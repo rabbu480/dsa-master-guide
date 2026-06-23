@@ -1,0 +1,55 @@
+# 🚀 FAANG DSA Master Guide
+
+> The ultimate interactive interview prep handbook and cheat sheet. Fully comprehensive with 100% coverage of all 20 core DSA patterns, switchable code implementations (Java, Kotlin, Python), LeetCode references, mental models, and pitfalls.
+
+🖥️ **Live Site:** [https://rabbu480.github.io/dsa-master-guide/](https://rabbu480.github.io/dsa-master-guide/)
+
+---
+
+## 🗺️ Topic Roadmap (20 Core Patterns)
+
+```text
+FAANG DSA
+│
+├── 1. Arrays & Strings (Traversal, Frequency Count, Prefix Sum, Difference Array, Kadane, Matrix)
+├── 2. Two Pointers (Opposite Direction, Same Direction, Fast & Slow Pointer)
+├── 3. Sliding Window (Fixed Window, Variable Window, Frequency Map Window)
+├── 4. HashMap & HashSet (Counting, Lookup, Grouping, Deduplication)
+├── 5. Stack (Basic Stack, Monotonic Increasing/Decreasing, Expression Evaluation)
+├── 6. Queue & Deque (Queue, BFS Queue, Monotonic Deque)
+├── 7. Binary Search (Classic, Lower/Upper Bound, Search Space, Rotated Array)
+├── 8. Linked List (Rotate, Random Pointer, Cycle Entry, Merge & Reorder)
+├── 9. Trees (Pre/In/Postorder, BFS Level Order, LCA/MaxPath/Balanced, BST Validate)
+├── 10. Heap / Priority Queue (Min/Max Heap, Top K, Merge K Sorted Lists)
+├── 11. Backtracking (Permutations, Subsets, Combinations, Word Search II)
+├── 12. Graphs (Representation, DFS, BFS, Cycle/Bipartite)
+├── 13. Topological Sort (Kahn's Algorithm, Alien Dictionary)
+├── 14. Union Find (Disjoint Set Union - DSU with Path Compression & Rank)
+├── 15. Trie (Prefix Tree, Wildcard Matching, Word Search II)
+├── 16. Dynamic Programming (Fundamentals, 1D DP, 2D DP, Knapsack, LCS/LIS/Edit Distance, Palindrome/Partition)
+├── 17. Intervals & Greedy (Merge/Insert, Jump Game, Task Scheduler)
+├── 18. Bit Manipulation (Bitwise Ops, Single Number, Hamming Distance)
+├── 19. Advanced Shortest Paths (Dijkstra, Bellman-Ford, Floyd-Warshall, MST Kruskal/Prim)
+└── 20. Advanced String & Structures (KMP, Rabin-Karp, Segment Tree, Fenwick Tree, Tarjan's Bridge)
+```
+
+---
+
+## ✨ Features
+
+- 📑 **Interactive Notebook Style**: Elegant ring-binder design with beautiful HSL-tailored colors, gradients, and subtle animations.
+- 🎛️ **Topic Filtering**: Quick-navigation tabs at the top to filter cards by category instantly or view the full curriculum at once.
+- 💱 **Multi-Language Tab Switching**: Switch between **Java**, **Kotlin**, and **Python** code blocks in real-time on every single card.
+- 🔗 **LeetCode Practice Links**: Clickable references to specific LeetCode problem numbers (e.g. `#1 Two Sum`, `#3 Longest Substring...`) to practice each pattern immediately.
+- 🧠 **Mental Models & Pitfalls**: Deep architectural walkthroughs of how to recognize each pattern in interviews and common mistakes to avoid.
+
+---
+
+## 🛠️ Tech Stack & Setup
+
+- **Frontend**: Vanilla HTML5, CSS3, and JavaScript (ES6+).
+- **Deployment**: Automated via GitHub Pages.
+
+To run it locally:
+1. Clone the repository.
+2. Open `index.html` in any web browser.
