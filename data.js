@@ -1,5 +1,28 @@
 const dsaData = [
 
+  // ─── 0. INTRO / DECISION TREE ────────────────────────────────────────────
+  {
+    title: "👋 Start Here: Pattern Decision Tree",
+    color: "#333333",
+    patterns: [
+      {
+        name: "How to Pick a Pattern in Interviews",
+        recognition: "Read the problem, spot the keywords, pick the right tool.",
+        mentalModel: "Input sorted? → Two Pointers / Binary Search. Grid/tree? → BFS/DFS. All combinations? → Backtracking. Min/Max/Count ways? → DP. Optimise greedy? → Greedy.",
+        pitfalls: "Don't jump to code. State brute force first. Then optimize.",
+        problems: [
+          { num: "1", name: "Two Sum (Array + HashMap)", url: "https://leetcode.com/problems/two-sum/" },
+          { num: "200", name: "Number of Islands (BFS/DFS)", url: "https://leetcode.com/problems/number-of-islands/" }
+        ],
+        code: {
+          "Java": `// 🧭 PATTERN DECISION TREE\n// ─────────────────────────────────────────────\n// Array sorted?           → Two Pointers, Binary Search\n// Subarray / Substring?   → Sliding Window\n// Frequency / Lookup?     → HashMap / HashSet\n// Find ALL combos?        → Backtracking\n// Shortest path?          → BFS (unweighted) / Dijkstra (weighted)\n// All paths / structure?  → DFS\n// Min/Max optimization?   → DP (overlapping subproblems)\n// Greedy local = global?  → Greedy\n// Intervals overlap?      → Sort + Greedy / Heap\n// Prefix match?           → Trie\n// Connected components?   → Union Find / BFS / DFS\n// Dependencies/ordering?  → Topological Sort\n// Top K elements?         → Heap / QuickSelect\n// ─────────────────────────────────────────────\n// ALWAYS state: brute force → optimize`,
+          "Kotlin": `// 🧭 COMPLEXITY CHEATSHEET\n// O(1)     → Math, HashMap lookup, Array access\n// O(log N) → Binary Search, Balanced BST\n// O(N)     → Linear Scan, Sliding Window, BFS, DFS\n// O(N log N) → Sorting, Heap of N elements\n// O(N^2)   → Nested loops, 2D DP\n// O(2^N)   → Subsets, Backtracking\n// O(N!)    → Permutations\n//\n// JAVA COLLECTIONS:\n// List   → ArrayList   → O(1) get, O(1) add\n// Set    → HashSet     → O(1) add/contains\n// Map    → HashMap     → O(1) put/get\n// Queue  → LinkedList  → O(1) offer/poll\n// Stack  → ArrayDeque  → O(1) push/pop\n// Heap   → PriorityQueue → O(log N) offer/poll`,
+          "Python": `# 🧭 LAST-MINUTE REVISION\n# 1. Clarify: negatives? duplicates? empty input? bounds?\n# 2. State brute force O(N^2) → explain why → optimize\n# 3. Say complexity BEFORE coding\n# 4. Dry run with small example after writing code\n# 5. Check edge cases: empty, single element, all same\n#\n# PYTHON COLLECTIONS:\n# list  → append/pop O(1)\n# set   → add/in O(1)\n# dict  → get/set O(1)\n# deque → appendleft/popleft O(1)\n# heapq → heappush/heappop O(log N)\n# Counter(arr) → freq map in one line`
+        }
+      }
+    ]
+  },
+
   // ─── 1. ARRAYS & STRINGS ─────────────────────────────────────────────────
   {
     title: "Arrays & Strings",
@@ -454,55 +477,87 @@ const dsaData = [
 
   // ─── 9. TREES ────────────────────────────────────────────────────────────
   {
-    title: "Trees: DFS Traversals",
+    title: "Trees (DFS & BFS)",
     color: "#5a3a8a",
     patterns: [
       {
-        name: "Preorder / Inorder / Postorder DFS",
-        recognition: "Tree exploration. BST sorted order (inorder). Height calculation (postorder).",
-        mentalModel: "Pre = Root first. In = Left-Root-Right (BST sorted). Post = Root last (calculate up from leaves).",
-        pitfalls: "Always handle null base case first.",
+        name: "🌿 Preorder DFS (Root → Left → Right)",
+        recognition: "Serialize tree. Print nodes top-down. Copy tree structure.",
+        mentalModel: "Visit root FIRST, then recurse left, then right. Think: read before your children.",
+        pitfalls: "Always check null FIRST before accessing .left or .right.",
         problems: [
-          { num: "144", name: "Preorder Traversal", url: "https://leetcode.com/problems/binary-tree-preorder-traversal/" },
-          { num: "230", name: "Kth Smallest in BST", url: "https://leetcode.com/problems/kth-smallest-element-in-a-bst/" },
-          { num: "104", name: "Max Depth", url: "https://leetcode.com/problems/maximum-depth-of-binary-tree/" }
+          { num: "144", name: "Binary Tree Preorder", url: "https://leetcode.com/problems/binary-tree-preorder-traversal/" },
+          { num: "105", name: "Construct Tree from Preorder+Inorder", url: "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/" }
         ],
         code: {
-          "Java": `void preorder(Node r) { if(r==null) return; visit(r); preorder(r.left); preorder(r.right); }\nvoid inorder(Node r)  { if(r==null) return; inorder(r.left); visit(r); inorder(r.right); }\nvoid postorder(Node r){ if(r==null) return; postorder(r.left); postorder(r.right); visit(r); }\n\n// Height (postorder)\nint height(Node r) {\n    if (r == null) return 0;\n    return 1 + Math.max(height(r.left), height(r.right));\n}`,
-          "Kotlin": `fun preorder(r: Node?) { if(r==null) return; visit(r); preorder(r.left); preorder(r.right) }\nfun inorder(r: Node?)  { if(r==null) return; inorder(r.left); visit(r); inorder(r.right) }\nfun postorder(r: Node?){ if(r==null) return; postorder(r.left); postorder(r.right); visit(r) }\n\nfun height(r: Node?): Int {\n    if (r == null) return 0\n    return 1 + maxOf(height(r.left), height(r.right))\n}`,
-          "Python": `def preorder(r):\n    if not r: return\n    visit(r); preorder(r.left); preorder(r.right)\n\ndef inorder(r):\n    if not r: return\n    inorder(r.left); visit(r); inorder(r.right)\n\ndef postorder(r):\n    if not r: return\n    postorder(r.left); postorder(r.right); visit(r)\n\ndef height(r):\n    if not r: return 0\n    return 1 + max(height(r.left), height(r.right))`
+          "Java": `// Recursive Preorder: Root → Left → Right\nvoid preorder(TreeNode root, List<Integer> res) {\n    if (root == null) return;   // ← base case FIRST\n    res.add(root.val);          // 1. Visit root\n    preorder(root.left, res);   // 2. Go Left\n    preorder(root.right, res);  // 3. Go Right\n}\n\n// Iterative Preorder (Stack)\nDeque<TreeNode> st = new ArrayDeque<>();\nst.push(root);\nwhile (!st.isEmpty()) {\n    TreeNode n = st.pop();\n    res.add(n.val);\n    if (n.right != null) st.push(n.right); // right first (LIFO)\n    if (n.left  != null) st.push(n.left);\n}`,
+          "Kotlin": `// Recursive Preorder\nfun preorder(root: TreeNode?, res: MutableList<Int>) {\n    if (root == null) return          // base case\n    res.add(root.`val`)               // 1. root\n    preorder(root.left, res)          // 2. left\n    preorder(root.right, res)         // 3. right\n}`,
+          "Python": `# Recursive Preorder: Root → Left → Right\ndef preorder(root, res=[]):\n    if not root: return          # base case\n    res.append(root.val)         # 1. root\n    preorder(root.left, res)     # 2. left\n    preorder(root.right, res)    # 3. right\n\n# Iterative Preorder (Stack)\nst = [root]\nwhile st:\n    n = st.pop()\n    res.append(n.val)\n    if n.right: st.append(n.right)  # right first\n    if n.left:  st.append(n.left)`
         }
       },
       {
-        name: "Recursive Patterns (Diameter, LCA, Path Sum)",
-        recognition: "Properties computed from subtree info. Pass up result.",
-        mentalModel: "Postorder: compute left and right subtree values, combine for root.",
-        pitfalls: "Diameter: update global max inside helper but return height. LCA: return non-null child.",
+        name: "🌿 Inorder DFS (Left → Root → Right)",
+        recognition: "BST sorted order. Kth smallest. Validate BST.",
+        mentalModel: "Go all the way LEFT first, visit root, then RIGHT. BST Inorder = sorted ascending array.",
+        pitfalls: "For BST validation: pass min and max bounds, not just prev node.",
         problems: [
-          { num: "543", name: "Diameter of Binary Tree", url: "https://leetcode.com/problems/diameter-of-binary-tree/" },
-          { num: "236", name: "Lowest Common Ancestor", url: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/" },
+          { num: "94", name: "Binary Tree Inorder", url: "https://leetcode.com/problems/binary-tree-inorder-traversal/" },
+          { num: "230", name: "Kth Smallest in BST", url: "https://leetcode.com/problems/kth-smallest-element-in-a-bst/" },
+          { num: "98", name: "Validate BST", url: "https://leetcode.com/problems/validate-binary-search-tree/" }
+        ],
+        code: {
+          "Java": `// Recursive Inorder: Left → Root → Right\nvoid inorder(TreeNode root, List<Integer> res) {\n    if (root == null) return;    // base case\n    inorder(root.left, res);     // 1. Go Left\n    res.add(root.val);           // 2. Visit root\n    inorder(root.right, res);    // 3. Go Right\n}\n// BST Inorder = SORTED array!\n\n// Iterative Inorder\nDeque<TreeNode> st = new ArrayDeque<>();\nTreeNode curr = root;\nwhile (curr != null || !st.isEmpty()) {\n    while (curr != null) { st.push(curr); curr = curr.left; }\n    curr = st.pop();\n    res.add(curr.val);\n    curr = curr.right;\n}`,
+          "Kotlin": `// Recursive Inorder\nfun inorder(root: TreeNode?, res: MutableList<Int>) {\n    if (root == null) return\n    inorder(root.left, res)      // 1. left\n    res.add(root.`val`)          // 2. root\n    inorder(root.right, res)     // 3. right\n}\n// BST inorder = sorted!`,
+          "Python": `# Recursive Inorder: Left → Root → Right\ndef inorder(root, res=[]):\n    if not root: return\n    inorder(root.left, res)      # 1. left\n    res.append(root.val)         # 2. root\n    inorder(root.right, res)     # 3. right\n# BST inorder → sorted array\n\n# Iterative Inorder\nst, curr = [], root\nwhile curr or st:\n    while curr: st.append(curr); curr = curr.left\n    curr = st.pop()\n    res.append(curr.val)\n    curr = curr.right`
+        }
+      },
+      {
+        name: "🌿 Postorder DFS (Left → Right → Root)",
+        recognition: "Calculate height, diameter, delete tree, evaluate expression tree.",
+        mentalModel: "Visit children FIRST, then root. Think: calculate kids before parent.",
+        pitfalls: "Height returns 0 for null. Diameter: global max ≠ return value.",
+        problems: [
+          { num: "145", name: "Binary Tree Postorder", url: "https://leetcode.com/problems/binary-tree-postorder-traversal/" },
+          { num: "104", name: "Max Depth of Binary Tree", url: "https://leetcode.com/problems/maximum-depth-of-binary-tree/" },
+          { num: "543", name: "Diameter of Binary Tree", url: "https://leetcode.com/problems/diameter-of-binary-tree/" }
+        ],
+        code: {
+          "Java": `// Recursive Postorder: Left → Right → Root\nvoid postorder(TreeNode root, List<Integer> res) {\n    if (root == null) return;\n    postorder(root.left, res);   // 1. Go Left\n    postorder(root.right, res);  // 2. Go Right\n    res.add(root.val);           // 3. Visit root (LAST)\n}\n\n// Max Depth (postorder style)\nint maxDepth(TreeNode root) {\n    if (root == null) return 0;\n    int left  = maxDepth(root.left);\n    int right = maxDepth(root.right);\n    return 1 + Math.max(left, right);  // combine at root\n}\n\n// Diameter\nint ans = 0;\nint dfs(TreeNode root) {\n    if (root == null) return 0;\n    int l = dfs(root.left), r = dfs(root.right);\n    ans = Math.max(ans, l + r); // update global max\n    return 1 + Math.max(l, r); // return height, NOT diameter\n}`,
+          "Kotlin": `// Postorder\nfun postorder(root: TreeNode?, res: MutableList<Int>) {\n    if (root == null) return\n    postorder(root.left, res)    // 1. left\n    postorder(root.right, res)   // 2. right\n    res.add(root.`val`)          // 3. root (last!)\n}\nfun maxDepth(root: TreeNode?): Int {\n    if (root == null) return 0\n    return 1 + maxOf(maxDepth(root.left), maxDepth(root.right))\n}`,
+          "Python": `# Postorder: Left → Right → Root\ndef postorder(root, res=[]):\n    if not root: return\n    postorder(root.left, res)    # 1. left\n    postorder(root.right, res)   # 2. right\n    res.append(root.val)         # 3. root (LAST)\n\n# Max Depth\ndef max_depth(root):\n    if not root: return 0\n    return 1 + max(max_depth(root.left), max_depth(root.right))\n\n# Diameter\nans = [0]\ndef dfs(root):\n    if not root: return 0\n    l, r = dfs(root.left), dfs(root.right)\n    ans[0] = max(ans[0], l + r)  # update global\n    return 1 + max(l, r)         # return height`
+        }
+      },
+      {
+        name: "🌊 BFS Level Order (List<List<Integer>>)",
+        recognition: "Level-by-level traversal. Right/Left side view. Zigzag. Min depth.",
+        mentalModel: "Queue + snapshot q.size() at start of each level. Inner for-loop processes one level at a time.",
+        pitfalls: "MUST snapshot q.size() before inner loop. Don't call q.size() inside the loop.",
+        problems: [
+          { num: "102", name: "Binary Tree Level Order", url: "https://leetcode.com/problems/binary-tree-level-order-traversal/" },
+          { num: "199", name: "Right Side View", url: "https://leetcode.com/problems/binary-tree-right-side-view/" },
+          { num: "103", name: "Zigzag Level Order", url: "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/" },
+          { num: "111", name: "Minimum Depth", url: "https://leetcode.com/problems/minimum-depth-of-binary-tree/" }
+        ],
+        code: {
+          "Java": `// Returns List<List<Integer>> - level order\nList<List<Integer>> res = new ArrayList<>();\nif (root == null) return res;\nQueue<TreeNode> q = new LinkedList<>();\nq.offer(root);\nwhile (!q.isEmpty()) {\n    int size = q.size(); // ← SNAPSHOT size!\n    List<Integer> level = new ArrayList<>();\n    for (int i = 0; i < size; i++) { // ← process ONE level\n        TreeNode n = q.poll();\n        level.add(n.val);\n        if (n.left  != null) q.offer(n.left);\n        if (n.right != null) q.offer(n.right);\n    }\n    res.add(level);\n}\nreturn res;\n\n// Right Side View: take last element of each level\n// res.add(level.get(level.size()-1));`,
+          "Kotlin": `// Level Order → List<List<Int>>\nval res = mutableListOf<List<Int>>()\nif (root == null) return res\nval q = ArrayDeque<TreeNode>()\nq.addLast(root)\nwhile (q.isNotEmpty()) {\n    val size = q.size          // ← SNAPSHOT\n    val level = mutableListOf<Int>()\n    repeat(size) {             // ← one full level\n        val n = q.removeFirst()\n        level.add(n.`val`)\n        n.left?.let  { q.addLast(it) }\n        n.right?.let { q.addLast(it) }\n    }\n    res.add(level)\n}\nreturn res`,
+          "Python": `# Level Order → List[List[int]]\nfrom collections import deque\nres = []; q = deque([root]) if root else deque()\nwhile q:\n    level = []\n    for _ in range(len(q)):    # ← snapshot len(q)!\n        n = q.popleft()\n        level.append(n.val)\n        if n.left:  q.append(n.left)\n        if n.right: q.append(n.right)\n    res.append(level)\nreturn res\n\n# Right Side View:\n# return [level[-1] for level in res]`
+        }
+      },
+      {
+        name: "🔑 LCA, Path Sum, Validate BST",
+        recognition: "Properties that require info from BOTH subtrees. Boundaries.",
+        mentalModel: "LCA: if node is p or q, return it. Check both sides. BST validate: pass (min, max) bounds down.",
+        pitfalls: "LCA: returns root when BOTH sides found. BST: don't just compare parent—use full range.",
+        problems: [
+          { num: "236", name: "LCA of Binary Tree", url: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/" },
+          { num: "98", name: "Validate BST", url: "https://leetcode.com/problems/validate-binary-search-tree/" },
           { num: "112", name: "Path Sum", url: "https://leetcode.com/problems/path-sum/" }
         ],
         code: {
-          "Java": `// Diameter\nint res = 0;\nint dfs(Node r) {\n    if (r == null) return 0;\n    int l = dfs(r.left), ri = dfs(r.right);\n    res = Math.max(res, l + ri);\n    return 1 + Math.max(l, ri);\n}\n\n// LCA\nNode lca(Node r, Node p, Node q) {\n    if (r==null||r==p||r==q) return r;\n    Node l = lca(r.left,p,q), ri = lca(r.right,p,q);\n    return (l!=null&&ri!=null) ? r : (l!=null?l:ri);\n}`,
-          "Kotlin": `// Diameter\nvar res = 0\nfun dfs(r: Node?): Int {\n    if (r == null) return 0\n    val l = dfs(r.left); val ri = dfs(r.right)\n    res = maxOf(res, l + ri)\n    return 1 + maxOf(l, ri)\n}`,
-          "Python": `# Diameter\nres = [0]\ndef dfs(r):\n    if not r: return 0\n    l, ri = dfs(r.left), dfs(r.right)\n    res[0] = max(res[0], l + ri)\n    return 1 + max(l, ri)\n\n# LCA\ndef lca(r, p, q):\n    if not r or r == p or r == q: return r\n    l = lca(r.left, p, q)\n    ri = lca(r.right, p, q)\n    return r if l and ri else (l or ri)`
-        }
-      },
-      {
-        name: "BFS: Level Order, Zigzag, Right/Left View",
-        recognition: "Level-by-level properties. Min depth. Right side visible nodes.",
-        mentalModel: "Queue + size snapshot per level. Alternate direction for zigzag.",
-        pitfalls: "Cache q.size() at start of level loop—not inside.",
-        problems: [
-          { num: "102", name: "Level Order", url: "https://leetcode.com/problems/binary-tree-level-order-traversal/" },
-          { num: "103", name: "Zigzag Level Order", url: "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/" },
-          { num: "199", name: "Right Side View", url: "https://leetcode.com/problems/binary-tree-right-side-view/" }
-        ],
-        code: {
-          "Java": `Queue<Node> q = new LinkedList<>();\nq.offer(root);\nboolean leftToRight = true;\nwhile (!q.isEmpty()) {\n    int size = q.size();\n    LinkedList<Integer> level = new LinkedList<>();\n    for (int i = 0; i < size; i++) {\n        Node n = q.poll();\n        if (leftToRight) level.addLast(n.val);\n        else level.addFirst(n.val); // zigzag\n        if (n.left != null) q.offer(n.left);\n        if (n.right != null) q.offer(n.right);\n    }\n    leftToRight = !leftToRight;\n}`,
-          "Kotlin": `val q = ArrayDeque<Node>()\nq.addLast(root)\nvar leftToRight = true\nwhile (q.isNotEmpty()) {\n    val level = ArrayDeque<Int>()\n    repeat(q.size) {\n        val n = q.removeFirst()\n        if (leftToRight) level.addLast(n.`val`) else level.addFirst(n.`val`)\n        n.left?.let { q.addLast(it) }\n        n.right?.let { q.addLast(it) }\n    }\n    leftToRight = !leftToRight\n}`,
-          "Python": `from collections import deque\nq = deque([root])\nleft_to_right = True\nwhile q:\n    level = []\n    for _ in range(len(q)):\n        n = q.popleft()\n        level.append(n.val)\n        if n.left: q.append(n.left)\n        if n.right: q.append(n.right)\n    if not left_to_right: level.reverse()\n    left_to_right = not left_to_right`
+          "Java": `// LCA\nTreeNode lca(TreeNode root, TreeNode p, TreeNode q) {\n    if (root == null || root == p || root == q) return root;\n    TreeNode left  = lca(root.left, p, q);\n    TreeNode right = lca(root.right, p, q);\n    if (left != null && right != null) return root; // p,q on diff sides\n    return left != null ? left : right;\n}\n\n// Validate BST (pass bounds!)\nboolean isValid(TreeNode root, long min, long max) {\n    if (root == null) return true;\n    if (root.val <= min || root.val >= max) return false;\n    return isValid(root.left, min, root.val) &&\n           isValid(root.right, root.val, max);\n}\n// Call: isValid(root, Long.MIN_VALUE, Long.MAX_VALUE)\n\n// Path Sum (subtract from target)\nboolean hasPath(TreeNode root, int target) {\n    if (root == null) return false;\n    if (root.left == null && root.right == null) return root.val == target;\n    return hasPath(root.left, target - root.val) ||\n           hasPath(root.right, target - root.val);\n}`,
+          "Kotlin": `fun lca(root: TreeNode?, p: TreeNode?, q: TreeNode?): TreeNode? {\n    if (root == null || root == p || root == q) return root\n    val left  = lca(root.left, p, q)\n    val right = lca(root.right, p, q)\n    return if (left != null && right != null) root else left ?: right\n}`,
+          "Python": `# LCA\ndef lca(root, p, q):\n    if not root or root == p or root == q: return root\n    left  = lca(root.left, p, q)\n    right = lca(root.right, p, q)\n    if left and right: return root   # p,q on different sides\n    return left or right\n\n# Validate BST\ndef is_valid(root, min_val=float('-inf'), max_val=float('inf')):\n    if not root: return True\n    if not (min_val < root.val < max_val): return False\n    return (is_valid(root.left, min_val, root.val) and\n            is_valid(root.right, root.val, max_val))`
         }
       }
     ]
@@ -606,19 +661,35 @@ const dsaData = [
     color: "#3a5a8a",
     patterns: [
       {
-        name: "DFS, BFS, Islands & Clone",
-        recognition: "Connected components, flood fill, number of islands.",
-        mentalModel: "DFS: recursion + visited. BFS: queue + visited. Mark visited when adding to queue.",
-        pitfalls: "Mark as visited BEFORE enqueuing. Adjacency list vs matrix.",
+        name: "Graph DFS (Recursive)",
+        recognition: "Connected components, paths, islands, flood fill, cycle detection.",
+        mentalModel: "Recursion + visited set. Go as deep as possible before backtracking. Mark visited BEFORE recursing.",
+        pitfalls: "Always mark visited BEFORE calling dfs() — not after. Unmark for backtracking problems.",
         problems: [
           { num: "200", name: "Number of Islands", url: "https://leetcode.com/problems/number-of-islands/" },
-          { num: "133", name: "Clone Graph", url: "https://leetcode.com/problems/clone-graph/" },
-          { num: "695", name: "Max Area of Island", url: "https://leetcode.com/problems/max-area-of-island/" }
+          { num: "695", name: "Max Area of Island", url: "https://leetcode.com/problems/max-area-of-island/" },
+          { num: "133", name: "Clone Graph", url: "https://leetcode.com/problems/clone-graph/" }
         ],
         code: {
-          "Java": `// Number of Islands\nvoid dfs(char[][] g, int r, int c) {\n    if (r<0||c<0||r>=g.length||c>=g[0].length||g[r][c]=='0') return;\n    g[r][c] = '0'; // mark visited\n    dfs(g,r+1,c); dfs(g,r-1,c); dfs(g,r,c+1); dfs(g,r,c-1);\n}\nint numIslands(char[][] g) {\n    int count = 0;\n    for (int r=0;r<g.length;r++) for(int c=0;c<g[0].length;c++)\n        if (g[r][c]=='1') { dfs(g,r,c); count++; }\n    return count;\n}`,
-          "Kotlin": `fun dfs(g: Array<CharArray>, r: Int, c: Int) {\n    if (r !in g.indices || c !in g[0].indices || g[r][c] == '0') return\n    g[r][c] = '0'\n    dfs(g,r+1,c); dfs(g,r-1,c); dfs(g,r,c+1); dfs(g,r,c-1)\n}`,
-          "Python": `def dfs(r, c):\n    if r < 0 or r >= R or c < 0 or c >= C or grid[r][c] == '0': return\n    grid[r][c] = '0'\n    dfs(r+1,c); dfs(r-1,c); dfs(r,c+1); dfs(r,c-1)\n\ncount = 0\nfor r in range(R):\n    for c in range(C):\n        if grid[r][c] == '1': dfs(r,c); count += 1`
+          "Java": `// Graph DFS Template\nvoid dfs(int node, boolean[] visited, List<List<Integer>> adj) {\n    visited[node] = true;           // ← mark BEFORE recursing\n    for (int neighbor : adj.get(node)) {\n        if (!visited[neighbor]) {\n            dfs(neighbor, visited, adj);\n        }\n    }\n}\n// Count connected components:\nint count = 0;\nfor (int i = 0; i < n; i++) {\n    if (!visited[i]) { dfs(i, visited, adj); count++; }\n}\n\n// Grid DFS (Number of Islands)\nvoid dfs(char[][] g, int r, int c) {\n    if (r<0||r>=g.length||c<0||c>=g[0].length||g[r][c]=='0') return;\n    g[r][c] = '0'; // mark visited in-place\n    dfs(g,r+1,c); dfs(g,r-1,c); dfs(g,r,c+1); dfs(g,r,c-1);\n}`,
+          "Kotlin": `// Graph DFS\nfun dfs(node: Int, visited: BooleanArray, adj: List<List<Int>>) {\n    visited[node] = true              // mark before recursing\n    for (nb in adj[node]) {\n        if (!visited[nb]) dfs(nb, visited, adj)\n    }\n}\n// Grid DFS\nfun dfs(g: Array<CharArray>, r: Int, c: Int) {\n    if (r !in g.indices || c !in g[0].indices || g[r][c] == '0') return\n    g[r][c] = '0'\n    dfs(g,r+1,c); dfs(g,r-1,c); dfs(g,r,c+1); dfs(g,r,c-1)\n}`,
+          "Python": `# Graph DFS Template\ndef dfs(node, visited, adj):\n    visited.add(node)                 # mark before recursing\n    for nb in adj[node]:\n        if nb not in visited:\n            dfs(nb, visited, adj)\n\n# Count components\nvisited = set()\ncount = 0\nfor i in range(n):\n    if i not in visited: dfs(i, visited, adj); count += 1\n\n# Grid DFS (Islands)\ndef dfs(r, c):\n    if r<0 or r>=R or c<0 or c>=C or grid[r][c]=='0': return\n    grid[r][c] = '0'  # mark visited\n    dfs(r+1,c); dfs(r-1,c); dfs(r,c+1); dfs(r,c-1)`
+        }
+      },
+      {
+        name: "Graph BFS (Iterative - Shortest Path)",
+        recognition: "Shortest path in unweighted graph. Minimum steps. Closest node.",
+        mentalModel: "Queue + visited set. Process level by level. BFS guarantees shortest path in unweighted graphs.",
+        pitfalls: "Mark visited WHEN adding to queue, NOT when polling. Otherwise you revisit nodes.",
+        problems: [
+          { num: "127", name: "Word Ladder", url: "https://leetcode.com/problems/word-ladder/" },
+          { num: "994", name: "Rotting Oranges", url: "https://leetcode.com/problems/rotting-oranges/" },
+          { num: "542", name: "01 Matrix", url: "https://leetcode.com/problems/01-matrix/" }
+        ],
+        code: {
+          "Java": `// Graph BFS Template (Shortest Path)\nQueue<Integer> q = new LinkedList<>();\nboolean[] visited = new boolean[n];\nq.offer(start);\nvisited[start] = true;     // ← mark WHEN adding to queue!\nint steps = 0;\nwhile (!q.isEmpty()) {\n    int size = q.size();   // ← process one level at a time\n    for (int i = 0; i < size; i++) {\n        int node = q.poll();\n        if (node == target) return steps;\n        for (int nb : adj.get(node)) {\n            if (!visited[nb]) {\n                visited[nb] = true;  // ← mark BEFORE adding\n                q.offer(nb);\n            }\n        }\n    }\n    steps++;\n}`,
+          "Kotlin": `// BFS Shortest Path\nval q = ArrayDeque<Int>()\nval visited = BooleanArray(n)\nq.addLast(start); visited[start] = true\nvar steps = 0\nwhile (q.isNotEmpty()) {\n    repeat(q.size) {\n        val node = q.removeFirst()\n        if (node == target) return steps\n        for (nb in adj[node]) {\n            if (!visited[nb]) { visited[nb] = true; q.addLast(nb) }\n        }\n    }\n    steps++\n}`,
+          "Python": `# BFS Template (Shortest Path)\nfrom collections import deque\nq = deque([start])\nvisited = {start}          # ← mark WHEN adding!\nsteps = 0\nwhile q:\n    for _ in range(len(q)): # ← process one level\n        node = q.popleft()\n        if node == target: return steps\n        for nb in adj[node]:\n            if nb not in visited:\n                visited.add(nb)    # mark before adding\n                q.append(nb)\n    steps += 1`
         }
       },
       {
