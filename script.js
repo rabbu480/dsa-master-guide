@@ -2,19 +2,32 @@ document.addEventListener("DOMContentLoaded", () => {
     const tocContainer = document.getElementById("toc-container");
     const contentContainer = document.getElementById("content-container");
 
+    // "Show All" Button
+    const showAllBtn = document.createElement("button");
+    showAllBtn.style.setProperty("--tab-color", "#333");
+    showAllBtn.textContent = "Show All Topics";
+    showAllBtn.className = "active-filter";
+    showAllBtn.onclick = () => filterSections(null, showAllBtn);
+    tocContainer.appendChild(showAllBtn);
+
+    const sectionElements = [];
+    const filterButtons = [showAllBtn];
+
     dsaData.forEach((section, index) => {
-        // Build TOC Link
-        const tocLink = document.createElement("a");
-        tocLink.href = `#section-${index}`;
-        tocLink.style.setProperty("--tab-color", section.color);
-        tocLink.textContent = section.title;
-        tocContainer.appendChild(tocLink);
+        // Build TOC Link/Button
+        const tocBtn = document.createElement("button");
+        tocBtn.style.setProperty("--tab-color", section.color);
+        tocBtn.textContent = section.title;
+        tocBtn.onclick = () => filterSections(index, tocBtn);
+        tocContainer.appendChild(tocBtn);
+        filterButtons.push(tocBtn);
 
         // Build Section
         const sectionEl = document.createElement("section");
         sectionEl.className = "category";
         sectionEl.id = `section-${index}`;
         sectionEl.style.setProperty("--cat-color", section.color);
+        sectionElements.push({ el: sectionEl, index: index });
 
         const headerEl = document.createElement("div");
         headerEl.className = "section-header";
@@ -26,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Build Cards
         section.patterns.forEach((pattern, pIndex) => {
-            const cardId = `card-${index}-${pIndex}`;
             const cardEl = document.createElement("div");
             cardEl.className = "card";
 
@@ -42,13 +54,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div><b>When to use:</b> ${pattern.recognition}</div>
                 <div><b>Model:</b> ${pattern.mentalModel}</div>
             `;
+            if (pattern.pitfalls) {
+                mentalModelEl.innerHTML += `<div><b>⚠️ Pitfalls:</b> ${pattern.pitfalls}</div>`;
+            }
             cardEl.appendChild(mentalModelEl);
 
-            // Problem Links
+            // Problem Links (Multiple)
             if (pattern.problems && pattern.problems.length > 0) {
                 const linksEl = document.createElement("div");
                 linksEl.className = "problem-links";
-                linksEl.innerHTML = `<b>Practice:</b> ` + pattern.problems.map(p => `<a href="${p.url}" target="_blank">${p.name}</a>`).join("");
+                linksEl.innerHTML = `<b>Practice:</b> ` + pattern.problems.map(p => 
+                    `<a href="${p.url}" target="_blank" style="--cat-color: ${section.color}">#${p.num} ${p.name}</a>`
+                ).join("");
                 cardEl.appendChild(linksEl);
             }
 
@@ -92,4 +109,20 @@ document.addEventListener("DOMContentLoaded", () => {
         sectionEl.appendChild(gridEl);
         contentContainer.appendChild(sectionEl);
     });
+
+    // Filtering Logic
+    function filterSections(targetIndex, clickedBtn) {
+        // Update active class on buttons
+        filterButtons.forEach(btn => btn.classList.remove("active-filter"));
+        clickedBtn.classList.add("active-filter");
+
+        // Hide/Show sections
+        sectionElements.forEach(item => {
+            if (targetIndex === null || item.index === targetIndex) {
+                item.el.classList.remove("hidden");
+            } else {
+                item.el.classList.add("hidden");
+            }
+        });
+    }
 });
