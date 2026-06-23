@@ -195,7 +195,7 @@ diff[L] += val; diff[R + 1] -= val;
 int[] res = new int[n]; res[0] = diff[0];
 for (int i = 1; i < n; i++) res[i] = res[i-1] + diff[i];`,
           "Kotlin": `val diff = IntArray(n + 1)
-diff[L] += `val`; diff[R + 1] -= `val`
+diff[L] += \`val\`; diff[R + 1] -= \`val\`
 val res = IntArray(n).also { it[0] = diff[0] }
 for (i in 1 until n) res[i] = res[i-1] + diff[i]`,
           "Python": `diff = [0] * (n + 1)
@@ -1121,7 +1121,7 @@ PriorityQueue<ListNode> pq=new PriorityQueue<>((a,b)->a.val-b.val);
 for(ListNode n:lists) if(n!=null) pq.offer(n);
 while(!pq.isEmpty()){ListNode n=pq.poll();cur.next=n;cur=cur.next;if(n.next!=null)pq.offer(n.next);}`,
           "Kotlin": `val dummy=ListNode(0); var cur:ListNode?=dummy
-while(l1!=null&&l2!=null){if(l1.`val`<l2.`val`){cur?.next=l1;l1=l1.next}else{cur?.next=l2;l2=l2.next};cur=cur?.next}
+while(l1!=null&&l2!=null){if(l1.\`val\`<l2.\`val\`){cur?.next=l1;l1=l1.next}else{cur?.next=l2;l2=l2.next};cur=cur?.next}
 cur?.next=l1?:l2`,
           "Python": `dummy = cur = ListNode(0)
 while l1 and l2:
