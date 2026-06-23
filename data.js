@@ -1,23 +1,71 @@
 const dsaData = [
 
-  // ─── 0. INTRO / DECISION TREE ────────────────────────────────────────────
+  // ─── 0. INTRO ─────────────────────────────────────────────────────────────
   {
     title: "👋 Start Here: Pattern Decision Tree",
     color: "#333333",
     patterns: [
       {
         name: "How to Pick a Pattern in Interviews",
-        recognition: "Read the problem, spot the keywords, pick the right tool.",
-        mentalModel: "Input sorted? → Two Pointers / Binary Search. Grid/tree? → BFS/DFS. All combinations? → Backtracking. Min/Max/Count ways? → DP. Optimise greedy? → Greedy.",
-        pitfalls: "Don't jump to code. State brute force first. Then optimize.",
+        recognition: "Read the problem → spot keywords → pick pattern → state complexity → code.",
+        mentalModel: "Input sorted? → Two Pointers/BS. Grid/tree? → BFS/DFS. All combos? → Backtracking. Min/Max/Count? → DP. Greedy local=global? → Greedy.",
+        pitfalls: "Never jump to code. State brute force O(N²) first, explain why it's slow, then optimize.",
         problems: [
-          { num: "1", name: "Two Sum (Array + HashMap)", url: "https://leetcode.com/problems/two-sum/" },
-          { num: "200", name: "Number of Islands (BFS/DFS)", url: "https://leetcode.com/problems/number-of-islands/" }
+          { num: "1", name: "Two Sum", url: "https://leetcode.com/problems/two-sum/" },
+          { num: "200", name: "Number of Islands", url: "https://leetcode.com/problems/number-of-islands/" }
         ],
         code: {
-          "Java": `// 🧭 PATTERN DECISION TREE\n// ─────────────────────────────────────────────\n// Array sorted?           → Two Pointers, Binary Search\n// Subarray / Substring?   → Sliding Window\n// Frequency / Lookup?     → HashMap / HashSet\n// Find ALL combos?        → Backtracking\n// Shortest path?          → BFS (unweighted) / Dijkstra (weighted)\n// All paths / structure?  → DFS\n// Min/Max optimization?   → DP (overlapping subproblems)\n// Greedy local = global?  → Greedy\n// Intervals overlap?      → Sort + Greedy / Heap\n// Prefix match?           → Trie\n// Connected components?   → Union Find / BFS / DFS\n// Dependencies/ordering?  → Topological Sort\n// Top K elements?         → Heap / QuickSelect\n// ─────────────────────────────────────────────\n// ALWAYS state: brute force → optimize`,
-          "Kotlin": `// 🧭 COMPLEXITY CHEATSHEET\n// O(1)     → Math, HashMap lookup, Array access\n// O(log N) → Binary Search, Balanced BST\n// O(N)     → Linear Scan, Sliding Window, BFS, DFS\n// O(N log N) → Sorting, Heap of N elements\n// O(N^2)   → Nested loops, 2D DP\n// O(2^N)   → Subsets, Backtracking\n// O(N!)    → Permutations\n//\n// JAVA COLLECTIONS:\n// List   → ArrayList   → O(1) get, O(1) add\n// Set    → HashSet     → O(1) add/contains\n// Map    → HashMap     → O(1) put/get\n// Queue  → LinkedList  → O(1) offer/poll\n// Stack  → ArrayDeque  → O(1) push/pop\n// Heap   → PriorityQueue → O(log N) offer/poll`,
-          "Python": `# 🧭 LAST-MINUTE REVISION\n# 1. Clarify: negatives? duplicates? empty input? bounds?\n# 2. State brute force O(N^2) → explain why → optimize\n# 3. Say complexity BEFORE coding\n# 4. Dry run with small example after writing code\n# 5. Check edge cases: empty, single element, all same\n#\n# PYTHON COLLECTIONS:\n# list  → append/pop O(1)\n# set   → add/in O(1)\n# dict  → get/set O(1)\n# deque → appendleft/popleft O(1)\n# heapq → heappush/heappop O(log N)\n# Counter(arr) → freq map in one line`
+          "Java": `// 🧭 PATTERN DECISION TREE
+// Array sorted?            → Two Pointers, Binary Search
+// Subarray / Substring?    → Sliding Window
+// Frequency / Lookup?      → HashMap / HashSet
+// Find ALL combos?         → Backtracking
+// Shortest path?           → BFS (unweighted), Dijkstra (weighted)
+// All paths / structure?   → DFS
+// Min/Max optimization?    → DP (overlapping subproblems)
+// Greedy local = global?   → Greedy
+// Intervals overlap?       → Sort + Sweep / Heap
+// Prefix match?            → Trie
+// Connected components?    → Union Find / BFS / DFS
+// Dependencies/ordering?   → Topological Sort
+// Top K elements?          → Heap / QuickSelect
+// Range query fast?        → Segment Tree / Fenwick Tree
+// ─────────────────────────────────────────────
+// ALWAYS: brute force → optimize → complexity`,
+          "Kotlin": `// 🧭 COMPLEXITY CHEATSHEET
+// O(1)       → Math, HashMap, Array access
+// O(log N)   → Binary Search, Balanced BST
+// O(N)       → Linear scan, Sliding Window, BFS, DFS
+// O(N log N) → Sorting, Heap insertions
+// O(N²)      → Nested loops, 2D DP
+// O(2^N)     → Subsets, Backtracking
+// O(N!)      → Permutations
+//
+// JAVA COLLECTIONS CHEATSHEET:
+// List   → ArrayList   → O(1) get/add
+// Set    → HashSet     → O(1) add/contains
+// Map    → HashMap     → O(1) put/get
+// Queue  → LinkedList  → O(1) offer/poll
+// Stack  → ArrayDeque  → O(1) push/pop
+// Heap   → PriorityQueue → O(logN) offer/poll
+// Deque  → ArrayDeque  → O(1) both ends`,
+          "Python": `# 🧭 INTERVIEW CHECKLIST
+# 1. CLARIFY: negatives? duplicates? empty? sorted? bounds?
+# 2. BRUTE FORCE: state O(N²) approach first
+# 3. OPTIMIZE: explain insight → better solution
+# 4. COMPLEXITY: say time + space before coding
+# 5. CODE: clean, readable, handle edge cases
+# 6. DRY RUN: trace small example after writing
+# 7. EDGE CASES: empty, single, all same, negatives
+#
+# PYTHON COLLECTIONS:
+# list  → append/pop O(1)
+# set   → add/in O(1)
+# dict  → get/set O(1)
+# deque → appendleft/popleft O(1)
+# heapq → heappush/heappop O(logN)
+# Counter(arr) → freq map in one line
+# sorted(arr, key=lambda x: x[0]) → sort by field`
         }
       }
     ]
@@ -29,93 +77,191 @@ const dsaData = [
     color: "#b5563c",
     patterns: [
       {
-        name: "Traversal",
-        recognition: "Process every element once. Linear scan.",
-        mentalModel: "Simple loop 0 to N. Track indices carefully.",
+        name: "Traversal & Basic Operations",
+        recognition: "Process every element. Find max/min. Rotate array.",
+        mentalModel: "Simple loop 0 to N-1. Track index carefully. Use modulo for rotation.",
         pitfalls: "Off-by-one. Modifying array while iterating.",
         problems: [
-          { num: "1", name: "Two Sum", url: "https://leetcode.com/problems/two-sum/" },
-          { num: "27", name: "Remove Element", url: "https://leetcode.com/problems/remove-element/" }
+          { num: "189", name: "Rotate Array", url: "https://leetcode.com/problems/rotate-array/" },
+          { num: "238", name: "Product of Array Except Self", url: "https://leetcode.com/problems/product-of-array-except-self/" }
         ],
         code: {
-          "Java": `for (int i = 0; i < arr.length; i++) {\n    // process arr[i]\n}\n// or for-each\nfor (int x : arr) {\n    // process x\n}`,
-          "Kotlin": `for (i in arr.indices) {\n    // process arr[i]\n}\n// or for-each\nfor (x in arr) {\n    // process x\n}`,
-          "Python": `for i in range(len(arr)):\n    # process arr[i]\n\n# or enumerate\nfor i, x in enumerate(arr):\n    # process x`
+          "Java": `// Rotate array right by k steps
+int n = arr.length; k %= n;
+reverse(arr, 0, n-1);
+reverse(arr, 0, k-1);
+reverse(arr, k, n-1);
+
+// Product except self (prefix * suffix)
+int[] res = new int[n];
+int prefix = 1;
+for (int i = 0; i < n; i++) { res[i] = prefix; prefix *= nums[i]; }
+int suffix = 1;
+for (int i = n-1; i >= 0; i--) { res[i] *= suffix; suffix *= nums[i]; }`,
+          "Kotlin": `// Rotate
+val n = arr.size; val k = k % n
+arr.reverse(); arr.reverse(0, k); arr.reverse(k, n)`,
+          "Python": `# Rotate array right by k
+arr[:] = arr[-k:] + arr[:-k]
+# Product except self
+prefix = [1] * n
+for i in range(1, n): prefix[i] = prefix[i-1] * nums[i-1]
+suffix = 1
+for i in range(n-1, -1, -1):
+    prefix[i] *= suffix; suffix *= nums[i]`
         }
       },
       {
         name: "Frequency Count (HashMap)",
-        recognition: "Count occurrences. Find most frequent. Anagram check.",
-        mentalModel: "Map element → count. Then query the map.",
-        pitfalls: "Forgetting getOrDefault(). Null pointer on .get().",
+        recognition: "Count occurrences. Anagram check. Most frequent. Group by frequency.",
+        mentalModel: "Map element → count. Query the map. Use bucket sort for O(N) top-K.",
+        pitfalls: "getOrDefault() not get(). Null pointer on .get(). Use Counter in Python.",
         problems: [
           { num: "242", name: "Valid Anagram", url: "https://leetcode.com/problems/valid-anagram/" },
           { num: "347", name: "Top K Frequent Elements", url: "https://leetcode.com/problems/top-k-frequent-elements/" }
         ],
         code: {
-          "Java": `Map<Integer, Integer> freq = new HashMap<>();\nfor (int x : arr) {\n    freq.put(x, freq.getOrDefault(x, 0) + 1);\n}\n// query\nint count = freq.getOrDefault(target, 0);`,
-          "Kotlin": `val freq = mutableMapOf<Int, Int>()\nfor (x in arr) {\n    freq[x] = (freq[x] ?: 0) + 1\n}\nval count = freq.getOrDefault(target, 0)`,
-          "Python": `from collections import Counter\nfreq = Counter(arr)\n# or manually:\nfreq = {}\nfor x in arr:\n    freq[x] = freq.get(x, 0) + 1`
+          "Java": `Map<Integer, Integer> freq = new HashMap<>();
+for (int x : arr)
+    freq.put(x, freq.getOrDefault(x, 0) + 1);
+// Top K via bucket sort O(N)
+List<Integer>[] bucket = new List[n + 1];
+for (int k : freq.keySet()) {
+    int f = freq.get(k);
+    if (bucket[f] == null) bucket[f] = new ArrayList<>();
+    bucket[f].add(k);
+}`,
+          "Kotlin": `val freq = mutableMapOf<Int, Int>()
+for (x in arr) freq[x] = (freq[x] ?: 0) + 1`,
+          "Python": `from collections import Counter
+freq = Counter(arr)
+# Top K
+top_k = freq.most_common(k)
+# Bucket sort O(N)
+bucket = [[] for _ in range(len(arr) + 1)]
+for num, cnt in freq.items(): bucket[cnt].append(num)`
         }
       },
       {
         name: "Prefix Sum",
-        recognition: "Range sum queries. Subarray sum equals K.",
-        mentalModel: "pre[i+1] = pre[i] + arr[i]. Range [L,R] = pre[R+1] - pre[L].",
-        pitfalls: "1-based prefix array confusion. Initialize map with {0:1} for subarray problems.",
+        recognition: "Range sum queries. Subarray sum = K. Count subarrays.",
+        mentalModel: "pre[i+1] = pre[i] + arr[i]. Range[L,R] = pre[R+1] - pre[L]. For subarray sum K: use HashMap {prefix: count}.",
+        pitfalls: "Initialize map with {0:1}. 1-based prefix confusion.",
         problems: [
           { num: "303", name: "Range Sum Query", url: "https://leetcode.com/problems/range-sum-query-immutable/" },
           { num: "560", name: "Subarray Sum Equals K", url: "https://leetcode.com/problems/subarray-sum-equals-k/" }
         ],
         code: {
-          "Java": `int[] pre = new int[n + 1];\nfor (int i = 0; i < n; i++) pre[i+1] = pre[i] + arr[i];\n// range sum L to R:\nint rangeSum = pre[R+1] - pre[L];\n\n// Subarray sum = K\nMap<Integer,Integer> map = new HashMap<>();\nmap.put(0, 1); int sum = 0, res = 0;\nfor (int x : arr) {\n    sum += x;\n    res += map.getOrDefault(sum - k, 0);\n    map.put(sum, map.getOrDefault(sum, 0) + 1);\n}`,
-          "Kotlin": `val pre = IntArray(n + 1)\nfor (i in 0 until n) pre[i+1] = pre[i] + arr[i]\nval rangeSum = pre[R+1] - pre[L]`,
-          "Python": `pre = [0] * (n + 1)\nfor i in range(n):\n    pre[i+1] = pre[i] + arr[i]\nrange_sum = pre[R+1] - pre[L]\n\n# Subarray sum = K\nfrom collections import defaultdict\ncount = defaultdict(int)\ncount[0] = 1\nres = s = 0\nfor x in arr:\n    s += x\n    res += count[s - k]\n    count[s] += 1`
+          "Java": `// Build prefix sum
+int[] pre = new int[n + 1];
+for (int i = 0; i < n; i++) pre[i+1] = pre[i] + arr[i];
+int rangeSum = pre[R+1] - pre[L]; // sum from L to R
+
+// Subarray sum = K → O(N)
+Map<Integer,Integer> map = new HashMap<>();
+map.put(0, 1); int sum = 0, res = 0;
+for (int x : arr) {
+    sum += x;
+    res += map.getOrDefault(sum - k, 0);
+    map.put(sum, map.getOrDefault(sum, 0) + 1);
+}`,
+          "Kotlin": `val pre = IntArray(n + 1)
+for (i in 0 until n) pre[i+1] = pre[i] + arr[i]
+val rangeSum = pre[R+1] - pre[L]`,
+          "Python": `pre = [0] * (n + 1)
+for i in range(n): pre[i+1] = pre[i] + arr[i]
+range_sum = pre[R+1] - pre[L]
+# Subarray sum = K
+from collections import defaultdict
+count = defaultdict(int); count[0] = 1
+res = s = 0
+for x in arr:
+    s += x; res += count[s - k]; count[s] += 1`
         }
       },
       {
         name: "Difference Array",
-        recognition: "Multiple range update queries, then final array.",
-        mentalModel: "diff[L] += val, diff[R+1] -= val. Then prefix sum to get result.",
-        pitfalls: "Forgetting the sweep step after all updates.",
+        recognition: "Multiple range update queries then read final values.",
+        mentalModel: "diff[L] += val, diff[R+1] -= val. Sweep prefix sum to get result.",
+        pitfalls: "Don't forget the final sweep step.",
         problems: [
           { num: "1109", name: "Corporate Flight Bookings", url: "https://leetcode.com/problems/corporate-flight-bookings/" },
           { num: "1094", name: "Car Pooling", url: "https://leetcode.com/problems/car-pooling/" }
         ],
         code: {
-          "Java": `int[] diff = new int[n + 1];\n// range update [L, R] with val\ndiff[L] += val;\ndiff[R + 1] -= val;\n// rebuild final array\nint[] result = new int[n];\nresult[0] = diff[0];\nfor (int i = 1; i < n; i++) {\n    result[i] = result[i-1] + diff[i];\n}`,
-          "Kotlin": `val diff = IntArray(n + 1)\ndiff[L] += `val`\ndiff[R + 1] -= `val`\nval result = IntArray(n)\nresult[0] = diff[0]\nfor (i in 1 until n) result[i] = result[i-1] + diff[i]`,
-          "Python": `diff = [0] * (n + 1)\ndiff[L] += val\ndiff[R + 1] -= val\nresult = [0] * n\nresult[0] = diff[0]\nfor i in range(1, n):\n    result[i] = result[i-1] + diff[i]`
+          "Java": `int[] diff = new int[n + 1];
+diff[L] += val; diff[R + 1] -= val;
+// Sweep
+int[] res = new int[n]; res[0] = diff[0];
+for (int i = 1; i < n; i++) res[i] = res[i-1] + diff[i];`,
+          "Kotlin": `val diff = IntArray(n + 1)
+diff[L] += `val`; diff[R + 1] -= `val`
+val res = IntArray(n).also { it[0] = diff[0] }
+for (i in 1 until n) res[i] = res[i-1] + diff[i]`,
+          "Python": `diff = [0] * (n + 1)
+diff[L] += val; diff[R + 1] -= val
+res = [0] * n; res[0] = diff[0]
+for i in range(1, n): res[i] = res[i-1] + diff[i]`
         }
       },
       {
         name: "Kadane's Algorithm",
-        recognition: "Maximum subarray sum. Continuous segment.",
-        mentalModel: "maxEnd = max(x, maxEnd + x). Reset when negative.",
-        pitfalls: "All-negative array: return max element, not 0.",
+        recognition: "Maximum subarray sum. Continuous segment. Circular subarray.",
+        mentalModel: "maxEnd = max(x, maxEnd + x). Reset when going negative. All-negative: return max element.",
+        pitfalls: "All-negative array: return max element not 0. Circular: totalSum - minSubarray.",
         problems: [
           { num: "53", name: "Maximum Subarray", url: "https://leetcode.com/problems/maximum-subarray/" },
           { num: "918", name: "Max Sum Circular Subarray", url: "https://leetcode.com/problems/maximum-sum-circular-subarray/" }
         ],
         code: {
-          "Java": `int maxEnd = arr[0], maxSoFar = arr[0];\nfor (int i = 1; i < arr.length; i++) {\n    maxEnd = Math.max(arr[i], maxEnd + arr[i]);\n    maxSoFar = Math.max(maxSoFar, maxEnd);\n}\nreturn maxSoFar;`,
-          "Kotlin": `var maxEnd = arr[0]\nvar maxSoFar = arr[0]\nfor (i in 1 until arr.size) {\n    maxEnd = maxOf(arr[i], maxEnd + arr[i])\n    maxSoFar = maxOf(maxSoFar, maxEnd)\n}\nreturn maxSoFar`,
-          "Python": `max_end = max_so_far = arr[0]\nfor x in arr[1:]:\n    max_end = max(x, max_end + x)\n    max_so_far = max(max_so_far, max_end)\nreturn max_so_far`
+          "Java": `int maxEnd = arr[0], best = arr[0];
+for (int i = 1; i < arr.length; i++) {
+    maxEnd = Math.max(arr[i], maxEnd + arr[i]);
+    best = Math.max(best, maxEnd);
+}
+return best;`,
+          "Kotlin": `var maxEnd = arr[0]; var best = arr[0]
+for (i in 1 until arr.size) {
+    maxEnd = maxOf(arr[i], maxEnd + arr[i])
+    best = maxOf(best, maxEnd)
+}`,
+          "Python": `max_end = best = arr[0]
+for x in arr[1:]:
+    max_end = max(x, max_end + x)
+    best = max(best, max_end)`
         }
       },
       {
         name: "Matrix Traversal",
-        recognition: "2D grid, spiral, diagonal, rotate 90°.",
-        mentalModel: "Use 4 direction arrays dx=[0,0,1,-1], dy=[1,-1,0,0]. Boundary checks.",
-        pitfalls: "Out of bounds. Visiting same cell twice (use visited set).",
+        recognition: "2D grid, spiral order, rotate 90°, 4-directional BFS/DFS.",
+        mentalModel: "4 directions: dx=[0,0,1,-1], dy=[1,-1,0,0]. Boundary check before accessing.",
+        pitfalls: "Out of bounds. Double-visiting (use visited array). Row vs column confusion.",
         problems: [
           { num: "54", name: "Spiral Matrix", url: "https://leetcode.com/problems/spiral-matrix/" },
           { num: "48", name: "Rotate Image", url: "https://leetcode.com/problems/rotate-image/" }
         ],
         code: {
-          "Java": `int[] dx = {0, 0, 1, -1};\nint[] dy = {1, -1, 0, 0};\n// BFS from (r, c)\nboolean[][] vis = new boolean[R][C];\nQueue<int[]> q = new LinkedList<>();\nq.offer(new int[]{r, c});\nvis[r][c] = true;\nwhile (!q.isEmpty()) {\n    int[] cur = q.poll();\n    for (int d = 0; d < 4; d++) {\n        int nr = cur[0] + dx[d];\n        int nc = cur[1] + dy[d];\n        if (nr>=0 && nr<R && nc>=0 && nc<C && !vis[nr][nc]) {\n            vis[nr][nc] = true;\n            q.offer(new int[]{nr, nc});\n        }\n    }\n}`,
-          "Kotlin": `val dx = intArrayOf(0, 0, 1, -1)\nval dy = intArrayOf(1, -1, 0, 0)\nfor (d in 0..3) {\n    val nr = r + dx[d]\n    val nc = c + dy[d]\n    if (nr in 0 until R && nc in 0 until C) {\n        // process\n    }\n}`,
-          "Python": `dx = [0, 0, 1, -1]\ndy = [1, -1, 0, 0]\nfor d in range(4):\n    nr, nc = r + dx[d], c + dy[d]\n    if 0 <= nr < R and 0 <= nc < C:\n        pass  # process`
+          "Java": `int[] dx = {0,0,1,-1}, dy = {1,-1,0,0};
+for (int d = 0; d < 4; d++) {
+    int nr = r + dx[d], nc = c + dy[d];
+    if (nr >= 0 && nr < R && nc >= 0 && nc < C)
+        // process (nr, nc)
+}
+// Rotate 90° clockwise: transpose then reverse each row
+for (int i=0;i<n;i++) for (int j=i+1;j<n;j++) swap(mat,i,j,j,i);
+for (int[] row : mat) reverse(row);`,
+          "Kotlin": `val dx = intArrayOf(0,0,1,-1); val dy = intArrayOf(1,-1,0,0)
+for (d in 0..3) {
+    val nr = r + dx[d]; val nc = c + dy[d]
+    if (nr in 0 until R && nc in 0 until C) { /* process */ }
+}`,
+          "Python": `dx, dy = [0,0,1,-1], [1,-1,0,0]
+for d in range(4):
+    nr, nc = r+dx[d], c+dy[d]
+    if 0 <= nr < R and 0 <= nc < C:
+        pass  # process
+# Rotate 90° clockwise
+matrix[:] = [list(row) for row in zip(*matrix[::-1])]`
         }
       }
     ]
@@ -128,48 +274,102 @@ const dsaData = [
     patterns: [
       {
         name: "Opposite Direction",
-        recognition: "Sorted array, pair sum, palindrome, reverse.",
-        mentalModel: "Left at 0, right at end. Move based on comparison.",
-        pitfalls: "l < r not l <= r. Must be sorted first.",
+        recognition: "Sorted array, pair sum, 3Sum, palindrome, container.",
+        mentalModel: "Left at start, right at end. Move inward based on comparison.",
+        pitfalls: "l < r not <=. Must sort first for most problems. Deduplicate with while loop.",
         problems: [
           { num: "167", name: "Two Sum II", url: "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/" },
-          { num: "11", name: "Container With Most Water", url: "https://leetcode.com/problems/container-with-most-water/" },
-          { num: "125", name: "Valid Palindrome", url: "https://leetcode.com/problems/valid-palindrome/" }
+          { num: "15", name: "3Sum", url: "https://leetcode.com/problems/3sum/" },
+          { num: "11", name: "Container With Most Water", url: "https://leetcode.com/problems/container-with-most-water/" }
         ],
         code: {
-          "Java": `int l = 0, r = arr.length - 1;\nwhile (l < r) {\n    int sum = arr[l] + arr[r];\n    if (sum == target) return new int[]{l, r};\n    else if (sum < target) l++;\n    else r--;\n}`,
-          "Kotlin": `var l = 0; var r = arr.size - 1\nwhile (l < r) {\n    val sum = arr[l] + arr[r]\n    when {\n        sum == target -> return intArrayOf(l, r)\n        sum < target -> l++\n        else -> r--\n    }\n}`,
-          "Python": `l, r = 0, len(arr) - 1\nwhile l < r:\n    s = arr[l] + arr[r]\n    if s == target: return [l, r]\n    elif s < target: l += 1\n    else: r -= 1`
+          "Java": `int l = 0, r = arr.length - 1;
+while (l < r) {
+    int sum = arr[l] + arr[r];
+    if (sum == target) return new int[]{l, r};
+    if (sum < target) l++; else r--;
+}
+// 3Sum: fix one, two-pointer rest
+Arrays.sort(nums);
+for (int i = 0; i < n-2; i++) {
+    if (i > 0 && nums[i] == nums[i-1]) continue; // skip dups
+    int l = i+1, r = n-1;
+    while (l < r) { /* two pointer logic */ }
+}`,
+          "Kotlin": `var l = 0; var r = arr.size - 1
+while (l < r) {
+    val sum = arr[l] + arr[r]
+    when { sum == target -> return intArrayOf(l,r)
+           sum < target -> l++; else -> r-- }
+}`,
+          "Python": `l, r = 0, len(arr) - 1
+while l < r:
+    s = arr[l] + arr[r]
+    if s == target: return [l, r]
+    elif s < target: l += 1
+    else: r -= 1`
         }
       },
       {
-        name: "Same Direction",
-        recognition: "In-place modification, remove duplicates, partition.",
-        mentalModel: "Slow tracks valid zone, fast explores. Copy fast to slow when valid.",
-        pitfalls: "Overwriting data before reading it.",
+        name: "Same Direction (Slow & Fast)",
+        recognition: "In-place remove, deduplicate, partition array.",
+        mentalModel: "slow = write pointer. fast = read pointer. Copy fast→slow when condition met.",
+        pitfalls: "Overwriting before reading. Return slow as new length.",
         problems: [
           { num: "26", name: "Remove Duplicates", url: "https://leetcode.com/problems/remove-duplicates-from-sorted-array/" },
-          { num: "283", name: "Move Zeroes", url: "https://leetcode.com/problems/move-zeroes/" }
+          { num: "283", name: "Move Zeroes", url: "https://leetcode.com/problems/move-zeroes/" },
+          { num: "75", name: "Sort Colors", url: "https://leetcode.com/problems/sort-colors/" }
         ],
         code: {
-          "Java": `int slow = 0;\nfor (int fast = 0; fast < n; fast++) {\n    if (isValid(arr[fast])) {\n        arr[slow++] = arr[fast];\n    }\n}\n// slow = new length`,
-          "Kotlin": `var slow = 0\nfor (fast in 0 until n) {\n    if (isValid(arr[fast])) {\n        arr[slow++] = arr[fast]\n    }\n}`,
-          "Python": `slow = 0\nfor fast in range(len(arr)):\n    if is_valid(arr[fast]):\n        arr[slow] = arr[fast]\n        slow += 1`
+          "Java": `int slow = 0;
+for (int fast = 0; fast < n; fast++) {
+    if (isValid(arr[fast])) // condition varies
+        arr[slow++] = arr[fast];
+}
+// Dutch flag (3-way partition)
+int lo=0, mid=0, hi=n-1;
+while (mid <= hi) {
+    if (nums[mid]==0) swap(lo++,mid++);
+    else if (nums[mid]==2) swap(mid,hi--);
+    else mid++;
+}`,
+          "Kotlin": `var slow = 0
+for (fast in 0 until n)
+    if (isValid(arr[fast])) arr[slow++] = arr[fast]`,
+          "Python": `slow = 0
+for fast in range(len(arr)):
+    if is_valid(arr[fast]):
+        arr[slow] = arr[fast]; slow += 1`
         }
       },
       {
         name: "Fast & Slow Pointer",
-        recognition: "Cycle detection, middle of linked list.",
-        mentalModel: "Fast moves 2x. They meet inside cycle or fast reaches null.",
-        pitfalls: "Null check: fast != null AND fast.next != null.",
+        recognition: "Cycle detection, find middle, happy number.",
+        mentalModel: "Fast moves 2x. They meet if cycle. When fast=null, slow=middle.",
+        pitfalls: "Check fast!=null AND fast.next!=null. Start both at head.",
         problems: [
           { num: "141", name: "Linked List Cycle", url: "https://leetcode.com/problems/linked-list-cycle/" },
-          { num: "876", name: "Middle of Linked List", url: "https://leetcode.com/problems/middle-of-the-linked-list/" }
+          { num: "876", name: "Middle of Linked List", url: "https://leetcode.com/problems/middle-of-the-linked-list/" },
+          { num: "202", name: "Happy Number", url: "https://leetcode.com/problems/happy-number/" }
         ],
         code: {
-          "Java": `ListNode slow = head, fast = head;\nwhile (fast != null && fast.next != null) {\n    slow = slow.next;\n    fast = fast.next.next;\n    if (slow == fast) return true; // cycle\n}\n// slow = middle`,
-          "Kotlin": `var slow = head; var fast = head\nwhile (fast?.next != null) {\n    slow = slow?.next\n    fast = fast.next?.next\n    if (slow === fast) return true\n}`,
-          "Python": `slow = fast = head\nwhile fast and fast.next:\n    slow = slow.next\n    fast = fast.next.next\n    if slow == fast:\n        return True  # cycle`
+          "Java": `ListNode slow = head, fast = head;
+while (fast != null && fast.next != null) {
+    slow = slow.next;
+    fast = fast.next.next;
+    if (slow == fast) return true; // cycle!
+}
+// slow = middle when fast = null`,
+          "Kotlin": `var slow = head; var fast = head
+while (fast?.next != null) {
+    slow = slow?.next; fast = fast.next?.next
+    if (slow === fast) return true
+}`,
+          "Python": `slow = fast = head
+while fast and fast.next:
+    slow = slow.next
+    fast = fast.next.next
+    if slow == fast: return True`
         }
       }
     ]
@@ -182,46 +382,110 @@ const dsaData = [
     patterns: [
       {
         name: "Fixed Window",
-        recognition: "Subarray of exact size K. Max/min/avg over all windows.",
-        mentalModel: "Slide a window of size K. Add right element, remove left element.",
-        pitfalls: "Update result AFTER window reaches size K.",
+        recognition: "Max/min/average over all subarrays of size K exactly.",
+        mentalModel: "Initialize first K. Then slide: add right, remove left element.",
+        pitfalls: "Build initial window before loop. Result after window reaches K.",
         problems: [
           { num: "643", name: "Max Avg Subarray I", url: "https://leetcode.com/problems/maximum-average-subarray-i/" }
         ],
         code: {
-          "Java": `int sum = 0;\nfor (int i = 0; i < k; i++) sum += arr[i];\nint best = sum;\nfor (int i = k; i < n; i++) {\n    sum += arr[i] - arr[i - k];\n    best = Math.max(best, sum);\n}\nreturn best;`,
-          "Kotlin": `var sum = arr.take(k).sum()\nvar best = sum\nfor (i in k until arr.size) {\n    sum += arr[i] - arr[i - k]\n    best = maxOf(best, sum)\n}\nreturn best`,
-          "Python": `window = sum(arr[:k])\nbest = window\nfor i in range(k, len(arr)):\n    window += arr[i] - arr[i - k]\n    best = max(best, window)\nreturn best`
+          "Java": `int sum = 0;
+for (int i = 0; i < k; i++) sum += arr[i];
+int best = sum;
+for (int i = k; i < n; i++) {
+    sum += arr[i] - arr[i-k];
+    best = Math.max(best, sum);
+}`,
+          "Kotlin": `var sum = arr.take(k).sum(); var best = sum
+for (i in k until arr.size) { sum += arr[i] - arr[i-k]; best = maxOf(best, sum) }`,
+          "Python": `window = sum(arr[:k]); best = window
+for i in range(k, len(arr)):
+    window += arr[i] - arr[i-k]; best = max(best, window)`
         }
       },
       {
         name: "Variable Window",
-        recognition: "Longest/shortest window satisfying a condition.",
-        mentalModel: "Expand right always. Shrink left while condition breaks.",
-        pitfalls: "Update result OUTSIDE the while loop (after shrinking).",
+        recognition: "Longest/shortest subarray satisfying condition. No fixed K.",
+        mentalModel: "Expand right always. Shrink left WHILE invalid. Update result after shrink.",
+        pitfalls: "Update result OUTSIDE while loop. Shrink until VALID.",
         problems: [
           { num: "3", name: "Longest Substring No Repeat", url: "https://leetcode.com/problems/longest-substring-without-repeating-characters/" },
-          { num: "209", name: "Min Size Subarray Sum", url: "https://leetcode.com/problems/minimum-size-subarray-sum/" }
+          { num: "209", name: "Min Size Subarray Sum", url: "https://leetcode.com/problems/minimum-size-subarray-sum/" },
+          { num: "424", name: "Longest Repeating Char Replace", url: "https://leetcode.com/problems/longest-repeating-character-replacement/" }
         ],
         code: {
-          "Java": `int l = 0, res = 0;\nfor (int r = 0; r < n; r++) {\n    // add arr[r] to window state\n    while (/* window invalid */) {\n        // remove arr[l] from state\n        l++;\n    }\n    res = Math.max(res, r - l + 1);\n}`,
-          "Kotlin": `var l = 0; var res = 0\nfor (r in 0 until n) {\n    // add arr[r] to state\n    while (/* invalid */) {\n        // remove arr[l]\n        l++\n    }\n    res = maxOf(res, r - l + 1)\n}`,
-          "Python": `l = res = 0\nfor r in range(len(arr)):\n    # add arr[r] to state\n    while False:  # invalid condition\n        # remove arr[l]\n        l += 1\n    res = max(res, r - l + 1)`
+          "Java": `int l = 0, res = 0;
+Map<Character, Integer> win = new HashMap<>();
+for (int r = 0; r < s.length(); r++) {
+    win.merge(s.charAt(r), 1, Integer::sum);
+    while (/* invalid */) {
+        win.merge(s.charAt(l), -1, Integer::sum);
+        if (win.get(s.charAt(l)) == 0) win.remove(s.charAt(l));
+        l++;
+    }
+    res = Math.max(res, r - l + 1);
+}`,
+          "Kotlin": `var l = 0; var res = 0
+val win = mutableMapOf<Char, Int>()
+for (r in s.indices) {
+    win[s[r]] = (win[s[r]] ?: 0) + 1
+    while (/* invalid */) { win[s[l]] = win[s[l]]!! - 1; if (win[s[l]] == 0) win.remove(s[l]); l++ }
+    res = maxOf(res, r - l + 1)
+}`,
+          "Python": `l = res = 0; win = {}
+for r, c in enumerate(s):
+    win[c] = win.get(c, 0) + 1
+    while False:  # invalid condition
+        win[s[l]] -= 1
+        if win[s[l]] == 0: del win[s[l]]
+        l += 1
+    res = max(res, r - l + 1)`
         }
       },
       {
-        name: "Frequency Map Window",
-        recognition: "Window with at most/exactly K distinct characters/elements.",
-        mentalModel: "HashMap tracks freq. Shrink when map.size() > K. Exactly K = AtMost(K) - AtMost(K-1).",
-        pitfalls: "Remove key from map when count reaches 0. Exactly K trick.",
+        name: "Frequency Map Window (Exactly K)",
+        recognition: "Window with at most/exactly K distinct elements.",
+        mentalModel: "Exactly K = atMost(K) - atMost(K-1). Shrink when map.size() > K.",
+        pitfalls: "Remove key from map when count hits 0. Exactly K trick is key.",
         problems: [
-          { num: "76", name: "Minimum Window Substring", url: "https://leetcode.com/problems/minimum-window-substring/" },
+          { num: "76", name: "Min Window Substring", url: "https://leetcode.com/problems/minimum-window-substring/" },
           { num: "992", name: "Subarrays with K Different", url: "https://leetcode.com/problems/subarrays-with-k-different-integers/" }
         ],
         code: {
-          "Java": `// Exactly K = AtMost(K) - AtMost(K-1)\nprivate int atMost(int[] arr, int k) {\n    Map<Integer,Integer> freq = new HashMap<>();\n    int l = 0, res = 0;\n    for (int r = 0; r < arr.length; r++) {\n        freq.merge(arr[r], 1, Integer::sum);\n        while (freq.size() > k) {\n            freq.merge(arr[l], -1, Integer::sum);\n            if (freq.get(arr[l]) == 0) freq.remove(arr[l]);\n            l++;\n        }\n        res += r - l + 1;\n    }\n    return res;\n}`,
-          "Kotlin": `fun atMost(arr: IntArray, k: Int): Int {\n    val freq = mutableMapOf<Int, Int>()\n    var l = 0; var res = 0\n    for (r in arr.indices) {\n        freq[arr[r]] = (freq[arr[r]] ?: 0) + 1\n        while (freq.size > k) {\n            freq[arr[l]] = freq[arr[l]]!! - 1\n            if (freq[arr[l]] == 0) freq.remove(arr[l])\n            l++\n        }\n        res += r - l + 1\n    }\n    return res\n}`,
-          "Python": `def at_most(arr, k):\n    freq = {}\n    l = res = 0\n    for r, x in enumerate(arr):\n        freq[x] = freq.get(x, 0) + 1\n        while len(freq) > k:\n            freq[arr[l]] -= 1\n            if freq[arr[l]] == 0: del freq[arr[l]]\n            l += 1\n        res += r - l + 1\n    return res`
+          "Java": `// Min Window Substring
+Map<Character,Integer> need = new HashMap<>(), win = new HashMap<>();
+for (char c : t.toCharArray()) need.merge(c, 1, Integer::sum);
+int formed=0, l=0, minLen=Integer.MAX_VALUE; String res="";
+for (int r=0; r < s.length(); r++) {
+    char c = s.charAt(r);
+    win.merge(c, 1, Integer::sum);
+    if (need.containsKey(c) && win.get(c).equals(need.get(c))) formed++;
+    while (formed == need.size()) {
+        if (r-l+1 < minLen) { minLen=r-l+1; res=s.substring(l,r+1); }
+        char lc = s.charAt(l++);
+        win.merge(lc,-1,Integer::sum);
+        if (need.containsKey(lc) && win.get(lc) < need.get(lc)) formed--;
+    }
+}`,
+          "Kotlin": `fun atMost(arr: IntArray, k: Int): Int {
+    val freq = mutableMapOf<Int,Int>(); var l=0; var res=0
+    for (r in arr.indices) {
+        freq[arr[r]] = (freq[arr[r]] ?: 0) + 1
+        while (freq.size > k) { freq[arr[l]] = freq[arr[l]]!!-1; if(freq[arr[l]]==0) freq.remove(arr[l]); l++ }
+        res += r - l + 1
+    }; return res
+}`,
+          "Python": `def at_most(arr, k):
+    freq = {}; l = res = 0
+    for r, x in enumerate(arr):
+        freq[x] = freq.get(x, 0) + 1
+        while len(freq) > k:
+            freq[arr[l]] -= 1
+            if freq[arr[l]] == 0: del freq[arr[l]]
+            l += 1
+        res += r - l + 1
+    return res
+# Exactly K = at_most(K) - at_most(K-1)`
         }
       }
     ]
@@ -234,32 +498,61 @@ const dsaData = [
     patterns: [
       {
         name: "Counting & Grouping",
-        recognition: "Group anagrams. Frequency analysis. Top K frequent.",
-        mentalModel: "Map each element or signature to a group/count.",
-        pitfalls: "Arrays.sort() for anagram key. getOrDefault() always.",
+        recognition: "Group anagrams. Top K frequent. Count occurrences by key.",
+        mentalModel: "Map signature → group. Map element → count. Build then query.",
+        pitfalls: "Arrays.sort() for anagram key. Always getOrDefault().",
         problems: [
           { num: "49", name: "Group Anagrams", url: "https://leetcode.com/problems/group-anagrams/" },
           { num: "347", name: "Top K Frequent", url: "https://leetcode.com/problems/top-k-frequent-elements/" }
         ],
         code: {
-          "Java": `Map<String, List<String>> map = new HashMap<>();\nfor (String w : words) {\n    char[] c = w.toCharArray(); Arrays.sort(c);\n    String key = new String(c);\n    map.computeIfAbsent(key, k -> new ArrayList<>()).add(w);\n}`,
-          "Kotlin": `val map = mutableMapOf<String, MutableList<String>>()\nfor (w in words) {\n    val key = w.toCharArray().sorted().joinToString(\"\")\n    map.getOrPut(key) { mutableListOf() }.add(w)\n}`,
-          "Python": `from collections import defaultdict\nmap = defaultdict(list)\nfor w in words:\n    key = ''.join(sorted(w))\n    map[key].append(w)`
+          "Java": `Map<String, List<String>> map = new HashMap<>();
+for (String w : words) {
+    char[] c = w.toCharArray(); Arrays.sort(c);
+    map.computeIfAbsent(new String(c), k -> new ArrayList<>()).add(w);
+}`,
+          "Kotlin": `val map = mutableMapOf<String, MutableList<String>>()
+for (w in words) {
+    val key = w.toCharArray().sorted().joinToString("")
+    map.getOrPut(key) { mutableListOf() }.add(w)
+}`,
+          "Python": `from collections import defaultdict
+map = defaultdict(list)
+for w in words: map[tuple(sorted(w))].append(w)`
         }
       },
       {
         name: "Lookup & Deduplication",
-        recognition: "Check if element exists. Remove duplicates. Longest consecutive.",
-        mentalModel: "HashSet = O(1) existence check. No ordering needed.",
-        pitfalls: "Set vs Map. equals()/hashCode() for custom objects.",
+        recognition: "Check existence O(1). Longest consecutive. Contains duplicate.",
+        mentalModel: "HashSet = O(1) contains. Only start sequence from element with no left neighbor.",
+        pitfalls: "equals()/hashCode() for custom objects. Only start from sequence beginning.",
         problems: [
           { num: "128", name: "Longest Consecutive", url: "https://leetcode.com/problems/longest-consecutive-sequence/" },
-          { num: "217", name: "Contains Duplicate", url: "https://leetcode.com/problems/contains-duplicate/" }
+          { num: "217", name: "Contains Duplicate", url: "https://leetcode.com/problems/contains-duplicate/" },
+          { num: "1", name: "Two Sum", url: "https://leetcode.com/problems/two-sum/" }
         ],
         code: {
-          "Java": `Set<Integer> set = new HashSet<>();\nfor (int n : nums) set.add(n);\nint best = 0;\nfor (int n : set) {\n    if (!set.contains(n - 1)) { // start of sequence\n        int len = 1;\n        while (set.contains(n + len)) len++;\n        best = Math.max(best, len);\n    }\n}`,
-          "Kotlin": `val set = nums.toHashSet()\nvar best = 0\nfor (n in set) {\n    if (n - 1 !in set) {\n        var len = 1\n        while (n + len in set) len++\n        best = maxOf(best, len)\n    }\n}`,
-          "Python": `s = set(nums)\nbest = 0\nfor n in s:\n    if n - 1 not in s:\n        length = 1\n        while n + length in s:\n            length += 1\n        best = max(best, length)`
+          "Java": `// Longest Consecutive O(N)
+Set<Integer> set = new HashSet<>();
+for (int n : nums) set.add(n);
+int best = 0;
+for (int n : set) {
+    if (!set.contains(n-1)) { // start of sequence only!
+        int len = 1;
+        while (set.contains(n + len)) len++;
+        best = Math.max(best, len);
+    }
+}`,
+          "Kotlin": `val set = nums.toHashSet()
+val best = set.filter { it-1 !in set }.maxOfOrNull { n ->
+    var len=1; while(n+len in set) len++; len
+} ?: 0`,
+          "Python": `s = set(nums); best = 0
+for n in s:
+    if n - 1 not in s:
+        length = 1
+        while n + length in s: length += 1
+        best = max(best, length)`
         }
       }
     ]
@@ -271,47 +564,159 @@ const dsaData = [
     color: "#4f7a4a",
     patterns: [
       {
-        name: "Basic Stack (Parentheses)",
-        recognition: "Matching pairs, undo operations, reverse order.",
-        mentalModel: "Push opening. On closing, pop and check match.",
-        pitfalls: "Pop on empty stack. Check stack is empty at end.",
+        name: "Basic Stack (Parentheses Matching)",
+        recognition: "Matching pairs, undo operations, balanced brackets.",
+        mentalModel: "Push opening brackets. On closing, pop and check match. Empty at end = valid.",
+        pitfalls: "Pop on empty stack (check first!). Stack must be empty at end.",
         problems: [
           { num: "20", name: "Valid Parentheses", url: "https://leetcode.com/problems/valid-parentheses/" },
-          { num: "150", name: "Evaluate RPN", url: "https://leetcode.com/problems/evaluate-reverse-polish-notation/" }
+          { num: "155", name: "Min Stack", url: "https://leetcode.com/problems/min-stack/" }
         ],
         code: {
-          "Java": `Deque<Character> st = new ArrayDeque<>();\nfor (char c : s.toCharArray()) {\n    if (c == '(') st.push(c);\n    else if (c == ')') {\n        if (st.isEmpty()) return false;\n        st.pop();\n    }\n}\nreturn st.isEmpty();`,
-          "Kotlin": `val st = ArrayDeque<Char>()\nfor (c in s) {\n    if (c == '(') st.addLast(c)\n    else if (c == ')') {\n        if (st.isEmpty()) return false\n        st.removeLast()\n    }\n}\nreturn st.isEmpty()`,
-          "Python": `st = []\nfor c in s:\n    if c == '(': st.append(c)\n    elif c == ')':\n        if not st: return False\n        st.pop()\nreturn len(st) == 0`
+          "Java": `Map<Character,Character> map = Map.of(')','(', ']','[', '}','{');
+Deque<Character> st = new ArrayDeque<>();
+for (char c : s.toCharArray()) {
+    if ("([{".indexOf(c) >= 0) st.push(c);
+    else if (st.isEmpty() || st.pop() != map.get(c)) return false;
+}
+return st.isEmpty();`,
+          "Kotlin": `val pair = mapOf(')' to '(', ']' to '[', '}' to '{')
+val st = ArrayDeque<Char>()
+for (c in s) {
+    if (c in "([{") st.addLast(c)
+    else if (st.isEmpty() || st.removeLast() != pair[c]) return false
+}
+return st.isEmpty()`,
+          "Python": `pair = {')':'(', ']':'[', '}':'{'}
+st = []
+for c in s:
+    if c in "([{": st.append(c)
+    elif not st or st.pop() != pair[c]: return False
+return len(st) == 0`
         }
       },
       {
-        name: "Monotonic Increasing Stack",
-        recognition: "Next Smaller Element. Previous Smaller Element.",
-        mentalModel: "Pop elements GREATER than current. Stack stays increasing.",
-        pitfalls: "Store indices not values for distance calculations.",
-        problems: [
-          { num: "84", name: "Largest Rectangle", url: "https://leetcode.com/problems/largest-rectangle-in-histogram/" }
-        ],
-        code: {
-          "Java": `Deque<Integer> st = new ArrayDeque<>(); // stores indices\nfor (int i = 0; i <= n; i++) {\n    int h = (i == n) ? 0 : heights[i];\n    while (!st.isEmpty() && heights[st.peek()] > h) {\n        int height = heights[st.pop()];\n        int width = st.isEmpty() ? i : i - st.peek() - 1;\n        res = Math.max(res, height * width);\n    }\n    st.push(i);\n}`,
-          "Kotlin": `val st = ArrayDeque<Int>()\nfor (i in 0..n) {\n    val h = if (i == n) 0 else heights[i]\n    while (st.isNotEmpty() && heights[st.last()] > h) {\n        val height = heights[st.removeLast()]\n        val width = if (st.isEmpty()) i else i - st.last() - 1\n        res = maxOf(res, height * width)\n    }\n    st.addLast(i)\n}`,
-          "Python": `st = []  # indices\nfor i in range(len(heights) + 1):\n    h = 0 if i == len(heights) else heights[i]\n    while st and heights[st[-1]] > h:\n        height = heights[st.pop()]\n        width = i if not st else i - st[-1] - 1\n        res = max(res, height * width)\n    st.append(i)`
-        }
-      },
-      {
-        name: "Monotonic Decreasing Stack",
-        recognition: "Next Greater Element. Temperatures. Span.",
-        mentalModel: "Pop elements SMALLER than current. Stack stays decreasing.",
-        pitfalls: "Indices vs values. Answer array initialization.",
+        name: "Monotonic Decreasing Stack (Next Greater)",
+        recognition: "Next greater element. Daily temperatures. Stock span.",
+        mentalModel: "Pop elements SMALLER than current → they found their next greater. Stack stays decreasing.",
+        pitfalls: "Store indices not values for distance. Pop when arr[stack.top] < arr[i].",
         problems: [
           { num: "739", name: "Daily Temperatures", url: "https://leetcode.com/problems/daily-temperatures/" },
           { num: "496", name: "Next Greater Element I", url: "https://leetcode.com/problems/next-greater-element-i/" }
         ],
         code: {
-          "Java": `int[] res = new int[n];\nDeque<Integer> st = new ArrayDeque<>();\nfor (int i = 0; i < n; i++) {\n    while (!st.isEmpty() && arr[st.peek()] < arr[i]) {\n        res[st.pop()] = i - st.peek(); // days until warmer\n    }\n    st.push(i);\n}`,
-          "Kotlin": `val res = IntArray(n)\nval st = ArrayDeque<Int>()\nfor (i in 0 until n) {\n    while (st.isNotEmpty() && arr[st.last()] < arr[i]) {\n        res[st.removeLast()] = arr[i] // next greater value\n    }\n    st.addLast(i)\n}`,
-          "Python": `res = [0] * n\nst = []\nfor i, x in enumerate(arr):\n    while st and arr[st[-1]] < x:\n        res[st.pop()] = x\n    st.append(i)`
+          "Java": `int[] res = new int[n];
+Deque<Integer> st = new ArrayDeque<>(); // indices
+for (int i = 0; i < n; i++) {
+    while (!st.isEmpty() && arr[st.peek()] < arr[i]) {
+        int idx = st.pop();
+        res[idx] = i - idx; // days until warmer
+    }
+    st.push(i);
+}`,
+          "Kotlin": `val res = IntArray(n); val st = ArrayDeque<Int>()
+for (i in 0 until n) {
+    while (st.isNotEmpty() && arr[st.last()] < arr[i])
+        res[st.removeLast()] = i - st.lastOrNull()!! // fix as needed
+    st.addLast(i)
+}`,
+          "Python": `res = [0] * n; st = []
+for i, x in enumerate(arr):
+    while st and arr[st[-1]] < x:
+        idx = st.pop()
+        res[idx] = i - idx
+    st.append(i)`
+        }
+      },
+      {
+        name: "Monotonic Increasing Stack (Next Smaller)",
+        recognition: "Largest rectangle in histogram. Trapping rain water.",
+        mentalModel: "Pop elements LARGER than current. Stack stays increasing.",
+        pitfalls: "Add sentinel 0 at end for histogram. Width calculation using stack top.",
+        problems: [
+          { num: "84", name: "Largest Rectangle in Histogram", url: "https://leetcode.com/problems/largest-rectangle-in-histogram/" },
+          { num: "42", name: "Trapping Rain Water", url: "https://leetcode.com/problems/trapping-rain-water/" }
+        ],
+        code: {
+          "Java": `int res = 0;
+Deque<Integer> st = new ArrayDeque<>();
+for (int i = 0; i <= n; i++) {
+    int h = (i == n) ? 0 : heights[i];
+    while (!st.isEmpty() && heights[st.peek()] > h) {
+        int height = heights[st.pop()];
+        int width = st.isEmpty() ? i : i - st.peek() - 1;
+        res = Math.max(res, height * width);
+    }
+    st.push(i);
+}`,
+          "Kotlin": `val st = ArrayDeque<Int>(); var res = 0
+for (i in 0..n) {
+    val h = if (i == n) 0 else heights[i]
+    while (st.isNotEmpty() && heights[st.last()] > h) {
+        val height = heights[st.removeLast()]
+        val width = if (st.isEmpty()) i else i - st.last() - 1
+        res = maxOf(res, height * width)
+    }
+    st.addLast(i)
+}`,
+          "Python": `st = []; res = 0
+for i in range(len(heights) + 1):
+    h = 0 if i == len(heights) else heights[i]
+    while st and heights[st[-1]] > h:
+        height = heights[st.pop()]
+        width = i if not st else i - st[-1] - 1
+        res = max(res, height * width)
+    st.append(i)`
+        }
+      },
+      {
+        name: "Expression Evaluation",
+        recognition: "Calculate string expression with +,-,*,/. Operators with precedence.",
+        mentalModel: "Scan left-right. On + or -: push. On * or /: pop and compute. Sum stack at end.",
+        pitfalls: "Handle negative numbers. Integer division truncates toward zero in Java.",
+        problems: [
+          { num: "224", name: "Basic Calculator", url: "https://leetcode.com/problems/basic-calculator/" },
+          { num: "227", name: "Basic Calculator II", url: "https://leetcode.com/problems/basic-calculator-ii/" }
+        ],
+        code: {
+          "Java": `// Basic Calculator II (+,-,*,/)
+Deque<Integer> st = new ArrayDeque<>();
+int num = 0; char op = '+';
+for (int i = 0; i < s.length(); i++) {
+    char c = s.charAt(i);
+    if (Character.isDigit(c)) num = num * 10 + (c - '0');
+    if (!Character.isDigit(c) && c != ' ' || i == s.length()-1) {
+        if (op=='+') st.push(num);
+        else if (op=='-') st.push(-num);
+        else if (op=='*') st.push(st.pop() * num);
+        else st.push(st.pop() / num);
+        op = c; num = 0;
+    }
+}
+int res = 0; while (!st.isEmpty()) res += st.pop();
+return res;`,
+          "Kotlin": `val st = ArrayDeque<Int>(); var num = 0; var op = '+'
+for (i in s.indices) {
+    val c = s[i]
+    if (c.isDigit()) num = num * 10 + (c - '0')
+    if (!c.isDigit() && c != ' ' || i == s.length-1) {
+        when (op) { '+' -> st.addLast(num); '-' -> st.addLast(-num)
+                    '*' -> st.addLast(st.removeLast() * num)
+                    '/' -> st.addLast(st.removeLast() / num) }
+        op = c; num = 0
+    }
+}`,
+          "Python": `st = []; num = 0; op = '+'
+s = s + '+'  # sentinel
+for c in s:
+    if c.isdigit(): num = num * 10 + int(c)
+    elif c != ' ':
+        if op == '+': st.append(num)
+        elif op == '-': st.append(-num)
+        elif op == '*': st.append(st.pop() * num)
+        elif op == '/': st.append(int(st.pop() / num))
+        op = c; num = 0
+return sum(st)`
         }
       }
     ]
@@ -323,32 +728,122 @@ const dsaData = [
     color: "#2e7a9c",
     patterns: [
       {
-        name: "BFS Queue",
-        recognition: "Shortest path in unweighted graph. Level-by-level.",
-        mentalModel: "Queue + visited set. Process level using size snapshot.",
-        pitfalls: "Mark visited WHEN enqueuing, not when dequeuing.",
+        name: "Basic Queue (FIFO)",
+        recognition: "Process in order received. Level-by-level. First in first out.",
+        mentalModel: "offer() adds to back. poll() removes from front. Use LinkedList or ArrayDeque.",
+        pitfalls: "LinkedList is slower than ArrayDeque. Use peek() to check front without removing.",
         problems: [
-          { num: "102", name: "Level Order Traversal", url: "https://leetcode.com/problems/binary-tree-level-order-traversal/" },
-          { num: "127", name: "Word Ladder", url: "https://leetcode.com/problems/word-ladder/" }
+          { num: "933", name: "Number of Recent Calls", url: "https://leetcode.com/problems/number-of-recent-calls/" },
+          { num: "346", name: "Moving Average From Data Stream", url: "https://leetcode.com/problems/moving-average-from-data-stream/" }
         ],
         code: {
-          "Java": `Queue<Node> q = new LinkedList<>();\nSet<Node> vis = new HashSet<>();\nq.offer(start); vis.add(start);\nwhile (!q.isEmpty()) {\n    int size = q.size();\n    for (int i = 0; i < size; i++) {\n        Node cur = q.poll();\n        for (Node nb : neighbors(cur)) {\n            if (!vis.contains(nb)) {\n                vis.add(nb); q.offer(nb);\n            }\n        }\n    }\n}`,
-          "Kotlin": `val q = ArrayDeque<Node>()\nval vis = mutableSetOf<Node>()\nq.addLast(start); vis.add(start)\nwhile (q.isNotEmpty()) {\n    repeat(q.size) {\n        val cur = q.removeFirst()\n        for (nb in neighbors(cur)) {\n            if (nb !in vis) { vis.add(nb); q.addLast(nb) }\n        }\n    }\n}`,
-          "Python": `from collections import deque\nq = deque([start])\nvis = {start}\nwhile q:\n    for _ in range(len(q)):\n        cur = q.popleft()\n        for nb in neighbors(cur):\n            if nb not in vis:\n                vis.add(nb)\n                q.append(nb)`
+          "Java": `// Queue operations
+Queue<Integer> q = new LinkedList<>(); // or ArrayDeque
+q.offer(val);         // add to back
+int front = q.poll(); // remove from front
+int peek = q.peek();  // view front, don't remove
+int size = q.size();  // number of elements
+boolean empty = q.isEmpty();
+
+// Moving average with queue
+Deque<Integer> window = new ArrayDeque<>();
+double sum = 0;
+void add(int val) {
+    window.offer(val); sum += val;
+    if (window.size() > k) sum -= window.poll();
+}`,
+          "Kotlin": `val q = ArrayDeque<Int>()
+q.addLast(val)         // offer
+val front = q.removeFirst() // poll
+val peek = q.first()   // peek`,
+          "Python": `from collections import deque
+q = deque()
+q.append(val)       # add to back (offer)
+front = q.popleft() # remove from front (poll)
+peek = q[0]         # view front
+# Moving average
+window = deque(); total = 0
+def add(val):
+    window.append(val); total += val
+    if len(window) > k: total -= window.popleft()`
         }
       },
       {
-        name: "Monotonic Deque",
-        recognition: "Sliding window maximum or minimum.",
-        mentalModel: "Deque stores indices. Pop front if out-of-window. Pop back if smaller than new element.",
-        pitfalls: "Store indices not values. Deque front = current max.",
+        name: "BFS Queue (Shortest Path)",
+        recognition: "Shortest path unweighted. Minimum steps. Level-order traversal.",
+        mentalModel: "Queue + visited set. Mark visited WHEN adding to queue. Process level by level with size snapshot.",
+        pitfalls: "Mark visited BEFORE adding to queue, not after polling. Otherwise duplicates enter queue.",
+        problems: [
+          { num: "102", name: "Level Order Traversal", url: "https://leetcode.com/problems/binary-tree-level-order-traversal/" },
+          { num: "127", name: "Word Ladder", url: "https://leetcode.com/problems/word-ladder/" },
+          { num: "994", name: "Rotting Oranges", url: "https://leetcode.com/problems/rotting-oranges/" }
+        ],
+        code: {
+          "Java": `Queue<Integer> q = new LinkedList<>();
+boolean[] visited = new boolean[n];
+q.offer(start); visited[start] = true; // ← mark when adding!
+int steps = 0;
+while (!q.isEmpty()) {
+    int size = q.size(); // ← snapshot for level
+    for (int i = 0; i < size; i++) {
+        int node = q.poll();
+        if (node == target) return steps;
+        for (int nb : adj.get(node))
+            if (!visited[nb]) { visited[nb]=true; q.offer(nb); }
+    }
+    steps++;
+}`,
+          "Kotlin": `val q = ArrayDeque<Int>(); val vis = BooleanArray(n)
+q.addLast(start); vis[start] = true; var steps = 0
+while (q.isNotEmpty()) {
+    repeat(q.size) {
+        val node = q.removeFirst()
+        for (nb in adj[node]) if (!vis[nb]) { vis[nb]=true; q.addLast(nb) }
+    }; steps++
+}`,
+          "Python": `from collections import deque
+q = deque([start]); visited = {start}; steps = 0
+while q:
+    for _ in range(len(q)):
+        node = q.popleft()
+        if node == target: return steps
+        for nb in adj[node]:
+            if nb not in visited:
+                visited.add(nb); q.append(nb)
+    steps += 1`
+        }
+      },
+      {
+        name: "Monotonic Deque (Sliding Window Max)",
+        recognition: "Sliding window maximum/minimum. O(N) instead of O(NK).",
+        mentalModel: "Deque stores INDICES. Pop front if out of window. Pop back while smaller than current. Front = current max.",
+        pitfalls: "Store indices not values. Deque front always = max of current window.",
         problems: [
           { num: "239", name: "Sliding Window Maximum", url: "https://leetcode.com/problems/sliding-window-maximum/" }
         ],
         code: {
-          "Java": `Deque<Integer> dq = new ArrayDeque<>();\nint[] res = new int[n - k + 1];\nfor (int i = 0; i < n; i++) {\n    // Remove out-of-window\n    if (!dq.isEmpty() && dq.peekFirst() == i - k) dq.pollFirst();\n    // Remove smaller from back\n    while (!dq.isEmpty() && arr[dq.peekLast()] < arr[i]) dq.pollLast();\n    dq.offerLast(i);\n    if (i >= k - 1) res[i - k + 1] = arr[dq.peekFirst()];\n}`,
-          "Kotlin": `val dq = ArrayDeque<Int>()\nval res = IntArray(n - k + 1)\nfor (i in 0 until n) {\n    if (dq.isNotEmpty() && dq.first() == i - k) dq.removeFirst()\n    while (dq.isNotEmpty() && arr[dq.last()] < arr[i]) dq.removeLast()\n    dq.addLast(i)\n    if (i >= k - 1) res[i - k + 1] = arr[dq.first()]\n}`,
-          "Python": `from collections import deque\ndq = deque()\nres = []\nfor i, x in enumerate(arr):\n    if dq and dq[0] == i - k: dq.popleft()\n    while dq and arr[dq[-1]] < x: dq.pop()\n    dq.append(i)\n    if i >= k - 1: res.append(arr[dq[0]])`
+          "Java": `Deque<Integer> dq = new ArrayDeque<>();
+int[] res = new int[n - k + 1];
+for (int i = 0; i < n; i++) {
+    if (!dq.isEmpty() && dq.peekFirst() == i-k) dq.pollFirst(); // out of window
+    while (!dq.isEmpty() && arr[dq.peekLast()] < arr[i]) dq.pollLast(); // remove smaller
+    dq.offerLast(i);
+    if (i >= k-1) res[i-k+1] = arr[dq.peekFirst()]; // front = max
+}`,
+          "Kotlin": `val dq = ArrayDeque<Int>(); val res = IntArray(n-k+1)
+for (i in 0 until n) {
+    if (dq.isNotEmpty() && dq.first() == i-k) dq.removeFirst()
+    while (dq.isNotEmpty() && arr[dq.last()] < arr[i]) dq.removeLast()
+    dq.addLast(i)
+    if (i >= k-1) res[i-k+1] = arr[dq.first()]
+}`,
+          "Python": `from collections import deque
+dq = deque(); res = []
+for i, x in enumerate(arr):
+    if dq and dq[0] == i-k: dq.popleft()
+    while dq and arr[dq[-1]] < x: dq.pop()
+    dq.append(i)
+    if i >= k-1: res.append(arr[dq[0]])`
         }
       }
     ]
@@ -361,61 +856,138 @@ const dsaData = [
     patterns: [
       {
         name: "Classic Binary Search",
-        recognition: "Find exact target in sorted array. O(log N).",
-        mentalModel: "Halve search space based on mid comparison.",
-        pitfalls: "mid = l + (r-l)/2 to avoid overflow. l<=r for classic.",
+        recognition: "Find exact value in sorted array. O(log N).",
+        mentalModel: "Halve search space each iteration. Mid = l + (r-l)/2.",
+        pitfalls: "l+(r-l)/2 to avoid overflow. l<=r for exact match. l<r for boundary search.",
         problems: [
           { num: "704", name: "Binary Search", url: "https://leetcode.com/problems/binary-search/" }
         ],
         code: {
-          "Java": `int l = 0, r = n - 1;\nwhile (l <= r) {\n    int mid = l + (r - l) / 2;\n    if (arr[mid] == target) return mid;\n    if (arr[mid] < target) l = mid + 1;\n    else r = mid - 1;\n}\nreturn -1;`,
-          "Kotlin": `var l = 0; var r = arr.size - 1\nwhile (l <= r) {\n    val mid = l + (r - l) / 2\n    when {\n        arr[mid] == target -> return mid\n        arr[mid] < target -> l = mid + 1\n        else -> r = mid - 1\n    }\n}`,
-          "Python": `l, r = 0, len(arr) - 1\nwhile l <= r:\n    mid = l + (r - l) // 2\n    if arr[mid] == target: return mid\n    if arr[mid] < target: l = mid + 1\n    else: r = mid - 1\nreturn -1`
+          "Java": `int l = 0, r = n - 1;
+while (l <= r) {
+    int mid = l + (r - l) / 2;
+    if (arr[mid] == target) return mid;
+    if (arr[mid] < target) l = mid + 1;
+    else r = mid - 1;
+}
+return -1;`,
+          "Kotlin": `var l = 0; var r = arr.size - 1
+while (l <= r) {
+    val mid = l + (r-l)/2
+    when { arr[mid]==target -> return mid
+           arr[mid]<target -> l=mid+1; else -> r=mid-1 }
+}`,
+          "Python": `l, r = 0, len(arr)-1
+while l <= r:
+    mid = l + (r-l)//2
+    if arr[mid] == target: return mid
+    if arr[mid] < target: l = mid + 1
+    else: r = mid - 1`
         }
       },
       {
-        name: "Lower / Upper Bound",
-        recognition: "First or last occurrence of target. First element >= target.",
-        mentalModel: "If match: keep searching left (lower) or right (upper). l < r variant.",
-        pitfalls: "l < r for boundaries. Return l not mid.",
+        name: "Lower Bound / Upper Bound",
+        recognition: "First/last occurrence. First element >= target. Insert position.",
+        mentalModel: "Lower: if arr[mid]>=target → r=mid. Upper: if arr[mid]>target → r=mid. Return l.",
+        pitfalls: "r = n (not n-1). Return l not mid. l<r loop.",
         problems: [
           { num: "34", name: "First and Last Position", url: "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/" },
           { num: "35", name: "Search Insert Position", url: "https://leetcode.com/problems/search-insert-position/" }
         ],
         code: {
-          "Java": `// Lower bound (first >= target)\nint l = 0, r = n;\nwhile (l < r) {\n    int m = l + (r - l) / 2;\n    if (arr[m] >= target) r = m;\n    else l = m + 1;\n}\nreturn l;\n\n// Upper bound (first > target)\n// Replace >= with >`,
-          "Kotlin": `// Lower bound\nvar l = 0; var r = arr.size\nwhile (l < r) {\n    val m = l + (r - l) / 2\n    if (arr[m] >= target) r = m\n    else l = m + 1\n}\nreturn l`,
-          "Python": `import bisect\n# lower bound (first >= target)\nbisect.bisect_left(arr, target)\n# upper bound (first > target)\nbisect.bisect_right(arr, target)\n\n# Manual lower bound:\nl, r = 0, len(arr)\nwhile l < r:\n    m = (l + r) // 2\n    if arr[m] >= target: r = m\n    else: l = m + 1`
+          "Java": `// Lower bound: first index where arr[i] >= target
+int l=0, r=n; // r=n not n-1!
+while (l < r) {
+    int m = l + (r-l)/2;
+    if (arr[m] >= target) r = m;
+    else l = m + 1;
+}
+return l; // l==r, first position >= target`,
+          "Kotlin": `var l=0; var r=arr.size // r=n!
+while (l < r) { val m=l+(r-l)/2; if(arr[m]>=target) r=m else l=m+1 }
+return l`,
+          "Python": `import bisect
+# Lower bound (first >= target)
+bisect.bisect_left(arr, target)
+# Upper bound (first > target)
+bisect.bisect_right(arr, target)
+# Manual:
+l, r = 0, len(arr)
+while l < r:
+    m = (l+r)//2
+    if arr[m] >= target: r = m
+    else: l = m + 1`
         }
       },
       {
         name: "Rotated Array Search",
-        recognition: "Array rotated at unknown pivot. No duplicates.",
-        mentalModel: "One half is always sorted. Check which half and whether target is in it.",
-        pitfalls: "Duplicates require special handling. Check sorted half first.",
+        recognition: "Sorted but rotated at unknown pivot.",
+        mentalModel: "One half is ALWAYS sorted. Check which half, then check if target is in it.",
+        pitfalls: "Check arr[l]<=arr[mid] for left sorted (not <). Handle duplicates separately.",
         problems: [
           { num: "33", name: "Search in Rotated Array", url: "https://leetcode.com/problems/search-in-rotated-sorted-array/" },
-          { num: "153", name: "Find Min in Rotated", url: "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/" }
+          { num: "153", name: "Find Minimum in Rotated", url: "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/" }
         ],
         code: {
-          "Java": `int l = 0, r = arr.length - 1;\nwhile (l <= r) {\n    int m = l + (r - l) / 2;\n    if (arr[m] == target) return m;\n    if (arr[l] <= arr[m]) { // left half sorted\n        if (target >= arr[l] && target < arr[m]) r = m - 1;\n        else l = m + 1;\n    } else { // right half sorted\n        if (target > arr[m] && target <= arr[r]) l = m + 1;\n        else r = m - 1;\n    }\n}`,
-          "Kotlin": `var l = 0; var r = arr.size - 1\nwhile (l <= r) {\n    val m = l + (r - l) / 2\n    if (arr[m] == target) return m\n    if (arr[l] <= arr[m]) {\n        if (target in arr[l] until arr[m]) r = m - 1 else l = m + 1\n    } else {\n        if (target in (arr[m]+1)..arr[r]) l = m + 1 else r = m - 1\n    }\n}`,
-          "Python": `l, r = 0, len(arr) - 1\nwhile l <= r:\n    m = (l + r) // 2\n    if arr[m] == target: return m\n    if arr[l] <= arr[m]:  # left sorted\n        if arr[l] <= target < arr[m]: r = m - 1\n        else: l = m + 1\n    else:  # right sorted\n        if arr[m] < target <= arr[r]: l = m + 1\n        else: r = m - 1`
+          "Java": `int l=0, r=arr.length-1;
+while (l <= r) {
+    int m = l+(r-l)/2;
+    if (arr[m]==target) return m;
+    if (arr[l] <= arr[m]) { // left sorted
+        if (target>=arr[l] && target<arr[m]) r=m-1;
+        else l=m+1;
+    } else { // right sorted
+        if (target>arr[m] && target<=arr[r]) l=m+1;
+        else r=m-1;
+    }
+}`,
+          "Kotlin": `var l=0; var r=arr.size-1
+while (l<=r) {
+    val m=l+(r-l)/2
+    if(arr[m]==target) return m
+    if(arr[l]<=arr[m]) { if(target in arr[l] until arr[m]) r=m-1 else l=m+1 }
+    else { if(target in (arr[m]+1)..arr[r]) l=m+1 else r=m-1 }
+}`,
+          "Python": `l, r = 0, len(arr)-1
+while l <= r:
+    m = (l+r)//2
+    if arr[m]==target: return m
+    if arr[l]<=arr[m]: # left sorted
+        if arr[l]<=target<arr[m]: r=m-1
+        else: l=m+1
+    else: # right sorted
+        if arr[m]<target<=arr[r]: l=m+1
+        else: r=m-1`
         }
       },
       {
         name: "Binary Search on Answer",
-        recognition: "Minimize max / Maximize min. 'Smallest X such that...'",
-        mentalModel: "Search the ANSWER space (not array). Check if answer is feasible.",
-        pitfalls: "isValid function logic is often the hard part. Boundary hi/lo values.",
+        recognition: "Minimize max / Maximize min. 'Can we do X with Y speed?'",
+        mentalModel: "Search the answer space. Write isValid(mid) function. If valid→try smaller, else→try larger.",
+        pitfalls: "isValid logic is the hard part. Boundary values must cover all possible answers.",
         problems: [
           { num: "875", name: "Koko Eating Bananas", url: "https://leetcode.com/problems/koko-eating-bananas/" },
-          { num: "410", name: "Split Array Largest Sum", url: "https://leetcode.com/problems/split-array-largest-sum/" }
+          { num: "410", name: "Split Array Largest Sum", url: "https://leetcode.com/problems/split-array-largest-sum/" },
+          { num: "1011", name: "Capacity to Ship Packages", url: "https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/" }
         ],
         code: {
-          "Java": `int l = minPossible, r = maxPossible;\nwhile (l < r) {\n    int mid = l + (r - l) / 2;\n    if (isValid(mid)) r = mid; // try smaller\n    else l = mid + 1;\n}\nreturn l; // minimum valid answer`,
-          "Kotlin": `var l = minPossible; var r = maxPossible\nwhile (l < r) {\n    val mid = l + (r - l) / 2\n    if (isValid(mid)) r = mid\n    else l = mid + 1\n}\nreturn l`,
-          "Python": `l, r = min_possible, max_possible\nwhile l < r:\n    mid = (l + r) // 2\n    if is_valid(mid):\n        r = mid  # try smaller\n    else:\n        l = mid + 1\nreturn l`
+          "Java": `int l = minPossible, r = maxPossible;
+while (l < r) {
+    int mid = l + (r-l)/2;
+    if (isValid(mid)) r = mid; // try smaller
+    else l = mid + 1;
+}
+return l;
+// isValid: can we achieve goal with parameter=mid?`,
+          "Kotlin": `var l=minPossible; var r=maxPossible
+while (l < r) { val mid=l+(r-l)/2; if(isValid(mid)) r=mid else l=mid+1 }
+return l`,
+          "Python": `l, r = min_possible, max_possible
+while l < r:
+    mid = (l+r)//2
+    if is_valid(mid): r = mid  # try smaller
+    else: l = mid + 1
+return l`
         }
       }
     ]
@@ -427,49 +999,174 @@ const dsaData = [
     color: "#7a2e5c",
     patterns: [
       {
-        name: "Reverse List",
-        recognition: "Reverse entire or partial linked list.",
-        mentalModel: "Three pointers: prev, curr, next. Save next before overwriting.",
-        pitfalls: "Losing next pointer. Always use dummy node.",
+        name: "Reverse Linked List",
+        recognition: "Reverse entire or k-group or between positions.",
+        mentalModel: "Three pointers: prev=null, curr=head, next. Flip curr.next=prev. Advance all.",
+        pitfalls: "Save next BEFORE overwriting curr.next. Dummy node for edge cases.",
         problems: [
           { num: "206", name: "Reverse Linked List", url: "https://leetcode.com/problems/reverse-linked-list/" },
-          { num: "92", name: "Reverse Between", url: "https://leetcode.com/problems/reverse-linked-list-ii/" }
+          { num: "92", name: "Reverse Linked List II", url: "https://leetcode.com/problems/reverse-linked-list-ii/" },
+          { num: "25", name: "Reverse Nodes in K-Group", url: "https://leetcode.com/problems/reverse-nodes-in-k-group/" }
         ],
         code: {
-          "Java": `ListNode prev = null, curr = head;\nwhile (curr != null) {\n    ListNode next = curr.next;\n    curr.next = prev;\n    prev = curr;\n    curr = next;\n}\nreturn prev; // new head`,
-          "Kotlin": `var prev: ListNode? = null\nvar curr: ListNode? = head\nwhile (curr != null) {\n    val next = curr.next\n    curr.next = prev\n    prev = curr\n    curr = next\n}\nreturn prev`,
-          "Python": `prev, curr = None, head\nwhile curr:\n    nxt = curr.next\n    curr.next = prev\n    prev = curr\n    curr = nxt\nreturn prev`
+          "Java": `ListNode prev = null, curr = head;
+while (curr != null) {
+    ListNode next = curr.next; // save next
+    curr.next = prev;          // flip
+    prev = curr; curr = next;  // advance
+}
+return prev; // new head`,
+          "Kotlin": `var prev: ListNode? = null; var curr: ListNode? = head
+while (curr != null) {
+    val next = curr.next; curr.next = prev; prev = curr; curr = next
+}
+return prev`,
+          "Python": `prev, curr = None, head
+while curr:
+    nxt = curr.next
+    curr.next = prev
+    prev, curr = curr, nxt
+return prev`
         }
       },
       {
-        name: "Remove Nth & Middle Node",
-        recognition: "Remove Nth from end. Find middle. Two-pass or one-pass.",
-        mentalModel: "Fast pointer N steps ahead. Both move together until fast hits end.",
-        pitfalls: "Dummy node prevents edge case of removing head.",
+        name: "Find Middle & Remove Nth",
+        recognition: "Find middle node. Remove nth from end. One-pass solutions.",
+        mentalModel: "Fast pointer N steps ahead of slow. When fast hits end, slow is at target.",
+        pitfalls: "Dummy node prevents edge case of removing head. Fast advances N+1 times for Nth.",
         problems: [
-          { num: "19", name: "Remove Nth From End", url: "https://leetcode.com/problems/remove-nth-node-from-end-of-list/" },
-          { num: "876", name: "Middle of Linked List", url: "https://leetcode.com/problems/middle-of-the-linked-list/" }
+          { num: "876", name: "Middle of Linked List", url: "https://leetcode.com/problems/middle-of-the-linked-list/" },
+          { num: "19", name: "Remove Nth From End", url: "https://leetcode.com/problems/remove-nth-node-from-end-of-list/" }
         ],
         code: {
-          "Java": `ListNode dummy = new ListNode(0, head);\nListNode fast = dummy, slow = dummy;\nfor (int i = 0; i <= n; i++) fast = fast.next;\nwhile (fast != null) { slow = slow.next; fast = fast.next; }\nslow.next = slow.next.next;\nreturn dummy.next;`,
-          "Kotlin": `val dummy = ListNode(0).apply { next = head }\nvar fast: ListNode? = dummy; var slow: ListNode? = dummy\nfor (i in 0..n) fast = fast?.next\nwhile (fast != null) { slow = slow?.next; fast = fast?.next }\nslow?.next = slow?.next?.next\nreturn dummy.next`,
-          "Python": `dummy = ListNode(0, head)\nfast = slow = dummy\nfor _ in range(n + 1):\n    fast = fast.next\nwhile fast:\n    slow = slow.next\n    fast = fast.next\nslow.next = slow.next.next\nreturn dummy.next`
+          "Java": `// Middle: when fast reaches end, slow = middle
+ListNode slow=head, fast=head;
+while (fast!=null && fast.next!=null) { slow=slow.next; fast=fast.next.next; }
+// slow = middle
+
+// Remove Nth from end
+ListNode dummy=new ListNode(0,head), fast=dummy, slow=dummy;
+for (int i=0; i<=n; i++) fast=fast.next;
+while (fast!=null) { slow=slow.next; fast=fast.next; }
+slow.next = slow.next.next;
+return dummy.next;`,
+          "Kotlin": `// Middle
+var slow=head; var fast=head
+while(fast?.next!=null){slow=slow?.next;fast=fast.next?.next}`,
+          "Python": `slow = fast = head
+while fast and fast.next:
+    slow = slow.next; fast = fast.next.next
+# slow = middle`
         }
       },
       {
-        name: "Merge & Reorder Lists",
+        name: "Cycle Detection & Entry Point",
+        recognition: "Detect cycle. Find where cycle starts. Floyd's algorithm.",
+        mentalModel: "Phase 1: fast+slow meet in cycle. Phase 2: move one pointer to head, advance both by 1 until they meet = entry.",
+        pitfalls: "Phase 2 starts with slow=head, fast=meeting point (not head).",
+        problems: [
+          { num: "141", name: "Linked List Cycle", url: "https://leetcode.com/problems/linked-list-cycle/" },
+          { num: "142", name: "Linked List Cycle II", url: "https://leetcode.com/problems/linked-list-cycle-ii/" }
+        ],
+        code: {
+          "Java": `// Detect cycle
+ListNode slow=head, fast=head;
+while (fast!=null && fast.next!=null) {
+    slow=slow.next; fast=fast.next.next;
+    if (slow==fast) break; // cycle found!
+}
+if (fast==null||fast.next==null) return null; // no cycle
+// Find entry point
+slow = head;
+while (slow != fast) { slow=slow.next; fast=fast.next; }
+return slow; // entry node`,
+          "Kotlin": `var slow=head; var fast=head; var hasCycle=false
+while(fast?.next!=null){slow=slow?.next;fast=fast.next?.next;if(slow===fast){hasCycle=true;break}}
+if(!hasCycle) return null
+slow=head
+while(slow!==fast){slow=slow?.next;fast=fast?.next}
+return slow`,
+          "Python": `slow = fast = head
+while fast and fast.next:
+    slow = slow.next; fast = fast.next.next
+    if slow == fast: break
+else: return None  # no cycle
+slow = head
+while slow != fast:
+    slow = slow.next; fast = fast.next
+return slow  # entry point`
+        }
+      },
+      {
+        name: "Merge Lists & Reorder",
         recognition: "Merge K sorted lists. Reorder L0→Ln→L1→Ln-1.",
         mentalModel: "Merge two: compare heads. Reorder: find mid + reverse second half + interleave.",
-        pitfalls: "Breaking links when splitting. Min-heap for merge K lists.",
+        pitfalls: "Merge K: use min-heap. Reorder: break second half connection after reversing.",
         problems: [
           { num: "21", name: "Merge Two Sorted Lists", url: "https://leetcode.com/problems/merge-two-sorted-lists/" },
-          { num: "143", name: "Reorder List", url: "https://leetcode.com/problems/reorder-list/" },
-          { num: "23", name: "Merge K Sorted Lists", url: "https://leetcode.com/problems/merge-k-sorted-lists/" }
+          { num: "23", name: "Merge K Sorted Lists", url: "https://leetcode.com/problems/merge-k-sorted-lists/" },
+          { num: "143", name: "Reorder List", url: "https://leetcode.com/problems/reorder-list/" }
         ],
         code: {
-          "Java": `// Merge Two\nListNode dummy = new ListNode(0), cur = dummy;\nwhile (l1 != null && l2 != null) {\n    if (l1.val < l2.val) { cur.next = l1; l1 = l1.next; }\n    else { cur.next = l2; l2 = l2.next; }\n    cur = cur.next;\n}\ncur.next = (l1 != null) ? l1 : l2;`,
-          "Kotlin": `val dummy = ListNode(0); var cur: ListNode? = dummy\nwhile (l1 != null && l2 != null) {\n    if (l1.`val` < l2.`val`) { cur?.next = l1; l1 = l1.next }\n    else { cur?.next = l2; l2 = l2.next }\n    cur = cur?.next\n}\ncur?.next = l1 ?: l2`,
-          "Python": `dummy = ListNode(0)\ncur = dummy\nwhile l1 and l2:\n    if l1.val < l2.val:\n        cur.next, l1 = l1, l1.next\n    else:\n        cur.next, l2 = l2, l2.next\n    cur = cur.next\ncur.next = l1 or l2`
+          "Java": `// Merge Two
+ListNode dummy=new ListNode(0), cur=dummy;
+while(l1!=null&&l2!=null) {
+    if(l1.val<l2.val){cur.next=l1;l1=l1.next;}
+    else{cur.next=l2;l2=l2.next;}
+    cur=cur.next;
+}
+cur.next=(l1!=null)?l1:l2;
+// Merge K: min-heap O(N logK)
+PriorityQueue<ListNode> pq=new PriorityQueue<>((a,b)->a.val-b.val);
+for(ListNode n:lists) if(n!=null) pq.offer(n);
+while(!pq.isEmpty()){ListNode n=pq.poll();cur.next=n;cur=cur.next;if(n.next!=null)pq.offer(n.next);}`,
+          "Kotlin": `val dummy=ListNode(0); var cur:ListNode?=dummy
+while(l1!=null&&l2!=null){if(l1.`val`<l2.`val`){cur?.next=l1;l1=l1.next}else{cur?.next=l2;l2=l2.next};cur=cur?.next}
+cur?.next=l1?:l2`,
+          "Python": `dummy = cur = ListNode(0)
+while l1 and l2:
+    if l1.val < l2.val: cur.next, l1 = l1, l1.next
+    else: cur.next, l2 = l2, l2.next
+    cur = cur.next
+cur.next = l1 or l2`
+        }
+      },
+      {
+        name: "Rotate List & Random Pointer",
+        recognition: "Rotate by K. Copy list with random pointers.",
+        mentalModel: "Rotate: find tail, make circular, break at (n-k)th node. Random: use HashMap old→new.",
+        pitfalls: "Rotate: k = k%n to handle k>=n. Random: two-pass: create all nodes, then assign nexts and randoms.",
+        problems: [
+          { num: "61", name: "Rotate List", url: "https://leetcode.com/problems/rotate-list/" },
+          { num: "138", name: "Copy List with Random Pointer", url: "https://leetcode.com/problems/copy-list-with-random-pointer/" }
+        ],
+        code: {
+          "Java": `// Rotate List
+int len=1; ListNode tail=head;
+while(tail.next!=null){tail=tail.next;len++;}
+k=k%len; if(k==0) return head;
+tail.next=head; // make circular
+int steps=len-k; ListNode newTail=head;
+for(int i=0;i<steps-1;i++) newTail=newTail.next;
+ListNode newHead=newTail.next; newTail.next=null;
+return newHead;
+// Random Pointer
+Map<Node,Node> map=new HashMap<>();
+Node cur=head;
+while(cur!=null){map.put(cur,new Node(cur.val));cur=cur.next;}
+cur=head;
+while(cur!=null){map.get(cur).next=map.get(cur.next);map.get(cur).random=map.get(cur.random);cur=cur.next;}`,
+          "Kotlin": `// Rotate: find len, k%=len, make circular, break at len-k`,
+          "Python": `# Random Pointer
+map = {}
+cur = head
+while cur: map[cur] = Node(cur.val); cur = cur.next
+cur = head
+while cur:
+    if cur.next: map[cur].next = map[cur.next]
+    if cur.random: map[cur].random = map[cur.random]
+    cur = cur.next
+return map[head]`
         }
       }
     ]
@@ -482,82 +1179,273 @@ const dsaData = [
     patterns: [
       {
         name: "🌿 Preorder DFS (Root → Left → Right)",
-        recognition: "Serialize tree. Print nodes top-down. Copy tree structure.",
-        mentalModel: "Visit root FIRST, then recurse left, then right. Think: read before your children.",
-        pitfalls: "Always check null FIRST before accessing .left or .right.",
+        recognition: "Serialize tree. Copy structure. Print top-down.",
+        mentalModel: "Visit root FIRST, then go left, then right. Use stack for iterative.",
+        pitfalls: "Always check null FIRST. Iterative: push right before left (stack is LIFO).",
         problems: [
           { num: "144", name: "Binary Tree Preorder", url: "https://leetcode.com/problems/binary-tree-preorder-traversal/" },
-          { num: "105", name: "Construct Tree from Preorder+Inorder", url: "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/" }
+          { num: "105", name: "Construct from Preorder+Inorder", url: "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/" }
         ],
         code: {
-          "Java": `// Recursive Preorder: Root → Left → Right\nvoid preorder(TreeNode root, List<Integer> res) {\n    if (root == null) return;   // ← base case FIRST\n    res.add(root.val);          // 1. Visit root\n    preorder(root.left, res);   // 2. Go Left\n    preorder(root.right, res);  // 3. Go Right\n}\n\n// Iterative Preorder (Stack)\nDeque<TreeNode> st = new ArrayDeque<>();\nst.push(root);\nwhile (!st.isEmpty()) {\n    TreeNode n = st.pop();\n    res.add(n.val);\n    if (n.right != null) st.push(n.right); // right first (LIFO)\n    if (n.left  != null) st.push(n.left);\n}`,
-          "Kotlin": `// Recursive Preorder\nfun preorder(root: TreeNode?, res: MutableList<Int>) {\n    if (root == null) return          // base case\n    res.add(root.`val`)               // 1. root\n    preorder(root.left, res)          // 2. left\n    preorder(root.right, res)         // 3. right\n}`,
-          "Python": `# Recursive Preorder: Root → Left → Right\ndef preorder(root, res=[]):\n    if not root: return          # base case\n    res.append(root.val)         # 1. root\n    preorder(root.left, res)     # 2. left\n    preorder(root.right, res)    # 3. right\n\n# Iterative Preorder (Stack)\nst = [root]\nwhile st:\n    n = st.pop()\n    res.append(n.val)\n    if n.right: st.append(n.right)  # right first\n    if n.left:  st.append(n.left)`
+          "Java": `void preorder(TreeNode root, List<Integer> res) {
+    if (root == null) return;    // ← null check first!
+    res.add(root.val);           // 1. ROOT
+    preorder(root.left, res);    // 2. Left
+    preorder(root.right, res);   // 3. Right
+}
+// Iterative
+Deque<TreeNode> st = new ArrayDeque<>();
+st.push(root);
+while (!st.isEmpty()) {
+    TreeNode n = st.pop();
+    res.add(n.val);
+    if (n.right != null) st.push(n.right); // right FIRST (LIFO)
+    if (n.left  != null) st.push(n.left);
+}`,
+          "Kotlin": `fun preorder(root: TreeNode?, res: MutableList<Int>) {
+    if (root == null) return
+    res.add(root.\`val\`)        // root
+    preorder(root.left, res)   // left
+    preorder(root.right, res)  // right
+}`,
+          "Python": `def preorder(root, res=[]):
+    if not root: return
+    res.append(root.val)        # root
+    preorder(root.left, res)    # left
+    preorder(root.right, res)   # right`
         }
       },
       {
         name: "🌿 Inorder DFS (Left → Root → Right)",
-        recognition: "BST sorted order. Kth smallest. Validate BST.",
-        mentalModel: "Go all the way LEFT first, visit root, then RIGHT. BST Inorder = sorted ascending array.",
-        pitfalls: "For BST validation: pass min and max bounds, not just prev node.",
+        recognition: "BST sorted order. Kth smallest. Validate BST. Morris traversal.",
+        mentalModel: "Go ALL the way left, then visit root, then right. BST Inorder = sorted array!",
+        pitfalls: "BST validate: pass (min,max) bounds, not just previous node.",
         problems: [
           { num: "94", name: "Binary Tree Inorder", url: "https://leetcode.com/problems/binary-tree-inorder-traversal/" },
           { num: "230", name: "Kth Smallest in BST", url: "https://leetcode.com/problems/kth-smallest-element-in-a-bst/" },
           { num: "98", name: "Validate BST", url: "https://leetcode.com/problems/validate-binary-search-tree/" }
         ],
         code: {
-          "Java": `// Recursive Inorder: Left → Root → Right\nvoid inorder(TreeNode root, List<Integer> res) {\n    if (root == null) return;    // base case\n    inorder(root.left, res);     // 1. Go Left\n    res.add(root.val);           // 2. Visit root\n    inorder(root.right, res);    // 3. Go Right\n}\n// BST Inorder = SORTED array!\n\n// Iterative Inorder\nDeque<TreeNode> st = new ArrayDeque<>();\nTreeNode curr = root;\nwhile (curr != null || !st.isEmpty()) {\n    while (curr != null) { st.push(curr); curr = curr.left; }\n    curr = st.pop();\n    res.add(curr.val);\n    curr = curr.right;\n}`,
-          "Kotlin": `// Recursive Inorder\nfun inorder(root: TreeNode?, res: MutableList<Int>) {\n    if (root == null) return\n    inorder(root.left, res)      // 1. left\n    res.add(root.`val`)          // 2. root\n    inorder(root.right, res)     // 3. right\n}\n// BST inorder = sorted!`,
-          "Python": `# Recursive Inorder: Left → Root → Right\ndef inorder(root, res=[]):\n    if not root: return\n    inorder(root.left, res)      # 1. left\n    res.append(root.val)         # 2. root\n    inorder(root.right, res)     # 3. right\n# BST inorder → sorted array\n\n# Iterative Inorder\nst, curr = [], root\nwhile curr or st:\n    while curr: st.append(curr); curr = curr.left\n    curr = st.pop()\n    res.append(curr.val)\n    curr = curr.right`
+          "Java": `void inorder(TreeNode root, List<Integer> res) {
+    if (root == null) return;
+    inorder(root.left, res);     // 1. Left
+    res.add(root.val);           // 2. ROOT ← middle!
+    inorder(root.right, res);    // 3. Right
+}
+// BST Inorder = SORTED array
+// Iterative Inorder
+Deque<TreeNode> st = new ArrayDeque<>();
+TreeNode curr = root;
+while (curr != null || !st.isEmpty()) {
+    while (curr != null) { st.push(curr); curr = curr.left; }
+    curr = st.pop(); res.add(curr.val); curr = curr.right;
+}`,
+          "Kotlin": `fun inorder(root: TreeNode?, res: MutableList<Int>) {
+    if (root == null) return
+    inorder(root.left, res)
+    res.add(root.\`val\`)         // ROOT in middle
+    inorder(root.right, res)
+}`,
+          "Python": `def inorder(root, res=[]):
+    if not root: return
+    inorder(root.left, res)
+    res.append(root.val)        # ROOT in middle
+    inorder(root.right, res)
+# BST inorder → sorted!`
         }
       },
       {
         name: "🌿 Postorder DFS (Left → Right → Root)",
-        recognition: "Calculate height, diameter, delete tree, evaluate expression tree.",
-        mentalModel: "Visit children FIRST, then root. Think: calculate kids before parent.",
-        pitfalls: "Height returns 0 for null. Diameter: global max ≠ return value.",
+        recognition: "Height, diameter, delete tree, evaluate tree, Tree DP.",
+        mentalModel: "Calculate children first, THEN process root. Information flows up from leaves.",
+        pitfalls: "Diameter: global variable for answer, return height. Don't confuse return value with answer.",
         problems: [
           { num: "145", name: "Binary Tree Postorder", url: "https://leetcode.com/problems/binary-tree-postorder-traversal/" },
-          { num: "104", name: "Max Depth of Binary Tree", url: "https://leetcode.com/problems/maximum-depth-of-binary-tree/" },
+          { num: "104", name: "Max Depth", url: "https://leetcode.com/problems/maximum-depth-of-binary-tree/" },
           { num: "543", name: "Diameter of Binary Tree", url: "https://leetcode.com/problems/diameter-of-binary-tree/" }
         ],
         code: {
-          "Java": `// Recursive Postorder: Left → Right → Root\nvoid postorder(TreeNode root, List<Integer> res) {\n    if (root == null) return;\n    postorder(root.left, res);   // 1. Go Left\n    postorder(root.right, res);  // 2. Go Right\n    res.add(root.val);           // 3. Visit root (LAST)\n}\n\n// Max Depth (postorder style)\nint maxDepth(TreeNode root) {\n    if (root == null) return 0;\n    int left  = maxDepth(root.left);\n    int right = maxDepth(root.right);\n    return 1 + Math.max(left, right);  // combine at root\n}\n\n// Diameter\nint ans = 0;\nint dfs(TreeNode root) {\n    if (root == null) return 0;\n    int l = dfs(root.left), r = dfs(root.right);\n    ans = Math.max(ans, l + r); // update global max\n    return 1 + Math.max(l, r); // return height, NOT diameter\n}`,
-          "Kotlin": `// Postorder\nfun postorder(root: TreeNode?, res: MutableList<Int>) {\n    if (root == null) return\n    postorder(root.left, res)    // 1. left\n    postorder(root.right, res)   // 2. right\n    res.add(root.`val`)          // 3. root (last!)\n}\nfun maxDepth(root: TreeNode?): Int {\n    if (root == null) return 0\n    return 1 + maxOf(maxDepth(root.left), maxDepth(root.right))\n}`,
-          "Python": `# Postorder: Left → Right → Root\ndef postorder(root, res=[]):\n    if not root: return\n    postorder(root.left, res)    # 1. left\n    postorder(root.right, res)   # 2. right\n    res.append(root.val)         # 3. root (LAST)\n\n# Max Depth\ndef max_depth(root):\n    if not root: return 0\n    return 1 + max(max_depth(root.left), max_depth(root.right))\n\n# Diameter\nans = [0]\ndef dfs(root):\n    if not root: return 0\n    l, r = dfs(root.left), dfs(root.right)\n    ans[0] = max(ans[0], l + r)  # update global\n    return 1 + max(l, r)         # return height`
+          "Java": `void postorder(TreeNode root, List<Integer> res) {
+    if (root == null) return;
+    postorder(root.left, res);   // 1. Left
+    postorder(root.right, res);  // 2. Right
+    res.add(root.val);           // 3. ROOT ← last!
+}
+// Max Depth (postorder)
+int maxDepth(TreeNode root) {
+    if (root == null) return 0;
+    return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+}
+// Diameter: global max, return height
+int ans = 0;
+int dfs(TreeNode root) {
+    if (root == null) return 0;
+    int l = dfs(root.left), r = dfs(root.right);
+    ans = Math.max(ans, l + r); // update GLOBAL
+    return 1 + Math.max(l, r);  // return HEIGHT
+}`,
+          "Kotlin": `fun maxDepth(root: TreeNode?): Int {
+    if (root == null) return 0
+    return 1 + maxOf(maxDepth(root.left), maxDepth(root.right))
+}`,
+          "Python": `def max_depth(root):
+    if not root: return 0
+    return 1 + max(max_depth(root.left), max_depth(root.right))
+
+ans = [0]
+def dfs(root):
+    if not root: return 0
+    l, r = dfs(root.left), dfs(root.right)
+    ans[0] = max(ans[0], l + r)  # global max
+    return 1 + max(l, r)          # return height`
         }
       },
       {
         name: "🌊 BFS Level Order (List<List<Integer>>)",
-        recognition: "Level-by-level traversal. Right/Left side view. Zigzag. Min depth.",
-        mentalModel: "Queue + snapshot q.size() at start of each level. Inner for-loop processes one level at a time.",
-        pitfalls: "MUST snapshot q.size() before inner loop. Don't call q.size() inside the loop.",
+        recognition: "Level-by-level. Right/Left side view. Zigzag. Min depth.",
+        mentalModel: "Queue + SNAPSHOT size at start of level loop. Inner for processes ONE level.",
+        pitfalls: "Snapshot q.size() BEFORE inner loop — don't call it inside!",
         problems: [
-          { num: "102", name: "Binary Tree Level Order", url: "https://leetcode.com/problems/binary-tree-level-order-traversal/" },
+          { num: "102", name: "Level Order Traversal", url: "https://leetcode.com/problems/binary-tree-level-order-traversal/" },
           { num: "199", name: "Right Side View", url: "https://leetcode.com/problems/binary-tree-right-side-view/" },
           { num: "103", name: "Zigzag Level Order", url: "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/" },
           { num: "111", name: "Minimum Depth", url: "https://leetcode.com/problems/minimum-depth-of-binary-tree/" }
         ],
         code: {
-          "Java": `// Returns List<List<Integer>> - level order\nList<List<Integer>> res = new ArrayList<>();\nif (root == null) return res;\nQueue<TreeNode> q = new LinkedList<>();\nq.offer(root);\nwhile (!q.isEmpty()) {\n    int size = q.size(); // ← SNAPSHOT size!\n    List<Integer> level = new ArrayList<>();\n    for (int i = 0; i < size; i++) { // ← process ONE level\n        TreeNode n = q.poll();\n        level.add(n.val);\n        if (n.left  != null) q.offer(n.left);\n        if (n.right != null) q.offer(n.right);\n    }\n    res.add(level);\n}\nreturn res;\n\n// Right Side View: take last element of each level\n// res.add(level.get(level.size()-1));`,
-          "Kotlin": `// Level Order → List<List<Int>>\nval res = mutableListOf<List<Int>>()\nif (root == null) return res\nval q = ArrayDeque<TreeNode>()\nq.addLast(root)\nwhile (q.isNotEmpty()) {\n    val size = q.size          // ← SNAPSHOT\n    val level = mutableListOf<Int>()\n    repeat(size) {             // ← one full level\n        val n = q.removeFirst()\n        level.add(n.`val`)\n        n.left?.let  { q.addLast(it) }\n        n.right?.let { q.addLast(it) }\n    }\n    res.add(level)\n}\nreturn res`,
-          "Python": `# Level Order → List[List[int]]\nfrom collections import deque\nres = []; q = deque([root]) if root else deque()\nwhile q:\n    level = []\n    for _ in range(len(q)):    # ← snapshot len(q)!\n        n = q.popleft()\n        level.append(n.val)\n        if n.left:  q.append(n.left)\n        if n.right: q.append(n.right)\n    res.append(level)\nreturn res\n\n# Right Side View:\n# return [level[-1] for level in res]`
+          "Java": `List<List<Integer>> res = new ArrayList<>();
+if (root == null) return res;
+Queue<TreeNode> q = new LinkedList<>();
+q.offer(root);
+boolean leftToRight = true;
+while (!q.isEmpty()) {
+    int size = q.size(); // ← SNAPSHOT HERE!
+    LinkedList<Integer> level = new LinkedList<>();
+    for (int i = 0; i < size; i++) { // ← process one level
+        TreeNode n = q.poll();
+        if (leftToRight) level.addLast(n.val);
+        else level.addFirst(n.val); // zigzag
+        if (n.left  != null) q.offer(n.left);
+        if (n.right != null) q.offer(n.right);
+    }
+    res.add(level);
+    leftToRight = !leftToRight; // flip for zigzag
+}
+// Right Side View: res.add(level.getLast())
+// Left Side View:  res.add(level.getFirst())`,
+          "Kotlin": `val q = ArrayDeque<TreeNode>(); q.addLast(root)
+while (q.isNotEmpty()) {
+    val size = q.size    // snapshot!
+    val level = mutableListOf<Int>()
+    repeat(size) {
+        val n = q.removeFirst()
+        level.add(n.\`val\`)
+        n.left?.let { q.addLast(it) }
+        n.right?.let { q.addLast(it) }
+    }
+    res.add(level)
+}`,
+          "Python": `from collections import deque
+res = []; q = deque([root]) if root else deque()
+left_to_right = True
+while q:
+    level = []
+    for _ in range(len(q)):    # snapshot len(q)!
+        n = q.popleft()
+        level.append(n.val)
+        if n.left:  q.append(n.left)
+        if n.right: q.append(n.right)
+    if not left_to_right: level.reverse()  # zigzag
+    res.append(level)
+    left_to_right = not left_to_right`
         }
       },
       {
-        name: "🔑 LCA, Path Sum, Validate BST",
-        recognition: "Properties that require info from BOTH subtrees. Boundaries.",
-        mentalModel: "LCA: if node is p or q, return it. Check both sides. BST validate: pass (min, max) bounds down.",
-        pitfalls: "LCA: returns root when BOTH sides found. BST: don't just compare parent—use full range.",
+        name: "🔑 Balanced, Max Path Sum, LCA",
+        recognition: "Check height balance. Max path through any node. Find LCA.",
+        mentalModel: "Balanced: postorder return height or -1 if unbalanced. MaxPath: track global via left+root+right.",
+        pitfalls: "Max Path Sum: include root.val in answer but can only extend one direction upward.",
         problems: [
-          { num: "236", name: "LCA of Binary Tree", url: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/" },
-          { num: "98", name: "Validate BST", url: "https://leetcode.com/problems/validate-binary-search-tree/" },
-          { num: "112", name: "Path Sum", url: "https://leetcode.com/problems/path-sum/" }
+          { num: "110", name: "Balanced Binary Tree", url: "https://leetcode.com/problems/balanced-binary-tree/" },
+          { num: "124", name: "Binary Tree Max Path Sum", url: "https://leetcode.com/problems/binary-tree-maximum-path-sum/" },
+          { num: "236", name: "LCA of Binary Tree", url: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/" }
         ],
         code: {
-          "Java": `// LCA\nTreeNode lca(TreeNode root, TreeNode p, TreeNode q) {\n    if (root == null || root == p || root == q) return root;\n    TreeNode left  = lca(root.left, p, q);\n    TreeNode right = lca(root.right, p, q);\n    if (left != null && right != null) return root; // p,q on diff sides\n    return left != null ? left : right;\n}\n\n// Validate BST (pass bounds!)\nboolean isValid(TreeNode root, long min, long max) {\n    if (root == null) return true;\n    if (root.val <= min || root.val >= max) return false;\n    return isValid(root.left, min, root.val) &&\n           isValid(root.right, root.val, max);\n}\n// Call: isValid(root, Long.MIN_VALUE, Long.MAX_VALUE)\n\n// Path Sum (subtract from target)\nboolean hasPath(TreeNode root, int target) {\n    if (root == null) return false;\n    if (root.left == null && root.right == null) return root.val == target;\n    return hasPath(root.left, target - root.val) ||\n           hasPath(root.right, target - root.val);\n}`,
-          "Kotlin": `fun lca(root: TreeNode?, p: TreeNode?, q: TreeNode?): TreeNode? {\n    if (root == null || root == p || root == q) return root\n    val left  = lca(root.left, p, q)\n    val right = lca(root.right, p, q)\n    return if (left != null && right != null) root else left ?: right\n}`,
-          "Python": `# LCA\ndef lca(root, p, q):\n    if not root or root == p or root == q: return root\n    left  = lca(root.left, p, q)\n    right = lca(root.right, p, q)\n    if left and right: return root   # p,q on different sides\n    return left or right\n\n# Validate BST\ndef is_valid(root, min_val=float('-inf'), max_val=float('inf')):\n    if not root: return True\n    if not (min_val < root.val < max_val): return False\n    return (is_valid(root.left, min_val, root.val) and\n            is_valid(root.right, root.val, max_val))`
+          "Java": `// Balanced: return -1 if unbalanced
+int check(TreeNode root) {
+    if (root == null) return 0;
+    int l = check(root.left), r = check(root.right);
+    if (l==-1 || r==-1 || Math.abs(l-r)>1) return -1;
+    return 1 + Math.max(l, r);
+}
+// Max Path Sum
+int maxSum = Integer.MIN_VALUE;
+int dfs(TreeNode root) {
+    if (root == null) return 0;
+    int l = Math.max(0, dfs(root.left));  // ignore negative
+    int r = Math.max(0, dfs(root.right)); // ignore negative
+    maxSum = Math.max(maxSum, l + root.val + r);
+    return root.val + Math.max(l, r); // extend ONE side up
+}
+// LCA
+TreeNode lca(TreeNode root, TreeNode p, TreeNode q) {
+    if (root==null||root==p||root==q) return root;
+    TreeNode l=lca(root.left,p,q), r=lca(root.right,p,q);
+    return (l!=null&&r!=null)?root:(l!=null?l:r);
+}`,
+          "Kotlin": `fun check(root: TreeNode?): Int {
+    if (root == null) return 0
+    val l=check(root.left); val r=check(root.right)
+    if (l==-1||r==-1||Math.abs(l-r)>1) return -1
+    return 1+maxOf(l,r)
+}`,
+          "Python": `# Max Path Sum
+max_sum = [float('-inf')]
+def dfs(root):
+    if not root: return 0
+    l = max(0, dfs(root.left))   # ignore negative
+    r = max(0, dfs(root.right))  # ignore negative
+    max_sum[0] = max(max_sum[0], l + root.val + r)
+    return root.val + max(l, r)  # extend ONE side`
+        }
+      },
+      {
+        name: "🌳 Validate BST & BST Operations",
+        recognition: "BST property: all left < root < all right (not just parent).",
+        mentalModel: "Pass (min, max) bounds at each node. Left narrows max, right narrows min.",
+        pitfalls: "Integer overflow with INT_MIN/MAX → use Long. BST insert/delete are recursive.",
+        problems: [
+          { num: "98", name: "Validate BST", url: "https://leetcode.com/problems/validate-binary-search-tree/" },
+          { num: "701", name: "Insert into a BST", url: "https://leetcode.com/problems/insert-into-a-binary-search-tree/" },
+          { num: "450", name: "Delete Node in BST", url: "https://leetcode.com/problems/delete-node-in-a-bst/" }
+        ],
+        code: {
+          "Java": `// Validate BST with bounds
+boolean isValid(TreeNode root, long min, long max) {
+    if (root == null) return true;
+    if (root.val <= min || root.val >= max) return false;
+    return isValid(root.left, min, root.val) &&
+           isValid(root.right, root.val, max);
+}
+// Call: isValid(root, Long.MIN_VALUE, Long.MAX_VALUE)
+
+// Insert into BST
+TreeNode insert(TreeNode root, int val) {
+    if (root == null) return new TreeNode(val);
+    if (val < root.val) root.left = insert(root.left, val);
+    else root.right = insert(root.right, val);
+    return root;
+}`,
+          "Kotlin": `fun isValid(root: TreeNode?, min: Long, max: Long): Boolean {
+    if (root == null) return true
+    if (root.\`val\`.toLong() <= min || root.\`val\`.toLong() >= max) return false
+    return isValid(root.left, min, root.\`val\`.toLong()) &&
+           isValid(root.right, root.\`val\`.toLong(), max)
+}`,
+          "Python": `def is_valid(root, min_val=float('-inf'), max_val=float('inf')):
+    if not root: return True
+    if not (min_val < root.val < max_val): return False
+    return (is_valid(root.left, min_val, root.val) and
+            is_valid(root.right, root.val, max_val))`
         }
       }
     ]
@@ -569,33 +1457,118 @@ const dsaData = [
     color: "#2e6b7a",
     patterns: [
       {
-        name: "Top K & K-way Merge",
-        recognition: "K largest, K smallest, K most frequent, Merge K sorted.",
-        mentalModel: "Min-Heap size K for top K largest. Max-Heap size K for top K smallest.",
-        pitfalls: "Comparator direction. Size check before peek.",
+        name: "Min Heap & Max Heap Basics",
+        recognition: "Always get smallest (min-heap) or largest (max-heap) in O(log N).",
+        mentalModel: "Min-heap: smallest on top. Max-heap: negate values in Python. Java: reverseOrder().",
+        pitfalls: "Python heapq is min-heap only. Negate for max-heap. Java comparator (a,b)->b-a for max.",
         problems: [
-          { num: "215", name: "Kth Largest", url: "https://leetcode.com/problems/kth-largest-element-in-an-array/" },
-          { num: "23", name: "Merge K Sorted Lists", url: "https://leetcode.com/problems/merge-k-sorted-lists/" },
-          { num: "973", name: "K Closest Points", url: "https://leetcode.com/problems/k-closest-points-to-origin/" }
+          { num: "703", name: "Kth Largest in Stream", url: "https://leetcode.com/problems/kth-largest-element-in-a-stream/" }
         ],
         code: {
-          "Java": `// Top K Largest (min-heap of size K)\nPriorityQueue<Integer> pq = new PriorityQueue<>();\nfor (int x : arr) {\n    pq.offer(x);\n    if (pq.size() > k) pq.poll();\n}\nreturn pq.peek();\n\n// Merge K Lists\nPriorityQueue<ListNode> pq = new PriorityQueue<>((a,b)->a.val-b.val);\nfor (ListNode node : lists) if (node != null) pq.offer(node);\nListNode dummy = new ListNode(0), cur = dummy;\nwhile (!pq.isEmpty()) {\n    ListNode n = pq.poll(); cur.next = n; cur = cur.next;\n    if (n.next != null) pq.offer(n.next);\n}`,
-          "Kotlin": `val pq = PriorityQueue<Int>()\nfor (x in arr) {\n    pq.offer(x)\n    if (pq.size > k) pq.poll()\n}\nreturn pq.peek()`,
-          "Python": `import heapq\n# Top K Largest\nheap = []\nfor x in arr:\n    heapq.heappush(heap, x)\n    if len(heap) > k: heapq.heappop(heap)\nreturn heap[0]\n\n# Top K Smallest (use max-heap with negation)\nheap = []\nfor x in arr:\n    heapq.heappush(heap, -x)\n    if len(heap) > k: heapq.heappop(heap)\nreturn -heap[0]`
+          "Java": `// Min-Heap (default)
+PriorityQueue<Integer> minH = new PriorityQueue<>();
+minH.offer(5); minH.offer(1); minH.offer(3);
+int min = minH.peek(); // 1, O(1)
+int removed = minH.poll(); // 1, O(logN)
+
+// Max-Heap
+PriorityQueue<Integer> maxH = new PriorityQueue<>(Collections.reverseOrder());
+// or: new PriorityQueue<>((a,b) -> b-a)
+
+// Custom comparator (by index 0)
+PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> a[0]-b[0]);`,
+          "Kotlin": `val minH = PriorityQueue<Int>()     // min-heap
+val maxH = PriorityQueue<Int>(compareByDescending{it}) // max-heap
+minH.offer(5); val top = minH.poll()`,
+          "Python": `import heapq
+# Min-heap
+h = []; heapq.heappush(h, 5)
+top = heapq.heappop(h)  # smallest
+
+# Max-heap (negate values!)
+maxH = []
+heapq.heappush(maxH, -5)   # push negated
+top = -heapq.heappop(maxH) # negate back
+
+# Heapify in-place O(N)
+arr = [3,1,4,1,5]; heapq.heapify(arr)`
         }
       },
       {
-        name: "Median from Data Stream",
-        recognition: "Find median dynamically as numbers are added.",
-        mentalModel: "Two heaps: Max-Heap for lower half, Min-Heap for upper half. Balance after each insert.",
-        pitfalls: "Rebalance after every insertion. Max-Heap uses negation in Python.",
+        name: "Top K Problems",
+        recognition: "K largest, K smallest, K most frequent, K closest.",
+        mentalModel: "Top K Largest → min-heap of size K. Top K Smallest → max-heap of size K. Pop when size > K.",
+        pitfalls: "Min-heap for LARGEST (counterintuitive). Size limit K is key.",
         problems: [
-          { num: "295", name: "Find Median From Data Stream", url: "https://leetcode.com/problems/find-median-from-data-stream/" }
+          { num: "215", name: "Kth Largest Element", url: "https://leetcode.com/problems/kth-largest-element-in-an-array/" },
+          { num: "347", name: "Top K Frequent Elements", url: "https://leetcode.com/problems/top-k-frequent-elements/" },
+          { num: "973", name: "K Closest Points to Origin", url: "https://leetcode.com/problems/k-closest-points-to-origin/" }
         ],
         code: {
-          "Java": `PriorityQueue<Integer> lo = new PriorityQueue<>(Collections.reverseOrder()); // max-heap\nPriorityQueue<Integer> hi = new PriorityQueue<>(); // min-heap\nvoid addNum(int n) {\n    lo.offer(n);\n    hi.offer(lo.poll());\n    if (lo.size() < hi.size()) lo.offer(hi.poll());\n}\ndouble findMedian() {\n    return lo.size() > hi.size() ? lo.peek() : (lo.peek() + hi.peek()) / 2.0;\n}`,
-          "Kotlin": `val lo = PriorityQueue<Int>(compareByDescending { it }) // max-heap\nval hi = PriorityQueue<Int>() // min-heap\nfun addNum(n: Int) {\n    lo.offer(n); hi.offer(lo.poll())\n    if (lo.size < hi.size) lo.offer(hi.poll())\n}\nfun findMedian() = if (lo.size > hi.size) lo.peek().toDouble() else (lo.peek() + hi.peek()) / 2.0`,
-          "Python": `import heapq\nlo = []  # max-heap (negated)\nhi = []  # min-heap\n\ndef add_num(n):\n    heapq.heappush(lo, -n)\n    heapq.heappush(hi, -heapq.heappop(lo))\n    if len(lo) < len(hi):\n        heapq.heappush(lo, -heapq.heappop(hi))\n\ndef find_median():\n    if len(lo) > len(hi): return -lo[0]\n    return (-lo[0] + hi[0]) / 2`
+          "Java": `// Top K Largest → min-heap size K
+PriorityQueue<Integer> pq = new PriorityQueue<>();
+for (int x : arr) {
+    pq.offer(x);
+    if (pq.size() > k) pq.poll(); // pop smallest
+}
+return pq.peek(); // kth largest
+
+// K Closest Points (by distance)
+PriorityQueue<int[]> pq = new PriorityQueue<>(
+    (a,b) -> (b[0]*b[0]+b[1]*b[1]) - (a[0]*a[0]+a[1]*a[1])); // max-heap by dist
+for (int[] p : points) {
+    pq.offer(p);
+    if (pq.size() > k) pq.poll();
+}`,
+          "Kotlin": `val pq = PriorityQueue<Int>()
+for (x in arr) { pq.offer(x); if(pq.size>k) pq.poll() }
+return pq.peek()`,
+          "Python": `import heapq
+# Top K Largest
+heap = []
+for x in arr:
+    heapq.heappush(heap, x)
+    if len(heap) > k: heapq.heappop(heap)
+return heap[0]
+
+# Pythonic: nlargest
+heapq.nlargest(k, arr)  # O(N logK)`
+        }
+      },
+      {
+        name: "Merge K Sorted Lists & K-way Merge",
+        recognition: "Merge multiple sorted lists/arrays into one sorted stream.",
+        mentalModel: "Min-heap stores (value, listIndex, elementIndex). Always pop smallest, push next from same list.",
+        pitfalls: "Push next element from same list after popping. Handle empty lists.",
+        problems: [
+          { num: "23", name: "Merge K Sorted Lists", url: "https://leetcode.com/problems/merge-k-sorted-lists/" },
+          { num: "295", name: "Find Median from Data Stream", url: "https://leetcode.com/problems/find-median-from-data-stream/" }
+        ],
+        code: {
+          "Java": `// Merge K Lists
+PriorityQueue<ListNode> pq = new PriorityQueue<>((a,b)->a.val-b.val);
+for (ListNode n : lists) if (n!=null) pq.offer(n);
+ListNode dummy=new ListNode(0), cur=dummy;
+while (!pq.isEmpty()) {
+    ListNode n=pq.poll(); cur.next=n; cur=cur.next;
+    if (n.next!=null) pq.offer(n.next);
+}
+// Median from Stream: two heaps
+PriorityQueue<Integer> lo=new PriorityQueue<>(reverseOrder()); // max
+PriorityQueue<Integer> hi=new PriorityQueue<>(); // min
+void add(int n){lo.offer(n);hi.offer(lo.poll());if(lo.size()<hi.size())lo.offer(hi.poll());}
+double median(){return lo.size()>hi.size()?lo.peek():(lo.peek()+hi.peek())/2.0;}`,
+          "Kotlin": `val pq=PriorityQueue<ListNode>(compareBy{it.\`val\`})
+for(n in lists) if(n!=null) pq.offer(n)`,
+          "Python": `import heapq
+# K-way merge
+heap = [(lists[i].val, i, lists[i]) for i in range(len(lists)) if lists[i]]
+heapq.heapify(heap)
+dummy = cur = ListNode(0)
+while heap:
+    val, i, node = heapq.heappop(heap)
+    cur.next = node; cur = cur.next
+    if node.next: heapq.heappush(heap, (node.next.val, i, node.next))`
         }
       }
     ]
@@ -608,48 +1581,160 @@ const dsaData = [
     patterns: [
       {
         name: "Subsets & Combinations",
-        recognition: "Generate all subsets/combinations of size K or with target sum.",
-        mentalModel: "At each index: include element and recurse, OR skip it.",
-        pitfalls: "Add a COPY of path, not reference. Use start index to avoid duplicates.",
+        recognition: "All subsets. Combinations of size K. Power set.",
+        mentalModel: "At each index: include → recurse → exclude (backtrack). Start index prevents duplicates.",
+        pitfalls: "Add COPY of path (new ArrayList<>(path)). Use start index for combinations.",
         problems: [
           { num: "78", name: "Subsets", url: "https://leetcode.com/problems/subsets/" },
-          { num: "39", name: "Combination Sum", url: "https://leetcode.com/problems/combination-sum/" },
+          { num: "90", name: "Subsets II (Duplicates)", url: "https://leetcode.com/problems/subsets-ii/" },
           { num: "77", name: "Combinations", url: "https://leetcode.com/problems/combinations/" }
         ],
         code: {
-          "Java": `void backtrack(int start, List<Integer> path) {\n    res.add(new ArrayList<>(path)); // add copy\n    for (int i = start; i < nums.length; i++) {\n        path.add(nums[i]);          // choose\n        backtrack(i + 1, path);    // explore (use i to allow reuse)\n        path.remove(path.size()-1); // unchoose\n    }\n}`,
-          "Kotlin": `fun backtrack(start: Int, path: MutableList<Int>) {\n    res.add(path.toList())\n    for (i in start until nums.size) {\n        path.add(nums[i])\n        backtrack(i + 1, path)\n        path.removeLast()\n    }\n}`,
-          "Python": `def backtrack(start, path):\n    res.append(list(path))  # copy!\n    for i in range(start, len(nums)):\n        path.append(nums[i])\n        backtrack(i + 1, path)\n        path.pop()`
+          "Java": `void backtrack(int start, List<Integer> path) {
+    res.add(new ArrayList<>(path)); // ← add COPY
+    for (int i = start; i < nums.length; i++) {
+        if (i > start && nums[i] == nums[i-1]) continue; // skip dups
+        path.add(nums[i]);
+        backtrack(i + 1, path);  // i+1 for no-reuse, i for reuse
+        path.remove(path.size()-1); // ← backtrack
+    }
+}
+// Call: Arrays.sort(nums); backtrack(0, new ArrayList<>());`,
+          "Kotlin": `fun backtrack(start: Int, path: MutableList<Int>) {
+    res.add(path.toList()) // copy
+    for (i in start until nums.size) {
+        if (i > start && nums[i] == nums[i-1]) continue
+        path.add(nums[i]); backtrack(i+1, path); path.removeLast()
+    }
+}`,
+          "Python": `def backtrack(start, path):
+    res.append(list(path))  # copy!
+    for i in range(start, len(nums)):
+        if i > start and nums[i] == nums[i-1]: continue  # skip dups
+        path.append(nums[i])
+        backtrack(i + 1, path)
+        path.pop()`
+        }
+      },
+      {
+        name: "Combination Sum",
+        recognition: "Find all combinations that sum to target. Elements can repeat.",
+        mentalModel: "Same as subsets but check target. Pass i (not i+1) to allow reuse.",
+        pitfalls: "Sort nums first. Prune with if nums[i] > target: break.",
+        problems: [
+          { num: "39", name: "Combination Sum", url: "https://leetcode.com/problems/combination-sum/" },
+          { num: "40", name: "Combination Sum II", url: "https://leetcode.com/problems/combination-sum-ii/" }
+        ],
+        code: {
+          "Java": `void backtrack(int start, int target, List<Integer> path) {
+    if (target == 0) { res.add(new ArrayList<>(path)); return; }
+    for (int i = start; i < nums.length; i++) {
+        if (nums[i] > target) break; // pruning!
+        path.add(nums[i]);
+        backtrack(i, target-nums[i], path); // i = allow reuse
+        path.remove(path.size()-1);
+    }
+}`,
+          "Kotlin": `fun backtrack(start: Int, target: Int, path: MutableList<Int>) {
+    if (target == 0) { res.add(path.toList()); return }
+    for (i in start until nums.size) {
+        if (nums[i] > target) break
+        path.add(nums[i]); backtrack(i, target-nums[i], path); path.removeLast()
+    }
+}`,
+          "Python": `def backtrack(start, target, path):
+    if target == 0: res.append(list(path)); return
+    for i in range(start, len(nums)):
+        if nums[i] > target: break  # pruning
+        path.append(nums[i])
+        backtrack(i, target - nums[i], path)  # i = allow reuse
+        path.pop()`
         }
       },
       {
         name: "Permutations",
-        recognition: "All orderings of elements. Each element used exactly once.",
-        mentalModel: "Loop all elements. Skip if used. Mark/unmark visited.",
-        pitfalls: "visited[] array. Start from 0 (not i) every time.",
+        recognition: "All orderings. Each element used exactly once.",
+        mentalModel: "Track used[]. Loop all elements each time. Mark/unmark as you go.",
+        pitfalls: "Start loop from 0 (not i) every call. used[] array must be reset.",
         problems: [
           { num: "46", name: "Permutations", url: "https://leetcode.com/problems/permutations/" },
-          { num: "47", name: "Permutations II", url: "https://leetcode.com/problems/permutations-ii/" }
+          { num: "47", name: "Permutations II (Duplicates)", url: "https://leetcode.com/problems/permutations-ii/" }
         ],
         code: {
-          "Java": `void backtrack(List<Integer> path, boolean[] used) {\n    if (path.size() == nums.length) { res.add(new ArrayList<>(path)); return; }\n    for (int i = 0; i < nums.length; i++) {\n        if (used[i]) continue;\n        used[i] = true; path.add(nums[i]);\n        backtrack(path, used);\n        used[i] = false; path.remove(path.size()-1);\n    }\n}`,
-          "Kotlin": `fun backtrack(path: MutableList<Int>, used: BooleanArray) {\n    if (path.size == nums.size) { res.add(path.toList()); return }\n    for (i in nums.indices) {\n        if (used[i]) continue\n        used[i] = true; path.add(nums[i])\n        backtrack(path, used)\n        used[i] = false; path.removeLast()\n    }\n}`,
-          "Python": `def backtrack(path, used):\n    if len(path) == len(nums):\n        res.append(list(path)); return\n    for i in range(len(nums)):\n        if used[i]: continue\n        used[i] = True; path.append(nums[i])\n        backtrack(path, used)\n        used[i] = False; path.pop()`
+          "Java": `void backtrack(List<Integer> path, boolean[] used) {
+    if (path.size() == nums.length) { res.add(new ArrayList<>(path)); return; }
+    for (int i = 0; i < nums.length; i++) {
+        if (used[i]) continue;
+        if (i>0 && nums[i]==nums[i-1] && !used[i-1]) continue; // skip dups
+        used[i] = true; path.add(nums[i]);
+        backtrack(path, used);
+        used[i] = false; path.remove(path.size()-1);
+    }
+}`,
+          "Kotlin": `fun backtrack(path: MutableList<Int>, used: BooleanArray) {
+    if (path.size == nums.size) { res.add(path.toList()); return }
+    for (i in nums.indices) {
+        if (used[i] || i>0 && nums[i]==nums[i-1] && !used[i-1]) continue
+        used[i]=true; path.add(nums[i]); backtrack(path,used)
+        used[i]=false; path.removeLast()
+    }
+}`,
+          "Python": `def backtrack(path, used):
+    if len(path) == len(nums): res.append(list(path)); return
+    for i in range(len(nums)):
+        if used[i]: continue
+        if i > 0 and nums[i] == nums[i-1] and not used[i-1]: continue
+        used[i] = True; path.append(nums[i])
+        backtrack(path, used)
+        used[i] = False; path.pop()`
         }
       },
       {
         name: "N-Queens & Word Search",
-        recognition: "Constraint satisfaction. Valid placement. Grid path.",
-        mentalModel: "Try placing at each position. Backtrack if invalid.",
-        pitfalls: "Mark visited before recursing, unmark after. Track cols+diagonals.",
+        recognition: "Constraint satisfaction on grid. Place N queens. Find word in grid.",
+        mentalModel: "Try each position. Check validity. Recurse. Undo if invalid.",
+        pitfalls: "Track cols + diagonals (row-col) + anti-diagonals (row+col) for N-Queens.",
         problems: [
           { num: "51", name: "N-Queens", url: "https://leetcode.com/problems/n-queens/" },
           { num: "79", name: "Word Search", url: "https://leetcode.com/problems/word-search/" }
         ],
         code: {
-          "Java": `// N-Queens\nvoid solve(int row, Set<Integer> cols, Set<Integer> d1, Set<Integer> d2) {\n    if (row == n) { res.add(buildBoard()); return; }\n    for (int col = 0; col < n; col++) {\n        if (cols.contains(col)||d1.contains(row-col)||d2.contains(row+col)) continue;\n        cols.add(col); d1.add(row-col); d2.add(row+col); queens[row]=col;\n        solve(row+1, cols, d1, d2);\n        cols.remove(col); d1.remove(row-col); d2.remove(row+col);\n    }\n}`,
-          "Kotlin": `fun search(r: Int, c: Int, i: Int): Boolean {\n    if (i == word.length) return true\n    if (r !in 0 until R || c !in 0 until C || board[r][c] != word[i]) return false\n    val tmp = board[r][c]; board[r][c] = '#'\n    val found = search(r+1,c,i+1)||search(r-1,c,i+1)||search(r,c+1,i+1)||search(r,c-1,i+1)\n    board[r][c] = tmp; return found\n}`,
-          "Python": `def dfs(r, c, i):\n    if i == len(word): return True\n    if r < 0 or r >= R or c < 0 or c >= C or board[r][c] != word[i]: return False\n    tmp = board[r][c]; board[r][c] = '#'\n    res = dfs(r+1,c,i+1) or dfs(r-1,c,i+1) or dfs(r,c+1,i+1) or dfs(r,c-1,i+1)\n    board[r][c] = tmp\n    return res`
+          "Java": `// N-Queens
+Set<Integer> cols=new HashSet<>(), d1=new HashSet<>(), d2=new HashSet<>();
+void solve(int row) {
+    if (row == n) { res.add(build()); return; }
+    for (int col = 0; col < n; col++) {
+        if (cols.contains(col)||d1.contains(row-col)||d2.contains(row+col)) continue;
+        cols.add(col); d1.add(row-col); d2.add(row+col); queens[row]=col;
+        solve(row+1);
+        cols.remove(col); d1.remove(row-col); d2.remove(row+col);
+    }
+}
+// Word Search
+boolean dfs(int r, int c, int i) {
+    if (i==word.length()) return true;
+    if (r<0||c<0||r>=R||c>=C||board[r][c]!=word.charAt(i)) return false;
+    char tmp=board[r][c]; board[r][c]='#'; // mark visited
+    boolean found=dfs(r+1,c,i+1)||dfs(r-1,c,i+1)||dfs(r,c+1,i+1)||dfs(r,c-1,i+1);
+    board[r][c]=tmp; // restore
+    return found;
+}`,
+          "Kotlin": `// Word Search
+fun dfs(r:Int,c:Int,i:Int):Boolean {
+    if(i==word.length) return true
+    if(r!in 0 until R||c!in 0 until C||board[r][c]!=word[i]) return false
+    val tmp=board[r][c]; board[r][c]='#'
+    val found=dfs(r+1,c,i+1)||dfs(r-1,c,i+1)||dfs(r,c+1,i+1)||dfs(r,c-1,i+1)
+    board[r][c]=tmp; return found
+}`,
+          "Python": `def dfs(r, c, i):
+    if i == len(word): return True
+    if r<0 or r>=R or c<0 or c>=C or board[r][c]!=word[i]: return False
+    tmp=board[r][c]; board[r][c]='#'  # mark
+    res=(dfs(r+1,c,i+1) or dfs(r-1,c,i+1) or
+         dfs(r,c+1,i+1) or dfs(r,c-1,i+1))
+    board[r][c]=tmp  # restore
+    return res`
         }
       }
     ]
@@ -661,50 +1746,153 @@ const dsaData = [
     color: "#3a5a8a",
     patterns: [
       {
-        name: "Graph DFS (Recursive)",
-        recognition: "Connected components, paths, islands, flood fill, cycle detection.",
-        mentalModel: "Recursion + visited set. Go as deep as possible before backtracking. Mark visited BEFORE recursing.",
-        pitfalls: "Always mark visited BEFORE calling dfs() — not after. Unmark for backtracking problems.",
+        name: "Graph Representation",
+        recognition: "Build graph from edge list. Adjacency list vs matrix.",
+        mentalModel: "Adjacency list: Map<Integer, List<Integer>>. Better for sparse graphs. Matrix: O(V²) space.",
+        pitfalls: "Undirected: add both directions. Directed: one direction only.",
+        problems: [
+          { num: "207", name: "Course Schedule", url: "https://leetcode.com/problems/course-schedule/" }
+        ],
+        code: {
+          "Java": `// Adjacency List (most common)
+List<List<Integer>> adj = new ArrayList<>();
+for (int i = 0; i < n; i++) adj.add(new ArrayList<>());
+for (int[] e : edges) {
+    adj.get(e[0]).add(e[1]); // directed
+    adj.get(e[1]).add(e[0]); // undirected: also add reverse
+}
+// Weighted: List<int[]> where int[] = {neighbor, weight}`,
+          "Kotlin": `val adj = List(n) { mutableListOf<Int>() }
+for ((u, v) in edges) { adj[u].add(v); adj[v].add(u) }`,
+          "Python": `from collections import defaultdict
+adj = defaultdict(list)
+for u, v in edges:
+    adj[u].append(v)
+    adj[v].append(u)  # undirected`
+        }
+      },
+      {
+        name: "Graph DFS",
+        recognition: "Connected components. All paths. Cycle detection. Flood fill. Islands.",
+        mentalModel: "Recursion + visited. Mark BEFORE recursing. Explores deepest path first.",
+        pitfalls: "Mark visited BEFORE recursing (not after). Grid DFS: mark cell in-place.",
         problems: [
           { num: "200", name: "Number of Islands", url: "https://leetcode.com/problems/number-of-islands/" },
           { num: "695", name: "Max Area of Island", url: "https://leetcode.com/problems/max-area-of-island/" },
           { num: "133", name: "Clone Graph", url: "https://leetcode.com/problems/clone-graph/" }
         ],
         code: {
-          "Java": `// Graph DFS Template\nvoid dfs(int node, boolean[] visited, List<List<Integer>> adj) {\n    visited[node] = true;           // ← mark BEFORE recursing\n    for (int neighbor : adj.get(node)) {\n        if (!visited[neighbor]) {\n            dfs(neighbor, visited, adj);\n        }\n    }\n}\n// Count connected components:\nint count = 0;\nfor (int i = 0; i < n; i++) {\n    if (!visited[i]) { dfs(i, visited, adj); count++; }\n}\n\n// Grid DFS (Number of Islands)\nvoid dfs(char[][] g, int r, int c) {\n    if (r<0||r>=g.length||c<0||c>=g[0].length||g[r][c]=='0') return;\n    g[r][c] = '0'; // mark visited in-place\n    dfs(g,r+1,c); dfs(g,r-1,c); dfs(g,r,c+1); dfs(g,r,c-1);\n}`,
-          "Kotlin": `// Graph DFS\nfun dfs(node: Int, visited: BooleanArray, adj: List<List<Int>>) {\n    visited[node] = true              // mark before recursing\n    for (nb in adj[node]) {\n        if (!visited[nb]) dfs(nb, visited, adj)\n    }\n}\n// Grid DFS\nfun dfs(g: Array<CharArray>, r: Int, c: Int) {\n    if (r !in g.indices || c !in g[0].indices || g[r][c] == '0') return\n    g[r][c] = '0'\n    dfs(g,r+1,c); dfs(g,r-1,c); dfs(g,r,c+1); dfs(g,r,c-1)\n}`,
-          "Python": `# Graph DFS Template\ndef dfs(node, visited, adj):\n    visited.add(node)                 # mark before recursing\n    for nb in adj[node]:\n        if nb not in visited:\n            dfs(nb, visited, adj)\n\n# Count components\nvisited = set()\ncount = 0\nfor i in range(n):\n    if i not in visited: dfs(i, visited, adj); count += 1\n\n# Grid DFS (Islands)\ndef dfs(r, c):\n    if r<0 or r>=R or c<0 or c>=C or grid[r][c]=='0': return\n    grid[r][c] = '0'  # mark visited\n    dfs(r+1,c); dfs(r-1,c); dfs(r,c+1); dfs(r,c-1)`
+          "Java": `// General DFS
+void dfs(int node, boolean[] vis) {
+    vis[node] = true; // ← BEFORE recursing
+    for (int nb : adj.get(node))
+        if (!vis[nb]) dfs(nb, vis);
+}
+// Count components
+int count = 0;
+for (int i=0;i<n;i++) if(!vis[i]){dfs(i,vis);count++;}
+
+// Grid DFS (Islands)
+void dfs(char[][] g, int r, int c) {
+    if (r<0||r>=g.length||c<0||c>=g[0].length||g[r][c]=='0') return;
+    g[r][c]='0'; // mark visited
+    dfs(g,r+1,c);dfs(g,r-1,c);dfs(g,r,c+1);dfs(g,r,c-1);
+}`,
+          "Kotlin": `fun dfs(node: Int, vis: BooleanArray) {
+    vis[node] = true
+    for (nb in adj[node]) if (!vis[nb]) dfs(nb, vis)
+}`,
+          "Python": `# DFS with visited set
+def dfs(node, visited, adj):
+    visited.add(node)  # mark FIRST
+    for nb in adj[node]:
+        if nb not in visited: dfs(nb, visited, adj)
+
+# Grid DFS
+def dfs(r, c):
+    if r<0 or r>=R or c<0 or c>=C or grid[r][c]=='0': return
+    grid[r][c]='0'  # mark visited in-place
+    for dr,dc in [(1,0),(-1,0),(0,1),(0,-1)]: dfs(r+dr, c+dc)`
         }
       },
       {
-        name: "Graph BFS (Iterative - Shortest Path)",
-        recognition: "Shortest path in unweighted graph. Minimum steps. Closest node.",
-        mentalModel: "Queue + visited set. Process level by level. BFS guarantees shortest path in unweighted graphs.",
-        pitfalls: "Mark visited WHEN adding to queue, NOT when polling. Otherwise you revisit nodes.",
+        name: "Graph BFS",
+        recognition: "Shortest path (unweighted). Min steps. Level distance.",
+        mentalModel: "Queue + visited. Mark visited WHEN adding (not polling). Process level by level.",
+        pitfalls: "Mark visited when ADDING to queue. Not when polling. Otherwise O(V²) revisits.",
         problems: [
           { num: "127", name: "Word Ladder", url: "https://leetcode.com/problems/word-ladder/" },
           { num: "994", name: "Rotting Oranges", url: "https://leetcode.com/problems/rotting-oranges/" },
           { num: "542", name: "01 Matrix", url: "https://leetcode.com/problems/01-matrix/" }
         ],
         code: {
-          "Java": `// Graph BFS Template (Shortest Path)\nQueue<Integer> q = new LinkedList<>();\nboolean[] visited = new boolean[n];\nq.offer(start);\nvisited[start] = true;     // ← mark WHEN adding to queue!\nint steps = 0;\nwhile (!q.isEmpty()) {\n    int size = q.size();   // ← process one level at a time\n    for (int i = 0; i < size; i++) {\n        int node = q.poll();\n        if (node == target) return steps;\n        for (int nb : adj.get(node)) {\n            if (!visited[nb]) {\n                visited[nb] = true;  // ← mark BEFORE adding\n                q.offer(nb);\n            }\n        }\n    }\n    steps++;\n}`,
-          "Kotlin": `// BFS Shortest Path\nval q = ArrayDeque<Int>()\nval visited = BooleanArray(n)\nq.addLast(start); visited[start] = true\nvar steps = 0\nwhile (q.isNotEmpty()) {\n    repeat(q.size) {\n        val node = q.removeFirst()\n        if (node == target) return steps\n        for (nb in adj[node]) {\n            if (!visited[nb]) { visited[nb] = true; q.addLast(nb) }\n        }\n    }\n    steps++\n}`,
-          "Python": `# BFS Template (Shortest Path)\nfrom collections import deque\nq = deque([start])\nvisited = {start}          # ← mark WHEN adding!\nsteps = 0\nwhile q:\n    for _ in range(len(q)): # ← process one level\n        node = q.popleft()\n        if node == target: return steps\n        for nb in adj[node]:\n            if nb not in visited:\n                visited.add(nb)    # mark before adding\n                q.append(nb)\n    steps += 1`
+          "Java": `Queue<Integer> q = new LinkedList<>();
+boolean[] vis = new boolean[n];
+q.offer(start); vis[start]=true; // ← mark when adding!
+int steps=0;
+while (!q.isEmpty()) {
+    int size=q.size(); // level snapshot
+    for (int i=0;i<size;i++) {
+        int node=q.poll();
+        if (node==target) return steps;
+        for (int nb:adj.get(node))
+            if(!vis[nb]){vis[nb]=true;q.offer(nb);}
+    }
+    steps++;
+}`,
+          "Kotlin": `val q=ArrayDeque<Int>(); val vis=BooleanArray(n)
+q.addLast(start); vis[start]=true; var steps=0
+while(q.isNotEmpty()){
+    repeat(q.size){val node=q.removeFirst()
+        for(nb in adj[node]) if(!vis[nb]){vis[nb]=true;q.addLast(nb)}}
+    steps++}`,
+          "Python": `from collections import deque
+q=deque([start]); vis={start}; steps=0
+while q:
+    for _ in range(len(q)):
+        node=q.popleft()
+        if node==target: return steps
+        for nb in adj[node]:
+            if nb not in vis: vis.add(nb); q.append(nb)
+    steps+=1`
         }
       },
       {
         name: "Cycle Detection & Bipartite",
-        recognition: "Is graph a DAG? Can we color with 2 colors? Course prerequisites.",
-        mentalModel: "DFS: track recursion stack for directed. Track colors for bipartite.",
-        pitfalls: "State: 0=unvisited, 1=in-stack, 2=done. Undirected: skip parent.",
+        recognition: "Has cycle? Can 2-color graph? Course is completable?",
+        mentalModel: "Directed cycle: state 0=unvis,1=in-stack,2=done. Bipartite: color 0/1, check neighbors.",
+        pitfalls: "Directed graph: in-stack state (1) ≠ visited state (2). Undirected: skip parent.",
         problems: [
           { num: "207", name: "Course Schedule", url: "https://leetcode.com/problems/course-schedule/" },
-          { num: "785", name: "Is Graph Bipartite", url: "https://leetcode.com/problems/is-graph-bipartite/" }
+          { num: "785", name: "Is Graph Bipartite?", url: "https://leetcode.com/problems/is-graph-bipartite/" }
         ],
         code: {
-          "Java": `// Cycle detection (directed)\nint[] state = new int[n]; // 0,1,2\nboolean hasCycle(int node) {\n    if (state[node] == 1) return true;\n    if (state[node] == 2) return false;\n    state[node] = 1;\n    for (int nb : adj[node]) if (hasCycle(nb)) return true;\n    state[node] = 2;\n    return false;\n}`,
-          "Kotlin": `val color = IntArray(n) { -1 }\nfun bfs(src: Int): Boolean {\n    val q = ArrayDeque<Int>()\n    q.addLast(src); color[src] = 0\n    while (q.isNotEmpty()) {\n        val u = q.removeFirst()\n        for (v in adj[u]) {\n            if (color[v] == -1) { color[v] = 1 - color[u]; q.addLast(v) }\n            else if (color[v] == color[u]) return false\n        }\n    }\n    return true\n}`,
-          "Python": `state = [0] * n  # 0=unvis,1=in-stack,2=done\ndef has_cycle(node):\n    if state[node] == 1: return True\n    if state[node] == 2: return False\n    state[node] = 1\n    for nb in adj[node]:\n        if has_cycle(nb): return True\n    state[node] = 2\n    return False`
+          "Java": `// Directed cycle detection
+int[] state = new int[n]; // 0=unvis,1=in-stack,2=done
+boolean hasCycle(int u) {
+    state[u]=1;
+    for (int v:adj.get(u)) {
+        if (state[v]==1) return true; // back edge!
+        if (state[v]==0 && hasCycle(v)) return true;
+    }
+    state[u]=2; return false;
+}
+// Bipartite
+int[] color = new int[n]; Arrays.fill(color,-1);
+// BFS: color[start]=0, color[nb]=1-color[cur]`,
+          "Kotlin": `val state=IntArray(n)
+fun hasCycle(u:Int):Boolean{
+    state[u]=1
+    for(v in adj[u]){if(state[v]==1) return true;if(state[v]==0&&hasCycle(v)) return true}
+    state[u]=2; return false
+}`,
+          "Python": `state = [0] * n  # 0=unvis,1=in-stack,2=done
+def has_cycle(u):
+    state[u] = 1
+    for v in adj[u]:
+        if state[v] == 1: return True  # back edge
+        if state[v] == 0 and has_cycle(v): return True
+    state[u] = 2; return False`
         }
       }
     ]
@@ -716,32 +1904,81 @@ const dsaData = [
     color: "#5a8a3a",
     patterns: [
       {
-        name: "Kahn's Algorithm (BFS)",
-        recognition: "Dependency ordering. Course schedule. Build order.",
-        mentalModel: "In-degree array. Queue nodes with 0 in-degree. Process and reduce neighbors.",
-        pitfalls: "If result length != n, there is a cycle.",
+        name: "Kahn's Algorithm (BFS In-Degree)",
+        recognition: "Linear ordering of DAG. Course schedule. Build order. Prerequisites.",
+        mentalModel: "In-degree array. Queue all nodes with in-degree=0. Pop, add to order, decrement neighbors.",
+        pitfalls: "If result.size() ≠ n → cycle exists. Build adj AND in-degree simultaneously.",
         problems: [
           { num: "207", name: "Course Schedule", url: "https://leetcode.com/problems/course-schedule/" },
           { num: "210", name: "Course Schedule II", url: "https://leetcode.com/problems/course-schedule-ii/" }
         ],
         code: {
-          "Java": `int[] indeg = new int[n];\nfor (int[] e : edges) indeg[e[1]]++;\nQueue<Integer> q = new LinkedList<>();\nfor (int i = 0; i < n; i++) if (indeg[i] == 0) q.offer(i);\nList<Integer> order = new ArrayList<>();\nwhile (!q.isEmpty()) {\n    int u = q.poll(); order.add(u);\n    for (int v : adj[u]) if (--indeg[v] == 0) q.offer(v);\n}\nreturn order.size() == n; // false = cycle`,
-          "Kotlin": `val indeg = IntArray(n)\nfor ((u,v) in edges) indeg[v]++\nval q = ArrayDeque<Int>()\nfor (i in 0 until n) if (indeg[i] == 0) q.addLast(i)\nval order = mutableListOf<Int>()\nwhile (q.isNotEmpty()) {\n    val u = q.removeFirst(); order.add(u)\n    for (v in adj[u]) if (--indeg[v] == 0) q.addLast(v)\n}\nreturn order.size == n`,
-          "Python": `from collections import deque\nindeg = [0] * n\nfor u, v in edges: indeg[v] += 1\nq = deque(i for i in range(n) if indeg[i] == 0)\norder = []\nwhile q:\n    u = q.popleft(); order.append(u)\n    for v in adj[u]:\n        indeg[v] -= 1\n        if indeg[v] == 0: q.append(v)\nreturn len(order) == n  # False = cycle`
+          "Java": `int[] indeg=new int[n];
+List<List<Integer>> adj=new ArrayList<>();
+for(int i=0;i<n;i++) adj.add(new ArrayList<>());
+for(int[] e:edges){adj.get(e[1]).add(e[0]);indeg[e[0]]++;}
+Queue<Integer> q=new LinkedList<>();
+for(int i=0;i<n;i++) if(indeg[i]==0) q.offer(i);
+List<Integer> order=new ArrayList<>();
+while(!q.isEmpty()){
+    int u=q.poll(); order.add(u);
+    for(int v:adj.get(u)) if(--indeg[v]==0) q.offer(v);
+}
+return order.size()==n; // false = cycle`,
+          "Kotlin": `val indeg=IntArray(n)
+for((u,v) in edges){adj[v].add(u);indeg[u]++}
+val q=ArrayDeque<Int>()
+for(i in 0 until n) if(indeg[i]==0) q.addLast(i)
+val order=mutableListOf<Int>()
+while(q.isNotEmpty()){val u=q.removeFirst();order.add(u);for(v in adj[u]) if(--indeg[v]==0) q.addLast(v)}
+return order.size==n`,
+          "Python": `from collections import deque
+indeg=[0]*n
+for u,v in edges: adj[v].append(u); indeg[u]+=1
+q=deque(i for i in range(n) if indeg[i]==0)
+order=[]
+while q:
+    u=q.popleft(); order.append(u)
+    for v in adj[u]:
+        indeg[v]-=1
+        if indeg[v]==0: q.append(v)
+return len(order)==n  # False=cycle`
         }
       },
       {
-        name: "DFS Topological Sort",
-        recognition: "Same as Kahn's but recursive DFS based.",
-        mentalModel: "Post-order DFS: after visiting all descendants, push node to stack. Reverse stack = topo order.",
-        pitfalls: "Works only on DAG. Reverse final list.",
+        name: "Alien Dictionary (Advanced Topo Sort)",
+        recognition: "Derive character ordering from sorted word list.",
+        mentalModel: "Compare adjacent words → find first different char → edge: word1[i] → word2[i]. Then topo sort.",
+        pitfalls: "If word1 is prefix of word2 and word1 comes after → invalid. Empty result = cycle.",
         problems: [
-          { num: "210", name: "Course Schedule II", url: "https://leetcode.com/problems/course-schedule-ii/" }
+          { num: "269", name: "Alien Dictionary", url: "https://leetcode.com/problems/alien-dictionary/" }
         ],
         code: {
-          "Java": `boolean[] vis = new boolean[n];\nDeque<Integer> stack = new ArrayDeque<>();\nvoid dfs(int u) {\n    vis[u] = true;\n    for (int v : adj[u]) if (!vis[v]) dfs(v);\n    stack.push(u);\n}`,
-          "Kotlin": `val vis = BooleanArray(n)\nval stack = ArrayDeque<Int>()\nfun dfs(u: Int) {\n    vis[u] = true\n    for (v in adj[u]) if (!vis[v]) dfs(v)\n    stack.addFirst(u)\n}`,
-          "Python": `vis = [False] * n\nstack = []\ndef dfs(u):\n    vis[u] = True\n    for v in adj[u]:\n        if not vis[v]: dfs(v)\n    stack.append(u)\nfor i in range(n):\n    if not vis[i]: dfs(i)\nreturn stack[::-1]  # reverse`
+          "Java": `// Build graph from adjacent word pairs
+Map<Character,List<Character>> adj=new HashMap<>();
+Map<Character,Integer> indeg=new HashMap<>();
+for (char c : allChars) { adj.put(c,new ArrayList<>()); indeg.put(c,0); }
+for (int i=0;i<words.length-1;i++) {
+    String w1=words[i], w2=words[i+1];
+    int len=Math.min(w1.length(),w2.length());
+    for (int j=0;j<len;j++) {
+        if (w1.charAt(j)!=w2.charAt(j)) {
+            adj.get(w1.charAt(j)).add(w2.charAt(j));
+            indeg.merge(w2.charAt(j),1,Integer::sum);
+            break;
+        }
+    }
+}
+// Then run Kahn's on the character graph`,
+          "Kotlin": `// Same logic but with Char keys`,
+          "Python": `adj = {c: [] for w in words for c in w}
+indeg = {c: 0 for c in adj}
+for i in range(len(words)-1):
+    w1, w2 = words[i], words[i+1]
+    for c1, c2 in zip(w1, w2):
+        if c1 != c2:
+            adj[c1].append(c2); indeg[c2]+=1; break
+# Run Kahn's on adj/indeg`
         }
       }
     ]
@@ -753,18 +1990,50 @@ const dsaData = [
     color: "#2e8a5a",
     patterns: [
       {
-        name: "Path Compression & Union by Rank",
-        recognition: "Connected components. Cycle in undirected graph. Kruskal MST.",
-        mentalModel: "find() with path compression flattens tree. Union by rank keeps tree balanced.",
-        pitfalls: "Initialize parent[i] = i. find() must be recursive for path compression.",
+        name: "Path Compression + Union by Rank",
+        recognition: "Connected components. Cycle detection in undirected graph. Kruskal MST.",
+        mentalModel: "find() with path compression flattens tree. Union by rank keeps balanced. O(α(N)) ≈ O(1).",
+        pitfalls: "Initialize parent[i]=i. find() must be recursive for path compression. Return false if already connected.",
         problems: [
           { num: "684", name: "Redundant Connection", url: "https://leetcode.com/problems/redundant-connection/" },
-          { num: "323", name: "Number of Connected Components", url: "https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/" }
+          { num: "323", name: "Number of Connected Components", url: "https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/" },
+          { num: "547", name: "Number of Provinces", url: "https://leetcode.com/problems/number-of-provinces/" }
         ],
         code: {
-          "Java": `int[] parent = new int[n], rank = new int[n];\nfor (int i = 0; i < n; i++) parent[i] = i;\n\nint find(int x) {\n    if (parent[x] != x) parent[x] = find(parent[x]); // path compression\n    return parent[x];\n}\n\nboolean union(int a, int b) {\n    int ra = find(a), rb = find(b);\n    if (ra == rb) return false; // cycle!\n    if (rank[ra] < rank[rb]) parent[ra] = rb;\n    else if (rank[ra] > rank[rb]) parent[rb] = ra;\n    else { parent[rb] = ra; rank[ra]++; }\n    return true;\n}`,
-          "Kotlin": `val parent = IntArray(n) { it }\nval rank = IntArray(n)\n\nfun find(x: Int): Int {\n    if (parent[x] != x) parent[x] = find(parent[x])\n    return parent[x]\n}\n\nfun union(a: Int, b: Int): Boolean {\n    val ra = find(a); val rb = find(b)\n    if (ra == rb) return false\n    if (rank[ra] < rank[rb]) parent[ra] = rb\n    else if (rank[ra] > rank[rb]) parent[rb] = ra\n    else { parent[rb] = ra; rank[ra]++ }\n    return true\n}`,
-          "Python": `parent = list(range(n))\nrank = [0] * n\n\ndef find(x):\n    if parent[x] != x:\n        parent[x] = find(parent[x])  # path compression\n    return parent[x]\n\ndef union(a, b):\n    ra, rb = find(a), find(b)\n    if ra == rb: return False  # cycle!\n    if rank[ra] < rank[rb]: parent[ra] = rb\n    elif rank[ra] > rank[rb]: parent[rb] = ra\n    else: parent[rb] = ra; rank[ra] += 1\n    return True`
+          "Java": `int[] parent=new int[n], rank=new int[n];
+for(int i=0;i<n;i++) parent[i]=i;
+
+int find(int x) {
+    if(parent[x]!=x) parent[x]=find(parent[x]); // path compression
+    return parent[x];
+}
+boolean union(int a, int b) {
+    int ra=find(a), rb=find(b);
+    if(ra==rb) return false; // already connected = cycle!
+    if(rank[ra]<rank[rb]) parent[ra]=rb;
+    else if(rank[ra]>rank[rb]) parent[rb]=ra;
+    else { parent[rb]=ra; rank[ra]++; }
+    return true;
+}`,
+          "Kotlin": `val parent=IntArray(n){it}; val rank=IntArray(n)
+fun find(x:Int):Int{ if(parent[x]!=x) parent[x]=find(parent[x]); return parent[x] }
+fun union(a:Int,b:Int):Boolean{
+    val ra=find(a);val rb=find(b); if(ra==rb) return false
+    if(rank[ra]<rank[rb]) parent[ra]=rb
+    else if(rank[ra]>rank[rb]) parent[rb]=ra
+    else{parent[rb]=ra;rank[ra]++}; return true
+}`,
+          "Python": `parent=list(range(n)); rank=[0]*n
+def find(x):
+    if parent[x]!=x: parent[x]=find(parent[x])  # path compression
+    return parent[x]
+def union(a,b):
+    ra,rb=find(a),find(b)
+    if ra==rb: return False  # already connected = cycle!
+    if rank[ra]<rank[rb]: parent[ra]=rb
+    elif rank[ra]>rank[rb]: parent[rb]=ra
+    else: parent[rb]=ra; rank[ra]+=1
+    return True`
         }
       }
     ]
@@ -777,17 +2046,107 @@ const dsaData = [
     patterns: [
       {
         name: "Insert, Search, StartsWith",
-        recognition: "Prefix matching, word dictionary, autocomplete.",
-        mentalModel: "Each node has 26 children + isWord flag. Walk per character.",
-        pitfalls: "Don't return true on startsWith if isWord not checked for search.",
+        recognition: "Prefix matching. Autocomplete. Word dictionary. Longest common prefix.",
+        mentalModel: "Each node has children[] array (or HashMap) + isWord flag. Walk one char at a time.",
+        pitfalls: "search() checks isWord. startsWith() doesn't. Don't confuse them.",
         problems: [
-          { num: "208", name: "Implement Trie", url: "https://leetcode.com/problems/implement-trie-prefix-tree/" },
-          { num: "211", name: "Design Add & Search Words", url: "https://leetcode.com/problems/design-add-and-search-words-data-structure/" }
+          { num: "208", name: "Implement Trie", url: "https://leetcode.com/problems/implement-trie-prefix-tree/" }
         ],
         code: {
-          "Java": `class TrieNode {\n    TrieNode[] children = new TrieNode[26];\n    boolean isWord;\n}\nvoid insert(String w) {\n    TrieNode cur = root;\n    for (char c : w.toCharArray()) {\n        int i = c - 'a';\n        if (cur.children[i] == null) cur.children[i] = new TrieNode();\n        cur = cur.children[i];\n    }\n    cur.isWord = true;\n}\nboolean search(String w) {\n    TrieNode cur = root;\n    for (char c : w.toCharArray()) {\n        int i = c - 'a';\n        if (cur.children[i] == null) return false;\n        cur = cur.children[i];\n    }\n    return cur.isWord; // startsWith: return true\n}`,
-          "Kotlin": `class TrieNode { val children = arrayOfNulls<TrieNode>(26); var isWord = false }\nfun insert(w: String) {\n    var cur = root\n    for (c in w) {\n        val i = c - 'a'\n        if (cur.children[i] == null) cur.children[i] = TrieNode()\n        cur = cur.children[i]!!\n    }\n    cur.isWord = true\n}`,
-          "Python": `class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.is_word = False\n\ndef insert(word):\n    cur = root\n    for c in word:\n        if c not in cur.children:\n            cur.children[c] = TrieNode()\n        cur = cur.children[c]\n    cur.is_word = True\n\ndef search(word):\n    cur = root\n    for c in word:\n        if c not in cur.children: return False\n        cur = cur.children[c]\n    return cur.is_word`
+          "Java": `class TrieNode {
+    TrieNode[] children = new TrieNode[26];
+    boolean isWord;
+}
+void insert(String w) {
+    TrieNode cur=root;
+    for (char c:w.toCharArray()) {
+        int i=c-'a';
+        if(cur.children[i]==null) cur.children[i]=new TrieNode();
+        cur=cur.children[i];
+    }
+    cur.isWord=true;
+}
+boolean search(String w) {
+    TrieNode cur=root;
+    for (char c:w.toCharArray()) {
+        int i=c-'a';
+        if(cur.children[i]==null) return false;
+        cur=cur.children[i];
+    }
+    return cur.isWord; // ← isWord check!
+}
+boolean startsWith(String pre) {
+    // same but return true (no isWord check)
+}`,
+          "Kotlin": `class TrieNode { val children=arrayOfNulls<TrieNode>(26); var isWord=false }
+fun insert(w:String){ var cur=root; for(c in w){val i=c-'a'; if(cur.children[i]==null) cur.children[i]=TrieNode(); cur=cur.children[i]!!}; cur.isWord=true }
+fun search(w:String):Boolean{ var cur=root; for(c in w){val i=c-'a'; if(cur.children[i]==null) return false; cur=cur.children[i]!!}; return cur.isWord }`,
+          "Python": `class TrieNode:
+    def __init__(self): self.children={}; self.is_word=False
+
+class Trie:
+    def __init__(self): self.root=TrieNode()
+    def insert(self, w):
+        cur=self.root
+        for c in w:
+            if c not in cur.children: cur.children[c]=TrieNode()
+            cur=cur.children[c]
+        cur.is_word=True
+    def search(self, w):
+        cur=self.root
+        for c in w:
+            if c not in cur.children: return False
+            cur=cur.children[c]
+        return cur.is_word  # ← check is_word!`
+        }
+      },
+      {
+        name: "Word Dictionary (Wildcard) & Word Search II",
+        recognition: "Search with '.' wildcard. Find all words from list in a grid.",
+        mentalModel: "Wildcard: DFS all 26 children when '.' encountered. Word Search II: Build trie from words, DFS grid.",
+        pitfalls: "Word Search II: remove word from trie after finding (avoid duplicates). Prune early.",
+        problems: [
+          { num: "211", name: "Design Add and Search Words", url: "https://leetcode.com/problems/design-add-and-search-words-data-structure/" },
+          { num: "212", name: "Word Search II", url: "https://leetcode.com/problems/word-search-ii/" }
+        ],
+        code: {
+          "Java": `// Search with wildcard '.'
+boolean search(String w, int i, TrieNode node) {
+    if(i==w.length()) return node.isWord;
+    char c=w.charAt(i);
+    if(c=='.') {
+        for(TrieNode child:node.children)
+            if(child!=null && search(w,i+1,child)) return true;
+        return false;
+    }
+    TrieNode next=node.children[c-'a'];
+    return next!=null && search(w,i+1,next);
+}
+// Word Search II: build trie, DFS grid
+void dfs(char[][] board, int r, int c, TrieNode node, String path) {
+    if(node.isWord){res.add(path);node.isWord=false;} // mark found
+    if(r<0||r>=R||c<0||c>=C||board[r][c]=='#') return;
+    char ch=board[r][c];
+    TrieNode next=node.children[ch-'a'];
+    if(next==null) return;
+    board[r][c]='#';
+    dfs(board,r+1,c,next,path+ch);dfs(board,r-1,c,next,path+ch);
+    dfs(board,r,c+1,next,path+ch);dfs(board,r,c-1,next,path+ch);
+    board[r][c]=ch;
+}`,
+          "Kotlin": `fun search(w: String, i: Int, node: TrieNode): Boolean {
+    if(i==w.length) return node.isWord
+    val c=w[i]
+    if(c=='.') return node.children.any{it!=null&&search(w,i+1,it)}
+    return node.children[c-'a']?.let{search(w,i+1,it)}?:false
+}`,
+          "Python": `def search(w, i, node):
+    if i == len(w): return node.is_word
+    c = w[i]
+    if c == '.':
+        return any(search(w, i+1, child) for child in node.children.values())
+    if c not in node.children: return False
+    return search(w, i+1, node.children[c])`
         }
       }
     ]
@@ -799,105 +2158,372 @@ const dsaData = [
     color: "#1f7a72",
     patterns: [
       {
-        name: "1D DP (Fibonacci, Stairs, House Robber)",
-        recognition: "Count ways, optimize next state from previous states.",
-        mentalModel: "dp[i] depends on dp[i-1] or dp[i-2]. Space optimize to 2 vars.",
-        pitfalls: "Base cases. House Robber: start from 3rd element.",
+        name: "DP Fundamentals (Memo vs Tabulation)",
+        recognition: "Overlapping subproblems + optimal substructure = DP.",
+        mentalModel: "Memoization = top-down recursion + cache. Tabulation = bottom-up iterative. Same complexity.",
+        pitfalls: "DP can only optimize if subproblems OVERLAP. Identify STATE variables first.",
+        problems: [
+          { num: "509", name: "Fibonacci Number", url: "https://leetcode.com/problems/fibonacci-number/" }
+        ],
+        code: {
+          "Java": `// STEP 1: Define state: dp[i] = answer for input i
+// STEP 2: Write recurrence: dp[i] = f(dp[i-1], dp[i-2])
+// STEP 3: Base cases: dp[0], dp[1]
+// STEP 4: Order (bottom-up) or memoize (top-down)
+
+// Memoization (top-down)
+Map<Integer,Integer> memo=new HashMap<>();
+int fib(int n){
+    if(n<=1) return n;
+    if(memo.containsKey(n)) return memo.get(n);
+    int res=fib(n-1)+fib(n-2);
+    memo.put(n,res); return res;
+}
+// Tabulation (bottom-up)
+int[] dp=new int[n+1]; dp[0]=0; dp[1]=1;
+for(int i=2;i<=n;i++) dp[i]=dp[i-1]+dp[i-2];`,
+          "Kotlin": `// Memoization
+val memo=mutableMapOf<Int,Int>()
+fun fib(n:Int):Int{
+    if(n<=1) return n
+    return memo.getOrPut(n){fib(n-1)+fib(n-2)}
+}`,
+          "Python": `# Memoization (top-down)
+from functools import lru_cache
+@lru_cache(None)
+def fib(n):
+    if n <= 1: return n
+    return fib(n-1) + fib(n-2)
+
+# Tabulation (bottom-up)
+dp = [0] * (n+1); dp[1] = 1
+for i in range(2, n+1): dp[i] = dp[i-1] + dp[i-2]`
+        }
+      },
+      {
+        name: "1D DP (Climbing Stairs, House Robber)",
+        recognition: "State depends on 1 or 2 previous states. Space optimize to O(1).",
+        mentalModel: "dp[i] = dp[i-1] + dp[i-2]. Space optimize with 2 variables a, b.",
+        pitfalls: "Base cases. House Robber: can't take adjacent. dp[i] = max(dp[i-1], dp[i-2]+val).",
         problems: [
           { num: "70", name: "Climbing Stairs", url: "https://leetcode.com/problems/climbing-stairs/" },
           { num: "198", name: "House Robber", url: "https://leetcode.com/problems/house-robber/" },
-          { num: "213", name: "House Robber II", url: "https://leetcode.com/problems/house-robber-ii/" }
+          { num: "213", name: "House Robber II", url: "https://leetcode.com/problems/house-robber-ii/" },
+          { num: "322", name: "Coin Change", url: "https://leetcode.com/problems/coin-change/" }
         ],
         code: {
-          "Java": `// Climbing Stairs\nint a = 1, b = 1;\nfor (int i = 2; i <= n; i++) { int c = a + b; a = b; b = c; }\nreturn b;\n\n// House Robber\nint inc = 0, exc = 0;\nfor (int x : nums) {\n    int tmp = inc;\n    inc = exc + x;\n    exc = Math.max(tmp, exc);\n}\nreturn Math.max(inc, exc);`,
-          "Kotlin": `// Climbing Stairs\nvar a = 1; var b = 1\nfor (i in 2..n) { val c = a + b; a = b; b = c }\nreturn b\n\n// House Robber\nvar inc = 0; var exc = 0\nfor (x in nums) {\n    val tmp = inc; inc = exc + x; exc = maxOf(tmp, exc)\n}\nreturn maxOf(inc, exc)`,
-          "Python": `# Climbing Stairs\na = b = 1\nfor _ in range(2, n + 1):\n    a, b = b, a + b\nreturn b\n\n# House Robber\ninc = exc = 0\nfor x in nums:\n    inc, exc = exc + x, max(inc, exc)\nreturn max(inc, exc)`
+          "Java": `// Climbing Stairs O(1) space
+int a=1,b=1;
+for(int i=2;i<=n;i++){int c=a+b;a=b;b=c;}
+return b;
+// House Robber
+int inc=0,exc=0;
+for(int x:nums){int tmp=inc;inc=exc+x;exc=Math.max(tmp,exc);}
+return Math.max(inc,exc);
+// House Robber II: run twice (exclude first or last)
+// Coin Change (unbounded knapsack)
+int[] dp=new int[sum+1]; Arrays.fill(dp,Integer.MAX_VALUE); dp[0]=0;
+for(int c:coins) for(int i=c;i<=sum;i++)
+    if(dp[i-c]!=Integer.MAX_VALUE) dp[i]=Math.min(dp[i],1+dp[i-c]);`,
+          "Kotlin": `var a=1;var b=1
+for(i in 2..n){val c=a+b;a=b;b=c}
+return b`,
+          "Python": `# Climbing Stairs
+a = b = 1
+for _ in range(2, n+1): a, b = b, a + b
+return b
+# House Robber
+inc = exc = 0
+for x in nums: inc, exc = exc+x, max(inc, exc)
+return max(inc, exc)
+# Coin Change
+dp = [float('inf')]*(sum+1); dp[0]=0
+for c in coins:
+    for i in range(c, sum+1):
+        dp[i]=min(dp[i], 1+dp[i-c])`
         }
       },
       {
         name: "2D DP (Grid Paths, Unique Paths)",
-        recognition: "Grid traversal counting paths. Min cost path.",
-        mentalModel: "dp[i][j] = dp[i-1][j] + dp[i][j-1]. Initialize edges to 1.",
-        pitfalls: "Initialize first row and column. Obstacles set dp to 0.",
+        recognition: "Grid traversal. Count paths. Min cost path. Obstacles.",
+        mentalModel: "dp[i][j] = dp[i-1][j] + dp[i][j-1]. Initialize first row/col to 1.",
+        pitfalls: "Obstacle: set dp to 0. Watch boundary initialization.",
         problems: [
           { num: "62", name: "Unique Paths", url: "https://leetcode.com/problems/unique-paths/" },
-          { num: "64", name: "Minimum Path Sum", url: "https://leetcode.com/problems/minimum-path-sum/" }
+          { num: "64", name: "Minimum Path Sum", url: "https://leetcode.com/problems/minimum-path-sum/" },
+          { num: "63", name: "Unique Paths II", url: "https://leetcode.com/problems/unique-paths-ii/" }
         ],
         code: {
-          "Java": `int[][] dp = new int[m][n];\nfor (int i = 0; i < m; i++) dp[i][0] = 1;\nfor (int j = 0; j < n; j++) dp[0][j] = 1;\nfor (int i = 1; i < m; i++)\n    for (int j = 1; j < n; j++)\n        dp[i][j] = dp[i-1][j] + dp[i][j-1];\nreturn dp[m-1][n-1];`,
-          "Kotlin": `val dp = Array(m) { IntArray(n) { 1 } }\nfor (i in 1 until m)\n    for (j in 1 until n)\n        dp[i][j] = dp[i-1][j] + dp[i][j-1]\nreturn dp[m-1][n-1]`,
-          "Python": `dp = [[1]*n for _ in range(m)]\nfor i in range(1, m):\n    for j in range(1, n):\n        dp[i][j] = dp[i-1][j] + dp[i][j-1]\nreturn dp[m-1][n-1]`
+          "Java": `int[][] dp=new int[m][n];
+for(int i=0;i<m;i++) dp[i][0]=1;
+for(int j=0;j<n;j++) dp[0][j]=1;
+for(int i=1;i<m;i++) for(int j=1;j<n;j++)
+    dp[i][j]=dp[i-1][j]+dp[i][j-1];
+return dp[m-1][n-1];`,
+          "Kotlin": `val dp=Array(m){IntArray(n){1}}
+for(i in 1 until m) for(j in 1 until n) dp[i][j]=dp[i-1][j]+dp[i][j-1]
+return dp[m-1][n-1]`,
+          "Python": `dp=[[1]*n for _ in range(m)]
+for i in range(1,m):
+    for j in range(1,n): dp[i][j]=dp[i-1][j]+dp[i][j-1]
+return dp[m-1][n-1]`
         }
       },
       {
-        name: "Knapsack & Coin Change",
-        recognition: "Select items with constraints (weight/value). Count/min ways to make sum.",
-        mentalModel: "0/1 Knapsack: iterate j backwards. Unbounded: forwards.",
-        pitfalls: "Iterate weights in reverse for 0/1. Initialize dp[0]=0, rest=INF.",
+        name: "Knapsack (0/1 and Unbounded)",
+        recognition: "Select items with weight/value constraints. Partition problem.",
+        mentalModel: "0/1: loop weights BACKWARDS. Unbounded: loop forwards. dp[0]=true/0.",
+        pitfalls: "0/1 must iterate reverse to avoid using item twice. Init correctly.",
         problems: [
-          { num: "322", name: "Coin Change", url: "https://leetcode.com/problems/coin-change/" },
-          { num: "416", name: "Partition Equal Subset", url: "https://leetcode.com/problems/partition-equal-subset-sum/" }
+          { num: "416", name: "Partition Equal Subset Sum", url: "https://leetcode.com/problems/partition-equal-subset-sum/" },
+          { num: "494", name: "Target Sum", url: "https://leetcode.com/problems/target-sum/" },
+          { num: "322", name: "Coin Change (Unbounded)", url: "https://leetcode.com/problems/coin-change/" }
         ],
         code: {
-          "Java": `// Coin Change (unbounded)\nint[] dp = new int[sum + 1];\nArrays.fill(dp, Integer.MAX_VALUE); dp[0] = 0;\nfor (int c : coins)\n    for (int i = c; i <= sum; i++)\n        if (dp[i-c] != Integer.MAX_VALUE)\n            dp[i] = Math.min(dp[i], 1 + dp[i-c]);\n\n// 0/1 Knapsack\nboolean[] dp = new boolean[sum + 1]; dp[0] = true;\nfor (int x : nums)\n    for (int j = sum; j >= x; j--) // REVERSE!\n        dp[j] |= dp[j - x];`,
-          "Kotlin": `val dp = IntArray(sum + 1) { Int.MAX_VALUE }.also { it[0] = 0 }\nfor (c in coins)\n    for (i in c..sum)\n        if (dp[i-c] != Int.MAX_VALUE)\n            dp[i] = minOf(dp[i], 1 + dp[i-c])`,
-          "Python": `# Coin Change\ndp = [float('inf')] * (sum + 1)\ndp[0] = 0\nfor c in coins:\n    for i in range(c, sum + 1):\n        dp[i] = min(dp[i], 1 + dp[i - c])\n\n# 0/1 Knapsack\ndp = [False] * (sum + 1); dp[0] = True\nfor x in nums:\n    for j in range(sum, x-1, -1):  # REVERSE!\n        dp[j] |= dp[j - x]`
+          "Java": `// 0/1 Knapsack (boolean subset sum)
+boolean[] dp=new boolean[sum+1]; dp[0]=true;
+for(int x:nums)
+    for(int j=sum;j>=x;j--) // ← REVERSE!
+        dp[j]|=dp[j-x];
+
+// Unbounded Knapsack (coin change)
+int[] dp=new int[sum+1]; Arrays.fill(dp,MAX); dp[0]=0;
+for(int c:coins)
+    for(int i=c;i<=sum;i++) // ← FORWARD
+        if(dp[i-c]!=MAX) dp[i]=Math.min(dp[i],1+dp[i-c]);`,
+          "Kotlin": `val dp=BooleanArray(sum+1).also{it[0]=true}
+for(x in nums) for(j in sum downTo x) dp[j]=dp[j]||dp[j-x]`,
+          "Python": `# 0/1 Knapsack (REVERSE!)
+dp=[False]*(sum+1); dp[0]=True
+for x in nums:
+    for j in range(sum, x-1, -1):  # REVERSE!
+        dp[j]|=dp[j-x]
+# Unbounded (FORWARD)
+dp=[float('inf')]*(sum+1); dp[0]=0
+for c in coins:
+    for i in range(c, sum+1):  # FORWARD
+        dp[i]=min(dp[i], 1+dp[i-c])`
         }
       },
       {
         name: "LCS, LIS, Edit Distance",
-        recognition: "String comparison, subsequence, edit operations, palindrome.",
-        mentalModel: "LCS: match = 1+diagonal, else max(up,left). LIS: O(N logN) with BS.",
-        pitfalls: "LCS: 1-indexed dp means dp[0][*] = dp[*][0] = 0 as base.",
+        recognition: "String matching. Subsequences. Edit operations. Palindromes.",
+        mentalModel: "LCS: match→diagonal+1, else→max(up,left). LIS O(NlogN): binary search on tails array.",
+        pitfalls: "LCS 1-indexed → dp[0][*]=0, dp[*][0]=0. Edit distance: 3 operations.",
         problems: [
-          { num: "1143", name: "Longest Common Subsequence", url: "https://leetcode.com/problems/longest-common-subsequence/" },
-          { num: "300", name: "Longest Increasing Subsequence", url: "https://leetcode.com/problems/longest-increasing-subsequence/" },
-          { num: "72", name: "Edit Distance", url: "https://leetcode.com/problems/edit-distance/" }
+          { num: "1143", name: "LCS", url: "https://leetcode.com/problems/longest-common-subsequence/" },
+          { num: "300", name: "LIS", url: "https://leetcode.com/problems/longest-increasing-subsequence/" },
+          { num: "72", name: "Edit Distance", url: "https://leetcode.com/problems/edit-distance/" },
+          { num: "5", name: "Longest Palindromic Substring", url: "https://leetcode.com/problems/longest-palindromic-substring/" }
         ],
         code: {
-          "Java": `// LCS\nint[][] dp = new int[m+1][n+1];\nfor (int i=1;i<=m;i++) for (int j=1;j<=n;j++)\n    dp[i][j] = (s1.charAt(i-1)==s2.charAt(j-1)) ? dp[i-1][j-1]+1 : Math.max(dp[i-1][j],dp[i][j-1]);\n\n// LIS O(N log N)\nList<Integer> tails = new ArrayList<>();\nfor (int x : nums) {\n    int pos = Collections.binarySearch(tails, x);\n    if (pos < 0) pos = -(pos + 1);\n    if (pos == tails.size()) tails.add(x); else tails.set(pos, x);\n}`,
-          "Kotlin": `// LCS\nval dp = Array(m+1) { IntArray(n+1) }\nfor (i in 1..m) for (j in 1..n)\n    dp[i][j] = if (s1[i-1]==s2[j-1]) dp[i-1][j-1]+1 else maxOf(dp[i-1][j],dp[i][j-1])`,
-          "Python": `# LCS\ndp = [[0]*(n+1) for _ in range(m+1)]\nfor i in range(1,m+1):\n    for j in range(1,n+1):\n        if s1[i-1]==s2[j-1]: dp[i][j]=dp[i-1][j-1]+1\n        else: dp[i][j]=max(dp[i-1][j],dp[i][j-1])\n\n# LIS O(N log N)\nimport bisect\ntails = []\nfor x in nums:\n    pos = bisect.bisect_left(tails, x)\n    if pos == len(tails): tails.append(x)\n    else: tails[pos] = x`
+          "Java": `// LCS
+int[][] dp=new int[m+1][n+1];
+for(int i=1;i<=m;i++) for(int j=1;j<=n;j++)
+    dp[i][j]=(s1.charAt(i-1)==s2.charAt(j-1))?dp[i-1][j-1]+1:Math.max(dp[i-1][j],dp[i][j-1]);
+// LIS O(NlogN): binary search on tails
+List<Integer> tails=new ArrayList<>();
+for(int x:nums){
+    int pos=Collections.binarySearch(tails,x);
+    if(pos<0) pos=-(pos+1);
+    if(pos==tails.size()) tails.add(x); else tails.set(pos,x);
+}
+return tails.size();
+// Edit Distance
+dp[i][j]=(s1[i-1]==s2[j-1])?dp[i-1][j-1]:1+Math.min(dp[i-1][j-1],Math.min(dp[i-1][j],dp[i][j-1]));`,
+          "Kotlin": `val dp=Array(m+1){IntArray(n+1)}
+for(i in 1..m) for(j in 1..n)
+    dp[i][j]=if(s1[i-1]==s2[j-1]) dp[i-1][j-1]+1 else maxOf(dp[i-1][j],dp[i][j-1])`,
+          "Python": `# LCS
+dp=[[0]*(n+1) for _ in range(m+1)]
+for i in range(1,m+1):
+    for j in range(1,n+1):
+        if s1[i-1]==s2[j-1]: dp[i][j]=dp[i-1][j-1]+1
+        else: dp[i][j]=max(dp[i-1][j],dp[i][j-1])
+# LIS O(NlogN)
+import bisect
+tails=[]
+for x in nums:
+    pos=bisect.bisect_left(tails,x)
+    if pos==len(tails): tails.append(x)
+    else: tails[pos]=x`
+        }
+      },
+      {
+        name: "Palindrome DP & Partition DP",
+        recognition: "Longest palindromic subsequence/substring. Min cuts for palindrome partition.",
+        mentalModel: "Palindrome DP: expand from center (odd/even). Or DP[i][j]=is s[i..j] palindrome.",
+        pitfalls: "Substring vs subsequence. Expand center for O(N²) vs DP table.",
+        problems: [
+          { num: "5", name: "Longest Palindromic Substring", url: "https://leetcode.com/problems/longest-palindromic-substring/" },
+          { num: "516", name: "Longest Palindromic Subsequence", url: "https://leetcode.com/problems/longest-palindromic-subsequence/" },
+          { num: "132", name: "Palindrome Partitioning II", url: "https://leetcode.com/problems/palindrome-partitioning-ii/" }
+        ],
+        code: {
+          "Java": `// Longest Palindromic Substring: expand from center
+String best="";
+for(int i=0;i<n;i++){
+    String odd=expand(s,i,i);   // odd length
+    String even=expand(s,i,i+1); // even length
+    if(odd.length()>best.length()) best=odd;
+    if(even.length()>best.length()) best=even;
+}
+String expand(String s,int l,int r){
+    while(l>=0&&r<s.length()&&s.charAt(l)==s.charAt(r)){l--;r++;}
+    return s.substring(l+1,r);
+}
+// Longest Palindromic Subsequence
+// LPS(s) = LCS(s, reverse(s))`,
+          "Kotlin": `fun expand(s:String,l:Int,r:Int):Int{
+    var lo=l;var hi=r
+    while(lo>=0&&hi<s.length&&s[lo]==s[hi]){lo--;hi++}
+    return hi-lo-1
+}`,
+          "Python": `# Expand from center
+def expand(l, r):
+    while l >= 0 and r < n and s[l] == s[r]:
+        l -= 1; r += 1
+    return s[l+1:r]
+best = ''
+for i in range(n):
+    for p in [expand(i,i), expand(i,i+1)]:
+        if len(p) > len(best): best = p
+# Palindrome Subsequence = LCS(s, s[::-1])`
         }
       }
     ]
   },
 
-  // ─── 17. INTERVALS ────────────────────────────────────────────────────────
+  // ─── 17. INTERVALS & GREEDY ──────────────────────────────────────────────
   {
     title: "Intervals & Greedy",
     color: "#7a5a2e",
     patterns: [
       {
         name: "Merge & Insert Intervals",
-        recognition: "Overlapping ranges, merge, insert, schedule.",
+        recognition: "Overlapping ranges. Merge. Insert new interval. Meeting rooms.",
         mentalModel: "Sort by start. Merge if next.start <= last.end. Update end = max(both).",
-        pitfalls: "Sort first. New interval insertion: handle 3 zones (before, overlap, after).",
+        pitfalls: "Sort first. Insert: 3 zones (before, overlap, after). Meeting Rooms II: min-heap of end times.",
         problems: [
           { num: "56", name: "Merge Intervals", url: "https://leetcode.com/problems/merge-intervals/" },
           { num: "57", name: "Insert Interval", url: "https://leetcode.com/problems/insert-interval/" },
           { num: "253", name: "Meeting Rooms II", url: "https://leetcode.com/problems/meeting-rooms-ii/" }
         ],
         code: {
-          "Java": `Arrays.sort(intervals, (a, b) -> a[0] - b[0]);\nList<int[]> res = new ArrayList<>();\nfor (int[] i : intervals) {\n    if (res.isEmpty() || res.get(res.size()-1)[1] < i[0])\n        res.add(i);\n    else\n        res.get(res.size()-1)[1] = Math.max(res.get(res.size()-1)[1], i[1]);\n}\n// Meeting rooms: min-heap of end times\nPriorityQueue<Integer> pq = new PriorityQueue<>();\nfor (int[] i : sorted) {\n    if (!pq.isEmpty() && pq.peek() <= i[0]) pq.poll();\n    pq.offer(i[1]);\n}`,
-          "Kotlin": `intervals.sortBy { it[0] }\nval res = mutableListOf<IntArray>()\nfor (i in intervals) {\n    if (res.isEmpty() || res.last()[1] < i[0]) res.add(i)\n    else res.last()[1] = maxOf(res.last()[1], i[1])\n}`,
-          "Python": `intervals.sort(key=lambda x: x[0])\nres = []\nfor i in intervals:\n    if not res or res[-1][1] < i[0]: res.append(i)\n    else: res[-1][1] = max(res[-1][1], i[1])`
+          "Java": `// Merge Intervals
+Arrays.sort(intervals,(a,b)->a[0]-b[0]);
+List<int[]> res=new ArrayList<>();
+for(int[] i:intervals){
+    if(res.isEmpty()||res.get(res.size()-1)[1]<i[0]) res.add(i);
+    else res.get(res.size()-1)[1]=Math.max(res.get(res.size()-1)[1],i[1]);
+}
+// Meeting Rooms II: min-heap of end times
+Arrays.sort(intervals,(a,b)->a[0]-b[0]);
+PriorityQueue<Integer> pq=new PriorityQueue<>();
+for(int[] i:intervals){
+    if(!pq.isEmpty()&&pq.peek()<=i[0]) pq.poll(); // free room
+    pq.offer(i[1]);
+}
+return pq.size(); // rooms needed`,
+          "Kotlin": `intervals.sortBy{it[0]}
+val res=mutableListOf<IntArray>()
+for(i in intervals)
+    if(res.isEmpty()||res.last()[1]<i[0]) res.add(i)
+    else res.last()[1]=maxOf(res.last()[1],i[1])`,
+          "Python": `intervals.sort(key=lambda x: x[0])
+res=[]
+for i in intervals:
+    if not res or res[-1][1]<i[0]: res.append(i)
+    else: res[-1][1]=max(res[-1][1],i[1])
+# Meeting Rooms II
+import heapq
+heapq.heapify(heap:=[])
+for start,end in sorted(intervals):
+    if heap and heap[0]<=start: heapq.heappop(heap)
+    heapq.heappush(heap,end)`
         }
       },
       {
-        name: "Greedy (Jump Game, Gas Station)",
-        recognition: "Local optimal leads to global optimal. Sorting by end time.",
-        mentalModel: "Jump Game: track max reach. Gas Station: total >= 0 means solution exists.",
-        pitfalls: "Jump Game II: update next_reach greedily. Gas: find start where local sum >= 0.",
+        name: "Jump Game & Gas Station",
+        recognition: "Can we reach end? Min jumps? Circular gas station.",
+        mentalModel: "Jump Game: track maxReach. If i>maxReach: stuck. Gas Station: if totalGas>=0, answer exists.",
+        pitfalls: "Jump Game II: update nextReach greedily. Gas Station: total >= 0 guarantees solution.",
         problems: [
           { num: "55", name: "Jump Game", url: "https://leetcode.com/problems/jump-game/" },
           { num: "45", name: "Jump Game II", url: "https://leetcode.com/problems/jump-game-ii/" },
           { num: "134", name: "Gas Station", url: "https://leetcode.com/problems/gas-station/" }
         ],
         code: {
-          "Java": `// Jump Game\nint reach = 0;\nfor (int i = 0; i <= reach && i < n; i++)\n    reach = Math.max(reach, i + nums[i]);\nreturn reach >= n - 1;\n\n// Gas Station\nint total = 0, cur = 0, start = 0;\nfor (int i = 0; i < n; i++) {\n    total += gas[i] - cost[i];\n    cur += gas[i] - cost[i];\n    if (cur < 0) { start = i + 1; cur = 0; }\n}\nreturn total >= 0 ? start : -1;`,
-          "Kotlin": `var reach = 0\nfor (i in 0..minOf(reach, n-1))\n    reach = maxOf(reach, i + nums[i])\nreturn reach >= n - 1`,
-          "Python": `# Jump Game\nreach = 0\nfor i in range(n):\n    if i > reach: break\n    reach = max(reach, i + nums[i])\nreturn reach >= n - 1\n\n# Gas Station\ntotal = cur = start = 0\nfor i in range(n):\n    total += gas[i] - cost[i]\n    cur += gas[i] - cost[i]\n    if cur < 0: start = i + 1; cur = 0\nreturn start if total >= 0 else -1`
+          "Java": `// Jump Game
+int reach=0;
+for(int i=0;i<n&&i<=reach;i++) reach=Math.max(reach,i+nums[i]);
+return reach>=n-1;
+// Jump Game II (min jumps)
+int jumps=0,curEnd=0,farthest=0;
+for(int i=0;i<n-1;i++){
+    farthest=Math.max(farthest,i+nums[i]);
+    if(i==curEnd){jumps++;curEnd=farthest;}
+}
+// Gas Station
+int total=0,cur=0,start=0;
+for(int i=0;i<n;i++){
+    total+=gas[i]-cost[i]; cur+=gas[i]-cost[i];
+    if(cur<0){start=i+1;cur=0;}
+}
+return total>=0?start:-1;`,
+          "Kotlin": `var reach=0
+for(i in 0 until n){ if(i>reach) break; reach=maxOf(reach,i+nums[i]) }
+return reach>=n-1`,
+          "Python": `# Jump Game
+reach = 0
+for i in range(n):
+    if i > reach: return False
+    reach = max(reach, i + nums[i])
+return True
+# Gas Station
+total=cur=start=0
+for i in range(n):
+    total+=gas[i]-cost[i]; cur+=gas[i]-cost[i]
+    if cur<0: start=i+1; cur=0
+return start if total>=0 else -1`
+        }
+      },
+      {
+        name: "Task Scheduler & Scheduling",
+        recognition: "CPU scheduling with cooldown. Minimum time to finish tasks.",
+        mentalModel: "Max frequency task determines idle slots. slots = (maxFreq-1)*n + count(tasks with maxFreq).",
+        pitfalls: "Result = max(len(tasks), calculated_slots). Never less than total tasks.",
+        problems: [
+          { num: "621", name: "Task Scheduler", url: "https://leetcode.com/problems/task-scheduler/" },
+          { num: "435", name: "Non-overlapping Intervals", url: "https://leetcode.com/problems/non-overlapping-intervals/" }
+        ],
+        code: {
+          "Java": `// Task Scheduler
+int[] freq=new int[26];
+for(char c:tasks) freq[c-'A']++;
+int maxFreq=0;
+for(int f:freq) maxFreq=Math.max(maxFreq,f);
+int maxCount=0;
+for(int f:freq) if(f==maxFreq) maxCount++;
+int slots=(maxFreq-1)*(n+1)+maxCount;
+return Math.max(slots,tasks.length);
+// Non-overlapping: remove min intervals to make non-overlapping
+// Sort by end time. Count non-overlapping. Remove = total - count.
+Arrays.sort(intervals,(a,b)->a[1]-b[1]);
+int count=0,end=Integer.MIN_VALUE;
+for(int[] i:intervals) if(i[0]>=end){count++;end=i[1];}
+return intervals.length-count;`,
+          "Kotlin": `val freq=IntArray(26); for(c in tasks) freq[c-'A']++
+val maxFreq=freq.max()!!
+val maxCount=freq.count{it==maxFreq}
+val slots=(maxFreq-1)*(n+1)+maxCount
+return maxOf(slots,tasks.size)`,
+          "Python": `from collections import Counter
+freq=Counter(tasks)
+max_freq=max(freq.values())
+max_count=sum(1 for f in freq.values() if f==max_freq)
+slots=(max_freq-1)*(n+1)+max_count
+return max(slots, len(tasks))`
         }
       }
     ]
@@ -909,34 +2535,78 @@ const dsaData = [
     color: "#3a7a6a",
     patterns: [
       {
-        name: "XOR, Missing Number, Single Number",
-        recognition: "Find unique element, missing number, pairs.",
-        mentalModel: "x ^ x = 0, x ^ 0 = x. XOR all elements: pairs cancel out.",
-        pitfalls: "XOR is commutative and associative. Integer overflow on sum trick.",
+        name: "XOR Tricks (Single Number, Missing)",
+        recognition: "Find unique element. Missing number. XOR properties.",
+        mentalModel: "x^x=0, x^0=x. XOR all: pairs cancel. Missing: XOR 1..n with array.",
+        pitfalls: "Integer overflow with sum approach. XOR is better.",
         problems: [
           { num: "136", name: "Single Number", url: "https://leetcode.com/problems/single-number/" },
-          { num: "268", name: "Missing Number", url: "https://leetcode.com/problems/missing-number/" }
+          { num: "268", name: "Missing Number", url: "https://leetcode.com/problems/missing-number/" },
+          { num: "137", name: "Single Number II", url: "https://leetcode.com/problems/single-number-ii/" }
         ],
         code: {
-          "Java": `// Single Number\nint res = 0;\nfor (int x : arr) res ^= x;\nreturn res;\n\n// Missing Number\nint res = nums.length;\nfor (int i = 0; i < nums.length; i++) res ^= i ^ nums[i];\nreturn res;`,
-          "Kotlin": `val res = arr.fold(0) { acc, x -> acc xor x }`,
-          "Python": `# Single Number\nfrom functools import reduce\nimport operator\nreturn reduce(operator.xor, arr)\n\n# Missing Number\nreturn (n*(n+1)//2) - sum(nums)`
+          "Java": `// Single Number: x^x=0
+int res=0; for(int x:arr) res^=x; return res;
+// Missing Number
+int res=n; for(int i=0;i<n;i++) res^=i^nums[i]; return res;
+// Single Number II (appears 3x, find 1x)
+int ones=0,twos=0;
+for(int x:arr){ones=(ones^x)&~twos;twos=(twos^x)&~ones;}
+return ones;`,
+          "Kotlin": `val res=arr.fold(0){acc,x->acc xor x}`,
+          "Python": `# Single Number
+from functools import reduce
+import operator
+res = reduce(operator.xor, arr)
+# Missing Number
+return n*(n+1)//2 - sum(nums)`
         }
       },
       {
-        name: "Bitmask, Set/Toggle/Count Bits",
-        recognition: "State compression, subsets, power of two.",
-        mentalModel: "1 << i sets bit i. n & (n-1) removes lowest bit. n & (-n) isolates lowest bit.",
-        pitfalls: "Operator precedence: (a & b) == 0 not a & b == 0.",
+        name: "Bit Masks (Set/Clear/Toggle/Count)",
+        recognition: "State compression. Subset enumeration. Power of two check.",
+        mentalModel: "1<<i sets bit i. n&(n-1) removes lowest bit. n&(-n) isolates lowest bit.",
+        pitfalls: "Operator precedence: (a&b)==0 not a&b==0. Use parentheses!",
         problems: [
           { num: "338", name: "Counting Bits", url: "https://leetcode.com/problems/counting-bits/" },
           { num: "191", name: "Number of 1 Bits", url: "https://leetcode.com/problems/number-of-1-bits/" },
           { num: "78", name: "Subsets via Bitmask", url: "https://leetcode.com/problems/subsets/" }
         ],
         code: {
-          "Java": `// Bit tricks cheatsheet\nint setBit   = n | (1 << i);   // set bit i\nint clearBit = n & ~(1 << i);  // clear bit i\nint toggleBit= n ^ (1 << i);   // toggle bit i\nboolean isSet = (n & (1 << i)) != 0;\nboolean isPow2 = n > 0 && (n & (n-1)) == 0;\nint lowest = n & (-n);          // isolate lowest set bit\nint count = Integer.bitCount(n);\n\n// Subsets via bitmask\nfor (int mask = 0; mask < (1 << n); mask++) {\n    List<Integer> sub = new ArrayList<>();\n    for (int i = 0; i < n; i++)\n        if ((mask & (1 << i)) != 0) sub.add(nums[i]);\n}`,
-          "Kotlin": `// Counting bits dp\nval dp = IntArray(n+1)\nfor (i in 1..n) dp[i] = dp[i shr 1] + (i and 1)`,
-          "Python": `# Bit tricks\nn | (1 << i)     # set bit i\nn & ~(1 << i)    # clear bit i\nn ^ (1 << i)     # toggle bit i\n(n >> i) & 1     # check bit i\nn & (n - 1)      # remove lowest set bit\nn & (-n)         # isolate lowest set bit\nbin(n).count('1')  # popcount\n\n# Subsets\nfor mask in range(1 << n):\n    sub = [nums[i] for i in range(n) if mask & (1 << i)]`
+          "Java": `// Bit trick cheatsheet
+num | (1<<i)      // set bit i
+num & ~(1<<i)     // clear bit i
+num ^ (1<<i)      // toggle bit i
+(num>>i)&1        // check bit i (1 or 0)
+num & (num-1)     // remove lowest set bit
+num & (-num)      // isolate lowest set bit
+n>0 && (n&(n-1))==0 // power of 2?
+Integer.bitCount(n)  // popcount
+
+// Counting bits DP
+int[] dp=new int[n+1];
+for(int i=1;i<=n;i++) dp[i]=dp[i>>1]+(i&1);
+
+// Enumerate all subsets
+for(int mask=0;mask<(1<<n);mask++)
+    for(int i=0;i<n;i++)
+        if((mask&(1<<i))!=0) // bit i is set`,
+          "Kotlin": `// Kotlin uses 'shr', 'shl', 'and', 'or', 'xor', 'inv'
+val setBit = num or (1 shl i)
+val checkBit = (num shr i) and 1
+val isPow2 = num>0 && (num and (num-1))==0`,
+          "Python": `# Bit tricks
+n | (1<<i)      # set bit i
+n & ~(1<<i)     # clear bit i
+n ^ (1<<i)      # toggle bit i
+(n >> i) & 1    # check bit i
+n & (n-1)       # remove lowest set bit
+n & (-n)        # isolate lowest set bit
+bin(n).count('1')  # popcount
+n>0 and (n&(n-1))==0  # power of 2?
+# Counting bits
+dp=[0]*(n+1)
+for i in range(1,n+1): dp[i]=dp[i>>1]+(i&1)`
         }
       }
     ]
@@ -944,36 +2614,336 @@ const dsaData = [
 
   // ─── 19. ADVANCED (Google/Meta L5+) ─────────────────────────────────────
   {
-    title: "Advanced (L5+ / Staff)",
+    title: "Advanced: Shortest Paths",
     color: "#6a1f5a",
     patterns: [
       {
         name: "Dijkstra's Algorithm",
-        recognition: "Shortest path in weighted graph (non-negative weights).",
-        mentalModel: "Min-heap (dist, node). Relax edges of popped node. Skip if already better dist found.",
-        pitfalls: "Does NOT work with negative weights. Stale entries in heap.",
+        recognition: "Shortest path in weighted graph (non-negative weights). Network delay.",
+        mentalModel: "Min-heap (dist, node). Relax edges. Skip stale entries (if d > dist[u]: continue).",
+        pitfalls: "Doesn't work with negative weights (use Bellman-Ford). Skip stale heap entries.",
         problems: [
           { num: "743", name: "Network Delay Time", url: "https://leetcode.com/problems/network-delay-time/" },
-          { num: "787", name: "Cheapest Flights Within K Stops", url: "https://leetcode.com/problems/cheapest-flights-within-k-stops/" }
+          { num: "1514", name: "Path with Maximum Probability", url: "https://leetcode.com/problems/path-with-maximum-probability/" }
         ],
         code: {
-          "Java": `int[] dist = new int[n]; Arrays.fill(dist, Integer.MAX_VALUE); dist[src] = 0;\nPriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->a[0]-b[0]);\npq.offer(new int[]{0, src});\nwhile (!pq.isEmpty()) {\n    int[] cur = pq.poll(); int d = cur[0], u = cur[1];\n    if (d > dist[u]) continue; // stale\n    for (int[] e : adj[u]) {\n        int v = e[0], w = e[1];\n        if (dist[u] + w < dist[v]) {\n            dist[v] = dist[u] + w;\n            pq.offer(new int[]{dist[v], v});\n        }\n    }\n}`,
-          "Kotlin": `val dist = IntArray(n) { Int.MAX_VALUE }.also { it[src] = 0 }\nval pq = PriorityQueue<IntArray>(compareBy { it[0] })\npq.offer(intArrayOf(0, src))\nwhile (pq.isNotEmpty()) {\n    val (d, u) = pq.poll()\n    if (d > dist[u]) continue\n    for ((v, w) in adj[u])\n        if (dist[u] + w < dist[v]) {\n            dist[v] = dist[u] + w\n            pq.offer(intArrayOf(dist[v], v))\n        }\n}`,
-          "Python": `import heapq\ndist = [float('inf')] * n; dist[src] = 0\npq = [(0, src)]\nwhile pq:\n    d, u = heapq.heappop(pq)\n    if d > dist[u]: continue\n    for v, w in adj[u]:\n        if dist[u] + w < dist[v]:\n            dist[v] = dist[u] + w\n            heapq.heappush(pq, (dist[v], v))`
+          "Java": `int[] dist=new int[n]; Arrays.fill(dist,Integer.MAX_VALUE); dist[src]=0;
+PriorityQueue<int[]> pq=new PriorityQueue<>((a,b)->a[0]-b[0]); // (dist, node)
+pq.offer(new int[]{0,src});
+while(!pq.isEmpty()){
+    int[] cur=pq.poll(); int d=cur[0],u=cur[1];
+    if(d>dist[u]) continue; // stale entry!
+    for(int[] e:adj.get(u)){
+        int v=e[0],w=e[1];
+        if(dist[u]+w<dist[v]){dist[v]=dist[u]+w;pq.offer(new int[]{dist[v],v});}
+    }
+}`,
+          "Kotlin": `val dist=IntArray(n){Int.MAX_VALUE}.also{it[src]=0}
+val pq=PriorityQueue<IntArray>(compareBy{it[0]})
+pq.offer(intArrayOf(0,src))
+while(pq.isNotEmpty()){
+    val(d,u)=pq.poll()
+    if(d>dist[u]) continue
+    for((v,w) in adj[u]) if(dist[u]+w<dist[v]){dist[v]=dist[u]+w;pq.offer(intArrayOf(dist[v],v))}
+}`,
+          "Python": `import heapq
+dist=[float('inf')]*n; dist[src]=0
+pq=[(0,src)]
+while pq:
+    d,u=heapq.heappop(pq)
+    if d>dist[u]: continue  # stale!
+    for v,w in adj[u]:
+        if dist[u]+w<dist[v]:
+            dist[v]=dist[u]+w; heapq.heappush(pq,(dist[v],v))`
         }
       },
       {
-        name: "KMP Pattern Matching",
-        recognition: "Find pattern in text. Multiple occurrences. O(N+M).",
-        mentalModel: "Build failure function (LPS array). On mismatch, jump using LPS.",
-        pitfalls: "LPS array is off by one. j resets to lps[j-1] not 0.",
+        name: "Bellman-Ford & Floyd-Warshall",
+        recognition: "Negative weights (Bellman-Ford). All-pairs shortest path (Floyd-Warshall).",
+        mentalModel: "Bellman-Ford: relax all edges N-1 times. Floyd: for each k, try routing through k.",
+        pitfalls: "Bellman-Ford: Nth relaxation finds negative cycle. Floyd: O(V³) space and time.",
         problems: [
-          { num: "28", name: "Find Index of First Occurrence", url: "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/" }
+          { num: "787", name: "Cheapest Flights Within K Stops", url: "https://leetcode.com/problems/cheapest-flights-within-k-stops/" }
         ],
         code: {
-          "Java": `int[] lps = new int[pat.length];\nfor (int i=1, j=0; i<pat.length;) {\n    if (pat[i]==pat[j]) { lps[i++]=++j; }\n    else if (j>0) j=lps[j-1];\n    else lps[i++]=0;\n}\n// Search\nfor (int i=0,j=0; i<text.length;) {\n    if (text[i]==pat[j]) { i++; j++; }\n    if (j==pat.length) { /* found at i-j */ j=lps[j-1]; }\n    else if (i<text.length && text[i]!=pat[j]) {\n        if (j>0) j=lps[j-1]; else i++;\n    }\n}`,
-          "Kotlin": `fun buildLPS(pat: String): IntArray {\n    val lps = IntArray(pat.length)\n    var j = 0; var i = 1\n    while (i < pat.length) {\n        if (pat[i] == pat[j]) { lps[i++] = ++j }\n        else if (j > 0) j = lps[j-1] else lps[i++] = 0\n    }\n    return lps\n}`,
-          "Python": `def build_lps(pat):\n    lps = [0] * len(pat)\n    j = 0; i = 1\n    while i < len(pat):\n        if pat[i] == pat[j]: lps[i] = j + 1; i += 1; j += 1\n        elif j > 0: j = lps[j-1]\n        else: i += 1\n    return lps`
+          "Java": `// Bellman-Ford: O(VE)
+int[] dist=new int[n]; Arrays.fill(dist,INF); dist[src]=0;
+for(int i=0;i<n-1;i++) // relax n-1 times
+    for(int[] e:edges)
+        if(dist[e[0]]!=INF && dist[e[0]]+e[2]<dist[e[1]])
+            dist[e[1]]=dist[e[0]]+e[2];
+// Check negative cycle: do one more relaxation
+for(int[] e:edges) if(dist[e[0]]+e[2]<dist[e[1]]) /* negative cycle! */;
+
+// Floyd-Warshall: O(V³) all-pairs
+int[][] dist=new int[n][n]; // init with edge weights
+for(int k=0;k<n;k++)
+    for(int i=0;i<n;i++)
+        for(int j=0;j<n;j++)
+            dist[i][j]=Math.min(dist[i][j],dist[i][k]+dist[k][j]);`,
+          "Kotlin": `// Bellman-Ford
+val dist=IntArray(n){INT_MAX}.also{it[src]=0}
+repeat(n-1){for((u,v,w) in edges) if(dist[u]!=INT_MAX&&dist[u]+w<dist[v]) dist[v]=dist[u]+w}`,
+          "Python": `# Bellman-Ford
+dist=[float('inf')]*n; dist[src]=0
+for _ in range(n-1):
+    for u,v,w in edges:
+        if dist[u]+w<dist[v]: dist[v]=dist[u]+w
+# Floyd-Warshall
+for k in range(n):
+    for i in range(n):
+        for j in range(n):
+            dist[i][j]=min(dist[i][j],dist[i][k]+dist[k][j])`
+        }
+      },
+      {
+        name: "Minimum Spanning Tree (Kruskal & Prim)",
+        recognition: "Connect all nodes with minimum total edge weight.",
+        mentalModel: "Kruskal: sort edges by weight, add if no cycle (Union Find). Prim: greedy grow from any node.",
+        pitfalls: "Kruskal: sort ascending. Prim: mark visited. Both produce same MST weight.",
+        problems: [
+          { num: "1584", name: "Min Cost to Connect All Points", url: "https://leetcode.com/problems/min-cost-to-connect-all-points/" }
+        ],
+        code: {
+          "Java": `// Kruskal: O(E logE)
+Arrays.sort(edges,(a,b)->a[2]-b[2]); // sort by weight
+int cost=0,count=0;
+for(int[] e:edges){
+    if(union(e[0],e[1])){ // add if no cycle
+        cost+=e[2]; if(++count==n-1) break;
+    }
+}
+// Prim: O(E logV)
+PriorityQueue<int[]> pq=new PriorityQueue<>((a,b)->a[0]-b[0]);
+boolean[] vis=new boolean[n]; pq.offer(new int[]{0,0});
+int cost=0;
+while(!pq.isEmpty()){
+    int[] cur=pq.poll(); if(vis[cur[1]]) continue;
+    vis[cur[1]]=true; cost+=cur[0];
+    for(int[] nb:adj.get(cur[1])) if(!vis[nb[0]]) pq.offer(new int[]{nb[1],nb[0]});
+}`,
+          "Kotlin": `// Kruskal with Union-Find
+edges.sortBy{it[2]}
+var cost=0; var count=0
+for((u,v,w) in edges) if(union(u,v)){cost+=w; if(++count==n-1) break}`,
+          "Python": `# Kruskal
+edges.sort(key=lambda x: x[2])
+cost=count=0
+for u,v,w in edges:
+    if union(u,v): cost+=w; count+=1
+    if count==n-1: break
+# Prim
+import heapq
+vis=[False]*n; pq=[(0,0)]; cost=0
+while pq:
+    w,u=heapq.heappop(pq)
+    if vis[u]: continue
+    vis[u]=True; cost+=w
+    for v,wt in adj[u]:
+        if not vis[v]: heapq.heappush(pq,(wt,v))`
+        }
+      }
+    ]
+  },
+
+  // ─── 20. ADVANCED: STRING ALGORITHMS ─────────────────────────────────────
+  {
+    title: "Advanced: String Algorithms",
+    color: "#4a2e7a",
+    patterns: [
+      {
+        name: "KMP Pattern Matching",
+        recognition: "Find pattern in text O(N+M). Multiple occurrences.",
+        mentalModel: "Build LPS (Longest Proper Prefix=Suffix) array. On mismatch, jump to lps[j-1].",
+        pitfalls: "LPS is 0-indexed. j resets to lps[j-1] not 0 on mismatch.",
+        problems: [
+          { num: "28", name: "Find Index of First Occurrence", url: "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/" },
+          { num: "459", name: "Repeated Substring Pattern", url: "https://leetcode.com/problems/repeated-substring-pattern/" }
+        ],
+        code: {
+          "Java": `// Build LPS array
+int[] lps=new int[m]; int j=0;
+for(int i=1;i<m;){
+    if(pat[i]==pat[j]) lps[i++]=++j;
+    else if(j>0) j=lps[j-1];
+    else lps[i++]=0;
+}
+// Search
+for(int i=0,k=0;i<n;){
+    if(text[i]==pat[k]){i++;k++;}
+    if(k==m){occurrences.add(i-m);k=lps[k-1];}
+    else if(i<n&&text[i]!=pat[k]){
+        if(k>0) k=lps[k-1]; else i++;
+    }
+}`,
+          "Kotlin": `fun buildLPS(pat:String):IntArray{
+    val lps=IntArray(pat.length); var j=0; var i=1
+    while(i<pat.length){
+        if(pat[i]==pat[j]) lps[i++]=++j
+        else if(j>0) j=lps[j-1] else i++
+    }; return lps
+}`,
+          "Python": `def build_lps(pat):
+    lps=[0]*len(pat); j=0; i=1
+    while i<len(pat):
+        if pat[i]==pat[j]: lps[i]=j+1; i+=1; j+=1
+        elif j>0: j=lps[j-1]
+        else: i+=1
+    return lps`
+        }
+      },
+      {
+        name: "Rabin-Karp Rolling Hash",
+        recognition: "Pattern matching with rolling hash. Find substring. Multiple pattern search.",
+        mentalModel: "Hash pattern. Slide hash window: remove left char, add right char in O(1).",
+        pitfalls: "Hash collision: verify match with string comparison. Use large prime modulus.",
+        problems: [
+          { num: "187", name: "Repeated DNA Sequences", url: "https://leetcode.com/problems/repeated-dna-sequences/" }
+        ],
+        code: {
+          "Java": `// Rolling hash
+long BASE=31,MOD=(long)1e9+7;
+long hash=0,power=1;
+// Initial window
+for(int i=0;i<m;i++){hash=(hash*BASE+pat.charAt(i))%MOD;if(i>0)power=power*BASE%MOD;}
+// Slide
+for(int i=m;i<n;i++){
+    hash=(hash*BASE+text.charAt(i))%MOD;
+    hash=(hash-text.charAt(i-m)*power%MOD+MOD)%MOD;
+    if(hash==patHash) // verify with .equals()!
+}`,
+          "Kotlin": `val BASE=31L; val MOD=1_000_000_007L`,
+          "Python": `BASE, MOD = 31, 10**9+7
+def rolling_hash(s, m):
+    h = 0; power = pow(BASE, m-1, MOD)
+    for c in s[:m]: h = (h*BASE + ord(c)) % MOD
+    yield h
+    for i in range(m, len(s)):
+        h = (h*BASE + ord(s[i]) - ord(s[i-m])*power) % MOD
+        yield h`
+        }
+      },
+      {
+        name: "Segment Tree",
+        recognition: "Range queries (sum/min/max) + point/range updates. O(log N) each.",
+        mentalModel: "Build tree bottom-up. Each node stores aggregate for range. Update propagates up.",
+        pitfalls: "1-indexed tree: root=1, left=2i, right=2i+1. Tree size = 4*n.",
+        problems: [
+          { num: "307", name: "Range Sum Query Mutable", url: "https://leetcode.com/problems/range-sum-query-mutable/" }
+        ],
+        code: {
+          "Java": `int[] tree=new int[4*n];
+void build(int[] arr,int node,int start,int end){
+    if(start==end){tree[node]=arr[start];return;}
+    int mid=(start+end)/2;
+    build(arr,2*node,start,mid);
+    build(arr,2*node+1,mid+1,end);
+    tree[node]=tree[2*node]+tree[2*node+1]; // merge
+}
+int query(int node,int start,int end,int l,int r){
+    if(r<start||end<l) return 0; // out of range
+    if(l<=start&&end<=r) return tree[node]; // full overlap
+    int mid=(start+end)/2;
+    return query(2*node,start,mid,l,r)+query(2*node+1,mid+1,end,l,r);
+}
+void update(int node,int start,int end,int idx,int val){
+    if(start==end){tree[node]=val;return;}
+    int mid=(start+end)/2;
+    if(idx<=mid) update(2*node,start,mid,idx,val);
+    else update(2*node+1,mid+1,end,idx,val);
+    tree[node]=tree[2*node]+tree[2*node+1];
+}`,
+          "Kotlin": `val tree=IntArray(4*n)
+fun build(arr:IntArray,node:Int,start:Int,end:Int){
+    if(start==end){tree[node]=arr[start];return}
+    val mid=(start+end)/2
+    build(arr,2*node,start,mid); build(arr,2*node+1,mid+1,end)
+    tree[node]=tree[2*node]+tree[2*node+1]
+}`,
+          "Python": `tree=[0]*(4*n)
+def build(arr,node,start,end):
+    if start==end: tree[node]=arr[start]; return
+    mid=(start+end)//2
+    build(arr,2*node,start,mid); build(arr,2*node+1,mid+1,end)
+    tree[node]=tree[2*node]+tree[2*node+1]
+def query(node,start,end,l,r):
+    if r<start or end<l: return 0
+    if l<=start and end<=r: return tree[node]
+    mid=(start+end)//2
+    return query(2*node,start,mid,l,r)+query(2*node+1,mid+1,end,l,r)`
+        }
+      },
+      {
+        name: "Fenwick Tree (Binary Indexed Tree)",
+        recognition: "Prefix sum with point updates. Simpler than Segment Tree. O(log N).",
+        mentalModel: "BIT[i] stores sum for a range determined by lowest set bit. Update propagates using i += i&(-i).",
+        pitfalls: "1-indexed. Update AND query both use i += i&(-i) or i -= i&(-i).",
+        problems: [
+          { num: "307", name: "Range Sum Query Mutable", url: "https://leetcode.com/problems/range-sum-query-mutable/" },
+          { num: "315", name: "Count of Smaller Numbers After Self", url: "https://leetcode.com/problems/count-of-smaller-numbers-after-self/" }
+        ],
+        code: {
+          "Java": `int[] bit=new int[n+1]; // 1-indexed
+void update(int i,int val){
+    for(;i<=n;i+=i&(-i)) bit[i]+=val; // add lowest bit
+}
+int query(int i){ // prefix sum [1..i]
+    int sum=0;
+    for(;i>0;i-=i&(-i)) sum+=bit[i]; // remove lowest bit
+    return sum;
+}
+int rangeQuery(int l,int r){return query(r)-query(l-1);}`,
+          "Kotlin": `val bit=IntArray(n+1)
+fun update(i:Int,v:Int){var x=i; while(x<=n){bit[x]+=v;x+=x and(-x)}}
+fun query(i:Int):Int{var x=i;var s=0; while(x>0){s+=bit[x];x-=x and(-x)};return s}`,
+          "Python": `bit=[0]*(n+1)  # 1-indexed
+def update(i, val):
+    while i <= n: bit[i]+=val; i+=i&(-i)
+def query(i):
+    s=0
+    while i>0: s+=bit[i]; i-=i&(-i)
+    return s`
+        }
+      },
+      {
+        name: "Tarjan's SCC & Bridges",
+        recognition: "Strongly connected components. Find bridges/articulation points.",
+        mentalModel: "DFS with disc (discovery time) and low (lowest disc reachable). SCC: use stack.",
+        pitfalls: "Track disc and low separately. Node on stack = still in DFS path.",
+        problems: [
+          { num: "1192", name: "Critical Connections in Network", url: "https://leetcode.com/problems/critical-connections-in-a-network/" }
+        ],
+        code: {
+          "Java": `// Find Bridges (Critical Connections)
+int[] disc=new int[n],low=new int[n]; boolean[] vis=new boolean[n];
+int[] timer={0};
+void dfs(int u,int parent){
+    disc[u]=low[u]=timer[0]++;vis[u]=true;
+    for(int v:adj.get(u)){
+        if(!vis[v]){
+            dfs(v,u);
+            low[u]=Math.min(low[u],low[v]);
+            if(low[v]>disc[u]) bridges.add(List.of(u,v)); // bridge!
+        } else if(v!=parent) low[u]=Math.min(low[u],disc[v]);
+    }
+}`,
+          "Kotlin": `val disc=IntArray(n); val low=IntArray(n); val vis=BooleanArray(n)
+var time=0
+fun dfs(u:Int,parent:Int){
+    disc[u]=time; low[u]=time++; vis[u]=true
+    for(v in adj[u]){
+        if(!vis[v]){dfs(v,u);low[u]=minOf(low[u],low[v]);if(low[v]>disc[u]) bridges.add(listOf(u,v))}
+        else if(v!=parent) low[u]=minOf(low[u],disc[v])
+    }
+}`,
+          "Python": `disc=[0]*n; low=[0]*n; vis=[False]*n; timer=[0]
+def dfs(u, parent):
+    disc[u]=low[u]=timer[0]; timer[0]+=1; vis[u]=True
+    for v in adj[u]:
+        if not vis[v]:
+            dfs(v,u); low[u]=min(low[u],low[v])
+            if low[v]>disc[u]: bridges.append([u,v])  # bridge!
+        elif v!=parent: low[u]=min(low[u],disc[v])`
         }
       }
     ]
