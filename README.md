@@ -53,3 +53,15 @@ FAANG DSA
 To run it locally:
 1. Clone the repository.
 2. Open `index.html` in any web browser.
+
+<!---LeetCode Topics Start-->
+# LeetCode Topics
+## Array
+|  |
+| ------- |
+| [0238-product-of-array-except-self](https://github.com/rabbu480/dsa-master-guide/tree/master/0238-product-of-array-except-self) |
+## Prefix Sum
+|  |
+| ------- |
+| [0238-product-of-array-except-self](https://github.com/rabbu480/dsa-master-guide/tree/master/0238-product-of-array-except-self) |
+<!---LeetCode Topics End-->
