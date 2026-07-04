@@ -59,6 +59,7 @@ To run it locally:
 ## Array
 |  |
 | ------- |
+| [0001-two-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0001-two-sum) |
 | [0217-contains-duplicate](https://github.com/rabbu480/dsa-master-guide/tree/master/0217-contains-duplicate) |
 | [0238-product-of-array-except-self](https://github.com/rabbu480/dsa-master-guide/tree/master/0238-product-of-array-except-self) |
 ## Prefix Sum
@@ -68,6 +69,7 @@ To run it locally:
 ## Hash Table
 |  |
 | ------- |
+| [0001-two-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0001-two-sum) |
 | [0217-contains-duplicate](https://github.com/rabbu480/dsa-master-guide/tree/master/0217-contains-duplicate) |
 | [0242-valid-anagram](https://github.com/rabbu480/dsa-master-guide/tree/master/0242-valid-anagram) |
 ## Sorting
