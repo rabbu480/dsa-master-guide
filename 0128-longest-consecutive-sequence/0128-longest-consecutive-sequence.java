@@ -8,7 +8,8 @@ class Solution {
         int longestConsecutive=0;
         for(int num:sortedNums ){
             int count=1;
-            // required to avoid multiple iteration to get start of sequence.
+            // Start counting only from the beginning of a sequence
+            // to avoid traversing the same sequence multiple times.
             if(!sortedNums.contains(num-1)){
                 while(sortedNums.contains(num+1)){
                     count++;
