@@ -91,6 +91,7 @@ To run it locally:
 |  |
 | ------- |
 | [0049-group-anagrams](https://github.com/rabbu480/dsa-master-guide/tree/master/0049-group-anagrams) |
+| [0125-valid-palindrome](https://github.com/rabbu480/dsa-master-guide/tree/master/0125-valid-palindrome) |
 | [0242-valid-anagram](https://github.com/rabbu480/dsa-master-guide/tree/master/0242-valid-anagram) |
 ## Divide and Conquer
 |  |
@@ -120,4 +121,8 @@ To run it locally:
 |  |
 | ------- |
 | [0036-valid-sudoku](https://github.com/rabbu480/dsa-master-guide/tree/master/0036-valid-sudoku) |
+## Two Pointers
+|  |
+| ------- |
+| [0125-valid-palindrome](https://github.com/rabbu480/dsa-master-guide/tree/master/0125-valid-palindrome) |
 <!---LeetCode Topics End-->
