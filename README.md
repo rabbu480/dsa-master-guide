@@ -60,6 +60,7 @@ To run it locally:
 |  |
 | ------- |
 | [0001-two-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0001-two-sum) |
+| [0036-valid-sudoku](https://github.com/rabbu480/dsa-master-guide/tree/master/0036-valid-sudoku) |
 | [0049-group-anagrams](https://github.com/rabbu480/dsa-master-guide/tree/master/0049-group-anagrams) |
 | [0128-longest-consecutive-sequence](https://github.com/rabbu480/dsa-master-guide/tree/master/0128-longest-consecutive-sequence) |
 | [0217-contains-duplicate](https://github.com/rabbu480/dsa-master-guide/tree/master/0217-contains-duplicate) |
@@ -73,6 +74,7 @@ To run it locally:
 |  |
 | ------- |
 | [0001-two-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0001-two-sum) |
+| [0036-valid-sudoku](https://github.com/rabbu480/dsa-master-guide/tree/master/0036-valid-sudoku) |
 | [0049-group-anagrams](https://github.com/rabbu480/dsa-master-guide/tree/master/0049-group-anagrams) |
 | [0128-longest-consecutive-sequence](https://github.com/rabbu480/dsa-master-guide/tree/master/0128-longest-consecutive-sequence) |
 | [0217-contains-duplicate](https://github.com/rabbu480/dsa-master-guide/tree/master/0217-contains-duplicate) |
@@ -114,4 +116,8 @@ To run it locally:
 |  |
 | ------- |
 | [0128-longest-consecutive-sequence](https://github.com/rabbu480/dsa-master-guide/tree/master/0128-longest-consecutive-sequence) |
+## Matrix
+|  |
+| ------- |
+| [0036-valid-sudoku](https://github.com/rabbu480/dsa-master-guide/tree/master/0036-valid-sudoku) |
 <!---LeetCode Topics End-->
