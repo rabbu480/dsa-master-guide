@@ -30,7 +30,7 @@ class Solution {
         // }
         // return null;
 
-        // O(n) O(1)
+        // O(n) O(1) But only works on sorted array 
         int right = numbers.length-1;
         int left = 0; 
         while(left < right){
