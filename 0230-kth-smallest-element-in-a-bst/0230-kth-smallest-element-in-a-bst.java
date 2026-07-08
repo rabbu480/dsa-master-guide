@@ -22,20 +22,16 @@ class Solution {
         return smallestVal;
     }
 
-    // 
+    // BST is already sorted order for in order
     int count=0;
     public void dfs(TreeNode root,int k){
         if(root == null ) return;
+        // in order 
         dfs(root.left,k);
-        // System.out.println(count);
         count++;
-        // System.out.println(count);
         if(count==k) {
-            System.out.println("root.val :: " +root.val);
             smallestVal= root.val;
-            // return root.val;
         } 
-
         dfs(root.right,k);
 
         // return 0;
