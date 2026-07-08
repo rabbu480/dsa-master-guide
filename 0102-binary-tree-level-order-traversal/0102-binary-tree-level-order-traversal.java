@@ -16,30 +16,29 @@
 class Solution {
     public List<List<Integer>> levelOrder(TreeNode root) {
 
-        List<List<Integer>> result = new ArrayList();
-        Queue<TreeNode> queue = new LinkedList<>();
+
+        Queue<TreeNode> queue= new LinkedList<>();
+        List<List<Integer>> levels= new ArrayList<>();
+        // CHeck root is null treeNode it slef empty.
+        if(root == null){
+            return levels;
+        }
         queue.offer(root);
-        if (root == null) {
-            return result;
-        }
+        // iterate queue level by level until all level covred.
+        while(!queue.isEmpty()){
 
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            List childrens = new ArrayList();
-            for (int i = 0; i < size; i++) {
-                TreeNode tee = queue.poll();
-                childrens.add(tee.val);
-                if (tee.left != null) {
-                    queue.offer(tee.left);
-                }
-                if (tee.right != null) {
-                    queue.offer(tee.right);
-                }
-                 
+            int size=queue.size();
+            List<Integer> level= new ArrayList<>();
+            // get top element of queue remove that add it chailds so it contains only current level add remove level, 
+            // remove current level from queue, add to list, add next level to queue 
+            for(int i=0;i< size;i++){
+                TreeNode node=queue.poll();
+                level.add(node.val);
+                if(node.left != null) queue.offer(node.left);
+                if(node.right != null) queue.offer(node.right);
             }
-            result.add(childrens);
+            levels.add(level);
         }
-
-        return result;
+        return levels;
     }
 }
