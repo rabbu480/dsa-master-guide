@@ -19,10 +19,8 @@ class Solution {
             return true;
         }
 
-        if(p == null && q!= null){
-            return false;
-        }
-        if(p != null && q== null){
+        // both then already if it was caught
+        if(p == null || q== null){
             return false;
         }
 
@@ -30,7 +28,6 @@ class Solution {
             return false;
         }
         return  isSameTree(p.left,q.left) && isSameTree(p.right,q.right);
-
     }
 
 }
