@@ -22,11 +22,9 @@ class Solution {
         return diameter;
     }
     public int maxDepth(TreeNode root){
-        int left=0;
-        int right=0;
         if(root == null) return 0;
-        left=maxDepth(root.left);
-        right=maxDepth(root.right);
+        int left=maxDepth(root.left);
+        int right=maxDepth(root.right);
         diameter=Math.max(diameter,left+right);
         return Math.max(left,right)+1;
     }
