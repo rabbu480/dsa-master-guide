@@ -25,23 +25,6 @@ class Solution {
         if(p != null && q== null){
             return false;
         }
- 
-        // if(p.left != null && q.left != null){
-        //     return true;
-        // }
-        // if(p.right != null && q.right != null ){
-        //     return true;
-        // }
-
-        // if(p == null || q== null ){
-        //     return  false;
-        // }
-        // if(p.left == null || q.left == null){
-        //     return true;
-        // }
-        // if(p.right == null || q.right == null){
-        //     return true;
-        // }
 
         if( p.val != q.val){
             return false;
