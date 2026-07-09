@@ -10,21 +10,29 @@
 
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-               // if(root == null) return root;
-        if(root == null) return null;
-
-        // p and q both less than root then left side  
-        if(p.val < root.val && q.val < root.val) {
-            return lowestCommonAncestor(root.left,p,q);
-        }
-        // p and q both less than root then right side 
-        if(p.val > root.val && q.val > root.val) {
-            return lowestCommonAncestor(root.right,p,q);
-        }
-        // as we itrating from top so if we found condition left<root < right then valid and the root the lca
-        return root;
-        
-        
+        return  dfslowestCommonAncestor(root,p,q);
     }
-    
+
+    public TreeNode dfslowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q){
+        if(root == null) return null;
+        if (root == p || root == q)
+            return root;
+        TreeNode left = dfslowestCommonAncestor(root.left,p,q);
+        TreeNode right = dfslowestCommonAncestor(root.right,p,q);
+        if(left != null && right != null){
+            return root;
+        }
+        if(left != null ){
+            return left;
+        }
+        if(right != null ){
+            return right;
+        }
+
+        return null;
+    }
+
+
+
+
 }
