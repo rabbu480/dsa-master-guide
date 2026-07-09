@@ -14,11 +14,11 @@ class Solution {
         if(root == null || p == null || q == null) return null;
 
         // p and q both less than root then left side  
-        if(p.val < root.val & q.val < root.val || q == null) {
+        if(p.val < root.val && q.val < root.val) {
             return lowestCommonAncestor(root.left,p,q);
         }
         // p and q both less than root then right side 
-        if(p.val > root.val & q.val > root.val || p == null) {
+        if(p.val > root.val && q.val > root.val) {
             return lowestCommonAncestor(root.right,p,q);
         }
         // as we itrating from top so if we found condition left<root < right then valid and the root the lca
