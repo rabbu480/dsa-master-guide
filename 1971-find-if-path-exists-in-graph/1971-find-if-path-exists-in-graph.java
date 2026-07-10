@@ -15,10 +15,11 @@ class Solution {
     public boolean hasValidPath(int current, int destination,List<List<Integer>> graph,boolean[] visted){
 
         List<Integer> neghbors=graph.get(current);
-        visted[current]= true;
+        
         if(current == destination){
             return true;
         }
+        visted[current]= true;
         for(int neghbor: neghbors){
             if(!visted[neghbor]  ){
                 if(hasValidPath(neghbor,destination,graph,visted)){
