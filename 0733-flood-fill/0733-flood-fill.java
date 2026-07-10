@@ -17,7 +17,10 @@ class Solution {
         if(r < 0 || c< 0||  r>= image.length || c >= image[0].length){
             return ;
         }
-        // not a original newColor then exit that means painted or other exits:
+        // originalColor=1,1 no return ==> 1 and 2
+        // originalColor=1,1 no return ==> 1 and 2
+        // 2 != 1;
+        // 
         if(image[r][c] != originalColor ) return ;
         // if this orignal only comes here then we know it orginal why we check ing 
         if(image[r][c] != newColor){
