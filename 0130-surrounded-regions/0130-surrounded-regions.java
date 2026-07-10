@@ -3,6 +3,7 @@ class Solution {
 
         // get the protected in board
         for(int r =0 ; r< board.length;r++) {
+            // row on column first and last i.e board[0].length-1
             if(board[r][0] == 'O'){
                 dfs(board,r,0);
             }
@@ -11,6 +12,7 @@ class Solution {
             }
         }
         for(int c =0 ;c< board[0].length;c++) {
+            // column on first and last row  board[0].length-1
             if(board[0][c] == 'O'){
                 dfs(board,0,c);
             }
