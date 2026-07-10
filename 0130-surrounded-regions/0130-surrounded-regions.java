@@ -3,7 +3,7 @@ class Solution {
 
         int rows = board.length;
         int cols = board[0].length;
-        // get the protected in board
+        // get the protected corner in board. call dfs mark the coners
         for(int r =0 ; r< rows;r++) {
             // row on column first and last i.e board[0].length-1
             // already dfs i schecking this 
@@ -38,6 +38,8 @@ class Solution {
 
             }
         }
+        // ** imp we can print arrays in deep using this 
+        System.out.println(Arrays.deepToString(board));
         // System.out.println("board >>>" + Arrays.toString(board ) );
         // for(int r =0 ;r< board.length;r++) {
         //     for(int c =0 ; c< board[0].length;c++) {
@@ -59,12 +61,9 @@ class Solution {
         if(r<0 || c < 0|| r>=board.length || c>= board[0].length ){
             return;
         }
-        System.out.println("board>>ooo" + board[r][c]  );
         // mark as protected 
         if(board[r][c] == 'O'){
-            System.out.println("board>>ooo" + board[r][c]  );
             board[r][c] = 'T';
-            
             dfs(board,r,c+1); 
             dfs(board,r,c-1);
             dfs(board,r-1,c);
