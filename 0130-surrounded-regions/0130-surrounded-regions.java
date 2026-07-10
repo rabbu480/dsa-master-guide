@@ -31,7 +31,7 @@ class Solution {
                 if(board[r][c] == 'O'){
                     board[r][c] = 'X' ;
                 }
-                else if(board[r][c] == 'T'){
+                if(board[r][c] == 'T'){
                     board[r][c] = 'O' ;
                 }  
 
