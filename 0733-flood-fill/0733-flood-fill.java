@@ -6,7 +6,7 @@ class Solution {
                 // if(r == sr && c == sc){
                     int originalColor = image[sr][sc];
                     dfs( image,sr,sc,originalColor, color) ;
-                    System.out.println("originalColor: " +originalColor +" color : "+color);
+                    // System.out.println("originalColor: " +originalColor +" color : "+color);
                 // }
         //     }
         // }
