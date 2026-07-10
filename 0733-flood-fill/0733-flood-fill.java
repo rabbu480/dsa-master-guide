@@ -13,18 +13,19 @@ class Solution {
         
     }
 
-    public void dfs(int[][] image,int r,int c, int originalColor,int color){
+    public void dfs(int[][] image,int r,int c, int originalColor,int newColor){
         if(r < 0 || c< 0||  r>= image.length || c >= image[0].length){
             return ;
         }
+        // not a original newColor then exit that means painted or other exits:
         if(image[r][c] != originalColor ) return ;
-
-        if(image[r][c] != color){
-            image[r][c] = color;
-            dfs(image,r,c+1,originalColor,color);
-            dfs(image,r,c-1,originalColor,color);
-            dfs(image,r+1,c,originalColor,color);
-            dfs(image,r-1,c,originalColor,color);
+        // if this orignal only comes here then we know it orginal why we check ing 
+        if(image[r][c] != newColor){
+            image[r][c] = newColor;
+            dfs(image,r,c+1,originalColor,newColor);
+            dfs(image,r,c-1,originalColor,newColor);
+            dfs(image,r+1,c,originalColor,newColor);
+            dfs(image,r-1,c,originalColor,newColor);
         }
 
 
