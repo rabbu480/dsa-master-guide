@@ -18,12 +18,11 @@ class Solution {
         if(r < 0 || c< 0||  r>= image.length || c >= image[0].length){
             return ;
         }
-        // originalColor=1,1 no return ==> 1 and 2
-        // originalColor=1,1 no return ==> 1 and 2
-        // 2 != 1;
-        // 
+
+        //  System.out.println(">>originalColor: " +originalColor +" color : "+newColor);
         if(image[r][c] != originalColor ) return ;
-        // if this orignal only comes here then we know it orginal why we check ing 
+        //  System.out.println(">>>originalColor: " +originalColor +" color : "+newColor);
+        // edge case when the noraml color is already appended that case 
         if(image[r][c] != newColor){
             image[r][c] = newColor;
             dfs(image,r,c+1,originalColor,newColor);
