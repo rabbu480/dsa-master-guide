@@ -5,7 +5,7 @@ class Solution {
         //     for(int c =0; c< image[r].length; c++){
                 // if(r == sr && c == sc){
                     int originalColor = image[sr][sc];
-                    dfs( image,sr,sc,originalColor, color, new boolean[ image.length][image[0].length]) ;
+                    dfs( image,sr,sc,originalColor, color) ;
                 // }
         //     }
         // }
@@ -13,7 +13,7 @@ class Solution {
         
     }
 
-    public void dfs(int[][] image,int r,int c, int originalColor,int color,boolean[][] visted){
+    public void dfs(int[][] image,int r,int c, int originalColor,int color){
         if(r < 0 || c< 0||  r>= image.length || c >= image[0].length){
             return ;
         }
@@ -21,11 +21,10 @@ class Solution {
 
         if(image[r][c] != color){
             image[r][c] = color;
-            // visted[r][c]=true; 
-            dfs(image,r,c+1,originalColor,color,visted);
-            dfs(image,r,c-1,originalColor,color,visted);
-            dfs(image,r+1,c,originalColor,color,visted);
-            dfs(image,r-1,c,originalColor,color,visted);
+            dfs(image,r,c+1,originalColor,color);
+            dfs(image,r,c-1,originalColor,color);
+            dfs(image,r+1,c,originalColor,color);
+            dfs(image,r-1,c,originalColor,color);
         }
 
 
