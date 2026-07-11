@@ -20,11 +20,10 @@ class Node {
 
 class Solution {
     Map<Node,Node> clonedMap= new HashMap();
-    public Node cloneGraph(Node node) {
 
+    public Node cloneGraph(Node node) {
         return dfs(node);
     }
- 
 
     public Node dfs(Node node){
         // check current node 
@@ -41,11 +40,13 @@ class Solution {
         // System.out.println("clonedMap:: " + clonedMap);
         if(node.neighbors != null ){
             System.out.println("node.val:: " +node.val);
-            ArrayList al = new ArrayList();
             for(Node nodez : node.neighbors){
                 // here dfs return each negbors negbors
                 // neighbors.add(nodeCopy);
                 Node neighbor = dfs(nodez);
+                //1 ==> 
+                // 2
+                // get related and add to it so now here 2 add relation 1
                 nodeCopy.neighbors.add(neighbor);
                 System.out.println("nodez.val::: " +nodeCopy);
             }
