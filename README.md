@@ -125,6 +125,7 @@ To run it locally:
 | [0128-longest-consecutive-sequence](https://github.com/rabbu480/dsa-master-guide/tree/master/0128-longest-consecutive-sequence) |
 | [0130-surrounded-regions](https://github.com/rabbu480/dsa-master-guide/tree/master/0130-surrounded-regions) |
 | [0547-number-of-provinces](https://github.com/rabbu480/dsa-master-guide/tree/master/0547-number-of-provinces) |
+| [0684-redundant-connection](https://github.com/rabbu480/dsa-master-guide/tree/master/0684-redundant-connection) |
 | [0695-max-area-of-island](https://github.com/rabbu480/dsa-master-guide/tree/master/0695-max-area-of-island) |
 | [1971-find-if-path-exists-in-graph](https://github.com/rabbu480/dsa-master-guide/tree/master/1971-find-if-path-exists-in-graph) |
 ## Matrix
@@ -172,6 +173,7 @@ To run it locally:
 | [0235-lowest-common-ancestor-of-a-binary-search-tree](https://github.com/rabbu480/dsa-master-guide/tree/master/0235-lowest-common-ancestor-of-a-binary-search-tree) |
 | [0543-diameter-of-binary-tree](https://github.com/rabbu480/dsa-master-guide/tree/master/0543-diameter-of-binary-tree) |
 | [0547-number-of-provinces](https://github.com/rabbu480/dsa-master-guide/tree/master/0547-number-of-provinces) |
+| [0684-redundant-connection](https://github.com/rabbu480/dsa-master-guide/tree/master/0684-redundant-connection) |
 | [0695-max-area-of-island](https://github.com/rabbu480/dsa-master-guide/tree/master/0695-max-area-of-island) |
 | [0733-flood-fill](https://github.com/rabbu480/dsa-master-guide/tree/master/0733-flood-fill) |
 | [1971-find-if-path-exists-in-graph](https://github.com/rabbu480/dsa-master-guide/tree/master/1971-find-if-path-exists-in-graph) |
@@ -187,6 +189,7 @@ To run it locally:
 | [0210-course-schedule-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0210-course-schedule-ii) |
 | [0226-invert-binary-tree](https://github.com/rabbu480/dsa-master-guide/tree/master/0226-invert-binary-tree) |
 | [0547-number-of-provinces](https://github.com/rabbu480/dsa-master-guide/tree/master/0547-number-of-provinces) |
+| [0684-redundant-connection](https://github.com/rabbu480/dsa-master-guide/tree/master/0684-redundant-connection) |
 | [0695-max-area-of-island](https://github.com/rabbu480/dsa-master-guide/tree/master/0695-max-area-of-island) |
 | [0733-flood-fill](https://github.com/rabbu480/dsa-master-guide/tree/master/0733-flood-fill) |
 | [0994-rotting-oranges](https://github.com/rabbu480/dsa-master-guide/tree/master/0994-rotting-oranges) |
@@ -216,6 +219,7 @@ To run it locally:
 | [0207-course-schedule](https://github.com/rabbu480/dsa-master-guide/tree/master/0207-course-schedule) |
 | [0210-course-schedule-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0210-course-schedule-ii) |
 | [0547-number-of-provinces](https://github.com/rabbu480/dsa-master-guide/tree/master/0547-number-of-provinces) |
+| [0684-redundant-connection](https://github.com/rabbu480/dsa-master-guide/tree/master/0684-redundant-connection) |
 | [1971-find-if-path-exists-in-graph](https://github.com/rabbu480/dsa-master-guide/tree/master/1971-find-if-path-exists-in-graph) |
 ## Topological Sort
 |  |
