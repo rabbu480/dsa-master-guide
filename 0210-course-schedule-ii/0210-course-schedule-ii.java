@@ -44,7 +44,6 @@ class Solution {
         for(int nextCourse:nextCourses){
             indegrees[nextCourse]--;
             if(indegrees[nextCourse] == 0 ){
-                // orderIndex++;
                 q.offer(nextCourse);
             }
         }
