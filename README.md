@@ -107,6 +107,7 @@ To run it locally:
 |  |
 | ------- |
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
+| [0743-network-delay-time](https://github.com/rabbu480/dsa-master-guide/tree/master/0743-network-delay-time) |
 ## Bucket Sort
 |  |
 | ------- |
@@ -176,6 +177,7 @@ To run it locally:
 | [0684-redundant-connection](https://github.com/rabbu480/dsa-master-guide/tree/master/0684-redundant-connection) |
 | [0695-max-area-of-island](https://github.com/rabbu480/dsa-master-guide/tree/master/0695-max-area-of-island) |
 | [0733-flood-fill](https://github.com/rabbu480/dsa-master-guide/tree/master/0733-flood-fill) |
+| [0743-network-delay-time](https://github.com/rabbu480/dsa-master-guide/tree/master/0743-network-delay-time) |
 | [1971-find-if-path-exists-in-graph](https://github.com/rabbu480/dsa-master-guide/tree/master/1971-find-if-path-exists-in-graph) |
 ## Breadth-First Search
 |  |
@@ -192,6 +194,7 @@ To run it locally:
 | [0684-redundant-connection](https://github.com/rabbu480/dsa-master-guide/tree/master/0684-redundant-connection) |
 | [0695-max-area-of-island](https://github.com/rabbu480/dsa-master-guide/tree/master/0695-max-area-of-island) |
 | [0733-flood-fill](https://github.com/rabbu480/dsa-master-guide/tree/master/0733-flood-fill) |
+| [0743-network-delay-time](https://github.com/rabbu480/dsa-master-guide/tree/master/0743-network-delay-time) |
 | [0994-rotting-oranges](https://github.com/rabbu480/dsa-master-guide/tree/master/0994-rotting-oranges) |
 | [1971-find-if-path-exists-in-graph](https://github.com/rabbu480/dsa-master-guide/tree/master/1971-find-if-path-exists-in-graph) |
 ## Binary Tree
@@ -220,10 +223,15 @@ To run it locally:
 | [0210-course-schedule-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0210-course-schedule-ii) |
 | [0547-number-of-provinces](https://github.com/rabbu480/dsa-master-guide/tree/master/0547-number-of-provinces) |
 | [0684-redundant-connection](https://github.com/rabbu480/dsa-master-guide/tree/master/0684-redundant-connection) |
+| [0743-network-delay-time](https://github.com/rabbu480/dsa-master-guide/tree/master/0743-network-delay-time) |
 | [1971-find-if-path-exists-in-graph](https://github.com/rabbu480/dsa-master-guide/tree/master/1971-find-if-path-exists-in-graph) |
 ## Topological Sort
 |  |
 | ------- |
 | [0207-course-schedule](https://github.com/rabbu480/dsa-master-guide/tree/master/0207-course-schedule) |
 | [0210-course-schedule-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0210-course-schedule-ii) |
+## Shortest Path
+|  |
+| ------- |
+| [0743-network-delay-time](https://github.com/rabbu480/dsa-master-guide/tree/master/0743-network-delay-time) |
 <!---LeetCode Topics End-->
