@@ -18,9 +18,5 @@ class Solution {
         }
 
         return pq.peek();
-
-        // while(pq.size() m k){
-        //     pq
-        // }
     }
 }
