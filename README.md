@@ -71,6 +71,7 @@ To run it locally:
 | [0695-max-area-of-island](https://github.com/rabbu480/dsa-master-guide/tree/master/0695-max-area-of-island) |
 | [0733-flood-fill](https://github.com/rabbu480/dsa-master-guide/tree/master/0733-flood-fill) |
 | [0994-rotting-oranges](https://github.com/rabbu480/dsa-master-guide/tree/master/0994-rotting-oranges) |
+| [1046-last-stone-weight](https://github.com/rabbu480/dsa-master-guide/tree/master/1046-last-stone-weight) |
 ## Prefix Sum
 |  |
 | ------- |
@@ -108,6 +109,7 @@ To run it locally:
 | ------- |
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
 | [0743-network-delay-time](https://github.com/rabbu480/dsa-master-guide/tree/master/0743-network-delay-time) |
+| [1046-last-stone-weight](https://github.com/rabbu480/dsa-master-guide/tree/master/1046-last-stone-weight) |
 ## Bucket Sort
 |  |
 | ------- |
