@@ -8,20 +8,16 @@ class Solution {
         for(int stone:stones){
             pq.offer(stone);
         }
-        //  System.out.println("---"+pq);
         while(pq.size() > 1){
 
             int y=pq.poll(); // heavysest 
             int x=pq.poll(); // next heavisest
             // ^^^smash 
             // 
-            System.out.println("-xx--"+pq);
             if(x<y){
                 pq.offer(y-x);
             }
         }
-
-
         return pq.isEmpty()?0:pq.peek();  
         
     }
