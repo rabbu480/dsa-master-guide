@@ -65,6 +65,7 @@ To run it locally:
 | [0128-longest-consecutive-sequence](https://github.com/rabbu480/dsa-master-guide/tree/master/0128-longest-consecutive-sequence) |
 | [0130-surrounded-regions](https://github.com/rabbu480/dsa-master-guide/tree/master/0130-surrounded-regions) |
 | [0167-two-sum-ii-input-array-is-sorted](https://github.com/rabbu480/dsa-master-guide/tree/master/0167-two-sum-ii-input-array-is-sorted) |
+| [0215-kth-largest-element-in-an-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0215-kth-largest-element-in-an-array) |
 | [0217-contains-duplicate](https://github.com/rabbu480/dsa-master-guide/tree/master/0217-contains-duplicate) |
 | [0238-product-of-array-except-self](https://github.com/rabbu480/dsa-master-guide/tree/master/0238-product-of-array-except-self) |
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
@@ -91,6 +92,7 @@ To run it locally:
 |  |
 | ------- |
 | [0049-group-anagrams](https://github.com/rabbu480/dsa-master-guide/tree/master/0049-group-anagrams) |
+| [0215-kth-largest-element-in-an-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0215-kth-largest-element-in-an-array) |
 | [0217-contains-duplicate](https://github.com/rabbu480/dsa-master-guide/tree/master/0217-contains-duplicate) |
 | [0242-valid-anagram](https://github.com/rabbu480/dsa-master-guide/tree/master/0242-valid-anagram) |
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
@@ -103,10 +105,12 @@ To run it locally:
 ## Divide and Conquer
 |  |
 | ------- |
+| [0215-kth-largest-element-in-an-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0215-kth-largest-element-in-an-array) |
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
 ## Heap (Priority Queue)
 |  |
 | ------- |
+| [0215-kth-largest-element-in-an-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0215-kth-largest-element-in-an-array) |
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
 | [0743-network-delay-time](https://github.com/rabbu480/dsa-master-guide/tree/master/0743-network-delay-time) |
 | [1046-last-stone-weight](https://github.com/rabbu480/dsa-master-guide/tree/master/1046-last-stone-weight) |
@@ -121,6 +125,7 @@ To run it locally:
 ## Quickselect
 |  |
 | ------- |
+| [0215-kth-largest-element-in-an-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0215-kth-largest-element-in-an-array) |
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
 ## Union-Find
 |  |
