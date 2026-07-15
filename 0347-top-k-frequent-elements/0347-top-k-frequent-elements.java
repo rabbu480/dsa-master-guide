@@ -6,6 +6,7 @@ class Solution {
         for(int num : nums){
             freqMap.put(num,freqMap.getOrDefault(num,0)+1);
         }
+        //  (a, b) -> Integer.compare(freqMap.get(a), freqMap.get(b))
         PriorityQueue<Integer> pq=new PriorityQueue((a,b) ->  freqMap.get(a) - freqMap.get(b));
         for(int key: freqMap.keySet()){
             pq.offer(key);
