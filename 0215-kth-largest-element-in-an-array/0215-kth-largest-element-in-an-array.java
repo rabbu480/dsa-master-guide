@@ -3,10 +3,10 @@ class Solution {
         
         // define minHeap PrioityQueue 
          PriorityQueue<Integer> pq=new PriorityQueue<>();
-         // maintain minHeap size k 
-         // while all elemnts < k remove from queue 
-         // so that the the minHeap contain the kth largest at top
-         //  elemnt and larget than k
+        // Maintain a min heap of size k.
+        // If the heap grows beyond k,
+        // remove the smallest element.
+        // The heap always contains the k largest elements.
          // time: O(nlogn) Space: O(k)
         for(int num: nums){
             // O(logk)
