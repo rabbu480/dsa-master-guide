@@ -25,7 +25,7 @@ class Solution {
             ListNode node=pq.poll();
             tail.next=node;
             tail=tail.next;
-            if(node != null && node.next != null){
+            if( node.next != null){
                 pq.offer(node.next);
             }
         }
