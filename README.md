@@ -95,6 +95,7 @@ To run it locally:
 | [0215-kth-largest-element-in-an-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0215-kth-largest-element-in-an-array) |
 | [0217-contains-duplicate](https://github.com/rabbu480/dsa-master-guide/tree/master/0217-contains-duplicate) |
 | [0242-valid-anagram](https://github.com/rabbu480/dsa-master-guide/tree/master/0242-valid-anagram) |
+| [0295-find-median-from-data-stream](https://github.com/rabbu480/dsa-master-guide/tree/master/0295-find-median-from-data-stream) |
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
 ## String
 |  |
@@ -113,6 +114,7 @@ To run it locally:
 | ------- |
 | [0023-merge-k-sorted-lists](https://github.com/rabbu480/dsa-master-guide/tree/master/0023-merge-k-sorted-lists) |
 | [0215-kth-largest-element-in-an-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0215-kth-largest-element-in-an-array) |
+| [0295-find-median-from-data-stream](https://github.com/rabbu480/dsa-master-guide/tree/master/0295-find-median-from-data-stream) |
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
 | [0743-network-delay-time](https://github.com/rabbu480/dsa-master-guide/tree/master/0743-network-delay-time) |
 | [1046-last-stone-weight](https://github.com/rabbu480/dsa-master-guide/tree/master/1046-last-stone-weight) |
@@ -151,6 +153,7 @@ To run it locally:
 | ------- |
 | [0125-valid-palindrome](https://github.com/rabbu480/dsa-master-guide/tree/master/0125-valid-palindrome) |
 | [0167-two-sum-ii-input-array-is-sorted](https://github.com/rabbu480/dsa-master-guide/tree/master/0167-two-sum-ii-input-array-is-sorted) |
+| [0295-find-median-from-data-stream](https://github.com/rabbu480/dsa-master-guide/tree/master/0295-find-median-from-data-stream) |
 ## Binary Search
 |  |
 | ------- |
@@ -251,4 +254,12 @@ To run it locally:
 |  |
 | ------- |
 | [0023-merge-k-sorted-lists](https://github.com/rabbu480/dsa-master-guide/tree/master/0023-merge-k-sorted-lists) |
+## Design
+|  |
+| ------- |
+| [0295-find-median-from-data-stream](https://github.com/rabbu480/dsa-master-guide/tree/master/0295-find-median-from-data-stream) |
+## Data Stream
+|  |
+| ------- |
+| [0295-find-median-from-data-stream](https://github.com/rabbu480/dsa-master-guide/tree/master/0295-find-median-from-data-stream) |
 <!---LeetCode Topics End-->
