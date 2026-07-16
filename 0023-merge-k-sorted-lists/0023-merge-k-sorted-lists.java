@@ -11,14 +11,13 @@
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
 
-        PriorityQueue<ListNode> pq=new PriorityQueue<>((a,b) -> a.val - b.val );
+        PriorityQueue<ListNode> pq=new PriorityQueue<>((a,b) ->  Integer.compare(a.val,b.val) );
 
         for (ListNode node : lists) {
             if (node != null)
                 pq.offer(node);
         }
         System.out.println(pq);
-
         ListNode dummy = new ListNode();
         ListNode tail = dummy;
         while(!pq.isEmpty()){
