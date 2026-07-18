@@ -14,7 +14,7 @@ class Solution {
                 // sorted 
                 // 4,5,6,7,0,1,2 target=5
                 // 
-                if( nums[left] <= target && target <= nums[mid]  ){
+                if( nums[left] <= target && target < nums[mid]  ){
                     right=mid-1;
                 } else {
                     left= mid+1;
@@ -25,7 +25,7 @@ class Solution {
                 // sorted 
                 // 6,7,0,1,2,3,4 target 3
                 // 6,7,8,9,0,1
-                if(  nums[mid] <= target  && target <= nums[right] ){
+                if(  nums[mid] < target  && target <= nums[right] ){
                     left=mid+1;
                 } else {
                     right= mid-1;
