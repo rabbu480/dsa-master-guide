@@ -18,9 +18,13 @@ class Solution {
         // 4, 6   if ()
         while(left < right){
             mid=left+(right-left)/2;
+
+            // rotation starting point where nums[left] <= nums[right
             if(nums[left] <= nums[right]){
                 return nums[left];
             }
+
+            // check this sorted non roted then go right.
             if(nums[left] <= nums[mid] ){
                 left=mid+1;
             } else {
