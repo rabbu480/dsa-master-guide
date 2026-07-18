@@ -60,6 +60,7 @@ To run it locally:
 |  |
 | ------- |
 | [0001-two-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0001-two-sum) |
+| [0033-search-in-rotated-sorted-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0033-search-in-rotated-sorted-array) |
 | [0034-find-first-and-last-position-of-element-in-sorted-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0034-find-first-and-last-position-of-element-in-sorted-array) |
 | [0036-valid-sudoku](https://github.com/rabbu480/dsa-master-guide/tree/master/0036-valid-sudoku) |
 | [0049-group-anagrams](https://github.com/rabbu480/dsa-master-guide/tree/master/0049-group-anagrams) |
@@ -159,6 +160,7 @@ To run it locally:
 ## Binary Search
 |  |
 | ------- |
+| [0033-search-in-rotated-sorted-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0033-search-in-rotated-sorted-array) |
 | [0034-find-first-and-last-position-of-element-in-sorted-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0034-find-first-and-last-position-of-element-in-sorted-array) |
 | [0167-two-sum-ii-input-array-is-sorted](https://github.com/rabbu480/dsa-master-guide/tree/master/0167-two-sum-ii-input-array-is-sorted) |
 | [0704-binary-search](https://github.com/rabbu480/dsa-master-guide/tree/master/0704-binary-search) |
