@@ -75,6 +75,7 @@ To run it locally:
 | [0695-max-area-of-island](https://github.com/rabbu480/dsa-master-guide/tree/master/0695-max-area-of-island) |
 | [0704-binary-search](https://github.com/rabbu480/dsa-master-guide/tree/master/0704-binary-search) |
 | [0733-flood-fill](https://github.com/rabbu480/dsa-master-guide/tree/master/0733-flood-fill) |
+| [0875-koko-eating-bananas](https://github.com/rabbu480/dsa-master-guide/tree/master/0875-koko-eating-bananas) |
 | [0994-rotting-oranges](https://github.com/rabbu480/dsa-master-guide/tree/master/0994-rotting-oranges) |
 | [1046-last-stone-weight](https://github.com/rabbu480/dsa-master-guide/tree/master/1046-last-stone-weight) |
 ## Prefix Sum
@@ -166,6 +167,7 @@ To run it locally:
 | [0153-find-minimum-in-rotated-sorted-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0153-find-minimum-in-rotated-sorted-array) |
 | [0167-two-sum-ii-input-array-is-sorted](https://github.com/rabbu480/dsa-master-guide/tree/master/0167-two-sum-ii-input-array-is-sorted) |
 | [0704-binary-search](https://github.com/rabbu480/dsa-master-guide/tree/master/0704-binary-search) |
+| [0875-koko-eating-bananas](https://github.com/rabbu480/dsa-master-guide/tree/master/0875-koko-eating-bananas) |
 ## Tree
 |  |
 | ------- |
