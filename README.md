@@ -64,6 +64,7 @@ To run it locally:
 | [0034-find-first-and-last-position-of-element-in-sorted-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0034-find-first-and-last-position-of-element-in-sorted-array) |
 | [0036-valid-sudoku](https://github.com/rabbu480/dsa-master-guide/tree/master/0036-valid-sudoku) |
 | [0049-group-anagrams](https://github.com/rabbu480/dsa-master-guide/tree/master/0049-group-anagrams) |
+| [0074-search-a-2d-matrix](https://github.com/rabbu480/dsa-master-guide/tree/master/0074-search-a-2d-matrix) |
 | [0128-longest-consecutive-sequence](https://github.com/rabbu480/dsa-master-guide/tree/master/0128-longest-consecutive-sequence) |
 | [0130-surrounded-regions](https://github.com/rabbu480/dsa-master-guide/tree/master/0130-surrounded-regions) |
 | [0153-find-minimum-in-rotated-sorted-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0153-find-minimum-in-rotated-sorted-array) |
@@ -149,6 +150,7 @@ To run it locally:
 |  |
 | ------- |
 | [0036-valid-sudoku](https://github.com/rabbu480/dsa-master-guide/tree/master/0036-valid-sudoku) |
+| [0074-search-a-2d-matrix](https://github.com/rabbu480/dsa-master-guide/tree/master/0074-search-a-2d-matrix) |
 | [0130-surrounded-regions](https://github.com/rabbu480/dsa-master-guide/tree/master/0130-surrounded-regions) |
 | [0695-max-area-of-island](https://github.com/rabbu480/dsa-master-guide/tree/master/0695-max-area-of-island) |
 | [0733-flood-fill](https://github.com/rabbu480/dsa-master-guide/tree/master/0733-flood-fill) |
@@ -164,6 +166,7 @@ To run it locally:
 | ------- |
 | [0033-search-in-rotated-sorted-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0033-search-in-rotated-sorted-array) |
 | [0034-find-first-and-last-position-of-element-in-sorted-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0034-find-first-and-last-position-of-element-in-sorted-array) |
+| [0074-search-a-2d-matrix](https://github.com/rabbu480/dsa-master-guide/tree/master/0074-search-a-2d-matrix) |
 | [0153-find-minimum-in-rotated-sorted-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0153-find-minimum-in-rotated-sorted-array) |
 | [0167-two-sum-ii-input-array-is-sorted](https://github.com/rabbu480/dsa-master-guide/tree/master/0167-two-sum-ii-input-array-is-sorted) |
 | [0704-binary-search](https://github.com/rabbu480/dsa-master-guide/tree/master/0704-binary-search) |
