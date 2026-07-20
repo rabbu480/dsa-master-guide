@@ -15,6 +15,8 @@ class Solution {
             return dp[i];
         }
         // either start 1 ,start 2
+        // Take nums[i] -> Go to i+2
+        // Take Nothing -> Go to i+1
         dp[i]= Math.max(maxAmount(i+1,nums,dp),nums[i]+maxAmount(i+2,nums,dp));
         return dp[i];
     }
