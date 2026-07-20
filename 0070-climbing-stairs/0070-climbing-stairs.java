@@ -17,6 +17,7 @@ class Solution {
         }
         System.out.println(" dp[i]>>>::::"+ Arrays.toString( dp));
         dp[i]=ways(i+1,n,dp)+ways(i+2,n,dp);
+        System.out.println(" dp[i]>2>>::::"+ Arrays.toString( dp));
         return dp[i];
     }
 }
