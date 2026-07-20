@@ -74,6 +74,7 @@ To run it locally:
 | [0215-kth-largest-element-in-an-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0215-kth-largest-element-in-an-array) |
 | [0217-contains-duplicate](https://github.com/rabbu480/dsa-master-guide/tree/master/0217-contains-duplicate) |
 | [0238-product-of-array-except-self](https://github.com/rabbu480/dsa-master-guide/tree/master/0238-product-of-array-except-self) |
+| [0322-coin-change](https://github.com/rabbu480/dsa-master-guide/tree/master/0322-coin-change) |
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
 | [0695-max-area-of-island](https://github.com/rabbu480/dsa-master-guide/tree/master/0695-max-area-of-island) |
 | [0704-binary-search](https://github.com/rabbu480/dsa-master-guide/tree/master/0704-binary-search) |
@@ -219,6 +220,7 @@ To run it locally:
 | [0207-course-schedule](https://github.com/rabbu480/dsa-master-guide/tree/master/0207-course-schedule) |
 | [0210-course-schedule-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0210-course-schedule-ii) |
 | [0226-invert-binary-tree](https://github.com/rabbu480/dsa-master-guide/tree/master/0226-invert-binary-tree) |
+| [0322-coin-change](https://github.com/rabbu480/dsa-master-guide/tree/master/0322-coin-change) |
 | [0547-number-of-provinces](https://github.com/rabbu480/dsa-master-guide/tree/master/0547-number-of-provinces) |
 | [0684-redundant-connection](https://github.com/rabbu480/dsa-master-guide/tree/master/0684-redundant-connection) |
 | [0695-max-area-of-island](https://github.com/rabbu480/dsa-master-guide/tree/master/0695-max-area-of-island) |
@@ -290,6 +292,7 @@ To run it locally:
 | [0091-decode-ways](https://github.com/rabbu480/dsa-master-guide/tree/master/0091-decode-ways) |
 | [0198-house-robber](https://github.com/rabbu480/dsa-master-guide/tree/master/0198-house-robber) |
 | [0213-house-robber-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0213-house-robber-ii) |
+| [0322-coin-change](https://github.com/rabbu480/dsa-master-guide/tree/master/0322-coin-change) |
 | [0746-min-cost-climbing-stairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0746-min-cost-climbing-stairs) |
 ## Memoization
 |  |
