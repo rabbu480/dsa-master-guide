@@ -27,7 +27,7 @@ class Solution {
         if (i + 1 < s.length()) {
             int val = Integer.parseInt(s.substring(i, i + 2));
 
-            if (val <= 26) {
+            if ( 10 <= val && val <= 26) {
                 ways += decode(i + 2, s, dp);
             }
             System.out.println(" i >> "+i +"val >>"+ val + " dp >> "+Arrays.toString(dp));
