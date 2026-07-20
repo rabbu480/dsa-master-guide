@@ -1,14 +1,14 @@
 class Solution {
     public int rob(int[] nums) {
-        int length=nums.length;
+        int n=nums.length;
         int[] dp= new int[nums.length];
         if (nums.length == 1) return nums[0];
         // 0,1,2 => 6 0,2  1,
         Arrays.fill(dp,-1);
-        int robStartAt0=robMaxAmnt(0,length-2,nums,dp);
+        int robStartAt0=robMaxAmnt(0,n-2,nums,dp);
         System.out.println("dp::>>" +Arrays.toString(dp));
         Arrays.fill(dp,-1);
-        int robStartAt1=robMaxAmnt(1,length-1,nums,dp);
+        int robStartAt1=robMaxAmnt(1,n-1,nums,dp);
         System.out.println("dp::<<" +Arrays.toString(dp));
         return Math.max(robStartAt0,robStartAt1);
 
