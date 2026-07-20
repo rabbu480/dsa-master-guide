@@ -275,4 +275,16 @@ To run it locally:
 |  |
 | ------- |
 | [0295-find-median-from-data-stream](https://github.com/rabbu480/dsa-master-guide/tree/master/0295-find-median-from-data-stream) |
+## Math
+|  |
+| ------- |
+| [0070-climbing-stairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0070-climbing-stairs) |
+## Dynamic Programming
+|  |
+| ------- |
+| [0070-climbing-stairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0070-climbing-stairs) |
+## Memoization
+|  |
+| ------- |
+| [0070-climbing-stairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0070-climbing-stairs) |
 <!---LeetCode Topics End-->
