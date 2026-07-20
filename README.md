@@ -110,6 +110,7 @@ To run it locally:
 |  |
 | ------- |
 | [0049-group-anagrams](https://github.com/rabbu480/dsa-master-guide/tree/master/0049-group-anagrams) |
+| [0091-decode-ways](https://github.com/rabbu480/dsa-master-guide/tree/master/0091-decode-ways) |
 | [0125-valid-palindrome](https://github.com/rabbu480/dsa-master-guide/tree/master/0125-valid-palindrome) |
 | [0242-valid-anagram](https://github.com/rabbu480/dsa-master-guide/tree/master/0242-valid-anagram) |
 ## Divide and Conquer
@@ -286,6 +287,7 @@ To run it locally:
 |  |
 | ------- |
 | [0070-climbing-stairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0070-climbing-stairs) |
+| [0091-decode-ways](https://github.com/rabbu480/dsa-master-guide/tree/master/0091-decode-ways) |
 | [0198-house-robber](https://github.com/rabbu480/dsa-master-guide/tree/master/0198-house-robber) |
 | [0213-house-robber-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0213-house-robber-ii) |
 | [0746-min-cost-climbing-stairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0746-min-cost-climbing-stairs) |
