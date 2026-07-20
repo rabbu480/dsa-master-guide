@@ -3,7 +3,7 @@ class Solution {
         // 4: memorization 
         int[] dp= new int[n+1];
         Arrays.fill(dp, -1);
-        System.out.println(" dp[i]::::"+ dp);
+        System.out.println(" dp[i]::::"+ Arrays.toString(dp));
         return ways(0,n,dp);
     }
 
@@ -15,7 +15,7 @@ class Solution {
         if(dp[i] != -1 ){
             return dp[i];
         }
-        System.out.println(" dp[i]>>>::::"+ dp);
+        System.out.println(" dp[i]>>>::::"+ Arrays.toString( dp));
         dp[i]=ways(i+1,n,dp)+ways(i+2,n,dp);
         return dp[i];
     }
