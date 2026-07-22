@@ -10,9 +10,15 @@ class Solution {
                 }
             }
         }
+
+        int area = 1;
+
         return maxAreaOfIsland;
         
     }
+
+
+    private static final int[][] DIR={{0,1},{0,-1},{1,0},{-1,0}} ;
 
     public int dfsIlandArea(int [][] grid,int r,int c) {
         if(r<0 || c<0 || r>= grid.length || c>= grid[0].length) {
@@ -21,10 +27,18 @@ class Solution {
         if(grid[r][c] == 0 ) return 0;
         grid[r][c] = 0 ;
 
-        return 1+ dfsIlandArea(grid,r,c+1) 
-                +dfsIlandArea(grid,r,c-1)
-                +dfsIlandArea(grid,r+1,c)
-                +dfsIlandArea(grid,r-1,c);   
+        // return 1+ dfsIlandArea(grid,r,c+1) 
+        //         +dfsIlandArea(grid,r,c-1)
+        //         +dfsIlandArea(grid,r+1,c)
+        //         +dfsIlandArea(grid,r-1,c);  
+
+        int area = 1;
+
+        for(int[] d:DIR){
+            area += dfsIlandArea(grid,r+d[0],c+d[1]);
+        } 
+
+        return area;
 
     }
 
