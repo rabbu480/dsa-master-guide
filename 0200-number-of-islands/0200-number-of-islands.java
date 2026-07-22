@@ -16,6 +16,9 @@ class Solution {
 
         return count;
     }
+    
+    public static final int[][] directions={{0,1},{0,-1},{1,0},{-1,0}};
+
     public void dfs(char[][] grid,int r,int c) {
         
         // outside grid
@@ -28,7 +31,6 @@ class Solution {
         if(grid[r][c] == '0'){
             return;
         }
-        int[][] directions={{0,1},{0,-1},{1,0},{-1,0}};
         // mark visited
         grid[r][c] = '0';
         for(int[] direction: directions){
