@@ -78,6 +78,7 @@ To run it locally:
 | [0238-product-of-array-except-self](https://github.com/rabbu480/dsa-master-guide/tree/master/0238-product-of-array-except-self) |
 | [0322-coin-change](https://github.com/rabbu480/dsa-master-guide/tree/master/0322-coin-change) |
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
+| [0648-replace-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0648-replace-words) |
 | [0695-max-area-of-island](https://github.com/rabbu480/dsa-master-guide/tree/master/0695-max-area-of-island) |
 | [0704-binary-search](https://github.com/rabbu480/dsa-master-guide/tree/master/0704-binary-search) |
 | [0733-flood-fill](https://github.com/rabbu480/dsa-master-guide/tree/master/0733-flood-fill) |
@@ -101,6 +102,7 @@ To run it locally:
 | [0217-contains-duplicate](https://github.com/rabbu480/dsa-master-guide/tree/master/0217-contains-duplicate) |
 | [0242-valid-anagram](https://github.com/rabbu480/dsa-master-guide/tree/master/0242-valid-anagram) |
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
+| [0648-replace-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0648-replace-words) |
 ## Sorting
 |  |
 | ------- |
@@ -120,6 +122,7 @@ To run it locally:
 | [0208-implement-trie-prefix-tree](https://github.com/rabbu480/dsa-master-guide/tree/master/0208-implement-trie-prefix-tree) |
 | [0211-design-add-and-search-words-data-structure](https://github.com/rabbu480/dsa-master-guide/tree/master/0211-design-add-and-search-words-data-structure) |
 | [0242-valid-anagram](https://github.com/rabbu480/dsa-master-guide/tree/master/0242-valid-anagram) |
+| [0648-replace-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0648-replace-words) |
 ## Divide and Conquer
 |  |
 | ------- |
@@ -317,4 +320,5 @@ To run it locally:
 | ------- |
 | [0208-implement-trie-prefix-tree](https://github.com/rabbu480/dsa-master-guide/tree/master/0208-implement-trie-prefix-tree) |
 | [0211-design-add-and-search-words-data-structure](https://github.com/rabbu480/dsa-master-guide/tree/master/0211-design-add-and-search-words-data-structure) |
+| [0648-replace-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0648-replace-words) |
 <!---LeetCode Topics End-->
