@@ -97,6 +97,7 @@ To run it locally:
 | [0049-group-anagrams](https://github.com/rabbu480/dsa-master-guide/tree/master/0049-group-anagrams) |
 | [0128-longest-consecutive-sequence](https://github.com/rabbu480/dsa-master-guide/tree/master/0128-longest-consecutive-sequence) |
 | [0133-clone-graph](https://github.com/rabbu480/dsa-master-guide/tree/master/0133-clone-graph) |
+| [0208-implement-trie-prefix-tree](https://github.com/rabbu480/dsa-master-guide/tree/master/0208-implement-trie-prefix-tree) |
 | [0217-contains-duplicate](https://github.com/rabbu480/dsa-master-guide/tree/master/0217-contains-duplicate) |
 | [0242-valid-anagram](https://github.com/rabbu480/dsa-master-guide/tree/master/0242-valid-anagram) |
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
@@ -116,6 +117,7 @@ To run it locally:
 | [0049-group-anagrams](https://github.com/rabbu480/dsa-master-guide/tree/master/0049-group-anagrams) |
 | [0091-decode-ways](https://github.com/rabbu480/dsa-master-guide/tree/master/0091-decode-ways) |
 | [0125-valid-palindrome](https://github.com/rabbu480/dsa-master-guide/tree/master/0125-valid-palindrome) |
+| [0208-implement-trie-prefix-tree](https://github.com/rabbu480/dsa-master-guide/tree/master/0208-implement-trie-prefix-tree) |
 | [0242-valid-anagram](https://github.com/rabbu480/dsa-master-guide/tree/master/0242-valid-anagram) |
 ## Divide and Conquer
 |  |
@@ -284,6 +286,7 @@ To run it locally:
 ## Design
 |  |
 | ------- |
+| [0208-implement-trie-prefix-tree](https://github.com/rabbu480/dsa-master-guide/tree/master/0208-implement-trie-prefix-tree) |
 | [0295-find-median-from-data-stream](https://github.com/rabbu480/dsa-master-guide/tree/master/0295-find-median-from-data-stream) |
 ## Data Stream
 |  |
@@ -306,4 +309,8 @@ To run it locally:
 |  |
 | ------- |
 | [0070-climbing-stairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0070-climbing-stairs) |
+## Trie
+|  |
+| ------- |
+| [0208-implement-trie-prefix-tree](https://github.com/rabbu480/dsa-master-guide/tree/master/0208-implement-trie-prefix-tree) |
 <!---LeetCode Topics End-->
