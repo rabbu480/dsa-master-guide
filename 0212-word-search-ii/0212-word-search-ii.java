@@ -61,8 +61,10 @@ class Solution {
             int dc=d[1];
             dfs(board,r+dr,c+dc,node);
         }
-        // Backtrack
+        // System.out.println("r-c"+r+"-"+c+">>>>"+Arrays.deepToString(board));
+        // Backtrack (refresh again )
         board[r][c] = ch;
+        // System.out.println("r-c"+r+"-"+c+">>>>"+Arrays.deepToString(board));
     }
 
     void insert(String word){
