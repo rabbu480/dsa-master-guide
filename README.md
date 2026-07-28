@@ -85,6 +85,7 @@ To run it locally:
 | [0720-longest-word-in-dictionary](https://github.com/rabbu480/dsa-master-guide/tree/master/0720-longest-word-in-dictionary) |
 | [0733-flood-fill](https://github.com/rabbu480/dsa-master-guide/tree/master/0733-flood-fill) |
 | [0746-min-cost-climbing-stairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0746-min-cost-climbing-stairs) |
+| [0820-short-encoding-of-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0820-short-encoding-of-words) |
 | [0875-koko-eating-bananas](https://github.com/rabbu480/dsa-master-guide/tree/master/0875-koko-eating-bananas) |
 | [0994-rotting-oranges](https://github.com/rabbu480/dsa-master-guide/tree/master/0994-rotting-oranges) |
 | [1046-last-stone-weight](https://github.com/rabbu480/dsa-master-guide/tree/master/1046-last-stone-weight) |
@@ -107,6 +108,7 @@ To run it locally:
 | [0648-replace-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0648-replace-words) |
 | [0677-map-sum-pairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0677-map-sum-pairs) |
 | [0720-longest-word-in-dictionary](https://github.com/rabbu480/dsa-master-guide/tree/master/0720-longest-word-in-dictionary) |
+| [0820-short-encoding-of-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0820-short-encoding-of-words) |
 ## Sorting
 |  |
 | ------- |
@@ -131,6 +133,7 @@ To run it locally:
 | [0648-replace-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0648-replace-words) |
 | [0677-map-sum-pairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0677-map-sum-pairs) |
 | [0720-longest-word-in-dictionary](https://github.com/rabbu480/dsa-master-guide/tree/master/0720-longest-word-in-dictionary) |
+| [0820-short-encoding-of-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0820-short-encoding-of-words) |
 ## Divide and Conquer
 |  |
 | ------- |
@@ -334,6 +337,7 @@ To run it locally:
 | [0648-replace-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0648-replace-words) |
 | [0677-map-sum-pairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0677-map-sum-pairs) |
 | [0720-longest-word-in-dictionary](https://github.com/rabbu480/dsa-master-guide/tree/master/0720-longest-word-in-dictionary) |
+| [0820-short-encoding-of-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0820-short-encoding-of-words) |
 ## Backtracking
 |  |
 | ------- |
