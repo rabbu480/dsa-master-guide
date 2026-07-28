@@ -104,6 +104,7 @@ To run it locally:
 | [0242-valid-anagram](https://github.com/rabbu480/dsa-master-guide/tree/master/0242-valid-anagram) |
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
 | [0648-replace-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0648-replace-words) |
+| [0677-map-sum-pairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0677-map-sum-pairs) |
 ## Sorting
 |  |
 | ------- |
@@ -125,6 +126,7 @@ To run it locally:
 | [0212-word-search-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0212-word-search-ii) |
 | [0242-valid-anagram](https://github.com/rabbu480/dsa-master-guide/tree/master/0242-valid-anagram) |
 | [0648-replace-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0648-replace-words) |
+| [0677-map-sum-pairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0677-map-sum-pairs) |
 ## Divide and Conquer
 |  |
 | ------- |
@@ -297,6 +299,7 @@ To run it locally:
 | [0208-implement-trie-prefix-tree](https://github.com/rabbu480/dsa-master-guide/tree/master/0208-implement-trie-prefix-tree) |
 | [0211-design-add-and-search-words-data-structure](https://github.com/rabbu480/dsa-master-guide/tree/master/0211-design-add-and-search-words-data-structure) |
 | [0295-find-median-from-data-stream](https://github.com/rabbu480/dsa-master-guide/tree/master/0295-find-median-from-data-stream) |
+| [0677-map-sum-pairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0677-map-sum-pairs) |
 ## Data Stream
 |  |
 | ------- |
@@ -325,6 +328,7 @@ To run it locally:
 | [0211-design-add-and-search-words-data-structure](https://github.com/rabbu480/dsa-master-guide/tree/master/0211-design-add-and-search-words-data-structure) |
 | [0212-word-search-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0212-word-search-ii) |
 | [0648-replace-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0648-replace-words) |
+| [0677-map-sum-pairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0677-map-sum-pairs) |
 ## Backtracking
 |  |
 | ------- |
