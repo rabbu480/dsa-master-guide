@@ -84,7 +84,67 @@ class TrieNode{
         return sb.toString();
     }
 
+
+    
+
 }
+
+
+// class MapSum {
+
+//     class TrieNode {
+//         TrieNode[] children = new TrieNode[26];
+//         int sum = 0;
+//     }
+
+//     TrieNode root;
+//     Map<String, Integer> map;
+
+//     public MapSum() {
+//         root = new TrieNode();
+//         map = new HashMap<>();
+//     }
+
+//     public void insert(String key, int val) {
+
+//         int oldValue = map.getOrDefault(key, 0);
+//         int delta = val - oldValue;
+
+//         map.put(key, val);
+
+//         TrieNode curr = root;
+
+//         for (char ch : key.toCharArray()) {
+
+//             int index = ch - 'a';
+
+//             if (curr.children[index] == null) {
+//                 curr.children[index] = new TrieNode();
+//             }
+
+//             curr = curr.children[index];
+//             curr.sum += delta;
+//         }
+//     }
+
+//     public int sum(String prefix) {
+
+//         TrieNode curr = root;
+
+//         for (char ch : prefix.toCharArray()) {
+
+//             int index = ch - 'a';
+
+//             if (curr.children[index] == null) {
+//                 return 0;
+//             }
+
+//             curr = curr.children[index];
+//         }
+
+//         return curr.sum;
+//     }
+// }
 /**
  * Your MapSum object will be instantiated and called as such:
  * MapSum obj = new MapSum();
