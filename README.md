@@ -82,6 +82,7 @@ To run it locally:
 | [0648-replace-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0648-replace-words) |
 | [0695-max-area-of-island](https://github.com/rabbu480/dsa-master-guide/tree/master/0695-max-area-of-island) |
 | [0704-binary-search](https://github.com/rabbu480/dsa-master-guide/tree/master/0704-binary-search) |
+| [0720-longest-word-in-dictionary](https://github.com/rabbu480/dsa-master-guide/tree/master/0720-longest-word-in-dictionary) |
 | [0733-flood-fill](https://github.com/rabbu480/dsa-master-guide/tree/master/0733-flood-fill) |
 | [0746-min-cost-climbing-stairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0746-min-cost-climbing-stairs) |
 | [0875-koko-eating-bananas](https://github.com/rabbu480/dsa-master-guide/tree/master/0875-koko-eating-bananas) |
@@ -105,6 +106,7 @@ To run it locally:
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
 | [0648-replace-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0648-replace-words) |
 | [0677-map-sum-pairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0677-map-sum-pairs) |
+| [0720-longest-word-in-dictionary](https://github.com/rabbu480/dsa-master-guide/tree/master/0720-longest-word-in-dictionary) |
 ## Sorting
 |  |
 | ------- |
@@ -115,6 +117,7 @@ To run it locally:
 | [0242-valid-anagram](https://github.com/rabbu480/dsa-master-guide/tree/master/0242-valid-anagram) |
 | [0295-find-median-from-data-stream](https://github.com/rabbu480/dsa-master-guide/tree/master/0295-find-median-from-data-stream) |
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
+| [0720-longest-word-in-dictionary](https://github.com/rabbu480/dsa-master-guide/tree/master/0720-longest-word-in-dictionary) |
 ## String
 |  |
 | ------- |
@@ -127,6 +130,7 @@ To run it locally:
 | [0242-valid-anagram](https://github.com/rabbu480/dsa-master-guide/tree/master/0242-valid-anagram) |
 | [0648-replace-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0648-replace-words) |
 | [0677-map-sum-pairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0677-map-sum-pairs) |
+| [0720-longest-word-in-dictionary](https://github.com/rabbu480/dsa-master-guide/tree/master/0720-longest-word-in-dictionary) |
 ## Divide and Conquer
 |  |
 | ------- |
@@ -329,6 +333,7 @@ To run it locally:
 | [0212-word-search-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0212-word-search-ii) |
 | [0648-replace-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0648-replace-words) |
 | [0677-map-sum-pairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0677-map-sum-pairs) |
+| [0720-longest-word-in-dictionary](https://github.com/rabbu480/dsa-master-guide/tree/master/0720-longest-word-in-dictionary) |
 ## Backtracking
 |  |
 | ------- |
