@@ -314,10 +314,12 @@ To run it locally:
 ## Math
 |  |
 | ------- |
+| [0062-unique-paths](https://github.com/rabbu480/dsa-master-guide/tree/master/0062-unique-paths) |
 | [0070-climbing-stairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0070-climbing-stairs) |
 ## Dynamic Programming
 |  |
 | ------- |
+| [0062-unique-paths](https://github.com/rabbu480/dsa-master-guide/tree/master/0062-unique-paths) |
 | [0070-climbing-stairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0070-climbing-stairs) |
 | [0091-decode-ways](https://github.com/rabbu480/dsa-master-guide/tree/master/0091-decode-ways) |
 | [0198-house-robber](https://github.com/rabbu480/dsa-master-guide/tree/master/0198-house-robber) |
@@ -342,4 +344,8 @@ To run it locally:
 |  |
 | ------- |
 | [0212-word-search-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0212-word-search-ii) |
+## Combinatorics
+|  |
+| ------- |
+| [0062-unique-paths](https://github.com/rabbu480/dsa-master-guide/tree/master/0062-unique-paths) |
 <!---LeetCode Topics End-->
