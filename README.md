@@ -66,6 +66,7 @@ To run it locally:
 | [0036-valid-sudoku](https://github.com/rabbu480/dsa-master-guide/tree/master/0036-valid-sudoku) |
 | [0049-group-anagrams](https://github.com/rabbu480/dsa-master-guide/tree/master/0049-group-anagrams) |
 | [0063-unique-paths-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0063-unique-paths-ii) |
+| [0064-minimum-path-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0064-minimum-path-sum) |
 | [0074-search-a-2d-matrix](https://github.com/rabbu480/dsa-master-guide/tree/master/0074-search-a-2d-matrix) |
 | [0128-longest-consecutive-sequence](https://github.com/rabbu480/dsa-master-guide/tree/master/0128-longest-consecutive-sequence) |
 | [0130-surrounded-regions](https://github.com/rabbu480/dsa-master-guide/tree/master/0130-surrounded-regions) |
@@ -178,6 +179,7 @@ To run it locally:
 | ------- |
 | [0036-valid-sudoku](https://github.com/rabbu480/dsa-master-guide/tree/master/0036-valid-sudoku) |
 | [0063-unique-paths-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0063-unique-paths-ii) |
+| [0064-minimum-path-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0064-minimum-path-sum) |
 | [0074-search-a-2d-matrix](https://github.com/rabbu480/dsa-master-guide/tree/master/0074-search-a-2d-matrix) |
 | [0130-surrounded-regions](https://github.com/rabbu480/dsa-master-guide/tree/master/0130-surrounded-regions) |
 | [0200-number-of-islands](https://github.com/rabbu480/dsa-master-guide/tree/master/0200-number-of-islands) |
@@ -323,6 +325,7 @@ To run it locally:
 | ------- |
 | [0062-unique-paths](https://github.com/rabbu480/dsa-master-guide/tree/master/0062-unique-paths) |
 | [0063-unique-paths-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0063-unique-paths-ii) |
+| [0064-minimum-path-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0064-minimum-path-sum) |
 | [0070-climbing-stairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0070-climbing-stairs) |
 | [0091-decode-ways](https://github.com/rabbu480/dsa-master-guide/tree/master/0091-decode-ways) |
 | [0198-house-robber](https://github.com/rabbu480/dsa-master-guide/tree/master/0198-house-robber) |
