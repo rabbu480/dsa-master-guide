@@ -1,28 +1,37 @@
 class Solution {
     public int rob(int[] nums) {
-        
-        int n= nums.length-1;
-        if(n==0) return nums[n];
-        int[] dp =new int[nums.length];
+        int n=nums.length;
+        int[] dp= new int[nums.length];
+        if (nums.length == 1) return nums[0];
+        // 0,1,2 => 6 0,2  1,
         Arrays.fill(dp,-1);
-        int startAt0= solve(0,n-1,nums,dp);
+        int robStartAt0=robMaxAmnt(0,n-2,nums,dp);
+        // System.out.println("dp::>>" +Arrays.toString(dp));
         Arrays.fill(dp,-1);
-        int startAtENd= solve(1,n,nums,dp);
-        return Math.max(startAt0,startAtENd);
-    }
-    // state : ith,,, house choice : rob or skip 
-    // recurrence 
+        int robStartAt1=robMaxAmnt(1,n-1,nums,dp);
+        // System.out.println("dp::<<" +Arrays.toString(dp));
+        return Math.max(robStartAt0,robStartAt1);
 
-    int solve(int i,int robTill, int[] nums,int[] dp){
+    }
+
+    // State 0 i, choice rob or skip  
+    // recurrence,basecase, recurssion 
+    // memorization 
+    int robMaxAmnt(int i,int robTill,int[] nums, int[] dp ){
 
         if(i > robTill) return 0;
-        if(dp[i] != -1) return dp[i];
 
-        int rob=nums[i]+solve(i+2,robTill,nums,dp);
-        int skip=solve(i+1,robTill,nums,dp);
-        dp[i]=  Math.max(rob,skip);
+        if(dp[i] != -1){
+            return dp[i];
+        }
+
+        int skip=robMaxAmnt(i+1,robTill,nums,dp);
+        int rob= nums[i]+robMaxAmnt(i+2,robTill,nums,dp);
+        dp[i]= Math.max(rob,skip);
 
         return dp[i];
+
     }
+
 }
 
