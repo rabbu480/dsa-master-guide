@@ -11,15 +11,28 @@ class Solution {
         
     }
 
-    // State,Choices: i i.e 0 or 1, one or two steps
-    // recurence  
-    int cost(int i ,int [] cost,int[] dp){
-        if(i>= cost.length) return 0;
-        if(dp[i] != -1){
+    int cost(int i , int[] cost, int[] dp){
+        if(i >= cost.length) return 0;
+        if(dp[i] != -1) {
             return dp[i];
         }
-        // should save 
         dp[i]=cost[i]+Math.min(cost(i+1,cost,dp),cost(i+2,cost,dp));
         return dp[i];
     }
+
+
+
+
+
+//     // State,Choices: i i.e 0 or 1, one or two steps
+//     // recurence  
+//     int cost(int i ,int [] cost,int[] dp){
+//         if(i>= cost.length) return 0;
+//         if(dp[i] != -1){
+//             return dp[i];
+//         }
+//         // should save 
+//         dp[i]=cost[i]+Math.min(cost(i+1,cost,dp),cost(i+2,cost,dp));
+//         return dp[i];
+//     }
 }
