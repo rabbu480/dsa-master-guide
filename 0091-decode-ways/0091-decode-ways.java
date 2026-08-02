@@ -30,7 +30,7 @@ class Solution {
             if ( 10 <= val && val <= 26) {
                 ways += decode(i + 2, s, dp);
             }
-            System.out.println(" i >> "+i +"val >>"+ val + " dp >> "+Arrays.toString(dp));
+            // System.out.println(" i >> "+i +"val >>"+ val + " dp >> "+Arrays.toString(dp));
         }
 
         dp[i]=ways;
