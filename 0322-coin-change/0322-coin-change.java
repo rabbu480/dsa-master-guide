@@ -38,7 +38,6 @@ class Solution {
                 
                 // System.out.println("temp >> "+temp +"-> coin " +coin +"-> remainingAmount " + remainingAmount +"-> minCoins :: " +minCoins);
 
-                // minCoins= minCoins == Integer.MAX_VALUE ? -1 : minCoins;
             }
         }
         dp[remainingAmount]=minCoins;
