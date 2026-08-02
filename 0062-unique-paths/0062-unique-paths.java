@@ -12,7 +12,8 @@ class Solution {
         // crossboundry : i> m-1 || j>n-1 return 0
     // ways(i,j,dp)
     // memeorizayton optimzation :: ways(i+1,j,dp) ,ways(i,j+1,dp)
-
+        // Time : O(m*n)
+        // Space : O(m*n)
     int ways(int i, int j, int m,int n ,Integer [][]dp){
 
         if(i== m-1 && j == n-1) return 1;
