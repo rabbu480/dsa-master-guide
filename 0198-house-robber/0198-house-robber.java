@@ -3,25 +3,51 @@ class Solution {
         int[] dp= new int[nums.length];
         Arrays.fill(dp,-1); 
 
-        return maxAmount(0,nums , dp);
+        // return maxAmount(0,nums , dp);
+        return solve(0,nums,dp);
     }
-    // State (start from house 0) , Choice (1 skip 2 )  ==> Rob this house OR Skip this house .
-    // recurrence, Base codition, recusion 
-    // Memorization dp[]  fill -1
 
-    int maxAmount(int i, int[] nums , int[] dp){ 
-        if(i>= nums.length) return 0;
-        if(dp[i]!=-1){
-            return dp[i];
-        }
-        // either start 1 ,start 2
-        // Take nums[i] -> Go to i+2
-        // Take Nothing -> Go to i+1
-        int skip = maxAmount(i + 1, nums, dp);
-        int rob = nums[i] + maxAmount(i + 2, nums, dp);
-        dp[i]= Math.max(skip,rob);
-        return dp[i];
+    // state :: i choices : rob 1 skip 2 
+    // recurence solve(i+1) , solve i+2
+    int solve(int i ,int[] nums, int[] dp){
+
+        if(i>=nums.length) return 0;
+
+        if(dp[i] != -1) return dp[i];
+
+        int rob= nums[i]+ solve(i+2,nums,dp);
+        int skip= solve(i+1,nums,dp);
+
+        dp[i] =  Math.max(rob,skip);
+
+        return dp[i] ;
+       
     }
+
+
+
+
+
+
+
+
+    // // State (start from house 0) , Choice (1 skip 2 )  ==> Rob this house OR Skip this house .
+    // // recurrence, Base codition, recusion 
+    // // Memorization dp[]  fill -1
+
+    // int maxAmount(int i, int[] nums , int[] dp){ 
+    //     if(i>= nums.length) return 0;
+    //     if(dp[i]!=-1){
+    //         return dp[i];
+    //     }
+    //     // either start 1 ,start 2
+    //     // Take nums[i] -> Go to i+2
+    //     // Take Nothing -> Go to i+1
+    //     int skip = maxAmount(i + 1, nums, dp);
+    //     int rob = nums[i] + maxAmount(i + 2, nums, dp);
+    //     dp[i]= Math.max(skip,rob);
+    //     return dp[i];
+    // }
 
 
 
