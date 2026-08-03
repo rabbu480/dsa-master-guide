@@ -13,6 +13,7 @@ class Solution {
 
 
     int Solve(int i, int j , String word1, String word2,int[][] dp ){
+        // word1 = "" word2 = "abc" to convert insert a then b then c
         if(i == word1.length())
             return word2.length() - j;
 
