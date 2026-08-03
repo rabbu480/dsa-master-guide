@@ -22,7 +22,8 @@ class Solution {
         }
         
         if(text1.charAt(i) == text2.charAt(j) ){
-           return  1+Solve(i+1,j+1,text1,text2,dp);
+            dp[i][j]= 1+Solve(i+1,j+1,text1,text2,dp);
+           return dp[i][j];
         }
 
         dp[i][j]=Math.max(Solve(i+1,j,text1,text2,dp), Solve(i,j+1,text1,text2,dp));
