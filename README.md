@@ -137,6 +137,7 @@ To run it locally:
 | [0677-map-sum-pairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0677-map-sum-pairs) |
 | [0720-longest-word-in-dictionary](https://github.com/rabbu480/dsa-master-guide/tree/master/0720-longest-word-in-dictionary) |
 | [0820-short-encoding-of-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0820-short-encoding-of-words) |
+| [1143-longest-common-subsequence](https://github.com/rabbu480/dsa-master-guide/tree/master/1143-longest-common-subsequence) |
 ## Divide and Conquer
 |  |
 | ------- |
@@ -335,6 +336,7 @@ To run it locally:
 | [0300-longest-increasing-subsequence](https://github.com/rabbu480/dsa-master-guide/tree/master/0300-longest-increasing-subsequence) |
 | [0322-coin-change](https://github.com/rabbu480/dsa-master-guide/tree/master/0322-coin-change) |
 | [0746-min-cost-climbing-stairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0746-min-cost-climbing-stairs) |
+| [1143-longest-common-subsequence](https://github.com/rabbu480/dsa-master-guide/tree/master/1143-longest-common-subsequence) |
 ## Memoization
 |  |
 | ------- |
@@ -361,4 +363,8 @@ To run it locally:
 |  |
 | ------- |
 | [0300-longest-increasing-subsequence](https://github.com/rabbu480/dsa-master-guide/tree/master/0300-longest-increasing-subsequence) |
+## Longest Common Subsequence
+|  |
+| ------- |
+| [1143-longest-common-subsequence](https://github.com/rabbu480/dsa-master-guide/tree/master/1143-longest-common-subsequence) |
 <!---LeetCode Topics End-->
