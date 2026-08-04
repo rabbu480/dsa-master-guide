@@ -82,6 +82,7 @@ To run it locally:
 | [0300-longest-increasing-subsequence](https://github.com/rabbu480/dsa-master-guide/tree/master/0300-longest-increasing-subsequence) |
 | [0322-coin-change](https://github.com/rabbu480/dsa-master-guide/tree/master/0322-coin-change) |
 | [0347-top-k-frequent-elements](https://github.com/rabbu480/dsa-master-guide/tree/master/0347-top-k-frequent-elements) |
+| [0416-partition-equal-subset-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0416-partition-equal-subset-sum) |
 | [0648-replace-words](https://github.com/rabbu480/dsa-master-guide/tree/master/0648-replace-words) |
 | [0695-max-area-of-island](https://github.com/rabbu480/dsa-master-guide/tree/master/0695-max-area-of-island) |
 | [0704-binary-search](https://github.com/rabbu480/dsa-master-guide/tree/master/0704-binary-search) |
@@ -339,6 +340,7 @@ To run it locally:
 | [0213-house-robber-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0213-house-robber-ii) |
 | [0300-longest-increasing-subsequence](https://github.com/rabbu480/dsa-master-guide/tree/master/0300-longest-increasing-subsequence) |
 | [0322-coin-change](https://github.com/rabbu480/dsa-master-guide/tree/master/0322-coin-change) |
+| [0416-partition-equal-subset-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0416-partition-equal-subset-sum) |
 | [0746-min-cost-climbing-stairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0746-min-cost-climbing-stairs) |
 | [1143-longest-common-subsequence](https://github.com/rabbu480/dsa-master-guide/tree/master/1143-longest-common-subsequence) |
 ## Memoization
@@ -371,4 +373,12 @@ To run it locally:
 |  |
 | ------- |
 | [1143-longest-common-subsequence](https://github.com/rabbu480/dsa-master-guide/tree/master/1143-longest-common-subsequence) |
+## Knapsack Problem
+|  |
+| ------- |
+| [0416-partition-equal-subset-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0416-partition-equal-subset-sum) |
+## 0-1 Knapsack
+|  |
+| ------- |
+| [0416-partition-equal-subset-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0416-partition-equal-subset-sum) |
 <!---LeetCode Topics End-->
