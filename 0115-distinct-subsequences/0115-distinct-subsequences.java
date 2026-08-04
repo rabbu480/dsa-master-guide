@@ -12,8 +12,11 @@ class Solution {
 
     int Solve(int i, int j , String source,String target,int[][] dp){
 
+        // Taget already achive so need need to slide source.
         if(j == target.length()) return 1;
         if(i == source.length()) return 0;
+        
+      
 
         if(dp[i][j] != -1) return dp[i][j];
 
