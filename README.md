@@ -129,6 +129,7 @@ To run it locally:
 | [0049-group-anagrams](https://github.com/rabbu480/dsa-master-guide/tree/master/0049-group-anagrams) |
 | [0072-edit-distance](https://github.com/rabbu480/dsa-master-guide/tree/master/0072-edit-distance) |
 | [0091-decode-ways](https://github.com/rabbu480/dsa-master-guide/tree/master/0091-decode-ways) |
+| [0115-distinct-subsequences](https://github.com/rabbu480/dsa-master-guide/tree/master/0115-distinct-subsequences) |
 | [0125-valid-palindrome](https://github.com/rabbu480/dsa-master-guide/tree/master/0125-valid-palindrome) |
 | [0208-implement-trie-prefix-tree](https://github.com/rabbu480/dsa-master-guide/tree/master/0208-implement-trie-prefix-tree) |
 | [0211-design-add-and-search-words-data-structure](https://github.com/rabbu480/dsa-master-guide/tree/master/0211-design-add-and-search-words-data-structure) |
@@ -333,6 +334,7 @@ To run it locally:
 | [0070-climbing-stairs](https://github.com/rabbu480/dsa-master-guide/tree/master/0070-climbing-stairs) |
 | [0072-edit-distance](https://github.com/rabbu480/dsa-master-guide/tree/master/0072-edit-distance) |
 | [0091-decode-ways](https://github.com/rabbu480/dsa-master-guide/tree/master/0091-decode-ways) |
+| [0115-distinct-subsequences](https://github.com/rabbu480/dsa-master-guide/tree/master/0115-distinct-subsequences) |
 | [0198-house-robber](https://github.com/rabbu480/dsa-master-guide/tree/master/0198-house-robber) |
 | [0213-house-robber-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0213-house-robber-ii) |
 | [0300-longest-increasing-subsequence](https://github.com/rabbu480/dsa-master-guide/tree/master/0300-longest-increasing-subsequence) |
