@@ -1,74 +1,61 @@
 class Solution {
     public void solve(char[][] board) {
-
-        int rows = board.length;
-        int cols = board[0].length;
-        // get the protected corner in board. call dfs mark the coners
-        for(int r =0 ; r< rows;r++) {
-            // row on column first and last i.e board[0].length-1
-            // already dfs i schecking this 
-            // if(board[r][0] == 'O'){
-                dfs(board,r,0);
-            // }
-            // if(board[r][c] == 'O'){
-                dfs(board,r,cols-1);
-            // }
-        }
-        for(int c =0 ;c< cols;c++) {
-            // column on first and last row  board[0].length-1
-            // if(board[0][c] == 'O'){
-                dfs(board,0,c);
-            // }
-            // if(board[rows][c] == 'O'){
-                dfs(board,rows-1,c) ;
-            // }
-        }
-        // make everything else except protected once in board.
-        // System.out.println("board >>>" + Arrays.toString(board[0] ) );
-        // System.out.println("board >>>" + Arrays.toString(board[board[0].length-1] ) );
-        for(int r =0 ;r< board.length;r++) {
-            for(int c =0 ; c< board[0].length;c++) {
-
-                if(board[r][c] == 'O'){
-                    board[r][c] = 'X' ;
-                }
-                if(board[r][c] == 'T'){
-                    board[r][c] = 'O' ;
-                }  
-
-            }
-        }
-        // ** imp we can print arrays in deep using this 
-        System.out.println(Arrays.deepToString(board));
-        // System.out.println("board >>>" + Arrays.toString(board ) );
-        // for(int r =0 ;r< board.length;r++) {
-        //     for(int c =0 ; c< board[0].length;c++) {
-
-        //         // if(board[r][c] == 'O'){
-        //         //     board[r][c] = 'X' ;
-        //         // }
-        //         if(board[r][c] == 'T'){
-        //             board[r][c] = 'O' ;
-        //         }  
-
+        // iterate all the edges anything in edge make it safe
+        // all remaining Mark 'x'
+        // i=0 || m    and j 0..n-1
+        // i= 0,n j = 0 & m 
+        // for(int i=0;i<n; i++){
+        //     for(int j =0; j<n ; j++){
+        //         dfs(i,j,board);
         //     }
         // }
 
-        // return board;
+        int m = board.length; // rows i m
+        int n = board[0].length; //cols j n
+
+        for(int j =0; j<n ; j++){
+            if(board[0][j] == 'O'){
+                dfs(0,j,board);
+            }
+        }
+        for(int j =0; j<n ; j++){
+            if(board[m-1][j] == 'O') dfs(m-1,j,board); 
+        }
+        for(int i =0; i<m ; i++){
+            if(board[i][0] == 'O') dfs(i,0,board);
+        }
+        for(int i =0; i<m ; i++){
+            if(board[i][n-1] == 'O') dfs(i,n-1,board);
+        }
+
+        for(int i=0;i<m; i++){
+            for(int j =0; j<n ; j++){
+                if(board[i][j] == 'O') board[i][j] = 'X';
+            }
+        }
+        for(int i=0;i<m; i++){
+            for(int j =0; j<n ; j++){
+               if(board[i][j] == 'S') board[i][j] = 'O';
+            }
+        }
+
+        
     }
 
-    public void dfs(char[][] board,int r, int c){
-        if(r<0 || c < 0|| r>=board.length || c>= board[0].length ){
-            return;
+    void dfs(int i,int j,char [][] board){
+
+        int m = board.length;
+        int n = board[0].length;
+
+        if(i<0 || j<0 || i>=m ||  j >= n || board[i][j] != 'O') return ; 
+
+        int[][] directions ={{0,1},{0,-1},{1,0},{-1,0}};
+
+        if(board[i][j] == 'O' ) board[i][j] = 'S';
+
+        for(int[] d: directions ) {
+            dfs(i+d[0],j+d[1],board);
         }
-        // mark as protected 
-        if(board[r][c] == 'O'){
-            board[r][c] = 'T';
-            dfs(board,r,c+1); 
-            dfs(board,r,c-1);
-            dfs(board,r-1,c);
-            dfs(board,r+1,c);
-            
-        }
+    
     }
 }
