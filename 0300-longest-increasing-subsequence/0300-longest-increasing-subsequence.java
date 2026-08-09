@@ -6,7 +6,9 @@ class Solution {
             Arrays.fill(row,-1);
         }
         // return Solve(0,-1,nums);
-        return Solve(0,-1,dp,nums);
+        int result =Solve(0,-1,dp,nums);
+        // System.out.println("Result >>> "+Arrays.deepToString(dp));
+        return result;
     }
     // State i,prev chocie: take the current skip the current   
     // R take Solve(i+1,i)  skip : Solve(i+1,prev) 
