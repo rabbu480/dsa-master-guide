@@ -1,4 +1,7 @@
 class Solution { 
+
+    public static final int[][] DIR = { {0,1},{0,-1},{1,0},{-1,0}};
+
     public int orangesRotting(int[][] grid) {
         // Step 1: Add ALL rotten oranges to queue
         //         Count fresh oranges
@@ -29,19 +32,15 @@ class Solution {
 
         // boolean[][] visited = new boolean[grid.length][grid[0].length];
         int timer=0;
+
         while(!queue.isEmpty()){
             boolean spread = false;
-            int [][] directions = { {0,1},{0,-1},{1,0},{-1,0}};
             int size = queue.size();
             for(int i =0; i <size ; i++){
                 int[] current= queue.poll();
-                for(int[] direction: directions  ){
-                    int cr= current[0];
-                    int cc= current[1];
-                    int dr=direction[0] ;
-                    int dc=direction[1] ;
-                    int r=cr+dr;
-                    int c=cc+dc;
+                for(int[] direction: DIR  ){
+                    int r=current[0]+direction[0];
+                    int c=current[1]+direction[1];
                     if(c < 0 || r < 0 || c >=  grid[0].length || r>=  grid.length){
                         continue;
                     }
@@ -71,7 +70,5 @@ class Solution {
         }
 
     }
-
-
 
 }
