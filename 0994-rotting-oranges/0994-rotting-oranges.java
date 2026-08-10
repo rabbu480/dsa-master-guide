@@ -41,7 +41,7 @@ class Solution {
                 for(int[] direction: DIR  ){
                     int r=current[0]+direction[0];
                     int c=current[1]+direction[1];
-                    if(c < 0 || r < 0 || c >=  grid[0].length || r>=  grid.length){
+                    if(c < 0 || r < 0 || c >  grid[0].length-1 || r> grid.length-1){
                         continue;
                     }
                     // if(visited[r][c]) continue;
