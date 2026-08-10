@@ -20,7 +20,7 @@ class Solution {
         while(left<=right){
             mid = left+(right-left)/2;
             long hours= hours(piles,mid);
-            // 1,2,  3, 4,5,6,7,8,9,10,11
+            // 1,2,3,4,5,6,7,8,9,10,11
             // 23,15,12,8,4,4,4,4,4,4
             //30,11,23,4,20  ,, 1,30 h=6
             // 1,5,10,15,
@@ -40,8 +40,8 @@ class Solution {
     long hours(int[] piles, int speed){
         long totalHours=0;
         for(int pile :piles){
-            // totalHours= totalHours + (int)Math.ceil((double)pile/speed);
-            totalHours += (pile + speed - 1) / speed;
+            totalHours= totalHours + (int)Math.ceil((double)pile/speed);
+            // totalHours += (pile + speed - 1) / speed;
         }
         return totalHours;
     }
