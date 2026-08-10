@@ -26,13 +26,26 @@ class Solution {
             return;
         }
 
-            visitedCity[cityIndex]=true;
-            for(int city=0; city< isConnected.length; city++ ){
-                if(city != cityIndex && isConnected[cityIndex][city] != 0 ){
-                    dfs(isConnected,city);
-                }
+        visitedCity[cityIndex]=true;
+        for(int city=0; city< isConnected.length; city++ ){
+            if(city != cityIndex && isConnected[cityIndex][city] != 0 ){
+                dfs(isConnected,city);
             }
+        }
 
+
+        // if (visited[currentCity]) {
+        //             return;
+        //         }
+
+        // visited[currentCity] = true;
+
+        // for (int neighbor = 0; neighbor < isConnected.length; neighbor++) {
+
+        //     if (isConnected[currentCity][neighbor] == 1) {
+        //         dfs(isConnected, neighbor);
+        //     }
+        // }
 
 
     } 
