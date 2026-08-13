@@ -1,0 +1,1713 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 12: Graphs Masterclass (Visual FAANG Edition)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#ffffff',
+            primaryTextColor: '#0f172a',
+            primaryBorderColor: '#2563eb',
+            lineColor: '#64748b',
+            fontFamily: 'Inter'
+        }
+    });
+</script>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+    }
+
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 11.8px;
+        line-height: 1.4;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 8px 16px;
+        display: flex;
+        
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand { font-weight: 900; font-size: 1rem; color: #38bdf8; }
+    .top-nav .nav-controls { display: flex; gap: 4px; flex-wrap: wrap; }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+
+    /* Sticky Sidebar Layout */
+    .app-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+
+    .toc-title { font-weight: 900; font-size: 0.85rem; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+
+    .main-content { min-width: 0; }
+
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 20px 24px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+        
+        display: flex;
+        flex-direction: column;
+        
+    }
+    [data-theme="dark"] .page { background: #1e293b; color: #f8fafc; }
+
+    /* Header Top */
+    .header-top {
+        display: flex;
+        
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 6px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top { background: #0f172a; border-color: #38bdf8; border-left-color: #38bdf8; }
+    .header-title-group { display: flex; align-items: center; gap: 8px; }
+    .header-top h1 { margin: 0; font-size: 1.15rem; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+    .header-top .page-num { background: #1e3a8a; color: white; padding: 2px 8px; border-radius: 14px; font-weight: 800; font-size: 0.72rem; }
+
+    /* Goal Badge Box */
+    .goal-badge {
+        border: 2px dashed #3b82f6;
+        background: #eff6ff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: #1e40af;
+        margin-bottom: 6px;
+    }
+
+    .cross-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #e0e7ff;
+        color: #3730a3;
+        border: 1px solid #c7d2fe;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-decoration: none;
+        margin-bottom: 4px;
+    }
+
+    /* Section Box */
+    .section-box {
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        background: white;
+        border: 2px solid #3b82f6;
+        width: 100%;
+    }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+    .section-header { padding: 4px 8px; font-weight: 800; font-size: 0.8rem; color: white; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+    .section-header .num { background: white; color: #0f172a; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 900; }
+    .section-content { padding: 6px 8px; font-size: 0.76rem; }
+
+    /* Color Themes */
+    .box-blue { border-color: #2563eb !important; } .box-blue .section-header { background: #2563eb !important; }
+    .box-green { border-color: #22c55e !important; } .box-green .section-header { background: #22c55e !important; }
+    .box-purple { border-color: #8b5cf6 !important; } .box-purple .section-header { background: #8b5cf6 !important; }
+    .box-red { border-color: #ef4444 !important; } .box-red .section-header { background: #ef4444 !important; }
+    .box-orange { border-color: #f97316 !important; } .box-orange .section-header { background: #f97316 !important; }
+    .box-teal { border-color: #0d9488 !important; } .box-teal .section-header { background: #0d9488 !important; }
+    .box-indigo { border-color: #6366f1 !important; } .box-indigo .section-header { background: #6366f1 !important; }
+    .box-amber { border-color: #d97706 !important; } .box-amber .section-header { background: #d97706 !important; }
+
+    /* Problem Split Grid */
+    .problem-split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+    .problem-info { display: flex; flex-direction: column; gap: 3px; }
+    .problem-code { display: flex; flex-direction: column; }
+
+    .meta-card { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 3px 6px; border-radius: 4px; display: flex;  align-items: center; font-weight: 700; font-size: 0.7rem; }
+    [data-theme="dark"] .meta-card { background: #0f172a; border-color: #334155; }
+    .badge-easy { background: #10b981; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-medium { background: #f59e0b; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-hard { background: #ef4444; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .company-tag { background: #1e3a8a; color: white; padding: 1px 4px; border-radius: 3px; font-size: 0.65rem; }
+
+    .flowchart-box { background: #eff6ff; border: 1px solid #93c5fd; border-left: 3px solid #2563eb; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: 700; color: #1e40af; }
+    .whynot-box { background: #fff7ed; border: 1px solid #fdba74; border-left: 3px solid #f97316; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; color: #9a3412; }
+
+    /* Graph State Box */
+    .graph-viz-box {
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        padding: 4px 6px;
+        margin: 3px 0;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.68rem;
+        line-height: 1.35;
+    }
+    .graph-state-title { font-weight: 800; color: #1e3a8a; font-family: 'Inter', sans-serif; }
+    [data-theme="dark"] .graph-state-title { color: #38bdf8; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    pre { background: #f8fafc; color: #0f172a; padding: 6px 8px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.71rem; line-height: 1.32; margin: 0; white-space: pre-wrap !important; word-break: break-word; border: 1px solid #cbd5e1; }
+    [data-theme="dark"] pre { background: #0f172a; color: #f8fafc; border-color: #334155; }
+    code { font-family: 'Fira Code', monospace; background: #f1f5f9; color: #0f172a; padding: 1px 3px; border-radius: 3px; font-size: 0.74rem; border: 1px solid #cbd5e1; }
+
+    .aha-box { background: #fefce8; border: 1px solid #eab308; border-left: 4px solid #ca8a04; color: #713f12; padding: 5px 8px; border-radius: 4px; font-size: 0.76rem; font-weight: 600; margin: 4px 0; }
+    .rule-box { padding: 4px 6px; border-radius: 4px; font-weight: 600; margin: 4px 0; font-size: 0.74rem; }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    .rule-purple { background: #faf5ff; border: 1px solid #a855f7; border-left: 4px solid #a855f7; color: #6b21a8; }
+    .rule-red { background: #fff1f2; border: 1px solid #ef4444; border-left: 4px solid #ef4444; color: #b91c1c; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+    table th, table td { border: 1px solid var(--border-color); padding: 3px 5px; text-align: left; }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+    .mermaid { display: flex; justify-content: center; margin: 2px 0; }
+    .back-to-top { position: fixed; bottom: 20px; right: 20px; background: #2563eb; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; border: none; z-index: 999; }
+
+    @page { size: A4 portrait; margin: 4mm; }
+    @media print {
+        body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .top-nav, .back-to-top, .toc-sidebar { display: none !important; }
+        .app-layout { display: block !important; }
+        .container { max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+        .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.72; }
+        pre { background-color: #f8fafc !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; }
+    }
+
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+</style>
+</head>
+<body>
+
+<!-- Sticky Top Nav -->
+<div class="top-nav">
+    <div class="brand">⚡ FAANG DSA HANDBOOK — TOPIC 12: GRAPHS</div>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn" style="background:#059669; border-color:#10b981; font-weight:800;">🏠 Index</a>
+        <button class="nav-btn" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="nav-btn" onclick="toggleSidebar()">↕️ Expand/Shrink TOC</button>
+        <a href="#page1" class="nav-btn">P1</a>
+        <a href="#page2" class="nav-btn">P2</a>
+        <a href="#page3" class="nav-btn">P3</a>
+        <a href="#page4" class="nav-btn">P4</a>
+        <a href="#page5" class="nav-btn">P5</a>
+        <a href="#page6" class="nav-btn">P6</a>
+        <a href="#page7" class="nav-btn">P7</a>
+        <a href="#page8" class="nav-btn">P8</a>
+        <a href="#page9" class="nav-btn">P9</a>
+        <a href="#page10" class="nav-btn">P10</a>
+        <a href="#page11" class="nav-btn">P11</a>
+        <a href="#page12" class="nav-btn">P12</a>
+        <a href="#page13" class="nav-btn">P13</a>
+        <a href="#page14" class="nav-btn">P14</a>
+        <a href="#page15" class="nav-btn">P15</a>
+        <a href="#page16" class="nav-btn">P16</a>
+        <a href="#page17" class="nav-btn">P17</a>
+        <button class="nav-btn" onclick="window.print()" style="background: #2563eb;">🖨️ PDF</button>
+    </div>
+</div>
+
+<div class="container">
+<div class="app-layout" id="appLayout">
+
+    <!-- Sticky Table of Contents Sidebar -->
+    <div class="toc-sidebar">
+        <div class="toc-header-bar"><span class="toc-title">📋 SECTIONS</span><button class="shrink-btn" onclick="toggleSidebar()"><span class="toc-text">➖ Shrink</span></button></div>
+        <ul class="toc-list">
+            <li><a href="#page1" class="toc-link">12.0 Foundation &amp; Terminology</a></li>
+            <li><a href="#page2" class="toc-link">12.1 Workshop: Edge Lists &amp; Growth</a></li>
+            <li><a href="#page3" class="toc-link">12.1 Workshop: Weighted &amp; Grids</a></li>
+            <li><a href="#page4" class="toc-link">12.1 Builders &amp; Input Flowchart</a></li>
+            <li><a href="#page5" class="toc-link">12.2 Traversal &amp; Multi-Source BFS</a></li>
+            <li><a href="#page6" class="toc-link">12.5 Topological Sort (Kahn)</a></li>
+            <li><a href="#page7" class="toc-link">12.6 Disjoint Set Union (DSU)</a></li>
+            <li><a href="#page8" class="toc-link">12.7 Shortest Path &amp; 12.8 MST</a></li>
+            <li><a href="#page9" class="toc-link">12.10 Decision Tree &amp; Cheat Sheet</a></li>
+            <li><a href="#page10" class="toc-link">Java Interview Templates (Part 1)</a></li>
+            <li><a href="#page11" class="toc-link">Java Interview Templates (Part 2)</a></li>
+            <li><a href="#page12" class="toc-link">12.11 Easy NeetCode Suite</a></li>
+            <li><a href="#page13" class="toc-link">12.11 Islands &amp; Max Area</a></li>
+            <li><a href="#page14" class="toc-link">12.11 Rotting Oranges &amp; Clone</a></li>
+            <li><a href="#page15" class="toc-link">12.11 Course Schedule I &amp; II</a></li>
+            <li><a href="#page16" class="toc-link">12.11 Redundant &amp; Network Delay</a></li>
+            <li><a href="#page17" class="toc-link">12.11 Alien Dict &amp; Revision</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Pages -->
+    <div class="main-content">
+
+    <!-- ========================================================= -->
+    <!-- PAGE 1: 12.0 GRAPH FOUNDATION & CORE TERMINOLOGY -->
+    <!-- ========================================================= -->
+    <div class="page" id="page1">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🌐</span>
+                    <h1>TOPIC 12.0: GRAPH FOUNDATION &amp; CORE TERMINOLOGY</h1>
+                </div>
+                <span class="page-num">PAGE 1 OF 17</span>
+            </div>
+
+            <!-- Cross-Link Badges -->
+            <a href="Topic11_Trie.html" class="cross-link">🔗 See Topic 11 → Trie Masterclass</a>
+
+            <!-- Goal Badge -->
+            <div class="goal-badge">
+                🎯 <strong>GOAL:</strong> Master Graph representations, Graph Construction Workshop, DFS/BFS traversals, Multi-Source BFS, Topological Sort (Kahn's), Disjoint Set Union (DSU), Dijkstra's Shortest Path, and Kruskal's MST!
+            </div>
+
+            <!-- AHA Box #1 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #1: GRAPHS VS TREES &amp; THE VISITED TRACKER</strong><br/>
+                A **Tree** is simply an undirected acyclic graph with $V - 1$ edges and a single root. A **Graph** can contain arbitrary cycles, multiple disconnected components, and directional edges!
+                <br/><strong>THE GOLDEN GRAPH LAW:</strong> Every graph traversal (DFS/BFS) MUST maintain a `visited[]` array or `visited[][]` matrix to prevent infinite loops caused by cycles!
+            </div>
+
+            <div class="grid-2">
+                <!-- Terminology -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> CORE GRAPH TERMINOLOGY</div>
+                    <div class="section-content">
+                        <div>• <strong>Vertices (V) &amp; Edges (E):</strong> Nodes and links connecting them.<br/>
+                        • <strong>Directed (Digraph) vs Undirected:</strong> One-way arrows ($u \to v$) vs two-way links ($u \leftrightarrow v$).<br/>
+                        • <strong>Weighted vs Unweighted:</strong> Edges carrying cost/distance vs uniform unit cost.<br/>
+                        • <strong>DAG (Directed Acyclic Graph):</strong> Directed graph with zero cycles (Required for Topological Sort!).</div>
+                    </div>
+                </div>
+
+                <!-- Tree vs Graph Comparison -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> TREE VS GRAPH PARADIGM COMPARISON</div>
+                    <div class="section-content">
+                        <table>
+                            <thead>
+                                <tr><th>Feature</th><th>Tree</th><th>Graph</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Root Node</td><td>Single Root (Top-Down)</td><td>No designated root</td></tr>
+                                <tr><td>Cycles Allowed</td><td>❌ Never (Acyclic)</td><td>✅ Yes (Cyclic or DAG)</td></tr>
+                                <tr><td>Visited Tracking</td><td>Not needed (Parent only)</td><td>✅ <strong>MANDATORY (`visited[]`)</strong></td></tr>
+                                <tr><td>Edges Count</td><td>Exactly $V - 1$</td><td>Arbitrary ($0$ to $V^2$)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graph Types Diagram -->
+            <div class="section-box box-green">
+                <div class="section-header">🎨 VISUALIZING DIRECTED DAG VS UNDIRECTED CYCLIC GRAPH</div>
+                <div class="section-content">
+                    <div class="graph-viz-box">
+<span class="graph-state-title">1. DIRECTED ACYCLIC GRAPH (DAG):</span>
+   [0] ────► [1] ────► [2]
+    │                   ▲
+    └───────────────────┘
+
+<span class="graph-state-title">2. UNDIRECTED CYCLIC GRAPH:</span>
+   [0] ◄──────► [1]
+    ▲            │
+    │            ▼
+    └─────────── [2]  (Cycle: 0 ↔ 1 ➔ 2 ➔ 0!)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Always identify if the graph is Directed vs Undirected, Weighted vs Unweighted, or a Grid before picking an algorithm!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 2: GRAPH CONSTRUCTION WORKSHOP (EDGE LISTS & ADJ LIST GROWTH) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page2">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🛠️</span>
+                    <h1>GRAPH CONSTRUCTION WORKSHOP: EDGE LISTS &amp; ADJ LIST GROWTH</h1>
+                </div>
+                <span class="page-num">PAGE 2 OF 17</span>
+            </div>
+
+            <!-- AHA Box #2 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #2: GRAPH CONSTRUCTION IS STEP ZERO</strong><br/>
+                Interviews do not give you a pre-built Graph object. They hand you an <strong>Edge List `int[][] edges`</strong>. Master constructing an <strong>Adjacency List `List<Integer>[]`</strong> within 5-10 seconds before writing ANY traversal logic!
+            </div>
+
+            <!-- Step-by-Step Adjacency List Growth Animation -->
+            <div class="section-box box-purple">
+                <div class="section-header">🎨 STEP-BY-STEP ADJACENCY LIST GROWTH ANIMATION FOR UNDIRECTED EDGES [(0,1), (0,2), (2,3)]</div>
+                <div class="section-content">
+                    <div class="graph-viz-box">
+<span class="graph-state-title">INITIALIZATION:</span>
+   adj[0] = [],  adj[1] = [],  adj[2] = [],  adj[3] = []
+
+<span class="graph-state-title">STEP 1: Process Edge (0, 1)</span>
+   Add 1 to adj[0], Add 0 to adj[1]
+   adj[0] = [1]
+   adj[1] = [0]
+
+<span class="graph-state-title">STEP 2: Process Edge (0, 2)</span>
+   Add 2 to adj[0], Add 0 to adj[2]
+   adj[0] = [1, 2]
+   adj[1] = [0]
+   adj[2] = [0]
+
+<span class="graph-state-title">STEP 3: Process Edge (2, 3)</span>
+   Add 3 to adj[2], Add 2 to adj[3]
+   adj[0] = [1, 2]
+   adj[1] = [0]
+   adj[2] = [0, 3]
+   adj[3] = [2]
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <!-- Undirected Construction Code -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> UNDIRECTED EDGE LIST ➔ ADJACENCY LIST</div>
+                    <div class="section-content">
+<pre>
+List&lt;Integer&gt;[] adj = new ArrayList[n];
+for (int i = 0; i &lt; n; i++) adj[i] = new ArrayList&lt;&gt;();
+for (int[] edge : edges) {
+    int u = edge[0], v = edge[1];
+    adj[u].add(v); // Forward link u -> v
+    adj[v].add(u); // Reverse link v -> u (Undirected!)
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Directed Construction Code -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">2</span> DIRECTED EDGE LIST ➔ ADJACENCY LIST</div>
+                    <div class="section-content">
+<pre>
+List&lt;Integer&gt;[] adj = new ArrayList[n];
+for (int i = 0; i &lt; n; i++) adj[i] = new ArrayList&lt;&gt;();
+for (int[] edge : edges) {
+    int u = edge[0], v = edge[1];
+    adj[u].add(v); // ONE-WAY link u -> v only!
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY DIFFERENCE:</strong> Undirected graphs require TWO list insertions (`adj[u].add(v)` AND `adj[v].add(u)`), while Directed graphs require ONLY ONE (`adj[u].add(v)`)!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 3: GRAPH WORKSHOP — WEIGHTED GRAPHS & GRID CONVERSIONS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page3">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📐</span>
+                    <h1>GRAPH WORKSHOP: WEIGHTED GRAPHS &amp; GRID CONVERSIONS</h1>
+                </div>
+                <span class="page-num">PAGE 3 OF 17</span>
+            </div>
+
+            <!-- AHA Box #3 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #3: WEIGHTED REPRESENTATIONS &amp; GRID NEIGHBORS</strong><br/>
+                For Weighted Graphs `[u, v, weight]`, represent neighbors as `int[] {neighborNode, weight}` inside `List<int[]>[]`.
+                <br/>For Grids `grid[r][c]`, generate neighbors dynamically using Direction Arrays `DIRS_4` (4-way) or `DIRS_8` (8-way including diagonals)!
+            </div>
+
+            <div class="grid-2">
+                <!-- Weighted Graph Code -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> WEIGHTED GRAPH (`List<int[]>[]`)</div>
+                    <div class="section-content">
+<pre>
+List&lt;int[]&gt;[] adj = new ArrayList[n];
+for (int i = 0; i &lt; n; i++) adj[i] = new ArrayList&lt;&gt;();
+for (int[] edge : edges) { // [u, v, weight]
+    int u = edge[0], v = edge[1], w = edge[2];
+    adj[u].add(new int[]{v, w});
+    adj[v].add(new int[]{u, w}); // Undirected
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Grid 4-Dir vs 8-Dir Offsets -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> GRID 4-DIR VS 8-DIR OFFSETS</div>
+                    <div class="section-content">
+<pre>
+// 4-Directional Offsets (Up, Down, Left, Right)
+int[][] DIRS_4 = {{0,1},{1,0},{0,-1},{-1,0}};
+
+// 8-Directional Offsets (Includes Diagonals!)
+int[][] DIRS_8 = {
+    {-1,-1},{-1,0},{-1,1},
+    { 0,-1},       { 0, 1},
+    { 1,-1},{ 1, 0},{ 1, 1}
+};</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coordinate Mapping Box -->
+            <div class="section-box box-amber">
+                <div class="section-header">🌐 COORDINATE MAPPING / FLATTENING 2D GRID ➔ 1D NODE ID</div>
+                <div class="section-content">
+                    <div class="graph-viz-box">
+<span class="graph-state-title">FLATTENING 2D (r, c) TO 1D UNIQUE NODE ID:</span>
+   id = (row * TOTAL_COLUMNS) + col;
+
+<span class="graph-state-title">RECONSTRUCTING 2D (r, c) FROM 1D NODE ID:</span>
+   row = id / TOTAL_COLUMNS;
+   col = id % TOTAL_COLUMNS;
+
+Example (Grid 3x4, cell (1, 2)): id = 1 * 4 + 2 = 6!   row = 6 / 4 = 1, col = 6 % 4 = 2!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Coordinate flattening maps 2D grid cells directly into Disjoint Set Union (DSU) parent arrays!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 4: GRAPH BUILDERS & INPUT RECOGNITION FLOWCHART -->
+    <!-- ========================================================= -->
+    <div class="page" id="page4">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📊</span>
+                    <h1>INPUT RECOGNITION FLOWCHART &amp; BUILDER TEMPLATES</h1>
+                </div>
+                <span class="page-num">PAGE 4 OF 17</span>
+            </div>
+
+            <!-- Input Recognition Flowchart -->
+            <div class="section-box box-purple">
+                <div class="section-header">🌳 INPUT PATTERN TO GRAPH TEMPLATE RECOGNITION FLOWCHART</div>
+                <div class="section-content">
+                    <div class="mermaid">
+                        graph TD
+                            A[What is the Interview Input Structure?]
+                            A --> B[edges[][] (Undirected / Unweighted)]
+                            A --> C[prerequisites[][] (Directed DAG)]
+                            A --> D[times[][] or weights[][] (Weighted)]
+                            A --> E[grid[][] (2D Matrix)]
+                            B --> B1[Template: Undirected Adj List]
+                            C --> C1[Template: Directed Adj List + InDegree]
+                            D --> D1[Template: Weighted Adj List List<int[]>]
+                            E --> E1[Template: Grid DIRS_4 / DIRS_8 Bounds]
+                    </div>
+                </div>
+            </div>
+
+            <!-- Printable Graph Builder Template -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📜 PRINTABLE GRAPH BUILDER TEMPLATE LIBRARY</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Input Format</th><th>Target Data Structure</th><th>Core Builder Loop</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>edges[u, v]</code></td><td>Undirected <code>List&lt;Integer&gt;[]</code></td><td><code>adj[u].add(v); adj[v].add(u);</code></td></tr>
+                            <tr><td><code>prerequisites[a, b]</code></td><td>Directed <code>List&lt;Integer&gt;[]</code></td><td><code>adj[b].add(a); indegree[a]++;</code></td></tr>
+                            <tr><td><code>times[u, v, w]</code></td><td>Weighted <code>List&lt;int[]&gt;[]</code></td><td><code>adj[u].add(new int[]{v, w});</code></td></tr>
+                            <tr><td><code>grid[r][c]</code></td><td>Implicit 2D Matrix Offsets</td><td><code>for (int[] d : DIRS_4) nr = r + d[0];</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Pick your graph construction template within 5 seconds based on input parameter names!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 5: TRAVERSAL TEMPLATES (DFS, BFS, MULTI-SOURCE BFS) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page5">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🏃‍♂️</span>
+                    <h1>TOPIC 12.2: GRAPH TRAVERSAL TEMPLATES (DFS, BFS, MULTI-SOURCE)</h1>
+                </div>
+                <span class="page-num">PAGE 5 OF 17</span>
+            </div>
+
+            <!-- AHA Box #4 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #4: MULTI-SOURCE BFS PARALLEL EXPANSION</strong><br/>
+                Standard BFS starts from 1 source node. **Multi-Source BFS** enqueues ALL initial starting sources simultaneously into the Queue BEFORE starting the loop!
+                <br/>This simulates **parallel propagation** (e.g. fire spreading, rotting oranges, water expansion) and computes shortest distance to ANY source in $O(V + E)$!
+            </div>
+
+            <div class="grid-2">
+                <!-- DFS Recursive Template -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> RECURSIVE DFS TRAVERSAL TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+private void dfs(int u, List&lt;Integer&gt;[] adj, boolean[] visited) {
+    visited[u] = true;
+    for (int v : adj[u]) {
+        if (!visited[v]) dfs(v, adj, visited);
+    }
+}</pre>
+                    </div>
+                </div>
+
+                <!-- BFS Level Template -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">2</span> BFS LEVEL TRAVERSAL TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+q.offer(start); visited[start] = true;
+while (!q.isEmpty()) {
+    int u = q.poll();
+    for (int v : adj[u]) {
+        if (!visited[v]) { visited[v] = true; q.offer(v); }
+    }
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multi-Source BFS Diagram -->
+            <div class="section-box box-purple">
+                <div class="section-header">🎨 VISUALIZING MULTI-SOURCE BFS QUEUE EXPANSION (ROTTING ORANGES)</div>
+                <div class="section-content">
+                    <div class="graph-viz-box">
+Initial Grid:  [2, 0, 1]    Enqueue ALL rotten oranges (2) at minute 0:
+               [1, 1, 0]    Queue: [(0,0), (0,2)]
+               [0, 1, 2]    
+
+Minute 1: Poll (0,0) &amp; (0,2) ➔ Rot adjacent fresh oranges ➔ Queue: [(1,0), (1,2)]
+Minute 2: Poll (1,0) &amp; (1,2) ➔ Rot adjacent (1,1) ➔ Queue: [(1,1)]
+Total Minutes = 2!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Set `visited[neighbor] = true` IMMEDIATELY upon pushing into Queue to prevent duplicate node enqueueing!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 6: TOPOLOGICAL SORT (KAHN'S BFS & COURSE SCHEDULE) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page6">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🎓</span>
+                    <h1>TOPIC 12.5: TOPOLOGICAL SORT (KAHN'S BFS &amp; COURSE SCHEDULE)</h1>
+                </div>
+                <span class="page-num">PAGE 6 OF 17</span>
+            </div>
+
+            <!-- AHA Box #5 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #5: KAHN'S IN-DEGREE BFS ALGORITHM</strong><br/>
+                Topological Sort orders vertices in a DAG such that for every edge $u \to v$, node $u$ appears before $v$.
+                <br/>1. Compute `indegree[i]` (number of incoming prerequisites) for all nodes.
+                <br/>2. Enqueue all nodes with `indegree == 0` (courses with zero prerequisites).
+                <br/>3. Poll node $u$, add to topological order, decrement `indegree[v]` for all neighbors. If `indegree[v] == 0`, enqueue $v$!
+                <br/>4. If processed count $< V$, a **CYCLE exists**!
+            </div>
+
+            <!-- Kahn's Algorithm Code -->
+            <div class="section-box box-blue">
+                <div class="section-header">🛠️ KAHN'S TOPOLOGICAL SORT BFS TEMPLATE</div>
+                <div class="section-content">
+<pre>
+public int[] findOrder(int numCourses, int[][] prerequisites) {
+    List&lt;Integer&gt;[] adj = new ArrayList[numCourses];
+    int[] indegree = new int[numCourses];
+    for (int i = 0; i &lt; numCourses; i++) adj[i] = new ArrayList&lt;&gt;();
+    for (int[] p : prerequisites) {
+        adj[p[1]].add(p[0]); // p[1] -> p[0]
+        indegree[p[0]]++;
+    }
+    Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    for (int i = 0; i &lt; numCourses; i++) if (indegree[i] == 0) q.offer(i);
+    int[] order = new int[numCourses];
+    int idx = 0;
+    while (!q.isEmpty()) {
+        int u = q.poll();
+        order[idx++] = u;
+        for (int v : adj[u]) {
+            if (--indegree[v] == 0) q.offer(v); // Prerequisite satisfied!
+        }
+    }
+    return idx == numCourses ? order : new int[0]; // Empty array if cycle detected!
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            ⚠️ <strong>CYCLE DETECTION:</strong> If `idx != numCourses`, it means some nodes remained stuck with `indegree > 0`, proving the graph contains a cycle!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 7: DISJOINT SET UNION (DSU / UNION-FIND) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page7">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🌲</span>
+                    <h1>TOPIC 12.6: DISJOINT SET UNION (DSU / UNION-FIND)</h1>
+                </div>
+                <span class="page-num">PAGE 7 OF 17</span>
+            </div>
+
+            <!-- AHA Box #6 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #6: DSU PATH COMPRESSION &amp; UNION BY RANK</strong><br/>
+                DSU tracks connected components in dynamic graphs with near-constant **$O(\alpha(N)) \approx O(1)$ time** per operation!
+                <br/>• **Path Compression:** Point visited nodes directly to the root during `find(i)`: `parent[i] = find(parent[i])`.
+                <br/>• **Union by Rank:** Attach smaller tree under larger tree root to keep tree height minimal!
+            </div>
+
+            <!-- DSU Implementation -->
+            <div class="section-box box-purple">
+                <div class="section-header">🛠️ STANDARD FAANG DSU CLASS IMPLEMENTATION</div>
+                <div class="section-content">
+<pre>
+class UnionFind {
+    private int[] parent;
+    private int[] rank;
+    public int count; // Number of connected components
+    
+    public UnionFind(int n) {
+        parent = new int[n]; rank = new int[n]; count = n;
+        for (int i = 0; i &lt; n; i++) parent[i] = i;
+    }
+    public int find(int i) {
+        if (parent[i] == i) return i;
+        return parent[i] = find(parent[i]); // Path Compression!
+    }
+    public boolean union(int i, int j) {
+        int rootI = find(i), rootJ = find(j);
+        if (rootI != rootJ) {
+            if (rank[rootI] &lt; rank[rootJ]) parent[rootI] = rootJ;
+            else if (rank[rootI] &gt; rank[rootJ]) parent[rootJ] = rootI;
+            else { parent[rootJ] = rootI; rank[rootI]++; }
+            count--; return true; // Successfully merged!
+        }
+        return false; // Already connected -> Cycle detected!
+    }
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> If `union(u, v)` returns `false` (meaning `find(u) == find(v)`), edge $(u, v)$ is a **Redundant Connection** creating a cycle!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 8: SHORTEST PATH (DIJKSTRA) & MST (KRUSKAL & PRIM) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page8">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">⚡</span>
+                    <h1>TOPIC 12.7 &amp; 12.8: DIJKSTRA'S SHORTEST PATH &amp; KRUSKAL'S MST</h1>
+                </div>
+                <span class="page-num">PAGE 8 OF 17</span>
+            </div>
+
+            <div class="grid-2">
+                <!-- Dijkstra -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> DIJKSTRA'S SHORTEST PATH ($O((V+E) \log V)$)</div>
+                    <div class="section-content">
+<pre>
+public int[] dijkstra(int n, List&lt;int[]&gt;[] adj, int src) {
+    int[] dist = new int[n];
+    Arrays.fill(dist, Integer.MAX_VALUE);
+    dist[src] = 0;
+    PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;((a, b) -&gt; Integer.compare(a[1], b[1]));
+    pq.offer(new int[]{src, 0});
+    while (!pq.isEmpty()) {
+        int[] curr = pq.poll();
+        int u = curr[0], d = curr[1];
+        if (d &gt; dist[u]) continue;
+        for (int[] edge : adj[u]) {
+            int v = edge[0], w = edge[1];
+            if (dist[u] + w &lt; dist[v]) {
+                dist[v] = dist[u] + w;
+                pq.offer(new int[]{v, dist[v]});
+            }
+        }
+    }
+    return dist;
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Kruskal's MST -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">2</span> KRUSKAL'S MST ($O(E \log E)$)</div>
+                    <div class="section-content">
+<pre>
+public int minCostConnectPoints(int[][] edges, int n) {
+    Arrays.sort(edges, (a, b) -&gt; Integer.compare(a[2], b[2]));
+    UnionFind dsu = new UnionFind(n);
+    int mstCost = 0, edgesAdded = 0;
+    for (int[] e : edges) {
+        if (dsu.union(e[0], e[1])) {
+            mstCost += e[2];
+            if (++edgesAdded == n - 1) break;
+        }
+    }
+    return mstCost;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>ALGORITHM SELECTION:</strong> Unweighted Shortest Path ➔ **BFS**. Non-Negative Weighted Shortest Path ➔ **Dijkstra**. Minimum Spanning Tree ➔ **Kruskal / Prim**.
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 9: DECISION TREE & PRINTABLE GRAPH CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page9">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📜</span>
+                    <h1>TOPIC 12.10 &amp; 1-PAGE PRINTABLE GRAPH CHEAT SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 9 OF 17</span>
+            </div>
+
+            <!-- Mermaid Decision Tree -->
+            <div class="section-box box-purple">
+                <div class="section-header">🌳 GRAPH INTERVIEW DECISION TREE (MERMAID)</div>
+                <div class="section-content">
+                    <div class="mermaid">
+                        graph TD
+                            A[What is the Graph Problem Type?]
+                            A --> B[Grid Island / Flood Fill / Rotting Oranges?]
+                            A --> C[Course Prerequisites / Topological Order?]
+                            A --> D[Weighted Shortest Path?]
+                            A --> E[Minimum Cost to Connect All Nodes?]
+                            A --> F[Dynamic Connectivity / Cycle Check?]
+                            B --> B1[Grid DFS / Multi-Source BFS]
+                            C --> C1[Kahn's BFS In-Degree Topological Sort]
+                            D --> D1[Dijkstra PriorityQueue]
+                            E --> E1[Kruskal's MST + DSU]
+                            F --> F1[Disjoint Set Union DSU]
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1-Page Printable Cheat Sheet -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📜 PRINTABLE GRAPH ALGORITHMS CHEAT SHEET</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Algorithm</th><th>Target Problem</th><th>Data Structure</th><th>Time Complexity</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Grid DFS / BFS</td><td>Number of Islands (LC 200)</td><td><code>visited[][]</code> + Matrix Offsets</td><td>$O(M \cdot N)$</td></tr>
+                            <tr><td>Multi-Source BFS</td><td>Rotting Oranges (LC 994)</td><td>Queue (Enqueue all sources)</td><td>$O(M \cdot N)$</td></tr>
+                            <tr><td>Kahn's TopoSort</td><td>Course Schedule (LC 207/210)</td><td><code>indegree[]</code> + Queue</td><td>$O(V + E)$</td></tr>
+                            <tr><td>Disjoint Set Union</td><td>Redundant Connection (LC 684)</td><td><code>parent[]</code> + <code>rank[]</code></td><td>$O(E \cdot \alpha(V))$</td></tr>
+                            <tr><td>Dijkstra Shortest Path</td><td>Network Delay Time (LC 743)</td><td>Min PriorityQueue <code>[node, dist]</code></td><td>$O((V + E) \log V)$</td></tr>
+                            <tr><td>Kruskal's MST</td><td>Min Cost Connect (LC 1584)</td><td>Edge Array + DSU</td><td>$O(E \log E)$</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Print this page and review it 10 minutes before your technical interview!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 10: DEDICATED JAVA INTERVIEW TEMPLATE LIBRARY (PART 1) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page10">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💻</span>
+                    <h1>JAVA INTERVIEW TEMPLATE LIBRARY (BUILDERS &amp; TRAVERSALS)</h1>
+                </div>
+                <span class="page-num">PAGE 10 OF 17</span>
+            </div>
+
+            <div class="grid-2">
+                <!-- Undirected Graph Template -->
+                <div class="section-box box-blue">
+                    <div class="section-header">1. UNDIRECTED GRAPH BUILDER</div>
+                    <div class="section-content">
+<pre>
+List&lt;Integer&gt;[] buildGraph(int n, int[][] edges) {
+    List&lt;Integer&gt;[] adj = new ArrayList[n];
+    for (int i = 0; i &lt; n; i++) adj[i] = new ArrayList&lt;&gt;();
+    for (int[] e : edges) {
+        adj[e[0]].add(e[1]); adj[e[1]].add(e[0]);
+    }
+    return adj;
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Directed Graph Template -->
+                <div class="section-box box-purple">
+                    <div class="section-header">2. DIRECTED GRAPH BUILDER</div>
+                    <div class="section-content">
+<pre>
+List&lt;Integer&gt;[] buildDirected(int n, int[][] edges) {
+    List&lt;Integer&gt;[] adj = new ArrayList[n];
+    for (int i = 0; i &lt; n; i++) adj[i] = new ArrayList&lt;&gt;();
+    for (int[] e : edges) { adj[e[0]].add(e[1]); }
+    return adj;
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <!-- BFS Template -->
+                <div class="section-box box-green">
+                    <div class="section-header">3. STANDARD BFS LEVEL TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+q.offer(start); vis[start] = true;
+while (!q.isEmpty()) {
+    int sz = q.size();
+    for (int i = 0; i &lt; sz; i++) {
+        int u = q.poll();
+        for (int v : adj[u]) {
+            if (!vis[v]) { vis[v] = true; q.offer(v); }
+        }
+    }
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Multi-Source BFS Template -->
+                <div class="section-box box-orange">
+                    <div class="section-header">4. MULTI-SOURCE BFS TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+Queue&lt;int[]&gt; q = new ArrayDeque&lt;&gt;();
+// Enqueue all initial sources first!
+for (int[] src : sources) { q.offer(src); vis[src[0]][src[1]] = true; }
+while (!q.isEmpty()) {
+    int[] curr = q.poll();
+    for (int[] d : DIRS_4) {
+        int nr = curr[0] + d[0], nc = curr[1] + d[1];
+        if (valid(nr, nc) &amp;&amp; !vis[nr][nc]) { vis[nr][nc] = true; q.offer(new int[]{nr, nc}); }
+    }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>REUSABLE CODE:</strong> Copy-paste these verified templates directly into your interview whiteboard or IDE!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 11: DEDICATED JAVA INTERVIEW TEMPLATE LIBRARY (PART 2) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page11">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💻</span>
+                    <h1>JAVA INTERVIEW TEMPLATE LIBRARY (ADVANCED ALGORITHMS)</h1>
+                </div>
+                <span class="page-num">PAGE 11 OF 17</span>
+            </div>
+
+            <div class="grid-2">
+                <!-- Topological Sort Kahn -->
+                <div class="section-box box-blue">
+                    <div class="section-header">5. TOPOLOGICAL SORT (KAHN'S BFS)</div>
+                    <div class="section-content">
+<pre>
+int[] topoSort(int n, int[][] edges) {
+    List&lt;Integer&gt;[] adj = buildDirected(n, edges);
+    int[] in = new int[n];
+    for (int[] e : edges) in[e[1]]++;
+    Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    for (int i = 0; i &lt; n; i++) if (in[i] == 0) q.offer(i);
+    int[] res = new int[n]; int idx = 0;
+    while (!q.isEmpty()) {
+        int u = q.poll(); res[idx++] = u;
+        for (int v : adj[u]) if (--in[v] == 0) q.offer(v);
+    }
+    return idx == n ? res : new int[0];
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Dijkstra Shortest Path -->
+                <div class="section-box box-purple">
+                    <div class="section-header">6. DIJKSTRA SHORTEST PATH</div>
+                    <div class="section-content">
+<pre>
+int[] dijkstra(int n, List&lt;int[]&gt;[] adj, int src) {
+    int[] dist = new int[n]; Arrays.fill(dist, Integer.MAX_VALUE);
+    dist[src] = 0;
+    PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;((a,b) -&gt; a[1] - b[1]);
+    pq.offer(new int[]{src, 0});
+    while (!pq.isEmpty()) {
+        int[] curr = pq.poll(); int u = curr[0], d = curr[1];
+        if (d &gt; dist[u]) continue;
+        for (int[] e : adj[u]) {
+            if (dist[u] + e[1] &lt; dist[e[0]]) {
+                dist[e[0]] = dist[u] + e[1]; pq.offer(new int[]{e[0], dist[e[0]]});
+            }
+        }
+    }
+    return dist;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Memorize these 6 core templates and you can solve 95% of FAANG Graph problems!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 12: EASY NEETCODE SUITE (FLOOD FILL, PATH EXISTS, STAR) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page12">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🧩</span>
+                    <h1>EASY NEETCODE: FLOOD FILL &amp; PATH EXISTS IN GRAPH</h1>
+                </div>
+                <span class="page-num">PAGE 12 OF 17</span>
+            </div>
+
+            <!-- Problem 1: LC 733 -->
+            <div class="section-box box-blue">
+                <div class="section-header">1. LEETCODE 733 — FLOOD FILL</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>Grid DFS Color Replacement</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Perform flood fill on 2D image starting at `(sr, sc)` replacing matching color with `color`.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+    int origColor = image[sr][sc];
+    if (origColor != color) dfs(image, sr, sc, origColor, color);
+    return image;
+}
+private void dfs(int[][] img, int r, int c, int orig, int color) {
+    if (r &lt; 0 || r &gt;= img.length || c &lt; 0 || c &gt;= img[0].length || img[r][c] != orig) return;
+    img[r][c] = color; // Change color (acts as visited!)
+    dfs(img, r + 1, c, orig, color); dfs(img, r - 1, c, orig, color);
+    dfs(img, r, c + 1, orig, color); dfs(img, r, c - 1, orig, color);
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 2: LC 1971 -->
+            <div class="section-box box-green">
+                <div class="section-header">2. LEETCODE 1971 — FIND IF PATH EXISTS IN GRAPH</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>BFS / DSU Connectivity</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Determine if valid path exists between `source` and `destination` in undirected graph.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean validPath(int n, int[][] edges, int source, int destination) {
+    UnionFind dsu = new UnionFind(n);
+    for (int[] e : edges) dsu.union(e[0], e[1]);
+    return dsu.find(source) == dsu.find(destination);
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 733):</strong> Mutating `image[r][c] = color` directly in-place serves as the `visited` check, saving auxiliary memory!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 13: MEDIUM NEETCODE (NUMBER OF ISLANDS & MAX AREA) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page13">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🏝️</span>
+                    <h1>MEDIUM NEETCODE: NUMBER OF ISLANDS &amp; MAX AREA ISLAND</h1>
+                </div>
+                <span class="page-num">PAGE 13 OF 17</span>
+            </div>
+
+            <!-- Problem 3: LC 200 -->
+            <div class="section-box box-blue">
+                <div class="section-header">3. LEETCODE 200 — NUMBER OF ISLANDS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Grid DFS Island Sink</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Count total number of 4-directionally connected land islands (`'1'`).
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int numIslands(char[][] grid) {
+    int count = 0;
+    for (int r = 0; r &lt; grid.length; r++) {
+        for (int c = 0; c &lt; grid[0].length; c++) {
+            if (grid[r][c] == '1') {
+                count++; dfs(grid, r, c); // Sink island!
+            }
+        }
+    }
+    return count;
+}
+private void dfs(char[][] grid, int r, int c) {
+    if (r &lt; 0 || r &gt;= grid.length || c &lt; 0 || c &gt;= grid[0].length || grid[r][c] != '1') return;
+    grid[r][c] = '0'; // Sink land to '0'
+    dfs(grid, r + 1, c); dfs(grid, r - 1, c);
+    dfs(grid, r, c + 1); dfs(grid, r, c - 1);
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 4: LC 695 -->
+            <div class="section-box box-purple">
+                <div class="section-header">4. LEETCODE 695 — MAX AREA OF ISLAND</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Grid DFS Area Accumulator</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Return maximum area (number of connected 1s) of an island in grid.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int maxAreaOfIsland(int[][] grid) {
+    int maxArea = 0;
+    for (int r = 0; r &lt; grid.length; r++) {
+        for (int c = 0; c &lt; grid[0].length; c++) {
+            if (grid[r][c] == 1) maxArea = Math.max(maxArea, dfs(grid, r, c));
+        }
+    }
+    return maxArea;
+}
+private int dfs(int[][] grid, int r, int c) {
+    if (r &lt; 0 || r &gt;= grid.length || c &lt; 0 || c &gt;= grid[0].length || grid[r][c] != 1) return 0;
+    grid[r][c] = 0; // Sink land
+    return 1 + dfs(grid, r + 1, c) + dfs(grid, r - 1, c) + dfs(grid, r, c + 1) + dfs(grid, r, c - 1);
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 200):</strong> Sinking land from `'1'` to `'0'` during DFS eliminates the need for an extra `visited[][]` boolean array!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 14: MEDIUM NEETCODE (ROTTING ORANGES & CLONE GRAPH) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page14">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🍊</span>
+                    <h1>MEDIUM NEETCODE: ROTTING ORANGES &amp; CLONE GRAPH</h1>
+                </div>
+                <span class="page-num">PAGE 14 OF 17</span>
+            </div>
+
+            <!-- Problem 5: LC 994 -->
+            <div class="section-box box-orange">
+                <div class="section-header">5. LEETCODE 994 — ROTTING ORANGES</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Multi-Source BFS</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Minimum minutes to rot all fresh oranges using Multi-Source BFS.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int orangesRotting(int[][] grid) {
+    int rows = grid.length, cols = grid[0].length, fresh = 0, minutes = 0;
+    Queue&lt;int[]&gt; q = new ArrayDeque&lt;&gt;();
+    for (int r = 0; r &lt; rows; r++) {
+        for (int c = 0; c &lt; cols; c++) {
+            if (grid[r][c] == 2) q.offer(new int[]{r, c});
+            else if (grid[r][c] == 1) fresh++;
+        }
+    }
+    if (fresh == 0) return 0;
+    int[][] DIRS = {{0,1},{1,0},{0,-1},{-1,0}};
+    while (!q.isEmpty() &amp;&amp; fresh &gt; 0) {
+        int size = q.size(); minutes++;
+        for (int i = 0; i &lt; size; i++) {
+            int[] curr = q.poll();
+            for (int[] d : DIRS) {
+                int nr = curr[0] + d[0], nc = curr[1] + d[1];
+                if (nr &gt;= 0 &amp;&amp; nr &lt; rows &amp;&amp; nc &gt;= 0 &amp;&amp; nc &lt; cols &amp;&amp; grid[nr][nc] == 1) {
+                    grid[nr][nc] = 2; fresh--; q.offer(new int[]{nr, nc});
+                }
+            }
+        }
+    }
+    return fresh == 0 ? minutes : -1;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 6: LC 133 -->
+            <div class="section-box box-teal">
+                <div class="section-header">6. LEETCODE 133 — CLONE GRAPH</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>DFS HashMap Node Mapping</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Deep copy a connected undirected graph.
+                        </div>
+                        <div class="problem-code">
+<pre>
+private Map&lt;Node, Node&gt; visited = new HashMap&lt;&gt;();
+public Node cloneGraph(Node node) {
+    if (node == null) return null;
+    if (visited.containsKey(node)) return visited.get(node);
+    Node clone = new Node(node.val);
+    visited.put(node, clone);
+    for (Node neighbor : node.neighbors) {
+        clone.neighbors.add(cloneGraph(neighbor));
+    }
+    return clone;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 133):</strong> `HashMap<Node, Node>` tracks original-to-clone node mapping to prevent infinite recursion on graph cycles!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 15: MEDIUM NEETCODE (COURSE SCHEDULE I & II) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page15">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🎓</span>
+                    <h1>MEDIUM NEETCODE: COURSE SCHEDULE I &amp; II (TOPOLOGICAL SORT)</h1>
+                </div>
+                <span class="page-num">PAGE 15 OF 17</span>
+            </div>
+
+            <!-- Problem 7: LC 207 -->
+            <div class="section-box box-blue">
+                <div class="section-header">7. LEETCODE 207 — COURSE SCHEDULE I</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Kahn's BFS In-Degree Cycle Check</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Determine if it is possible to finish all `numCourses` given prerequisites.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean canFinish(int numCourses, int[][] prerequisites) {
+    List&lt;Integer&gt;[] adj = new ArrayList[numCourses];
+    int[] indegree = new int[numCourses];
+    for (int i = 0; i &lt; numCourses; i++) adj[i] = new ArrayList&lt;&gt;();
+    for (int[] p : prerequisites) {
+        adj[p[1]].add(p[0]); indegree[p[0]]++;
+    }
+    Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    for (int i = 0; i &lt; numCourses; i++) if (indegree[i] == 0) q.offer(i);
+    int count = 0;
+    while (!q.isEmpty()) {
+        int u = q.poll(); count++;
+        for (int v : adj[u]) if (--indegree[v] == 0) q.offer(v);
+    }
+    return count == numCourses;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 8: LC 210 -->
+            <div class="section-box box-purple">
+                <div class="section-header">8. LEETCODE 210 — COURSE SCHEDULE II</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Topological Ordering Array</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Return valid ordering of courses to finish all requirements.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int[] findOrder(int numCourses, int[][] prerequisites) {
+    List&lt;Integer&gt;[] adj = new ArrayList[numCourses];
+    int[] indegree = new int[numCourses];
+    for (int i = 0; i &lt; numCourses; i++) adj[i] = new ArrayList&lt;&gt;();
+    for (int[] p : prerequisites) {
+        adj[p[1]].add(p[0]); indegree[p[0]]++;
+    }
+    Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    for (int i = 0; i &lt; numCourses; i++) if (indegree[i] == 0) q.offer(i);
+    int[] res = new int[numCourses]; int idx = 0;
+    while (!q.isEmpty()) {
+        int u = q.poll(); res[idx++] = u;
+        for (int v : adj[u]) if (--indegree[v] == 0) q.offer(v);
+    }
+    return idx == numCourses ? res : new int[0];
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🧠 <strong>MEMORY BOX:</strong> Prerequisites `[a, b]` means course `b` MUST be taken before `a`, establishing directed edge `b ➔ a`!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 16: MEDIUM NEETCODE (REDUNDANT EDGE & NETWORK DELAY) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page16">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔗</span>
+                    <h1>MEDIUM NEETCODE: REDUNDANT CONNECTION &amp; NETWORK DELAY</h1>
+                </div>
+                <span class="page-num">PAGE 16 OF 17</span>
+            </div>
+
+            <!-- Problem 9: LC 684 -->
+            <div class="section-box box-green">
+                <div class="section-header">9. LEETCODE 684 — REDUNDANT CONNECTION</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>DSU Cycle Edge Detection</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Return edge that can be removed so tree has zero cycles.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int[] findRedundantConnection(int[][] edges) {
+    int n = edges.length;
+    UnionFind dsu = new UnionFind(n + 1);
+    for (int[] edge : edges) {
+        if (!dsu.union(edge[0], edge[1])) return edge; // Cycle edge!
+    }
+    return new int[0];
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 10: LC 743 -->
+            <div class="section-box box-blue">
+                <div class="section-header">10. LEETCODE 743 — NETWORK DELAY TIME</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Dijkstra Shortest Path</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Minimum time for all $N$ nodes to receive signal from source $K$.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int networkDelayTime(int[][] times, int n, int k) {
+    List&lt;int[]&gt;[] adj = new ArrayList[n + 1];
+    for (int i = 1; i &lt;= n; i++) adj[i] = new ArrayList&lt;&gt;();
+    for (int[] t : times) adj[t[0]].add(new int[]{t[1], t[2]});
+    int[] dist = new int[n + 1]; Arrays.fill(dist, Integer.MAX_VALUE);
+    dist[k] = 0;
+    PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;((a, b) -&gt; Integer.compare(a[1], b[1]));
+    pq.offer(new int[]{k, 0});
+    while (!pq.isEmpty()) {
+        int[] curr = pq.poll(); int u = curr[0], d = curr[1];
+        if (d &gt; dist[u]) continue;
+        for (int[] edge : adj[u]) {
+            int v = edge[0], w = edge[1];
+            if (dist[u] + w &lt; dist[v]) {
+                dist[v] = dist[u] + w; pq.offer(new int[]{v, dist[v]});
+            }
+        }
+    }
+    int maxDist = 0;
+    for (int i = 1; i &lt;= n; i++) {
+        if (dist[i] == Integer.MAX_VALUE) return -1;
+        maxDist = Math.max(maxDist, dist[i]);
+    }
+    return maxDist;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 684):</strong> The FIRST edge where `dsu.union(u, v)` returns `false` is the exact edge creating the cycle!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 17: HARD NEETCODE (ALIEN DICT & WORD LADDER) & REVISION -->
+    <!-- ========================================================= -->
+    <div class="page" id="page17">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔥</span>
+                    <h1>HARD NEETCODE: ALIEN DICTIONARY &amp; MASTER REVISION</h1>
+                </div>
+                <span class="page-num">PAGE 17 OF 17</span>
+            </div>
+
+            <!-- Problem 11: LC 269 -->
+            <div class="section-box box-red">
+                <div class="section-header">11. LEETCODE 269 — ALIEN DICTIONARY</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Char Graph + TopoSort</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Determine character ordering from sorted alien dictionary words.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public String alienOrder(String[] words) {
+    Map&lt;Character, Set&lt;Character&gt;&gt; adj = new HashMap&lt;&gt;();
+    Map&lt;Character, Integer&gt; indegree = new HashMap&lt;&gt;();
+    for (String w : words) for (char c : w.toCharArray()) {
+        adj.putIfAbsent(c, new HashSet&lt;&gt;()); indegree.putIfAbsent(c, 0);
+    }
+    for (int i = 0; i &lt; words.length - 1; i++) {
+        String w1 = words[i], w2 = words[i+1];
+        if (w1.length() &gt; w2.length() &amp;&amp; w1.startsWith(w2)) return "";
+        for (int j = 0; j &lt; Math.min(w1.length(), w2.length()); j++) {
+            char c1 = w1.charAt(j), c2 = w2.charAt(j);
+            if (c1 != c2) {
+                if (!adj.get(c1).contains(c2)) {
+                    adj.get(c1).add(c2); indegree.put(c2, indegree.get(c2) + 1);
+                }
+                break;
+            }
+        }
+    }
+    Queue&lt;Character&gt; q = new ArrayDeque&lt;&gt;();
+    for (char c : indegree.keySet()) if (indegree.get(c) == 0) q.offer(c);
+    StringBuilder sb = new StringBuilder();
+    while (!q.isEmpty()) {
+        char u = q.poll(); sb.append(u);
+        for (char v : adj.get(u)) {
+            indegree.put(v, indegree.get(v) - 1);
+            if (indegree.get(v) == 0) q.offer(v);
+        }
+    }
+    return sb.length() == indegree.size() ? sb.toString() : "";
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4 Golden Laws -->
+            <div class="section-box box-green">
+                <div class="section-header">⭐ THE 4 GOLDEN LAWS OF GRAPHS</div>
+                <div class="section-content">
+                    <div style="font-size:0.78rem; line-height:1.45;">
+                        1. <strong>Always Track Visited:</strong> Graphs contain cycles! Mark <code>visited[u] = true</code> immediately upon discovery.<br/>
+                        2. <strong>Unweighted Shortest Path ➔ BFS:</strong> BFS guarantees shortest path level-by-level in unweighted graphs.<br/>
+                        3. <strong>Dependencies ➔ Topological Sort (Kahn BFS):</strong> Enqueue nodes with <code>indegree == 0</code>.<br/>
+                        4. <strong>Dynamic Connectivity &amp; Cycle Check ➔ DSU:</strong> Path compression gives $O(\alpha(N))$ union/find ops.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forward Cross Link -->
+            <a href="index.html" class="cross-link" style="background:#dcfce7; color:#15803d; border-color:#86efac; font-size:0.78rem;">👉 Next Master Topic: Topic 13 → Dynamic Programming Masterclass</a>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🎉 <strong>TOPIC 12 GRAPHS MASTERCLASS COMPLETE!</strong> Turn the page to <strong>Topic 13: Dynamic Programming Masterclass</strong>!
+        </div>
+    </div>
+
+    </div> <!-- end .main-content -->
+</div> <!-- end .app-layout -->
+</div> <!-- end .container -->
+
+<!-- Floating Back to Top Button -->
+<button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆</button>
+
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout') || document.querySelector('.app-layout');
+        const btn = document.querySelector('.shrink-btn span');
+        if (layout) {
+            layout.classList.toggle('shrunk');
+            if (btn) {
+                btn.innerText = layout.classList.contains('shrunk') ? '➕ Expand' : '➖ Shrink';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+

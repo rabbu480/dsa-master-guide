@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Topic 06: Linked List Masterclass — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11.2px; line-height: 1.38; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 16px 20px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 14px; }
+.ph h1 { font-size: 1.8rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.88rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.75rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; }
+.bh  { background: var(--pri); color: white; padding: 6px 12px;
+  font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 18px; height: 18px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 10px 12px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 6px 12px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.75rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.95rem; }
+.psub   { color: var(--sub); font-size: 0.8rem; }
+.prow-body { display: flex; }
+.pc { padding: 8px 10px; font-size: 0.78rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.72rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; }
+.prob-head { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.75rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.70rem; line-height: 1.4; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.76rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+th, td { border: 1px solid var(--bdr); padding: 5px 7px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.badge-b { background: #dbeafe; color: #1e40af; }
+.badge-g { background: #dcfce7; color: #166534; }
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.tip  { background: #f0fdf4; border-left: 4px solid var(--grn); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 8px 10px; margin-top: 6px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.82rem; margin-bottom: 3px; }
+
+.dt-wrap { font-size: 0.76rem; }
+.dt-root { background: var(--pri); color: white; padding: 5px 10px; border-radius: 5px; text-align: center; font-weight: 700; margin-bottom: 8px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 5px 7px; font-weight: 600; color: #1e40af; font-size: 0.72rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 5px 7px; color: #065f46; font-weight: 700; font-size: 0.72rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.75rem; padding: 4px 3px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 6px 10px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.85; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+
+@media print {
+  pre {
+    background: #f8fafc !important;
+    color: #0f172a !important;
+    border: 1.5px solid #cbd5e1 !important;
+    font-family: 'Fira Code', monospace !important;
+    font-size: 0.72rem !important;
+    line-height: 1.22 !important;
+    padding: 6px 8px !important;
+    white-space: pre-wrap !important;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+<!-- PAGE 1 -->
+<div class="page"><div class="ph"><div><h1>LINKED LIST</h1><div class="sub">Foundation &amp; Templates</div></div><div style="text-align:right"><div class="pn">PAGE 1 OF 6</div></div></div><div>>
+
+<div class="g3" style="margin-bottom:12px">
+  <div class="box pur">
+    <div class="bh">💡 WHY LINKED LISTS?</div>
+    <div class="bc">
+      <p style="margin-bottom:6px">Arrays require contiguous memory blocks. Linked Lists store nodes anywhere in Heap memory, linked via <strong>next pointers</strong> for <strong>O(1) insertion/deletion</strong> without shifting!</p>
+      <div class="aha">
+        <div class="aha-t">💡 THE DUMMY NODE AHA</div>
+        Always use a <strong>Dummy Head Sentinel Node</strong> (`ListNode dummy = new ListNode(0)`) to eliminate edge cases when modifying or removing the real head node!
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bh"><span class="n">1</span> CORE NODE STRUCTURE</div>
+    <div class="bc">
+<pre>public class ListNode {
+  int val;
+  ListNode next;
+  ListNode(int val) { this.val = val; }
+  ListNode(int val, ListNode next) { 
+    this.val = val; this.next = next; 
+  }
+}</pre>
+    </div>
+  </div>
+
+  <div class="box sky">
+    <div class="bh"><span class="n">2</span> VISUALIZING POINTER REVERSAL</div>
+    <div class="bc">
+      <div style="font-weight:700;color:var(--pri);margin-bottom:4px">3-Pointer Window (prev, curr, next):</div>
+<pre>prev = null,  curr = [1] -> [2] -> [3] -> null
+Step 1: next = curr.next ([2])
+Step 2: curr.next = prev (null <- [1])
+Step 3: prev = curr ([1]), curr = next ([2])
+Final Reversed List: [3] -> [2] -> [1] -> null</pre>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">📚 PREREQUISITES &amp; COMPLEXITY REASONING</div>
+    <div class="bc">
+      <table style="font-size:0.76rem">
+        <tr><th>Operation</th><th>Time Complexity</th><th>Auxiliary Space</th></tr>
+        <tr><td>Prepend / Append (with tail pointer)</td><td><strong>O(1)</strong></td><td><strong>O(1)</strong></td></tr>
+        <tr><td>Search / Index Access</td><td><strong>O(N)</strong></td><td><strong>O(1)</strong></td></tr>
+        <tr><td>In-place Reversal</td><td><strong>O(N)</strong></td><td><strong>O(1)</strong></td></tr>
+        <tr><td>Fast / Slow Cycle Detection</td><td><strong>O(N)</strong></td><td><strong>O(1)</strong></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box amb">
+    <div class="bh">⚡ CLUES THAT SCREAM LINKED LIST</div>
+    <div class="bc">
+      <p style="font-size:0.8rem">1. <em>"Modify list in-place"</em> \rightarrow 3-Pointer Reversal or Fast/Slow Pointers</p>
+      <p style="font-size:0.8rem">2. <em>"Find cycle / entry point"</em> \rightarrow Floyd's Tortoise and Hare</p>
+      <p style="font-size:0.8rem">3. <em>"Remove Nth node from end"</em> \rightarrow 2 Pointers separated by offset N</p>
+      <p style="font-size:0.8rem">4. <em>"Merge K sorted lists"</em> \rightarrow Min-Heap PriorityQueue O(N \log K)</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<div style="margin-top:4px"></div><div>>
+
+<div class="g2" style="margin-bottom:12px">
+  <div class="box">
+    <div class="bh"><span class="n">1</span> DUMMY SENTINEL PATTERN (`ListNodeUtils`)</div>
+    <div class="bc">
+<pre>public class ListNodeUtils {
+  // Always attach dummy head when building or filtering lists
+  public static ListNode createList(int[] values) {
+    ListNode dummy = new ListNode(0);
+    ListNode curr = dummy;
+    for (int val : values) {
+      curr.next = new ListNode(val);
+      curr = curr.next;
+    }
+    return dummy.next; // Real head
+  }
+}</pre>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh"><span class="n">2</span> IN-PLACE REVERSAL HELPER</div>
+    <div class="bc">
+<pre>public static ListNode reverse(ListNode head) {
+  ListNode prev = null, curr = head;
+  while (curr != null) {
+    ListNode nextTemp = curr.next;
+    curr.next = prev;
+    prev = curr;
+    curr = nextTemp;
+  }
+  return prev; // New head of reversed list!
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box sky">
+    <div class="bh"><span class="n">3</span> FIND MIDDLE NODE (Fast &amp; Slow Pointers)</div>
+    <div class="bc">
+<pre>public static ListNode findMiddle(ListNode head) {
+  ListNode slow = head, fast = head;
+  while (fast != null && fast.next != null) {
+    slow = slow.next;
+    fast = fast.next.next;
+  }
+  return slow; // Returns second middle for even length
+}</pre>
+    </div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh"><span class="n">4</span> MERGE TWO SORTED LISTS</div>
+    <div class="bc">
+<pre>public static ListNode merge(ListNode l1, ListNode l2) {
+  ListNode dummy = new ListNode(0), curr = dummy;
+  while (l1 != null && l2 != null) {
+    if (l1.val <= l2.val) { curr.next = l1; l1 = l1.next; }
+    else { curr.next = l2; l2 = l2.next; }
+    curr = curr.next;
+  }
+  curr.next = (l1 != null) ? l1 : l2;
+  return dummy.next;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<!-- PAGE 2 -->
+<div class="page"><div class="ph"><div><h1>LINKED LIST</h1><div class="sub">Core Patterns — Part 1 &amp; Part 2</div></div><div style="text-align:right"><div class="pn">PAGE 2 OF 6</div></div></div><div>>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 1</div>
+    <div class="ptitle">IN-PLACE POINTER REVERSAL (prev, curr, next)</div>
+    <div class="psub">e.g. Reverse Linked List (LC 206), Reverse Nodes in K-Group (LC 25)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.78rem">Reversing full or subsegments of a linked list in O(N) time and O(1) auxiliary space.</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 206</div>
+<pre>public ListNode reverseList(ListNode head) {
+  ListNode prev = null, curr = head;
+  while (curr != null) {
+    ListNode next = curr.next;
+    curr.next = prev;
+    prev = curr;
+    curr = next;
+  }
+  return prev;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 2</div>
+    <div class="ptitle">DUMMY SENTINEL NODE (Head Modification Guard)</div>
+    <div class="psub">e.g. Merge Two Sorted Lists (LC 21), Partition List (LC 86)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.78rem">Whenever operations might delete, swap, or prepend nodes at the head of the list.</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 21</div>
+<pre>public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+  ListNode dummy = new ListNode(0), curr = dummy;
+  while (list1 != null && list2 != null) {
+    if (list1.val <= list2.val) { curr.next = list1; list1 = list1.next; }
+    else { curr.next = list2; list2 = list2.next; }
+    curr = curr.next;
+  }
+  curr.next = (list1 != null) ? list1 : list2;
+  return dummy.next;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<div style="margin-top:4px"></div><div>>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 3</div>
+    <div class="ptitle">FLOYD'S TORTOISE &amp; HARE (Cycle Detection &amp; Entry)</div>
+    <div class="psub">e.g. Linked List Cycle I &amp; II (LC 141, 142)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Mathematical Proof</div>
+      <div style="font-size:0.78rem">
+        `fast` moves at 2x speed of `slow`. If cycle exists, distance reduces by 1 each step until collision.<br>
+        To find cycle start: reset `slow` to `head`, then move both 1 step at a time until they meet!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 141</div>
+<pre>public boolean hasCycle(ListNode head) {
+  ListNode slow = head, fast = head;
+  while (fast != null && fast.next != null) {
+    slow = slow.next;
+    fast = fast.next.next;
+    if (slow == fast) return true;
+  }
+  return false;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 4</div>
+    <div class="ptitle">FAST &amp; SLOW MIDDLE / PALINDROME SPLIT</div>
+    <div class="psub">e.g. Palindrome Linked List (LC 234), Reorder List (LC 143)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">3-Step Strategy</div>
+      <div style="font-size:0.78rem">
+        1. Find middle via fast/slow.<br>
+        2. Reverse second half.<br>
+        3. Compare / interleave two halves!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 234</div>
+<pre>public boolean isPalindrome(ListNode head) {
+  ListNode slow = head, fast = head;
+  while (fast != null && fast.next != null) {
+    slow = slow.next; fast = fast.next.next;
+  }
+  ListNode prev = null, curr = slow;
+  while (curr != null) {
+    ListNode nxt = curr.next; curr.next = prev; prev = curr; curr = nxt;
+  }
+  while (prev != null) {
+    if (head.val != prev.val) return false;
+    head = head.next; prev = prev.next;
+  }
+  return true;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<!-- PAGE 3 -->
+<div class="page"><div class="ph"><div><h1>LINKED LIST</h1><div class="sub">Core Patterns — Part 3 &amp; Part 4</div></div><div style="text-align:right"><div class="pn">PAGE 3 OF 6</div></div></div><div>>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 5</div>
+    <div class="ptitle">TWO POINTER OFFSET SEARCH (Nth Node From End)</div>
+    <div class="psub">e.g. Remove Nth Node From End (LC 19)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Offset Mechanics</div>
+      <div style="font-size:0.78rem">
+        Advance `fast` by N + 1 steps ahead of `dummy`. Then move `fast` and `slow` together until `fast == null`. `slow.next` is the N-th node from end!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 19</div>
+<pre>public ListNode removeNthFromEnd(ListNode head, int n) {
+  ListNode dummy = new ListNode(0);
+  dummy.next = head;
+  ListNode fast = dummy, slow = dummy;
+  for (int i = 0; i <= n; i++) fast = fast.next;
+  while (fast != null) {
+    fast = fast.next;
+    slow = slow.next;
+  }
+  slow.next = slow.next.next;
+  return dummy.next;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 6</div>
+    <div class="ptitle">REORDER LIST INTERLEAVING</div>
+    <div class="psub">e.g. Reorder List (LC 143) — $L_0 \rightarrow L_n \rightarrow L_1 \rightarrow L_{n-1}$</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Interleaving Strategy</div>
+      <div style="font-size:0.78rem">
+        Split list at mid, reverse second half, then interleave pointers `first` and `second` step by step!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 143</div>
+<pre>public void reorderList(ListNode head) {
+  if (head == null || head.next == null) return;
+  ListNode slow = head, fast = head;
+  while (fast.next != null && fast.next.next != null) {
+    slow = slow.next; fast = fast.next.next;
+  }
+  ListNode prev = null, curr = slow.next; slow.next = null;
+  while (curr != null) {
+    ListNode nxt = curr.next; curr.next = prev; prev = curr; curr = nxt;
+  }
+  ListNode first = head, second = prev;
+  while (second != null) {
+    ListNode t1 = first.next, t2 = second.next;
+    first.next = second; second.next = t1;
+    first = t1; second = t2;
+  }
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<div style="margin-top:4px"></div><div>>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 7</div>
+    <div class="ptitle">MERGE K SORTED LISTS (Min-Heap PriorityQueue)</div>
+    <div class="psub">e.g. Merge K Sorted Lists (LC 23)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Min-Heap Complexity</div>
+      <div style="font-size:0.78rem">
+        Heap size is at most K. Each insertion/deletion takes O(\log K). Total time $= O(N \log K) where N$ is total nodes!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 23</div>
+<pre>public ListNode mergeKLists(ListNode[] lists) {
+  if (lists == null || lists.length == 0) return null;
+  PriorityQueue&lt;ListNode&gt; pq = new PriorityQueue&lt;&gt;((a,b)->a.val-b.val);
+  for (ListNode node : lists) if (node != null) pq.offer(node);
+  ListNode dummy = new ListNode(0), curr = dummy;
+  while (!pq.isEmpty()) {
+    ListNode minNode = pq.poll();
+    curr.next = minNode;
+    curr = curr.next;
+    if (minNode.next != null) pq.offer(minNode.next);
+  }
+  return dummy.next;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 8</div>
+    <div class="ptitle">COPY LIST WITH RANDOM POINTER (HashMap / Interleaving)</div>
+    <div class="psub">e.g. Copy List with Random Pointer (LC 138)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">HashMap Mapping Strategy</div>
+      <div style="font-size:0.78rem">
+        Map `originalNode -> copyNode`. Pass 1: create copies. Pass 2: assign `next` and `random` pointers!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 138</div>
+<pre>public Node copyRandomList(Node head) {
+  if (head == null) return null;
+  Map&lt;Node, Node&gt; map = new HashMap&lt;&gt;();
+  Node curr = head;
+  while (curr != null) {
+    map.put(curr, new Node(curr.val));
+    curr = curr.next;
+  }
+  curr = head;
+  while (curr != null) {
+    map.get(curr).next = map.get(curr.next);
+    map.get(curr).random = map.get(curr.random);
+    curr = curr.next;
+  }
+  return map.get(head);
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<!-- PAGE 4 -->
+<div class="page"><div class="ph"><div><h1>LINKED LIST</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div><div style="text-align:right"><div class="pn">PAGE 4 OF 6</div></div></div><div>>
+
+<div class="g2">
+  <div class="box">
+    <div class="bh">LINKED LIST — WHICH ALGORITHM TO USE?</div>
+    <div class="bc dt-wrap">
+      <div class="dt-root">Start: What is the operation?</div>
+      <div class="dt-grid">
+        <div class="dt-row">
+          <div class="dt-q">🔄 Reverse list or subsegment</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">3-Pointer Reversal<br><span style="font-weight:400;font-size:0.7rem">`prev`, `curr`, `next`</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🛡️ Modify/Delete list head</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Dummy Sentinel<br><span style="font-weight:400;font-size:0.7rem">`ListNode dummy = new ListNode(0)`</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🌀 Detect cycle / find loop entry</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Floyd's Fast/Slow<br><span style="font-weight:400;font-size:0.7rem">`fast` moves 2x, `slow` 1x</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">📏 Find Nth node from end</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Offset 2-Pointer<br><span style="font-weight:400;font-size:0.7rem">`fast` advanced by N+1</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🔀 Merge K sorted lists</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Min-Heap PQ<br><span style="font-weight:400;font-size:0.7rem">PriorityQueue of heads</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div class="box pur">
+      <div class="bh">🎯 TRIGGER WORDS DIRECTORY</div>
+      <div class="bc">
+        <table>
+          <tr><th>Trigger Word</th><th>Variant</th><th>Action</th></tr>
+          <tr><td>"Reverse in-place"</td><td>3-Pointer</td><td>Loop `curr.next = prev`</td></tr>
+          <tr><td>"Detect cycle"</td><td>Floyd's Fast/Slow</td><td>Check `slow == fast`</td></tr>
+          <tr><td>"Nth node from end"</td><td>Offset Pointers</td><td>Advance `fast` by N+1</td></tr>
+          <tr><td>"Merge K sorted"</td><td>Min-Heap PQ</td><td>Offer heads to PriorityQueue</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="box amb">
+      <div class="bh">💼 INTERVIEW TRADE-OFFS &amp; FOLLOW-UPS</div>
+      <div class="bc">
+        <table>
+          <tr><th>Interviewer Asks</th><th>Your Answer</th></tr>
+          <tr><td>Why use Dummy Node?</td><td>Eliminates conditional special-casing when updating or deleting the head node!</td></tr>
+          <tr><td>Array vs Linked List insertion?</td><td>Array insert takes O(N) shift time; Linked List insert takes O(1) given pointer node!</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<!-- PAGE 5 -->
+<div class="page"><div class="ph"><div><h1>LINKED LIST</h1><div class="sub">FAANG Problem Ladder (All 10 Problems)</div></div><div style="text-align:right"><div class="pn">PAGE 5 OF 6</div></div></div><div>>
+
+<div class="g2" style="gap:10px">
+<div>
+  <div style="background:var(--grn);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟢 EASY — Fundamental Reversals &amp; Cycles</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 206 · Reverse Linked List</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> 3-Pointer Reversal</div>
+        <div><strong>Key Insight:</strong> Save `curr.next` before overwriting.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public ListNode reverseList(ListNode head) {
+  ListNode prev = null, curr = head;
+  while (curr != null) {
+    ListNode nxt = curr.next;
+    curr.next = prev;
+    prev = curr;
+    curr = nxt;
+  }
+  return prev;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 21 · Merge Two Sorted Lists</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Dummy Sentinel</div>
+        <div><strong>Key Insight:</strong> Append smaller node. Attach remaining.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+  ListNode dummy = new ListNode(0), curr = dummy;
+  while (l1 != null && l2 != null) {
+    if (l1.val <= l2.val) { curr.next = l1; l1 = l1.next; }
+    else { curr.next = l2; l2 = l2.next; }
+    curr = curr.next;
+  }
+  curr.next = (l1 != null) ? l1 : l2;
+  return dummy.next;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 141 · Linked List Cycle</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Floyd's Fast / Slow</div>
+        <div><strong>Key Insight:</strong> `fast` moves 2x, `slow` 1x. Collision = Cycle!</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public boolean hasCycle(ListNode head) {
+  ListNode slow = head, fast = head;
+  while (fast != null && fast.next != null) {
+    slow = slow.next; fast = fast.next.next;
+    if (slow == fast) return true;
+  }
+  return false;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — Palindromes &amp; Nth Node Removal</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 234 · Palindrome Linked List</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Mid Split + Reversal</div>
+        <div><strong>Key Insight:</strong> Find mid, reverse second half, compare!</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.60rem">public boolean isPalindrome(ListNode head) {
+  ListNode slow = head, fast = head;
+  while (fast != null && fast.next != null) {
+    slow = slow.next; fast = fast.next.next;
+  }
+  ListNode prev = null, curr = slow;
+  while (curr != null) {
+    ListNode nxt = curr.next; curr.next = prev; prev = curr; curr = nxt;
+  }
+  while (prev != null) {
+    if (head.val != prev.val) return false;
+    head = head.next; prev = prev.next;
+  }
+  return true;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 19 · Remove Nth From End</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Offset Pointers</div>
+        <div><strong>Key Insight:</strong> Advance `fast` by N+1 from `dummy`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.60rem">public ListNode removeNthFromEnd(ListNode head, int n) {
+  ListNode dummy = new ListNode(0); dummy.next = head;
+  ListNode fast = dummy, slow = dummy;
+  for (int i = 0; i <= n; i++) fast = fast.next;
+  while (fast != null) { fast = fast.next; slow = slow.next; }
+  slow.next = slow.next.next;
+  return dummy.next;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<div style="margin-top:4px"></div><div>>
+
+<div class="g2" style="gap:10px;margin-bottom:10px">
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — Reorder List &amp; Add Two Numbers</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 143 · Reorder List</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Mid + Reverse + Interleave</div>
+        <div><strong>Key Insight:</strong> Interleave first and reversed second.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public void reorderList(ListNode head) {
+  if (head == null || head.next == null) return;
+  ListNode s = head, f = head;
+  while (f.next != null && f.next.next != null) { s = s.next; f = f.next.next; }
+  ListNode prev = null, curr = s.next; s.next = null;
+  while (curr != null) { ListNode nxt = curr.next; curr.next = prev; prev = curr; curr = nxt; }
+  ListNode first = head, second = prev;
+  while (second != null) {
+    ListNode t1 = first.next, t2 = second.next;
+    first.next = second; second.next = t1; first = t1; second = t2;
+  }
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 2 · Add Two Numbers</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Dummy Sentinel + Carry</div>
+        <div><strong>Key Insight:</strong> `sum = val1 + val2 + carry`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+  ListNode dummy = new ListNode(0), curr = dummy;
+  int carry = 0;
+  while (l1 != null || l2 != null || carry != 0) {
+    int v1 = (l1 != null) ? l1.val : 0;
+    int v2 = (l2 != null) ? l2.val : 0;
+    int sum = v1 + v2 + carry; carry = sum / 10;
+    curr.next = new ListNode(sum % 10); curr = curr.next;
+    if (l1 != null) l1 = l1.next; if (l2 != null) l2 = l2.next;
+  }
+  return dummy.next;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--red);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🔴 HARD — Merge K Lists &amp; Random Clone</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fee2e2">
+      <span class="ptitle" style="color:var(--red)">LC 138 · Copy Random List</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> HashMap Clone</div>
+        <div><strong>Key Insight:</strong> Map `old -> new` in Pass 1, link in Pass 2.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public Node copyRandomList(Node head) {
+  if (head == null) return null;
+  Map&lt;Node, Node&gt; map = new HashMap&lt;&gt;();
+  Node curr = head;
+  while (curr != null) { map.put(curr, new Node(curr.val)); curr = curr.next; }
+  curr = head;
+  while (curr != null) {
+    map.get(curr).next = map.get(curr.next);
+    map.get(curr).random = map.get(curr.random);
+    curr = curr.next;
+  }
+  return map.get(head);
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fee2e2">
+      <span class="ptitle" style="color:var(--red)">LC 23 · Merge K Sorted Lists</span>
+      <span class="diff-h">HARD</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Min-Heap PriorityQueue</div>
+        <div><strong>Key Insight:</strong> Heap stores at most K heads (O(N \log K)).</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public ListNode mergeKLists(ListNode[] lists) {
+  if (lists == null || lists.length == 0) return null;
+  PriorityQueue&lt;ListNode&gt; pq = new PriorityQueue&lt;&gt;((a,b)->a.val-b.val);
+  for (ListNode n : lists) if (n != null) pq.offer(n);
+  ListNode dummy = new ListNode(0), curr = dummy;
+  while (!pq.isEmpty()) {
+    ListNode min = pq.poll(); curr.next = min; curr = curr.next;
+    if (min.next != null) pq.offer(min.next);
+  }
+  return dummy.next;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Master Summary Table -->
+<div class="box">
+  <div class="bh" style="padding:3px 6px;font-size:0.76rem">📊 COMPLETE LINKED LIST PROBLEM LADDER SUMMARY</div>
+  <div class="bc" style="padding:4px 6px">
+    <table>
+      <tr><th>LC #</th><th>Problem</th><th>Pattern</th><th>Time</th><th>Space</th><th>Diff</th></tr>
+      <tr><td>206</td><td>Reverse Linked List</td><td>3-Pointer Reversal</td><td>O(N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>21</td><td>Merge Two Sorted Lists</td><td>Dummy Sentinel</td><td>O(N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>141</td><td>Linked List Cycle</td><td>Floyd's Fast / Slow</td><td>O(N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>234</td><td>Palindrome Linked List</td><td>Mid Split + Reversal</td><td>O(N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>19</td><td>Remove Nth From End</td><td>Offset Pointers</td><td>O(N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>143</td><td>Reorder List</td><td>Mid + Reverse + Interleave</td><td>O(N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>2</td><td>Add Two Numbers</td><td>Dummy Sentinel + Carry</td><td>O(N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>138</td><td>Copy Random List</td><td>HashMap Clone</td><td>O(N)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>23</td><td>Merge K Sorted Lists</td><td>Min-Heap PriorityQueue</td><td>O(N log K)</td><td>O(K)</td><td><span class="diff-h">H</span></td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+</div>
+<!-- PAGE 6 -->
+<div class="page"><div class="ph"><div><h1>LINKED LIST</h1><div class="sub">Dry Run, Proofs &amp; Cheat Sheet</div></div><div style="text-align:right"><div class="pn">PAGE 6 OF 6</div></div></div><div><div><div><div>>
+
+<div class="g2" style="margin-bottom:10px">
+  <div class="box">
+    <div class="bh">🔍 DRY RUN — Reverse Linked List ([1 -> 2 -> 3])</div>
+    <div class="bc">
+      <table style="font-size:0.70rem">
+        <tr><th>Step</th><th>prev</th><th>curr</th><th>next</th><th>Action / Pointer Assignment</th></tr>
+        <tr><td>1</td><td>null</td><td>[1]</td><td>[2]</td><td>`curr.next = prev` (1 -> null). `prev = [1], curr = [2]`</td></tr>
+        <tr><td>2</td><td>[1]</td><td>[2]</td><td>[3]</td><td>`curr.next = prev` (2 -> 1). `prev = [2], curr = [3]`</td></tr>
+        <tr><td>3</td><td>[2]</td><td>[3]</td><td>null</td><td>`curr.next = prev` (3 -> 2). `prev = [3], curr = null`</td></tr>
+        <tr><td>End</td><td>[3]</td><td>null</td><td>-</td><td>Return `prev` ([3] is new head!) ✅</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh">📐 MATHEMATICAL PROOF — FLOYD'S CYCLE DETECTION</div>
+    <div class="bc">
+      <div style="font-size:0.76rem">
+        <p style="margin-bottom:4px">Let L be distance from head to cycle entrance, C cycle length, K distance from entrance to collision point.</p>
+        <p style="margin-bottom:4px">Slow distance $= L + K. Fast distance = L + K + nC = 2(L + K)$.</p>
+        <p style="margin-bottom:4px">Thus, $L + K = nC => L = nC - K$. Resetting `slow` to head and moving both 1 step at a time guarantees meeting at cycle entrance after L steps!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+    <div class="bc">
+      <div class="g2" style="gap:6px">
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Write 3-Pointer Reversal in 2m</li>
+          <li>☐ Use Dummy Sentinel node for all head ops</li>
+          <li>☐ Implement Floyd's Fast/Slow cycle check</li>
+          <li>☐ Code Remove Nth Node From End</li>
+        </ul>
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Code Palindrome Linked List in O(1) space</li>
+          <li>☐ Write Reorder List (Mid + Reverse + Interleave)</li>
+          <li>☐ Code Merge K Sorted Lists with Min-Heap</li>
+          <li>☐ Prove Floyd's Cycle Entry math on board</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+    <div class="bc">
+      <div class="aha" style="margin-bottom:4px;padding:5px">
+        <div class="aha-t">Rule 1 — Always Guard Against Null Pointer</div>
+        Before accessing `curr.next.val`, always check `if (curr != null && curr.next != null)`!
+      </div>
+      <div class="aha" style="padding:5px">
+        <div class="aha-t">Rule 2 — Disconnect Broken Links</div>
+        When splitting lists (e.g., Reorder List), set `slow.next = null` to avoid infinite cycle traps!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

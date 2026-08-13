@@ -1,0 +1,372 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1>GRAPH PATTERN GUIDE</h1>
+            <div class="subtitle">MASTER UNION FIND (DISJOINT SET) TEMPLATE GUIDE<br><small style="color:#64748b;font-weight:normal;">"Merge sets. Detect cycles. Count components. Super fast."</small></div>
+        </div>
+        <div style="text-align: right;">
+            <div class="page-number">PAGE 10</div>
+        </div>
+    </div>
+
+    <div class="grid-container">
+        <div class="col-left">
+            <div class="section-box">
+                <div class="section-header"><span class="num">1</span> MASTER IDEA</div>
+                <div class="section-content">
+                    <p>Union Find helps us manage disjoint sets.</p>
+                    <p><strong>It answers:</strong><br>Are two nodes connected?</p>
+                    <p><strong>It helps in:</strong><br>
+                    Cycle Detection<br>
+                    Components Count<br>
+                    Dynamic Connectivity</p>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header"><span class="num">2</span> CORE OPERATIONS <span style="color:#fbbf24;">★★★★★</span></div>
+                <div class="section-content">
+                    <table>
+                        <tr>
+                            <th>Operation</th>
+                            <th>Purpose</th>
+                        </tr>
+                        <tr>
+                            <td>find(x)</td>
+                            <td>Find root/parent of x<br>(With Path Compression)</td>
+                        </tr>
+                        <tr>
+                            <td>union(a, b)</td>
+                            <td>Merge two sets<br>(With Union by Rank/Size)</td>
+                        </tr>
+                        <tr>
+                            <td>connected(a, b)</td>
+                            <td>Check if a and b<br>belong to same set</td>
+                        </tr>
+                        <tr>
+                            <td>components</td>
+                            <td>Number of disjoint sets</td>
+                        </tr>
+                    </table>
+                    <div style="background-color: #e0f2fe; padding: 10px; margin-top: 10px; border-left: 4px solid #3b82f6;">
+                        <strong>TIP:</strong> Path Compression + Union by Rank makes operations almost O(1) (α(N)).
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header"><span class="num">4</span> VARIANTS <span style="color:#fbbf24;">★★★★</span></div>
+                <div class="section-content">
+                    <div style="margin-bottom: 15px;">
+                        <strong>Union by Size (Alternative)</strong><br>
+                        Use size[] instead of rank[]<br>
+                        • Attach smaller tree under bigger tree<br>
+                        • Update size of new root
+                    </div>
+                    <div>
+                        <strong>Path Compression (Essential)</strong><br>
+                        Always compress path in find(x)<br>
+                        for almost O(1) performance.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header"><span class="num">5</span> MULTI-SET OPERATIONS <span style="color:#fbbf24;">★★★★</span></div>
+                <div class="section-content">
+                    <table>
+                        <tr>
+                            <td>connected(a, b)</td>
+                            <td>Same root?</td>
+                        </tr>
+                        <tr>
+                            <td>union(a, b)</td>
+                            <td>Merge sets</td>
+                        </tr>
+                        <tr>
+                            <td>find(x)</td>
+                            <td>Get root of x</td>
+                        </tr>
+                        <tr>
+                            <td>components()</td>
+                            <td>Count disjoint sets</td>
+                        </tr>
+                    </table>
+                    
+                    <div style="text-align: center; margin-top: 10px;">
+                        <strong>Example (N = 6)</strong>
+                        <div class="mermaid">
+                        graph TD
+                            subgraph "Sets: {0,1,2,3}, {4,5}"
+                            1((1)) --> 0((0))
+                            2((2)) --> 0
+                            3((3)) --> 2
+                            5((5)) --> 4((4))
+                            end
+                        </div>
+                        <div>Components = 2</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header"><span class="num">7</span> WHEN TO USE UNION FIND? <span style="color:#fbbf24;">★★★★★</span></div>
+                <div class="section-content">
+                    <strong>Use When...</strong>
+                    <ul style="list-style-type: none; padding-left: 0;">
+                        <li>✅ You need to check if two nodes are connected.</li>
+                        <li>✅ You need to detect a cycle in an undirected graph.</li>
+                        <li>✅ You need to count number of components.</li>
+                        <li>✅ You need to connect cells dynamically.</li>
+                        <li>✅ You have many union/find queries.</li>
+                    </ul>
+                    <strong>Do NOT Use When...</strong>
+                    <ul style="list-style-type: none; padding-left: 0;">
+                        <li>❌ Graph is directed and you need cycle detection.</li>
+                        <li>❌ You need shortest path.</li>
+                        <li>❌ You need ordering of nodes.</li>
+                        <li>❌ You need traversal / component details.</li>
+                    </ul>
+                    
+                    <div class="mermaid">
+                    graph TD
+                        A[Need to manage sets?] -->|Yes| B[Need to check connection?]
+                        B -->|Yes| C[Use Union Find]
+                        B -->|No| D[Need order / shortest path?]
+                        D -->|Yes| E[Use BFS / Dijkstra / Topo Sort]
+                        D -->|No| F[Other problem type]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-right">
+            <div class="section-box">
+                <div class="section-header"><span class="num">3</span> UNION FIND TEMPLATE (OPTIMIZED) <span style="color:#fbbf24;">★★★★★</span></div>
+                <div class="section-content">
+                    <strong>Java Template</strong>
+                    <pre><code>class UnionFind {
+    private int[] parent;
+    private int[] rank;   // or use size[]
+    private int count;    // number of components
+
+    public UnionFind(int n) {
+        parent = new int[n];
+        rank = new int[n];
+        count = n;
+        for (int i = 0; i &lt; n; i++) parent[i] = i;
+    }
+
+    // Find with Path Compression
+    public int find(int x) {
+        if (parent[x] != x) parent[x] = find(parent[x]);
+        return parent[x];
+    }
+
+    // Union by Rank
+    public boolean union(int a, int b) {
+        int rootA = find(a);
+        int rootB = find(b);
+        if (rootA == rootB) return false; // already connected
+
+        if (rank[rootA] &lt; rank[rootB]) parent[rootA] = rootB;
+        else if (rank[rootA] &gt; rank[rootB]) parent[rootB] = rootA;
+        else {
+            parent[rootB] = rootA;
+            rank[rootA]++;
+        }
+        count--;
+        return true;
+    }
+
+    public boolean connected(int a, int b) {
+        return find(a) == find(b);
+    }
+
+    public int components() {
+        return count;
+    }
+}</code></pre>
+                    
+                    <div style="background-color: #f8fafc; padding: 10px; border: 1px solid #e2e8f0; margin-top: 10px;">
+                        <h4 style="color: #6b21a8; margin-top: 0;">AHA MOMENTS</h4>
+                        <ul style="list-style-type: none; padding-left: 0; margin-bottom: 0;">
+                            <li>💡 find(x) gives ultimate parent (root) of x.</li>
+                            <li>💡 If two nodes have same root -> they are connected.</li>
+                            <li>💡 Union merges two different roots.</li>
+                            <li>💡 Path Compression flattens trees.</li>
+                            <li>💡 Union by Rank keeps trees shallow.</li>
+                            <li>💡 Amortized time per operation is O(α(N)).</li>
+                        </ul>
+                    </div>
+
+                    <div style="background-color: #fef2f2; padding: 10px; border: 1px solid #fecaca; margin-top: 10px;">
+                        <h4 style="color: #b91c1c; margin-top: 0;">COMMON MISTAKES</h4>
+                        <ul style="list-style-type: none; padding-left: 0; margin-bottom: 0;">
+                            <li>❌ Forgetting path compression.</li>
+                            <li>❌ Not using union by rank/size.</li>
+                            <li>❌ Union even when already connected.</li>
+                            <li>❌ Wrong component count update.</li>
+                            <li>❌ Indexing mistake (0 vs 1).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header"><span class="num">6</span> WHAT ACTUALLY CHANGES? <span style="color:#fbbf24;">★★★★</span></div>
+                <div class="section-content">
+                    <table>
+                        <tr>
+                            <th>Problem Type</th>
+                            <th>What We Do</th>
+                            <th>How We Use Union Find</th>
+                            <th>Example Problems</th>
+                        </tr>
+                        <tr>
+                            <td>Cycle Detection<br>(Undirected)</td>
+                            <td>For each edge (u,v)</td>
+                            <td>If connected(u,v) -> cycle<br>Else union(u,v)</td>
+                            <td>Redundant Connection<br>Graph Valid Tree</td>
+                        </tr>
+                        <tr>
+                            <td>Cycle Detection<br>(Directed)</td>
+                            <td>Topological sort recommended</td>
+                            <td>Not ideal for directed cycles</td>
+                            <td>Course Schedule (use Topo Sort)</td>
+                        </tr>
+                        <tr>
+                            <td>Components Count</td>
+                            <td>For each edge (u,v)</td>
+                            <td>union(u,v) always<br>Return uf.components()</td>
+                            <td>Number of Provinces</td>
+                        </tr>
+                        <tr>
+                            <td>Max Area / Island</td>
+                            <td>Union adjacent cells</td>
+                            <td>Map cell -> id, union neighbors</td>
+                            <td>Making A Large Island</td>
+                        </tr>
+                        <tr>
+                            <td>Dynamic Connectivity</td>
+                            <td>Online union queries</td>
+                            <td>Process union & connected</td>
+                            <td>Friend Circles (online)</td>
+                        </tr>
+                    </table>
+                    <div style="background-color: #e0f2fe; padding: 10px; margin-top: 10px; border-left: 4px solid #3b82f6;">
+                        <strong>TIP:</strong> Problem decision depends on whether graph is directed, weighted and what to return.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header"><span class="num">8</span> COMPLEXITY <span style="color:#fbbf24;">★★★★★</span></div>
+                <div class="section-content">
+                    <div style="display: flex; gap: 10px;">
+                        <table style="flex: 1;">
+                            <tr><td>find(x)</td><td>O(α(N))</td></tr>
+                            <tr><td>union(a, b)</td><td>O(α(N))</td></tr>
+                            <tr><td>connected(a, b)</td><td>O(α(N))</td></tr>
+                            <tr><td>components()</td><td>O(1)</td></tr>
+                        </table>
+                        <div style="flex: 1;">
+                            <strong>Where α(N) is Inverse Ackermann Function</strong>
+                            <ul>
+                                <li>α(N) ≤ 4 for all practical N</li>
+                                <li>Nearly constant time!</li>
+                                <li>Best data structure for connectivity.</li>
+                            </ul>
+                            <strong>Space Complexity</strong>
+                            <p>O(N) for parent[] + rank[]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="grid-container">
+        <div class="col-left" style="flex: 2;">
+            <div class="section-box">
+                <div class="section-header"><span class="num">9</span> RETURN TYPE GUIDE <span style="color:#fbbf24;">★★★★</span></div>
+                <div class="section-content">
+                    <table>
+                        <tr>
+                            <th>Return Type</th>
+                            <th>Purpose</th>
+                            <th>Typical Problems</th>
+                            <th>Interview Meaning</th>
+                        </tr>
+                        <tr>
+                            <td>boolean</td>
+                            <td>Check if connected / cycle exists</td>
+                            <td>Redundant Connection, Graph Valid Tree</td>
+                            <td>Validity / Feasibility check</td>
+                        </tr>
+                        <tr>
+                            <td>int</td>
+                            <td>Count components</td>
+                            <td>Number of Provinces</td>
+                            <td>Count groups</td>
+                        </tr>
+                        <tr>
+                            <td>void</td>
+                            <td>Just perform unions</td>
+                            <td>Build DSU then answer queries</td>
+                            <td>Preprocessing / Setup</td>
+                        </tr>
+                        <tr>
+                            <td>List / Set</td>
+                            <td>List of components</td>
+                            <td>Connected Components (Advanced)</td>
+                            <td>Return actual groups</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header"><span class="num">11</span> INTERVIEW THINKING FLOW <span style="color:#fbbf24;">★★★★★</span></div>
+                <div class="section-content">
+                    <div class="mermaid">
+                    graph LR
+                        A((?)) -->|Yes| B((C))
+                        B -->|Yes| C((88))
+                        C -->|Yes| D[Choose Union Find Template]
+                        D --> E[Write Code]
+                        E --> F[Dry Run]
+                        F --> G[Optimize]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-right" style="flex: 1;">
+            <div class="section-box">
+                <div class="section-header"><span class="num">10</span> COMMON INTERVIEW MISTAKES <span style="color:#fbbf24;">★★★★</span></div>
+                <div class="section-content">
+                    <ul style="list-style-type: none; padding-left: 0;">
+                        <li>❌ Forgetting path compression.</li>
+                        <li>❌ Union without checking roots.</li>
+                        <li>❌ Wrong component count.</li>
+                        <li>❌ Not handling 0-index / 1-index.</li>
+                        <li>❌ Not initializing parent[i] = i.</li>
+                        <li>❌ Using DSU for directed cycle.</li>
+                        <li>❌ Using DSU for shortest path.</li>
+                        <li>❌ Forgetting edge cases.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header"><span class="num">12</span> PAGE 11 PREVIEW <span style="color:#fbbf24;">★★★★★</span></div>
+                <div class="section-content">
+                    <p>Next page contains UNION FIND PROBLEM GUIDE.<br>For each problem, you will see:</p>
+                    <p><strong>Base Template -> Changed Lines -> AHA Moment -> Complexity -> Interview Tip</strong></p>
+                    <p>Apply these templates with tiny changes and solve any Union Find problem with confidence!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

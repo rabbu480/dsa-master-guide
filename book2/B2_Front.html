@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 2 - Front Matter & Template Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+    :root { --primary: #1e3a8a; --emerald: #059669; --text-dark: #0f172a; --bg-light: #f8fafc; --border-color: #cbd5e1; }
+    body { font-family: 'Inter', sans-serif; background-color: #cbd5e1; color: var(--text-dark); margin: 0; padding: 20px; font-size: 13px; line-height: 1.5; }
+    .page { background: white; max-width: 1100px; margin: 0 auto 30px auto; padding: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 8px; page-break-after: always; }
+    .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--primary); padding-bottom: 12px; margin-bottom: 25px; background: #f1f5f9; padding: 15px 20px; border-radius: 6px; }
+    .header-top h1 { margin: 0; font-size: 1.8rem; color: var(--primary); font-weight: 900; text-transform: uppercase; }
+    .badge { background: var(--emerald); color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; }
+    .section-box { border: 2px solid var(--primary); border-radius: 8px; margin-bottom: 25px; overflow: hidden; background: white; page-break-inside: avoid; }
+    .section-header { background: var(--primary); color: white; padding: 10px 18px; font-size: 1.1rem; font-weight: 800; }
+    .section-content { padding: 18px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 10px 0; }
+    table th, table td { border: 1px solid var(--border-color); padding: 8px 12px; text-align: left; }
+    table th { background: #f1f5f9; font-weight: 800; }
+    @media print { body { background: white; padding: 0; } .page { box-shadow: none; border: none; margin: 0; padding: 15px 0; max-width: 100%; } }
+</style>
+</head>
+<body>
+
+<div class="page">
+    <div class="header-top">
+        <div>
+            <h1>Book 2 — Problem & Pattern Reference</h1>
+            <div style="font-size: 0.95rem; color: #475569; font-weight: 600;">Front Matter · Template Quick-Reference Index</div>
+        </div>
+        <span class="badge">Book 2</span>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">How to Use Book 2</div>
+        <div class="section-content">
+            <p>Book 2 serves as an interview-day reference manual. It contains <strong>152 curated problem entries</strong> mapped directly to the 29 Pattern DNA Cards in Section 2 and the 24 Master Java Templates in Book 1 Appendix A.</p>
+        </div>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">Template Quick-Reference Index</div>
+        <div class="section-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Template ID</th>
+                        <th>Template Name</th>
+                        <th>Book 1 Ref</th>
+                        <th>Time Complexity</th>
+                        <th>Space Complexity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>A.1</td><td>DFS Recursive</td><td>Book 1 App A</td><td>O(V + E)</td><td>O(V)</td></tr>
+                    <tr><td>A.5</td><td>BFS Level Order</td><td>Book 1 App A</td><td>O(V + E)</td><td>O(V)</td></tr>
+                    <tr><td>A.7</td><td>Topological Sort (Kahn's)</td><td>Book 1 App A</td><td>O(V + E)</td><td>O(V)</td></tr>
+                    <tr><td>A.9</td><td>Binary Search Bounds</td><td>Book 1 App A</td><td>O(log N)</td><td>O(1)</td></tr>
+                    <tr><td>A.12</td><td>Sliding Window Variable</td><td>Book 1 App A</td><td>O(N)</td><td>O(K)</td></tr>
+                    <tr><td>A.14</td><td>Monotonic Stack</td><td>Book 1 App A</td><td>O(N)</td><td>O(N)</td></tr>
+                    <tr><td>A.18</td><td>Union-Find (Path Comp + Rank)</td><td>Book 1 App A</td><td>O(α(N))</td><td>O(N)</td></tr>
+                    <tr><td>A.19</td><td>Dijkstra Shortest Path</td><td>Book 1 App A</td><td>O((V+E) log V)</td><td>O(V+E)</td></tr>
+                    <tr><td>A.21</td><td>Trie Operations</td><td>Book 1 App A</td><td>O(L)</td><td>O(N × L)</td></tr>
+                    <tr><td>A.24</td><td>DP Tabulation Skeleton</td><td>Book 1 App A</td><td>O(N × M)</td><td>O(M)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

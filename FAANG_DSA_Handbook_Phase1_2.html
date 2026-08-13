@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAANG DSA Master Handbook (Phase 1 & 2)</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 1200px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; }
+        h1, h2, h3 { color: #2c3e50; }
+        h1 { border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { border-bottom: 2px solid #bdc3c7; margin-top: 40px; padding-bottom: 5px; color: #e74c3c; }
+        .section { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .template-box { background: #282c34; color: #abb2bf; padding: 15px; border-radius: 5px; overflow-x: auto; font-family: Consolas, monospace; }
+        .keyword { color: #c678dd; } .type { color: #e5c07b; } .method { color: #61afef; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #3498db; color: white; }
+        .checklist { list-style-type: square; color: #e67e22; font-weight: bold; }
+        .mistakes { color: #c0392b; }
+        .success { color: #27ae60; }
+    </style>
+</head>
+<body>
+
+<h1>FAANG DSA Master Handbook — Phases 1 & 2</h1>
+<p><strong>Strictly optimized for 30-second pattern recognition and flawless Java execution.</strong> No fluff. No college theory. Just what you need to pass.</p>
+
+<!-- DECISION TREE -->
+<div class="section">
+    <h2>1. The 30-Second Pattern Decision Tree</h2>
+    <ul>
+        <li><strong>Sorted Array + Target Sum/Pair?</strong> &rarr; Two Pointers</li>
+        <li><strong>Contiguous Subarray/Substring + Min/Max/Longest?</strong> &rarr; Sliding Window</li>
+        <li><strong>Top K / Kth Smallest / Kth Largest?</strong> &rarr; Heap / PriorityQueue</li>
+        <li><strong>LIFO / "Next Greater Element" / Nested parsing?</strong> &rarr; Stack</li>
+        <li><strong>Sorted Array + O(log N) requirement?</strong> &rarr; Binary Search</li>
+        <li><strong>Connected Components / Shortest Path (Unweighted)?</strong> &rarr; BFS / DFS (Graphs)</li>
+        <li><strong>Tree Traversal / Level Order?</strong> &rarr; BFS (Queue) / DFS (Recursion)</li>
+    </ul>
+</div>
+
+<!-- ARRAYS & HASHING -->
+<div class="section">
+    <h2>2. Arrays & Hashing</h2>
+    <p><strong>Recognition:</strong> Frequency counting, finding duplicates, O(1) lookups needed.</p>
+    <p><strong>Template (Frequency Map):</strong></p>
+    <pre class="template-box">
+Map&lt;Integer, Integer&gt; count = new HashMap&lt;&gt;();
+for (int num : nums) {
+    count.put(num, count.getOrDefault(num, 0) + 1);
+}</pre>
+    <p class="mistakes"><strong>Common Mistakes:</strong> Using `HashMap` when an `int[26]` array works for lowercase English letters (Array is much faster). Modifying collection while iterating.</p>
+</div>
+
+<!-- TWO POINTERS -->
+<div class="section">
+    <h2>3. Two Pointers</h2>
+    <p><strong>Recognition:</strong> Sorted arrays, palindromes, container with most water.</p>
+    <p><strong>Template (Opposite Ends):</strong></p>
+    <pre class="template-box">
+int left = 0, right = nums.length - 1;
+while (left &lt; right) {
+    int sum = nums[left] + nums[right];
+    if (sum == target) return true;
+    if (sum &lt; target) left++;
+    else right--;
+}</pre>
+    <p class="mistakes"><strong>Common Mistakes:</strong> `while (left &lt;= right)` vs `while (left &lt; right)`. Not handling duplicates correctly in 3Sum.</p>
+</div>
+
+<!-- SLIDING WINDOW -->
+<div class="section">
+    <h2>4. Sliding Window</h2>
+    <p><strong>Recognition:</strong> "Longest/Shortest substring/subarray", "contiguous".</p>
+    <p><strong>Template (Dynamic Window):</strong></p>
+    <pre class="template-box">
+int left = 0, maxLen = 0;
+for (int right = 0; right &lt; nums.length; right++) {
+    // 1. Add nums[right] to state
+    while (/* condition violated */) {
+        // 2. Remove nums[left] from state
+        left++;
+    }
+    // 3. Update maxLen / minLen
+}</pre>
+</div>
+
+<!-- BINARY SEARCH -->
+<div class="section">
+    <h2>5. Binary Search</h2>
+    <p><strong>Recognition:</strong> Sorted array, O(log N) time required, finding boundaries.</p>
+    <p><strong>Template (Search Space / Boundary):</strong></p>
+    <pre class="template-box">
+int left = 0, right = nums.length - 1;
+while (left &lt;= right) {
+    int mid = left + (right - left) / 2; // Prevent overflow
+    if (nums[mid] == target) return mid;
+    if (nums[mid] &lt; target) left = mid + 1;
+    else right = mid - 1;
+}</pre>
+    <p class="mistakes"><strong>Common Mistakes:</strong> Calculating `mid = (left + right)/2` (causes integer overflow). Infinite loops when `left < right` without shifting `mid` properly.</p>
+</div>
+
+<!-- TREES -->
+<div class="section">
+    <h2>6. Trees</h2>
+    <p><strong>Recognition:</strong> Hierarchical data, LCA, path sums, BST properties.</p>
+    <p><strong>Template (DFS / Recursive):</strong></p>
+    <pre class="template-box">
+public int dfs(TreeNode node) {
+    if (node == null) return 0;
+    int left = dfs(node.left);
+    int right = dfs(node.right);
+    return Math.max(left, right) + 1; // Example: Max Depth
+}</pre>
+</div>
+
+<!-- GRAPHS -->
+<div class="section">
+    <h2>7. Graphs</h2>
+    <p><strong>Recognition:</strong> Grids (matrices), connected components, "shortest path" (BFS), topological sort (dependencies).</p>
+    <p><strong>Template (BFS Shortest Path):</strong></p>
+    <pre class="template-box">
+Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();
+Set&lt;Integer&gt; visited = new HashSet&lt;&gt;();
+q.offer(startNode); visited.add(startNode);
+int steps = 0;
+
+while (!q.isEmpty()) {
+    int size = q.size();
+    for (int i = 0; i &lt; size; i++) {
+        int curr = q.poll();
+        if (curr == target) return steps;
+        for (int neighbor : adj.get(curr)) {
+            if (visited.add(neighbor)) {
+                q.offer(neighbor);
+            }
+        }
+    }
+    steps++;
+}</pre>
+</div>
+
+<!-- HEAP / PRIORITY QUEUE -->
+<div class="section">
+    <h2>8. Heap / Priority Queue</h2>
+    <p><strong>Recognition:</strong> "Top K", "Kth Largest/Smallest", Median of data stream.</p>
+    <p><strong>Template (Min-Heap for Top K Largest):</strong></p>
+    <pre class="template-box">
+PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;(); // Min-Heap
+for (int num : nums) {
+    pq.offer(num);
+    if (pq.size() &gt; k) {
+        pq.poll(); // Evict the smallest, keeping top K largest
+    }
+}</pre>
+</div>
+
+<!-- COMPLEXITY CHEAT SHEET -->
+<div class="section">
+    <h2>Complexity Cheat Sheet</h2>
+    <table>
+        <tr><th>Data Structure / Algo</th><th>Time (Avg / Worst)</th><th>Space (Worst)</th></tr>
+        <tr><td>HashMap Lookup/Insert</td><td>O(1) / O(N)</td><td>O(N)</td></tr>
+        <tr><td>Binary Search</td><td>O(log N)</td><td>O(1)</td></tr>
+        <tr><td>Sliding Window</td><td>O(N)</td><td>O(1) or O(N) (Map)</td></tr>
+        <tr><td>PriorityQueue (Insert/Poll)</td><td>O(log N)</td><td>O(N)</td></tr>
+        <tr><td>DFS / BFS (Graph)</td><td>O(V + E)</td><td>O(V)</td></tr>
+    </table>
+</div>
+
+</body>
+</html>

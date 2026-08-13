@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Topic 03: Two Pointers Masterclass — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 14px; }
+.ph h1 { font-size: 1.8rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.88rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.75rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; }
+.bh  { background: var(--pri); color: white; padding: 6px 12px;
+  font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 18px; height: 18px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 10px 12px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 6px 12px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.75rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.95rem; }
+.psub   { color: var(--sub); font-size: 0.8rem; }
+.prow-body { display: flex; }
+.pc { padding: 8px 10px; font-size: 0.78rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.72rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; }
+.prob-head { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.75rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.70rem; line-height: 1.4; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.76rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+th, td { border: 1px solid var(--bdr); padding: 5px 7px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.badge-b { background: #dbeafe; color: #1e40af; }
+.badge-g { background: #dcfce7; color: #166534; }
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.tip  { background: #f0fdf4; border-left: 4px solid var(--grn); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 8px 10px; margin-top: 6px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.82rem; margin-bottom: 3px; }
+
+.dt-wrap { font-size: 0.76rem; }
+.dt-root { background: var(--pri); color: white; padding: 5px 10px; border-radius: 5px; text-align: center; font-weight: 700; margin-bottom: 8px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 5px 7px; font-weight: 600; color: #1e40af; font-size: 0.72rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 5px 7px; color: #065f46; font-weight: 700; font-size: 0.72rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.75rem; padding: 4px 3px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 6px 10px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.85; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- PAGE 1: DISCOVERY & WHY TWO POINTERS -->
+<div class="page">
+<div class="ph">
+  <div><h1>TWO POINTERS PATTERN</h1><div class="sub">FAANG Master Guide — Java Edition</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 1 OF 10</div><div class="ptag">FOUNDATION · POINTER DISCOVERY · OPTIMIZATION</div></div>
+</div>
+
+<div class="g3" style="margin-bottom:12px">
+  <div class="box pur">
+    <div class="bh">🎬 THE REAL-WORLD STORY</div>
+    <div class="bc">
+      <p style="margin-bottom:6px">Imagine two people standing at opposite ends of a long hallway looking for a pair of numbers that add up to a target sum.</p>
+      <div class="aha">
+        <div class="aha-t">💡 THE TWO POINTERS AHA MOMENT</div>
+        If the array is sorted, comparing `arr[left] + arr[right]` tells us EXACTLY which pointer to move! If sum is too small \rightarrow `left++`. If sum is too large \rightarrow `right--`. Replaces O(N^2) loops with <strong>O(N) single pass</strong>!
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bh">🤔 WHY NOT NESTED LOOPS?</div>
+    <div class="bc">
+      <ul style="padding-left:14px;font-size:0.76rem">
+        <li><strong>Nested Loops O(N^2):</strong> Checks every possible pair `(i, j)`. For N = 100,000, requires 10,000,000,000 operations \rightarrow TLE Error!</li>
+        <li><strong>Two Pointers O(N):</strong> Moves inward deterministically. Total steps <= N. Executes in 5 milliseconds!</li>
+        <li><strong>Auxiliary Space O(1):</strong> Reuses array pointers with 0 extra memory allocation.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box sky">
+    <div class="bh">📌 2 MAIN POINTER VARIATIONS</div>
+    <div class="bc">
+      <div style="font-weight:700;color:var(--pri);margin-bottom:4px">1. Opposite Direction (Converging):</div>
+<pre>left -> [ 1,  2,  4,  6,  8, 11 ] <- right
+Sum = 1 + 11 = 12 > Target 10 -> right--
+Sum = 1 + 8  = 9  < Target 10 -> left++</pre>
+      <div style="font-weight:700;color:var(--pri);margin-top:6px;margin-bottom:4px">2. Same Direction (Fast &amp; Slow / Partition):</div>
+<pre>[ slow, fast -> ] (In-place array modification)</pre>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">📚 PREREQUISITES &amp; COMPLEXITY REASONING</div>
+    <div class="bc">
+      <table style="font-size:0.76rem">
+        <tr><th>Problem Variation</th><th>Time Complexity</th><th>Auxiliary Space</th></tr>
+        <tr><td>Two Sum II (Sorted Array)</td><td><strong>O(N) single pass</strong></td><td><strong>O(1) in-place</strong></td></tr>
+        <tr><td>3Sum (Sort + 2-Pointer Loop)</td><td><strong>O(N^2)</strong></td><td><strong>O(1) space</strong></td></tr>
+        <tr><td>Container With Most Water</td><td><strong>O(N) single pass</strong></td><td><strong>O(1) space</strong></td></tr>
+        <tr><td>Trapping Rain Water (2 Pointers)</td><td><strong>O(N) single pass</strong></td><td><strong>O(1) space</strong></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box amb">
+    <div class="bh">⚡ CLUES THAT SCREAM TWO POINTERS</div>
+    <div class="bc">
+      <p style="font-size:0.8rem">1. <em>"Array is SORTED"</em> and asks for pair sum, triplet sum, or range search \rightarrow Opposite Two Pointers</p>
+      <p style="font-size:0.8rem">2. <em>"Remove duplicates / zeros in-place in O(1) space"</em> \rightarrow Fast &amp; Slow Pointers</p>
+      <p style="font-size:0.8rem">3. <em>"Container with water / Trapping water at boundaries"</em> \rightarrow Converging Boundary Pointers</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 2: API & SIDE-BY-SIDE TEMPLATES -->
+<div class="page">
+<div class="ph">
+  <div><h1>TWO POINTERS PATTERN</h1><div class="sub">Java Side-by-Side Pointer Templates</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 2 OF 10</div><div class="ptag">TEMPLATES · OPPOSITE DIRECTION · SAME DIRECTION</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:12px">
+  <div class="box">
+    <div class="bh"><span class="n">1</span> TEMPLATE A: OPPOSITE DIRECTION (CONVERGING)</div>
+    <div class="bc">
+<pre>public int[] twoSumSorted(int[] nums, int target) {
+  int left = 0, right = nums.length - 1;
+  while (left < right) {
+    int sum = nums[left] + nums[right];
+    if (sum == target) {
+      return new int[]{left + 1, right + 1};
+    } else if (sum < target) {
+      left++;  // Needs larger value!
+    } else {
+      right--; // Needs smaller value!
+    }
+  }
+  return new int[0];
+}</pre>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh"><span class="n">2</span> TEMPLATE B: SAME DIRECTION (FAST &amp; SLOW)</div>
+    <div class="bc">
+<pre>public int removeDuplicates(int[] nums) {
+  if (nums.length == 0) return 0;
+  int slow = 0;
+  for (int fast = 1; fast < nums.length; fast++) {
+    if (nums[fast] != nums[slow]) {
+      slow++;
+      nums[slow] = nums[fast]; // Overwrite in-place!
+    }
+  }
+  return slow + 1; // Length of unique array!
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 3: CORE PATTERNS (VALID PALINDROME & TWO SUM II) -->
+<div class="page">
+<div class="ph">
+  <div><h1>TWO POINTERS PATTERN</h1><div class="sub">Core Patterns — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 3 OF 10</div><div class="ptag">VALID PALINDROME · TWO SUM II</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 1</div>
+    <div class="ptitle">VALID PALINDROME (Converging Alphanumeric Scan)</div>
+    <div class="psub">e.g. Valid Palindrome (LC 125)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.78rem">Check symmetry from ends inward, skipping non-alphanumeric characters in O(N) time and O(1) space.</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 125</div>
+<pre>public boolean isPalindrome(String s) {
+  int l = 0, r = s.length() - 1;
+  while (l < r) {
+    while (l < r && !Character.isLetterOrDigit(s.charAt(l))) l++;
+    while (l < r && !Character.isLetterOrDigit(s.charAt(r))) r--;
+    if (Character.toLowerCase(s.charAt(l)) != Character.toLowerCase(s.charAt(r))) {
+      return false;
+    }
+    l++; r--;
+  }
+  return true;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 2</div>
+    <div class="ptitle">TWO SUM II (Sorted Input Array)</div>
+    <div class="psub">e.g. Two Sum II - Input Array Is Sorted (LC 167)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.78rem">Array is ALREADY sorted. Converge left/right pointers to find target in O(N) time and O(1) space without HashMap!</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 167</div>
+<pre>public int[] twoSum(int[] numbers, int target) {
+  int l = 0, r = numbers.length - 1;
+  while (l < r) {
+    int sum = numbers[l] + numbers[r];
+    if (sum == target) return new int[]{l + 1, r + 1};
+    if (sum < target) l++; else r--;
+  }
+  return new int[0];
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 4: CORE PATTERNS (3SUM) -->
+<div class="page">
+<div class="ph">
+  <div><h1>TWO POINTERS PATTERN</h1><div class="sub">Core Patterns — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 4 OF 10</div><div class="ptag">3SUM · DUPLICATE SKIPPING</div></div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 3</div>
+    <div class="ptitle">3SUM (Sort + Fix Outer Pointer + 2-Pointer Loop)</div>
+    <div class="psub">e.g. 3Sum (LC 15)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Duplicate Skip Requirement</div>
+      <div style="font-size:0.78rem">
+        Sort array first. Loop `i` from 0 to N-3. Skip duplicates for `i`, `left`, and `right` to guarantee unique triplets in O(N^2) time!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 15</div>
+<pre>public List&lt;List&lt;Integer&gt;&gt; threeSum(int[] nums) {
+  Arrays.sort(nums);
+  List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+  for (int i = 0; i < nums.length - 2; i++) {
+    if (i > 0 && nums[i] == nums[i - 1]) continue; // Skip duplicate i!
+    int l = i + 1, r = nums.length - 1;
+    while (l < r) {
+      int sum = nums[i] + nums[l] + nums[r];
+      if (sum == 0) {
+        res.add(Arrays.asList(nums[i], nums[l], nums[r]));
+        while (l < r && nums[l] == nums[l + 1]) l++; // Skip duplicate l!
+        while (l < r && nums[r] == nums[r - 1]) r--; // Skip duplicate r!
+        l++; r--;
+      } else if (sum < 0) l++; else r--;
+    }
+  }
+  return res;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 5: CORE PATTERNS (CONTAINER WITH MOST WATER) -->
+<div class="page">
+<div class="ph">
+  <div><h1>TWO POINTERS PATTERN</h1><div class="sub">Core Patterns — Part 3</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 5 OF 10</div><div class="ptag">CONTAINER WITH MOST WATER · GREEDY SHRINKING</div></div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 4</div>
+    <div class="ptitle">CONTAINER WITH MOST WATER (Greedy Boundary Shrink)</div>
+    <div class="psub">e.g. Container With Most Water (LC 11)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Greedy Choice Proof</div>
+      <div style="font-size:0.78rem">
+        `Area = min(height[l], height[r]) * (r - l)`. The limiting factor is the shorter wall! Moving the taller wall CANNOT increase area because width shrinks and height is capped by shorter wall. Thus, ALWAYS move the shorter wall pointer!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 11</div>
+<pre>public int maxArea(int[] height) {
+  int l = 0, r = height.length - 1;
+  int maxWater = 0;
+  while (l < r) {
+    int h = Math.min(height[l], height[r]);
+    maxWater = Math.max(maxWater, h * (r - l));
+    if (height[l] < height[r]) {
+      l++; // Move shorter wall!
+    } else {
+      r--; // Move shorter wall!
+    }
+  }
+  return maxWater;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 6: CORE PATTERNS (TRAPPING RAIN WATER) -->
+<div class="page">
+<div class="ph">
+  <div><h1>TWO POINTERS PATTERN</h1><div class="sub">Core Patterns — Part 4</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 6 OF 10</div><div class="ptag">TRAPPING RAIN WATER · BOUNDARY MAX TRACKING</div></div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 5</div>
+    <div class="ptitle">TRAPPING RAIN WATER (2-Pointer Maximum Tracking)</div>
+    <div class="psub">e.g. Trapping Rain Water (LC 42)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Water Trap Mechanics</div>
+      <div style="font-size:0.78rem">
+        Maintain `leftMax` and `rightMax`. If `leftMax < rightMax`, trapped water at `left` is determined solely by `leftMax - height[left]`! Runs in O(N) time and O(1) space.
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 42</div>
+<pre>public int trap(int[] height) {
+  int l = 0, r = height.length - 1;
+  int leftMax = 0, rightMax = 0, water = 0;
+  while (l < r) {
+    if (height[l] < height[r]) {
+      if (height[l] >= leftMax) leftMax = height[l];
+      else water += leftMax - height[l];
+      l++;
+    } else {
+      if (height[r] >= rightMax) rightMax = height[r];
+      else water += rightMax - height[r];
+      r--;
+    }
+  }
+  return water;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 7: DECISION TREE & TRIGGER WORDS -->
+<div class="page">
+<div class="ph">
+  <div><h1>TWO POINTERS PATTERN</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 7 OF 10</div><div class="ptag">DECISION TREE · TRIGGER WORDS · TRADE-OFFS</div></div>
+</div>
+
+<div class="g2">
+  <div class="box">
+    <div class="bh">TWO POINTERS — WHICH VARIATION TO USE?</div>
+    <div class="bc dt-wrap">
+      <div class="dt-root">Start: What is the input array type &amp; goal?</div>
+      <div class="dt-grid">
+        <div class="dt-row">
+          <div class="dt-q">🎯 Sorted array pair/triplet sum</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Opposite Pointers<br><span style="font-weight:400;font-size:0.7rem">`left = 0, right = n - 1`</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">✂️ In-place duplicate removal / partition</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Fast &amp; Slow Pointers<br><span style="font-weight:400;font-size:0.7rem">`slow` tracks valid write idx</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🌊 Max area / Trapping water</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Boundary Max Converge<br><span style="font-weight:400;font-size:0.7rem">Move shorter boundary wall</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🔤 String symmetry / Palindrome</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Alphanumeric Converge<br><span style="font-weight:400;font-size:0.7rem">Skip non-char, match ends</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div class="box pur">
+      <div class="bh">🎯 TRIGGER WORDS DIRECTORY</div>
+      <div class="bc">
+        <table>
+          <tr><th>Trigger Word</th><th>Variant</th><th>Action</th></tr>
+          <tr><td>"Sorted array, find pair sum"</td><td>Opposite Two Pointers</td><td>`l++` if sum small, `r--` if large</td></tr>
+          <tr><td>"3Sum / 4Sum"</td><td>Sort + Outer Loop + 2-Pointer</td><td>Skip duplicate values on all 3 pointers</td></tr>
+          <tr><td>"Container with most water"</td><td>Shorter Wall Move</td><td>Move `l` if `h[l] < h[r]` else `r`</td></tr>
+          <tr><td>"Trapping rain water"</td><td>2-Pointer Boundary Max</td><td>Compare `leftMax` vs `rightMax`</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="box amb">
+      <div class="bh">💼 INTERVIEW TRADE-OFFS &amp; FOLLOW-UPS</div>
+      <div class="bc">
+        <table>
+          <tr><th>Interviewer Asks</th><th>Your Answer</th></tr>
+          <tr><td>Why sorting for 3Sum if array is unsorted?</td><td>Sorting takes O(N log N) time, making the overall O(N^2) 2-pointer scan possible while avoiding complex hash set duplicate checks!</td></tr>
+          <tr><td>How to prevent duplicate triplets in 3Sum?</td><td>Skip duplicate values for `nums[i]`, `nums[l]`, and `nums[r]` using `while` loops after finding a valid sum!</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 8: PROBLEM LADDER PART 1 (5 PROBLEMS) -->
+<div class="page">
+<div class="ph">
+  <div><h1>TWO POINTERS PATTERN</h1><div class="sub">Problem Ladder — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 8 OF 10</div><div class="ptag">PROBLEM LADDER — EASY · MEDIUM</div></div>
+</div>
+
+<div class="g2" style="gap:10px">
+<div>
+  <div style="background:var(--grn);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟢 EASY — Basic Converging &amp; Partition</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 125 · Valid Palindrome</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Converging Pointers</div>
+        <div><strong>Key Insight:</strong> Skip non-alphanumeric chars.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public boolean isPalindrome(String s) {
+  int l = 0, r = s.length() - 1;
+  while (l < r) {
+    while (l < r && !Character.isLetterOrDigit(s.charAt(l))) l++;
+    while (l < r && !Character.isLetterOrDigit(s.charAt(r))) r--;
+    if (Character.toLowerCase(s.charAt(l)) != Character.toLowerCase(s.charAt(r))) return false;
+    l++; r--;
+  }
+  return true;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 167 · Two Sum II</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Sorted Converging</div>
+        <div><strong>Key Insight:</strong> `l++` if sum small, `r--` if large.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public int[] twoSum(int[] numbers, int target) {
+  int l = 0, r = numbers.length - 1;
+  while (l < r) {
+    int sum = numbers[l] + numbers[r];
+    if (sum == target) return new int[]{l + 1, r + 1};
+    if (sum < target) l++; else r--;
+  }
+  return new int[0];
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 26 · Remove Duplicates</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Fast &amp; Slow Pointers</div>
+        <div><strong>Key Insight:</strong> Overwrite `nums[++slow] = nums[fast]`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public int removeDuplicates(int[] nums) {
+  if (nums.length == 0) return 0;
+  int slow = 0;
+  for (int fast = 1; fast < nums.length; fast++) {
+    if (nums[fast] != nums[slow]) { slow++; nums[slow] = nums[fast]; }
+  }
+  return slow + 1;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — Triplets &amp; Water Containers</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 15 · 3Sum</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Sort + 2 Pointers</div>
+        <div><strong>Key Insight:</strong> Fix `i`, converge `l` &amp; `r`, skip dups.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.60rem">public List&lt;List&lt;Integer&gt;&gt; threeSum(int[] nums) {
+  Arrays.sort(nums); List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+  for (int i = 0; i < nums.length - 2; i++) {
+    if (i > 0 && nums[i] == nums[i - 1]) continue;
+    int l = i + 1, r = nums.length - 1;
+    while (l < r) {
+      int sum = nums[i] + nums[l] + nums[r];
+      if (sum == 0) {
+        res.add(Arrays.asList(nums[i], nums[l], nums[r]));
+        while (l < r && nums[l] == nums[l + 1]) l++;
+        while (l < r && nums[r] == nums[r - 1]) r--;
+        l++; r--;
+      } else if (sum < 0) l++; else r--;
+    }
+  }
+  return res;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 11 · Container With Most Water</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Shorter Wall Converge</div>
+        <div><strong>Key Insight:</strong> Always move pointer of shorter wall.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.60rem">public int maxArea(int[] height) {
+  int l = 0, r = height.length - 1, maxW = 0;
+  while (l < r) {
+    int h = Math.min(height[l], height[r]);
+    maxW = Math.max(maxW, h * (r - l));
+    if (height[l] < height[r]) l++; else r--;
+  }
+  return maxW;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: PROBLEM LADDER PART 2 (2 PROBLEMS + SUMMARY TABLE) -->
+<div class="page">
+<div class="ph">
+  <div><h1>TWO POINTERS PATTERN</h1><div class="sub">Problem Ladder — Part 2 &amp; Summary</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 9 OF 10</div><div class="ptag">PROBLEM LADDER — HARD · SUMMARY</div></div>
+</div>
+
+<div class="g2" style="gap:10px;margin-bottom:10px">
+<div>
+  <div style="background:var(--red);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🔴 HARD — Trapping Rain Water</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fee2e2">
+      <span class="ptitle" style="color:var(--red)">LC 42 · Trapping Rain Water</span>
+      <span class="diff-h">HARD</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Boundary Max Tracking</div>
+        <div><strong>Key Insight:</strong> Trapped water bounded by `leftMax` &amp; `rightMax`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public int trap(int[] height) {
+  int l = 0, r = height.length - 1;
+  int lMax = 0, rMax = 0, water = 0;
+  while (l < r) {
+    if (height[l] < height[r]) {
+      if (height[l] >= lMax) lMax = height[l];
+      else water += lMax - height[l];
+      l++;
+    } else {
+      if (height[r] >= rMax) rMax = height[r];
+      else water += rMax - height[r];
+      r--;
+    }
+  }
+  return water;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — 3Sum Closest</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 16 · 3Sum Closest</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Sort + Min Diff Converge</div>
+        <div><strong>Key Insight:</strong> Track minimum absolute difference.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public int threeSumClosest(int[] nums, int target) {
+  Arrays.sort(nums);
+  int closest = nums[0] + nums[1] + nums[2];
+  for (int i = 0; i < nums.length - 2; i++) {
+    int l = i + 1, r = nums.length - 1;
+    while (l < r) {
+      int sum = nums[i] + nums[l] + nums[r];
+      if (Math.abs(target - sum) < Math.abs(target - closest)) closest = sum;
+      if (sum < target) l++; else r--;
+    }
+  }
+  return closest;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Master Summary Table -->
+<div class="box">
+  <div class="bh" style="padding:3px 6px;font-size:0.76rem">📊 COMPLETE TWO POINTERS PROBLEM LADDER SUMMARY</div>
+  <div class="bc" style="padding:4px 6px">
+    <table>
+      <tr><th>LC #</th><th>Problem</th><th>Pattern</th><th>Time</th><th>Space</th><th>Diff</th></tr>
+      <tr><td>125</td><td>Valid Palindrome</td><td>Converging Alphanumeric Scan</td><td>O(N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>167</td><td>Two Sum II</td><td>Sorted Converging Pointers</td><td>O(N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>26</td><td>Remove Duplicates</td><td>Fast &amp; Slow Pointers</td><td>O(N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>15</td><td>3Sum</td><td>Sort + Outer Loop + 2-Pointer</td><td>O(N^2)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>11</td><td>Container With Most Water</td><td>Shorter Wall Converge</td><td>O(N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>16</td><td>3Sum Closest</td><td>Sort + Min Difference Check</td><td>O(N^2)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>42</td><td>Trapping Rain Water</td><td>2-Pointer Boundary Max Tracking</td><td>O(N)</td><td>O(1)</td><td><span class="diff-h">H</span></td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 10: DRY RUN, MATH PROOFS & CHEAT SHEET -->
+<div class="page">
+<div class="ph">
+  <div><h1>TWO POINTERS PATTERN</h1><div class="sub">Dry Run, Math Proofs &amp; Cheat Sheet</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 10 OF 10</div><div class="ptag">DRY RUN · PROOFS · CHEAT SHEET</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:10px">
+  <div class="box">
+    <div class="bh">🔍 DRY RUN — Container With Most Water ([1, 8, 6, 2, 5, 4, 8, 3, 7])</div>
+    <div class="bc">
+      <table style="font-size:0.70rem">
+        <tr><th>Step</th><th>l (val)</th><th>r (val)</th><th>width (r - l)</th><th>h = min(h[l], h[r])</th><th>area</th><th>maxArea</th><th>Action</th></tr>
+        <tr><td>1</td><td>0 (1)</td><td>8 (7)</td><td>8</td><td>min(1, 7) = 1</td><td>8</td><td>8</td><td>`l++` (1 < 7)</td></tr>
+        <tr><td>2</td><td>1 (8)</td><td>8 (7)</td><td>7</td><td>min(8, 7) = 7</td><td>49</td><td>49</td><td>`r--` (7 < 8)</td></tr>
+        <tr><td>3</td><td>1 (8)</td><td>7 (3)</td><td>6</td><td>min(8, 3) = 3</td><td>18</td><td>49</td><td>`r--` (3 < 8)</td></tr>
+        <tr><td>4</td><td>1 (8)</td><td>6 (8)</td><td>5</td><td>min(8, 8) = 8</td><td>40</td><td>49 ✅</td><td>`r--`</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh">📐 MATHEMATICAL PROOF — GREEDY CHOICE OF SHORTER WALL</div>
+    <div class="bc">
+      <div style="font-size:0.76rem">
+        <p style="margin-bottom:4px"><strong>Claim:</strong> In Container With Most Water, moving the taller wall pointer cannot produce a larger area.</p>
+        <p style="margin-bottom:4px"><strong>Proof:</strong> Area is defined as `min(h[l], h[r]) * width`. If `h[l] < h[r]`, max height is capped at `h[l]`. Moving `r` inward decreases `width` while height remains at most `h[l]`. Thus, area is strictly smaller! Moving `l` is the ONLY way to potentially find a taller wall \rightarrow <strong>Exact Proof of Correctness!</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+    <div class="bc">
+      <div class="g2" style="gap:6px">
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Code Valid Palindrome with alphanumeric skip</li>
+          <li>☐ Code Two Sum II on sorted array in O(N)</li>
+          <li>☐ Code Remove Duplicates in O(1) space</li>
+          <li>☐ Implement 3Sum with triply nested duplicate skip</li>
+        </ul>
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Code Container With Most Water in 3 minutes</li>
+          <li>☐ Implement Trapping Rain Water with 2-pointers</li>
+          <li>☐ Explain greedy choice proof for water container</li>
+          <li>☐ Differentiate Converging vs Fast/Slow pointers</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+    <div class="bc">
+      <div class="aha" style="margin-bottom:4px;padding:5px">
+        <div class="aha-t">Rule 1 — Always Sort First for Sum Problems</div>
+        Before using Two Pointers for Two Sum / 3Sum / 4Sum, ensure the array is sorted (`Arrays.sort(nums)`). The entire directional choice relies on sorted order!
+      </div>
+      <div class="aha" style="padding:5px">
+        <div class="aha-t">Rule 2 — Guard Against Out-of-Bounds in Duplicate Skips</div>
+        When skipping duplicates inside `while` loops (e.g. in 3Sum), ALWAYS include `while (l < r && nums[l] == nums[l + 1]) l++` to prevent index out of bounds errors!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

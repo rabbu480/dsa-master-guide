@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 - Part 4: Stack, Queue, Deque & Monotonic Data Structures</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+    :root { --primary: #1e3a8a; --secondary: #2563eb; --accent: #d97706; --emerald: #059669; --text-dark: #0f172a; --bg-light: #f8fafc; --border-color: #cbd5e1; --code-bg: #1e293b; --code-text: #f8fafc; }
+    body { font-family: 'Inter', sans-serif; background-color: #cbd5e1; color: var(--text-dark); margin: 0; padding: 20px; font-size: 13px; line-height: 1.5; }
+    .page { background: white; max-width: 1100px; margin: 0 auto 30px auto; padding: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 8px; page-break-after: always; }
+    .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--primary); padding-bottom: 12px; margin-bottom: 25px; background: #f1f5f9; padding: 15px 20px; border-radius: 6px; }
+    .header-top h1 { margin: 0; font-size: 1.8rem; color: var(--primary); font-weight: 900; text-transform: uppercase; }
+    .badge { background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; }
+    .section-box { border: 2px solid var(--primary); border-radius: 8px; margin-bottom: 25px; overflow: hidden; background: white; page-break-inside: avoid; }
+    .section-header { background: var(--primary); color: white; padding: 10px 18px; font-size: 1.1rem; font-weight: 800; }
+    .section-content { padding: 18px; }
+    pre { background: var(--code-bg); color: var(--code-text); padding: 16px; margin: 10px 0; border-radius: 6px; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 1.5; white-space: pre-wrap !important; word-break: break-word !important; }
+    @media print { body { background: white; padding: 0; } .page { box-shadow: none; border: none; margin: 0; padding: 15px 0; max-width: 100%; } .section-box { page-break-inside: avoid !important; break-inside: avoid !important; } }
+</style>
+</head>
+<body>
+
+<div class="page">
+    <div class="header-top">
+        <div>
+            <h1>Book 1 — Part 4: Monotonic Stack & Monotonic Queue</h1>
+            <div style="font-size: 0.95rem; color: #475569; font-weight: 600;">Pages 52–63 · Next Greater Element & Sliding Window Max</div>
+        </div>
+        <span class="badge">Part 4</span>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">4.3 Monotonic Stack (Refer to A.14)</div>
+        <div class="section-content">
+            <pre><code>public int[] dailyTemperatures(int[] temperatures) {
+    int n = temperatures.length;
+    int[] res = new int[n];
+    Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;(); // Stores indices
+    
+    for (int i = 0; i &lt; n; i++) {
+        while (!stack.isEmpty() &amp;&amp; temperatures[stack.peek()] &lt; temperatures[i]) {
+            int prevIdx = stack.pop();
+            res[prevIdx] = i - prevIdx;
+        }
+        stack.push(i);
+    }
+    return res;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">4.4 Monotonic Queue (Refer to A.15)</div>
+        <div class="section-content">
+            <pre><code>public int[] maxSlidingWindow(int[] nums, int k) {
+    Deque&lt;Integer&gt; deque = new ArrayDeque&lt;&gt;();
+    int[] res = new int[nums.length - k + 1];
+    
+    for (int i = 0; i &lt; nums.length; i++) {
+        if (!deque.isEmpty() &amp;&amp; deque.peekFirst() &lt; i - k + 1) deque.pollFirst();
+        while (!deque.isEmpty() &amp;&amp; nums[deque.peekLast()] &lt;= nums[i]) deque.pollLast();
+        
+        deque.offerLast(i);
+        if (i &gt;= k - 1) res[i - k + 1] = nums[deque.peekFirst()];
+    }
+    return res;
+}</code></pre>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

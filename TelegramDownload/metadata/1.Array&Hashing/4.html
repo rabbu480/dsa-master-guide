@@ -1,0 +1,303 @@
+<div class="page">
+    <div class="header-top" style="background-color: #1e3b5e; color: white; padding: 15px; text-align: center; border-radius: 8px;">
+        <h1 style="margin: 0; font-size: 32px;">VOLUME 1: ARRAYS & HASHING <span style="background-color: #2563eb; padding: 5px 15px; border-radius: 8px; font-size: 24px; vertical-align: middle;">CHEAT SHEET</span></h1>
+        <div style="display: flex; justify-content: center; gap: 30px; margin-top: 10px; color: #facc15; font-weight: bold;">
+            <span>⭐ FAANG Interview Edition</span>
+            <span>🎯 Quick Lookup</span>
+            <span>⚡ Patterns First, Code Next</span>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 2fr 2fr; gap: 10px; margin-top: 15px;">
+        <div class="section-box">
+            <div class="section-header" style="background-color: #22c55e; color: white; padding: 8px; font-weight: bold;">1. INTERVIEW FLOW (ALWAYS FOLLOW)</div>
+            <div class="section-content" style="padding: 10px; font-size: 14px;">
+                <ol style="list-style: none; padding: 0; margin: 0;">
+                    <li style="margin-bottom: 8px;"><strong>1. Clarify</strong><br><small>Ask constraints, edge cases, duplicates, range, complexity.</small></li>
+                    <li style="margin-bottom: 8px; text-align: center;">↓</li>
+                    <li style="margin-bottom: 8px;"><strong>2. Brute Force</strong><br><small>Get it working first.</small></li>
+                    <li style="margin-bottom: 8px; text-align: center;">↓</li>
+                    <li style="margin-bottom: 8px;"><strong>3. Better</strong><br><small>Can we optimize?</small></li>
+                    <li style="margin-bottom: 8px; text-align: center;">↓</li>
+                    <li style="margin-bottom: 8px;"><strong>4. Optimal</strong><br><small>Best approach (Time/Space).</small></li>
+                    <li style="margin-bottom: 8px; text-align: center;">↓</li>
+                    <li style="margin-bottom: 8px;"><strong>5. Complexity</strong><br><small>Time and Space analysis.</small></li>
+                    <li style="margin-bottom: 8px; text-align: center;">↓</li>
+                    <li style="margin-bottom: 8px;"><strong>6. Code</strong><br><small>Clean, bug-free code.</small></li>
+                    <li style="margin-bottom: 8px; text-align: center;">↓</li>
+                    <li><strong>7. Explain</strong><br><small>Walkthrough + dry run.</small></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <div class="section-header" style="background-color: #3b82f6; color: white; padding: 8px; font-weight: bold;">2. PATTERN RECOGNITION</div>
+            <div class="section-content">
+                <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid #ccc;">
+                            <th>Need</th>
+                            <th>Use</th>
+                            <th>Example Problems</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Uniqueness / Duplicate</td><td>HashSet</td><td>217</td></tr>
+                        <tr><td>Frequency / Count</td><td>HashMap / int[26]</td><td>242, 347</td></tr>
+                        <tr><td>Pair / Complement</td><td>HashMap</td><td>1</td></tr>
+                        <tr><td>Grouping</td><td>HashMap&lt;Key, List&gt;</td><td>49</td></tr>
+                        <tr><td>Top K Frequent</td><td>HashMap + Min Heap</td><td>347</td></tr>
+                        <tr><td>Left & Right Info</td><td>Prefix / Suffix</td><td>238</td></tr>
+                        <tr><td>Consecutive Sequence</td><td>HashSet</td><td>128</td></tr>
+                        <tr><td>Matrix Validation</td><td>HashSet</td><td>36</td></tr>
+                        <tr><td>Encoding / Decoding</td><td>Length + Delimiter</td><td>271</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <div class="section-header" style="background-color: #f97316; color: white; padding: 8px; font-weight: bold;">3. PROBLEMS AT A GLANCE</div>
+            <div class="section-content">
+                <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid #ccc;">
+                            <th>LC #</th>
+                            <th>Problem</th>
+                            <th>Pattern</th>
+                            <th>Key Idea</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>217</td><td>Contains Duplicate</td><td>HashSet</td><td>If !set.add(x) ⇒ duplicate</td></tr>
+                        <tr><td>242</td><td>Valid Anagram</td><td>Frequency Array</td><td>Count++ then Count--</td></tr>
+                        <tr><td>1</td><td>Two Sum</td><td>HashMap</td><td>target - num</td></tr>
+                        <tr><td>49</td><td>Group Anagrams</td><td>HashMap + Freq Sig</td><td>26-count key string</td></tr>
+                        <tr><td>347</td><td>Top K Frequent</td><td>HashMap + Heap</td><td>Min Heap of size K</td></tr>
+                        <tr><td>271</td><td>Encode & Decode</td><td>Length + Delimiter</td><td>length#string format</td></tr>
+                        <tr><td>238</td><td>Product Except Self</td><td>Prefix / Suffix</td><td>Left[i] x Right[i]</td></tr>
+                        <tr><td>128</td><td>Longest Consecutive</td><td>HashSet</td><td>Start if num-1 not present</td></tr>
+                        <tr><td>36</td><td>Valid Sudoku</td><td>HashSet</td><td>Rows, Cols, 3x3 boxes</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-box" style="margin-top: 15px;">
+        <div class="section-header" style="background-color: #6366f1; color: white; padding: 8px; font-weight: bold; text-align: center;">4. KEY PATTERNS & TRICKS (HIGH IMPACT)</div>
+        <div class="section-content" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding: 10px; font-size: 12px;">
+            <div>
+                <strong style="color: #6366f1;">4.1 Group Anagrams (LC 49)</strong>
+                <pre style="background: #f8f9fa; padding: 5px; margin: 5px 0; font-family: monospace;"><code style="font-size: 10px;">int[] freq = new int[26];
+for(char c : s.toCharArray())
+    freq[c - 'a']++;
+StringBuilder key = new StringBuilder();
+for(int f : freq) key.append(f).append('#');</code></pre>
+                <small style="display: block; margin-top: 5px;">💡 # is important to avoid ambiguity.</small>
+            </div>
+            <div>
+                <strong style="color: #6366f1;">4.2 Top K Frequent (LC 347)</strong>
+                <pre style="background: #f8f9fa; padding: 5px; margin: 5px 0; font-family: monospace;"><code style="font-size: 10px;">Map&lt;Integer,Integer&gt; map = new HashMap&lt;&gt;();
+// count frequency
+PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;(
+  (a,b) -> a[1] - b[1] // min heap
+);
+for(int key : map.keySet()){
+  pq.offer(new int[]{key, map.get(key)});
+  if(pq.size() > k) pq.poll();
+}</code></pre>
+                <small style="display: block; margin-top: 5px;">💡 Keep only K elements in heap.</small>
+            </div>
+            <div>
+                <strong style="color: #6366f1;">4.3 Product Except Self (LC 238)</strong>
+                <ol style="padding-left: 15px; margin: 5px 0;">
+                    <li>Left Product Array</li>
+                    <li>Right Product (in one pass)</li>
+                    <li>Result[i] = Left[i] * Right[i]</li>
+                </ol>
+                <pre style="background: #f8f9fa; padding: 5px; margin: 5px 0; font-family: monospace;"><code style="font-size: 10px;">nums: [1,2,3,4]
+left: [1,1,2,6]
+right: [24,12,4,1]
+res: [24,12,8,6]</code></pre>
+                <small style="display: block; margin-top: 5px;">💡 No division. O(n) time, O(1) extra space (excluding output).</small>
+            </div>
+            <div>
+                <strong style="color: #6366f1;">4.4 Longest Consecutive (LC 128)</strong>
+                <pre style="background: #f8f9fa; padding: 5px; margin: 5px 0; font-family: monospace;"><code style="font-size: 10px;">Set&lt;Integer&gt; set = new HashSet&lt;&gt;(nums); // add all numbers
+int longest = 0;
+for(int num : set){
+  if(!set.contains(num - 1)){
+    int curr = num, count = 1;
+    while(set.contains(curr + 1)){
+      curr++; count++;
+    }
+    longest = Math.max(longest, count);
+  }
+}</code></pre>
+                <small style="display: block; margin-top: 5px;">💡 Start count only if num-1 is absent.</small>
+            </div>
+            <div>
+                <strong style="color: #6366f1;">4.5 Encode & Decode (LC 271)</strong>
+                <p style="margin: 5px 0;"><strong>ENCODE:</strong><br><code style="font-size: 10px; font-family: monospace;">sb.append(s.length()).append('#').append(s);</code></p>
+                <p style="margin: 5px 0;"><strong>DECODE:</strong><br><span style="font-size: 10px;">Read length until '#', then take that many characters.</span></p>
+                <pre style="background: #f8f9fa; padding: 5px; margin: 5px 0; font-family: monospace;"><code style="font-size: 10px;">Example:
+Input : ["Hello","World"]
+Encode: 5#Hello5#World
+Decode: ["Hello","World"]</code></pre>
+                <small style="display: block; margin-top: 5px;">💡 Never use split(). Parse length.</small>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 10px; margin-top: 15px;">
+        <div class="section-box">
+            <div class="section-header" style="background-color: #22c55e; color: white; padding: 8px; font-weight: bold; font-size: 12px; text-align: center;">5. COMPLEXITY QUICK REFERENCE</div>
+            <div class="section-content">
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+                    <tbody>
+                        <tr><td>HashSet add/contains/remove</td><td>O(1) avg</td></tr>
+                        <tr><td>HashMap put/get/contains</td><td>O(1) avg</td></tr>
+                        <tr><td>Loop (n times)</td><td>O(n)</td></tr>
+                        <tr><td>Two separate loops</td><td>O(2n) = O(n)</td></tr>
+                        <tr><td>Nested loops (n x m)</td><td>O(n*m)</td></tr>
+                        <tr><td>Sorting</td><td>O(n log n)</td></tr>
+                        <tr><td>PriorityQueue offer / poll</td><td>O(log n)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <div class="section-header" style="background-color: #0ea5e9; color: white; padding: 8px; font-weight: bold; font-size: 12px; text-align: center;">6. JAVA COLLECTIONS & APIS (MOST USED)</div>
+            <div class="section-content" style="display: flex; gap: 10px; font-size: 11px; padding: 10px;">
+                <div style="flex: 1;">
+                    <strong>HashSet&lt;Integer&gt; set</strong>
+                    <ul style="list-style: none; padding: 0; margin: 5px 0;">
+                        <li>add(x)</li>
+                        <li>contains(x)</li>
+                        <li>remove(x)</li>
+                        <li>size()</li>
+                        <li>clear()</li>
+                    </ul>
+                </div>
+                <div style="flex: 1;">
+                    <strong>HashMap&lt;K,V&gt; map</strong>
+                    <ul style="list-style: none; padding: 0; margin: 5px 0;">
+                        <li>put(k,v)</li>
+                        <li>get(k)</li>
+                        <li>containsKey(k)</li>
+                        <li>getOrDefault(k, def)</li>
+                        <li>computeIfAbsent(k, v->newV)</li>
+                        <li>keySet(), values(), entrySet()</li>
+                    </ul>
+                </div>
+                <div style="flex: 1;">
+                    <strong>PriorityQueue&lt;int[]&gt; pq</strong>
+                    <ul style="list-style: none; padding: 0; margin: 5px 0;">
+                        <li>offer(x)</li>
+                        <li>poll()</li>
+                        <li>peek()</li>
+                        <li>size()</li>
+                    </ul>
+                    <strong style="display:block; margin-top:5px;">For min heap:</strong>
+                    <code style="font-family: monospace;">(a,b) -> a[1] - b[1]</code>
+                </div>
+                <div style="flex: 1;">
+                    <strong>String / StringBuilder</strong>
+                    <ul style="list-style: none; padding: 0; margin: 5px 0;">
+                        <li>toCharArray()</li>
+                        <li>String.valueOf(x)</li>
+                        <li>Integer.parseInt(s)</li>
+                        <li style="margin-top: 5px;"><strong>StringBuilder sb</strong></li>
+                        <li>sb.append(x)</li>
+                        <li>sb.toString()</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <div class="section-header" style="background-color: #f59e0b; color: white; padding: 8px; font-weight: bold; font-size: 12px; text-align: center;">7. CONVERSIONS (QUICK RECALL)</div>
+            <div class="section-content">
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+                    <tbody>
+                        <tr><td>String → char[]</td><td>s.toCharArray()</td></tr>
+                        <tr><td>char[] → String</td><td>new String(arr)</td></tr>
+                        <tr><td>int → String</td><td>String.valueOf(x)<br>Integer.toString(x)</td></tr>
+                        <tr><td>String → int</td><td>Integer.parseInt(s)</td></tr>
+                        <tr><td>char → int</td><td>c - '0'</td></tr>
+                        <tr><td>int → char</td><td>(char) (x + '0')</td></tr>
+                        <tr><td>List → Array</td><td>list.toArray(new T[0])</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1.5fr; gap: 10px; margin-top: 15px;">
+        <div class="section-box">
+            <div class="section-header" style="background-color: #2563eb; color: white; padding: 8px; font-weight: bold; font-size: 12px; text-align: center;">8. BIG-O RULES (DON'T FORGET)</div>
+            <div class="section-content" style="font-size: 11px; text-align: center; padding: 10px;">
+                <div style="display: flex; justify-content: space-around; margin-bottom: 10px;">
+                    <div>
+                        <strong style="color: #2563eb;">Sequential loops ADD.</strong><br>Example 1 (Sequential):
+                        <pre style="background: #f8f9fa; padding: 5px; margin: 5px 0; text-align: left; font-family: monospace;">for i in n
+for j in n
+// O(n) + O(n) = O(n)</pre>
+                    </div>
+                    <div>
+                        <strong style="color: #2563eb;">Nested loops MULTIPLY.</strong><br>Example 2 (Nested):
+                        <pre style="background: #f8f9fa; padding: 5px; margin: 5px 0; text-align: left; font-family: monospace;">for i in n
+  for j in n
+// O(n * n) = O(n^2)</pre>
+                    </div>
+                </div>
+                <strong style="color: #2563eb;">One loop = O(n), Two loops sequential = O(n)</strong>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <div class="section-header" style="background-color: #dc2626; color: white; padding: 8px; font-weight: bold; font-size: 12px; text-align: center;">9. COMMON MISTAKES (AVOID)</div>
+            <div class="section-content" style="font-size: 11px; padding: 10px;">
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="margin-bottom: 5px;">❌ Using sort when HashSet can solve in O(n).</li>
+                    <li style="margin-bottom: 5px;">❌ Forgetting to check num-1 before counting sequence.</li>
+                    <li style="margin-bottom: 5px;">❌ Using split() in Encode/Decode (causes errors with #).</li>
+                    <li style="margin-bottom: 5px;">❌ Not handling negative numbers or edge cases.</li>
+                    <li style="margin-bottom: 5px;">❌ Not analyzing complexity.</li>
+                    <li>❌ Over-complicating when a simpler pattern fits.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <div class="section-header" style="background-color: #9333ea; color: white; padding: 8px; font-weight: bold; font-size: 12px; text-align: center;">10. INTERVIEW COMMUNICATION TIPS</div>
+            <div class="section-content" style="font-size: 11px; padding: 10px;">
+                <ul style="list-style: none; padding: 0; margin: 0 0 10px 0;">
+                    <li style="margin-bottom: 3px;">✅ Think out loud. Explain each step.</li>
+                    <li style="margin-bottom: 3px;">✅ Start with brute force, then optimize.</li>
+                    <li style="margin-bottom: 3px;">✅ Give examples and dry run.</li>
+                    <li style="margin-bottom: 3px;">✅ State assumptions clearly.</li>
+                    <li style="margin-bottom: 3px;">✅ Write clean, readable code.</li>
+                    <li>✅ Summarize time & space at the end.</li>
+                </ul>
+                <div style="text-align: center; color: #9333ea; font-weight: bold; margin-top: 5px;">
+                    Golden Line:<br>
+                    "Brute Force → Better → Optimal →<br>
+                    Complexity → Code → Explain"
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="background-color: #fef08a; padding: 10px 15px; margin-top: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: bold;">
+        <div style="background-color: #facc15; padding: 5px 10px; border-radius: 5px; color: #422006;">MEMORY MANTRAS ⭐</div>
+        <div style="text-align: center;"><span style="color: #2563eb;">Need Unique?</span><br>Use HashSet</div>
+        <div style="text-align: center;"><span style="color: #2563eb;">Need Count?</span><br>Use HashMap</div>
+        <div style="text-align: center;"><span style="color: #2563eb;">Need Left & Right?</span><br>Use Prefix / Suffix</div>
+        <div style="text-align: center;"><span style="color: #2563eb;">Need Top K?</span><br>Use Heap</div>
+        <div style="text-align: center;"><span style="color: #2563eb;">Need Consecutive?</span><br>Use HashSet</div>
+        <div style="color: #b45309; text-align: right; line-height: 1.2;">🏆 PRACTICE. PATTERNS.<br>REPEAT. CRACK FAANG!</div>
+    </div>
+</div>

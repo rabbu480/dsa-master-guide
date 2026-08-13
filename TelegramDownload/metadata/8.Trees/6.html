@@ -1,0 +1,365 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline; gap: 10px;">
+            <div style="background-color: #0b1c3c; color: white; font-size: 24px; padding: 5px 15px; border-radius: 5px;">5</div>
+            <h1>BFS PATTERN PROBLEMS</h1>
+            <div class="subtitle">(LEVEL ORDER FOCUSED)<br><small style="color:#64748b;font-weight:normal;">(FAANG Cheat Sheet)</small></div>
+        </div>
+        <div style="text-align: right;">
+            <div class="page-number">PAGE 5</div>
+        </div>
+    </div>
+
+    <div style="text-align: center; font-weight: bold; font-size: 1.2em; margin-bottom: 10px;">BFS = Level by Level using Queue</div>
+
+    <div style="display: flex; justify-content: space-between; border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 10px; font-weight: bold; font-size: 0.9em;">
+        <div>💡 AHA = Key Insight</div>
+        <div>⚙️ Pattern = How to think</div>
+        <div>∑ Formula / Idea</div>
+        <div>⏱️ Complexity = Time & Space</div>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header" style="background-color: #0b1c3c; color: white; padding: 5px;">1. LEVEL ORDER TRAVERSAL (LC 102)</div>
+        <div class="section-content" style="display: flex; gap: 10px; padding: 10px;">
+            <!-- Example -->
+            <div style="flex: 1;">
+                <strong style="color: #16a34a;">Example</strong>
+                <div class="mermaid">
+                graph TD
+                    1((1)) --> 2((2))
+                    1 --> 3((3))
+                    2 --> 4((4))
+                    2 --> 5((5))
+                    3 --> 6((6))
+                    3 --> 7((7))
+                </div>
+                <br>
+                <strong>Output:</strong><br>
+                [[1], [2,3], [4,5,6,7]]
+            </div>
+            <!-- AHA / Pattern / Idea -->
+            <div style="flex: 1; border-left: 1px solid #ccc; padding-left: 10px;">
+                <strong style="color: #ea580c;">💡 AHA</strong><br>
+                <p style="font-size: 0.9em; margin-bottom: 5px;">Need nodes level by level.<br>Use Queue.<br>Queue size tells current level.</p>
+                <strong style="color: #16a34a;">⚙️ Pattern</strong><br>
+                <p style="font-size: 0.9em; margin-bottom: 5px;">BFS (Level Order) using Queue</p>
+                <strong style="color: #2563eb;">∑ Idea / Formula</strong><br>
+                <p style="font-size: 0.9em;">Process all nodes in queue (size = current level). Add children to queue.</p>
+            </div>
+            <!-- Code -->
+            <div style="flex: 2; border-left: 1px solid #ccc; padding-left: 10px;">
+                <div style="background-color: #0b1c3c; color: white; text-align: center; padding: 2px;">Code (Java)</div>
+<pre style="font-size: 0.85em;"><code>List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    if (root == null) return res;
+
+    Queue&lt;TreeNode&gt; q = new LinkedList&lt;&gt;();
+    q.offer(root);
+
+    while (!q.isEmpty()) {
+        int size = q.size();
+        List&lt;Integer&gt; level = new ArrayList&lt;&gt;();
+        
+        // process current level
+        for (int i = 0; i &lt; size; i++) {
+            TreeNode node = q.poll();
+            level.add(node.val);
+            
+            if (node.left != null) q.offer(node.left);
+            if (node.right != null) q.offer(node.right);
+        }
+        res.add(level);
+    }
+    return res;
+}</code></pre>
+            </div>
+            <!-- Complexity -->
+            <div style="flex: 1; border-left: 1px solid #ccc; padding-left: 10px;">
+                <div style="text-align: right;"><strong style="color: #7e22ce;">⏱️ Complexity</strong></div>
+                <br>
+                <p style="font-size: 0.9em;"><strong>Time: O(n)</strong><br>Every node visited once.</p>
+                <br>
+                <p style="font-size: 0.9em;"><strong>Space: O(n)</strong><br>Queue can hold max nodes of last level.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container">
+        <div class="col-left">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #0b1c3c; color: white; padding: 5px;">2. RIGHT SIDE VIEW (LC 199)</div>
+                <div class="section-content" style="display: flex; gap: 10px; padding: 10px;">
+                    <div style="flex: 1;">
+                        <strong style="color: #16a34a;">Example</strong>
+                        <div class="mermaid">
+                        graph TD
+                            1((1)) --> 2((2))
+                            1 --> 3((3))
+                            2 --> 4((4))
+                            2 --> 5((5))
+                            3 --> 6((6))
+                            3 --> 7((7))
+                        </div>
+                        <br>
+                        <strong>Output: [1, 3, 7]</strong><br>
+                        <span style="font-size: 0.85em;">(Rightmost of each level)</span>
+                    </div>
+                    <div style="flex: 1; border-left: 1px solid #ccc; padding-left: 5px;">
+                        <strong style="color: #ea580c;">💡 AHA</strong><br>
+                        <p style="font-size: 0.8em; margin-bottom: 5px;">We need the last node of each level. In each level, the last node we pop is the rightmost.</p>
+                        <strong style="color: #16a34a;">⚙️ Pattern</strong><br>
+                        <p style="font-size: 0.8em; margin-bottom: 5px;">BFS (Level Order)</p>
+                        <strong style="color: #2563eb;">∑ Idea</strong><br>
+                        <p style="font-size: 0.8em;">In each level, pick the last node's value.</p>
+                    </div>
+                    <div style="flex: 1.5; border-left: 1px solid #ccc; padding-left: 5px;">
+                        <div style="background-color: #f0f0f0; text-align: center; padding: 2px;">Code (Java)</div>
+<pre style="font-size: 0.7em;"><code>List&lt;Integer&gt; rightSideView(TreeNode root) {
+    List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+    if (root == null) return res;
+    Queue&lt;TreeNode&gt; q = new LinkedList&lt;&gt;();
+    q.offer(root);
+    while (!q.isEmpty()) {
+        int size = q.size();
+        for (int i = 0; i &lt; size; i++) {
+            TreeNode node = q.poll();
+            if (i == size - 1) res.add(node.val); // last node
+            if (node.left != null) q.offer(node.left);
+            if (node.right != null) q.offer(node.right);
+        }
+    }
+    return res;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-right">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #0b1c3c; color: white; padding: 5px;">3. ZIGZAG LEVEL ORDER (LC 103)</div>
+                <div class="section-content" style="display: flex; gap: 10px; padding: 10px;">
+                    <div style="flex: 1;">
+                        <strong style="color: #16a34a;">Example</strong>
+                        <div class="mermaid">
+                        graph TD
+                            1((1)) --> 2((2))
+                            1 --> 3((3))
+                            2 --> 4((4))
+                            2 --> 5((5))
+                            3 --> 6((6))
+                            3 --> 7((7))
+                        </div>
+                        <br>
+                        <strong>Output:</strong><br>
+                        <span style="font-size: 0.85em;">[[1], [3,2], [4,5,6,7]]</span>
+                    </div>
+                    <div style="flex: 1; border-left: 1px solid #ccc; padding-left: 5px;">
+                        <strong style="color: #ea580c;">💡 AHA</strong><br>
+                        <p style="font-size: 0.8em; margin-bottom: 5px;">Direction changes at every level. Use a flag.</p>
+                        <strong style="color: #16a34a;">⚙️ Pattern</strong><br>
+                        <p style="font-size: 0.8em; margin-bottom: 5px;">BFS + Direction Toggle</p>
+                        <strong style="color: #2563eb;">∑ Idea</strong><br>
+                        <p style="font-size: 0.8em;">If leftToRight -><br>left to right<br>Else -><br>right to left</p>
+                    </div>
+                    <div style="flex: 1.5; border-left: 1px solid #ccc; padding-left: 5px;">
+                        <div style="background-color: #f0f0f0; text-align: center; padding: 2px;">Code (Java)</div>
+<pre style="font-size: 0.65em;"><code>List&lt;List&lt;Integer&gt;&gt; zigzagLevelOrder(TreeNode root) {
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    if (root == null) return res;
+    Queue&lt;TreeNode&gt; q = new LinkedList&lt;&gt;();
+    q.offer(root);
+    boolean leftToRight = true;
+    while (!q.isEmpty()) {
+        int size = q.size();
+        LinkedList&lt;Integer&gt; level = new LinkedList&lt;&gt;();
+        for (int i = 0; i &lt; size; i++) {
+            TreeNode node = q.poll();
+            if (leftToRight) level.addLast(node.val);
+            else level.addFirst(node.val);
+            
+            if (node.left != null) q.offer(node.left);
+            if (node.right != null) q.offer(node.right);
+        }
+        res.add(level);
+        leftToRight = !leftToRight; // toggle
+    }
+    return res;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container" style="margin-top: 10px;">
+        <div class="col-left">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #4c1d95; color: white; padding: 5px;">4. BFS TEMPLATE (REMEMBER THIS!)</div>
+                <div class="section-content" style="display: flex; gap: 10px; padding: 10px;">
+                    <div style="flex: 1.5;">
+<pre style="font-size: 0.75em;"><code>// BFS Template
+if (root == null) return;
+
+Queue&lt;TreeNode&gt; q = new LinkedList&lt;&gt;();
+q.offer(root);
+
+while (!q.isEmpty()) {
+    int size = q.size();    // nodes in current level
+    
+    for (int i = 0; i &lt; size; i++) {
+        TreeNode node = q.poll();
+        // ---- Do something with node here ----
+        
+        if (node.left != null) q.offer(node.left);
+        if (node.right != null) q.offer(node.right);
+    } // ---- Level completed ----
+}</code></pre>
+                    </div>
+                    <div style="flex: 1; border: 1px solid #ccc; padding: 10px; border-radius: 5px; background-color: #f8fafc; font-size: 0.9em;">
+                        <strong>Key Points</strong><br><br>
+                        <span style="color:#2563eb;">✔</span> <strong>Use Queue</strong><br><br>
+                        <span style="color:#2563eb;">✔</span> <strong>queue.size() = current level size</strong><br><br>
+                        <span style="color:#2563eb;">✔</span> <strong>Process level by level</strong><br><br>
+                        <span style="color:#2563eb;">✔</span> <strong>Add children for next level</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-right">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #0b1c3c; color: white; padding: 5px;">5. HOW QUEUE WORKS IN BFS</div>
+                <div class="section-content" style="padding: 10px;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 0.8em;">
+                        <tr style="border-bottom: 2px solid #ccc; color: #1e3a8a;">
+                            <th>Step</th>
+                            <th>Queue (Front → Back)</th>
+                            <th>Level</th>
+                            <th>Action</th>
+                            <th>Visual Flow</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td><div style="background-color: #1e3a8a; color: white; border-radius: 50%; width: 20px; height: 20px; display: inline-block; line-height: 20px;">1</div></td>
+                            <td>[ 1 ]</td>
+                            <td>0</td>
+                            <td>Start: push root</td>
+                            <td rowspan="7" style="vertical-align: middle;">
+                                <div class="mermaid">
+                                graph TD
+                                    subgraph Level 0
+                                    1((1))
+                                    end
+                                    subgraph Level 1
+                                    2((2))
+                                    3((3))
+                                    end
+                                    subgraph Level 2
+                                    4((4))
+                                    5((5))
+                                    6((6))
+                                    7((7))
+                                    end
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td><div style="background-color: #1e3a8a; color: white; border-radius: 50%; width: 20px; height: 20px; display: inline-block; line-height: 20px;">2</div></td>
+                            <td>[ ] → [ 2, 3 ]</td>
+                            <td>1</td>
+                            <td>Pop 1, push 2, 3</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td><div style="background-color: #1e3a8a; color: white; border-radius: 50%; width: 20px; height: 20px; display: inline-block; line-height: 20px;">3</div></td>
+                            <td>[ 2, 3 ]</td>
+                            <td>1</td>
+                            <td>Process level 1</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td><div style="background-color: #1e3a8a; color: white; border-radius: 50%; width: 20px; height: 20px; display: inline-block; line-height: 20px;">4</div></td>
+                            <td>[ ] → [ 4, 5, 6, 7 ]</td>
+                            <td>2</td>
+                            <td>Pop 2, push 4, 5<br>Pop 3, push 6, 7</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td><div style="background-color: #1e3a8a; color: white; border-radius: 50%; width: 20px; height: 20px; display: inline-block; line-height: 20px;">5</div></td>
+                            <td>[ 4, 5, 6, 7 ]</td>
+                            <td>2</td>
+                            <td>Process level 2</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td><div style="background-color: #1e3a8a; color: white; border-radius: 50%; width: 20px; height: 20px; display: inline-block; line-height: 20px;">6</div></td>
+                            <td>[ ]</td>
+                            <td>3</td>
+                            <td>All nodes processed</td>
+                        </tr>
+                        <tr>
+                            <td><div style="background-color: #1e3a8a; color: white; border-radius: 50%; width: 20px; height: 20px; display: inline-block; line-height: 20px;">7</div></td>
+                            <td>[ ]</td>
+                            <td>-</td>
+                            <td>Queue empty, done!</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-top: 10px;">
+        <!-- WHEN TO USE BFS -->
+        <div style="flex: 1; border: 1px solid #86efac; border-radius: 5px; padding: 10px; font-size: 0.85em;">
+            <strong style="color: #16a34a; font-size: 1.1em;">WHEN TO USE BFS?</strong><br><br>
+            <span style="color: #16a34a;">✔</span> Need level by level processing<br>
+            <span style="color: #16a34a;">✔</span> Shortest path in unweighted graphs<br>
+            <span style="color: #16a34a;">✔</span> Minimum steps / transformations<br>
+            <span style="color: #16a34a;">✔</span> Problems involving distance / levels<br>
+            <span style="color: #16a34a;">✔</span> Tree view from top / side / bottom
+        </div>
+        <!-- BFS vs DFS -->
+        <div style="flex: 1.5; border: 1px solid #93c5fd; border-radius: 5px; padding: 10px; text-align: center; font-size: 0.85em;">
+            <strong style="color: #2563eb; font-size: 1.1em;">BFS vs DFS (Quick Comparison)</strong><br><br>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr style="border-bottom: 2px solid #ccc; background-color: #f1f5f9;">
+                    <th style="padding: 5px;">Feature</th>
+                    <th>BFS</th>
+                    <th>DFS</th>
+                </tr>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 5px;"><strong>Strategy</strong></td>
+                    <td>Level by Level</td>
+                    <td>Go Deep, then Backtrack</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 5px;"><strong>Data Structure</strong></td>
+                    <td>Queue</td>
+                    <td>Stack / Recursion</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 5px;"><strong>Best For</strong></td>
+                    <td>Level problems</td>
+                    <td>Path / Depth problems</td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px;"><strong>Space</strong></td>
+                    <td>O(max width)</td>
+                    <td>O(max depth)</td>
+                </tr>
+            </table>
+        </div>
+        <!-- QUICK RECAP -->
+        <div style="flex: 1; border: 1px solid #fde047; border-radius: 5px; padding: 10px; font-size: 0.85em;">
+            <strong style="color: #0284c7; font-size: 1.1em;">QUICK RECAP</strong><br><br>
+            ⭐ Use Queue for BFS.<br>
+            ⭐ queue.size() gives current level.<br>
+            ⭐ Process all nodes of a level together.<br>
+            ⭐ Add children for next level.<br>
+            ⭐ BFS = Clean + Level Order + Optimal<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for shortest path problems).
+        </div>
+    </div>
+
+    <div style="margin-top: 15px; text-align: center; font-weight: bold; background-color: #fef08a; padding: 10px; border-radius: 5px;">
+        🏆 FINAL MANTRA: Think Level by Level → Use Queue → Process Level → Add Children → Repeat → Get Answer
+    </div>
+</div>

@@ -1,0 +1,543 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1>GRAPH PATTERN GUIDE</h1>
+            <div class="subtitle">PAGE 6 — MASTER BFS TEMPLATE GUIDE<br><small style="color:#64748b;font-weight:normal;">"One BFS algorithm. Five reusable templates."</small></div>
+        </div>
+        <div style="text-align: right;">
+            <div class="page-number">PAGE 6</div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+        <div style="flex: 1;">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">1</span> MASTER IDEA <span style="float:right">★★★★★</span></div>
+                <div class="section-content">
+                    <p>💡 <strong>Almost every Graph BFS interview problem uses one of a few reusable templates.</strong></p>
+                    <p>The BFS traversal pattern almost never changes.</p>
+                    <p>Only the caller, input, return type and tiny logic change.</p>
+                </div>
+            </div>
+        </div>
+        <div style="flex: 3;">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">2</span> GRAPH BFS TEMPLATE (ADJACENCY LIST) <span style="float:right">★★★★★</span></div>
+                <div class="section-content">
+                    <div style="display: flex; gap: 20px;">
+                        <div style="flex: 1;">
+                            <table style="width:100%; border:none; text-align:left;">
+                                <tr><td>🔗 <strong>Input</strong></td><td>Adjacency List<br>(<code>List&lt;List&lt;Integer&gt;&gt;</code>)</td></tr>
+                                <tr><td>📞 <strong>Caller</strong></td><td><code>bfs(start)</code></td></tr>
+                                <tr><td>✅ <strong>Visited</strong></td><td><code>boolean[]</code></td></tr>
+                                <tr><td>🔙 <strong>Return</strong></td><td>void / boolean / int</td></tr>
+                                <tr><td>🎯 <strong>Used In</strong></td><td>
+                                    <ul style="margin:0; padding-left:20px;">
+                                        <li>Valid Path</li>
+                                        <li>Connected Components</li>
+                                        <li>Shortest Path (Unweighted)</li>
+                                        <li>Bipartite Check</li>
+                                    </ul>
+                                </td></tr>
+                            </table>
+                        </div>
+                        <div style="flex: 2;">
+                            <strong>Java Template</strong>
+<pre><code>public void bfs(int start, List&lt;List&lt;Integer&gt;&gt; graph, boolean[] visited) {
+    Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();
+    q.offer(start);
+    visited[start] = true;
+    
+    while (!q.isEmpty()) {
+        int node = q.poll();
+        // process current node here (modify as per problem)
+        for (int neighbor : graph.get(node)) {
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                q.offer(neighbor);
+            }
+        }
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                    <div style="background-color: #f0fdf4; border-left: 4px solid #22c55e; padding: 10px; margin-top: 10px;">
+                        <strong>AHA</strong> Graph neighbors come from <code>graph.get(node)</code>. BFS explores level by level.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container" style="margin-bottom: 20px;">
+        <div class="col-left">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">3</span> GRID BFS TEMPLATE <span style="float:right">★★★★★</span></div>
+                <div class="section-content">
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1; font-size: 0.9em;">
+                            <p>🗺️ <strong>Input</strong>: Grid</p>
+                            <p>📞 <strong>Caller</strong>: <code>bfs(r, c)</code></p>
+                            <p>✅ <strong>Visited</strong>: <code>boolean[][]</code></p>
+                            <p>🏃 <strong>Movement</strong>: <code>dirs[]</code></p>
+                            <p>🗄️ <strong>Queue</strong>: <code>Queue&lt;int[]&gt;</code></p>
+                            <p>🎯 <strong>Used In</strong>:
+                                <ul style="margin:0; padding-left:15px;">
+                                    <li>Rotting Oranges</li>
+                                    <li>Walls and Gates</li>
+                                    <li>Shortest Path in Binary Matrix</li>
+                                    <li>01 Matrix</li>
+                                </ul>
+                            </p>
+                        </div>
+                        <div style="flex: 2;">
+                            <strong>Java Template</strong>
+<pre style="font-size: 0.75em;"><code>public void bfs(int r, int c, int[][] grid, boolean[][] visited) {
+    int m = grid.length, n = grid[0].length;
+    int[][] dirs = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+    Queue&lt;int[]&gt; q = new LinkedList&lt;&gt;();
+    q.offer(new int[]{r, c});
+    visited[r][c] = true;
+    
+    while (!q.isEmpty()) {
+        int[] cur = q.poll();
+        int cr = cur[0], cc = cur[1];
+        
+        for (int[] d : dirs) {
+            int nr = cr + d[0], nc = cc + d[1];
+            if (nr &gt;= 0 &amp;&amp; nr &lt; m &amp;&amp; nc &gt;= 0 &amp;&amp; nc &lt; n 
+                &amp;&amp; !visited[nr][nc]) {
+                visited[nr][nc] = true;
+                q.offer(new int[]{nr, nc});
+            }
+        }
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                    <div style="background-color: #e0f2fe; border-left: 4px solid #3b82f6; padding: 10px; margin-top: 10px;">
+                        <strong>AHA</strong> Grid is an implicit graph. We move using <code>dirs[]</code>.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-right">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">4</span> MULTI-SOURCE BFS TEMPLATE <span style="float:right">★★★★</span></div>
+                <div class="section-content">
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1; font-size: 0.9em;">
+                            <p>💡 <strong>Idea</strong>: Push ALL sources first, then BFS.</p>
+                            <p>📥 <strong>Queue Init</strong>: Add all sources to queue.</p>
+                            <p>🎯 <strong>Used In</strong>:
+                                <ul style="margin:0; padding-left:15px;">
+                                    <li>Rotting Oranges</li>
+                                    <li>Walls and Gates</li>
+                                    <li>Distance to Nearest 0</li>
+                                    <li>01 Matrix</li>
+                                    <li>Pacific Atlantic (variation)</li>
+                                    <li>Multi-Source Shortest Path</li>
+                                </ul>
+                            </p>
+                        </div>
+                        <div style="flex: 2;">
+                            <strong>Java Template</strong>
+<pre style="font-size: 0.75em;"><code>public void multiSourceBfs(List&lt;int[]&gt; sources, int m, int n, boolean[][] visited) {
+    int[][] dirs = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+    Queue&lt;int[]&gt; q = new LinkedList&lt;&gt;();
+    
+    // 1. Add all sources to queue
+    for (int[] src : sources) {
+        q.offer(src);
+        visited[src[0]][src[1]] = true;
+    }
+    
+    // 2. Process together level by level
+    while (!q.isEmpty()) {
+        int[] cur = q.poll();
+        int r = cur[0], c = cur[1];
+        for (int[] d : dirs) {
+            int nr = r + d[0], nc = c + d[1];
+            if (nr &gt;= 0 &amp;&amp; nr &lt; m &amp;&amp; nc &gt;= 0 &amp;&amp; nc &lt; n 
+                &amp;&amp; !visited[nr][nc]) {
+                visited[nr][nc] = true;
+                q.offer(new int[]{nr, nc});
+            }
+        }
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                    <div style="background-color: #e0f2fe; border-left: 4px solid #3b82f6; padding: 10px; margin-top: 10px;">
+                        <strong>AHA</strong> Multiple starting points become one BFS. Distances spread outwards.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container" style="margin-bottom: 20px;">
+        <div class="col-left">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">5</span> LEVEL ORDER BFS TEMPLATE <span style="float:right">★★★★</span></div>
+                <div class="section-content">
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1; font-size: 0.9em;">
+                            <p>💡 <strong>Idea</strong>: Process one level at a time using queue size.</p>
+                            <p>🔑 <strong>Key Line</strong>: <code>int size = q.size();</code></p>
+                            <p>🎯 <strong>Used In</strong>:
+                                <ul style="margin:0; padding-left:15px;">
+                                    <li>Tree Level Order</li>
+                                    <li>Graph Levels</li>
+                                    <li>Minimum Steps Problems</li>
+                                    <li>Level wise Traversal</li>
+                                </ul>
+                            </p>
+                        </div>
+                        <div style="flex: 2;">
+                            <strong>Java Template</strong>
+<pre style="font-size: 0.75em;"><code>public List&lt;List&lt;Integer&gt;&gt; levelOrder(int start, List&lt;List&lt;Integer&gt;&gt; graph) {
+    List&lt;List&lt;Integer&gt;&gt; ans = new ArrayList&lt;&gt;();
+    boolean[] visited = new boolean[graph.size()];
+    Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();
+    q.offer(start);
+    visited[start] = true;
+    
+    while (!q.isEmpty()) {
+        int size = q.size();        // level size
+        List&lt;Integer&gt; level = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; size; i++) {
+            int node = q.poll();
+            level.add(node);
+            for (int nei : graph.get(node)) {
+                if (!visited[nei]) {
+                    visited[nei] = true;
+                    q.offer(nei);
+                }
+            }
+        }
+        ans.add(level);
+    }
+    return ans;
+}</code></pre>
+                        </div>
+                    </div>
+                    <div style="background-color: #e0f2fe; border-left: 4px solid #3b82f6; padding: 10px; margin-top: 10px;">
+                        <strong>AHA</strong> Queue size gives the number of nodes at the current level.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-right">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">6</span> DISTANCE BFS TEMPLATE <span style="float:right">★★★★</span></div>
+                <div class="section-content">
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1; font-size: 0.9em;">
+                            <p>💡 <strong>Idea</strong>: Track distance (level) when you reach each node.</p>
+                            <p>📏 <strong>Track</strong>: level variable OR distance[] array</p>
+                            <p>🎯 <strong>Used In</strong>:
+                                <ul style="margin:0; padding-left:15px;">
+                                    <li>Shortest Path (Unweighted)</li>
+                                    <li>01 Matrix</li>
+                                    <li>Nearest Exit</li>
+                                    <li>K Steps Problems</li>
+                                    <li>Minimum Steps</li>
+                                </ul>
+                            </p>
+                        </div>
+                        <div style="flex: 2;">
+                            <strong>Java Template</strong>
+<pre style="font-size: 0.75em;"><code>public int bfsShortestPath(int start, int target, List&lt;List&lt;Integer&gt;&gt; graph) {
+    int n = graph.size();
+    boolean[] visited = new boolean[n];
+    Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();
+    q.offer(start);
+    visited[start] = true;
+    int level = 0;
+    
+    while (!q.isEmpty()) {
+        int size = q.size();
+        for (int i = 0; i &lt; size; i++) {
+            int node = q.poll();
+            if (node == target) return level;
+            for (int nei : graph.get(node)) {
+                if (!visited[nei]) {
+                    visited[nei] = true;
+                    q.offer(nei);
+                }
+            }
+        }
+        level++;    // next distance
+    }
+    return -1; // not reachable
+}</code></pre>
+                        </div>
+                    </div>
+                    <div style="background-color: #e0f2fe; border-left: 4px solid #3b82f6; padding: 10px; margin-top: 10px;">
+                        <strong>AHA</strong> First time you reach a node is the shortest distance in unweighted graphs.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container" style="margin-bottom: 20px;">
+        <div class="col-left">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">7</span> WHAT ACTUALLY CHANGES? <span style="float:right">★★★★★</span></div>
+                <div class="section-content">
+                    <table style="width:100%; text-align:left; font-size: 0.85em; border-collapse: collapse;">
+                        <tr style="background:#f1f5f9; border-bottom:1px solid #cbd5e1;">
+                            <th style="padding: 5px;">Template</th>
+                            <th style="padding: 5px;">Input</th>
+                            <th style="padding: 5px;">Caller</th>
+                            <th style="padding: 5px;">Visited</th>
+                            <th style="padding: 5px;">Return</th>
+                            <th style="padding: 5px;">ONLY THING THAT CHANGES</th>
+                        </tr>
+                        <tr style="border-bottom:1px solid #cbd5e1;">
+                            <td style="padding: 5px;">🔗 Graph BFS<br>(Adj List)</td>
+                            <td style="padding: 5px;">Adjacency List<br><code>List&lt;List&lt;Integer&gt;&gt;</code></td>
+                            <td style="padding: 5px;"><code>bfs(start)</code></td>
+                            <td style="padding: 5px;"><code>boolean[]</code></td>
+                            <td style="padding: 5px;">void /<br>boolean /<br>int</td>
+                            <td style="padding: 5px;">Neighbors come from<br><code>graph.get(node)</code></td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #cbd5e1;">
+                            <td style="padding: 5px;">▦ Grid BFS</td>
+                            <td style="padding: 5px;">Grid<br><code>(int[][])</code></td>
+                            <td style="padding: 5px;"><code>bfs(r, c)</code></td>
+                            <td style="padding: 5px;"><code>boolean[][]</code></td>
+                            <td style="padding: 5px;">void /<br>int</td>
+                            <td style="padding: 5px;">Movement using <code>dirs[]</code><br>+ boundary checks</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #cbd5e1;">
+                            <td style="padding: 5px;">🚀 Multi-Source BFS</td>
+                            <td style="padding: 5px;">Grid / Graph<br>(Any)</td>
+                            <td style="padding: 5px;"><code>multiSourceBfs(sources)</code></td>
+                            <td style="padding: 5px;"><code>boolean[][]</code><br>or <code>boolean[]</code></td>
+                            <td style="padding: 5px;">void /<br>int</td>
+                            <td style="padding: 5px;">Initial queue contains<br>all sources</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #cbd5e1;">
+                            <td style="padding: 5px;">📶 Level Order BFS</td>
+                            <td style="padding: 5px;">Graph / Tree<br>(Any)</td>
+                            <td style="padding: 5px;"><code>bfs(start)</code></td>
+                            <td style="padding: 5px;"><code>boolean[]</code></td>
+                            <td style="padding: 5px;"><code>List&lt;List&lt;Integer&gt;&gt;</code><br>/ void / int</td>
+                            <td style="padding: 5px;">Use queue size (level)<br>to process by level</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px;">📏 Distance BFS</td>
+                            <td style="padding: 5px;">Graph / Grid<br>(Any)</td>
+                            <td style="padding: 5px;"><code>bfs(start)</code></td>
+                            <td style="padding: 5px;"><code>boolean[]</code><br>(or <code>distance[]</code>)</td>
+                            <td style="padding: 5px;">int</td>
+                            <td style="padding: 5px;">Track level or distance<br>for each node</td>
+                        </tr>
+                    </table>
+                    <div style="text-align: center; margin-top: 10px; font-weight: bold; background: #fef9c3; padding: 5px; border-radius: 4px;">
+                        💡 This table is your 30-second interview revision sheet. Memorize it.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-right">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">8</span> RETURN TYPE GUIDE <span style="float:right">★★★★★</span></div>
+                <div class="section-content">
+                    <table style="width:100%; text-align:left; font-size: 0.85em; border-collapse: collapse;">
+                        <tr style="background:#f1f5f9; border-bottom:1px solid #cbd5e1;">
+                            <th style="padding: 5px;">Return Type</th>
+                            <th style="padding: 5px;">Purpose</th>
+                            <th style="padding: 5px;">Typical Problems</th>
+                            <th style="padding: 5px;">Interview Meaning</th>
+                        </tr>
+                        <tr style="border-bottom:1px solid #cbd5e1;">
+                            <td style="padding: 5px;"><code>void</code></td>
+                            <td style="padding: 5px;">Traverse / Mark /<br>Modify</td>
+                            <td style="padding: 5px;">Flood Fill, Surrounded Regions,<br>Rotting Oranges</td>
+                            <td style="padding: 5px;">We only visit / update<br>nodes.</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #cbd5e1;">
+                            <td style="padding: 5px;"><code>boolean</code></td>
+                            <td style="padding: 5px;">Search / Existence<br>Check</td>
+                            <td style="padding: 5px;">Valid Path, Word Ladder,<br>Bipartite Check</td>
+                            <td style="padding: 5px;">Return true when<br>condition is met.</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #cbd5e1;">
+                            <td style="padding: 5px;"><code>int</code></td>
+                            <td style="padding: 5px;">Distance / Steps /<br>Count</td>
+                            <td style="padding: 5px;">Shortest Path, Nearest Exit,<br>01 Matrix, Minimum Steps</td>
+                            <td style="padding: 5px;">Count level or distance.</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #cbd5e1;">
+                            <td style="padding: 5px;"><code>int[] / int[][]</code></td>
+                            <td style="padding: 5px;">Store Distances</td>
+                            <td style="padding: 5px;">Walls and Gates, 01 Matrix,<br>Distance to Nearest</td>
+                            <td style="padding: 5px;">Record best distance<br>per node/cell.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px;"><code>List / List&lt;List&lt;&gt;&gt;</code></td>
+                            <td style="padding: 5px;">Collect Results</td>
+                            <td style="padding: 5px;">Level Order, All Shortest Paths,<br>Top-K Level Problems</td>
+                            <td style="padding: 5px;">Collect multiple answers<br>or levels.</td>
+                        </tr>
+                    </table>
+                    <div style="text-align: center; margin-top: 10px; font-weight: bold; background: #fef9c3; padding: 5px; border-radius: 4px;">
+                        ⭐ Changing the return type usually changes the solution.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+        <div style="flex: 1;">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">9</span> AHA MOMENTS <span style="float:right">★★★★★</span></div>
+                <div class="section-content" style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display:flex; gap:5px;"><span>💡</span><span>BFS uses a Queue ➝ explores level by level.</span></div>
+                    <div style="display:flex; gap:5px;"><span>⏱️</span><span>First time you visit a node is always the shortest (when all edges have same weight).</span></div>
+                    <div style="display:flex; gap:5px;"><span>🚀</span><span>Multi-source BFS = start from everywhere at once.</span></div>
+                    <div style="display:flex; gap:5px;"><span>🗄️</span><span>Queue size gives level size (very powerful).</span></div>
+                    <div style="display:flex; gap:5px;"><span>🎯</span><span>BFS is perfect for shortest path, minimum steps, nearest, distance problems.</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="flex: 1;">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">10</span> COMMON INTERVIEW MISTAKES <span style="float:right">★★★★★</span></div>
+                <div class="section-content" style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px; color: #b91c1c;">
+                    <div><span style="color: #ef4444;">⊗</span> Forgot to mark visited.</div>
+                    <div><span style="color: #ef4444;">⊗</span> Marked visited too late (after adding to queue).</div>
+                    <div><span style="color: #ef4444;">⊗</span> Forgot queue size when doing level order.</div>
+                    <div><span style="color: #ef4444;">⊗</span> Added the same node multiple times.</div>
+                    <div><span style="color: #ef4444;">⊗</span> Didn't initialize all sources for multi-source BFS.</div>
+                    <div><span style="color: #ef4444;">⊗</span> Used DFS instead of BFS for shortest path.</div>
+                    <div><span style="color: #ef4444;">⊗</span> Infinite loop due to cycle (no visited).</div>
+                    <div><span style="color: #ef4444;">⊗</span> Forgot disconnected graph (use outer loop).</div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="flex: 1;">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">11</span> INTERVIEW THINKING FLOW <span style="float:right">★★★★★</span></div>
+                <div class="section-content" style="text-align: center; font-size: 0.7em;">
+                    <div class="mermaid">
+                    graph TD
+                        A[Problem] --> B[What do I need?]
+                        B --> C1[Shortest Path]
+                        B --> C2[Multiple Sources]
+                        B --> C3[Traverse by Levels]
+                        B --> C4[Reachability]
+                        B --> C5[General Traversal]
+                        C1 --> D1[Distance BFS]
+                        C2 --> D2[Multi-Source BFS]
+                        C3 --> D3[Level Order BFS]
+                        C4 --> D4[Graph BFS]
+                        C5 --> D5[Graph / Grid]
+                        D1 --> E[Choose Template - Write Code]
+                        D2 --> E
+                        D3 --> E
+                        D4 --> E
+                        D5 --> E
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="flex: 1;">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">12</span> PAGE 7 PREVIEW <span style="float:right">★★★★★</span></div>
+                <div class="section-content" style="text-align: center; font-size: 0.85em;">
+                    <div style="margin-bottom: 10px;">📖 <strong>Next page contains GRAPH BFS PROBLEMS.</strong></div>
+                    <div>For each problem, you will see:</div>
+                    <div style="display: flex; justify-content: space-around; margin: 15px 0;">
+                        <div style="text-align:center;">
+                            <div>📄</div>
+                            <div style="font-size:0.8em; color:#64748b;">Base<br>Template</div>
+                        </div>
+                        <div style="text-align:center; display: flex; align-items: center;">
+                            <div>➡</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <div>✏️</div>
+                            <div style="font-size:0.8em; color:#64748b;">Changed<br>Lines</div>
+                        </div>
+                        <div style="text-align:center; display: flex; align-items: center;">
+                            <div>➡</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <div>💡</div>
+                            <div style="font-size:0.8em; color:#64748b;">AHA<br>Moment</div>
+                        </div>
+                        <div style="text-align:center; display: flex; align-items: center;">
+                            <div>➡</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <div>⏱️</div>
+                            <div style="font-size:0.8em; color:#64748b;">Complexity</div>
+                        </div>
+                        <div style="text-align:center; display: flex; align-items: center;">
+                            <div>➡</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <div>🎯</div>
+                            <div style="font-size:0.8em; color:#64748b;">Interview<br>Tip</div>
+                        </div>
+                    </div>
+                    <div style="color: #4338ca; font-weight: bold; margin-top: 10px;">Apply these templates with tiny changes and solve any BFS problem with confidence!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; font-size: 0.9em; border-top: 2px solid #cbd5e1; padding-top: 10px;">
+        <div style="display: flex; align-items: center; gap: 5px;">
+            <span style="font-size: 1.5em;">❓</span>
+            <div><strong>Problem</strong><br><span style="color:#64748b; font-size:0.8em;">(Understand)</span></div>
+        </div>
+        <div>➡</div>
+        <div style="display: flex; align-items: center; gap: 5px;">
+            <span style="font-size: 1.5em;">📥</span>
+            <div><strong>Input</strong><br><span style="color:#64748b; font-size:0.8em;">(What given)</span></div>
+        </div>
+        <div>➡</div>
+        <div style="display: flex; align-items: center; gap: 5px;">
+            <span style="font-size: 1.5em;">▦</span>
+            <div><strong>Representation</strong><br><span style="color:#64748b; font-size:0.8em;">(How to model)</span></div>
+        </div>
+        <div>➡</div>
+        <div style="display: flex; align-items: center; gap: 5px;">
+            <span style="font-size: 1.5em;">🗄️</span>
+            <div><strong>Helper Structure</strong><br><span style="color:#64748b; font-size:0.8em;">(Visited, Queue, etc.)</span></div>
+        </div>
+        <div>➡</div>
+        <div style="display: flex; align-items: center; gap: 5px;">
+            <span style="font-size: 1.5em;">⚙️</span>
+            <div><strong>Pattern</strong><br><span style="color:#64748b; font-size:0.8em;">(BFS Template)</span></div>
+        </div>
+        <div>➡</div>
+        <div style="display: flex; align-items: center; gap: 5px;">
+            <span style="font-size: 1.5em;">✏️</span>
+            <div><strong>Tiny Logic Change</strong><br><span style="color:#64748b; font-size:0.8em;">(Apply Changes)</span></div>
+        </div>
+        <div>➡</div>
+        <div style="display: flex; align-items: center; gap: 5px;">
+            <span style="font-size: 1.5em;">🏃</span>
+            <div><strong>Dry Run</strong><br><span style="color:#64748b; font-size:0.8em;">(Example)</span></div>
+        </div>
+        <div>➡</div>
+        <div style="display: flex; align-items: center; gap: 5px;">
+            <span style="font-size: 1.5em;">⏱️</span>
+            <div><strong>Optimize</strong><br><span style="color:#64748b; font-size:0.8em;">(Time/Space)</span></div>
+        </div>
+    </div>
+</div>

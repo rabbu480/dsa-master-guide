@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Topic 01: Foundations &amp; Big-O Masterclass — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+  min-height: 850px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 14px;
+  flex-shrink: 0; }
+.ph h1 { font-size: 1.8rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.88rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.g4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.bh  { background: var(--pri); color: white; padding: 6px 12px;
+  font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 18px; height: 18px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 10px 12px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.70rem; line-height: 1.4; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.76rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+th, td { border: 1px solid var(--bdr); padding: 5px 7px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur);
+  border-radius: 6px; padding: 8px 10px; margin-top: 6px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.82rem; margin-bottom: 3px; }
+
+.mt-auto { margin-top: auto; }
+
+.dt-row { display: flex; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; margin-bottom: 4px; }
+.dt-q { background: #eff6ff; padding: 4px 7px; font-weight: 600; flex: 1; font-size: 0.72rem; display: flex; align-items: center; }
+.dt-arrow { background: white; padding: 4px 3px; color: #64748b; font-size: 0.75rem; display: flex; align-items: center; }
+.dt-a { background: #f0fdf4; padding: 4px 7px; font-weight: 700; flex: 1.2; font-size: 0.72rem; display: flex; align-items: center; }
+
+.pattern-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+.pattern-cell { background: #f8fafc; border: 1px solid var(--bdr); border-radius: 3px; padding: 3px 6px; font-size: 0.7rem; display: flex; justify-content: space-between; align-items: center; }
+.pattern-cell .trigger { font-weight: 600; color: var(--pri); }
+.pattern-cell .think { color: var(--grn); font-weight: 700; }
+
+.flow-row { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; font-size: 0.7rem; font-weight: 600; }
+.flow-step { background: var(--pri); color: white; padding: 2px 8px; border-radius: 4px; }
+.flow-arrow { color: var(--sub); font-size: 1.1rem; }
+.flow-step-green { background: var(--grn); color: white; padding: 2px 8px; border-radius: 4px; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 6px 10px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; min-height: 95vh !important; height: 98vh !important; overflow: hidden !important; zoom: 0.85; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+  pre {
+    background: #f8fafc !important;
+    color: #0f172a !important;
+    border: 1.5px solid #cbd5e1 !important;
+    font-family: 'Fira Code', monospace !important;
+    font-size: 0.72rem !important;
+    line-height: 1.22 !important;
+    padding: 6px 8px !important;
+    white-space: pre-wrap !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- ============================================================ -->
+<!-- PAGE 1: FOUNDATION -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>FOUNDATIONS &amp; BIG-O ANALYSIS</h1><div class="sub">FAANG Master Guide — Book 0</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 1 OF 6</div></div>
+  </div>
+
+  <!-- REAL-WORLD STORY + WHY NOT SECONDS + GROWTH HIERARCHY -->
+  <div class="g3" style="margin-bottom:12px">
+    <div class="box pur">
+      <div class="bh">🎬 THE REAL-WORLD STORY</div>
+      <div class="bc">
+        <p style="margin-bottom:6px">Imagine transferring a 100 GB file across town. Wi-Fi scales linearly with file size (100 GB = 200 min) → <strong>O(N)</strong>. Driving a USB drive takes fixed time regardless of size (100 GB = 30 min) → <strong>O(1)</strong>.</p>
+        <div class="aha">
+          <div class="aha-t">💡 THE BIG-O AHA MOMENT</div>
+          Big-O notation measures how runtime or memory scales as input size N grows to infinity, ignoring hardware speed differences!
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="bh">🤔 WHY NOT MEASURE SECONDS?</div>
+      <div class="bc">
+        <ul style="padding-left:16px;font-size:0.76rem">
+          <li>A fast CPU runs bad code quickly on tiny inputs.</li>
+          <li>OS background processes alter millisecond execution timings.</li>
+          <li>Big-O gives a universal mathematical upper bound guaranteed on all FAANG evaluation servers!</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box sky">
+      <div class="bh">📈 BIG-O GROWTH HIERARCHY</div>
+      <div class="bc">
+        <table>
+          <tr><th>Big-O</th><th>Name</th><th>Max N for 1 Sec (10⁸ ops)*</th></tr>
+          <tr><td><strong>O(1)</strong></td><td>Constant</td><td>Unlimited</td></tr>
+          <tr><td><strong>O(log N)</strong></td><td>Logarithmic</td><td>10¹⁸ (Binary Search)</td></tr>
+          <tr><td><strong>O(N)</strong></td><td>Linear</td><td>10⁸ (Single Pass)</td></tr>
+          <tr><td><strong>O(N log N)</strong></td><td>Linearithmic</td><td>10⁶ (Sorting)</td></tr>
+          <tr><td><strong>O(N²)</strong></td><td>Quadratic</td><td>10⁴ (Nested Loops)</td></tr>
+          <tr><td><strong>O(2^N) / O(N!)</strong></td><td>Exponential</td><td>20 / 11 (Recursion)</td></tr>
+        </table>
+        <div style="font-size:0.65rem;color:var(--sub);margin-top:3px;">* Rules of thumb — actual limits vary by CPU, language, and constant factors.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VISUAL GROWTH CURVES -->
+  <div class="box grn" style="margin-bottom:8px;">
+    <div class="bh">📊 VISUAL GROWTH CURVES</div>
+    <div class="bc">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:4px;text-align:center;font-size:0.7rem;font-family:'Fira Code',monospace;">
+        <div style="background:#f1f5f9;border-radius:4px;padding:4px;">
+          <div style="font-weight:700;color:var(--grn);">O(1)</div>
+          <div style="font-size:1.5rem;">━</div>
+          <div style="font-size:0.65rem;color:var(--sub);">Constant</div>
+        </div>
+        <div style="background:#f1f5f9;border-radius:4px;padding:4px;">
+          <div style="font-weight:700;color:var(--sky);">O(log N)</div>
+          <div style="font-size:1.5rem;">╱</div>
+          <div style="font-size:0.65rem;color:var(--sub);">Logarithmic</div>
+        </div>
+        <div style="background:#f1f5f9;border-radius:4px;padding:4px;">
+          <div style="font-weight:700;color:var(--amb);">O(N)</div>
+          <div style="font-size:1.5rem;">╱</div>
+          <div style="font-size:0.65rem;color:var(--sub);">Linear</div>
+        </div>
+        <div style="background:#f1f5f9;border-radius:4px;padding:4px;">
+          <div style="font-weight:700;color:var(--org);">O(N²)</div>
+          <div style="font-size:1.5rem;">╱╱</div>
+          <div style="font-size:0.65rem;color:var(--sub);">Quadratic</div>
+        </div>
+        <div style="background:#f1f5f9;border-radius:4px;padding:4px;">
+          <div style="font-weight:700;color:var(--red);">O(2^N)</div>
+          <div style="font-size:1.5rem;transform:rotate(90deg);">│</div>
+          <div style="font-size:0.65rem;color:var(--sub);">Exponential 🚀</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 REDUCTION RULES + 5-STEP FRAMEWORK -->
+  <div class="g2" style="margin-bottom:8px">
+    <div class="box">
+      <div class="bh">📐 THE 3 BIG-O REDUCTION RULES</div>
+      <div class="bc">
+        <div style="font-size:0.76rem">
+          <p style="margin-bottom:4px"><strong>Rule 1 — Drop Constants:</strong> O(2N + 5) → <strong>O(N)</strong>. We care about growth rate, not constant multipliers.</p>
+          <p style="margin-bottom:4px"><strong>Rule 2 — Drop Non-Dominant Terms:</strong> O(N² + 100N + 500) → <strong>O(N²)</strong>. N² dominates N as N grows.</p>
+          <p style="margin-bottom:4px"><strong>Rule 3 — Multi-Variable Rules:</strong> Array A size N, Array B size M → <strong>O(N + M)</strong> for sequential loops, <strong>O(N · M)</strong> for nested loops!</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box amb">
+      <div class="bh">⚡ 5-STEP FAANG PROBLEM SOLVING FRAMEWORK</div>
+      <div class="bc">
+        <ol style="padding-left:16px;font-size:0.76rem">
+          <li><strong>Clarify Constraints:</strong> Ask N limits (N &lt;= 10⁵ => O(N log N) target).</li>
+          <li><strong>State Brute Force:</strong> Mention naive solution &amp; complexity first.</li>
+          <li><strong>Identify Bottleneck:</strong> Spot repeated work → HashMap/Binary Search.</li>
+          <li><strong>Optimize &amp; Code:</strong> Write clean, modular Java standard code.</li>
+          <li><strong>Dry Run Test Cases:</strong> Step line-by-line with small/edge inputs!</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERVIEW RECOGNITION BOX -->
+  <div class="box pur" style="margin-bottom:8px;">
+    <div class="bh">🎯 INTERVIEW RECOGNITION — WHAT TO THINK WHEN YOU HEAR...</div>
+    <div class="bc">
+      <div class="pattern-grid">
+        <div class="pattern-cell"><span class="trigger">"Find pair"</span> → <span class="think">HashMap / Two Pointers</span></div>
+        <div class="pattern-cell"><span class="trigger">"Sorted"</span> → <span class="think">Binary Search</span></div>
+        <div class="pattern-cell"><span class="trigger">"Maximum / Minimum"</span> → <span class="think">Greedy or DP</span></div>
+        <div class="pattern-cell"><span class="trigger">"Connected"</span> → <span class="think">Graph (DFS/BFS/DSU)</span></div>
+        <div class="pattern-cell"><span class="trigger">"Substring"</span> → <span class="think">Sliding Window</span></div>
+        <div class="pattern-cell"><span class="trigger">"Kth"</span> → <span class="think">Heap / QuickSelect</span></div>
+        <div class="pattern-cell"><span class="trigger">"Count ways"</span> → <span class="think">DP</span></div>
+        <div class="pattern-cell"><span class="trigger">"Shortest path"</span> → <span class="think">BFS / Dijkstra</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPLEXITY DECISION TREE (NEW) -->
+  <div class="box" style="margin-bottom:8px;">
+    <div class="bh">🌳 COMPLEXITY DECISION TREE — ONE PICTURE</div>
+    <div class="bc">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;text-align:center;font-size:0.7rem;">
+        <div style="background:#fef2f2;border-radius:4px;padding:6px;border:1px solid #fca5a5;">
+          <div style="font-weight:800;color:#991b1b;">N ≤ 20</div>
+          <div style="color:var(--sub);font-size:0.65rem;">↓</div>
+          <div style="font-weight:700;color:#dc2626;">Backtracking</div>
+          <div style="font-size:0.6rem;color:var(--sub);">O(2^N) / O(N!)</div>
+        </div>
+        <div style="background:#fef3c7;border-radius:4px;padding:6px;border:1px solid #fcd34d;">
+          <div style="font-weight:800;color:#92400e;">N ≤ 2,000</div>
+          <div style="color:var(--sub);font-size:0.65rem;">↓</div>
+          <div style="font-weight:700;color:#d97706;">O(N²)</div>
+          <div style="font-size:0.6rem;color:var(--sub);">Nested Loops / DP</div>
+        </div>
+        <div style="background:#d1fae5;border-radius:4px;padding:6px;border:1px solid #6ee7b7;">
+          <div style="font-weight:800;color:#065f46;">N ≤ 10⁵</div>
+          <div style="color:var(--sub);font-size:0.65rem;">↓</div>
+          <div style="font-weight:700;color:#059669;">O(N log N)</div>
+          <div style="font-size:0.6rem;color:var(--sub);">Sorting / Binary Search</div>
+        </div>
+        <div style="background:#dbeafe;border-radius:4px;padding:6px;border:1px solid #93c5fd;">
+          <div style="font-weight:800;color:#1e40af;">N ≥ 10⁹</div>
+          <div style="color:var(--sub);font-size:0.65rem;">↓</div>
+          <div style="font-weight:700;color:#2563eb;">O(log N)</div>
+          <div style="font-size:0.6rem;color:var(--sub);">Binary Search / Math</div>
+        </div>
+      </div>
+      <div style="font-size:0.65rem;color:var(--sub);margin-top:4px;text-align:center;">One picture — know your complexity target before you write code!</div>
+    </div>
+  </div>
+
+  <!-- DEDUCING TARGET COMPLEXITY -->
+  <div class="box" style="flex:1;">
+    <div class="bh">📊 DEDUCING TARGET COMPLEXITY FROM INPUT CONSTRAINTS (N)</div>
+    <div class="bc">
+      <table>
+        <tr><th>Input Size (N)</th><th>Target Complexity</th><th>Typical Algorithm Patterns</th></tr>
+        <tr><td>N &lt;= 10..12</td><td>O(N!) or O(2^N · N)</td><td>Permutations, N-Queens</td></tr>
+        <tr><td>N &lt;= 20..25</td><td>O(2^N)</td><td>Subsets, Combination Sum</td></tr>
+        <tr><td>N &lt;= 500</td><td>O(N³)</td><td>Floyd-Warshall, Matrix Chain DP</td></tr>
+        <tr><td>N &lt;= 2,000</td><td>O(N²)</td><td>Nested Loops, 2D Grid DP</td></tr>
+        <tr><td>N &lt;= 10⁵..10⁶</td><td>O(N log N) or O(N)</td><td>Sorting, Binary Search, Two Pointers, HashMap</td></tr>
+        <tr><td>N &lt;= 10⁹..10¹⁸</td><td>O(log N) or O(1)</td><td>BS on Answer, Bit Manipulation, Math</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.7rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:8px;text-align:center;">🏆 Book 0: Foundations · Built from FAANG interviews &amp; real problem-solving patterns</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 2: SPACE COMPLEXITY & DATA STRUCTURES -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>FOUNDATIONS &amp; BIG-O ANALYSIS</h1><div class="sub">Space Complexity &amp; Data Structure Complexities</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 2 OF 6</div></div>
+  </div>
+
+  <!-- APPROACH BEFORE CODE FLOW -->
+  <div class="box pur" style="margin-bottom:8px;">
+    <div class="bh">🧠 APPROACH BEFORE CODE — FAANG THINKING FLOW</div>
+    <div class="bc">
+      <div class="flow-row">
+        <span class="flow-step">Understand Problem</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Find Constraints</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Estimate Complexity</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Choose Pattern</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Dry Run</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Code</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Complexity</span>
+      </div>
+      <div style="font-size:0.7rem;color:var(--sub);margin-top:4px;">This is exactly how FAANG interviewers expect you to think — don't jump to code!</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px">
+    <div class="box">
+      <div class="bh">💡 AUXILIARY SPACE VS CALL STACK</div>
+      <div class="bc">
+        <ul style="padding-left:16px;font-size:0.76rem">
+          <li><strong>Input Space:</strong> Memory used to store input data (e.g. array of size N).</li>
+          <li><strong>Auxiliary Space:</strong> Extra memory created by your code (DS + call stack).</li>
+          <li><strong>Recursion Call Stack:</strong> `factorial(3)` calls `factorial(2)` → Max stack depth 3 => <strong>O(N) Auxiliary Space!</strong></li>
+        </ul>
+        <div class="aha" style="margin-top:6px">
+          <div class="aha-t">💡 THE SPACE COMPLEXITY AHA</div>
+          Always separate Input Space from Auxiliary Space. FAANG interviewers expect you to distinguish between them explicitly!
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="bh">🛠 ESSENTIAL JAVA DATA STRUCTURE COMPLEXITIES</div>
+      <div class="bc">
+        <table>
+          <tr><th>Data Structure</th><th>Operation</th><th>Time Complexity</th></tr>
+          <tr><td>`ArrayList<T>`</td><td>`add()`, `get(i)`, `remove(last)`</td><td>O(1) amortized*</td></tr>
+          <tr><td>`HashMap<K, V>`</td><td>`put()`, `get()`, `containsKey()`</td><td>O(1) avg, O(N) worst**</td></tr>
+          <tr><td>`HashSet<T>`</td><td>`add()`, `contains()`, `remove()`</td><td>O(1) avg</td></tr>
+          <tr><td>`ArrayDeque<T>`</td><td>`push()`, `pop()`, `offer()`, `poll()`</td><td>O(1)</td></tr>
+          <tr><td>`PriorityQueue<T>`</td><td>`offer()`, `poll()`, `peek()`</td><td>O(log N) offer/poll</td></tr>
+        </table>
+        <div style="font-size:0.65rem;color:var(--sub);margin-top:3px;">
+          * Amortized O(1) — occasional resize makes some adds O(N).<br>
+          ** Java 8+ uses tree bins for heavy collisions, worst-case becomes O(log N).<br>
+          <span style="font-weight:700;">Requires Monotonicity or Sorted Data</span> for Binary Search.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="box pur">
+      <div class="bh">⚡ JAVA INTERVIEW POWER SNIPPETS</div>
+      <div class="bc">
+<pre>// 1. Frequency Map Shortcut:
+map.put(key, map.getOrDefault(key, 0) + 1);
+
+// 2. Sort Array in Reverse Order:
+Arrays.sort(arr, (a, b) -> Integer.compare(b, a));
+
+// 3. Min Heap & Max Heap Declarations:
+PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+PriorityQueue&lt;Integer&gt; maxHeap = new PriorityQueue&lt;&gt;((a, b) -> b - a);
+
+// 4. String Array to Char Manipulation:
+char[] chars = str.toCharArray();
+String sortedStr = new String(chars);</pre>
+      </div>
+    </div>
+
+    <div class="box amb">
+      <div class="bh">💼 COMMON JAVA INTERVIEW BUGS &amp; FIXES</div>
+      <div class="bc">
+        <div style="font-size:0.76rem">
+          <p style="margin-bottom:4px"><strong>1. Binary Search Mid Overflow:</strong><br>
+          `int mid = (left + right) / 2;` → ❌ Overflows!<br>
+          `int mid = left + (right - left) / 2;` → ✅ Safe!</p>
+          <p style="margin-top:4px"><strong>2. String Immutability Loop Overhead:</strong><br>
+          `String s += "a";` in loop → ❌ O(N²)!<br>
+          `StringBuilder sb = new StringBuilder();` → ✅ O(1) amortized!</p>
+          <p style="margin-top:4px"><strong>3. Comparator Overflow:</strong><br>
+          `(a, b) -> a - b` → ❌ Overflow!<br>
+          `(a, b) -> Integer.compare(a, b)` → ✅ Safe!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.7rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:8px;text-align:center;">🏆 Book 0: Foundations · Built from FAANG interviews &amp; real problem-solving patterns</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 3: DECISION TREE & TRIGGER WORDS -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>FOUNDATIONS &amp; BIG-O ANALYSIS</h1><div class="sub">Decision Tree &amp; Pattern Recognition</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 3 OF 6</div></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px">
+    <div class="box">
+      <div class="bh">🌳 BIG-O — WHICH COMPLEXITY TO EXPECT?</div>
+      <div class="bc">
+        <div style="font-weight:700;font-size:0.76rem;margin-bottom:6px;">Start: What is the problem asking?</div>
+        <div>
+          <div class="dt-row">
+            <div class="dt-q">🔍 Find if element exists</div>
+            <div class="dt-arrow">→</div>
+            <div class="dt-a">Binary Search O(log N)</div>
+          </div>
+          <div class="dt-row">
+            <div class="dt-q">🔢 Count frequencies</div>
+            <div class="dt-arrow">→</div>
+            <div class="dt-a">HashMap O(N)</div>
+          </div>
+          <div class="dt-row">
+            <div class="dt-q">🗂️ Sort elements</div>
+            <div class="dt-arrow">→</div>
+            <div class="dt-a">Sorting O(N log N)</div>
+          </div>
+          <div class="dt-row">
+            <div class="dt-q">🧩 Permutations / subsets</div>
+            <div class="dt-arrow">→</div>
+            <div class="dt-a">Backtracking O(2^N) / O(N!)</div>
+          </div>
+          <div class="dt-row">
+            <div class="dt-q">🔗 Graph connected components</div>
+            <div class="dt-arrow">→</div>
+            <div class="dt-a">DFS/BFS O(V + E)</div>
+          </div>
+          <div class="dt-row">
+            <div class="dt-q">📊 Optimize / maximize</div>
+            <div class="dt-arrow">→</div>
+            <div class="dt-a">DP / Greedy (problem specific)</div>
+          </div>
+        </div>
+        <div style="background:#fffbeb;border-left:4px solid var(--amb);padding:4px 6px;border-radius:0 4px 4px 0;font-size:0.72rem;margin-top:6px;">
+          💡 <strong>Rule:</strong> If N ≤ 10⁵, O(N log N) or better is required. If N ≤ 10⁴, O(N²) may pass.
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div class="box pur">
+        <div class="bh">🎯 TRIGGER WORDS DIRECTORY</div>
+        <div class="bc">
+          <table>
+            <tr><th>Trigger Word</th><th>Pattern</th><th>Action</th></tr>
+            <tr><td>"Find if exists"</td><td>Binary Search</td><td>Sorted array → O(log N)</td></tr>
+            <tr><td>"Count duplicates"</td><td>HashMap</td><td>O(N) frequency map</td></tr>
+            <tr><td>"All combinations"</td><td>Backtracking</td><td>DFS with state tree</td></tr>
+            <tr><td>"Shortest path"</td><td>BFS / Dijkstra</td><td>Queue / PriorityQueue</td></tr>
+            <tr><td>"Optimize"</td><td>DP / Greedy</td><td>Subproblem recurrence</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="box amb">
+        <div class="bh">💼 INTERVIEW TRADE-OFFS &amp; FOLLOW-UPS</div>
+        <div class="bc">
+          <table>
+            <tr><th>Interviewer Asks</th><th>Your Answer</th></tr>
+            <tr><td>HashMap vs TreeMap?</td><td>HashMap O(1) avg, no order. TreeMap O(log N) sorted order.</td></tr>
+            <tr><td>Can you do better than O(N log N)?</td><td>Depends on problem — often O(N) with hashing/two pointers.</td></tr>
+            <tr><td>When is O(N²) acceptable?</td><td>When N ≤ 10⁴ and problem requires pairwise comparison.</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PATTERN TRIGGER WORDS COMPACT BOX -->
+  <div class="box grn" style="margin-bottom:8px;">
+    <div class="bh">🧩 PATTERN TRIGGER WORDS — QUICK REVISION</div>
+    <div class="bc">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;font-size:0.7rem;">
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;text-align:center;">
+          <div style="font-weight:700;color:var(--pri);">Maximum</div>
+          <div style="color:var(--grn);">DP / Greedy</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;text-align:center;">
+          <div style="font-weight:700;color:var(--pri);">Count Ways</div>
+          <div style="color:var(--grn);">DP</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;text-align:center;">
+          <div style="font-weight:700;color:var(--pri);">Kth</div>
+          <div style="color:var(--grn);">Heap / QuickSelect</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;text-align:center;">
+          <div style="font-weight:700;color:var(--pri);">Shortest Path</div>
+          <div style="color:var(--grn);">BFS / Dijkstra</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;text-align:center;">
+          <div style="font-weight:700;color:var(--pri);">Connected</div>
+          <div style="color:var(--grn);">DFS / BFS / DSU</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;text-align:center;">
+          <div style="font-weight:700;color:var(--pri);">Range Query</div>
+          <div style="color:var(--grn);">Prefix Sum</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;text-align:center;">
+          <div style="font-weight:700;color:var(--pri);">Sorted</div>
+          <div style="color:var(--grn);">Binary Search</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;text-align:center;">
+          <div style="font-weight:700;color:var(--pri);">Substring</div>
+          <div style="color:var(--grn);">Sliding Window</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAANG INTERVIEW FLOW -->
+  <div class="box red">
+    <div class="bh">🎤 FAANG INTERVIEW FLOW — THE PROCESS</div>
+    <div class="bc">
+      <div class="flow-row">
+        <span class="flow-step">Read Problem</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Clarify</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Brute Force</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Optimize</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Dry Run</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Code</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Complexity</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step-green">Edge Cases</span>
+      </div>
+      <div style="font-size:0.7rem;color:var(--sub);margin-top:4px;">You and I already follow this flow in our sessions — it's exactly what FAANG interviewers expect!</div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.7rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:8px;text-align:center;">🏆 Book 0: Foundations · Built from FAANG interviews &amp; real problem-solving patterns</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 4: DRY RUN & COMPLEXITY PROOFS -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>FOUNDATIONS &amp; BIG-O ANALYSIS</h1><div class="sub">Dry Run &amp; Complexity Proofs</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 4 OF 6</div></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px">
+    <div class="box">
+      <div class="bh">🔍 DRY RUN — Two Sum ([2, 7, 11, 15], Target=9)</div>
+      <div class="bc">
+        <table style="font-size:0.7rem">
+          <tr><th>Step</th><th>i</th><th>nums[i]</th><th>complement</th><th>map state</th><th>Action</th></tr>
+          <tr><td>1</td><td>0</td><td>2</td><td>7</td><td>{}</td><td>`map.put(2, 0)`</td></tr>
+          <tr><td>2</td><td>1</td><td>7</td><td>2</td><td>{2: 0}</td><td>Match Found! Return `[0, 1]`</td></tr>
+        </table>
+        <div style="margin-top:6px;font-size:0.72rem;">
+          <strong>Time Complexity:</strong> O(N) — single pass through array.<br>
+          <strong>Space Complexity:</strong> O(N) — HashMap stores at most N elements.
+        </div>
+      </div>
+    </div>
+
+    <div class="box grn">
+      <div class="bh">📐 MATHEMATICAL PROOF — BINARY SEARCH O(log N)</div>
+      <div class="bc">
+        <div style="font-size:0.76rem">
+          <p style="margin-bottom:4px"><strong>Claim:</strong> Binary Search on a sorted array of size N runs in O(log N) time.</p>
+          <p style="margin-bottom:4px"><strong>Proof:</strong> At each step, the search space halves: N → N/2 → N/4 → ... → 1.</p>
+          <p style="margin-bottom:4px">After k steps, remaining elements = N / 2ᵏ.</p>
+          <p>We stop when N / 2ᵏ = 1 → 2ᵏ = N → k = log₂ N → <strong>O(log N)</strong>.</p>
+          <p style="margin-top:4px;font-size:0.7rem;color:var(--sub);"><strong>Requires:</strong> Sorted Data or Monotonicity.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="box pur">
+      <div class="bh">📐 MATHEMATICAL PROOF — HASHMAP O(1) AMORTIZED</div>
+      <div class="bc">
+        <div style="font-size:0.76rem">
+          <p style="margin-bottom:4px"><strong>Claim:</strong> HashMap get/put operations run in O(1) average time.</p>
+          <p style="margin-bottom:4px"><strong>Proof:</strong> Hash function distributes keys uniformly across buckets. Each bucket contains an average of N / B elements.</p>
+          <p>With load factor < 1 (e.g., 0.75), bucket size is O(1) on average. <strong>O(1) amortized</strong>.</p>
+          <div class="aha" style="margin-top:6px;padding:6px;">
+            <div class="aha-t">⚠️ Worst Case</div>
+            If all keys hash to the same bucket, HashMap degrades to O(N). Java 8+ uses balanced trees → O(log N).
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box amb">
+      <div class="bh">🚨 COMMON MISTAKES — AVOID THESE</div>
+      <div class="bc">
+        <div style="font-size:0.76rem">
+          <p style="margin-bottom:4px"><strong>1. Off-by-One Errors:</strong> Using `while (left < right)` vs `while (left <= right)` incorrectly.</p>
+          <p style="margin-bottom:4px"><strong>2. Overflow in Mid Calculation:</strong> `(left + right) / 2` overflows for large N. Use `left + (right - left) / 2`.</p>
+          <p style="margin-bottom:4px"><strong>3. Forgetting to Handle Empty Input:</strong> Always check `if (arr == null || arr.length == 0)`.</p>
+          <p style="margin-bottom:4px"><strong>4. Mutating Input During Dry Run:</strong> Never modify input when doing state tracing.</p>
+          <p><strong>5. Using `==` for String Comparison:</strong> Always use `.equals()` for string content.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERVIEW LANGUAGE (NEW) -->
+  <div class="box" style="margin-top:8px;">
+    <div class="bh">🎤 INTERVIEW LANGUAGE — HOW TO COMMUNICATE OPTIMIZATION</div>
+    <div class="bc">
+      <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:6px;font-size:0.72rem;">
+        <p style="margin-bottom:4px;"><strong style="color:var(--pri);">Interviewer:</strong> "Can you optimize?"</p>
+        <p style="margin-bottom:4px;padding-left:12px;border-left:3px solid var(--grn);"><strong style="color:var(--grn);">You:</strong> "Current complexity is O(N²). The bottleneck is the inner loop repeatedly scanning the array for each element. I'll use a HashMap to track seen values, which reduces lookups to O(1). Expected complexity becomes O(N)."</p>
+        <p style="font-size:0.65rem;color:var(--sub);margin-top:4px;">This teaches communication — not just algorithms.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.7rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:8px;text-align:center;">🏆 Book 0: Foundations · Built from FAANG interviews &amp; real problem-solving patterns</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 5: CHEAT SHEET & MASTERY CHECKLIST -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>FOUNDATIONS &amp; BIG-O ANALYSIS</h1><div class="sub">Cheat Sheet &amp; Mastery Checklist</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 5 OF 6</div></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px">
+    <div class="box">
+      <div class="bh">📊 QUICK REFERENCE: COMPLEXITY CLASSES</div>
+      <div class="bc">
+        <table style="font-size:0.7rem;">
+          <tr><th>Complexity</th><th>Name</th><th>N=10³</th><th>N=10⁵</th><th>N=10⁷</th></tr>
+          <tr><td><strong>O(1)</strong></td><td>Constant</td><td>✅ 1 ns</td><td>✅ 1 ns</td><td>✅ 1 ns</td></tr>
+          <tr><td><strong>O(log N)</strong></td><td>Logarithmic</td><td>✅ 10 ns</td><td>✅ 17 ns</td><td>✅ 24 ns</td></tr>
+          <tr><td><strong>O(N)</strong></td><td>Linear</td><td>✅ 1 µs</td><td>✅ 100 µs</td><td>⚠️ 10 ms</td></tr>
+          <tr><td><strong>O(N log N)</strong></td><td>Linearithmic</td><td>✅ 10 µs</td><td>⚠️ 1.7 ms</td><td>❌ 170 ms</td></tr>
+          <tr><td><strong>O(N²)</strong></td><td>Quadratic</td><td>⚠️ 1 ms</td><td>❌ 10 sec</td><td>❌ ∞</td></tr>
+          <tr><td><strong>O(2^N)</strong></td><td>Exponential</td><td>❌ ∞</td><td>❌ ∞</td><td>❌ ∞</td></tr>
+        </table>
+        <div style="background:#f0fdf4;border-left:4px solid var(--grn);padding:4px 6px;margin-top:4px;border-radius:0 4px 4px 0;font-size:0.7rem;">
+          ✅ = Pass, ⚠️ = Borderline, ❌ = Fail
+        </div>
+      </div>
+    </div>
+
+    <div class="box grn">
+      <div class="bh">📝 RUNTIME ESTIMATION RULE OF THUMB</div>
+      <div class="bc">
+        <div style="font-size:0.76rem;">
+          <p style="margin-bottom:4px;"><strong>Modern CPU ≈ 10⁸ operations per second</strong></p>
+          <p style="margin-bottom:4px;"><strong>N = 10⁵</strong> → O(N log N) ≈ 1.7 × 10⁶ ops → ✅ Pass</p>
+          <p style="margin-bottom:4px;"><strong>N = 10⁴</strong> → O(N²) = 10⁸ ops → ✅ Pass (just barely)</p>
+          <p style="margin-bottom:4px;"><strong>N = 10⁵</strong> → O(N²) = 10¹⁰ ops → ❌ Fail (10 seconds!)</p>
+          <p><strong>N = 10⁹</strong> → O(log N) required → Binary Search only</p>
+        </div>
+        <div class="aha" style="margin-top:6px;padding:6px;">
+          <div class="aha-t">💡 FAANG INSIGHT</div>
+          If N ≤ 10⁶, O(N log N) sorting is usually acceptable. If N ≤ 10⁴, O(N²) DP may pass. Always clarify constraints first!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:8px;">
+    <div class="box pur">
+      <div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+      <div class="bc">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+          <ul style="font-size:0.72rem;list-style:none;padding:0;">
+            <li>☐ Explain Big-O with real-world analogies</li>
+            <li>☐ Deduce target complexity from input size N</li>
+            <li>☐ State 3 Big-O reduction rules</li>
+            <li>☐ Use safe mid formula `left + (right-left)/2`</li>
+            <li>☐ Differentiate Input Space vs Auxiliary Space</li>
+          </ul>
+          <ul style="font-size:0.72rem;list-style:none;padding:0;">
+            <li>☐ Perform 4-step line-by-line dry runs</li>
+            <li>☐ Use `StringBuilder` over `String +=` in loops</li>
+            <li>☐ Estimate runtime for N = 10⁵ vs 10⁶ vs 10⁷</li>
+            <li>☐ Use `Integer.compare(a, b)` over `a - b`</li>
+            <li>☐ Handle empty input gracefully</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="box red">
+      <div class="bh">🚨 TOP 5 INTERVIEW KILLERS — DON'T DO THESE</div>
+      <div class="bc">
+        <div style="font-size:0.72rem;">
+          <p style="margin-bottom:4px;"><strong>❌ 1.</strong> Starting with optimized solution (no brute force first)</p>
+          <p style="margin-bottom:4px;"><strong>❌ 2.</strong> Not checking edge cases (empty, null, single element)</p>
+          <p style="margin-bottom:4px;"><strong>❌ 3.</strong> Using `==` for string comparison instead of `.equals()`</p>
+          <p style="margin-bottom:4px;"><strong>❌ 4.</strong> Modifying input during dry run (confuses interviewers)</p>
+          <p style="margin-bottom:4px;"><strong>❌ 5.</strong> Not proving time/space complexity at the end</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECOGNITION SPEED (NEW) -->
+  <div class="box sky" style="margin-bottom:8px;">
+    <div class="bh">⚡ RECOGNITION SPEED — THE SENIOR CANDIDATE DIFFERENCE</div>
+    <div class="bc">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;text-align:center;font-size:0.7rem;">
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:6px;">
+          <div style="font-weight:800;color:var(--grn);">Read Problem</div>
+          <div style="font-size:1rem;color:var(--sub);">↓</div>
+          <div style="font-weight:800;color:var(--pri);">5 Seconds</div>
+          <div style="font-size:0.65rem;color:var(--sub);">↓</div>
+          <div style="font-weight:700;color:var(--amb);">Recognize Pattern</div>
+          <div style="font-size:0.6rem;color:var(--sub);">Don't invent algorithms.</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:6px;">
+          <div style="font-weight:800;color:var(--grn);">Junior</div>
+          <div style="font-size:1rem;color:var(--sub);">↓</div>
+          <div style="font-weight:800;color:var(--pri);">"I'll try something"</div>
+          <div style="font-size:0.65rem;color:var(--sub);">↓</div>
+          <div style="font-weight:700;color:var(--red);">Wastes time</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:6px;">
+          <div style="font-weight:800;color:var(--grn);">Senior</div>
+          <div style="font-size:1rem;color:var(--sub);">↓</div>
+          <div style="font-weight:800;color:var(--pri);">"This is [Pattern]"</div>
+          <div style="font-size:0.65rem;color:var(--sub);">↓</div>
+          <div style="font-weight:700;color:var(--grn);">Writes code</div>
+        </div>
+      </div>
+      <div style="font-size:0.65rem;color:var(--sub);margin-top:4px;text-align:center;">The difference between senior and junior candidates is pattern recognition speed.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.7rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:8px;text-align:center;">🏆 Book 0: Foundations · Built from FAANG interviews &amp; real problem-solving patterns</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 6: GOLDEN RULES & AHA SUMMARY -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>FOUNDATIONS &amp; BIG-O ANALYSIS</h1><div class="sub">Golden Rules &amp; AHA Summary</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 6 OF 6</div></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;flex:1;">
+    <div class="box pur">
+      <div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+      <div class="bc">
+        <div class="aha" style="margin-bottom:8px;padding:6px;">
+          <div class="aha-t">Rule 1 — State Brute Force First</div>
+          Always state the obvious brute force solution and its time/space complexity before jumping into optimization! It shows structured thinking.
+        </div>
+        <div class="aha" style="margin-bottom:8px;padding:6px;">
+          <div class="aha-t">Rule 2 — Dry Run Saves You from Rejection</div>
+          90% of interview bugs (off-by-one errors, null pointers, unhandled edge cases) are caught during your dry run before running tests!
+        </div>
+        <div class="aha" style="padding:6px;">
+          <div class="aha-t">Rule 3 — Space-Time Tradeoff is #1 Optimization</div>
+          Trading space (O(N) HashMap) for time (O(1) lookups) is the most common FAANG optimization technique.
+        </div>
+      </div>
+    </div>
+
+    <div class="box grn">
+      <div class="bh">🧠 AHA SUMMARY — THE ENTIRE MENTAL MODEL</div>
+      <div class="bc">
+        <div style="font-size:0.76rem;">
+          <p style="margin-bottom:6px;"><strong>Everything in DSA is about reducing work.</strong></p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:0.7rem;">
+            <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;">
+              <span style="font-weight:700;color:var(--red);">Repeated Lookup</span>
+              <span style="color:var(--sub);"> → </span>
+              <span style="font-weight:700;color:var(--grn);">HashMap</span>
+            </div>
+            <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;">
+              <span style="font-weight:700;color:var(--red);">Repeated Search</span>
+              <span style="color:var(--sub);"> → </span>
+              <span style="font-weight:700;color:var(--grn);">Binary Search</span>
+            </div>
+            <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;">
+              <span style="font-weight:700;color:var(--red);">Repeated Calculation</span>
+              <span style="color:var(--sub);"> → </span>
+              <span style="font-weight:700;color:var(--grn);">DP</span>
+            </div>
+            <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;">
+              <span style="font-weight:700;color:var(--red);">Repeated Traversal</span>
+              <span style="color:var(--sub);"> → </span>
+              <span style="font-weight:700;color:var(--grn);">Graph</span>
+            </div>
+            <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;">
+              <span style="font-weight:700;color:var(--red);">Repeated Comparison</span>
+              <span style="color:var(--sub);"> → </span>
+              <span style="font-weight:700;color:var(--grn);">Sorting</span>
+            </div>
+            <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;">
+              <span style="font-weight:700;color:var(--red);">Repeated Overlap</span>
+              <span style="color:var(--sub);"> → </span>
+              <span style="font-weight:700;color:var(--grn);">Sliding Window</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box red" style="margin-bottom:8px;">
+    <div class="bh">📋 SUMMARY — WHAT YOU LEARNED</div>
+    <div class="bc">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;font-size:0.7rem;">
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;text-align:center;">
+          <div style="font-weight:700;color:var(--pri);">Big-O Intuition</div>
+          <div style="font-size:0.65rem;color:var(--sub);">O(N) ≠ milliseconds</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;text-align:center;">
+          <div style="font-weight:700;color:var(--pri);">Complexity Hierarchy</div>
+          <div style="font-size:0.65rem;color:var(--sub);">O(1) → O(log N) → O(N)</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;text-align:center;">
+          <div style="font-weight:700;color:var(--pri);">Space Complexity</div>
+          <div style="font-size:0.65rem;color:var(--sub);">Input vs Auxiliary</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;text-align:center;">
+          <div style="font-weight:700;color:var(--pri);">Reduction Rules</div>
+          <div style="font-size:0.65rem;color:var(--sub);">Drop constants</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;text-align:center;">
+          <div style="font-weight:700;color:var(--pri);">Pattern Recognition</div>
+          <div style="font-size:0.65rem;color:var(--sub);">"Kth" → Heap</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px;text-align:center;">
+          <div style="font-weight:700;color:var(--pri);">Interview Flow</div>
+          <div style="font-size:0.65rem;color:var(--sub);">Read → Clarify → Code</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.7rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:8px;text-align:center;">
+    🏆 Book 0: Foundations · Built from FAANG interviews &amp; real problem-solving patterns<br>
+    <span style="font-size:0.65rem;">Use this as your mental model before every interview problem</span>
+  </div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

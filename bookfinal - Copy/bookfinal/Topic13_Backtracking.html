@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 13: Backtracking Masterclass (Visual FAANG Edition)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#ffffff',
+            primaryTextColor: '#0f172a',
+            primaryBorderColor: '#2563eb',
+            lineColor: '#64748b',
+            fontFamily: 'Inter'
+        }
+    });
+</script>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+    }
+
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 11.8px;
+        line-height: 1.4;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 8px 16px;
+        display: flex;
+        
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand { font-weight: 900; font-size: 1rem; color: #38bdf8; }
+    .top-nav .nav-controls { display: flex; gap: 4px; flex-wrap: wrap; }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+
+    /* Sticky Sidebar Layout */
+    .app-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+
+    .toc-title { font-weight: 900; font-size: 0.85rem; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+
+    .main-content { min-width: 0; }
+
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 20px 24px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+        
+        display: flex;
+        flex-direction: column;
+        
+    }
+    [data-theme="dark"] .page { background: #1e293b; color: #f8fafc; }
+
+    /* Header Top */
+    .header-top {
+        display: flex;
+        
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 6px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top { background: #0f172a; border-color: #38bdf8; border-left-color: #38bdf8; }
+    .header-title-group { display: flex; align-items: center; gap: 8px; }
+    .header-top h1 { margin: 0; font-size: 1.15rem; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+    .header-top .page-num { background: #1e3a8a; color: white; padding: 2px 8px; border-radius: 14px; font-weight: 800; font-size: 0.72rem; }
+
+    /* Goal Badge Box */
+    .goal-badge {
+        border: 2px dashed #3b82f6;
+        background: #eff6ff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: #1e40af;
+        margin-bottom: 6px;
+    }
+
+    .cross-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #e0e7ff;
+        color: #3730a3;
+        border: 1px solid #c7d2fe;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-decoration: none;
+        margin-bottom: 4px;
+    }
+
+    /* Section Box */
+    .section-box {
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        background: white;
+        border: 2px solid #3b82f6;
+        width: 100%;
+    }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+    .section-header { padding: 4px 8px; font-weight: 800; font-size: 0.8rem; color: white; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+    .section-header .num { background: white; color: #0f172a; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 900; }
+    .section-content { padding: 6px 8px; font-size: 0.76rem; }
+
+    /* Color Themes */
+    .box-blue { border-color: #2563eb !important; } .box-blue .section-header { background: #2563eb !important; }
+    .box-green { border-color: #22c55e !important; } .box-green .section-header { background: #22c55e !important; }
+    .box-purple { border-color: #8b5cf6 !important; } .box-purple .section-header { background: #8b5cf6 !important; }
+    .box-red { border-color: #ef4444 !important; } .box-red .section-header { background: #ef4444 !important; }
+    .box-orange { border-color: #f97316 !important; } .box-orange .section-header { background: #f97316 !important; }
+    .box-teal { border-color: #0d9488 !important; } .box-teal .section-header { background: #0d9488 !important; }
+    .box-indigo { border-color: #6366f1 !important; } .box-indigo .section-header { background: #6366f1 !important; }
+    .box-amber { border-color: #d97706 !important; } .box-amber .section-header { background: #d97706 !important; }
+
+    /* Problem Split Grid */
+    .problem-split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+    .problem-info { display: flex; flex-direction: column; gap: 3px; }
+    .problem-code { display: flex; flex-direction: column; }
+
+    .meta-card { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 3px 6px; border-radius: 4px; display: flex;  align-items: center; font-weight: 700; font-size: 0.7rem; }
+    [data-theme="dark"] .meta-card { background: #0f172a; border-color: #334155; }
+    .badge-easy { background: #10b981; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-medium { background: #f59e0b; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-hard { background: #ef4444; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .company-tag { background: #1e3a8a; color: white; padding: 1px 4px; border-radius: 3px; font-size: 0.65rem; }
+
+    .flowchart-box { background: #eff6ff; border: 1px solid #93c5fd; border-left: 3px solid #2563eb; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: 700; color: #1e40af; }
+    .whynot-box { background: #fff7ed; border: 1px solid #fdba74; border-left: 3px solid #f97316; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; color: #9a3412; }
+
+    /* State Space Tree Box */
+    .state-tree-box {
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        padding: 4px 6px;
+        margin: 3px 0;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.68rem;
+        line-height: 1.35;
+    }
+    .tree-state-title { font-weight: 800; color: #1e3a8a; font-family: 'Inter', sans-serif; }
+    [data-theme="dark"] .tree-state-title { color: #38bdf8; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    pre { background: #f8fafc; color: #0f172a; padding: 6px 8px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.71rem; line-height: 1.32; margin: 0; white-space: pre-wrap !important; word-break: break-word; border: 1px solid #cbd5e1; }
+    [data-theme="dark"] pre { background: #0f172a; color: #f8fafc; border-color: #334155; }
+    code { font-family: 'Fira Code', monospace; background: #f1f5f9; color: #0f172a; padding: 1px 3px; border-radius: 3px; font-size: 0.74rem; border: 1px solid #cbd5e1; }
+
+    .aha-box { background: #fefce8; border: 1px solid #eab308; border-left: 4px solid #ca8a04; color: #713f12; padding: 5px 8px; border-radius: 4px; font-size: 0.76rem; font-weight: 600; margin: 4px 0; }
+    .rule-box { padding: 4px 6px; border-radius: 4px; font-weight: 600; margin: 4px 0; font-size: 0.74rem; }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    .rule-purple { background: #faf5ff; border: 1px solid #a855f7; border-left: 4px solid #a855f7; color: #6b21a8; }
+    .rule-red { background: #fff1f2; border: 1px solid #ef4444; border-left: 4px solid #ef4444; color: #b91c1c; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+    table th, table td { border: 1px solid var(--border-color); padding: 3px 5px; text-align: left; }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+    .mermaid { display: flex; justify-content: center; margin: 2px 0; }
+    .back-to-top { position: fixed; bottom: 20px; right: 20px; background: #2563eb; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; border: none; z-index: 999; }
+
+    @page { size: A4 portrait; margin: 4mm; }
+    @media print {
+        body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .top-nav, .back-to-top, .toc-sidebar { display: none !important; }
+        .app-layout { display: block !important; }
+        .container { max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+        .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.72; }
+        pre { background-color: #f8fafc !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; }
+    }
+
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+</style>
+</head>
+<body>
+
+<!-- Sticky Top Nav -->
+<div class="top-nav">
+    <div class="brand">⚡ FAANG DSA HANDBOOK — TOPIC 13: BACKTRACKING</div>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn" style="background:#059669; border-color:#10b981; font-weight:800;">🏠 Index</a>
+        <button class="nav-btn" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="nav-btn" onclick="toggleSidebar()">↕️ Expand/Shrink TOC</button>
+        <a href="#page1" class="nav-btn">P1</a>
+        <a href="#page2" class="nav-btn">P2</a>
+        <a href="#page3" class="nav-btn">P3</a>
+        <a href="#page4" class="nav-btn">P4</a>
+        <a href="#page5" class="nav-btn">P5</a>
+        <a href="#page6" class="nav-btn">P6</a>
+        <a href="#page7" class="nav-btn">P7</a>
+        <a href="#page8" class="nav-btn">P8</a>
+        <a href="#page9" class="nav-btn">P9</a>
+        <a href="#page10" class="nav-btn">P10</a>
+        <a href="#page11" class="nav-btn">P11</a>
+        <a href="#page12" class="nav-btn">P12</a>
+        <a href="#page13" class="nav-btn">P13</a>
+        <a href="#page14" class="nav-btn">P14</a>
+        <a href="#page15" class="nav-btn">P15</a>
+        <a href="#page16" class="nav-btn">P16</a>
+        <button class="nav-btn" onclick="window.print()" style="background: #2563eb;">🖨️ PDF</button>
+    </div>
+</div>
+
+<div class="container">
+<div class="app-layout" id="appLayout">
+
+    <!-- Sticky Table of Contents Sidebar -->
+    <div class="toc-sidebar">
+        <div class="toc-header-bar"><span class="toc-title">📋 SECTIONS</span><button class="shrink-btn" onclick="toggleSidebar()"><span class="toc-text">➖ Shrink</span></button></div>
+        <ul class="toc-list">
+            <li><a href="#page1" class="toc-link">13.0 Foundation &amp; Search Tree</a></li>
+            <li><a href="#page2" class="toc-link">13.1 Choose-Explore-Undo Template</a></li>
+            <li><a href="#page3" class="toc-link">13.2 Subsets vs Combinations</a></li>
+            <li><a href="#page4" class="toc-link">13.5 Constraint Satisfaction</a></li>
+            <li><a href="#page5" class="toc-link">13.7 Pruning Techniques</a></li>
+            <li><a href="#page6" class="toc-link">13.8 Decision Tree &amp; Cheat Sheet</a></li>
+            <li><a href="#page7" class="toc-link">Template Library (Part 1)</a></li>
+            <li><a href="#page8" class="toc-link">Template Library (Part 2)</a></li>
+            <li><a href="#page9" class="toc-link">13.11 Easy NeetCode Suite</a></li>
+            <li><a href="#page10" class="toc-link">13.11 Subsets I &amp; II</a></li>
+            <li><a href="#page11" class="toc-link">13.11 Combination Sum I &amp; II</a></li>
+            <li><a href="#page12" class="toc-link">13.11 Permutations I &amp; II</a></li>
+            <li><a href="#page13" class="toc-link">13.11 Palindrome Part &amp; Word Search</a></li>
+            <li><a href="#page14" class="toc-link">13.11 N-Queens &amp; Sudoku Solver</a></li>
+            <li><a href="#page15" class="toc-link">13.11 Word Search II &amp; Paths III</a></li>
+            <li><a href="#page16" class="toc-link">13.12 Revision &amp; Summary</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Pages -->
+    <div class="main-content">
+
+    <!-- ========================================================= -->
+    <!-- PAGE 1: 13.0 BACKTRACKING FOUNDATION & SEARCH TREE -->
+    <!-- ========================================================= -->
+    <div class="page" id="page1">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔄</span>
+                    <h1>TOPIC 13.0: BACKTRACKING FOUNDATION &amp; DECISION TREE</h1>
+                </div>
+                <span class="page-num">PAGE 1 OF 16</span>
+            </div>
+
+            <!-- Cross-Link Badges -->
+            <a href="Topic12_Graphs.html" class="cross-link">🔗 See Topic 12 → Graphs Masterclass</a>
+
+            <!-- Goal Badge -->
+            <div class="goal-badge">
+                🎯 <strong>GOAL:</strong> Master Backtracking intuition, state space decision trees, the Choose ➔ Explore ➔ Undo (State Restoration) paradigm, duplicate pruning, and solve all major FAANG questions!
+            </div>
+
+            <div class="section-box box-teal" style="margin-top:8px">
+                <div class="section-header">🧰 REUSABLE BACKTRACKING UTILITIES &amp; TEMPLATE</div>
+                <div class="section-content">
+<pre>
+// Generic Choose -> Explore -> Undo Skeleton
+void backtrack(int start, int[] nums, List&lt;Integer&gt; path, List&lt;List&lt;Integer&gt;&gt; res) {
+    res.add(new ArrayList&lt;&gt;(path)); // Add snapshot of valid state
+    for (int i = start; i &lt; nums.length; i++) {
+        // 1. CHOOSE
+        path.add(nums[i]);
+        // 2. EXPLORE
+        backtrack(i + 1, nums, path, res);
+        // 3. UNDO (State Restoration)
+        path.remove(path.size() - 1);
+    }
+}</pre>
+                </div>
+            </div>
+
+            <!-- AHA Box #1 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #1: BACKTRACKING IS DEPTH-FIRST SEARCH ON A DECISION TREE WITH STATE RESTORATION</strong><br/>
+                Backtracking systematically explores all possible candidates in a State Space Tree. When a candidate path leads to a **Dead End** or **Invalid Constraint**, the algorithm **undoes the last choice** (backtracks) to restore state and try the next branch!
+            </div>
+
+            <div class="grid-2">
+                <!-- Core Terminology -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> CORE BACKTRACKING TERMINOLOGY</div>
+                    <div class="section-content">
+                        <div>• <strong>Decision Tree / State Space:</strong> Hierarchy of all possible choices.<br/>
+                        • <strong>Candidate Path (`path`):</strong> List of choices made so far.<br/>
+                        • <strong>Pruning / Branch Cutting:</strong> Stopping exploration early when constraints are violated.<br/>
+                        • <strong>State Restoration:</strong> `path.remove(path.size() - 1)` to reset for the next branch!</div>
+                    </div>
+                </div>
+
+                <!-- Brute Force vs Backtracking -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> BRUTE FORCE VS BACKTRACKING</div>
+                    <div class="section-content">
+                        <table>
+                            <thead>
+                                <tr><th>Feature</th><th>Pure Brute Force</th><th>Backtracking (With Pruning)</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Exploration</td><td>Generates ALL full sequences first</td><td>Explores incrementally step-by-step</td></tr>
+                                <tr><td>Constraint Check</td><td>Checked only at leaf level</td><td>Checked at <strong>EVERY decision node</strong></td></tr>
+                                <tr><td>Efficiency</td><td>$O(N^N)$ Full Space Explosion</td><td>✅ <strong>Prunes thousands of invalid branches early</strong></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- State Space Tree Diagram -->
+            <div class="section-box box-green">
+                <div class="section-header">🎨 VISUALIZING STATE SPACE DECISION TREE (SUBSETS OF [1, 2])</div>
+                <div class="section-content">
+                    <div class="state-tree-box">
+<span class="tree-state-title">DECISION TREE FOR SUBSETS OF [1, 2]:</span>
+                      []
+                   /      \
+               [1]          []           (Choice 1: Include '1' vs Exclude)
+              /   \        /   \
+          [1,2]   [1]    [2]   []        (Choice 2: Include '2' vs Exclude)
+
+Result Subsets: [], [1], [2], [1, 2]  (Total 2^N = 4 subsets!)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Reach for Backtracking whenever a problem asks for "All Combinations", "All Permutations", "All Subsets", or "Constraint Satisfaction"!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 2: 13.1 CORE BACKTRACKING TEMPLATE (CHOOSE ➔ EXPLORE ➔ UNDO) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page2">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🛠️</span>
+                    <h1>TOPIC 13.1: CORE BACKTRACKING TEMPLATE (CHOOSE-EXPLORE-UNDO)</h1>
+                </div>
+                <span class="page-num">PAGE 2 OF 16</span>
+            </div>
+
+            <!-- AHA Box #2 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #2: THE GOLDEN 3-STEP BACKTRACKING PARADIGM</strong><br/>
+                Every backtracking algorithm in computer science follows this exact 3-step loop:
+                <br/>1. <strong>CHOOSE:</strong> `path.add(candidate)`
+                <br/>2. <strong>EXPLORE:</strong> `backtrack(nextState, path)` (Recursive Call)
+                <br/>3. <strong>UNDO:</strong> `path.remove(path.size() - 1)` (State Restoration for next iteration!)
+            </div>
+
+            <!-- Core Java Template -->
+            <div class="section-box box-blue">
+                <div class="section-header">🛠️ UNIVERSAL REUSABLE JAVA BACKTRACKING TEMPLATE</div>
+                <div class="section-content">
+<pre>
+public List&lt;List&lt;Integer&gt;&gt; backtrackTemplate(int[] nums) {
+    List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();
+    backtrack(nums, 0, new ArrayList&lt;&gt;(), result);
+    return result;
+}
+
+private void backtrack(int[] nums, int start, List&lt;Integer&gt; path, List&lt;List&lt;Integer&gt;&gt; result) {
+    // 1. BASE CASE / SOLUTION FOUND
+    result.add(new ArrayList&lt;&gt;(path)); // Make DEEP COPY of path!
+
+    for (int i = start; i &lt; nums.length; i++) {
+        // 2. PRUNING / CONSTRAINT CHECK
+        if (shouldPrune(nums, i)) continue;
+
+        // 3. STEP 1: CHOOSE
+        path.add(nums[i]);
+
+        // 4. STEP 2: EXPLORE (Recursion)
+        backtrack(nums, i + 1, path, result);
+
+        // 5. STEP 3: UNDO (State Restoration)
+        path.remove(path.size() - 1);
+    }
+}</pre>
+                </div>
+            </div>
+
+            <div class="section-box box-amber">
+                <div class="section-header">⚠️ CRITICAL FAANG BUG: SHALLOW PATH REFERENCE INSTEAD OF DEEP COPY</div>
+                <div class="section-content">
+                    <div>❌ <strong>WRONG:</strong> <code>result.add(path);</code> ➔ Stores a reference to the single mutating `path` object! Result will contain empty lists at the end!</div>
+                    <div>✅ <strong>CORRECT:</strong> <code>result.add(new ArrayList&lt;&gt;(path));</code> ➔ Creates an independent snapshot of current path!</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> ALWAYS pass `new ArrayList<>(path)` when appending solutions to `result`!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 3: SUBSETS VS COMBINATIONS VS PERMUTATIONS PATTERNS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page3">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📊</span>
+                    <h1>TOPIC 13.2 &amp; 13.4: SUBSETS VS COMBINATIONS VS PERMUTATIONS</h1>
+                </div>
+                <span class="page-num">PAGE 3 OF 16</span>
+            </div>
+
+            <!-- AHA Box #3 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #3: PASSING `start` INDEX VS `visited[]` BOOLEAN ARRAY</strong><br/>
+                • <strong>Subsets &amp; Combinations (Order DOES NOT matter):</strong> `[1, 2]` is identical to `[2, 1]`. Pass `start` index to recursion (`i + 1`) to only pick elements moving forward!
+                <br/>• <strong>Permutations (Order DOES matter):</strong> `[1, 2]` is DIFFERENT from `[2, 1]`. Start loop at index `0` every time and use a `boolean[] visited` array!
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="section-box box-purple">
+                <div class="section-header">📊 SUBSETS VS COMBINATIONS VS PERMUTATIONS MATRIX</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Pattern Type</th><th>Order Matters?</th><th>Loop Start Index</th><th>Duplicate Skipping Rule</th><th>Output Count</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Subsets</strong></td><td>❌ No</td><td>`i + 1` (Forward)</td><td>`if (i > start && nums[i] == nums[i-1]) continue;`</td><td>$2^N$</td></tr>
+                            <tr><td><strong>Combinations</strong></td><td>❌ No</td><td>`i + 1` (Forward)</td><td>`if (i > start && nums[i] == nums[i-1]) continue;`</td><td>$\binom{N}{K}$</td></tr>
+                            <tr><td><strong>Permutations</strong></td><td>✅ <strong>YES</strong></td><td>`0` (Every time)</td><td>`if (visited[i] || (i > 0 && nums[i] == nums[i-1] && !visited[i-1]))`</td><td>$N!$</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>DUPLICATE SKIPPING LAW:</strong> Sort input array first (`Arrays.sort(nums)`), then check `if (i > start && nums[i] == nums[i-1]) continue;`!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 4: 13.5 CONSTRAINT SATISFACTION & GRID BACKTRACKING -->
+    <!-- ========================================================= -->
+    <div class="page" id="page4">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🧩</span>
+                    <h1>TOPIC 13.5 &amp; 13.6: CONSTRAINT SATISFACTION &amp; GRID BACKTRACKING</h1>
+                </div>
+                <span class="page-num">PAGE 4 OF 16</span>
+            </div>
+
+            <!-- AHA Box #4 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #4: IN-PLACE MUTATION &amp; UN-MUTATION FOR GRIDS</strong><br/>
+                In Grid Backtracking (Word Search), avoid allocating extra `visited[][]` matrices!
+                <br/>1. <strong>Choose:</strong> Save `char temp = board[r][c]; board[r][c] = '#';`
+                <br/>2. <strong>Explore:</strong> Recurse to 4 neighbor cells.
+                <br/>3. <strong>Undo:</strong> Restore `board[r][c] = temp;`!
+            </div>
+
+            <div class="grid-2">
+                <!-- N-Queens State Setup -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> N-QUEENS $O(1)$ CONSTRAINT CHECKING</div>
+                    <div class="section-content">
+<pre>
+// Track attacked columns and diagonals
+boolean[] cols = new boolean[n];
+boolean[] diag1 = new boolean[2 * n]; // r + c
+boolean[] diag2 = new boolean[2 * n]; // r - c + n
+
+boolean isSafe(int r, int c, int n) {
+    return !cols[c] &amp;&amp; !diag1[r + c] &amp;&amp; !diag2[r - c + n];
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Grid Un-mutation -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">2</span> GRID IN-PLACE BACKTRACKING</div>
+                    <div class="section-content">
+<pre>
+char temp = board[r][c];
+board[r][c] = '#'; // Mark visited (Choose)
+
+// Explore 4 directions
+boolean found = dfs(r+1, c) || dfs(r-1, c) || 
+                dfs(r, c+1) || dfs(r, c-1);
+
+board[r][c] = temp; // Un-mark visited (Undo!)</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> In-place grid cell mutation saves $O(M \cdot N)$ memory and ensures high-performance grid DFS!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 5: 13.7 PRUNING TECHNIQUES & BRANCH CUTTING -->
+    <!-- ========================================================= -->
+    <div class="page" id="page5">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">✂️</span>
+                    <h1>TOPIC 13.7: PRUNING TECHNIQUES &amp; BRANCH CUTTING</h1>
+                </div>
+                <span class="page-num">PAGE 5 OF 16</span>
+            </div>
+
+            <!-- AHA Box #5 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #5: PRUNING SAVES MILLIONS OF RECURSIVE CALLS</strong><br/>
+                Without pruning, N-Queens has a search space of $N^N$ ($8^8 = 16,777,216$ states!).
+                <br/>By checking constraints AT EVERY CHOICE and skipping invalid branches early, pruning cuts exploration down to ONLY 2,057 states ($10,000\times$ faster)!
+            </div>
+
+            <div class="grid-2">
+                <!-- Pruning Type 1 -->
+                <div class="section-box box-amber">
+                    <div class="section-header"><span class="num">1</span> BOUNDARY &amp; TARGET OVERFLOW PRUNING</div>
+                    <div class="section-content">
+                        <div>• <strong>Target Overflow:</strong> In Combination Sum, if `target < 0`, stop searching immediately (`return;`).<br/>
+                        • <strong>Early Exit:</strong> Stop recursion as soon as 1 valid answer is found (return `boolean`).</div>
+                    </div>
+                </div>
+
+                <!-- Pruning Type 2 -->
+                <div class="section-box box-red">
+                    <div class="section-header"><span class="num">2</span> DUPLICATE BRANCH PRUNING</div>
+                    <div class="section-content">
+                        <div>• Sort input array first (`Arrays.sort(nums)`).<br/>
+                        • Skip identical elements at the same recursion depth level: `if (i > start && nums[i] == nums[i-1]) continue;`.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Code Comparison for Pruning -->
+            <div class="section-box box-purple">
+                <div class="section-header"><span class="num">3</span> CODE MECHANICS: DUPLICATE PRUNING LOGIC</div>
+                <div class="section-content">
+<pre>
+// Sort input to bring identical elements together
+Arrays.sort(candidates);
+
+for (int i = start; i &lt; candidates.length; i++) {
+    // PRUNE: If current candidate is identical to previous sibling at SAME depth level, skip!
+    if (i &gt; start &amp;&amp; candidates[i] == candidates[i - 1]) continue;
+
+    if (candidates[i] &gt; target) break; // PRUNE: Array is sorted, so subsequent items also exceed target!
+
+    path.add(candidates[i]);
+    backtrack(candidates, target - candidates[i], i + 1, path, res);
+    path.remove(path.size() - 1);
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            📌 <strong>PRUNING RULE:</strong> Always place `if (remainingTarget < 0) return;` at the VERY TOP of your recursive function!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 6: DECISION TREE & PRINTABLE BACKTRACKING CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page6">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📜</span>
+                    <h1>TOPIC 13.8 &amp; 1-PAGE PRINTABLE BACKTRACKING CHEAT SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 6 OF 16</span>
+            </div>
+
+            <!-- Mermaid Decision Tree -->
+            <div class="section-box box-purple">
+                <div class="section-header">🌳 BACKTRACKING INTERVIEW DECISION TREE (MERMAID)</div>
+                <div class="section-content">
+                    <div class="mermaid">
+                        graph TD
+                            A[What is the Backtracking Problem Type?]
+                            A --> B[Generate All Subsets / Power Set?]
+                            A --> C[Generate Target Sum Combinations?]
+                            A --> D[Generate All Permutations?]
+                            A --> E[Board Placement / Grid Search?]
+                            B --> B1[Loop i from start, Recurse i + 1]
+                            C --> C1[Loop i from start, Target - nums[i]]
+                            D --> D1[Loop i from 0, Use visited[i] boolean array]
+                            E --> E1[In-place Board Swap board[r][c] = '#']
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1-Page Printable Cheat Sheet -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📜 PRINTABLE BACKTRACKING CHEAT SHEET</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Pattern Type</th><th>Target Problem</th><th>Loop Index &amp; Recursion</th><th>Time Complexity</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Subsets</td><td>Subsets I (LC 78)</td><td><code>backtrack(i + 1, path)</code></td><td>$O(N \cdot 2^N)$</td></tr>
+                            <tr><td>Subsets with Dups</td><td>Subsets II (LC 90)</td><td>Sort + <code>i > start && nums[i] == nums[i-1]</code></td><td>$O(N \cdot 2^N)$</td></tr>
+                            <tr><td>Combinations</td><td>Combination Sum (LC 39)</td><td>Pass <code>i</code> for reuse, <code>i + 1</code> for single use</td><td>$O(N^{\frac{T}{M}})$</td></tr>
+                            <tr><td>Permutations</td><td>Permutations (LC 46)</td><td>Loop <code>i = 0</code> + <code>visited[i]</code> boolean array</td><td>$O(N \cdot N!)$</td></tr>
+                            <tr><td>Grid Search</td><td>Word Search (LC 79)</td><td>In-place <code>board[r][c] = '#'</code> and restore</td><td>$O(M \cdot N \cdot 4^L)$</td></tr>
+                            <tr><td>Constraint Board</td><td>N-Queens (LC 51)</td><td>Track <code>cols[]</code>, <code>diag1[]</code>, <code>diag2[]</code></td><td>$O(N!)$</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Print this page and review it 10 minutes before your technical interview!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 7: DEDICATED BACKTRACKING TEMPLATE LIBRARY (PART 1) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page7">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💻</span>
+                    <h1>BACKTRACKING TEMPLATE LIBRARY (SUBSETS &amp; COMBINATIONS)</h1>
+                </div>
+                <span class="page-num">PAGE 7 OF 16</span>
+            </div>
+
+            <div class="grid-2">
+                <!-- Subsets Template -->
+                <div class="section-box box-blue">
+                    <div class="section-header">1. SUBSETS TEMPLATE (LC 78 / 90)</div>
+                    <div class="section-content">
+<pre>
+void backtrackSubsets(int[] nums, int start, List&lt;Integer&gt; path, List&lt;List&lt;Integer&gt;&gt; res) {
+    res.add(new ArrayList&lt;&gt;(path));
+    for (int i = start; i &lt; nums.length; i++) {
+        if (i &gt; start &amp;&amp; nums[i] == nums[i - 1]) continue; // Skip dups
+        path.add(nums[i]);
+        backtrackSubsets(nums, i + 1, path, res);
+        path.remove(path.size() - 1);
+    }
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Combinations Template -->
+                <div class="section-box box-purple">
+                    <div class="section-header">2. COMBINATIONS TEMPLATE (LC 39 / 40)</div>
+                    <div class="section-content">
+<pre>
+void backtrackCombo(int[] nums, int target, int start, List&lt;Integer&gt; path, List&lt;List&lt;Integer&gt;&gt; res) {
+    if (target == 0) { res.add(new ArrayList&lt;&gt;(path)); return; }
+    for (int i = start; i &lt; nums.length; i++) {
+        if (nums[i] &gt; target) break; // Prune target overflow
+        if (i &gt; start &amp;&amp; nums[i] == nums[i - 1]) continue; // Skip dups
+        path.add(nums[i]);
+        backtrackCombo(nums, target - nums[i], i + 1, path, res); // i+1 for single use
+        path.remove(path.size() - 1);
+    }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>REUSABLE CODE:</strong> Copy-paste these templates directly into your interview whiteboard or IDE!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 8: DEDICATED BACKTRACKING TEMPLATE LIBRARY (PART 2) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page8">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💻</span>
+                    <h1>BACKTRACKING TEMPLATE LIBRARY (PERMUTATIONS &amp; GRIDS)</h1>
+                </div>
+                <span class="page-num">PAGE 8 OF 16</span>
+            </div>
+
+            <div class="grid-2">
+                <!-- Permutations Template -->
+                <div class="section-box box-blue">
+                    <div class="section-header">3. PERMUTATIONS TEMPLATE (LC 46 / 47)</div>
+                    <div class="section-content">
+<pre>
+void backtrackPerm(int[] nums, boolean[] vis, List&lt;Integer&gt; path, List&lt;List&lt;Integer&gt;&gt; res) {
+    if (path.size() == nums.length) { res.add(new ArrayList&lt;&gt;(path)); return; }
+    for (int i = 0; i &lt; nums.length; i++) {
+        if (vis[i]) continue;
+        if (i &gt; 0 &amp;&amp; nums[i] == nums[i-1] &amp;&amp; !vis[i-1]) continue; // Skip dups
+        vis[i] = true; path.add(nums[i]);
+        backtrackPerm(nums, vis, path, res);
+        path.remove(path.size() - 1); vis[i] = false;
+    }
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Grid Backtracking Template -->
+                <div class="section-box box-green">
+                    <div class="section-header">4. GRID SEARCH TEMPLATE (LC 79)</div>
+                    <div class="section-content">
+<pre>
+boolean dfsGrid(char[][] b, String w, int r, int c, int idx) {
+    if (idx == w.length()) return true;
+    if (r &lt; 0 || r &gt;= b.length || c &lt; 0 || c &gt;= b[0].length || b[r][c] != w.charAt(idx)) return false;
+    char tmp = b[r][c]; b[r][c] = '#'; // Choose
+    boolean res = dfsGrid(b, w, r+1, c, idx+1) || dfsGrid(b, w, r-1, c, idx+1) ||
+                  dfsGrid(b, w, r, c+1, idx+1) || dfsGrid(b, w, r, c-1, idx+1);
+    b[r][c] = tmp; return res; // Undo!
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Memorize these core templates and you can solve 95% of FAANG Backtracking problems!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 9: EASY NEETCODE SUITE (LETTER COMBINATIONS) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page9">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📱</span>
+                    <h1>EASY NEETCODE: LETTER COMBINATIONS OF PHONE NUMBER</h1>
+                </div>
+                <span class="page-num">PAGE 9 OF 16</span>
+            </div>
+
+            <!-- Problem 1: LC 17 -->
+            <div class="section-box box-blue">
+                <div class="section-header">1. LEETCODE 17 — LETTER COMBINATIONS OF A PHONE NUMBER</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Digit Mapping Recursion</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Return all possible letter combinations that input digits could represent on a phone keypad.
+                        </div>
+                        <div class="problem-code">
+<pre>
+class Solution {
+    private static final String[] MAP = {
+        "", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"
+    };
+    public List&lt;String&gt; letterCombinations(String digits) {
+        List&lt;String&gt; res = new ArrayList&lt;&gt;();
+        if (digits.isEmpty()) return res;
+        backtrack(digits, 0, new StringBuilder(), res);
+        return res;
+    }
+    private void backtrack(String digits, int idx, StringBuilder path, List&lt;String&gt; res) {
+        if (idx == digits.length()) { res.add(path.toString()); return; }
+        String letters = MAP[digits.charAt(idx) - '0'];
+        for (char c : letters.toCharArray()) {
+            path.append(c); // Choose
+            backtrack(digits, idx + 1, path, res); // Explore
+            path.deleteCharAt(path.length() - 1); // Undo!
+        }
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 17):</strong> Using `StringBuilder` with `append()` and `deleteCharAt()` manages character string state without creating new string objects!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 10: MEDIUM NEETCODE (SUBSETS I & II) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page10">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📦</span>
+                    <h1>MEDIUM NEETCODE: SUBSETS I &amp; SUBSETS II</h1>
+                </div>
+                <span class="page-num">PAGE 10 OF 16</span>
+            </div>
+
+            <!-- Problem 2: LC 78 -->
+            <div class="section-box box-blue">
+                <div class="section-header">2. LEETCODE 78 — SUBSETS (POWER SET)</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Power Set Generation</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Return all possible subsets (the power set) of unique elements.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public List&lt;List&lt;Integer&gt;&gt; subsets(int[] nums) {
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    backtrack(nums, 0, new ArrayList&lt;&gt;(), res);
+    return res;
+}
+private void backtrack(int[] nums, int start, List&lt;Integer&gt; path, List&lt;List&lt;Integer&gt;&gt; res) {
+    res.add(new ArrayList&lt;&gt;(path));
+    for (int i = start; i &lt; nums.length; i++) {
+        path.add(nums[i]);
+        backtrack(nums, i + 1, path, res);
+        path.remove(path.size() - 1);
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 3: LC 90 -->
+            <div class="section-box box-purple">
+                <div class="section-header">3. LEETCODE 90 — SUBSETS II (WITH DUPLICATES)</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Duplicate Branch Pruning</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Return all possible subsets of array containing duplicate numbers.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public List&lt;List&lt;Integer&gt;&gt; subsetsWithDup(int[] nums) {
+    Arrays.sort(nums); // Sort first for duplicate check!
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    backtrack(nums, 0, new ArrayList&lt;&gt;(), res);
+    return res;
+}
+private void backtrack(int[] nums, int start, List&lt;Integer&gt; path, List&lt;List&lt;Integer&gt;&gt; res) {
+    res.add(new ArrayList&lt;&gt;(path));
+    for (int i = start; i &lt; nums.length; i++) {
+        if (i &gt; start &amp;&amp; nums[i] == nums[i - 1]) continue; // Skip dups!
+        path.add(nums[i]);
+        backtrack(nums, i + 1, path, res);
+        path.remove(path.size() - 1);
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 90):</strong> Checking `i > start && nums[i] == nums[i-1]` skips duplicate choices at the SAME decision level while allowing them across different depth levels!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 11: MEDIUM NEETCODE (COMBINATION SUM I & II) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page11">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🎯</span>
+                    <h1>MEDIUM NEETCODE: COMBINATION SUM I &amp; II</h1>
+                </div>
+                <span class="page-num">PAGE 11 OF 16</span>
+            </div>
+
+            <!-- Problem 4: LC 39 -->
+            <div class="section-box box-blue">
+                <div class="section-header">4. LEETCODE 39 — COMBINATION SUM I</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Unlimited Re-Use Target Sum</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Return combinations summing to `target` (same element can be chosen unlimited times).
+                        </div>
+                        <div class="problem-code">
+<pre>
+public List&lt;List&lt;Integer&gt;&gt; combinationSum(int[] candidates, int target) {
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    Arrays.sort(candidates);
+    backtrack(candidates, target, 0, new ArrayList&lt;&gt;(), res);
+    return res;
+}
+private void backtrack(int[] c, int target, int start, List&lt;Integer&gt; path, List&lt;List&lt;Integer&gt;&gt; res) {
+    if (target == 0) { res.add(new ArrayList&lt;&gt;(path)); return; }
+    for (int i = start; i &lt; c.length; i++) {
+        if (c[i] &gt; target) break; // Early target overflow pruning
+        path.add(c[i]);
+        backtrack(c, target - c[i], i, path, res); // Pass 'i' for reuse!
+        path.remove(path.size() - 1);
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 5: LC 40 -->
+            <div class="section-box box-teal">
+                <div class="section-header">5. LEETCODE 40 — COMBINATION SUM II</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Single-Use + Duplicate Pruning</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Return combinations summing to `target` (each element used AT MOST ONCE).
+                        </div>
+                        <div class="problem-code">
+<pre>
+public List&lt;List&lt;Integer&gt;&gt; combinationSum2(int[] candidates, int target) {
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    Arrays.sort(candidates);
+    backtrack(candidates, target, 0, new ArrayList&lt;&gt;(), res);
+    return res;
+}
+private void backtrack(int[] c, int target, int start, List&lt;Integer&gt; path, List&lt;List&lt;Integer&gt;&gt; res) {
+    if (target == 0) { res.add(new ArrayList&lt;&gt;(path)); return; }
+    for (int i = start; i &lt; c.length; i++) {
+        if (c[i] &gt; target) break;
+        if (i &gt; start &amp;&amp; c[i] == c[i - 1]) continue; // Skip dups
+        path.add(c[i]);
+        backtrack(c, target - c[i], i + 1, path, res); // Pass 'i+1' for single-use!
+        path.remove(path.size() - 1);
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 39 vs LC 40):</strong> Pass `i` to recursion for unlimited element reuse; pass `i + 1` for single element use!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 12: MEDIUM NEETCODE (PERMUTATIONS I & II) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page12">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔄</span>
+                    <h1>MEDIUM NEETCODE: PERMUTATIONS I &amp; II</h1>
+                </div>
+                <span class="page-num">PAGE 12 OF 16</span>
+            </div>
+
+            <!-- Problem 6: LC 46 -->
+            <div class="section-box box-blue">
+                <div class="section-header">6. LEETCODE 46 — PERMUTATIONS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Order-Sensitive Visited Tracking</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Return all possible permutations of an array of distinct integers.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public List&lt;List&lt;Integer&gt;&gt; permute(int[] nums) {
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    backtrack(nums, new boolean[nums.length], new ArrayList&lt;&gt;(), res);
+    return res;
+}
+private void backtrack(int[] nums, boolean[] vis, List&lt;Integer&gt; path, List&lt;List&lt;Integer&gt;&gt; res) {
+    if (path.size() == nums.length) { res.add(new ArrayList&lt;&gt;(path)); return; }
+    for (int i = 0; i &lt; nums.length; i++) {
+        if (vis[i]) continue;
+        vis[i] = true; path.add(nums[i]);
+        backtrack(nums, vis, path, res);
+        path.remove(path.size() - 1); vis[i] = false;
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 7: LC 47 -->
+            <div class="section-box box-purple">
+                <div class="section-header">7. LEETCODE 47 — PERMUTATIONS II (WITH DUPLICATES)</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Permutation Duplicate Pruning</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Return unique permutations of array containing duplicate numbers.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public List&lt;List&lt;Integer&gt;&gt; permuteUnique(int[] nums) {
+    Arrays.sort(nums);
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    backtrack(nums, new boolean[nums.length], new ArrayList&lt;&gt;(), res);
+    return res;
+}
+private void backtrack(int[] nums, boolean[] vis, List&lt;Integer&gt; path, List&lt;List&lt;Integer&gt;&gt; res) {
+    if (path.size() == nums.length) { res.add(new ArrayList&lt;&gt;(path)); return; }
+    for (int i = 0; i &lt; nums.length; i++) {
+        if (vis[i]) continue;
+        if (i &gt; 0 &amp;&amp; nums[i] == nums[i - 1] &amp;&amp; !vis[i - 1]) continue; // Skip duplicate branch
+        vis[i] = true; path.add(nums[i]);
+        backtrack(nums, vis, path, res);
+        path.remove(path.size() - 1); vis[i] = false;
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🧠 <strong>MEMORY BOX:</strong> In Permutations II, `!vis[i-1]` ensures that duplicate elements are inserted ONLY in strict left-to-right order!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 13: MEDIUM NEETCODE (PALINDROME PARTITIONING & WORD SEARCH) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page13">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔍</span>
+                    <h1>MEDIUM NEETCODE: PALINDROME PARTITIONING &amp; WORD SEARCH</h1>
+                </div>
+                <span class="page-num">PAGE 13 OF 16</span>
+            </div>
+
+            <!-- Problem 8: LC 131 -->
+            <div class="section-box box-green">
+                <div class="section-header">8. LEETCODE 131 — PALINDROME PARTITIONING</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Substring Palindrome Check</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Partition string `s` such that every substring of partition is a palindrome.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public List&lt;List&lt;String&gt;&gt; partition(String s) {
+    List&lt;List&lt;String&gt;&gt; res = new ArrayList&lt;&gt;();
+    backtrack(s, 0, new ArrayList&lt;&gt;(), res);
+    return res;
+}
+private void backtrack(String s, int start, List&lt;String&gt; path, List&lt;List&lt;String&gt;&gt; res) {
+    if (start == s.length()) { res.add(new ArrayList&lt;&gt;(path)); return; }
+    for (int end = start; end &lt; s.length(); end++) {
+        if (isPalindrome(s, start, end)) {
+            path.add(s.substring(start, end + 1));
+            backtrack(s, end + 1, path, res);
+            path.remove(path.size() - 1);
+        }
+    }
+}
+private boolean isPalindrome(String s, int l, int r) {
+    while (l &lt; r) if (s.charAt(l++) != s.charAt(r--)) return false;
+    return true;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 9: LC 79 -->
+            <div class="section-box box-teal">
+                <div class="section-header">9. LEETCODE 79 — WORD SEARCH</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Grid DFS In-Place Cell Mutation</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Determine if target word exists in 2D grid matrix of letters.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean exist(char[][] board, String word) {
+    for (int r = 0; r &lt; board.length; r++) {
+        for (int c = 0; c &lt; board[0].length; c++) {
+            if (dfs(board, word, r, c, 0)) return true;
+        }
+    }
+    return false;
+}
+private boolean dfs(char[][] b, String w, int r, int c, int idx) {
+    if (idx == w.length()) return true;
+    if (r &lt; 0 || r &gt;= b.length || c &lt; 0 || c &gt;= b[0].length || b[r][c] != w.charAt(idx)) return false;
+    char tmp = b[r][c]; b[r][c] = '#'; // Mark visited
+    boolean found = dfs(b, w, r+1, c, idx+1) || dfs(b, w, r-1, c, idx+1) ||
+                    dfs(b, w, r, c+1, idx+1) || dfs(b, w, r, c-1, idx+1);
+    b[r][c] = tmp; // Restore cell state!
+    return found;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 79):</strong> Restoring `b[r][c] = tmp` right after DFS exploration enables trying other valid grid paths!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 14: HARD NEETCODE (N-QUEENS & SUDOKU SOLVER) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page14">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">👑</span>
+                    <h1>HARD NEETCODE: N-QUEENS &amp; SUDOKU SOLVER</h1>
+                </div>
+                <span class="page-num">PAGE 14 OF 16</span>
+            </div>
+
+            <!-- Problem 10: LC 51 -->
+            <div class="section-box box-red">
+                <div class="section-header">10. LEETCODE 51 — N-QUEENS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Board Placement Constraint Check</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Place $N$ queens on an $N \times N$ chessboard such that no two queens attack each other.
+                        </div>
+                        <div class="problem-code">
+<pre>
+class Solution {
+    public List&lt;List&lt;String&gt;&gt; solveNQueens(int n) {
+        List&lt;List&lt;String&gt;&gt; res = new ArrayList&lt;&gt;();
+        char[][] board = new char[n][n];
+        for (char[] row : board) Arrays.fill(row, '.');
+        backtrack(board, 0, new boolean[n], new boolean[2*n], new boolean[2*n], res);
+        return res;
+    }
+    private void backtrack(char[][] b, int r, boolean[] cols, boolean[] d1, boolean[] d2, List&lt;List&lt;String&gt;&gt; res) {
+        int n = b.length;
+        if (r == n) {
+            List&lt;String&gt; path = new ArrayList&lt;&gt;();
+            for (char[] row : b) path.add(new String(row));
+            res.add(path); return;
+        }
+        for (int c = 0; c &lt; n; c++) {
+            if (cols[c] || d1[r + c] || d2[r - c + n]) continue;
+            b[r][c] = 'Q'; cols[c] = d1[r + c] = d2[r - c + n] = true;
+            backtrack(b, r + 1, cols, d1, d2, res);
+            b[r][c] = '.'; cols[c] = d1[r + c] = d2[r - c + n] = false;
+        }
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 11: LC 37 -->
+            <div class="section-box box-indigo">
+                <div class="section-header">11. LEETCODE 37 — SUDOKU SOLVER</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>9x9 Grid Cell Choice</span>
+                                <span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Solve a Sudoku puzzle by filling empty cells `'.'` with digits `'1'-'9'`.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public void solveSudoku(char[][] board) { solve(board); }
+private boolean solve(char[][] b) {
+    for (int r = 0; r &lt; 9; r++) {
+        for (int c = 0; c &lt; 9; c++) {
+            if (b[r][c] == '.') {
+                for (char ch = '1'; ch &lt;= '9'; ch++) {
+                    if (isValid(b, r, c, ch)) {
+                        b[r][c] = ch;
+                        if (solve(b)) return true;
+                        b[r][c] = '.'; // Backtrack
+                    }
+                }
+                return false;
+            }
+        }
+    }
+    return true;
+}
+private boolean isValid(char[][] b, int r, int c, char ch) {
+    for (int i = 0; i &lt; 9; i++) {
+        if (b[r][i] == ch || b[i][c] == ch) return false;
+        if (b[3 * (r / 3) + i / 3][3 * (c / 3) + i % 3] == ch) return false;
+    }
+    return true;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Fast $O(1)$ diagonal lookups `d1[r + c]` and `d2[r - c + n]` make N-Queens lightning fast!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 15: HARD NEETCODE (WORD SEARCH II & UNIQUE PATHS III) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page15">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔥</span>
+                    <h1>HARD NEETCODE: WORD SEARCH II &amp; UNIQUE PATHS III</h1>
+                </div>
+                <span class="page-num">PAGE 15 OF 16</span>
+            </div>
+
+            <!-- Problem 12: LC 212 -->
+            <div class="section-box box-red">
+                <div class="section-header">12. LEETCODE 212 — WORD SEARCH II</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Trie + Grid Backtracking Pruning</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Find all dictionary words present on a 2D board.
+                        </div>
+                        <div class="problem-code">
+<pre>
+class Solution {
+    class TrieNode { TrieNode[] children = new TrieNode[26]; String word; }
+    public List&lt;String&gt; findWords(char[][] board, String[] words) {
+        TrieNode root = new TrieNode();
+        for (String w : words) {
+            TrieNode curr = root;
+            for (char c : w.toCharArray()) {
+                int idx = c - 'a';
+                if (curr.children[idx] == null) curr.children[idx] = new TrieNode();
+                curr = curr.children[idx];
+            }
+            curr.word = w;
+        }
+        List&lt;String&gt; res = new ArrayList&lt;&gt;();
+        for (int r = 0; r &lt; board.length; r++) {
+            for (int c = 0; c &lt; board[0].length; c++) dfs(board, r, c, root, res);
+        }
+        return res;
+    }
+    private void dfs(char[][] b, int r, int c, TrieNode node, List&lt;String&gt; res) {
+        char ch = b[r][c];
+        if (ch == '#' || node.children[ch - 'a'] == null) return;
+        node = node.children[ch - 'a'];
+        if (node.word != null) { res.add(node.word); node.word = null; }
+        b[r][c] = '#';
+        int[][] dirs = {{0,1},{1,0},{0,-1},{-1,0}};
+        for (int[] d : dirs) {
+            int nr = r + d[0], nc = c + d[1];
+            if (nr &gt;= 0 &amp;&amp; nr &lt; b.length &amp;&amp; nc &gt;= 0 &amp;&amp; nc &lt; b[0].length) dfs(b, nr, nc, node, res);
+        }
+        b[r][c] = ch; // Backtrack
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 13: LC 980 -->
+            <div class="section-box box-purple">
+                <div class="section-header">13. LEETCODE 980 — UNIQUE PATHS III</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Hamiltonian Grid Path Backtrack</span>
+                                <span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Paths from start cell to end cell walking over EVERY non-obstacle cell EXACTLY ONCE.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int uniquePathsIII(int[][] grid) {
+    int startR = 0, startC = 0, empty = 1;
+    for (int r = 0; r &lt; grid.length; r++) {
+        for (int c = 0; c &lt; grid[0].length; c++) {
+            if (grid[r][c] == 1) { startR = r; startC = c; }
+            else if (grid[r][c] == 0) empty++;
+        }
+    }
+    return dfs(grid, startR, startC, empty);
+}
+private int dfs(int[][] g, int r, int c, int count) {
+    if (r &lt; 0 || r &gt;= g.length || c &lt; 0 || c &gt;= g[0].length || g[r][c] == -1) return 0;
+    if (g[r][c] == 2) return count == 0 ? 1 : 0;
+    g[r][c] = -1; // Choose
+    int paths = dfs(g, r+1, c, count-1) + dfs(g, r-1, c, count-1) +
+                dfs(g, r, c+1, count-1) + dfs(g, r, c-1, count-1);
+    g[r][c] = 0; // Undo!
+    return paths;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 980):</strong> Countdown variable `empty` ensures every valid path visits all non-obstacle grid cells before reaching target `2`!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 16: MASTER REVISION & REFERENCE CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page16">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💎</span>
+                    <h1>IF YOU REMEMBER ONLY ONE PAGE... MASTER REVISION SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 16 OF 16</span>
+            </div>
+
+            <!-- 4 Golden Laws -->
+            <div class="section-box box-green">
+                <div class="section-header">⭐ THE 4 GOLDEN LAWS OF BACKTRACKING</div>
+                <div class="section-content">
+                    <div style="font-size:0.78rem; line-height:1.45;">
+                        1. <strong>State Restoration Law:</strong> Always undo choices after recursive calls: <code>path.remove(path.size() - 1)</code>.<br/>
+                        2. <strong>Deep Copy Result Law:</strong> Always store deep copies <code>result.add(new ArrayList&lt;&gt;(path))</code>.<br/>
+                        3. <strong>Duplicate Skipping Rule:</strong> Sort input array first, then check <code>if (i &gt; start &amp;&amp; nums[i] == nums[i-1]) continue;</code>.<br/>
+                        4. <strong>Subsets vs Permutations:</strong> Pass <code>i + 1</code> for Subsets/Combinations. Use <code>boolean[] visited</code> for Permutations!
+                    </div>
+                </div>
+            </div>
+
+            <!-- When Backtracking Fails -->
+            <div class="section-box box-amber">
+                <div class="section-header">⛔ WHEN BACKTRACKING FAILS (DO NOT USE!)</div>
+                <div class="section-content">
+                    <div>• <strong>Overlapping Subproblems without Path Tracking:</strong> Searching min cost without unique paths ➔ Use **Dynamic Programming**!</div>
+                    <div>• <strong>Local Choice Always Optimal:</strong> If greedy choice gives global optimum ➔ Use **Greedy**!</div>
+                </div>
+            </div>
+
+            <!-- NeetCode & Blind 75 Tracker -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📊 NEETCODE &amp; BLIND 75 CONFIDENCE TRACKER</div>
+                <div class="section-content">
+                    <div class="grid-3">
+                        <div><span class="badge-medium">🟡 Med</span> LC 17 Phone Numbers</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 78 Subsets I</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 90 Subsets II</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 39 Combination Sum I</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 40 Combination Sum II</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 46 Permutations I</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 47 Permutations II</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 131 Palindrome Part</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 79 Word Search</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 51 N-Queens</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 37 Sudoku Solver</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 212 Word Search II</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 980 Unique Paths III</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forward Cross Link -->
+            <a href="index.html" class="cross-link" style="background:#dcfce7; color:#15803d; border-color:#86efac; font-size:0.78rem;">👉 Next Master Topic: Topic 14 → Dynamic Programming Masterclass</a>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🎉 <strong>TOPIC 13 BACKTRACKING MASTERCLASS COMPLETE!</strong> Turn the page to <strong>Topic 14: Dynamic Programming Masterclass</strong>!
+        </div>
+    </div>
+
+    </div> <!-- end .main-content -->
+</div> <!-- end .app-layout -->
+</div> <!-- end .container -->
+
+<!-- Floating Back to Top Button -->
+<button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆</button>
+
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout') || document.querySelector('.app-layout');
+        const btn = document.querySelector('.shrink-btn span');
+        if (layout) {
+            layout.classList.toggle('shrunk');
+            if (btn) {
+                btn.innerText = layout.classList.contains('shrunk') ? '➕ Expand' : '➖ Shrink';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,1443 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 15: Greedy Algorithms Masterclass (Visual FAANG Edition)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#ffffff',
+            primaryTextColor: '#0f172a',
+            primaryBorderColor: '#2563eb',
+            lineColor: '#64748b',
+            fontFamily: 'Inter'
+        }
+    });
+</script>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+    }
+
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 11.8px;
+        line-height: 1.4;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 8px 16px;
+        display: flex;
+        
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand { font-weight: 900; font-size: 1rem; color: #38bdf8; }
+    .top-nav .nav-controls { display: flex; gap: 4px; flex-wrap: wrap; }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+
+    /* Sticky Sidebar Layout */
+    .app-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+
+    .toc-title { font-weight: 900; font-size: 0.85rem; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+
+    .main-content { min-width: 0; }
+
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 20px 24px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+        
+        display: flex;
+        flex-direction: column;
+        
+    }
+    [data-theme="dark"] .page { background: #1e293b; color: #f8fafc; }
+
+    /* Header Top */
+    .header-top {
+        display: flex;
+        
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 6px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top { background: #0f172a; border-color: #38bdf8; border-left-color: #38bdf8; }
+    .header-title-group { display: flex; align-items: center; gap: 8px; }
+    .header-top h1 { margin: 0; font-size: 1.15rem; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+    .header-top .page-num { background: #1e3a8a; color: white; padding: 2px 8px; border-radius: 14px; font-weight: 800; font-size: 0.72rem; }
+
+    /* Goal Badge Box */
+    .goal-badge {
+        border: 2px dashed #3b82f6;
+        background: #eff6ff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: #1e40af;
+        margin-bottom: 6px;
+    }
+
+    .cross-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #e0e7ff;
+        color: #3730a3;
+        border: 1px solid #c7d2fe;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-decoration: none;
+        margin-bottom: 4px;
+    }
+
+    /* Section Box */
+    .section-box {
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        background: white;
+        border: 2px solid #3b82f6;
+        width: 100%;
+    }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+    .section-header { padding: 4px 8px; font-weight: 800; font-size: 0.8rem; color: white; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+    .section-header .num { background: white; color: #0f172a; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 900; }
+    .section-content { padding: 6px 8px; font-size: 0.76rem; }
+
+    /* Color Themes */
+    .box-blue { border-color: #2563eb !important; } .box-blue .section-header { background: #2563eb !important; }
+    .box-green { border-color: #22c55e !important; } .box-green .section-header { background: #22c55e !important; }
+    .box-purple { border-color: #8b5cf6 !important; } .box-purple .section-header { background: #8b5cf6 !important; }
+    .box-red { border-color: #ef4444 !important; } .box-red .section-header { background: #ef4444 !important; }
+    .box-orange { border-color: #f97316 !important; } .box-orange .section-header { background: #f97316 !important; }
+    .box-teal { border-color: #0d9488 !important; } .box-teal .section-header { background: #0d9488 !important; }
+    .box-indigo { border-color: #6366f1 !important; } .box-indigo .section-header { background: #6366f1 !important; }
+    .box-amber { border-color: #d97706 !important; } .box-amber .section-header { background: #d97706 !important; }
+
+    /* Problem Split Grid */
+    .problem-split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+    .problem-info { display: flex; flex-direction: column; gap: 3px; }
+    .problem-code { display: flex; flex-direction: column; }
+
+    .meta-card { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 3px 6px; border-radius: 4px; display: flex;  align-items: center; font-weight: 700; font-size: 0.7rem; }
+    [data-theme="dark"] .meta-card { background: #0f172a; border-color: #334155; }
+    .badge-easy { background: #10b981; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-medium { background: #f59e0b; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-hard { background: #ef4444; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .company-tag { background: #1e3a8a; color: white; padding: 1px 4px; border-radius: 3px; font-size: 0.65rem; }
+
+    .flowchart-box { background: #eff6ff; border: 1px solid #93c5fd; border-left: 3px solid #2563eb; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: 700; color: #1e40af; }
+    .whynot-box { background: #fff7ed; border: 1px solid #fdba74; border-left: 3px solid #f97316; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; color: #9a3412; }
+
+    /* Proof Box */
+    .proof-box {
+        background: #fdf4ff;
+        border: 1px solid #f0abfc;
+        border-left: 4px solid #c084fc;
+        padding: 4px 6px;
+        margin: 3px 0;
+        font-size: 0.72rem;
+        line-height: 1.35;
+        color: #701a75;
+    }
+    [data-theme="dark"] .proof-box { background: #4a044e; color: #f5d0fe; border-color: #e879f9; }
+    .proof-title { font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    pre { background: #f8fafc; color: #0f172a; padding: 6px 8px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.71rem; line-height: 1.32; margin: 0; white-space: pre-wrap !important; word-break: break-word; border: 1px solid #cbd5e1; }
+    [data-theme="dark"] pre { background: #0f172a; color: #f8fafc; border-color: #334155; }
+    code { font-family: 'Fira Code', monospace; background: #f1f5f9; color: #0f172a; padding: 1px 3px; border-radius: 3px; font-size: 0.74rem; border: 1px solid #cbd5e1; }
+
+    .aha-box { background: #fefce8; border: 1px solid #eab308; border-left: 4px solid #ca8a04; color: #713f12; padding: 5px 8px; border-radius: 4px; font-size: 0.76rem; font-weight: 600; margin: 4px 0; }
+    .rule-box { padding: 4px 6px; border-radius: 4px; font-weight: 600; margin: 4px 0; font-size: 0.74rem; }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    .rule-purple { background: #faf5ff; border: 1px solid #a855f7; border-left: 4px solid #a855f7; color: #6b21a8; }
+    .rule-red { background: #fff1f2; border: 1px solid #ef4444; border-left: 4px solid #ef4444; color: #b91c1c; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+    table th, table td { border: 1px solid var(--border-color); padding: 3px 5px; text-align: left; }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+    .mermaid { display: flex; justify-content: center; margin: 2px 0; }
+    .back-to-top { position: fixed; bottom: 20px; right: 20px; background: #2563eb; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; border: none; z-index: 999; }
+
+    @page { size: A4 portrait; margin: 4mm; }
+    @media print {
+        body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .top-nav, .back-to-top, .toc-sidebar { display: none !important; }
+        .app-layout { display: block !important; }
+        .container { max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+        .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.72; }
+        pre { background-color: #f8fafc !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; }
+    }
+
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+</style>
+</head>
+<body>
+
+<!-- Sticky Top Nav -->
+<div class="top-nav">
+    <div class="brand">⚡ FAANG DSA HANDBOOK — TOPIC 15: GREEDY ALGORITHMS</div>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn" style="background:#059669; border-color:#10b981; font-weight:800;">🏠 Index</a>
+        <button class="nav-btn" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="nav-btn" onclick="toggleSidebar()">↕️ Expand/Shrink TOC</button>
+        <a href="#page1" class="nav-btn">P1</a>
+        <a href="#page2" class="nav-btn">P2</a>
+        <a href="#page3" class="nav-btn">P3</a>
+        <a href="#page4" class="nav-btn">P4</a>
+        <a href="#page5" class="nav-btn">P5</a>
+        <a href="#page6" class="nav-btn">P6</a>
+        <a href="#page7" class="nav-btn">P7</a>
+        <a href="#page8" class="nav-btn">P8</a>
+        <a href="#page9" class="nav-btn">P9</a>
+        <a href="#page10" class="nav-btn">P10</a>
+        <a href="#page11" class="nav-btn">P11</a>
+        <a href="#page12" class="nav-btn">P12</a>
+        <a href="#page13" class="nav-btn">P13</a>
+        <a href="#page14" class="nav-btn">P14</a>
+        <a href="#page15" class="nav-btn">P15</a>
+        <a href="#page16" class="nav-btn">P16</a>
+        <button class="nav-btn" onclick="window.print()" style="background: #2563eb;">🖨️ PDF</button>
+    </div>
+</div>
+
+<div class="container">
+<div class="app-layout" id="appLayout">
+
+    <!-- Sticky Table of Contents Sidebar -->
+    <div class="toc-sidebar">
+        <div class="toc-header-bar"><span class="toc-title">📋 SECTIONS</span><button class="shrink-btn" onclick="toggleSidebar()"><span class="toc-text">➖ Shrink</span></button></div>
+        <ul class="toc-list">
+            <li><a href="#page1" class="toc-link">15.0 Foundation &amp; 2 Pillars</a></li>
+            <li><a href="#page2" class="toc-link">15.1 Greedy Framework &amp; Proofs</a></li>
+            <li><a href="#page3" class="toc-link">15.2 Interval Greedy Pattern</a></li>
+            <li><a href="#page4" class="toc-link">15.3 Jump Pattern (Farthest Reach)</a></li>
+            <li><a href="#page5" class="toc-link">15.4 Resource Allocation &amp; Circuit</a></li>
+            <li><a href="#page6" class="toc-link">15.5 Scheduling &amp; Priority Queue</a></li>
+            <li><a href="#page7" class="toc-link">15.6 Advanced Greedy Patterns</a></li>
+            <li><a href="#page8" class="toc-link">15.7 Decision Tree &amp; Cheat Sheet</a></li>
+            <li><a href="#page9" class="toc-link">Template Library (Part 1)</a></li>
+            <li><a href="#page10" class="toc-link">Template Library (Part 2)</a></li>
+            <li><a href="#page11" class="toc-link">15.10 Easy NeetCode Suite</a></li>
+            <li><a href="#page12" class="toc-link">15.10 Jump Game I &amp; II</a></li>
+            <li><a href="#page13" class="toc-link">15.10 Gas Station &amp; Partition</a></li>
+            <li><a href="#page14" class="toc-link">15.10 Merge &amp; Non-Overlap</a></li>
+            <li><a href="#page15" class="toc-link">15.10 Queue Recon &amp; Candy</a></li>
+            <li><a href="#page16" class="toc-link">15.11 Revision &amp; Summary</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Pages -->
+    <div class="main-content">
+
+    <!-- ========================================================= -->
+    <!-- PAGE 1: 15.0 GREEDY FOUNDATION & THE 2 PILLARS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page1">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🦅</span>
+                    <h1>TOPIC 15.0: GREEDY FOUNDATION &amp; CORE PILLARS</h1>
+                </div>
+                <span class="page-num">PAGE 1 OF 16</span>
+            </div>
+
+            <!-- Cross-Link Badges -->
+            <a href="Topic14_DynamicProgramming.html" class="cross-link">🔗 See Topic 14 → Dynamic Programming Masterclass</a>
+
+            <!-- Goal Badge -->
+            <div class="goal-badge">
+                🎯 <strong>GOAL:</strong> Master Greedy Algorithms! Learn the Greedy Choice Property, Exchange Argument Proofs, Counter-Example Analysis, Interval Sorting, Farthest Reach Jump Windows, Circuit Deficit tracking, and solve all NeetCode Greedy questions!
+            </div>
+
+            <div class="section-box box-teal" style="margin-top:8px">
+                <div class="section-header">🧰 REUSABLE GREEDY UTILITIES</div>
+                <div class="section-content">
+<pre>
+// Interval sorting by end time (Canonical Greedy Choice)
+Arrays.sort(intervals, (a, b) -&gt; Integer.compare(a[1], b[1]));
+
+// Max Reach Tracker Pattern (Jump Game / Gas Station)
+int maxReach = 0;
+for (int i = 0; i &lt; nums.length; i++) {
+    if (i &gt; maxReach) return false; // unreachable gap
+    maxReach = Math.max(maxReach, i + nums[i]);
+}</pre>
+                </div>
+            </div>
+
+            <!-- AHA Box #1 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #1: GREEDY ALGORITHMS NEVER BACKTRACK!</strong><br/>
+                A Greedy algorithm makes the **locally optimal choice** at each step without ever re-evaluating or undoing past decisions. It works ONLY when:
+                <br/>1. <strong>Greedy Choice Property:</strong> A globally optimal solution can be arrived at by making locally optimal (greedy) choices!
+                <br/>2. <strong>Optimal Substructure:</strong> An optimal solution to the problem contains optimal solutions to its subproblems!
+            </div>
+
+            <div class="grid-2">
+                <!-- Core Terminology -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> CORE GREEDY TERMINOLOGY</div>
+                    <div class="section-content">
+                        <div>• <strong>Local Optimum:</strong> Best immediate choice available at step `i`.<br/>
+                        • <strong>Global Optimum:</strong> Absolutely best overall solution to the entire problem.<br/>
+                        • <strong>No Backtracking:</strong> Decisions are final (unlike Backtracking or DP).<br/>
+                        • <strong>Sorting Prerequisite:</strong> Most greedy array/interval problems require sorting input first!</div>
+                    </div>
+                </div>
+
+                <!-- Greedy vs DP vs Backtracking -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> GREEDY VS DP VS BACKTRACKING MATRIX</div>
+                    <div class="section-content">
+                        <table>
+                            <thead>
+                                <tr><th>Feature</th><th>Greedy</th><th>Dynamic Programming</th><th>Backtracking</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Decisions Made</td><td>1 Choice per step (Final)</td><td>Explores ALL subproblems &amp; picks min/max</td><td>Explores ALL branches with state undo</td></tr>
+                                <tr><td>Time Complexity</td><td>✅ <strong>$O(N)$ or $O(N \log N)$ (Fastest!)</strong></td><td>$O(N^2)$ or $O(N \cdot W)$</td><td>$O(2^N)$ or $O(N!)$</td></tr>
+                                <tr><td>Correctness Proof</td><td>Requires Exchange Proof</td><td>Proven by Recurrence Base Cases</td><td>Guaranteed by Exhaustive Search</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Reach for Greedy when a problem asks for "Min/Max Activities, Refuels, or Intervals" AND you can prove local choice leads to global optimum!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 2: 15.1 GREEDY FRAMEWORK & COUNTER-EXAMPLE PROOFS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page2">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">⚖️</span>
+                    <h1>TOPIC 15.1: GREEDY THINKING FRAMEWORK &amp; COUNTER-EXAMPLES</h1>
+                </div>
+                <span class="page-num">PAGE 2 OF 16</span>
+            </div>
+
+            <!-- AHA Box #2 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #2: WHY GREEDY FAILS (COUNTER-EXAMPLE ANALYSIS)</strong><br/>
+                Greedy fails whenever a local greedy choice **destroys future possibilities**!
+                <br/>• <strong>Example: Coin Change for Amount = 6 with Coins `[1, 3, 4]`</strong>:
+                <br/>- <em>Greedy Choice:</em> Pick largest coin `4` ➔ Remaining `2` ➔ Pick `1` + `1` ➔ Total 3 coins (`4, 1, 1`).
+                <br/>- <em>Optimal Solution (DP):</em> Pick `3` + `3` ➔ Total 2 coins! ❌ <strong>Greedy Fails!</strong>
+            </div>
+
+            <div class="grid-2">
+                <!-- Exchange Argument Proof -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">1</span> THE EXCHANGE ARGUMENT PROOF TECHNIQUE</div>
+                    <div class="section-content">
+                        <div class="proof-box">
+                            <span class="proof-title">PROOF STEPS:</span><br/>
+                            1. Assume there exists an Optimal Solution $O$.<br/>
+                            2. Compare $O$ with Greedy Solution $G$.<br/>
+                            3. Show that swapping any choice in $O$ with the Greedy choice in $G$ does NOT decrease solution quality!<br/>
+                            4. Conclude that $G$ is as optimal as $O$!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Greedy Thinking Workflow -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">2</span> 4-STEP GREEDY WORKFLOW</div>
+                    <div class="section-content">
+                        <div>1. <strong>Sort Input:</strong> Sort by End Time, Start Time, or Value Ratio.<br/>
+                        2. <strong>Identify Local Choice:</strong> Pick element that maximizes immediate gain.<br/>
+                        3. <strong>Check Counter-Examples:</strong> Can local choice ruin future states?<br/>
+                        4. <strong>Implement Single Pass:</strong> Iterate array in $O(N)$ time!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            ⚠️ <strong>FAANG INTERVIEW WARNING:</strong> Never present a Greedy solution without explaining WHY the greedy choice is optimal! Always mention a counter-example where Greedy would fail!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 3: 15.2 INTERVAL GREEDY PATTERNS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page3">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📅</span>
+                    <h1>TOPIC 15.2: INTERVAL GREEDY PATTERNS</h1>
+                </div>
+                <span class="page-num">PAGE 3 OF 16</span>
+            </div>
+
+            <!-- AHA Box #3 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #3: SORT BY END TIME VS SORT BY START TIME</strong><br/>
+                • <strong>Sort by End Time (`b[1] - a[1]`):</strong> For <em>Interval Scheduling / Non-Overlapping Intervals</em>! Picking intervals that finish earliest leaves maximum room for future intervals!
+                <br/>• <strong>Sort by Start Time (`a[0] - b[0]`):</strong> For <em>Merge Intervals</em>! Processing intervals in order of appearance allows merging overlapping bounds sequentially!
+            </div>
+
+            <div class="grid-2">
+                <!-- Sort by End Time -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">1</span> SORT BY END TIME (MAX ACTIVITIES / NON-OVERLAP)</div>
+                    <div class="section-content">
+<pre>
+Arrays.sort(intervals, (a, b) -&gt; Integer.compare(a[1], b[1]));
+int count = 0, prevEnd = Integer.MIN_VALUE;
+for (int[] inv : intervals) {
+    if (inv[0] &gt;= prevEnd) {
+        count++; prevEnd = inv[1]; // Pick earliest ending interval!
+    }
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Sort by Start Time -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">2</span> SORT BY START TIME (MERGE INTERVALS)</div>
+                    <div class="section-content">
+<pre>
+Arrays.sort(intervals, (a, b) -&gt; Integer.compare(a[0], b[0]));
+List&lt;int[]&gt; merged = new ArrayList&lt;&gt;();
+for (int[] inv : intervals) {
+    if (merged.isEmpty() || merged.get(merged.size() - 1)[1] &lt; inv[0]) {
+        merged.add(inv);
+    } else {
+        merged.get(merged.size() - 1)[1] = Math.max(merged.get(merged.size() - 1)[1], inv[1]);
+    }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Always use `Integer.compare(a, b)` instead of `a - b` to prevent integer overflow bugs!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 4: 15.3 JUMP PATTERN (FARTHEST REACH WINDOW) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page4">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🏃</span>
+                    <h1>TOPIC 15.3: JUMP PATTERN (FARTHEST REACH WINDOW)</h1>
+                </div>
+                <span class="page-num">PAGE 4 OF 16</span>
+            </div>
+
+            <!-- AHA Box #4 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #4: FARTHEST REACH IMPLICIT BFS WINDOW</strong><br/>
+                Instead of trying all jump combinations (Backtracking $O(2^N)$), maintain a greedy `farthest` index reach!
+                <br/>In <strong>Jump Game II</strong>, treat `[currStart, currEnd]` as a BFS level! Increment `jumps++` ONLY when index `i` reaches `currEnd`!
+            </div>
+
+            <div class="grid-2">
+                <!-- Jump Game I -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> JUMP GAME I (CAN REACH END?)</div>
+                    <div class="section-content">
+<pre>
+public boolean canJump(int[] nums) {
+    int farthest = 0;
+    for (int i = 0; i &lt; nums.length; i++) {
+        if (i &gt; farthest) return false; // Trapped!
+        farthest = Math.max(farthest, i + nums[i]);
+    }
+    return true;
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Jump Game II -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> JUMP GAME II (MINIMUM JUMPS)</div>
+                    <div class="section-content">
+<pre>
+public int jump(int[] nums) {
+    int jumps = 0, currEnd = 0, farthest = 0;
+    for (int i = 0; i &lt; nums.length - 1; i++) {
+        farthest = Math.max(farthest, i + nums[i]);
+        if (i == currEnd) { // Reached end of current jump level
+            jumps++;
+            currEnd = farthest;
+        }
+    }
+    return jumps;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Jump Game II runs in $O(N)$ time and $O(1)$ space using implicit BFS level windows!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 5: 15.4 RESOURCE ALLOCATION & CIRCUIT DEFICIT PATTERN -->
+    <!-- ========================================================= -->
+    <div class="page" id="page5">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">⛽</span>
+                    <h1>TOPIC 15.4: RESOURCE ALLOCATION &amp; CIRCUIT DEFICIT PATTERN</h1>
+                </div>
+                <span class="page-num">PAGE 5 OF 16</span>
+            </div>
+
+            <!-- AHA Box #5 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #5: CIRCUIT DEFICIT &amp; RESET GREEDY LOGIC (GAS STATION)</strong><br/>
+                In <strong>Gas Station (LC 134)</strong>:
+                <br/>1. If `totalGas < totalCost`, a complete circular trip is IMPOSSIBLE!
+                <br/>2. If `currGas < 0` at station `i`, NO station from `start` to `i` can be the starting point! Reset `start = i + 1` and `currGas = 0`!
+            </div>
+
+            <!-- Gas Station Implementation -->
+            <div class="section-box box-green">
+                <div class="section-header">🛠️ GAS STATION (LC 134) $O(N)$ SINGLE-PASS IMPLEMENTATION</div>
+                <div class="section-content">
+<pre>
+public int canCompleteCircuit(int[] gas, int[] cost) {
+    int totalGas = 0, totalCost = 0, currGas = 0, start = 0;
+    for (int i = 0; i &lt; gas.length; i++) {
+        totalGas += gas[i];
+        totalCost += cost[i];
+        currGas += gas[i] - cost[i];
+        if (currGas &lt; 0) { // Deficit! Reset start to next station
+            start = i + 1;
+            currGas = 0;
+        }
+    }
+    return totalGas &gt;= totalCost ? start : -1;
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Checking `totalGas >= totalCost` guarantees that the reset `start` station will successfully complete the full circuit!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 6: 15.5 SCHEDULING & PRIORITY QUEUE GREEDY -->
+    <!-- ========================================================= -->
+    <div class="page" id="page6">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">⏱️</span>
+                    <h1>TOPIC 15.5: SCHEDULING &amp; PRIORITY QUEUE GREEDY</h1>
+                </div>
+                <span class="page-num">PAGE 6 OF 16</span>
+            </div>
+
+            <!-- AHA Box #6 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #6: MAX FREQUENCY DRIVES IDLE SLOTS (TASK SCHEDULER)</strong><br/>
+                In <strong>Task Scheduler (LC 621)</strong>, the task with the highest frequency (`maxFreq`) creates the bottleneck frame layout!
+                <br/>Formula: <code>(maxFreq - 1) * (n + 1) + countMaxFreq</code>
+            </div>
+
+            <!-- Task Scheduler Code -->
+            <div class="section-box box-blue">
+                <div class="section-header">🛠️ TASK SCHEDULER (LC 621) $O(N)$ GREEDY FORMULA</div>
+                <div class="section-content">
+<pre>
+public int leastInterval(char[] tasks, int n) {
+    int[] freq = new int[26];
+    int maxFreq = 0, countMaxFreq = 0;
+    for (char c : tasks) {
+        freq[c - 'A']++;
+        maxFreq = Math.max(maxFreq, freq[c - 'A']);
+    }
+    for (int f : freq) if (f == maxFreq) countMaxFreq++;
+    int ans = (maxFreq - 1) * (n + 1) + countMaxFreq;
+    return Math.max(ans, tasks.length);
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> `Math.max(ans, tasks.length)` handles cases where there are enough unique tasks that zero idle slots are needed!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 7: 15.6 ADVANCED GREEDY PATTERNS (PARTITION LABELS & QUEUE RECON) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page7">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">✂️</span>
+                    <h1>TOPIC 15.6: ADVANCED GREEDY PATTERNS</h1>
+                </div>
+                <span class="page-num">PAGE 7 OF 16</span>
+            </div>
+
+            <!-- AHA Box #7 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #7: LAST OCCURRENCE MAP &amp; INSERTION RECONSTRUCTION</strong><br/>
+                • <strong>Partition Labels (LC 763):</strong> Track the last occurrence of each character. Expand partition boundary `maxEnd = Math.max(maxEnd, lastIndex[c])`!
+                <br/>• <strong>Queue Reconstruction by Height (LC 406):</strong> Sort by height **descending**, k **ascending**. Taller people are already placed, so inserting person at index `k` maintains valid counts!
+            </div>
+
+            <div class="grid-2">
+                <!-- Partition Labels -->
+                <div class="section-box box-teal">
+                    <div class="section-header"><span class="num">1</span> PARTITION LABELS (LC 763)</div>
+                    <div class="section-content">
+<pre>
+public List&lt;Integer&gt; partitionLabels(String s) {
+    int[] last = new int[26];
+    for (int i = 0; i &lt; s.length(); i++) last[s.charAt(i) - 'a'] = i;
+    List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+    int start = 0, maxEnd = 0;
+    for (int i = 0; i &lt; s.length(); i++) {
+        maxEnd = Math.max(maxEnd, last[s.charAt(i) - 'a']);
+        if (i == maxEnd) {
+            res.add(i - start + 1); start = i + 1;
+        }
+    }
+    return res;
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Queue Reconstruction -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> QUEUE RECONSTRUCTION (LC 406)</div>
+                    <div class="section-content">
+<pre>
+public int[][] reconstructQueue(int[][] people) {
+    Arrays.sort(people, (a, b) -&gt; a[0] != b[0] ? b[0] - a[0] : a[1] - b[1]);
+    List&lt;int[]&gt; res = new ArrayList&lt;&gt;();
+    for (int[] p : people) res.add(p[1], p); // Insert at index k!
+    return res.toArray(new int[people.length][]);
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Queue Reconstruction uses `res.add(p[1], p)` to greedily place items in list order!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 8: DECISION TREE & PRINTABLE GREEDY CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page8">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📜</span>
+                    <h1>TOPIC 15.7 &amp; 1-PAGE PRINTABLE GREEDY CHEAT SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 8 OF 16</span>
+            </div>
+
+            <!-- Mermaid Decision Tree -->
+            <div class="section-box box-purple">
+                <div class="section-header">🌳 GREEDY INTERVIEW DECISION TREE (MERMAID)</div>
+                <div class="section-content">
+                    <div class="mermaid">
+                        graph TD
+                            A[What is the Greedy Problem Type?]
+                            A --> B[Interval Overlaps / Scheduling?]
+                            A --> C[Reach End / Step Jumps?]
+                            A --> D[Gas / Deficit Circuit Walk?]
+                            A --> E[Task Frequencies / Idle Slots?]
+                            A --> F[String / Substring Partitions?]
+                            B --> B1[Sort by End Time or Start Time]
+                            C --> C1[Farthest Reach Window farthest = max]
+                            D --> D1[Accumulate Net Balance, Reset Start on Deficit]
+                            E --> E1[Formula: maxFreq - 1 * n + 1 + countMax]
+                            F --> F1[Last Index Map maxEnd = max lastIndex]
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1-Page Printable Cheat Sheet -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📜 PRINTABLE GREEDY CHEAT SHEET</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Pattern Type</th><th>Target Problem</th><th>Greedy Choice Strategy</th><th>Complexity</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Interval Non-Overlap</td><td>Non-overlapping Intervals (LC 435)</td><td>Sort by End Time <code>b[1] - a[1]</code></td><td>$O(N \log N)$ Time, $O(1)$ Space</td></tr>
+                            <tr><td>Merge Intervals</td><td>Merge Intervals (LC 56)</td><td>Sort by Start Time <code>a[0] - b[0]</code></td><td>$O(N \log N)$ Time, $O(N)$ Space</td></tr>
+                            <tr><td>Farthest Reach</td><td>Jump Game II (LC 45)</td><td>Implicit BFS level <code>currEnd = farthest</code></td><td>$O(N)$ Time, $O(1)$ Space</td></tr>
+                            <tr><td>Circuit Deficit</td><td>Gas Station (LC 134)</td><td>Reset <code>start = i + 1</code> on deficit</td><td>$O(N)$ Time, $O(1)$ Space</td></tr>
+                            <tr><td>Frequency Scheduling</td><td>Task Scheduler (LC 621)</td><td>Max freq bottleneck formula</td><td>$O(N)$ Time, $O(1)$ Space</td></tr>
+                            <tr><td>String Partition</td><td>Partition Labels (LC 763)</td><td>Last index map tracking <code>maxEnd</code></td><td>$O(N)$ Time, $O(1)$ Space</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Print this page and review it 10 minutes before your technical interview!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 9: DEDICATED GREEDY TEMPLATE LIBRARY (PART 1) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page9">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💻</span>
+                    <h1>GREEDY TEMPLATE LIBRARY (INTERVALS &amp; JUMPS)</h1>
+                </div>
+                <span class="page-num">PAGE 9 OF 16</span>
+            </div>
+
+            <div class="grid-2">
+                <!-- Sort + Interval Template -->
+                <div class="section-box box-blue">
+                    <div class="section-header">1. INTERVAL SCHEDULING TEMPLATE (SORT END TIME)</div>
+                    <div class="section-content">
+<pre>
+int intervalScheduling(int[][] intervals) {
+    Arrays.sort(intervals, (a, b) -&gt; Integer.compare(a[1], b[1]));
+    int count = 0, prevEnd = Integer.MIN_VALUE;
+    for (int[] inv : intervals) {
+        if (inv[0] &gt;= prevEnd) {
+            count++; prevEnd = inv[1];
+        }
+    }
+    return count;
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Jump Game Farthest Reach Template -->
+                <div class="section-box box-purple">
+                    <div class="section-header">2. FARTHEST REACH JUMP TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+int jumpGame(int[] nums) {
+    int jumps = 0, currEnd = 0, farthest = 0;
+    for (int i = 0; i &lt; nums.length - 1; i++) {
+        farthest = Math.max(farthest, i + nums[i]);
+        if (i == currEnd) {
+            jumps++; currEnd = farthest;
+        }
+    }
+    return jumps;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>REUSABLE CODE:</strong> Copy-paste these templates directly into your interview whiteboard or IDE!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 10: DEDICATED GREEDY TEMPLATE LIBRARY (PART 2) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page10">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💻</span>
+                    <h1>GREEDY TEMPLATE LIBRARY (CIRCUITS &amp; 2-PASS ARRAYS)</h1>
+                </div>
+                <span class="page-num">PAGE 10 OF 16</span>
+            </div>
+
+            <div class="grid-2">
+                <!-- Circuit Deficit Template -->
+                <div class="section-box box-blue">
+                    <div class="section-header">3. CIRCUIT DEFICIT RESET TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+int circuitDeficit(int[] gain, int[] cost) {
+    int total = 0, curr = 0, start = 0;
+    for (int i = 0; i &lt; gain.length; i++) {
+        int diff = gain[i] - cost[i];
+        total += diff; curr += diff;
+        if (curr &lt; 0) { start = i + 1; curr = 0; }
+    }
+    return total &gt;= 0 ? start : -1;
+}</pre>
+                    </div>
+                </div>
+
+                <!-- 2-Pass Array Template -->
+                <div class="section-box box-green">
+                    <div class="section-header">4. TWO-PASS ARRAY GREEDY TEMPLATE (CANDY)</div>
+                    <div class="section-content">
+<pre>
+int twoPassGreedy(int[] ratings) {
+    int n = ratings.length; int[] arr = new int[n];
+    Arrays.fill(arr, 1);
+    for (int i = 1; i &lt; n; i++) if (ratings[i] &gt; ratings[i-1]) arr[i] = arr[i-1] + 1;
+    for (int i = n - 2; i &gt;= 0; i--) if (ratings[i] &gt; ratings[i+1]) arr[i] = Math.max(arr[i], arr[i+1] + 1);
+    int sum = 0; for (int x : arr) sum += x; return sum;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Memorize these core templates to solve 95% of FAANG Greedy problems!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 11: EASY NEETCODE SUITE (ASSIGN COOKIES & LEMONADE CHANGE) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page11">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🍪</span>
+                    <h1>EASY NEETCODE: ASSIGN COOKIES &amp; LEMONADE CHANGE</h1>
+                </div>
+                <span class="page-num">PAGE 11 OF 16</span>
+            </div>
+
+            <!-- Problem 1: LC 455 -->
+            <div class="section-box box-blue">
+                <div class="section-header">1. LEETCODE 455 — ASSIGN COOKIES</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>Sort + Two Pointers</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Maximize content children using cookies of size `s[j]` for greedy greed factor `g[i]`.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int findContentChildren(int[] g, int[] s) {
+    Arrays.sort(g); Arrays.sort(s);
+    int i = 0, j = 0;
+    while (i &lt; g.length &amp;&amp; j &lt; s.length) {
+        if (s[j] &gt;= g[i]) i++; // Cookie satisfies child!
+        j++; // Try next cookie
+    }
+    return i;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 2: LC 860 -->
+            <div class="section-box box-green">
+                <div class="section-header">2. LEETCODE 860 — LEMONADE CHANGE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>Bill Change Priority</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Provide correct change ($5, $10, $20) for lemonade customers.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean lemonadeChange(int[] bills) {
+    int five = 0, ten = 0;
+    for (int b : bills) {
+        if (b == 5) five++;
+        else if (b == 10) {
+            if (five == 0) return false;
+            five--; ten++;
+        } else { // b == 20
+            if (ten &gt; 0 &amp;&amp; five &gt; 0) { ten--; five--; } // Greedy: Use $10 bill first!
+            else if (five &gt;= 3) five -= 3;
+            else return false;
+        }
+    }
+    return true;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 860):</strong> When giving $15 change for a $20 bill, greedily use a $10 bill first because $5 bills are more versatile!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 12: MEDIUM NEETCODE (JUMP GAME I & II) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page12">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🏃</span>
+                    <h1>MEDIUM NEETCODE: JUMP GAME I &amp; II</h1>
+                </div>
+                <span class="page-num">PAGE 12 OF 16</span>
+            </div>
+
+            <!-- Problem 3: LC 55 -->
+            <div class="section-box box-blue">
+                <div class="section-header">3. LEETCODE 55 — JUMP GAME I</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Farthest Reach Track</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Determine if you can reach the last index from the first index.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean canJump(int[] nums) {
+    int farthest = 0;
+    for (int i = 0; i &lt; nums.length; i++) {
+        if (i &gt; farthest) return false;
+        farthest = Math.max(farthest, i + nums[i]);
+    }
+    return true;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 4: LC 45 -->
+            <div class="section-box box-purple">
+                <div class="section-header">4. LEETCODE 45 — JUMP GAME II</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Implicit BFS Level Window</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Minimum number of jumps to reach the last index.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int jump(int[] nums) {
+    int jumps = 0, currEnd = 0, farthest = 0;
+    for (int i = 0; i &lt; nums.length - 1; i++) {
+        farthest = Math.max(farthest, i + nums[i]);
+        if (i == currEnd) {
+            jumps++; currEnd = farthest;
+        }
+    }
+    return jumps;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 45):</strong> Increment `jumps++` ONLY when index `i` reaches `currEnd`!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 13: MEDIUM NEETCODE (GAS STATION & PARTITION LABELS) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page13">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">⛽</span>
+                    <h1>MEDIUM NEETCODE: GAS STATION &amp; PARTITION LABELS</h1>
+                </div>
+                <span class="page-num">PAGE 13 OF 16</span>
+            </div>
+
+            <!-- Problem 5: LC 134 -->
+            <div class="section-box box-blue">
+                <div class="section-header">5. LEETCODE 134 — GAS STATION</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Circuit Deficit Reset</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Find starting gas station index to complete a full circular trip.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int canCompleteCircuit(int[] gas, int[] cost) {
+    int totalGas = 0, totalCost = 0, currGas = 0, start = 0;
+    for (int i = 0; i &lt; gas.length; i++) {
+        totalGas += gas[i]; totalCost += cost[i];
+        currGas += gas[i] - cost[i];
+        if (currGas &lt; 0) { start = i + 1; currGas = 0; }
+    }
+    return totalGas &gt;= totalCost ? start : -1;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 6: LC 763 -->
+            <div class="section-box box-teal">
+                <div class="section-header">6. LEETCODE 763 — PARTITION LABELS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Last Index Map Boundary</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Partition string so that each letter appears in at most one part.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public List&lt;Integer&gt; partitionLabels(String s) {
+    int[] last = new int[26];
+    for (int i = 0; i &lt; s.length(); i++) last[s.charAt(i) - 'a'] = i;
+    List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+    int start = 0, maxEnd = 0;
+    for (int i = 0; i &lt; s.length(); i++) {
+        maxEnd = Math.max(maxEnd, last[s.charAt(i) - 'a']);
+        if (i == maxEnd) { res.add(i - start + 1); start = i + 1; }
+    }
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 763):</strong> Updating `maxEnd = Math.max(maxEnd, last[char])` expands partition boundary greedily!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 14: MEDIUM NEETCODE (MERGE & NON-OVERLAPPING INTERVALS) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page14">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📅</span>
+                    <h1>MEDIUM NEETCODE: MERGE &amp; NON-OVERLAPPING INTERVALS</h1>
+                </div>
+                <span class="page-num">PAGE 14 OF 16</span>
+            </div>
+
+            <!-- Problem 7: LC 56 -->
+            <div class="section-box box-blue">
+                <div class="section-header">7. LEETCODE 56 — MERGE INTERVALS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Sort Start Time Merge</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Merge all overlapping intervals into non-overlapping result array.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int[][] merge(int[][] intervals) {
+    Arrays.sort(intervals, (a, b) -&gt; Integer.compare(a[0], b[0]));
+    List&lt;int[]&gt; res = new ArrayList&lt;&gt;();
+    for (int[] inv : intervals) {
+        if (res.isEmpty() || res.get(res.size() - 1)[1] &lt; inv[0]) res.add(inv);
+        else res.get(res.size() - 1)[1] = Math.max(res.get(res.size() - 1)[1], inv[1]);
+    }
+    return res.toArray(new int[res.size()][]);
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 8: LC 435 -->
+            <div class="section-box box-purple">
+                <div class="section-header">8. LEETCODE 435 — NON-OVERLAPPING INTERVALS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Sort End Time Removal</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Minimum number of intervals to remove to make remaining non-overlapping.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int eraseOverlapIntervals(int[][] intervals) {
+    Arrays.sort(intervals, (a, b) -&gt; Integer.compare(a[1], b[1]));
+    int removals = 0, prevEnd = Integer.MIN_VALUE;
+    for (int[] inv : intervals) {
+        if (inv[0] &gt;= prevEnd) prevEnd = inv[1]; // Keep interval
+        else removals++; // Remove overlapping interval
+    }
+    return removals;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Merge Intervals sorts by START time; Non-Overlapping Intervals sorts by END time!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 15: HARD NEETCODE (QUEUE RECONSTRUCTION & CANDY) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page15">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔥</span>
+                    <h1>HARD NEETCODE: QUEUE RECONSTRUCTION &amp; CANDY</h1>
+                </div>
+                <span class="page-num">PAGE 15 OF 16</span>
+            </div>
+
+            <!-- Problem 9: LC 406 -->
+            <div class="section-box box-purple">
+                <div class="section-header">9. LEETCODE 406 — QUEUE RECONSTRUCTION BY HEIGHT</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Sort Descending Height Insert</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Reconstruct queue of people `[h, k]` where `k` is number of taller people ahead.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int[][] reconstructQueue(int[][] people) {
+    Arrays.sort(people, (a, b) -&gt; a[0] != b[0] ? b[0] - a[0] : a[1] - b[1]);
+    List&lt;int[]&gt; res = new ArrayList&lt;&gt;();
+    for (int[] p : people) res.add(p[1], p);
+    return res.toArray(new int[people.length][]);
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 10: LC 135 -->
+            <div class="section-box box-red">
+                <div class="section-header">10. LEETCODE 135 — CANDY</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Two-Pass Left/Right Greedy</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Minimum candies needed to distribute to children satisfying rating neighbor rules.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int candy(int[] ratings) {
+    int n = ratings.length; int[] candies = new int[n];
+    Arrays.fill(candies, 1);
+    for (int i = 1; i &lt; n; i++) { // Left to Right Pass
+        if (ratings[i] &gt; ratings[i - 1]) candies[i] = candies[i - 1] + 1;
+    }
+    for (int i = n - 2; i &gt;= 0; i--) { // Right to Left Pass
+        if (ratings[i] &gt; ratings[i + 1]) candies[i] = Math.max(candies[i], candies[i + 1] + 1);
+    }
+    int sum = 0; for (int c : candies) sum += c; return sum;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> LC 135 Candy requires 2 passes (Left-to-Right + Right-to-Left) with `Math.max()` to satisfy BOTH neighbor constraints!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 16: MASTER REVISION & REFERENCE CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page16">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💎</span>
+                    <h1>IF YOU REMEMBER ONLY ONE PAGE... MASTER REVISION SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 16 OF 16</span>
+            </div>
+
+            <!-- 4 Golden Laws -->
+            <div class="section-box box-green">
+                <div class="section-header">⭐ THE 4 GOLDEN LAWS OF GREEDY ALGORITHMS</div>
+                <div class="section-content">
+                    <div style="font-size:0.78rem; line-height:1.45;">
+                        1. <strong>No Backtracking Law:</strong> Greedy choices are permanent! Prove local choice leads to global optimum.<br/>
+                        2. <strong>Interval Sorting Rule:</strong> Non-overlapping intervals sort by END time; Merging intervals sort by START time.<br/>
+                        3. <strong>Farthest Reach Rule:</strong> Jump Game maintains <code>farthest = max(farthest, i + nums[i])</code>.<br/>
+                        4. <strong>Circuit Deficit Reset:</strong> Reset <code>start = i + 1</code> on negative gas balance!
+                    </div>
+                </div>
+            </div>
+
+            <!-- When Greedy Fails -->
+            <div class="section-box box-amber">
+                <div class="section-header">⛔ WHEN GREEDY FAILS (DO NOT USE!)</div>
+                <div class="section-content">
+                    <div>• <strong>Coin Change with Non-Canonical Denominations:</strong> `[1, 3, 4]` for amount `6` ➔ Use **Dynamic Programming**!</div>
+                    <div>• <strong>0/1 Knapsack with Weight Constraints:</strong> Fractional choices not allowed ➔ Use **Dynamic Programming**!</div>
+                </div>
+            </div>
+
+            <!-- NeetCode & Blind 75 Tracker -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📊 NEETCODE &amp; BLIND 75 CONFIDENCE TRACKER</div>
+                <div class="section-content">
+                    <div class="grid-3">
+                        <div><span class="badge-easy">🟢 Easy</span> LC 455 Assign Cookies</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 860 Lemonade Change</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 55 Jump Game I</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 45 Jump Game II</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 134 Gas Station</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 763 Partition Labels</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 56 Merge Intervals</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 435 Non-overlapping</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 406 Queue Recon</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 135 Candy</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forward Cross Link -->
+            <a href="index.html" class="cross-link" style="background:#dcfce7; color:#15803d; border-color:#86efac; font-size:0.78rem;">👉 Next Master Topic: Topic 16 → Intervals Masterclass</a>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🎉 <strong>TOPIC 15 GREEDY ALGORITHMS MASTERCLASS COMPLETE!</strong> Turn the page to <strong>Topic 16: Intervals Masterclass</strong>!
+        </div>
+    </div>
+
+    </div> <!-- end .main-content -->
+</div> <!-- end .app-layout -->
+</div> <!-- end .container -->
+
+<!-- Floating Back to Top Button -->
+<button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆</button>
+
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout') || document.querySelector('.app-layout');
+        const btn = document.querySelector('.shrink-btn span');
+        if (layout) {
+            layout.classList.toggle('shrunk');
+            if (btn) {
+                btn.innerText = layout.classList.contains('shrunk') ? '➕ Expand' : '➖ Shrink';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+

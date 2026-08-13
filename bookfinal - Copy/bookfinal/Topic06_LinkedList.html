@@ -1,0 +1,1413 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 06: Linked List Masterclass (10/10 Perfect FAANG Edition)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#ffffff',
+            primaryTextColor: '#0f172a',
+            primaryBorderColor: '#2563eb',
+            lineColor: '#64748b',
+            fontFamily: 'Inter'
+        }
+    });
+</script>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+    }
+
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 11.8px;
+        line-height: 1.4;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 8px 16px;
+        display: flex;
+        
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand { font-weight: 900; font-size: 1rem; color: #38bdf8; }
+    .top-nav .nav-controls { display: flex; gap: 4px; flex-wrap: wrap; }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+
+    /* Sticky Sidebar Layout */
+    .app-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+
+    .toc-title { font-weight: 900; font-size: 0.85rem; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+
+    .main-content { min-width: 0; }
+
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 20px 24px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+        
+        display: flex;
+        flex-direction: column;
+        
+    }
+    [data-theme="dark"] .page { background: #1e293b; color: #f8fafc; }
+
+    /* Header Top */
+    .header-top {
+        display: flex;
+        
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 6px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top { background: #0f172a; border-color: #38bdf8; border-left-color: #38bdf8; }
+    .header-title-group { display: flex; align-items: center; gap: 8px; }
+    .header-top h1 { margin: 0; font-size: 1.15rem; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+    .header-top .page-num { background: #1e3a8a; color: white; padding: 2px 8px; border-radius: 14px; font-weight: 800; font-size: 0.72rem; }
+
+    /* Goal Badge Box */
+    .goal-badge {
+        border: 2px dashed #3b82f6;
+        background: #eff6ff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: #1e40af;
+        margin-bottom: 6px;
+    }
+
+    .cross-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #e0e7ff;
+        color: #3730a3;
+        border: 1px solid #c7d2fe;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-decoration: none;
+        margin-bottom: 4px;
+    }
+
+    /* Section Box */
+    .section-box {
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        background: white;
+        border: 2px solid #3b82f6;
+        width: 100%;
+    }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+    .section-header { padding: 4px 8px; font-weight: 800; font-size: 0.8rem; color: white; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+    .section-header .num { background: white; color: #0f172a; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 900; }
+    .section-content { padding: 6px 8px; font-size: 0.76rem; }
+
+    /* Color Themes */
+    .box-blue { border-color: #2563eb !important; } .box-blue .section-header { background: #2563eb !important; }
+    .box-green { border-color: #22c55e !important; } .box-green .section-header { background: #22c55e !important; }
+    .box-purple { border-color: #8b5cf6 !important; } .box-purple .section-header { background: #8b5cf6 !important; }
+    .box-red { border-color: #ef4444 !important; } .box-red .section-header { background: #ef4444 !important; }
+    .box-orange { border-color: #f97316 !important; } .box-orange .section-header { background: #f97316 !important; }
+    .box-teal { border-color: #0d9488 !important; } .box-teal .section-header { background: #0d9488 !important; }
+    .box-indigo { border-color: #6366f1 !important; } .box-indigo .section-header { background: #6366f1 !important; }
+    .box-amber { border-color: #d97706 !important; } .box-amber .section-header { background: #d97706 !important; }
+
+    /* Problem Split Grid */
+    .problem-split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+    .problem-info { display: flex; flex-direction: column; gap: 3px; }
+    .problem-code { display: flex; flex-direction: column; }
+
+    .meta-card { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 3px 6px; border-radius: 4px; display: flex;  align-items: center; font-weight: 700; font-size: 0.7rem; }
+    [data-theme="dark"] .meta-card { background: #0f172a; border-color: #334155; }
+    .badge-easy { background: #10b981; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-medium { background: #f59e0b; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-hard { background: #ef4444; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .company-tag { background: #1e3a8a; color: white; padding: 1px 4px; border-radius: 3px; font-size: 0.65rem; }
+
+    .flowchart-box { background: #eff6ff; border: 1px solid #93c5fd; border-left: 3px solid #2563eb; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: 700; color: #1e40af; }
+    .whynot-box { background: #fff7ed; border: 1px solid #fdba74; border-left: 3px solid #f97316; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; color: #9a3412; }
+    .why-var-box { background: #f0fdf4; border: 1px solid #86efac; border-left: 3px solid #22c55e; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; color: #15803d; }
+    .draw-exercise-box { background: #faf5ff; border: 1px dashed #c084fc; border-left: 3px solid #9333ea; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; color: #6b21a8; }
+
+    /* Before / After Pointer Animation Box */
+    .before-after-box {
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        padding: 4px 6px;
+        margin: 3px 0;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.68rem;
+        line-height: 1.35;
+    }
+    .pointer-state-title { font-weight: 800; color: #1e3a8a; font-family: 'Inter', sans-serif; }
+    [data-theme="dark"] .pointer-state-title { color: #38bdf8; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    pre { background: #f8fafc; color: #0f172a; padding: 6px 8px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.71rem; line-height: 1.32; margin: 0; white-space: pre-wrap !important; word-break: break-word; border: 1px solid #cbd5e1; }
+    [data-theme="dark"] pre { background: #0f172a; color: #f8fafc; border-color: #334155; }
+    code { font-family: 'Fira Code', monospace; background: #f1f5f9; color: #0f172a; padding: 1px 3px; border-radius: 3px; font-size: 0.74rem; border: 1px solid #cbd5e1; }
+
+    .aha-box { background: #fefce8; border: 1px solid #eab308; border-left: 4px solid #ca8a04; color: #713f12; padding: 5px 8px; border-radius: 4px; font-size: 0.76rem; font-weight: 600; margin: 4px 0; }
+    .rule-box { padding: 4px 6px; border-radius: 4px; font-weight: 600; margin: 4px 0; font-size: 0.74rem; }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    .rule-purple { background: #faf5ff; border: 1px solid #a855f7; border-left: 4px solid #a855f7; color: #6b21a8; }
+    .rule-red { background: #fff1f2; border: 1px solid #ef4444; border-left: 4px solid #ef4444; color: #b91c1c; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+    table th, table td { border: 1px solid var(--border-color); padding: 3px 5px; text-align: left; }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+    .mermaid { display: flex; justify-content: center; margin: 2px 0; }
+    .back-to-top { position: fixed; bottom: 20px; right: 20px; background: #2563eb; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; border: none; z-index: 999; }
+
+    @page { size: A4 portrait; margin: 4mm; }
+    @media print {
+        body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .top-nav, .back-to-top, .toc-sidebar { display: none !important; }
+        .app-layout { display: block !important; }
+        .container { max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+        .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.72; }
+        pre { background-color: #f8fafc !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; }
+    }
+
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+</style>
+</head>
+<body>
+
+<!-- Sticky Top Nav -->
+<div class="top-nav">
+    <div class="brand">⚡ FAANG DSA HANDBOOK — TOPIC 06: LINKED LIST</div>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn" style="background:#059669; border-color:#10b981; font-weight:800;">🏠 Index</a>
+        <button class="nav-btn" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="nav-btn" onclick="toggleSidebar()">↕️ Expand/Shrink TOC</button>
+        <a href="#page1" class="nav-btn">P1</a>
+        <a href="#page2" class="nav-btn">P2</a>
+        <a href="#page3" class="nav-btn">P3</a>
+        <a href="#page4" class="nav-btn">P4</a>
+        <a href="#page5" class="nav-btn">P5</a>
+        <a href="#page6" class="nav-btn">P6</a>
+        <a href="#page7" class="nav-btn">P7</a>
+        <a href="#page8" class="nav-btn">P8</a>
+        <a href="#page9" class="nav-btn">P9</a>
+        <a href="#page10" class="nav-btn">P10</a>
+        <a href="#page11" class="nav-btn">P11</a>
+        <button class="nav-btn" onclick="window.print()" style="background: #2563eb;">🖨️ PDF</button>
+    </div>
+</div>
+
+<div class="container">
+<div class="app-layout" id="appLayout">
+
+    <!-- Sticky Table of Contents Sidebar -->
+    <div class="toc-sidebar">
+        <div class="toc-header-bar"><span class="toc-title">📋 SECTIONS</span><button class="shrink-btn" onclick="toggleSidebar()"><span class="toc-text">➖ Shrink</span></button></div>
+        <ul class="toc-list">
+            <li><a href="#page1" class="toc-link">06.0 Foundation &amp; Dummy</a></li>
+            <li><a href="#page2" class="toc-link">06.1 &amp; 06.2 Singly/Doubly</a></li>
+            <li><a href="#page3" class="toc-link">06.3 Fast/Slow &amp; Composition</a></li>
+            <li><a href="#page4" class="toc-link">06.4 Reverse &amp; Keywords</a></li>
+            <li><a href="#page5" class="toc-link">06.7 Decision &amp; Cheat Sheet</a></li>
+            <li><a href="#page6" class="toc-link">06.9 Easy NeetCode Suite</a></li>
+            <li><a href="#page7" class="toc-link">06.9 Mid/Palindrome/Nth</a></li>
+            <li><a href="#page8" class="toc-link">06.9 Reorder &amp; Add Two</a></li>
+            <li><a href="#page9" class="toc-link">06.9 Copy Random &amp; Sort</a></li>
+            <li><a href="#page10" class="toc-link">06.9 Merge K &amp; K-Group</a></li>
+            <li><a href="#page11" class="toc-link">06.10 Revision &amp; Summary</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Pages -->
+    <div class="main-content">
+
+    <!-- ========================================================= -->
+    <!-- PAGE 1: 06.0 LINKED LIST FOUNDATION & DUMMY NODE MECHANICS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page1">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔗</span>
+                    <h1>TOPIC 06.0: LINKED LIST FOUNDATION &amp; DUMMY NODE MECHANICS</h1>
+                </div>
+                <span class="page-num">PAGE 1 OF 11</span>
+            </div>
+
+            <!-- Cross-Link Badges -->
+            <a href="Topic05_BinarySearch.html" class="cross-link">🔗 See Topic 05 → Binary Search Masterclass</a>
+
+            <!-- Goal Badge -->
+            <div class="goal-badge">
+                🎯 <strong>GOAL:</strong> Master Java reference pointers, visualize every node reconnection before writing code, and eliminate NullPointerExceptions using Dummy Nodes!
+            </div>
+
+            <div class="section-box box-teal" style="margin-top:8px">
+                <div class="section-header">🧰 REUSABLE LINKED LIST UTILITIES</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">Reverse Linked List Utility:</p>
+<pre>
+ListNode reverseList(ListNode head) {
+    ListNode prev = null, curr = head;
+    while (curr != null) {
+        ListNode nextTemp = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = nextTemp;
+    }
+    return prev;
+}</pre>
+                        </div>
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">Find Middle Node (Fast &amp; Slow):</p>
+<pre>
+ListNode findMiddle(ListNode head) {
+    ListNode slow = head, fast = head;
+    while (fast != null &amp;&amp; fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    return slow;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AHA Box #1: Dummy Node -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #1: THE DUMMY NODE SENTINEL PATTERN (FOR BEGINNERS)</strong><br/>
+                Why do beginners get <code>NullPointerException</code> or write endless <code>if (head == null)</code> checks? Because the <strong>head node can change or be deleted</strong>! Creating a <code>ListNode dummy = new ListNode(-1); dummy.next = head;</code> anchors the list. Now perform all insertions/deletions on <code>dummy.next</code> safely, and return <code>dummy.next</code> as the new head!
+            </div>
+
+            <div class="grid-2">
+                <!-- Memory Layout & References -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> JAVA REFERENCE VS ARRAY MEMORY</div>
+                    <div class="section-content">
+                        <div>• <strong>Array:</strong> Contiguous memory block. $O(1)$ index lookup <code>arr[i]</code> via base address math.<br/>
+                        • <strong>Linked List:</strong> Non-contiguous nodes scattered on Java Heap. Nodes link via reference pointers (<code>next</code>). $O(N)$ sequential traversal, but $O(1)$ node insertion/deletion once pointer is positioned!</div>
+                    </div>
+                </div>
+
+                <!-- Why This Variable Exists Box -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">2</span> WHY THIS VARIABLE EXISTS: `ListNode temp`</div>
+                    <div class="section-content">
+                        <div class="why-var-box">
+                            💡 <strong>ListNode temp = curr.next;</strong><br/>
+                            <strong>Why it exists:</strong> Re-assigning <code>curr.next = prev</code> severs the forward arrow! Without saving <code>temp</code> first, nodes 3..N become completely unreachable, causing Java's Garbage Collector to erase the rest of your list!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Learning Exercise #1 -->
+            <div class="section-box box-purple">
+                <div class="section-header">✏️ ACTIVE LEARNING: DRAW IT YOURSELF #1</div>
+                <div class="section-content">
+                    <div class="draw-exercise-box">
+                        <strong>EXERCISE:</strong> Given list <code>1 ➔ 2 ➔ 3 ➔ 4</code>. Draw the position of <code>prev</code>, <code>curr</code>, and <code>nextTemp</code> after exactly ONE iteration of reversing:<br/>
+                        <code>[Your Drawing Space: prev = ____, curr = ____, nextTemp = ____, List: 1 ◄── 2 ➔ 3 ➔ 4]</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visual Dummy Node Anchor Diagram -->
+            <div class="section-box box-amber">
+                <div class="section-header">🎨 VISUALIZING THE DUMMY NODE SENTINEL ANCHOR</div>
+                <div class="section-content">
+                    <div class="before-after-box">
+<span class="pointer-state-title">WITH DUMMY NODE ANCHOR:</span>
+
+  [dummy: -1] ──next──► [Head: 10] ──next──► [Node: 20] ──next──► [Node: 30] ──next──► null
+       ▲
+       │
+  tail = dummy  (Perform all appends to tail.next safely! Return dummy.next at the end!)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Always use a Dummy Node whenever the head of the linked list might be modified, created, merged, or deleted!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 2: SINGLY & DOUBLY LIST OPERATIONS + POINTER STATE TABLE -->
+    <!-- ========================================================= -->
+    <div class="page" id="page2">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">⚡</span>
+                    <h1>TOPIC 06.1 &amp; 06.2: SINGLY &amp; DOUBLY LINKED LIST OPERATIONS</h1>
+                </div>
+                <span class="page-num">PAGE 2 OF 11</span>
+            </div>
+
+            <!-- Pointer State Table for Reversing -->
+            <div class="section-box box-purple">
+                <div class="section-header">📊 STEP-BY-STEP POINTER STATE TABLE (REVERSE LIST 1 ➔ 2 ➔ 3)</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Step</th><th>prev</th><th>curr</th><th>nextTemp</th><th>Link State &amp; List Representation</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>0 (Start)</td><td><code>null</code></td><td><code>1</code></td><td><code>2</code></td><td><code>1 ➔ 2 ➔ 3 ➔ null</code> (Original list)</td></tr>
+                            <tr><td>1</td><td><code>1</code></td><td><code>2</code></td><td><code>3</code></td><td><code>null ◄── 1</code> &nbsp;|&nbsp; <code>2 ➔ 3 ➔ null</code> (1st link reversed!)</td></tr>
+                            <tr><td>2</td><td><code>2</code></td><td><code>3</code></td><td><code>null</code></td><td><code>null ◄── 1 ◄── 2</code> &nbsp;|&nbsp; <code>3 ➔ null</code> (2nd link reversed!)</td></tr>
+                            <tr><td>3 (End)</td><td><code>3</code></td><td><code>null</code></td><td><code>null</code></td><td><code>null ◄── 1 ◄── 2 ◄── 3 (prev = 3)</code> (Loop ends!)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Doubly Linked List Deletion -->
+            <div class="section-box box-blue">
+                <div class="section-header"><span class="num">1</span> DOUBLY LINKED LIST (DLL) NODE DELETION</div>
+                <div class="section-content">
+                    <div class="before-after-box">
+<span class="pointer-state-title">DELETING TARGET NODE B FROM A ◄──► B ◄──► C:</span>
+  [A] ◄──prev──next──► [B] ◄──prev──next──► [C]
+
+<span class="pointer-state-title">STEP 1: Re-route A's next pointer to C:</span>   A.next = B.next;   (A ──next──► C)
+<span class="pointer-state-title">STEP 2: Re-route C's prev pointer to A:</span>   C.prev = B.prev;   (A ◄──prev── C)
+
+RESULT: [A] ◄──────────────prev──────────────next──────────────► [C]  (B is decoupled!)
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLL vs DLL Comparison Table -->
+            <div class="section-box box-amber">
+                <div class="section-header">📊 SINGLY LINKED LIST (SLL) VS DOUBLY LINKED LIST (DLL)</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Operation</th><th>Singly Linked List (SLL)</th><th>Doubly Linked List (DLL)</th><th>Key Note</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Memory per Node</td><td>1 Value + 1 Reference (`next`)</td><td>1 Value + 2 References (`prev`, `next`)</td><td>DLL consumes ~2x reference overhead</td></tr>
+                            <tr><td>Delete Node given pointer</td><td>$O(N)$ (must find predecessor node)</td><td>$O(1)$ (via <code>node.prev.next = node.next</code>)</td><td>DLL is used in LRU Cache!</td></tr>
+                            <tr><td>Backward Traversal</td><td>Impossible ($O(N)$ rebuild required)</td><td>$O(1)$ effortless via <code>curr.prev</code></td><td>DLL allows bi-directional iteration</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            ⚠️ <strong>POINTER ORDER MATTERS:</strong> Always connect <code>newNode.next</code> to the existing chain BEFORE re-routing <code>curr.next</code>, or you break the chain!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 3: FAST & SLOW POINTERS & PATTERN COMPOSITION MATRIX -->
+    <!-- ========================================================= -->
+    <div class="page" id="page3">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🧱</span>
+                    <h1>TOPIC 06.3 &amp; PATTERN COMPOSITION MATRIX</h1>
+                </div>
+                <span class="page-num">PAGE 3 OF 11</span>
+            </div>
+
+            <!-- Pattern Composition Matrix -->
+            <div class="section-box box-purple">
+                <div class="section-header">🧱 PATTERN COMPOSITION: BUILDING COMPLEX SOLUTIONS</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Complex Medium/Hard Problem</th><th>= Sub-Pattern 1</th><th>+ Sub-Pattern 2</th><th>+ Sub-Pattern 3</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>LC 143: Reorder List</strong></td>
+                                <td>Fast/Slow Find Middle</td>
+                                <td>3-Pointer Reverse 2nd Half</td>
+                                <td>Two-Pointer Interleave Links</td>
+                            </tr>
+                            <tr>
+                                <td><strong>LC 234: Palindrome List</strong></td>
+                                <td>Fast/Slow Find Middle</td>
+                                <td>3-Pointer Reverse 2nd Half</td>
+                                <td>Two-Pointer Value Comparison</td>
+                            </tr>
+                            <tr>
+                                <td><strong>LC 148: Sort List</strong></td>
+                                <td>Fast/Slow Split in Half</td>
+                                <td>Recursive Divide &amp; Conquer</td>
+                                <td>Dummy Node Sorted Merge</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <!-- Finding Middle Node -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> FINDING MIDDLE NODE MECHANICS</div>
+                    <div class="section-content">
+<pre>
+public ListNode findMiddle(ListNode head) {
+    ListNode slow = head, fast = head;
+    while (fast != null &amp;&amp; fast.next != null) {
+        slow = slow.next;       // 1 step
+        fast = fast.next.next;  // 2 steps
+    }
+    return slow; // Points to middle!
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Cycle Start Point Proof -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">2</span> CYCLE START MATHEMATICAL PROOF</div>
+                    <div class="section-content">
+                        <div>Let $L$ = distance from Head to Entrance, $k$ = distance from Entrance to Meeting Point.</div>
+                        <div style="background:#f0fdf4; border:1px solid #86efac; padding:3px 6px; border-radius:4px; font-family:'Fira Code',monospace; font-size:0.68rem; margin-top:2px;">
+                            Distance(fast) = 2 * Distance(slow)<br/>
+                            L + nC + k = 2(L + k)  ➔  L = nC - k
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fast & Slow Race Visual Diagram -->
+            <div class="section-box box-amber">
+                <div class="section-header">🎨 FAST &amp; SLOW POINTER RACE VISUALIZATION</div>
+                <div class="section-content">
+                    <div class="before-after-box">
+<span class="pointer-state-title">ODD LENGTH LIST (1 ➔ 2 ➔ 3 ➔ 4 ➔ 5 ➔ null):</span>
+  Start:  slow=1, fast=1
+  Step 1: slow=2, fast=3
+  Step 2: slow=3 (MID!), fast=5  ➔  fast.next == null ➔ STOP!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Break down complex medium problems into 3 basic building blocks: Find Mid + Reverse + Merge!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 4: REVERSE, MERGE & PATTERN RECOGNITION KEYWORDS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page4">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔑</span>
+                    <h1>TOPIC 06.4, 06.5 &amp; PATTERN RECOGNITION KEYWORDS</h1>
+                </div>
+                <span class="page-num">PAGE 4 OF 11</span>
+            </div>
+
+            <!-- Pattern Recognition Keyword Quick Lookup Table -->
+            <div class="section-box box-indigo">
+                <div class="section-header">🔑 PATTERN RECOGNITION KEYWORD QUICK-LOOKUP</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Question Phrase Contains:</th><th>Target Linked List Pattern</th><th>Key Code Mechanism</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>"Reverse / Invert links in-place"</td><td>3-Pointer Reverse Window</td><td><code>temp=curr.next; curr.next=prev; prev=curr; curr=temp;</code></td></tr>
+                            <tr><td>"Find Middle / Detect Loop"</td><td>Fast &amp; Slow Pointers</td><td><code>slow = slow.next; fast = fast.next.next;</code></td></tr>
+                            <tr><td>"Modify Head / Merge Lists"</td><td>Dummy Node Sentinel</td><td><code>ListNode dummy = new ListNode(-1); dummy.next = head;</code></td></tr>
+                            <tr><td>"Remove N-th from End"</td><td>Fast &amp; Slow N-Gap</td><td>Create gap of $N+1$ steps between fast and slow pointers</td></tr>
+                            <tr><td>"Merge K Sorted Lists"</td><td>Min-Heap / PriorityQueue</td><td><code>PriorityQueue&lt;ListNode&gt; minHeap</code> tracking active heads</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <!-- Iterative Reverse Code -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">1</span> ITERATIVE REVERSE LIST</div>
+                    <div class="section-content">
+<pre>
+public ListNode reverseList(ListNode head) {
+    ListNode prev = null, curr = head;
+    while (curr != null) {
+        ListNode nextTemp = curr.next; // Step 1: Save next
+        curr.next = prev;              // Step 2: Reverse link
+        prev = curr;                   // Step 3: Advance prev
+        curr = nextTemp;               // Step 4: Advance curr
+    }
+    return prev; // New head!
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Merge Sorted Lists Code -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">2</span> MERGE TWO SORTED LISTS (DUMMY)</div>
+                    <div class="section-content">
+<pre>
+public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+    ListNode dummy = new ListNode(-1), tail = dummy;
+    while (l1 != null &amp;&amp; l2 != null) {
+        if (l1.val &lt;= l2.val) { tail.next = l1; l1 = l1.next; }
+        else { tail.next = l2; l2 = l2.next; }
+        tail = tail.next;
+    }
+    tail.next = (l1 != null) ? l1 : l2;
+    return dummy.next;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Matching prompt keywords to pattern mechanics allows solving 90% of interview questions in under 15 minutes!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 5: DECISION TREE & 1-PAGE PRINTABLE POINTER CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page5">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📜</span>
+                    <h1>TOPIC 06.7 &amp; 1-PAGE PRINTABLE POINTER CHEAT SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 5 OF 11</span>
+            </div>
+
+            <!-- Mermaid Decision Tree -->
+            <div class="section-box box-purple">
+                <div class="section-header">🌳 LINKED LIST INTERVIEW DECISION TREE (MERMAID)</div>
+                <div class="section-content">
+                    <div class="mermaid">
+                        graph TD
+                            A[What is the Linked List problem type?]
+                            A --> B[Cycle or Middle Node?]
+                            A --> C[Modify Head or Merge?]
+                            A --> D[Reorder or Reverse?]
+                            B --> B1[Fast & Slow Pointer Pattern]
+                            C --> C1[Dummy Node Sentinel Pattern]
+                            D --> D1[3-Pointer Sliding Window Pattern]
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1-Page Printable Pointer Cheat Sheet -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📜 PRINTABLE POINTER CHEAT SHEET</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Pointer Name</th><th>Primary Purpose</th><th>When to Use</th><th>Common Mistake to Avoid</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>dummy</code></td><td>Anchor head node safely</td><td>Head can change/delete or merging lists</td><td>Returning <code>dummy</code> instead of <code>dummy.next</code></td></tr>
+                            <tr><td><code>tail</code></td><td>Tracks end of newly built list</td><td>Building or appending nodes dynamically</td><td>Forgetting <code>tail = tail.next</code> after appending</td></tr>
+                            <tr><td><code>prev</code></td><td>Points to predecessor node</td><td>Reversing links or deleting target node</td><td>Initializing to <code>head</code> instead of <code>null</code> when reversing</td></tr>
+                            <tr><td><code>curr</code></td><td>Points to active working node</td><td>Traversing or reversing current link</td><td>Advancing <code>curr = curr.next</code> after severing link</td></tr>
+                            <tr><td><code>nextTemp</code></td><td>Saves forward link chain</td><td>Before executing <code>curr.next = prev</code></td><td>Forgetting to declare <code>temp</code> (erases rest of list!)</td></tr>
+                            <tr><td><code>slow</code></td><td>Moves 1 step at a time</td><td>Mid-finding, cycle detection, N-th end</td><td>Moving <code>slow</code> before <code>fast</code> initialization</td></tr>
+                            <tr><td><code>fast</code></td><td>Moves 2 steps at a time</td><td>Mid-finding, cycle detection</td><td>Forgetting <code>fast.next != null</code> check (NPE crash!)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Print this page and review it 10 minutes before your technical interview!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 6: EASY NEETCODE SUITE (LC 206, LC 21, LC 141) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page6">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🧩</span>
+                    <h1>EASY NEETCODE: REVERSE, MERGE TWO LISTS &amp; CYCLE DETECTION</h1>
+                </div>
+                <span class="page-num">PAGE 6 OF 11</span>
+            </div>
+
+            <!-- Problem 1: LC 206 -->
+            <div class="section-box box-blue">
+                <div class="section-header">1. LEETCODE 206 — REVERSE LINKED LIST</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>3-Pointer Reverse</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span><span class="company-tag">Google</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: prev=null, curr=head ➔ Save temp=curr.next ➔ curr.next=prev ➔ Advance prev & curr
+                            </div>
+
+                            <strong>Problem:</strong> Given head of singly linked list, reverse list and return new head.<br/>
+                            <em>Example:</em> <code>1 ➔ 2 ➔ 3 ➔ 4 ➔ 5</code> → Output: <code>5 ➔ 4 ➔ 3 ➔ 2 ➔ 1</code>.
+
+                            <!-- Alternative Solutions Box -->
+                            <div class="whynot-box">
+                                💡 <strong>ALTERNATIVE SOLUTIONS:</strong><br/>
+                                1. <strong>Stack:</strong> Push all nodes to Stack, pop to rebuild ($O(N)$ Space).<br/>
+                                2. <strong>Recursive:</strong> Reverses links on unwinding ($O(N)$ Call Stack).<br/>
+                                3. <strong>Iterative 3-Pointer:</strong> $O(N)$ Time &amp; $O(1)$ Space — <strong>OPTIMAL CHOICE!</strong>
+                            </div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public ListNode reverseList(ListNode head) {
+    ListNode prev = null, curr = head;
+    while (curr != null) {
+        ListNode nextTemp = curr.next; // Step 1: Save forward chain
+        curr.next = prev;              // Step 2: Reverse link pointer
+        prev = curr;                   // Step 3: Shift prev forward
+        curr = nextTemp;               // Step 4: Shift curr forward
+    }
+    return prev; // Step 5: New reversed head!
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 2: LC 21 -->
+            <div class="section-box box-green">
+                <div class="section-header">2. LEETCODE 21 — MERGE TWO SORTED LISTS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>Dummy Node Merge</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Microsoft</span>
+                            </div>
+                            <strong>Problem:</strong> Merge two sorted linked lists into one sorted list.<br/>
+                            <em>Example:</em> <code>l1 = 1 ➔ 2 ➔ 4</code>, <code>l2 = 1 ➔ 3 ➔ 4</code> → <code>1 ➔ 1 ➔ 2 ➔ 3 ➔ 4 ➔ 4</code>.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+    ListNode dummy = new ListNode(-1), tail = dummy;
+    while (list1 != null &amp;&amp; list2 != null) {
+        if (list1.val &lt;= list2.val) { tail.next = list1; list1 = list1.next; }
+        else { tail.next = list2; list2 = list2.next; }
+        tail = tail.next;
+    }
+    tail.next = (list1 != null) ? list1 : list2;
+    return dummy.next;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 3: LC 141 -->
+            <div class="section-box box-purple">
+                <div class="section-header">3. LEETCODE 141 — LINKED LIST CYCLE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>Fast &amp; Slow Pointer</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Determine if linked list has a cycle (`fast == slow`).
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean hasCycle(ListNode head) {
+    ListNode slow = head, fast = head;
+    while (fast != null &amp;&amp; fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+        if (slow == fast) return true; // Cycle detected!
+    }
+    return false;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 21):</strong> Dummy Node sentinel completely removes edge case logic for choosing initial head node!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 7: EASY/MEDIUM NEETCODE (MIDDLE, PALINDROME, REMOVE NTH) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page7">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🐢</span>
+                    <h1>EASY/MEDIUM NEETCODE: MIDDLE, PALINDROME &amp; REMOVE NTH</h1>
+                </div>
+                <span class="page-num">PAGE 7 OF 11</span>
+            </div>
+
+            <!-- Problem 4: LC 876 -->
+            <div class="section-box box-teal">
+                <div class="section-header">4. LEETCODE 876 — MIDDLE OF THE LINKED LIST</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★☆</span>
+                                <span>Fast &amp; Slow</span>
+                                <span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Return middle node of linked list. If two middle nodes, return second middle.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public ListNode middleNode(ListNode head) {
+    ListNode slow = head, fast = head;
+    while (fast != null &amp;&amp; fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    return slow; // Points to middle node!
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 5: LC 234 -->
+            <div class="section-box box-rose">
+                <div class="section-header">5. LEETCODE 234 — PALINDROME LINKED LIST</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>Mid + Reverse</span>
+                                <span class="company-tag">Meta</span><span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Check if linked list values form a palindrome in $O(N)$ time and $O(1)$ space.
+
+                            <!-- Alternative Solutions Box -->
+                            <div class="whynot-box">
+                                💡 <strong>ALTERNATIVE SOLUTIONS COMPARISON:</strong><br/>
+                                1. <strong>Array Copy:</strong> Copy to ArrayList, use 2-pointer ($O(N)$ Space).<br/>
+                                2. <strong>Stack:</strong> Push 1st half, pop &amp; compare ($O(N)$ Space).<br/>
+                                3. <strong>Find Mid + Reverse 2nd Half:</strong> $O(N)$ Time &amp; $O(1)$ Space — <strong>OPTIMAL!</strong>
+                            </div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean isPalindrome(ListNode head) {
+    ListNode slow = head, fast = head;
+    while (fast != null &amp;&amp; fast.next != null) {
+        slow = slow.next; fast = fast.next.next;
+    }
+    ListNode secondHalf = reverse(slow), p1 = head, p2 = secondHalf;
+    while (p2 != null) {
+        if (p1.val != p2.val) return false;
+        p1 = p1.next; p2 = p2.next;
+    }
+    return true;
+}
+private ListNode reverse(ListNode head) {
+    ListNode prev = null, curr = head;
+    while (curr != null) {
+        ListNode nextTemp = curr.next; curr.next = prev;
+        prev = curr; curr = nextTemp;
+    }
+    return prev;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 6: LC 19 -->
+            <div class="section-box box-orange">
+                <div class="section-header">6. LEETCODE 19 — REMOVE NTH NODE FROM END OF LIST</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Fast/Slow Gap + Dummy</span>
+                                <span class="company-tag">Meta</span><span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Remove $N$-th node from end of list in one pass.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public ListNode removeNthFromEnd(ListNode head, int n) {
+    ListNode dummy = new ListNode(0), fast = dummy, slow = dummy;
+    dummy.next = head;
+    for (int i = 0; i &lt;= n; i++) fast = fast.next; // Create N gap
+    while (fast != null) {
+        fast = fast.next; slow = slow.next;
+    }
+    slow.next = slow.next.next; // Bypass N-th node!
+    return dummy.next;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 19):</strong> Creating a gap of $N+1$ steps between `fast` and `slow` positions `slow` directly before the target node to delete!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 8: MEDIUM NEETCODE (REORDER LIST & ADD TWO NUMBERS) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page8">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔀</span>
+                    <h1>MEDIUM NEETCODE: REORDER LIST &amp; ADD TWO NUMBERS</h1>
+                </div>
+                <span class="page-num">PAGE 8 OF 11</span>
+            </div>
+
+            <!-- Problem 7: LC 143 -->
+            <div class="section-box box-blue">
+                <div class="section-header">7. LEETCODE 143 — REORDER LIST</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Find Mid + Reverse + Interleave</span>
+                                <span class="company-tag">Meta</span><span class="company-tag">Amazon</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: Find Mid ➔ Reverse 2nd Half ➔ Interleave L1 & L2 nodes alternatingly!
+                            </div>
+
+                            <strong>Problem:</strong> Reorder list to $L_0 \rightarrow L_n \rightarrow L_1 \rightarrow L_{n-1} \dots$<br/>
+                            <em>Example:</em> <code>1 ➔ 2 ➔ 3 ➔ 4</code> → <code>1 ➔ 4 ➔ 2 ➔ 3</code>.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public void reorderList(ListNode head) {
+    if (head == null || head.next == null) return;
+    // Step 1: Find Middle
+    ListNode slow = head, fast = head;
+    while (fast != null &amp;&amp; fast.next != null) {
+        slow = slow.next; fast = fast.next.next;
+    }
+    // Step 2: Reverse Second Half
+    ListNode prev = null, curr = slow.next;
+    slow.next = null; // Split lists
+    while (curr != null) {
+        ListNode temp = curr.next; curr.next = prev;
+        prev = curr; curr = temp;
+    }
+    // Step 3: Interleave Lists
+    ListNode first = head, second = prev;
+    while (second != null) {
+        ListNode t1 = first.next, t2 = second.next;
+        first.next = second; second.next = t1;
+        first = t1; second = t2;
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 8: LC 2 -->
+            <div class="section-box box-purple">
+                <div class="section-header">8. LEETCODE 2 — ADD TWO NUMBERS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Dummy + Carry Digit</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Two non-empty linked lists representing two non-negative integers in reverse order. Add the two numbers and return sum list.<br/>
+                            <em>Example:</em> <code>(2 ➔ 4 ➔ 3) + (5 ➔ 6 ➔ 4)</code> → <code>7 ➔ 0 ➔ 8</code> (342 + 465 = 807).
+                        </div>
+                        <div class="problem-code">
+<pre>
+public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+    ListNode dummy = new ListNode(0), curr = dummy;
+    int carry = 0;
+    while (l1 != null || l2 != null || carry != 0) {
+        int v1 = (l1 != null) ? l1.val : 0;
+        int v2 = (l2 != null) ? l2.val : 0;
+        int sum = v1 + v2 + carry;
+        carry = sum / 10;
+        curr.next = new ListNode(sum % 10);
+        curr = curr.next;
+        if (l1 != null) l1 = l1.next;
+        if (l2 != null) l2 = l2.next;
+    }
+    return dummy.next;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 143):</strong> Reorder list combines 3 core sub-patterns: Fast/Slow Mid + 3-Pointer Reverse + Two-Pointer Interleaving!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 9: MEDIUM NEETCODE (COPY LIST RANDOM & SORT LIST) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page9">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📋</span>
+                    <h1>MEDIUM NEETCODE: COPY RANDOM POINTER &amp; SORT LIST</h1>
+                </div>
+                <span class="page-num">PAGE 9 OF 11</span>
+            </div>
+
+            <!-- Problem 9: LC 138 -->
+            <div class="section-box box-teal">
+                <div class="section-header">9. LEETCODE 138 — COPY LIST WITH RANDOM POINTER</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>3-Pass Interleaving</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Deep copy linked list where each node contains an additional `random` pointer in $O(N)$ time and $O(1)$ extra space!
+                        </div>
+                        <div class="problem-code">
+<pre>
+public Node copyRandomList(Node head) {
+    if (head == null) return null;
+    // Pass 1: Interleave clone nodes (A ➔ A' ➔ B ➔ B')
+    Node curr = head;
+    while (curr != null) {
+        Node clone = new Node(curr.val);
+        clone.next = curr.next; curr.next = clone;
+        curr = clone.next;
+    }
+    // Pass 2: Assign random pointers
+    curr = head;
+    while (curr != null) {
+        if (curr.random != null) curr.next.random = curr.random.next;
+        curr = curr.next.next;
+    }
+    // Pass 3: Separate cloned list from original
+    curr = head; Node dummy = new Node(0), copyCurr = dummy;
+    while (curr != null) {
+        copyCurr.next = curr.next; copyCurr = copyCurr.next;
+        curr.next = curr.next.next; curr = curr.next;
+    }
+    return dummy.next;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 10: LC 148 -->
+            <div class="section-box box-indigo">
+                <div class="section-header">10. LEETCODE 148 — SORT LIST (MERGE SORT ON LINKED LIST)</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Divide &amp; Conquer Merge</span>
+                                <span class="company-tag">Meta</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Sort a linked list in $O(N \log N)$ time and $O(\log N)$ space complexity.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public ListNode sortList(ListNode head) {
+    if (head == null || head.next == null) return head;
+    // Step 1: Split list in half
+    ListNode prev = null, slow = head, fast = head;
+    while (fast != null &amp;&amp; fast.next != null) {
+        prev = slow; slow = slow.next; fast = fast.next.next;
+    }
+    prev.next = null; // Cut link
+    // Step 2: Recursively sort halves &amp; merge
+    ListNode l1 = sortList(head), l2 = sortList(slow);
+    return merge(l1, l2);
+}
+private ListNode merge(ListNode l1, ListNode l2) {
+    ListNode dummy = new ListNode(0), tail = dummy;
+    while (l1 != null &amp;&amp; l2 != null) {
+        if (l1.val &lt;= l2.val) { tail.next = l1; l1 = l1.next; }
+        else { tail.next = l2; l2 = l2.next; }
+        tail = tail.next;
+    }
+    tail.next = (l1 != null) ? l1 : l2;
+    return dummy.next;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🧠 <strong>MEMORY BOX:</strong> 3-pass interleaving (`A -> A' -> B -> B'`) achieves $O(1)$ space deep copying without needing a HashMap!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 10: HARD NEETCODE (MERGE K LISTS & REVERSE K-GROUP) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page10">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔥</span>
+                    <h1>HARD NEETCODE: MERGE K LISTS &amp; REVERSE K-GROUP</h1>
+                </div>
+                <span class="page-num">PAGE 10 OF 11</span>
+            </div>
+
+            <!-- Problem 11: LC 23 -->
+            <div class="section-box box-red">
+                <div class="section-header">11. LEETCODE 23 — MERGE K SORTED LISTS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Min-Heap / PriorityQueue</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Merge $K$ sorted linked lists into one sorted linked list in $O(N \log K)$ time!
+                        </div>
+                        <div class="problem-code">
+<pre>
+public ListNode mergeKLists(ListNode[] lists) {
+    if (lists == null || lists.length == 0) return null;
+    PriorityQueue&lt;ListNode&gt; minHeap = new PriorityQueue&lt;&gt;((a,b) -&gt; a.val - b.val);
+    for (ListNode node : lists) {
+        if (node != null) minHeap.add(node);
+    }
+    ListNode dummy = new ListNode(0), tail = dummy;
+    while (!minHeap.isEmpty()) {
+        ListNode smallest = minHeap.poll();
+        tail.next = smallest;
+        tail = tail.next;
+        if (smallest.next != null) minHeap.add(smallest.next);
+    }
+    return dummy.next;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 12: LC 25 -->
+            <div class="section-box box-orange">
+                <div class="section-header">12. LEETCODE 25 — REVERSE NODES IN K-GROUP</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Group Reversal + Pointer Stitching</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Microsoft</span>
+                            </div>
+                            <strong>Problem:</strong> Reverse nodes of list $k$ at a time and return modified list.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public ListNode reverseKGroup(ListNode head, int k) {
+    ListNode curr = head; int count = 0;
+    while (curr != null &amp;&amp; count != k) { // Find k-th node
+        curr = curr.next; count++;
+    }
+    if (count == k) {
+        ListNode reversedHead = reverseKGroup(curr, k); // Recurse rest
+        while (count-- &gt; 0) { // Reverse current k group
+            ListNode temp = head.next; head.next = reversedHead;
+            reversedHead = head; head = temp;
+        }
+        head = reversedHead;
+    }
+    return head;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> For Merge K Sorted Lists, Min-Heap maintains active head nodes in $O(\log K)$ per extraction!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 11: MASTER REVISION & REFERENCE CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page11">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💎</span>
+                    <h1>IF YOU REMEMBER ONLY ONE PAGE... MASTER REVISION SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 11 OF 11</span>
+            </div>
+
+            <!-- 4 Golden Laws -->
+            <div class="section-box box-green">
+                <div class="section-header">⭐ THE 4 GOLDEN LAWS OF LINKED LISTS</div>
+                <div class="section-content">
+                    <div style="font-size:0.78rem; line-height:1.45;">
+                        1. <strong>Dummy Node Anchor:</strong> Use <code>ListNode dummy = new ListNode(-1); dummy.next = head;</code> whenever head node can change!<br/>
+                        2. <strong>Fast &amp; Slow Speed Rule:</strong> Move <code>slow = slow.next</code> (1x) and <code>fast = fast.next.next</code> (2x) for mid-finding &amp; cycle detection.<br/>
+                        3. <strong>3-Pointer Reverse Window:</strong> Save forward chain first (<code>temp = curr.next</code>), reverse arrow (<code>curr.next = prev</code>), then shift window!<br/>
+                        4. <strong>Null Safety Check:</strong> Always check <code>while (fast != null && fast.next != null)</code> before jumping 2 steps!
+                    </div>
+                </div>
+            </div>
+
+            <!-- When Linked List Fails -->
+            <div class="section-box box-amber">
+                <div class="section-header">⛔ WHEN LINKED LIST FAILS (DO NOT USE!)</div>
+                <div class="section-content">
+                    <div>• <strong>Random Index Access:</strong> Getting element at index $i$ takes $O(N)$ sequential steps ➔ Use <strong>Array / ArrayList</strong>!</div>
+                    <div>• <strong>CPU Cache Locality:</strong> Non-contiguous heap nodes cause high CPU cache misses ➔ Arrays outperform Linked Lists for iteration speed!</div>
+                </div>
+            </div>
+
+            <!-- NeetCode & Blind 75 Tracker -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📊 NEETCODE &amp; BLIND 75 CONFIDENCE TRACKER</div>
+                <div class="section-content">
+                    <div class="grid-3">
+                        <div><span class="badge-easy">🟢 Easy</span> LC 206 Reverse List</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 21 Merge Two Lists</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 141 List Cycle</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 876 Middle of List</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 234 Palindrome List</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 19 Remove Nth End</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 143 Reorder List</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 2 Add Two Numbers</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 138 Copy Random</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 148 Sort List</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 23 Merge K Lists</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 25 Reverse K-Group</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forward Cross Link -->
+            <a href="index.html" class="cross-link" style="background:#dcfce7; color:#15803d; border-color:#86efac; font-size:0.78rem;">👉 Next Master Topic: Topic 07 → Stack &amp; Queues Masterclass</a>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🎉 <strong>TOPIC 06 LINKED LIST MASTERCLASS COMPLETE!</strong> Turn the page to <strong>Topic 07: Stack &amp; Queues Masterclass</strong>!
+        </div>
+    </div>
+
+    </div> <!-- end .main-content -->
+</div> <!-- end .app-layout -->
+</div> <!-- end .container -->
+
+<!-- Floating Back to Top Button -->
+<button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆</button>
+
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout') || document.querySelector('.app-layout');
+        const btn = document.querySelector('.shrink-btn span');
+        if (layout) {
+            layout.classList.toggle('shrunk');
+            if (btn) {
+                btn.innerText = layout.classList.contains('shrunk') ? '➕ Expand' : '➖ Shrink';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,2047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 2 — FAANG Interview Mastery | Senior &amp; Staff Engineer Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#ffffff', primaryTextColor: '#000000', primaryBorderColor: '#3b82f6', lineColor: '#cbd5e1', fontFamily: 'Inter' } });
+</script>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 10.5px; line-height: 1.32; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 8px 12px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 6px; margin-bottom: 10px; }
+.ph h1 { font-size: 1.65rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.82rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.72rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.bh  { background: var(--pri); color: white; padding: 4px 8px;
+  font-weight: 700; font-size: 0.82rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 16px; height: 16px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.70rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 6px 8px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 5px 10px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.72rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.90rem; }
+.psub   { color: var(--sub); font-size: 0.76rem; }
+.prow-body { display: flex; }
+.pc { padding: 6px 8px; font-size: 0.76rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.70rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 6px; }
+.prob-head { padding: 4px 8px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 1px 6px; border-radius: 8px; font-size: 0.64rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 1px 6px; border-radius: 8px; font-size: 0.64rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 8px; font-size: 0.64rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 5px 7px; border-right: 1px solid var(--bdr); font-size: 0.74rem; }
+.prob-code { padding: 5px 7px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 4px 6px; font-size: 0.64rem; line-height: 1.35; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.72rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+th, td { border: 1px solid var(--bdr); padding: 3px 5px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 5px 7px; margin-top: 3px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.78rem; margin-bottom: 2px; }
+
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 4px 6px; border-radius: 0 4px 4px 0; font-size: 0.74rem; margin-top: 3px; }
+
+.dt-wrap { font-size: 0.74rem; }
+.dt-root { background: var(--pri); color: white; padding: 3px 6px; border-radius: 4px; text-align: center; font-weight: 700; margin-bottom: 5px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 3px 5px; font-weight: 600; color: #1e40af; font-size: 0.70rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 3px 5px; color: #065f46; font-weight: 700; font-size: 0.70rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.70rem; padding: 2px 3px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 6px 10px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <span class="brand">⚡ BOOK 2 — FAANG INTERVIEW MASTERY v5.0</span>
+  <a href="index.html" class="nav-btn" style="background:#059669;">🏠 Index</a>
+  <a href="#p1" class="nav-btn">Ch20</a><a href="#p2" class="nav-btn">MidSr</a>
+  <a href="#p3" class="nav-btn">Ch21</a><a href="#p4" class="nav-btn">Trees/Graphs</a>
+  <a href="#p5" class="nav-btn">Framework</a><a href="#p6" class="nav-btn">Templates</a>
+  <a href="#p7" class="nav-btn">Execution</a><a href="#p8" class="nav-btn">Communication</a>
+  <a href="#p9" class="nav-btn">Mock1</a><a href="#p10" class="nav-btn">Mock2-3</a>
+  <a href="#p11" class="nav-btn">Mock4-5</a><a href="#p12" class="nav-btn">Companies1</a>
+  <a href="#p13" class="nav-btn">Companies2</a><a href="#p14" class="nav-btn">Revision</a>
+  <a href="#p15" class="nav-btn">Playbook</a><a href="#p16" class="nav-btn">FAANG Framework</a>
+  <button class="nav-btn" onclick="window.print()" style="background:#2563eb; margin-left: auto;">🖨️ Print PDF</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 1 : CHAPTER 20 — INTERVIEW MINDSET -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="p1">
+<div class="header-top">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1>🧠 CH 20: INTERVIEW MINDSET</h1>
+    <span class="subtitle">How FAANG interviewers think • Evaluation rubric • What gets you hired or rejected</span>
+  </div>
+  <span class="page-number">PAGE 1</span>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:12px;margin-bottom:12px">
+
+<!-- HOW INTERVIEWERS THINK -->
+<div class="section-box" style="border:2px solid #059669">
+  <div class="section-header" style="background:#d1fae5;color:#047857"><span class="num" style="background:#059669;color:white">1</span>HOW INTERVIEWERS THINK</div>
+  <div class="section-content">
+    <p style="color:#047857;font-weight:700;margin:0 0 6px">They spend 45 mins deciding:</p>
+    <p style="margin:4px 0">🧩 <strong>Can this person break down a problem?</strong></p>
+    <p style="margin:4px 0">💬 <strong>Can they communicate their thinking?</strong></p>
+    <p style="margin:4px 0">⚡ <strong>Do they handle ambiguity well?</strong></p>
+    <p style="margin:4px 0">🔧 <strong>Can they write clean production code?</strong></p>
+    <p style="margin:4px 0">🐛 <strong>Do they verify their own work?</strong></p>
+    <p style="margin:4px 0">🚀 <strong>Are they a Senior Engineer or an order-taker?</strong></p>
+    <div class="aha-box" style="margin-top:8px">
+      💡 <strong>The interview is a pair-programming session disguised as an exam. Your job is to make the interviewer's job easy.</strong>
+    </div>
+  </div>
+</div>
+
+<!-- EVALUATION PILLARS -->
+<div class="section-box" style="border:2px solid #2563eb">
+  <div class="section-header" style="background:#dbeafe;color:#1d4ed8"><span class="num" style="background:#2563eb;color:white">2</span>THE 4 FAANG EVALUATION PILLARS</div>
+  <div class="section-content" style="padding:8px">
+    <table>
+      <tr><th>Pillar</th><th>What They Look For</th><th>✅ Green Flag</th><th>❌ Red Flag</th></tr>
+      <tr><td><strong>Problem Solving</strong></td><td>Pattern recognition, trade-off analysis</td><td>Clarifies before coding</td><td>Jumps straight to code</td></tr>
+      <tr><td><strong>Technical Skill</strong></td><td>Correct DS choice, clean Java code</td><td>Modular functions, good names</td><td>Monolithic spaghetti</td></tr>
+      <tr><td><strong>Verification</strong></td><td>Proactive dry run, edge case thinking</td><td>Traces manually, finds bugs</td><td>"It looks right to me"</td></tr>
+      <tr><td><strong>Communication</strong></td><td>Thinks out loud, receptive to hints</td><td>Narrates reasoning constantly</td><td>Silent 10+ min coding</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- HIRING RUBRIC -->
+<div class="section-box" style="border:2px solid #7c3aed">
+  <div class="section-header" style="background:#ede9fe;color:#6d28d9"><span class="num" style="background:#7c3aed;color:white">3</span>HIRING RUBRIC SCORES</div>
+  <div class="section-content">
+    <table>
+      <tr><th>Score</th><th>Verdict</th><th>Signal</th></tr>
+      <tr><td style="background:#fef2f2"><strong>1</strong></td><td style="background:#fef2f2">No Hire</td><td>Couldn't solve or communicate</td></tr>
+      <tr><td style="background:#fff7ed"><strong>2</strong></td><td style="background:#fff7ed">Lean No</td><td>Partial solve, weak communication</td></tr>
+      <tr><td style="background:#f0fdf4"><strong>3</strong></td><td style="background:#f0fdf4">Lean Yes</td><td>Solved with hints, OK communication</td></tr>
+      <tr><td style="background:#eff6ff"><strong>4</strong></td><td style="background:#eff6ff"><strong>Strong Hire</strong></td><td>Optimal + clean code + narrated fully</td></tr>
+    </table>
+    <div class="aha-box" style="margin-top:6px;font-size:0.72rem">💡 Score 4 = interviewer writes: <em>"Would love to work with them."</em></div>
+  </div>
+</div>
+
+</div>
+
+<!-- BOTTOM: Rejections + What Impresses -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+<div class="section-box" style="border:2px solid #ef4444">
+  <div class="section-header" style="background:#fee2e2;color:#b91c1c"><span class="num" style="background:#ef4444;color:white">4</span>5 INSTANT REJECTION TRIGGERS</div>
+  <div class="section-content">
+    <div class="mistake-box">❌ <strong>Silent coding for 10+ minutes.</strong> Interviewers can't evaluate what they can't hear. Even wrong ideas spoken out loud are better than silence.</div>
+    <div class="mistake-box" style="margin-top:5px">❌ <strong>Jumping to code before clarifying.</strong> Interviewer: "The problem said integers — did you ask if they could be negative?"</div>
+    <div class="mistake-box" style="margin-top:5px">❌ <strong>"I'm done" without dry-running.</strong> Submitting buggy code with confidence is worse than finding your own bug.</div>
+    <div class="mistake-box" style="margin-top:5px">❌ <strong>Arguing against interviewer hints.</strong> When they say "what about this edge case?" — they are giving you the answer. Listen!</div>
+    <div class="mistake-box" style="margin-top:5px">❌ <strong>Using variable names like a, b, temp2, x1.</strong> `leftPtr`, `maxSumSoFar`, `visitedNodes` signal senior-level thinking.</div>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #f97316">
+  <div class="section-header" style="background:#ffedd5;color:#c2410c"><span class="num" style="background:#f97316;color:white">5</span>WHAT IMPRESSES FAANG INTERVIEWERS</div>
+  <div class="section-content">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <div style="background:#f0fdf4;padding:6px 8px;border-radius:4px;border-left:3px solid #22c55e;font-size:0.73rem">✅ <strong>Proactively names constraints before being asked</strong> — "I'll assume N ≤ 10⁵, so O(N log N) is fine"</div>
+      <div style="background:#f0fdf4;padding:6px 8px;border-radius:4px;border-left:3px solid #22c55e;font-size:0.73rem">✅ <strong>Compares two approaches</strong> — "Heap vs QuickSelect: heap is O(N log K), QuickSelect O(N) avg"</div>
+      <div style="background:#f0fdf4;padding:6px 8px;border-radius:4px;border-left:3px solid #22c55e;font-size:0.73rem">✅ <strong>Gets interviewer agreement before coding</strong> — "Does this approach make sense before I code it?"</div>
+      <div style="background:#f0fdf4;padding:6px 8px;border-radius:4px;border-left:3px solid #22c55e;font-size:0.73rem">✅ <strong>Writes defensive guards at top</strong> — null check, empty array check before main logic</div>
+      <div style="background:#f0fdf4;padding:6px 8px;border-radius:4px;border-left:3px solid #22c55e;font-size:0.73rem">✅ <strong>Dry-runs with a specific example</strong> — traces pointer values step by step on paper/screen</div>
+      <div style="background:#f0fdf4;padding:6px 8px;border-radius:4px;border-left:3px solid #22c55e;font-size:0.73rem">✅ <strong>Announces follow-ups unprompted</strong> — "If the input was a stream, I'd use a sliding window instead"</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="rule-box">🏆 <strong>GOLDEN RULE:</strong> Every minute you speak, every constraint you clarify, every trade-off you name = signal. Silence = no signal. No signal = No Hire.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 2 : MID vs SENIOR vs STAFF -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="p2">
+<div class="header-top">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1>👑 MID vs SENIOR vs STAFF EXPECTATIONS</h1>
+    <span class="subtitle">The exact behavioral differences that determine your level</span>
+  </div>
+  <span class="page-number">PAGE 2</span>
+</div>
+
+<div class="section-box" style="border:2px solid #2563eb">
+  <div class="section-header" style="background:#dbeafe;color:#1d4ed8"><span class="num" style="background:#2563eb;color:white">1</span>LEVEL EXPECTATION COMPARISON MATRIX</div>
+  <div class="section-content" style="padding:8px">
+    <table>
+      <tr><th style="width:18%">Rubric Dimension</th><th style="background:#fef9c3;width:27%">Mid-Level (L4 / IC4)</th><th style="background:#dbeafe;width:27%">Senior Engineer (L5 / IC5)</th><th style="background:#d1fae5;width:28%">Staff Engineer (L6 / IC6)</th></tr>
+      <tr>
+        <td><strong>🔍 Requirement Clarification</strong></td>
+        <td>Asks basic: "Is input sorted?"</td>
+        <td>Asks: constraints, scale N, edge cases, return type for invalid</td>
+        <td>Identifies hidden scale (streaming, distributed), asks about memory limits, SLA</td>
+      </tr>
+      <tr>
+        <td><strong>💡 Algorithm Choice</strong></td>
+        <td>Proposes first working approach</td>
+        <td>Compares 2-3 trade-offs explicitly: Heap vs QuickSelect, BFS vs DFS</td>
+        <td>Proposes optimal + discusses cache locality, concurrency, and real-world gotchas</td>
+      </tr>
+      <tr>
+        <td><strong>💻 Code Structure</strong></td>
+        <td>Monolithic single method, ad-hoc names</td>
+        <td>Modular helpers, Java records, descriptive names, handles overflow</td>
+        <td>Production-grade: extensible interfaces, handles all error cases, comments WHY</td>
+      </tr>
+      <tr>
+        <td><strong>🧪 Verification / Testing</strong></td>
+        <td>Tests happy path when asked</td>
+        <td>Proactively dry-runs edge cases: empty, single element, all-same, max N</td>
+        <td>Constructs adversarial tests: worst-case input, stress test thinking, invariant checking</td>
+      </tr>
+      <tr>
+        <td><strong>🗣️ Communication Style</strong></td>
+        <td>Responds to questions</td>
+        <td>Thinks out loud continuously, narrates every decision</td>
+        <td>Leads the interview gracefully, guides discussion, makes interviewer feel like a colleague</td>
+      </tr>
+      <tr>
+        <td><strong>📈 Proactiveness</strong></td>
+        <td>Solves exactly what is asked</td>
+        <td>Asks "what if N is 10⁹?" before interviewer does</td>
+        <td>Reframes the problem: "Is this actually a shortest path on a graph of states?"</td>
+      </tr>
+      <tr>
+        <td><strong>🔄 Follow-up Handling</strong></td>
+        <td>Waits for follow-up question</td>
+        <td>Proactively says "a harder version of this would be..."</td>
+        <td>Presents 3 alternative approaches with trade-offs, discusses system-level implications</td>
+      </tr>
+      <tr>
+        <td><strong>🏗️ Engineering Ownership</strong></td>
+        <td>Implementer mentality</td>
+        <td>Takes ownership of correctness and efficiency</td>
+        <td>Thinks about team impact, API design, long-term maintainability</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+<div class="section-box" style="border:2px solid #7c3aed">
+  <div class="section-header" style="background:#ede9fe;color:#6d28d9"><span class="num" style="background:#7c3aed;color:white">2</span>SAME QUESTION — L4 vs L5 RESPONSE</div>
+  <div class="section-content">
+    <p style="font-weight:700;margin:0 0 6px">Question: "Find the k-th largest element in an array."</p>
+    <div class="dialogue-box" style="border-left-color:#ca8a04;background:#fefce8">
+      <strong style="color:#92400e">L4 Candidate:</strong><br>
+      "I'll sort the array and return arr[n-k]." <em style="color:#64748b">(begins coding immediately)</em>
+    </div>
+    <div class="dialogue-box" style="margin-top:6px">
+      <strong class="candidate">L5 Candidate:</strong><br>
+      "Before I code — a few clarifications. Can the input have duplicates? Are elements guaranteed integers? What is the range of k — is k always valid?<br><br>
+      For approach: sorting gives O(N log N). A better approach is a min-heap of size k — O(N log K) time, O(K) space. QuickSelect can do O(N) average but O(N²) worst-case. Given no worst-case guarantee needed, I'll use the heap approach for predictability. Does that sound good?"
+    </div>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #dc2626">
+  <div class="section-header" style="background:#fee2e2;color:#b91c1c"><span class="num" style="background:#dc2626;color:white">3</span>COMMON MISTAKES BY LEVEL</div>
+  <div class="section-content">
+    <p style="font-weight:700;color:#b91c1c;margin:0 0 6px">L4 Mistakes (getting rejected for L5):</p>
+    <ul style="margin-bottom:8px">
+      <li>Solves the easy version without checking constraints</li>
+      <li>Never mentions time/space until asked</li>
+      <li>Thinks "it works" = done (no dry run)</li>
+      <li>Doesn't handle null / empty / single element</li>
+    </ul>
+    <p style="font-weight:700;color:#92400e;margin:0 0 6px">L5 Mistakes (getting rejected for L6):</p>
+    <ul>
+      <li>Solves correctly but doesn't proactively scale</li>
+      <li>Doesn't anticipate follow-ups before being asked</li>
+      <li>Presents one solution without comparing alternatives</li>
+      <li>Good code but doesn't discuss extensibility / API design</li>
+    </ul>
+  </div>
+</div>
+
+</div>
+
+<div class="rule-box">📌 <strong>KEY INSIGHT:</strong> To pass as L5, demonstrate engineering ownership from the first 30 seconds. To pass as L6, make the interviewer feel they're collaborating with a peer, not evaluating a candidate.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 3 : CHAPTER 21 — PATTERN RECOGNITION -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="p3">
+<div class="header-top">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1>🎯 CH 21: PATTERN RECOGNITION MASTERY</h1>
+    <span class="subtitle">30-second recognition • Constraint mapping • Hidden keywords • Wrong pattern traps</span>
+  </div>
+  <span class="page-number">PAGE 3</span>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+<div class="section-box" style="border:2px solid #059669">
+  <div class="section-header" style="background:#d1fae5;color:#047857"><span class="num" style="background:#059669;color:white">1</span>THE 30-SECOND RECOGNITION SYSTEM</div>
+  <div class="section-content">
+    <p><strong>Step 1:</strong> Read problem → underline nouns (input type) and verbs (operation type)</p>
+    <p><strong>Step 2:</strong> Look at N constraint → maps to max allowed time complexity</p>
+    <p><strong>Step 3:</strong> Match keyword phrases → map to pattern family</p>
+    <p><strong>Step 4:</strong> Recall generic template → customize for problem</p>
+    <div class="section-box" style="border:1px solid #a7f3d0;margin-top:8px">
+      <div class="section-header" style="background:#a7f3d0;color:#064e3b;font-size:0.72rem">CONSTRAINT → MAX COMPLEXITY MAPPING</div>
+      <div class="section-content" style="padding:6px">
+        <table>
+          <tr><th>N Constraint</th><th>Max Complexity</th><th>Pattern Hint</th></tr>
+          <tr><td>N ≤ 20</td><td>O(2ᴺ) or O(N!)</td><td>Backtracking, Bitmask DP</td></tr>
+          <tr><td>N ≤ 100</td><td>O(N³)</td><td>3D DP, Floyd-Warshall</td></tr>
+          <tr><td>N ≤ 1,000</td><td>O(N²)</td><td>2D DP, Bubble Sort</td></tr>
+          <tr><td>N ≤ 100,000</td><td>O(N log N)</td><td>Sort + Heap + Binary Search</td></tr>
+          <tr><td>N ≤ 10,000,000</td><td>O(N)</td><td>Two Pointers, Sliding Window, Prefix Sum</td></tr>
+          <tr><td>N ≤ 10¹⁸</td><td>O(log N)</td><td>Binary Search on Answer, Math</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #7c3aed">
+  <div class="section-header" style="background:#ede9fe;color:#6d28d9"><span class="num" style="background:#7c3aed;color:white">2</span>HIDDEN KEYWORD → PATTERN MAP</div>
+  <div class="section-content">
+    <table>
+      <tr><th>If you see these words…</th><th>Think this pattern</th></tr>
+      <tr><td>"contiguous subarray", "max/min sum"</td><td>Sliding Window / Prefix Sum</td></tr>
+      <tr><td>"two numbers that sum to target"</td><td>Two Pointers or HashMap</td></tr>
+      <tr><td>"sorted array", "find index of"</td><td>Binary Search</td></tr>
+      <tr><td>"top K", "K largest/smallest", "frequent"</td><td>Min-Heap of size K</td></tr>
+      <tr><td>"shortest path", "fewest steps"</td><td>BFS (unweighted) or Dijkstra</td></tr>
+      <tr><td>"all combinations", "all subsets", "generate all"</td><td>Backtracking</td></tr>
+      <tr><td>"minimum cost", "optimal choice at each step"</td><td>Greedy or DP</td></tr>
+      <tr><td>"overlapping subproblems", "how many ways"</td><td>Dynamic Programming</td></tr>
+      <tr><td>"merge intervals", "schedule", "overlap"</td><td>Intervals + Sort by start</td></tr>
+      <tr><td>"connected components", "union", "same group"</td><td>Union-Find (DSU)</td></tr>
+      <tr><td>"course prerequisites", "dependency order"</td><td>Topological Sort</td></tr>
+      <tr><td>"word prefix", "autocomplete", "starts with"</td><td>Trie</td></tr>
+      <tr><td>"parentheses", "valid brackets", "daily temperature"</td><td>Monotonic Stack</td></tr>
+      <tr><td>"range query", "point update"</td><td>Segment Tree / Fenwick BIT</td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- FULL-WIDTH PATTERN MATRIX -->
+<div class="section-box" style="border:2px solid #2563eb">
+  <div class="section-header" style="background:#dbeafe;color:#1d4ed8"><span class="num" style="background:#2563eb;color:white">3</span>COMPLETE PATTERN RECOGNITION MATRIX (15 CORE PATTERNS)</div>
+  <div class="section-content" style="padding:8px">
+    <table>
+      <tr><th>Pattern</th><th>Trigger Signal</th><th>Key DS</th><th>Time</th><th>Space</th><th>Classic Problems</th></tr>
+      <tr><td><strong>Two Pointers</strong></td><td>Sorted array, pair finding, palindrome</td><td>int left, right</td><td>O(N)</td><td>O(1)</td><td>LC 15, 125, 167, 11</td></tr>
+      <tr><td><strong>Sliding Window</strong></td><td>Contiguous subarray/substring, max/min K window</td><td>int[128] freq, l/r pointers</td><td>O(N)</td><td>O(1)</td><td>LC 3, 76, 424, 567</td></tr>
+      <tr><td><strong>Binary Search</strong></td><td>Sorted space, minimise/maximise feasibility</td><td>int lo, hi, mid</td><td>O(log N)</td><td>O(1)</td><td>LC 33, 875, 410, 4</td></tr>
+      <tr><td><strong>Prefix Sum</strong></td><td>Subarray sum = k, range queries</td><td>int[] prefix, HashMap</td><td>O(N)</td><td>O(N)</td><td>LC 560, 523, 1248</td></tr>
+      <tr><td><strong>Monotonic Stack</strong></td><td>Next greater/smaller, histogram bars</td><td>Deque&lt;Integer&gt;</td><td>O(N)</td><td>O(N)</td><td>LC 739, 84, 85, 42</td></tr>
+      <tr><td><strong>Top-K Heap</strong></td><td>K largest/smallest/frequent</td><td>PriorityQueue min-heap</td><td>O(N log K)</td><td>O(K)</td><td>LC 215, 347, 295, 973</td></tr>
+      <tr><td><strong>Tree DFS</strong></td><td>Tree path, depth, subtree, LCA</td><td>Recursion stack</td><td>O(N)</td><td>O(H)</td><td>LC 104, 124, 236, 543</td></tr>
+      <tr><td><strong>Tree BFS</strong></td><td>Level order, row by row, zigzag</td><td>Queue&lt;TreeNode&gt;</td><td>O(N)</td><td>O(W)</td><td>LC 102, 199, 103</td></tr>
+      <tr><td><strong>Graph DFS/BFS</strong></td><td>Connected components, flood fill, island</td><td>boolean[] visited</td><td>O(V+E)</td><td>O(V)</td><td>LC 200, 695, 130</td></tr>
+      <tr><td><strong>Topo Sort</strong></td><td>Dependencies, DAG ordering</td><td>int[] indegree, Queue</td><td>O(V+E)</td><td>O(V)</td><td>LC 207, 210, 269</td></tr>
+      <tr><td><strong>Union-Find</strong></td><td>Grouping, connectivity, cycle detection</td><td>int[] parent, rank</td><td>O(α(N))</td><td>O(N)</td><td>LC 547, 684, 1319</td></tr>
+      <tr><td><strong>1D DP</strong></td><td>Min/max cost, count ways, linear state</td><td>int[] dp</td><td>O(N)</td><td>O(N)</td><td>LC 70, 198, 300, 139</td></tr>
+      <tr><td><strong>2D DP</strong></td><td>Grid paths, string matching, knapsack</td><td>int[][] dp</td><td>O(N·M)</td><td>O(N·M)</td><td>LC 62, 1143, 72, 416</td></tr>
+      <tr><td><strong>Backtracking</strong></td><td>All combinations, permutations, N-Queens</td><td>List&lt;T&gt; path, recursion</td><td>O(2ᴺ) / O(N!)</td><td>O(N)</td><td>LC 78, 39, 46, 51</td></tr>
+      <tr><td><strong>Greedy + Intervals</strong></td><td>Merge, schedule, min arrows, activity</td><td>Arrays.sort + scan</td><td>O(N log N)</td><td>O(N)</td><td>LC 56, 435, 452, 253</td></tr>
+    </table>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div class="section-box" style="border:2px solid #ef4444">
+  <div class="section-header" style="background:#fee2e2;color:#b91c1c"><span class="num" style="background:#ef4444;color:white">4</span>WRONG PATTERN TRAPS — PIVOT IMMEDIATELY</div>
+  <div class="section-content">
+    <table>
+      <tr><th>Looks Like</th><th>Actually Is</th><th>Failure Signal</th><th>Pivot To</th></tr>
+      <tr><td>Greedy (Coin Change)</td><td>DP (Unbounded Knapsack)</td><td>Non-canonical coins → greedy fails</td><td>dp[i] = min(dp[i], dp[i-coin]+1)</td></tr>
+      <tr><td>DFS (Shortest Path)</td><td>BFS Level Order</td><td>DFS explores deep first, misses short</td><td>Queue + visited[] BFS</td></tr>
+      <tr><td>Sort (Top K)</td><td>Min-Heap size K</td><td>Sort is O(N log N), heap is O(N log K)</td><td>PriorityQueue minHeap</td></tr>
+      <tr><td>DP (Jump Game)</td><td>Greedy (Farthest Reach)</td><td>DP is O(N²), greedy O(N)</td><td>maxReach = max(maxReach, i+nums[i])</td></tr>
+    </table>
+  </div>
+</div>
+<div class="section-box" style="border:2px solid #f97316">
+  <div class="section-header" style="background:#ffedd5;color:#c2410c"><span class="num" style="background:#f97316;color:white">5</span>WHEN NOT TO USE — COMMON CONFUSIONS</div>
+  <div class="section-content">
+    <ul>
+      <li>❌ <strong>Binary Search on unsorted array</strong> — must sort first or use Two Pointers</li>
+      <li>❌ <strong>DFS for shortest path</strong> — always use BFS for unweighted shortest path</li>
+      <li>❌ <strong>Greedy on Coin Change with arbitrary coins</strong> — use DP</li>
+      <li>❌ <strong>Backtracking when N &gt; 20</strong> — exponential, look for DP or Greedy</li>
+      <li>❌ <strong>Two Pointers on unsorted array</strong> — only valid on sorted or monotone arrays</li>
+      <li>❌ <strong>Union-Find for directed graphs</strong> — only correct for undirected connectivity</li>
+    </ul>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 4 : TREES + GRAPHS TEMPLATE LIBRARY -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="p4">
+<div class="header-top">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1>🌳 TREE + GRAPH TEMPLATE LIBRARY</h1>
+    <span class="subtitle">All 8 Tree Templates + 11 Graph Templates — the complete reusable set</span>
+  </div>
+  <span class="page-number">PAGE 4</span>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+
+<!-- TREE TEMPLATES -->
+<div>
+<div class="section-box" style="border:2px solid #059669">
+  <div class="section-header" style="background:#d1fae5;color:#047857"><span class="num" style="background:#059669;color:white">T1</span>DFS — PREORDER / INORDER / POSTORDER</div>
+  <div class="section-content">
+<pre>// PREORDER: Root → Left → Right
+void preorder(TreeNode node) {
+    if (node == null) return;
+    process(node);    // ← Root FIRST
+    preorder(node.left);
+    preorder(node.right);
+}
+// INORDER: Left → Root → Right (BST = sorted!)
+void inorder(TreeNode node) {
+    if (node == null) return;
+    inorder(node.left);
+    process(node);    // ← Root MIDDLE
+    inorder(node.right);
+}
+// POSTORDER: Left → Right → Root
+int postorder(TreeNode node) {
+    if (node == null) return 0;
+    int left = postorder(node.left);
+    int right = postorder(node.right);
+    return combine(left, right, node); // ← Root LAST
+}</pre>
+    <div class="aha-box">💡 Preorder = serialize. Inorder on BST = sorted. Postorder = compute from leaves up.</div>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #2563eb">
+  <div class="section-header" style="background:#dbeafe;color:#1d4ed8"><span class="num" style="background:#2563eb;color:white">T2</span>BFS — LEVEL ORDER</div>
+  <div class="section-content">
+<pre>List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    if (root == null) return res;
+    Queue&lt;TreeNode&gt; q = new ArrayDeque&lt;&gt;();
+    q.offer(root);
+    while (!q.isEmpty()) {
+        int size = q.size(); // FREEZE level size
+        List&lt;Integer&gt; level = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; size; i++) {
+            TreeNode node = q.poll();
+            level.add(node.val);
+            if (node.left != null) q.offer(node.left);
+            if (node.right != null) q.offer(node.right);
+        }
+        res.add(level);
+    }
+    return res;
+}</pre>
+  </div>
+</div>
+</div>
+
+<!-- More Tree Templates -->
+<div>
+<div class="section-box" style="border:2px solid #7c3aed">
+  <div class="section-header" style="background:#ede9fe;color:#6d28d9"><span class="num" style="background:#7c3aed;color:white">T3</span>BOTTOM-UP: HEIGHT / BALANCED / DIAMETER</div>
+  <div class="section-content">
+<pre>// HEIGHT (returns int)
+int height(TreeNode node) {
+    if (node == null) return 0;
+    int L = height(node.left);
+    int R = height(node.right);
+    return 1 + Math.max(L, R); // ← combine
+}
+// BALANCED (returns bool)
+boolean isBalanced(TreeNode node) {
+    return checkHeight(node) != -1;
+}
+int checkHeight(TreeNode node) {
+    if (node == null) return 0;
+    int L = checkHeight(node.left);
+    if (L == -1) return -1;
+    int R = checkHeight(node.right);
+    if (R == -1) return -1;
+    if (Math.abs(L - R) &gt; 1) return -1;
+    return 1 + Math.max(L, R);
+}
+// DIAMETER (global max with postorder)
+int maxDia = 0;
+int diameter(TreeNode node) {
+    if (node == null) return 0;
+    int L = diameter(node.left);
+    int R = diameter(node.right);
+    maxDia = Math.max(maxDia, L + R);
+    return 1 + Math.max(L, R);
+}</pre>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #ea580c">
+  <div class="section-header" style="background:#ffedd5;color:#c2410c"><span class="num" style="background:#ea580c;color:white">T5</span>BST — SEARCH / VALIDATE / LCA</div>
+  <div class="section-content">
+<pre>// BST SEARCH
+TreeNode search(TreeNode root, int target) {
+    if (root == null || root.val == target) return root;
+    return target &lt; root.val ?
+        search(root.left, target) :
+        search(root.right, target);
+}
+// VALIDATE BST (pass min/max bounds)
+boolean validate(TreeNode node, long min, long max) {
+    if (node == null) return true;
+    if (node.val &lt;= min || node.val &gt;= max) return false;
+    return validate(node.left, min, node.val) &amp;&amp;
+           validate(node.right, node.val, max);
+}
+// LCA (Binary Tree)
+TreeNode lca(TreeNode node, TreeNode p, TreeNode q) {
+    if (node == null || node == p || node == q) return node;
+    TreeNode L = lca(node.left, p, q);
+    TreeNode R = lca(node.right, p, q);
+    return (L != null &amp;&amp; R != null) ? node : (L != null ? L : R);
+}</pre>
+  </div>
+</div>
+</div>
+
+<!-- GRAPH TEMPLATES -->
+<div>
+<div class="section-box" style="border:2px solid #db2777">
+  <div class="section-header" style="background:#fce7f3;color:#9d174d"><span class="num" style="background:#db2777;color:white">G1</span>BUILD GRAPH — ALL TYPES</div>
+  <div class="section-content">
+<pre>// UNDIRECTED GRAPH from edge list
+List&lt;List&lt;Integer&gt;&gt; buildGraph(int n, int[][] edges) {
+    List&lt;List&lt;Integer&gt;&gt; g = new ArrayList&lt;&gt;();
+    for (int i = 0; i &lt; n; i++) g.add(new ArrayList&lt;&gt;());
+    for (int[] e : edges) {
+        g.get(e[0]).add(e[1]);
+        g.get(e[1]).add(e[0]); // remove for directed
+    }
+    return g;
+}
+// WEIGHTED GRAPH
+List&lt;List&lt;int[]&gt;&gt; buildWeighted(int n, int[][] edges) {
+    List&lt;List&lt;int[]&gt;&gt; g = new ArrayList&lt;&gt;();
+    for (int i = 0; i &lt; n; i++) g.add(new ArrayList&lt;&gt;());
+    for (int[] e : edges)  // e = [from, to, weight]
+        g.get(e[0]).add(new int[]{e[1], e[2]});
+    return g;
+}
+// GRID UTILITIES
+int[][] DIR4 = {{-1,0},{1,0},{0,-1},{0,1}};
+int[][] DIR8 = {{-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1}};
+boolean isValid(int r, int c, int rows, int cols) {
+    return r &gt;= 0 &amp;&amp; r &lt; rows &amp;&amp; c &gt;= 0 &amp;&amp; c &lt; cols;
+}</pre>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #0284c7">
+  <div class="section-header" style="background:#e0f2fe;color:#0369a1"><span class="num" style="background:#0284c7;color:white">G3</span>BFS + DIJKSTRA</div>
+  <div class="section-content">
+<pre>// BFS (unweighted shortest path)
+int bfs(List&lt;List&lt;Integer&gt;&gt; g, int src, int dst) {
+    int[] dist = new int[g.size()];
+    Arrays.fill(dist, -1); dist[src] = 0;
+    Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    q.offer(src);
+    while (!q.isEmpty()) {
+        int u = q.poll();
+        if (u == dst) return dist[u];
+        for (int v : g.get(u)) {
+            if (dist[v] == -1) {
+                dist[v] = dist[u] + 1;
+                q.offer(v);
+            }
+        }
+    }
+    return -1;
+}
+// DIJKSTRA (weighted)
+int[] dijkstra(List&lt;List&lt;int[]&gt;&gt; g, int src) {
+    int[] dist = new int[g.size()];
+    Arrays.fill(dist, Integer.MAX_VALUE); dist[src] = 0;
+    PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;((a,b) -&gt; a[0]-b[0]);
+    pq.offer(new int[]{0, src});
+    while (!pq.isEmpty()) {
+        int[] cur = pq.poll();
+        int d = cur[0], u = cur[1];
+        if (d &gt; dist[u]) continue; // stale
+        for (int[] e : g.get(u)) {
+            int newDist = dist[u] + e[1];
+            if (newDist &lt; dist[e[0]]) {
+                dist[e[0]] = newDist;
+                pq.offer(new int[]{newDist, e[0]});
+            }
+        }
+    }
+    return dist;
+}</pre>
+  </div>
+</div>
+</div>
+
+</div>
+
+<!-- Union Find + Topo Sort -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+<div class="section-box" style="border:2px solid #16a34a">
+  <div class="section-header" style="background:#dcfce7;color:#15803d"><span class="num" style="background:#16a34a;color:white">G9</span>UNION-FIND (DSU) — PATH COMPRESSION + UNION BY RANK</div>
+  <div class="section-content">
+<pre>int[] parent, rank;
+void init(int n) { parent = new int[n]; rank = new int[n];
+    for (int i = 0; i &lt; n; i++) parent[i] = i; }
+int find(int x) { // path compression
+    if (parent[x] != x) parent[x] = find(parent[x]);
+    return parent[x]; }
+boolean union(int x, int y) { // union by rank
+    int px = find(x), py = find(y);
+    if (px == py) return false; // already same component (cycle!)
+    if (rank[px] &lt; rank[py]) { int t = px; px = py; py = t; }
+    parent[py] = px;
+    if (rank[px] == rank[py]) rank[px]++;
+    return true; }</pre>
+  </div>
+</div>
+<div class="section-box" style="border:2px solid #d97706">
+  <div class="section-header" style="background:#fef9c3;color:#92400e"><span class="num" style="background:#d97706;color:white">G8</span>TOPOLOGICAL SORT — KAHN'S ALGORITHM</div>
+  <div class="section-content">
+<pre>List&lt;Integer&gt; topoSort(int n, int[][] prereqs) {
+    List&lt;List&lt;Integer&gt;&gt; g = new ArrayList&lt;&gt;();
+    int[] indegree = new int[n];
+    for (int i = 0; i &lt; n; i++) g.add(new ArrayList&lt;&gt;());
+    for (int[] p : prereqs) {
+        g.get(p[1]).add(p[0]);
+        indegree[p[0]]++;
+    }
+    Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    for (int i = 0; i &lt; n; i++) if (indegree[i] == 0) q.offer(i);
+    List&lt;Integer&gt; order = new ArrayList&lt;&gt;();
+    while (!q.isEmpty()) {
+        int u = q.poll(); order.add(u);
+        for (int v : g.get(u))
+            if (--indegree[v] == 0) q.offer(v);
+    }
+    return order.size() == n ? order : new ArrayList&lt;&gt;(); // empty = cycle
+}</pre>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 5 : PROBLEM SOLVING FRAMEWORK -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="p5">
+<div class="header-top">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1>🛠️ CH 22: THE COMPLETE PROBLEM SOLVING FRAMEWORK</h1>
+    <span class="subtitle">7-step workflow • Time budget • Clarification scripts • Full worked example</span>
+  </div>
+  <span class="page-number">PAGE 5</span>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1.6fr;gap:12px;margin-bottom:12px">
+
+<div>
+<div class="section-box" style="border:2px solid #2563eb">
+  <div class="section-header" style="background:#dbeafe;color:#1d4ed8"><span class="num" style="background:#2563eb;color:white">1</span>THE 7-STEP WORKFLOW + TIME BUDGET</div>
+  <div class="section-content">
+    <table>
+      <tr><th>Min</th><th>Step</th><th>Goal</th></tr>
+      <tr style="background:#f0fdf4"><td>0–3</td><td>🔍 <strong>Clarify + Constraints</strong></td><td>N range, negative ints, return type, edge cases</td></tr>
+      <tr><td>3–7</td><td>📝 <strong>Work Examples</strong></td><td>Concrete 3-4 element example, trace manually</td></tr>
+      <tr style="background:#f0fdf4"><td>7–12</td><td>🔨 <strong>Brute Force + Why It Fails</strong></td><td>State O(N²), explain bottleneck</td></tr>
+      <tr><td>12–17</td><td>💡 <strong>Optimal Insight + Pitch</strong></td><td>Name data structure, get interviewer nod</td></tr>
+      <tr style="background:#f0fdf4"><td>17–35</td><td>💻 <strong>Write Clean Java Code</strong></td><td>Modular, defensive guards first</td></tr>
+      <tr><td>35–42</td><td>▶️ <strong>Dry Run Edge Cases</strong></td><td>Empty, single, duplicates, max N</td></tr>
+      <tr style="background:#f0fdf4"><td>42–45</td><td>📊 <strong>Complexity + Follow-ups</strong></td><td>Time/space analysis, scale question</td></tr>
+    </table>
+    <div class="aha-box" style="margin-top:6px">💡 <strong>Never start coding before minute 17.</strong> Agreement on approach = no wasted code resets.</div>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #059669">
+  <div class="section-header" style="background:#d1fae5;color:#047857"><span class="num" style="background:#059669;color:white">2</span>CLARIFYING QUESTIONS SCRIPT</div>
+  <div class="section-content">
+    <p style="font-weight:700;margin:0 0 4px;color:#047857">For ARRAYS:</p>
+    <ul>
+      <li>"Can input contain negative numbers or duplicates?"</li>
+      <li>"Is the array sorted? Can I sort it?"</li>
+      <li>"What is the max value of N? Max element value?"</li>
+    </ul>
+    <p style="font-weight:700;margin:4px 0;color:#047857">For GRAPHS:</p>
+    <ul>
+      <li>"Is the graph directed or undirected?"</li>
+      <li>"Can it have cycles? Multiple components?"</li>
+      <li>"Are edge weights positive or can they be negative?"</li>
+    </ul>
+    <p style="font-weight:700;margin:4px 0;color:#047857">For STRINGS:</p>
+    <ul>
+      <li>"Only lowercase letters, or ASCII or Unicode?"</li>
+      <li>"Is the string empty a valid input?"</li>
+    </ul>
+    <p style="font-weight:700;margin:4px 0;color:#047857">For DESIGN:</p>
+    <ul>
+      <li>"What are the most frequent operations — get vs put?"</li>
+      <li>"Thread-safe? Persistence? Memory constraints?"</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<!-- FULL WORKED EXAMPLE: TWO SUM -->
+<div class="section-box" style="border:2px solid #7c3aed">
+  <div class="section-header" style="background:#ede9fe;color:#6d28d9"><span class="num" style="background:#7c3aed;color:white">3</span>FULL WORKED EXAMPLE: LC 1 — TWO SUM (L5-Level Execution)</div>
+  <div class="section-content">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div>
+      <div class="dialogue-box">
+        <span class="interviewer">Interviewer:</span> "Given an integer array nums and target, return indices of two numbers that add to target."<br><br>
+        <span class="candidate">Candidate:</span> "Before I code — quick clarifications: Can there be multiple valid answers? Is there exactly one solution guaranteed? Can we reuse the same element? And what's the range of N and element values?"<br><br>
+        <span class="interviewer">Interviewer:</span> "Exactly one solution. No reuse. N ≤ 10⁴."<br><br>
+        <span class="candidate">Candidate:</span> "Got it. Brute force would be O(N²) with two nested loops — too slow for N=10⁴ in a tight time limit. <br><br>
+        Optimal insight: use a HashMap to store complement. For each num, check if (target - num) already exists in the map. If yes, return [map.get(complement), i]. Otherwise, store nums[i] → i. This is O(N) time, O(N) space. Does that sound good?"<br><br>
+        <span class="interviewer">Interviewer:</span> "Yes, go ahead."
+      </div>
+    </div>
+    <div>
+<pre>// GUARD: always handle edge cases first
+public int[] twoSum(int[] nums, int target) {
+    if (nums == null || nums.length &lt; 2)
+        return new int[]{};
+
+    // complement → index mapping
+    Map&lt;Integer, Integer&gt; seen = new HashMap&lt;&gt;();
+
+    for (int i = 0; i &lt; nums.length; i++) {
+        int complement = target - nums[i];
+        if (seen.containsKey(complement)) {
+            // DRY RUN: nums=[2,7,11,15], target=9
+            // i=0: complement=7, seen={} → miss
+            // i=1: complement=2, seen={2:0} → HIT!
+            return new int[]{seen.get(complement), i};
+        }
+        seen.put(nums[i], i);
+    }
+    return new int[]{}; // never reached per problem spec
+}
+// Time: O(N) — one pass, O(1) HashMap lookup
+// Space: O(N) — at most N entries in HashMap
+// Edge: nums=[3,3], target=6 → works! (different indices)</pre>
+    </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
+      <div>
+        <p style="font-weight:700;margin:0 0 4px">▶️ DRY RUN TABLE: nums=[2,7,11,15], target=9</p>
+        <table>
+          <tr><th>i</th><th>nums[i]</th><th>complement</th><th>seen contains?</th><th>action</th></tr>
+          <tr><td>0</td><td>2</td><td>7</td><td>❌ No</td><td>put 2→0</td></tr>
+          <tr style="background:#f0fdf4"><td>1</td><td>7</td><td>2</td><td>✅ Yes! (index 0)</td><td>return [0,1]</td></tr>
+        </table>
+      </div>
+      <div>
+        <p style="font-weight:700;margin:0 0 4px">🔄 FOLLOW-UP QUESTIONS:</p>
+        <ul>
+          <li>"What if there can be multiple pairs?" → collect all, return List&lt;int[]&gt;</li>
+          <li>"What if array is sorted?" → Two Pointers, O(1) space!</li>
+          <li>"What if input is a data stream?" → Keep HashMap, process one-by-one</li>
+          <li>"What if we need 3Sum?" → Sort + Two Pointers outer loop</li>
+        </ul>
+        <div class="aha-box">💡 <strong>Always volunteer follow-ups!</strong> It signals Senior+ thinking.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 6 : JAVA TOOLKIT + TEMPLATES LIBRARY -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="p6">
+<div class="header-top">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1>☕ CH 25: JAVA INTERVIEW TOOLKIT + TEMPLATE LIBRARY</h1>
+    <span class="subtitle">Collections cheat sheet • Utility APIs • Comparators • DP + BS templates</span>
+  </div>
+  <span class="page-number">PAGE 6</span>
+</div>
+
+<div style="display:grid;grid-template-columns:1.2fr 1fr;gap:12px;margin-bottom:12px">
+
+<div class="section-box" style="border:2px solid #2563eb">
+  <div class="section-header" style="background:#dbeafe;color:#1d4ed8"><span class="num" style="background:#2563eb;color:white">1</span>JAVA COLLECTIONS MASTER REFERENCE</div>
+  <div class="section-content" style="padding:8px">
+    <table>
+      <tr><th>Collection</th><th>Key Operations</th><th>Time</th><th>Interview Use</th><th>⚠️ Gotcha</th></tr>
+      <tr><td><strong>HashMap&lt;K,V&gt;</strong></td><td>put, get, getOrDefault, containsKey, computeIfAbsent</td><td>O(1) avg</td><td>Frequency, complement lookup, grouping</td><td>getOrDefault not same as get+putIfAbsent</td></tr>
+      <tr><td><strong>HashSet&lt;T&gt;</strong></td><td>add, contains, remove</td><td>O(1) avg</td><td>Dedup, existence check, visited</td><td>add() returns false if already present</td></tr>
+      <tr><td><strong>TreeMap&lt;K,V&gt;</strong></td><td>floorKey, ceilingKey, firstKey, lastKey, subMap</td><td>O(log N)</td><td>Ordered range queries, calendar, skyline</td><td>NavigableMap API not in HashMap!</td></tr>
+      <tr><td><strong>TreeSet&lt;T&gt;</strong></td><td>floor, ceiling, lower, higher, headSet, tailSet</td><td>O(log N)</td><td>K-th element, range existence</td><td>floor/ceiling return null if not found</td></tr>
+      <tr><td><strong>PriorityQueue</strong></td><td>offer, poll, peek</td><td>O(log N)</td><td>Top-K, Dijkstra, two-heap median</td><td>Default is MIN heap! Use (a,b)->b-a for MAX</td></tr>
+      <tr><td><strong>ArrayDeque</strong></td><td>push/pop (Stack), offer/poll (Queue), peekFirst/Last</td><td>O(1)</td><td>Stack, Queue, Monotonic DS</td><td>Faster than LinkedList and Stack class</td></tr>
+      <tr><td><strong>Arrays utility</strong></td><td>sort, binarySearch, fill, copyOf, toString</td><td>O(N log N) sort</td><td>Sort + BS, initialize arrays</td><td>Use Integer.compare(a,b) not a-b (overflow!)</td></tr>
+    </table>
+  </div>
+</div>
+
+<div>
+<div class="section-box" style="border:2px solid #059669">
+  <div class="section-header" style="background:#d1fae5;color:#047857"><span class="num" style="background:#059669;color:white">2</span>COMPARATOR / LAMBDA QUICK REFERENCE</div>
+  <div class="section-content">
+<pre>// MIN HEAP (default)
+PriorityQueue&lt;Integer&gt; minPQ = new PriorityQueue&lt;&gt;();
+// MAX HEAP
+PriorityQueue&lt;Integer&gt; maxPQ = new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+// Sort by second element (SAFE — no overflow)
+PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;((a,b)-&gt;Integer.compare(a[1],b[1]));
+// Sort array of arrays by first col asc, then second desc
+Arrays.sort(intervals, (a,b) -&gt; a[0]==b[0] ? b[1]-a[1] : a[0]-b[0]);
+// Sort strings by length, then alphabetically
+list.sort(Comparator.comparingInt(String::length).thenComparing(Comparator.naturalOrder()));
+// GroupBy (anagram key)
+Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
+map.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(word);</pre>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #7c3aed;margin-top:12px">
+  <div class="section-header" style="background:#ede9fe;color:#6d28d9"><span class="num" style="background:#7c3aed;color:white">3</span>JAVA TYPE CONVERSION CHEAT SHEET</div>
+  <div class="section-content">
+    <table>
+      <tr><th>From</th><th>To</th><th>Java Code</th></tr>
+      <tr><td>String</td><td>char[]</td><td><code>s.toCharArray()</code></td></tr>
+      <tr><td>char[]</td><td>String</td><td><code>new String(arr)</code></td></tr>
+      <tr><td>int</td><td>String</td><td><code>String.valueOf(n)</code></td></tr>
+      <tr><td>String</td><td>int</td><td><code>Integer.parseInt(s)</code></td></tr>
+      <tr><td>char</td><td>int (index)</td><td><code>c - 'a'</code></td></tr>
+      <tr><td>int</td><td>char</td><td><code>(char)('a' + i)</code></td></tr>
+      <tr><td>List&lt;Integer&gt;</td><td>int[]</td><td><code>list.stream().mapToInt(x-&gt;x).toArray()</code></td></tr>
+      <tr><td>int[]</td><td>List</td><td><code>Arrays.stream(arr).boxed().collect(Collectors.toList())</code></td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+</div>
+
+<!-- BOTTOM: DP Template + Binary Search Template -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+<div class="section-box" style="border:2px solid #ea580c">
+  <div class="section-header" style="background:#ffedd5;color:#c2410c"><span class="num" style="background:#ea580c;color:white">4</span>DP TEMPLATE — MEMO + TABULATION</div>
+  <div class="section-content">
+<pre>// ═══ TOP-DOWN MEMOIZATION ═══
+Map&lt;String, Integer&gt; memo = new HashMap&lt;&gt;();
+int dp(int i, int j, String s, String t) {
+    if (i == s.length()) return 0; // base case
+    if (j == t.length()) return s.length() - i;
+    String key = i + "," + j;
+    if (memo.containsKey(key)) return memo.get(key);
+    int res;
+    if (s.charAt(i) == t.charAt(j)) res = dp(i+1, j+1, s, t);
+    else res = 1 + Math.min(dp(i+1,j,s,t), Math.min(dp(i,j+1,s,t), dp(i+1,j+1,s,t)));
+    memo.put(key, res);
+    return res;
+}
+// ═══ BOTTOM-UP TABULATION ═══
+// dp[i][j] = min edit distance for s[0..i-1], t[0..j-1]
+int editDistance(String s, String t) {
+    int n = s.length(), m = t.length();
+    int[][] dp = new int[n+1][m+1];
+    for (int i = 0; i &lt;= n; i++) dp[i][0] = i;
+    for (int j = 0; j &lt;= m; j++) dp[0][j] = j;
+    for (int i = 1; i &lt;= n; i++)
+        for (int j = 1; j &lt;= m; j++)
+            dp[i][j] = s.charAt(i-1) == t.charAt(j-1) ? dp[i-1][j-1] :
+                1 + Math.min(dp[i-1][j], Math.min(dp[i][j-1], dp[i-1][j-1]));
+    return dp[n][m];
+}</pre>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #16a34a">
+  <div class="section-header" style="background:#dcfce7;color:#15803d"><span class="num" style="background:#16a34a;color:white">5</span>BINARY SEARCH — 3 TEMPLATES</div>
+  <div class="section-content">
+<pre>// ═══ CLASSIC: Find exact target ═══
+int binarySearch(int[] arr, int target) {
+    int lo = 0, hi = arr.length - 1;
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2; // NEVER (lo+hi)/2 (overflow!)
+        if (arr[mid] == target) return mid;
+        else if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}
+// ═══ LEFT BOUNDARY: First position ≥ target ═══
+int lowerBound(int[] arr, int target) {
+    int lo = 0, hi = arr.length;
+    while (lo &lt; hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid;          // ← move right boundary LEFT
+    }
+    return lo;
+}
+// ═══ BINARY SEARCH ON ANSWER ═══
+// Minimize x such that feasible(x) = true
+int lo = minPossible, hi = maxPossible;
+while (lo &lt; hi) {
+    int mid = lo + (hi - lo) / 2;
+    if (feasible(mid)) hi = mid;  // mid works, try smaller
+    else lo = mid + 1;            // too small, go bigger
+}
+// lo = answer</pre>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 7 : EXECUTION STRATEGY + CLEAN CODE -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="p7">
+<div class="header-top">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1>💻 CH 23: CODING EXECUTION + DEBUGGING</h1>
+    <span class="subtitle">CoderPad • Whiteboard • Clean code rules • Debugging protocol • Recovery when stuck</span>
+  </div>
+  <span class="page-number">PAGE 7</span>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+
+<div class="section-box" style="border:2px solid #0284c7">
+  <div class="section-header" style="background:#e0f2fe;color:#0369a1"><span class="num" style="background:#0284c7;color:white">1</span>CODERPAD STRATEGY</div>
+  <div class="section-content">
+    <ul>
+      <li>✅ Keep imports at top: <code>import java.util.*;</code></li>
+      <li>✅ Write a skeleton class + method signature first</li>
+      <li>✅ Use // comments as your coding plan before filling in</li>
+      <li>✅ Call helper methods before implementing them (top-down)</li>
+      <li>✅ Use <code>System.out.println()</code> for debug traces during dry run</li>
+      <li>❌ Don't use System.exit() or scanner — not needed</li>
+      <li>❌ Don't use static fields unless asked for design</li>
+      <li>❌ Don't rename variables halfway through (confusing)</li>
+    </ul>
+    <div class="aha-box" style="margin-top:6px">💡 Write the function signature + guard clauses + helper stubs BEFORE any logic. It signals organized thinking.</div>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #059669">
+  <div class="section-header" style="background:#d1fae5;color:#047857"><span class="num" style="background:#059669;color:white">2</span>CLEAN CODE CHECKLIST (10 RULES)</div>
+  <div class="section-content">
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Return type and method name clearly describe purpose</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>First line: null/empty guard (<code>if (nums == null || nums.length == 0) return ...;</code>)</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Descriptive variable names: <code>leftPtr</code> not <code>l</code>, <code>maxSoFar</code> not <code>m</code></span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>One responsibility per function — extract helpers for complex logic</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Use <code>Math.max()</code>, <code>Math.min()</code> over verbose if-else</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Use <code>Integer.compare(a, b)</code> in comparators — never <code>a - b</code> (overflow!)</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Loop variable names match their domain: <code>row, col</code> not <code>i, j</code> for grids</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Explicit base case for recursion at the top</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Use <code>long</code> for sums that may overflow 32-bit int</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Maximum 25 lines per method — refactor if longer</span></div>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #ef4444">
+  <div class="section-header" style="background:#fee2e2;color:#b91c1c"><span class="num" style="background:#ef4444;color:white">3</span>5-STEP RECOVERY WHEN STUCK</div>
+  <div class="section-content">
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <div class="flow-step" style="background:#fef2f2;border-color:#ef4444;color:#991b1b">1. VERBALIZE: Explain what you know and what you're stuck on</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="background:#fff7ed;border-color:#f97316">2. DRAW: Sketch a 3-4 element concrete example on paper/screen</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="background:#fefce8;border-color:#ca8a04">3. SIMPLIFY: "What if N=1? What if all elements are the same?"</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="background:#f0fdf4;border-color:#22c55e">4. DATASTRUCTURE: "Can sorting / a HashMap / a queue help here?"</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="background:#eff6ff;border-color:#3b82f6">5. ASK: "I'm thinking X or Y — does either direction seem promising to you?"</div>
+    </div>
+    <div class="mistake-box" style="margin-top:8px">❌ NEVER sit silent for more than 90 seconds. Always verbalize your mental state, even if stuck!</div>
+  </div>
+</div>
+
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+<div class="section-box" style="border:2px solid #d97706">
+  <div class="section-header" style="background:#fef9c3;color:#92400e"><span class="num" style="background:#d97706;color:white">4</span>DEBUGGING PROTOCOL — WHEN CODE FAILS</div>
+  <div class="section-content">
+    <p style="font-weight:700;margin:0 0 6px">The 5-step debug process:</p>
+    <ol style="padding-left:16px">
+      <li><strong>Re-read the failing test case</strong> — what is the expected output?</li>
+      <li><strong>Trace with print statements</strong> — add System.out.println() for key variables</li>
+      <li><strong>Check loop bounds</strong> — off-by-one errors are #1 source of bugs</li>
+      <li><strong>Check null/empty handling</strong> — is the guard at the top correct?</li>
+      <li><strong>Check data structure initialization</strong> — HashMap cleared? Arrays zeroed?</li>
+    </ol>
+    <div class="aha-box" style="margin-top:6px">💡 <strong>Say out loud:</strong> "Let me trace through this specific failing case step by step..." — interviewers love seeing systematic debugging!</div>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #7c3aed">
+  <div class="section-header" style="background:#ede9fe;color:#6d28d9"><span class="num" style="background:#7c3aed;color:white">5</span>VARIABLE NAMING GUIDE</div>
+  <div class="section-content">
+    <table>
+      <tr><th>❌ Weak Name</th><th>✅ Strong Name</th><th>Context</th></tr>
+      <tr><td>l, r</td><td>leftPtr, rightPtr</td><td>Two Pointers</td></tr>
+      <tr><td>m</td><td>maxSoFar, maxLen</td><td>Sliding Window</td></tr>
+      <tr><td>i, j</td><td>row, col</td><td>Grid traversal</td></tr>
+      <tr><td>n</td><td>nodeCount, totalNodes</td><td>Graph</td></tr>
+      <tr><td>tmp</td><td>prevNode, nextNode</td><td>Linked List</td></tr>
+      <tr><td>h</td><td>maxHeap, minHeap</td><td>Priority Queue</td></tr>
+      <tr><td>dp</td><td>minCostDp, waysCount</td><td>DP table</td></tr>
+      <tr><td>vis</td><td>visitedNodes, seen</td><td>Graph DFS/BFS</td></tr>
+    </table>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 8 : COMMUNICATION MASTERY -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="p8">
+<div class="header-top">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1>🗣️ CH 24: COMMUNICATION MASTERY</h1>
+    <span class="subtitle">Thinking out loud • Senior scripts • Handling hints • Trade-off language</span>
+  </div>
+  <span class="page-number">PAGE 8</span>
+</div>
+
+<div class="section-box" style="border:2px solid #2563eb">
+  <div class="section-header" style="background:#dbeafe;color:#1d4ed8"><span class="num" style="background:#2563eb;color:white">1</span>SENIOR ENGINEER COMMUNICATION MATRIX — EXACT PHRASES</div>
+  <div class="section-content" style="padding:8px">
+    <table>
+      <tr><th style="width:20%">Interview Stage</th><th style="width:26%">L4 Says (❌ Avoid)</th><th style="width:27%">L5 Says (✅ Target)</th><th style="width:27%">L6 Says (🌟 Aim For)</th></tr>
+      <tr><td>Opening</td><td>"Let me just solve it."</td><td>"Before I start — a few clarifications about constraints..."</td><td>"Interesting problem — this reminds me of shortest path in a DAG. Let me verify: is the input always a valid DAG?"</td></tr>
+      <tr><td>Naming approach</td><td>"I'll use a map."</td><td>"I'll use a HashMap here because I need O(1) complement lookup — this brings time from O(N²) to O(N)."</td><td>"Two approaches: HashMap for O(N) average, or Two Pointers on sorted input for O(N) worst-case with O(1) space. Given no sort cost, HashMap is simpler."</td></tr>
+      <tr><td>Complexity</td><td>"It's O(N)."</td><td>"Time is O(N log K) because each of the N elements does at most one heap operation costing O(log K). Space is O(K) for the heap."</td><td>"Time O(N log K), space O(K). Note: if K ≈ N, heap approach degrades to O(N log N) — in that case, nth_element (QuickSelect) gives O(N) average with O(1) extra space."</td></tr>
+      <tr><td>Dry Run</td><td>"I think it works."</td><td>"Let me trace through my example: nums=[3,1,4,1], target=5. At i=0, complement=2, seen={} miss, store 3→0. At i=1, complement=4..."</td><td>"Let me construct an adversarial case: what if all elements are the same? nums=[3,3,3], target=6 — my code handles this correctly because each index is distinct in the map."</td></tr>
+      <tr><td>Receiving hints</td><td>"Oh OK." (continues same approach)</td><td>"That's a great point — you're suggesting the sorted input enables Two Pointers? Let me think about that: we could sort in O(N log N) then use O(N) two-pointer scan..."</td><td>"Yes, that edge case I hadn't considered — if the input contains Long.MAX_VALUE, my subtraction overflows. Let me fix the guard: use target - nums[i] computed in long first."</td></tr>
+    </table>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+
+<div class="section-box" style="border:2px solid #059669">
+  <div class="section-header" style="background:#d1fae5;color:#047857"><span class="num" style="background:#059669;color:white">2</span>THINKING OUT LOUD — SCRIPT LIBRARY</div>
+  <div class="section-content">
+    <p style="font-weight:700;color:#047857;margin:0 0 4px">When recognizing a pattern:</p>
+    <div class="dialogue-box">"This looks like a sliding window problem because we're asked for the longest contiguous subarray satisfying a condition — that's the classic signal."</div>
+    <p style="font-weight:700;color:#047857;margin:4px 0">When comparing approaches:</p>
+    <div class="dialogue-box">"I see two ways: sort + two pointers in O(N log N) time and O(1) space, or hash map in O(N) time and O(N) space. Given N is 10⁵ and space isn't constrained, I'll go with the hash map for simplicity."</div>
+    <p style="font-weight:700;color:#047857;margin:4px 0">When writing a helper:</p>
+    <div class="dialogue-box">"I'll extract this into a helper `isValid(row, col)` to keep the DFS clean — I'll implement it right after."</div>
+    <p style="font-weight:700;color:#047857;margin:4px 0">When stuck:</p>
+    <div class="dialogue-box">"I know the brute force, but I'm trying to see if there's a way to avoid the inner loop. Does caching prefix sums help here?"</div>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #f97316">
+  <div class="section-header" style="background:#ffedd5;color:#c2410c"><span class="num" style="background:#f97316;color:white">3</span>TRADE-OFF DISCUSSION FRAMEWORK</div>
+  <div class="section-content">
+    <p style="font-weight:700;margin:0 0 6px">Always structure trade-offs as:</p>
+    <div style="font-style:italic;background:#f8fafc;padding:8px;border-radius:4px;margin-bottom:8px">
+      "Approach A gives [Time A] time and [Space A] space. Approach B gives [Time B] time and [Space B] space. Given [constraint from clarification], I'll choose [A or B] because [specific reason]."
+    </div>
+    <table>
+      <tr><th>Trade-off Dimension</th><th>What to Say</th></tr>
+      <tr><td>Time vs Space</td><td>"Trading O(N) space for O(1) better time — worth it here because N ≤ 10⁵"</td></tr>
+      <tr><td>Worst vs Average</td><td>"QuickSelect is O(N) average but O(N²) worst — for guaranteed O(N log K) use heap"</td></tr>
+      <tr><td>Simplicity vs Optimality</td><td>"The simpler O(N log N) solution is bug-free and fast enough; QuickSelect saves a log factor but adds complexity"</td></tr>
+      <tr><td>Recursion vs Iteration</td><td>"Recursion is cleaner here. For very deep trees (N=10⁵), stack overflow is a risk — iterative DFS with explicit stack is safer"</td></tr>
+    </table>
+  </div>
+</div>
+
+</div>
+
+<div class="rule-box">🎯 <strong>COMMUNICATION FORMULA:</strong> Clarify → Example → Brute Force → Optimal Insight → Get Agreement → Code → Dry Run → Complexity → Follow-up. <em>Never skip a step.</em></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 9 : MOCK INTERVIEW 1 (GOOGLE - HARD) -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="p9">
+<div class="header-top">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1>🧪 MOCK 1: GOOGLE HARD — COURSE SCHEDULE II</h1>
+    <span class="subtitle">Full 45-minute mock with evaluation rubric and score</span>
+  </div>
+  <span class="page-number">PAGE 9</span>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div>
+  <div class="section-box" style="border:2px solid #059669">
+    <div class="section-header" style="background:#d1fae5;color:#047857">PROBLEM</div>
+    <div class="section-content">
+      <span class="badge badge-hard">🔴 Hard</span>
+      <span class="badge badge-google">🔵 Google</span>
+      <span class="badge" style="background:#f1f5f9;border:1px solid #94a3b8">LC 210</span>
+      <p style="margin:6px 0">There are numCourses courses (0 to numCourses-1). You are given prerequisites where prerequisites[i] = [a, b] means to take course a you must first take b. Return a valid course ordering. If impossible, return [].</p>
+    </div>
+  </div>
+
+  <div class="section-box" style="border:2px solid #2563eb">
+    <div class="section-header" style="background:#dbeafe;color:#1d4ed8">CANDIDATE INTERVIEW EXECUTION</div>
+    <div class="section-content">
+      <div class="dialogue-box">
+        <span class="candidate">Candidate:</span> "First, clarifications: Can there be duplicate edges? What is the max numCourses — 2000? Can courses have no prerequisites? What should I return if numCourses=0?"<br><br>
+        <span class="interviewer">Interviewer:</span> "No duplicates, max 2000, return [] for 0 courses."<br><br>
+        <span class="candidate">Candidate:</span> "This is a topological sort problem on a DAG. I'll model each prerequisite [a,b] as a directed edge b→a (b before a). Then run Kahn's algorithm with in-degree counting. If all N courses are processed, return the order; if any course remains (cycle detected), return [].<br><br>
+        Time: O(V+E), Space: O(V+E). Shall I code this?"<br><br>
+        <span class="interviewer">Interviewer:</span> "Yes, go ahead."
+      </div>
+      <div class="aha-box" style="margin-top:6px">💡 <strong>AHA:</strong> The trick is modeling prerequisites as directed edges correctly — b→a means b is prerequisite of a.</div>
+    </div>
+  </div>
+
+  <div class="section-box" style="border:2px solid #7c3aed;margin-top:0">
+    <div class="section-header" style="background:#ede9fe;color:#6d28d9">DRY RUN: numCourses=4, prerequisites=[[1,0],[2,0],[3,1],[3,2]]</div>
+    <div class="section-content">
+      <table style="font-size:0.7rem">
+        <tr><th>Step</th><th>Queue</th><th>inDegree</th><th>order</th></tr>
+        <tr><td>Init</td><td>[0]</td><td>[0,1,1,2]</td><td>[]</td></tr>
+        <tr><td>Poll 0</td><td>[1,2]</td><td>[0,0,0,2]</td><td>[0]</td></tr>
+        <tr><td>Poll 1</td><td>[2]</td><td>[0,0,0,1]</td><td>[0,1]</td></tr>
+        <tr><td>Poll 2</td><td>[3]</td><td>[0,0,0,0]</td><td>[0,1,2]</td></tr>
+        <tr><td>Poll 3</td><td>[]</td><td>[0,0,0,0]</td><td>[0,1,2,3] ✅</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="section-box" style="border:2px solid #ea580c">
+    <div class="section-header" style="background:#ffedd5;color:#c2410c">COMPLETE JAVA SOLUTION</div>
+    <div class="section-content">
+<pre>public int[] findOrder(int numCourses, int[][] prerequisites) {
+    // GUARD: edge case
+    if (numCourses == 0) return new int[]{};
+
+    // BUILD GRAPH + compute in-degrees
+    List&lt;List&lt;Integer&gt;&gt; g = new ArrayList&lt;&gt;();
+    int[] inDegree = new int[numCourses];
+    for (int i = 0; i &lt; numCourses; i++) g.add(new ArrayList&lt;&gt;());
+
+    for (int[] prereq : prerequisites) {
+        int course = prereq[0], pre = prereq[1];
+        g.get(pre).add(course);   // edge: pre → course
+        inDegree[course]++;
+    }
+
+    // INIT QUEUE with zero in-degree courses
+    Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    for (int i = 0; i &lt; numCourses; i++)
+        if (inDegree[i] == 0) q.offer(i);
+
+    // PROCESS: Kahn's BFS topological sort
+    int[] order = new int[numCourses];
+    int idx = 0;
+    while (!q.isEmpty()) {
+        int course = q.poll();
+        order[idx++] = course;
+        for (int next : g.get(course)) {
+            if (--inDegree[next] == 0)
+                q.offer(next);
+        }
+    }
+    // If all courses processed → no cycle
+    return idx == numCourses ? order : new int[]{};
+}
+// Time:  O(V + E) — V=numCourses, E=prerequisites.length
+// Space: O(V + E) — adjacency list + in-degree array</pre>
+    </div>
+  </div>
+
+  <div class="section-box" style="border:2px solid #16a34a">
+    <div class="section-header" style="background:#dcfce7;color:#15803d">FOLLOW-UP QUESTIONS</div>
+    <div class="section-content">
+      <ol style="padding-left:14px">
+        <li><strong>"What if we need all possible orderings?"</strong> — DFS backtracking, return all valid topological sorts</li>
+        <li><strong>"What if some courses are elective (no path from source)?"</strong> — disconnected graph; still works since we init all zero-indegree nodes</li>
+        <li><strong>"If N = 10⁶ courses, any issue?"</strong> — Java recursion depth for DFS approach could overflow. Kahn's iterative BFS is safe.</li>
+        <li><strong>"How do you detect which specific cycle exists?"</strong> — Color-based DFS: white/gray/black states; gray node re-visit = back edge = cycle</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="section-box" style="border:2px solid #2563eb">
+    <div class="section-header" style="background:#dbeafe;color:#1d4ed8">EVALUATION RUBRIC + SCORE</div>
+    <div class="section-content">
+      <table style="font-size:0.72rem">
+        <tr><th>Dimension</th><th>Score (1-4)</th><th>Feedback</th></tr>
+        <tr><td>Problem Solving</td><td style="color:#15803d;font-weight:800">4</td><td>Identified graph + topo sort in under 2 min</td></tr>
+        <tr><td>Code Quality</td><td style="color:#15803d;font-weight:800">4</td><td>Clean, modular, proper naming, guard clause</td></tr>
+        <tr><td>Verification</td><td style="color:#15803d;font-weight:800">4</td><td>Full step-by-step dry run with trace table</td></tr>
+        <tr><td>Communication</td><td style="color:#15803d;font-weight:800">4</td><td>Narrated full 7-step framework</td></tr>
+        <tr><td><strong>OVERALL</strong></td><td colspan="2" style="color:#15803d;font-weight:800">🌟 STRONG HIRE (L5/L6)</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 10 : MOCK 2 (META) + MOCK 3 (AMAZON) -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="p10">
+<div class="header-top">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1>🧪 MOCK 2: META MEDIUM + MOCK 3: AMAZON DESIGN</h1>
+  </div>
+  <span class="page-number">PAGE 10</span>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+<!-- MOCK 2: META — MERGE INTERVALS -->
+<div>
+  <div class="section-box" style="border:2px solid #7c3aed">
+    <div class="section-header" style="background:#ede9fe;color:#6d28d9">MOCK 2: META — MERGE INTERVALS (LC 56)</div>
+    <div class="section-content">
+      <span class="badge badge-med">🟡 Medium</span>
+      <span class="badge badge-meta">🟣 Meta</span>
+      <p style="margin:4px 0;font-size:0.74rem">Given an array of intervals, merge all overlapping intervals.</p>
+      <div class="dialogue-box" style="font-size:0.73rem;margin:6px 0">
+        <span class="candidate">Candidate:</span> "Are intervals guaranteed non-negative? Can end &lt; start exist? Is output order important?"<br>
+        <span class="interviewer">Interviewer:</span> "Valid intervals, any order."<br>
+        <span class="candidate">Candidate:</span> "Sort by start time. Then single pass: if current interval's start ≤ last merged end, merge by taking max of ends. Otherwise, add as new interval. O(N log N) time, O(N) space for output."
+      </div>
+<pre style="font-size:0.68rem">public int[][] merge(int[][] intervals) {
+    Arrays.sort(intervals, (a, b) -&gt; Integer.compare(a[0], b[0]));
+    List&lt;int[]&gt; merged = new ArrayList&lt;&gt;();
+    for (int[] inv : intervals) {
+        if (merged.isEmpty() || merged.get(merged.size()-1)[1] &lt; inv[0])
+            merged.add(inv);          // no overlap: add as-is
+        else
+            merged.get(merged.size()-1)[1] =   // overlap: extend end
+                Math.max(merged.get(merged.size()-1)[1], inv[1]);
+    }
+    return merged.toArray(new int[merged.size()][]);
+}
+// Time: O(N log N)  Space: O(N)</pre>
+      <p style="font-size:0.72rem;font-weight:700">DRY RUN: [[1,3],[2,6],[8,10],[15,18]]</p>
+      <table style="font-size:0.68rem">
+        <tr><th>inv</th><th>last.end</th><th>action</th><th>merged</th></tr>
+        <tr><td>[1,3]</td><td>—</td><td>add</td><td>[[1,3]]</td></tr>
+        <tr><td>[2,6]</td><td>3</td><td>2≤3 → extend to 6</td><td>[[1,6]]</td></tr>
+        <tr><td>[8,10]</td><td>6</td><td>8&gt;6 → add</td><td>[[1,6],[8,10]]</td></tr>
+        <tr><td>[15,18]</td><td>10</td><td>15&gt;10 → add</td><td>[[1,6],[8,10],[15,18]]</td></tr>
+      </table>
+      <div class="aha-box" style="font-size:0.71rem">💡 Meta style: speed matters. Aim to code this in under 10 minutes with zero bugs.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MOCK 3: AMAZON — LRU CACHE -->
+<div>
+  <div class="section-box" style="border:2px solid #f97316">
+    <div class="section-header" style="background:#ffedd5;color:#c2410c">MOCK 3: AMAZON — LRU CACHE (LC 146)</div>
+    <div class="section-content">
+      <span class="badge badge-med">🟡 Medium</span>
+      <span class="badge badge-amazon">🟠 Amazon</span>
+      <p style="margin:4px 0;font-size:0.74rem">Design an LRU cache with O(1) get and put operations.</p>
+      <div class="dialogue-box" style="font-size:0.73rem;margin:4px 0">
+        <span class="candidate">Candidate:</span> "Key insight: O(1) get + put means I need a data structure that supports O(1) ordered access. HashMap + Doubly Linked List: HashMap for O(1) key lookup, DLL for O(1) order maintenance. Sentinel head/tail nodes avoid null checks."
+      </div>
+<pre style="font-size:0.66rem">class LRUCache {
+    class Node { int key, val; Node prev, next;
+        Node(int k, int v){ key=k; val=v; } }
+    private final Map&lt;Integer,Node&gt; map = new HashMap&lt;&gt;();
+    private final Node head = new Node(0,0), tail = new Node(0,0);
+    private final int cap;
+    public LRUCache(int capacity) {
+        this.cap = capacity;
+        head.next = tail; tail.prev = head;  // sentinel setup
+    }
+    public int get(int key) {
+        if (!map.containsKey(key)) return -1;
+        Node node = map.get(key);
+        remove(node); insertFront(node);   // move to MRU position
+        return node.val;
+    }
+    public void put(int key, int value) {
+        if (map.containsKey(key)) remove(map.get(key));
+        if (map.size() == cap) {   // evict LRU (tail.prev)
+            map.remove(tail.prev.key); remove(tail.prev); }
+        Node node = new Node(key, value);
+        insertFront(node); map.put(key, node);
+    }
+    private void remove(Node n) { n.prev.next=n.next; n.next.prev=n.prev; }
+    private void insertFront(Node n) {
+        n.next=head.next; n.next.prev=n; head.next=n; n.prev=head; }
+}
+// ALL ops: O(1) time  |  Space: O(capacity)</pre>
+      <div class="aha-box" style="font-size:0.71rem;margin-top:6px">💡 Amazon LP integration: "This is a classic ownership problem — one oversight in the eviction logic (wrong pointer) causes production cache corruption."</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 11 : MOCK 4 STAFF LEVEL + BACKTRACKING MOCK -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="p11">
+<div class="header-top">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1>🧪 MOCK 4: UBER HARD + MOCK 5: STAFF-LEVEL</h1>
+  </div>
+  <span class="page-number">PAGE 11</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+<!-- MOCK 4: N-QUEENS (Hard Backtracking) -->
+<div>
+  <div class="section-box" style="border:2px solid #ef4444">
+    <div class="section-header" style="background:#fee2e2;color:#b91c1c">MOCK 4: UBER — N-QUEENS (LC 51)</div>
+    <div class="section-content">
+      <span class="badge badge-hard">🔴 Hard</span>
+      <span class="badge" style="background:#fef9c3;border:1px solid #fcd34d;color:#92400e">🚗 Uber</span>
+      <p style="margin:4px 0;font-size:0.74rem">Place N queens on N×N board so none attacks another. Return all valid configurations.</p>
+      <div class="dialogue-box" style="font-size:0.73rem;margin:4px 0">
+        <span class="candidate">Candidate:</span> "Classic backtracking. Each row gets exactly one queen. For each row, try each column — skip if column, diagonal, or anti-diagonal already occupied. Use three HashSets for O(1) conflict checking. Choose → place → recurse → undo."
+      </div>
+<pre style="font-size:0.67rem">public List&lt;List&lt;String&gt;&gt; solveNQueens(int n) {
+    List&lt;List&lt;String&gt;&gt; res = new ArrayList&lt;&gt;();
+    int[] queens = new int[n]; // queens[row] = col
+    Arrays.fill(queens, -1);
+    Set&lt;Integer&gt; cols = new HashSet&lt;&gt;(),
+        diag = new HashSet&lt;&gt;(),    // row - col
+        antiDiag = new HashSet&lt;&gt;(); // row + col
+    backtrack(0, n, queens, cols, diag, antiDiag, res);
+    return res;
+}
+void backtrack(int row, int n, int[] queens,
+    Set&lt;Integer&gt; cols, Set&lt;Integer&gt; diag, Set&lt;Integer&gt; antiDiag,
+    List&lt;List&lt;String&gt;&gt; res) {
+    if (row == n) { res.add(buildBoard(queens, n)); return; }
+    for (int col = 0; col &lt; n; col++) {
+        if (cols.contains(col) || diag.contains(row-col)
+            || antiDiag.contains(row+col)) continue;
+        // CHOOSE
+        queens[row] = col;
+        cols.add(col); diag.add(row-col); antiDiag.add(row+col);
+        // EXPLORE
+        backtrack(row+1, n, queens, cols, diag, antiDiag, res);
+        // UNDO (state restoration)
+        queens[row] = -1;
+        cols.remove(col); diag.remove(row-col); antiDiag.remove(row+col);
+    }
+}
+// Time: O(N!) worst  Space: O(N) recursion depth</pre>
+      <p style="font-weight:700;font-size:0.72rem;margin:4px 0">FOLLOW-UPS:</p>
+      <ul style="font-size:0.71rem">
+        <li>"Count unique solutions only?" → just increment counter, not build board</li>
+        <li>"Solve for N=100?" → not feasible with backtracking; use optimization (branch-and-bound, symmetry)</li>
+        <li>"How is this used at Uber?" → dispatch routing = constraint satisfaction at scale</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- MOCK 5: STAFF LEVEL — MEDIAN OF STREAMS -->
+<div>
+  <div class="section-box" style="border:2px solid #8b5cf6">
+    <div class="section-header" style="background:#f5f3ff;color:#6d28d9">MOCK 5: STAFF LEVEL — FIND MEDIAN FROM DATA STREAM (LC 295)</div>
+    <div class="section-content">
+      <span class="badge badge-hard">🔴 Hard</span>
+      <span class="badge" style="background:#e0e7ff;border:1px solid #818cf8;color:#3730a3">👑 Staff Level</span>
+      <p style="margin:4px 0;font-size:0.74rem">Design a MedianFinder that supports addNum(int num) and findMedian() in O(log N) and O(1) respectively.</p>
+      <div class="dialogue-box" style="font-size:0.73rem;margin:4px 0">
+        <span class="candidate">Candidate:</span> "Two heaps: max-heap for lower half, min-heap for upper half. Invariant: maxHeap.size() == minHeap.size() or maxHeap.size() == minHeap.size()+1. Median = maxHeap.peek() if odd, or average of both tops if even. Staff-level extension: if data is mostly skewed to one side, discuss memory-efficient approaches using reservoir sampling."
+      </div>
+<pre style="font-size:0.67rem">class MedianFinder {
+    // maxHeap holds lower half (negated for max behavior)
+    private final PriorityQueue&lt;Integer&gt; maxHeap = new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+    // minHeap holds upper half
+    private final PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+
+    public void addNum(int num) {
+        maxHeap.offer(num);              // 1. always add to maxHeap first
+        minHeap.offer(maxHeap.poll());   // 2. balance: push max of lower to upper
+        if (maxHeap.size() &lt; minHeap.size())     // 3. maintain size invariant
+            maxHeap.offer(minHeap.poll());
+    }
+    public double findMedian() {
+        if (maxHeap.size() &gt; minHeap.size())
+            return maxHeap.peek();       // odd total: lower half has one more
+        return (maxHeap.peek() + minHeap.peek()) / 2.0; // even: average of midpoints
+    }
+}
+// addNum: O(log N)  findMedian: O(1)  Space: O(N)</pre>
+      <div class="section-box" style="border:1px solid #a5b4fc;margin-top:6px">
+        <div class="section-header" style="background:#e0e7ff;color:#3730a3;font-size:0.72rem">STAFF-LEVEL EXTENSIONS</div>
+        <div class="section-content" style="padding:6px;font-size:0.71rem">
+          <p>1. <strong>99% data within range [0,100]?</strong> → Use integer frequency count array, O(1) add, O(1) median</p>
+          <p>2. <strong>Remove elements?</strong> → Lazy deletion with HashSet of "removed" keys, recalculate on access</p>
+          <p style="margin:0">3. <strong>Sliding window median?</strong> → Two TreeMaps with frequency counts (LC 480)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 12 : COMPANY GUIDES PART 1 -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="p12">
+<div class="header-top">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1>🏢 CH 27: COMPANY GUIDES — GOOGLE · META · AMAZON · MICROSOFT</h1>
+  </div>
+  <span class="page-number">PAGE 12</span>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+<!-- GOOGLE -->
+<div class="section-box" style="border:2px solid #2563eb">
+  <div class="section-header" style="background:#dbeafe;color:#1d4ed8">🔵 GOOGLE — Interview Guide</div>
+  <div class="section-content">
+    <table>
+      <tr><th colspan="2" style="background:#dbeafe;color:#1d4ed8">Google Interview Profile</th></tr>
+      <tr><td><strong>Rounds</strong></td><td>5–6 rounds: 4-5 coding + 1 system design (Sr+)</td></tr>
+      <tr><td><strong>Difficulty</strong></td><td>Hard. Expect unseen variant problems, not LeetCode exact copies</td></tr>
+      <tr><td><strong>Top Patterns</strong></td><td>Graph BFS/DFS, Trees, DP (intervals, 2D), Topo Sort, Segment Tree</td></tr>
+      <tr><td><strong>Style</strong></td><td>Mathematical correctness over speed; expect proofs for greedy choices</td></tr>
+      <tr><td><strong>Communication</strong></td><td>Think out loud constantly; they evaluate process as much as solution</td></tr>
+      <tr><td><strong>Common Mistakes</strong></td><td>Solving easy version without handling edge cases; not proving correctness</td></tr>
+      <tr><td><strong>Preparation</strong></td><td>NeetCode Hard problems; graph variants; BST edge cases; practice verbal explanation</td></tr>
+      <tr><td><strong>Time Management</strong></td><td>40min coding + 5min follow-up; never run over without checking time</td></tr>
+    </table>
+    <div class="aha-box" style="margin-top:6px;font-size:0.71rem">💡 Google cares deeply about correctness and mathematical rigor. If you choose greedy, you should be able to explain the exchange argument.</div>
+  </div>
+</div>
+
+<!-- META -->
+<div class="section-box" style="border:2px solid #7c3aed">
+  <div class="section-header" style="background:#ede9fe;color:#6d28d9">🟣 META — Interview Guide</div>
+  <div class="section-content">
+    <table>
+      <tr><th colspan="2" style="background:#ede9fe;color:#6d28d9">Meta Interview Profile</th></tr>
+      <tr><td><strong>Rounds</strong></td><td>2 coding rounds (45 min each) — often 2 problems per round!</td></tr>
+      <tr><td><strong>Difficulty</strong></td><td>Medium-Hard but known problems; speed is crucial</td></tr>
+      <tr><td><strong>Top Patterns</strong></td><td>Arrays, Strings, Two Pointers, BFS/DFS, Trees, HashMap, Sliding Window</td></tr>
+      <tr><td><strong>Style</strong></td><td>Velocity. They expect clean, bug-free code quickly (aim 15 min per problem)</td></tr>
+      <tr><td><strong>Communication</strong></td><td>Brief clarification, then code fast. Less conversation than Google.</td></tr>
+      <tr><td><strong>Common Mistakes</strong></td><td>Too much talking; running out of time on second problem</td></tr>
+      <tr><td><strong>Preparation</strong></td><td>Blind 75 + Meta-tagged LeetCode; practice writing clean code in &lt;15 min</td></tr>
+      <tr><td><strong>Behavioral</strong></td><td>Meta Leadership Principles: Move fast, Be bold, Focus on impact</td></tr>
+    </table>
+    <div class="aha-box" style="margin-top:6px;font-size:0.71rem">💡 Meta = speed + accuracy. Practice coding common patterns in under 12 minutes, bug-free.</div>
+  </div>
+</div>
+
+<!-- AMAZON -->
+<div class="section-box" style="border:2px solid #f97316">
+  <div class="section-header" style="background:#ffedd5;color:#c2410c">🟠 AMAZON — Interview Guide</div>
+  <div class="section-content">
+    <table>
+      <tr><th colspan="2" style="background:#ffedd5;color:#c2410c">Amazon Interview Profile</th></tr>
+      <tr><td><strong>Rounds</strong></td><td>4–5 rounds: coding + LP behavioral in every single round</td></tr>
+      <tr><td><strong>Difficulty</strong></td><td>Medium. Breadth over depth — practical DS problems</td></tr>
+      <tr><td><strong>Top Patterns</strong></td><td>Heap/PQ, HashMap, BFS/DFS, Sliding Window, Design (LRU, LFU)</td></tr>
+      <tr><td><strong>Style</strong></td><td>LP integration every round; always have STAR stories ready</td></tr>
+      <tr><td><strong>Communication</strong></td><td>Frame technical decisions using Leadership Principles language</td></tr>
+      <tr><td><strong>Common Mistakes</strong></td><td>Ignoring LP questions; not connecting code to real-world impact</td></tr>
+      <tr><td><strong>Preparation</strong></td><td>Map all 16 LPs to your STAR stories; practice out loud</td></tr>
+      <tr><td><strong>LP Focus</strong></td><td>Bias for Action, Customer Obsession, Dive Deep, Ownership, Frugality</td></tr>
+    </table>
+    <div class="aha-box" style="margin-top:6px;font-size:0.71rem">💡 Amazon = Coding + Storytelling. Prepare 3-5 rich STAR stories that map to multiple LPs.</div>
+  </div>
+</div>
+
+<!-- MICROSOFT -->
+<div class="section-box" style="border:2px solid #059669">
+  <div class="section-header" style="background:#d1fae5;color:#047857">🟢 MICROSOFT — Interview Guide</div>
+  <div class="section-content">
+    <table>
+      <tr><th colspan="2" style="background:#d1fae5;color:#047857">Microsoft Interview Profile</th></tr>
+      <tr><td><strong>Rounds</strong></td><td>4–5 rounds: coding + behavioral + hiring manager final</td></tr>
+      <tr><td><strong>Difficulty</strong></td><td>Easy-Medium. Strong emphasis on code clarity and testing</td></tr>
+      <tr><td><strong>Top Patterns</strong></td><td>Linked List, Trees (BST), Stack, Arrays, String, Basic DP</td></tr>
+      <tr><td><strong>Style</strong></td><td>Code quality + verbal explanation + "How would you test this?"</td></tr>
+      <tr><td><strong>Communication</strong></td><td>Collaborative; interviewer may guide you more than at Google</td></tr>
+      <tr><td><strong>Common Mistakes</strong></td><td>Not discussing testing strategy; ignoring null edge cases</td></tr>
+      <tr><td><strong>Preparation</strong></td><td>LeetCode Easy-Medium; practice explaining code after writing</td></tr>
+      <tr><td><strong>Special</strong></td><td>"How would you test this function?" — always prepare an answer</td></tr>
+    </table>
+    <div class="aha-box" style="margin-top:6px;font-size:0.71rem">💡 Microsoft rewards thoroughness. Voluntarily discuss testing strategy and null handling.</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 13 : COMPANY GUIDES PART 2 -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="p13">
+<div class="header-top">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1>🏢 COMPANY GUIDES — UBER · STRIPE · NETFLIX · DATADOG · AIRBNB</h1>
+  </div>
+  <span class="page-number">PAGE 13</span>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+
+<div class="section-box" style="border:2px solid #0284c7">
+  <div class="section-header" style="background:#e0f2fe;color:#0369a1">🚗 UBER</div>
+  <div class="section-content">
+    <table>
+      <tr><td><strong>Rounds</strong></td><td>4 rounds: coding, SD, behavioral, HM</td></tr>
+      <tr><td><strong>Top Patterns</strong></td><td>Graphs (Dijkstra!), Geospatial, Concurrency, Heap</td></tr>
+      <tr><td><strong>Style</strong></td><td>Practical, production-ready; expect large N problems</td></tr>
+      <tr><td><strong>Special</strong></td><td>Geospatial indexing, real-time matching algorithms</td></tr>
+      <tr><td><strong>Prep Tip</strong></td><td>Master Dijkstra, geohash concepts, surge pricing algorithms</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #6366f1">
+  <div class="section-header" style="background:#e0e7ff;color:#3730a3">💳 STRIPE</div>
+  <div class="section-content">
+    <table>
+      <tr><td><strong>Rounds</strong></td><td>4 rounds: coding in real IDE (not CoderPad)</td></tr>
+      <tr><td><strong>Top Patterns</strong></td><td>Practical parsing, String manipulation, System design</td></tr>
+      <tr><td><strong>Style</strong></td><td>Real IDE + real tests; expected to write unit tests!</td></tr>
+      <tr><td><strong>Special</strong></td><td>JSON parsing, rate limiting, idempotency key design</td></tr>
+      <tr><td><strong>Prep Tip</strong></td><td>Practice writing clean, testable Java in your IDE, not online editors</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #dc2626">
+  <div class="section-header" style="background:#fee2e2;color:#b91c1c">📺 NETFLIX</div>
+  <div class="section-content">
+    <table>
+      <tr><td><strong>Rounds</strong></td><td>3-4 rounds; strong system design focus at senior</td></tr>
+      <tr><td><strong>Top Patterns</strong></td><td>Data pipeline, Streaming algorithms, LRU/Cache design</td></tr>
+      <tr><td><strong>Style</strong></td><td>"Freedom and Responsibility" culture; ownership is key</td></tr>
+      <tr><td><strong>Special</strong></td><td>Chaos engineering mindset; resilience + failure handling</td></tr>
+      <tr><td><strong>Prep Tip</strong></td><td>Read Netflix Tech Blog; understand their chaos engineering</td></tr>
+    </table>
+  </div>
+</div>
+
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+
+<div class="section-box" style="border:2px solid #ea580c">
+  <div class="section-header" style="background:#ffedd5;color:#c2410c">📊 DATADOG</div>
+  <div class="section-content">
+    <table>
+      <tr><td><strong>Rounds</strong></td><td>4 rounds: coding + metrics system design</td></tr>
+      <tr><td><strong>Top Patterns</strong></td><td>Sliding Window, Time Series, Heap, HashMap, Rate limiting</td></tr>
+      <tr><td><strong>Style</strong></td><td>Observability-focused; expect questions about metrics at scale</td></tr>
+      <tr><td><strong>Special</strong></td><td>Moving average, percentile calculation (P99), anomaly detection</td></tr>
+      <tr><td><strong>Prep Tip</strong></td><td>Understand time-series data structures, circular buffers, rolling windows</td></tr>
+    </table>
+    <div class="aha-box" style="font-size:0.71rem">💡 Datadog loves questions about "how would you compute P99 latency efficiently from a stream?"</div>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #db2777">
+  <div class="section-header" style="background:#fce7f3;color:#9d174d">🏠 AIRBNB</div>
+  <div class="section-content">
+    <table>
+      <tr><td><strong>Rounds</strong></td><td>4 rounds: coding + infra design + cross-functional interview</td></tr>
+      <tr><td><strong>Top Patterns</strong></td><td>Intervals, Calendar scheduling, Booking availability, Graph traversal</td></tr>
+      <tr><td><strong>Style</strong></td><td>Practical domain-specific questions (booking, calendar, pricing)</td></tr>
+      <tr><td><strong>Special</strong></td><td>Merge intervals with availability calendars; conflict detection</td></tr>
+      <tr><td><strong>Prep Tip</strong></td><td>Master interval problems; practice booking system design</td></tr>
+    </table>
+    <div class="aha-box" style="font-size:0.71rem">💡 Airbnb loves: "Given N bookings, find all available time slots between check-ins."</div>
+  </div>
+</div>
+
+</div>
+
+<!-- COMPANY COMPARISON MATRIX -->
+<div class="section-box" style="border:2px solid #1e3a8a">
+  <div class="section-header" style="background:#dbeafe;color:#1e3a8a">COMPANY COMPARISON MATRIX</div>
+  <div class="section-content" style="padding:8px">
+    <table>
+      <tr><th>Company</th><th>Speed</th><th>Difficulty</th><th>Behavioral</th><th>System Design</th><th>Top Skill to Practice</th></tr>
+      <tr><td>🔵 Google</td><td>Medium</td><td>⭐⭐⭐⭐⭐</td><td>Moderate</td><td>Sr+ required</td><td>Graph algorithms, algorithmic correctness</td></tr>
+      <tr><td>🟣 Meta</td><td>🔥 Fast</td><td>⭐⭐⭐⭐</td><td>Light</td><td>Sr+ required</td><td>Speed + accuracy, no time waste</td></tr>
+      <tr><td>🟠 Amazon</td><td>Medium</td><td>⭐⭐⭐</td><td>🔥 Heavy (LP)</td><td>Sr+ required</td><td>STAR stories + practical DS</td></tr>
+      <tr><td>🟢 Microsoft</td><td>Relaxed</td><td>⭐⭐⭐</td><td>Moderate</td><td>Optional</td><td>Code quality + testing strategy</td></tr>
+      <tr><td>🚗 Uber</td><td>Medium</td><td>⭐⭐⭐⭐</td><td>Light</td><td>Sr+ required</td><td>Dijkstra, spatial indexing</td></tr>
+      <tr><td>💳 Stripe</td><td>Medium</td><td>⭐⭐⭐</td><td>Moderate</td><td>Sr required</td><td>Clean code + unit testing in IDE</td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 14 : REVISION HANDBOOK -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="p14">
+<div class="header-top">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1>📜 CH 28: REVISION HANDBOOK + STUDY PLANS</h1>
+    <span class="subtitle">Pattern matrix • Blind 75 map • NeetCode 150 map • Last month/week/day plans</span>
+  </div>
+  <span class="page-number">PAGE 14</span>
+</div>
+
+<div class="section-box" style="border:2px solid #1e3a8a">
+  <div class="section-header" style="background:#dbeafe;color:#1e3a8a">ULTIMATE COMPLEXITY REVISION MATRIX — 20 CORE PATTERNS</div>
+  <div class="section-content" style="padding:8px">
+    <table>
+      <tr><th>Pattern</th><th>Time</th><th>Space</th><th>DS Used</th><th>When to Use</th><th>Top FAANG Problems</th></tr>
+      <tr><td><strong>Two Pointers</strong></td><td>O(N)</td><td>O(1)</td><td>Two int pointers</td><td>Sorted array, pair/triple sum</td><td>LC 15, 11, 42, 125</td></tr>
+      <tr><td><strong>Sliding Window</strong></td><td>O(N)</td><td>O(1)/O(K)</td><td>int[128] freq, l/r</td><td>Contiguous subarray/string</td><td>LC 3, 76, 424, 239</td></tr>
+      <tr><td><strong>Binary Search</strong></td><td>O(log N)</td><td>O(1)</td><td>lo, hi, mid</td><td>Sorted space or BS on answer</td><td>LC 33, 875, 410, 4</td></tr>
+      <tr><td><strong>Prefix Sum</strong></td><td>O(N)</td><td>O(N)</td><td>int[] prefix + HashMap</td><td>Subarray sum queries</td><td>LC 560, 525, 1248</td></tr>
+      <tr><td><strong>Monotonic Stack</strong></td><td>O(N)</td><td>O(N)</td><td>Deque&lt;Integer&gt;</td><td>Next greater/smaller element</td><td>LC 739, 84, 85, 42</td></tr>
+      <tr><td><strong>Top-K Heap</strong></td><td>O(N log K)</td><td>O(K)</td><td>PriorityQueue</td><td>K largest/smallest/frequent</td><td>LC 347, 295, 215, 973</td></tr>
+      <tr><td><strong>Tree DFS</strong></td><td>O(N)</td><td>O(H)</td><td>Call stack</td><td>Path, depth, subtree problems</td><td>LC 104, 236, 124, 543</td></tr>
+      <tr><td><strong>Tree BFS</strong></td><td>O(N)</td><td>O(W)</td><td>Queue&lt;TreeNode&gt;</td><td>Level-order, row traversal</td><td>LC 102, 199, 103</td></tr>
+      <tr><td><strong>Graph DFS</strong></td><td>O(V+E)</td><td>O(V)</td><td>boolean[] visited</td><td>Flood fill, components</td><td>LC 200, 130, 695, 417</td></tr>
+      <tr><td><strong>Graph BFS</strong></td><td>O(V+E)</td><td>O(V)</td><td>Queue + visited</td><td>Shortest path unweighted</td><td>LC 994, 1162, 127</td></tr>
+      <tr><td><strong>Topo Sort</strong></td><td>O(V+E)</td><td>O(V)</td><td>int[] indegree + Queue</td><td>DAG ordering, dependencies</td><td>LC 207, 210, 269</td></tr>
+      <tr><td><strong>Dijkstra</strong></td><td>O(E log V)</td><td>O(V+E)</td><td>PriorityQueue&lt;int[]&gt;</td><td>Shortest path weighted</td><td>LC 743, 1514, 787</td></tr>
+      <tr><td><strong>Union-Find</strong></td><td>O(α(N))</td><td>O(N)</td><td>int[] parent, rank</td><td>Grouping, cycle detect</td><td>LC 547, 684, 1319</td></tr>
+      <tr><td><strong>1D DP</strong></td><td>O(N)</td><td>O(N)→O(1)</td><td>int[] dp</td><td>Min cost, count ways, LIS</td><td>LC 70, 198, 300, 322</td></tr>
+      <tr><td><strong>2D DP</strong></td><td>O(NM)</td><td>O(NM)→O(M)</td><td>int[][] dp</td><td>Grid, string match, knapsack</td><td>LC 62, 1143, 72, 416</td></tr>
+      <tr><td><strong>Backtracking</strong></td><td>O(2ᴺ)/O(N!)</td><td>O(N)</td><td>List path + recursion</td><td>All combos, permutations</td><td>LC 78, 39, 46, 51</td></tr>
+      <tr><td><strong>Greedy + Sort</strong></td><td>O(N log N)</td><td>O(1)/O(N)</td><td>Arrays.sort</td><td>Optimal local → global</td><td>LC 55, 134, 621, 406</td></tr>
+      <tr><td><strong>Intervals</strong></td><td>O(N log N)</td><td>O(N)</td><td>Sort by start + scan</td><td>Merge, insert, overlap</td><td>LC 56, 57, 435, 253</td></tr>
+      <tr><td><strong>Trie</strong></td><td>O(L)</td><td>O(N·L)</td><td>TrieNode[26]</td><td>Prefix, word search, autocomplete</td><td>LC 208, 211, 212, 421</td></tr>
+      <tr><td><strong>Bit Manipulation</strong></td><td>O(1)/O(N)</td><td>O(1)</td><td>int bitmask</td><td>XOR tricks, subsets, masking</td><td>LC 136, 191, 338, 78</td></tr>
+    </table>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px">
+
+<div class="section-box" style="border:2px solid #16a34a">
+  <div class="section-header" style="background:#dcfce7;color:#15803d">LAST MONTH PLAN (4 WEEKS)</div>
+  <div class="section-content">
+    <table>
+      <tr><th>Week</th><th>Focus</th><th>Problems/Day</th></tr>
+      <tr><td>Week 1</td><td>Arrays, Strings, HashMap, Two Pointers, Sliding Window</td><td>3 Medium</td></tr>
+      <tr><td>Week 2</td><td>Trees, BST, Heap, Binary Search, Linked List</td><td>3 Medium</td></tr>
+      <tr><td>Week 3</td><td>Graphs, DP (1D/2D), Backtracking, Greedy, Intervals</td><td>2 Medium + 1 Hard</td></tr>
+      <tr><td>Week 4</td><td>Mock interviews, revision, weak areas, system design</td><td>Full mocks</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #f97316">
+  <div class="section-header" style="background:#ffedd5;color:#c2410c">LAST WEEK PLAN (7 DAYS)</div>
+  <div class="section-content">
+    <table>
+      <tr><th>Day</th><th>Focus</th></tr>
+      <tr><td>Day 1</td><td>Arrays, HashMap, Two Pointers top 10</td></tr>
+      <tr><td>Day 2</td><td>Trees: DFS + BFS + BST top 10</td></tr>
+      <tr><td>Day 3</td><td>Graphs: BFS/DFS/Topo/Dijkstra top 10</td></tr>
+      <tr><td>Day 4</td><td>DP: 1D, 2D, Knapsack top 10</td></tr>
+      <tr><td>Day 5</td><td>Heap, Binary Search, Backtracking top 10</td></tr>
+      <tr><td>Day 6</td><td>Full mock interview (timed, 45 min)</td></tr>
+      <tr><td>Day 7</td><td>Review mistakes, cheat sheets only — rest!</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #7c3aed">
+  <div class="section-header" style="background:#ede9fe;color:#6d28d9">LAST DAY PLAN (24 HRS)</div>
+  <div class="section-content">
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Review pattern cheat sheet — 30 min</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Review complexity table above</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Practice 3 favourite templates from memory</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Review one mock interview out loud</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Prepare 3 LP stories for Amazon/behavioral</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Sleep 8 hours — seriously!</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Light exercise in the morning</span></div>
+    <div class="checklist-item"><span class="check-no">❌</span><span>Do NOT solve new hard problems</span></div>
+    <div class="checklist-item"><span class="check-no">❌</span><span>Do NOT stay up late "just in case"</span></div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 15 : ULTIMATE INTERVIEW PLAYBOOK + OFFER NEGOTIATION -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="p15">
+<div class="header-top">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1>💎 CH 29: ULTIMATE INTERVIEW PLAYBOOK + OFFER NEGOTIATION</h1>
+    <span class="subtitle">Before • During • After • If stuck • Offer strategy</span>
+  </div>
+  <span class="page-number">PAGE 15</span>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+
+<div class="section-box" style="border:2px solid #059669">
+  <div class="section-header" style="background:#d1fae5;color:#047857">✅ BEFORE INTERVIEW CHECKLIST</div>
+  <div class="section-content">
+    <p style="font-weight:700;color:#047857">Night Before:</p>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Review pattern cheat sheet (20 min max)</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Prepare IDE / CoderPad snippet (import java.util.*;)</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Review your STAR stories for LP questions</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Sleep 8 hours — peak cognitive performance requires sleep</span></div>
+    <div class="checklist-item"><span class="check-no">❌</span><span>Don't solve new hard problems night before</span></div>
+    <p style="font-weight:700;color:#047857;margin-top:8px">Morning Of:</p>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Light exercise (30 min walk)</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Good breakfast, no caffeine overload</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Join 5 min early, test audio/video</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Have water and scratch paper ready</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Remind yourself: this is a conversation, not an exam</span></div>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #2563eb">
+  <div class="section-header" style="background:#dbeafe;color:#1d4ed8">💻 DURING INTERVIEW PROTOCOL</div>
+  <div class="section-content">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <div class="flow-step" style="background:#dbeafe;border-color:#2563eb;color:#1e40af">0-3 min: Read problem. NEVER code yet.</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">Ask clarifying questions about constraints</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">Work through a small concrete example</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">State brute force + why it's suboptimal</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">Name optimal approach + get agreement</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="background:#dbeafe;border-color:#2563eb;color:#1e40af">Code: Guard → Helper stubs → Logic → Return</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">Dry run your code on the example</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">State complexity (time + space) + edge cases</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="background:#dcfce7;border-color:#22c55e;color:#15803d">Volunteer follow-up: "A harder version would be..."</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #ef4444">
+  <div class="section-header" style="background:#fee2e2;color:#b91c1c">🆘 IF COMPLETELY STUCK</div>
+  <div class="section-content">
+    <div class="dialogue-box">
+      <span class="candidate">Say out loud:</span> "Let me think step by step about what I know..."
+    </div>
+    <div style="font-size:0.74rem;margin:6px 0">
+      <p><strong>Strategy 1:</strong> Solve a simpler version — "What if N=1?"</p>
+      <p><strong>Strategy 2:</strong> Draw a concrete example — visualize the state machine</p>
+      <p><strong>Strategy 3:</strong> Try brute force out loud — it may reveal the optimization</p>
+      <p><strong>Strategy 4:</strong> "I'm thinking of X or Y — does either feel right to you?"</p>
+      <p><strong>Strategy 5:</strong> "What if I sort first / use a HashMap / use a queue?"</p>
+    </div>
+    <div class="aha-box">💡 <strong>Interviewers can HELP you if you verbalize where you're stuck!</strong> Silent struggling = unsalvageable.</div>
+    <p style="font-weight:700;margin:6px 0">If you take a hint:</p>
+    <div class="dialogue-box">
+      <span class="candidate">Say:</span> "That's a great point — let me think about how that changes the approach. If I use [hint], then I can avoid [bottleneck] because..."
+    </div>
+    <p style="font-size:0.72rem;color:#64748b">Taking a hint gracefully = demonstrates intellectual humility = good signal!</p>
+  </div>
+</div>
+
+</div>
+
+<!-- OFFER NEGOTIATION -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+<div class="section-box" style="border:2px solid #7c3aed">
+  <div class="section-header" style="background:#ede9fe;color:#6d28d9">💰 OFFER NEGOTIATION — 4 GOLDEN LAWS</div>
+  <div class="section-content">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <div style="background:#f5f3ff;padding:6px 8px;border-radius:4px;border-left:3px solid #7c3aed;font-size:0.73rem">
+        <strong>Law 1: Never Give First Number</strong><br>
+        "I'd love to understand the full compensation structure first — what's the range for this level?"
+      </div>
+      <div style="background:#f5f3ff;padding:6px 8px;border-radius:4px;border-left:3px solid #7c3aed;font-size:0.73rem">
+        <strong>Law 2: Leverage Competing Offers</strong><br>
+        "I have an offer from [Company] for $X TC. I'm more excited about [your company] — can you match or improve?"
+      </div>
+      <div style="background:#f5f3ff;padding:6px 8px;border-radius:4px;border-left:3px solid #7c3aed;font-size:0.73rem">
+        <strong>Law 3: Negotiate TC Not Salary</strong><br>
+        Focus on RSU cliff, vesting schedule, sign-on bonus — base salary cap is harder to move than equity/sign-on.
+      </div>
+      <div style="background:#f5f3ff;padding:6px 8px;border-radius:4px;border-left:3px solid #7c3aed;font-size:0.73rem">
+        <strong>Law 4: Anchor with Enthusiasm</strong><br>
+        "I'm very excited about this role. If we can reach $X TC total, I'll sign immediately — I'm not shopping around."
+      </div>
+    </div>
+    <div class="aha-box" style="margin-top:6px;font-size:0.71rem">💡 <strong>Script:</strong> "I'm very excited about the opportunity. The offer is $Y — I was expecting around $X based on my research and the competing offer. Is there any flexibility in the RSU grant?"</div>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #16a34a">
+  <div class="section-header" style="background:#dcfce7;color:#15803d">✅ FINAL INTERVIEW MASTER CHECKLIST</div>
+  <div class="section-content">
+    <p style="font-weight:700;color:#047857;margin:0 0 4px">Before coding (must do all 5):</p>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Clarify input type, constraints, N range</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Work through a concrete example</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Name brute force + explain why it's slow</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Pitch optimal approach + get agreement</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>State time/space complexity before coding</span></div>
+    <p style="font-weight:700;color:#047857;margin:6px 0 4px">While coding (must do all 5):</p>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Guard clause at top (null, empty check)</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Descriptive variable names throughout</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Think out loud while writing every loop</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Extract helpers for complex sub-problems</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Use Integer.compare() in all comparators</span></div>
+    <p style="font-weight:700;color:#047857;margin:6px 0 4px">After coding (must do all 5):</p>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Dry run with your own concrete example</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Test edge cases: empty, single, duplicates</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>State final time and space complexity</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Volunteer follow-up extension unprompted</span></div>
+    <div class="checklist-item"><span class="check-yes">✔</span><span>Ask a thoughtful question about the team</span></div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 16 : FAANG LEARNING FRAMEWORK (OUR UNIQUE TEACHING STYLE) -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="p16">
+<div class="header-top">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1>🧠 THE FAANG LEARNING FRAMEWORK — OUR UNIQUE TEACHING SYSTEM</h1>
+    <span class="subtitle">13 phases • Mentor style principles • Signature workflow • Template-first learning</span>
+  </div>
+  <span class="page-number">PAGE 16</span>
+</div>
+
+<div style="display:grid;grid-template-columns:1.4fr 1fr;gap:12px;margin-bottom:12px">
+
+<div class="section-box" style="border:2px solid #2563eb">
+  <div class="section-header" style="background:#dbeafe;color:#1d4ed8">THE 13-PHASE FAANG LEARNING FRAMEWORK (Applied to EVERY Topic)</div>
+  <div class="section-content" style="padding:8px">
+    <table>
+      <tr><th>Phase</th><th>Name</th><th>Goal</th><th>Key Activity</th></tr>
+      <tr style="background:#f0fdf4"><td><strong>Phase 0</strong></td><td>🎯 Mindset</td><td>WHY does this exist?</td><td>Why do companies ask this? What does it solve? Interview frequency?</td></tr>
+      <tr><td><strong>Phase 1</strong></td><td>💡 Intuition First</td><td>Build the feeling</td><td>Story → Real-world analogy → Draw it → Build from scratch → AHA moment</td></tr>
+      <tr style="background:#f0fdf4"><td><strong>Phase 2</strong></td><td>📖 Core Understanding</td><td>Lock in definitions</td><td>Formal definitions → Properties → Rules → Edge cases → Common confusions</td></tr>
+      <tr><td><strong>Phase 3</strong></td><td>🎯 Pattern Recognition</td><td>Brain learns to spot it</td><td>Recognition keywords → When NOT to use → Similar pattern comparison</td></tr>
+      <tr style="background:#f0fdf4"><td><strong>Phase 4</strong></td><td>🔨 Build Algorithm Together</td><td>Derive, don't memorize</td><td>Brute Force → Identify bottleneck → Optimize step by step → Why it works</td></tr>
+      <tr><td><strong>Phase 5</strong></td><td>⚙️ Template Building</td><td>Create reusable code</td><td>Generic template → Java template → Interview skeleton → Memory tricks</td></tr>
+      <tr style="background:#f0fdf4"><td><strong>Phase 6</strong></td><td>▶️ Dry Run</td><td>See variables move</td><td>Small example → Medium example → Visual trace → State change table</td></tr>
+      <tr><td><strong>Phase 7</strong></td><td>💻 Coding Together</td><td>One line at a time</td><td>Explain every variable → Every loop → Every condition → Complete Java code</td></tr>
+      <tr style="background:#f0fdf4"><td><strong>Phase 8</strong></td><td>📊 Complexity Thinking</td><td>Analyze rigorously</td><td>Time O() → Space O() → Why? → Can it be improved? → Trade-offs</td></tr>
+      <tr><td><strong>Phase 9</strong></td><td>🐛 Debugging Mindset</td><td>Find and fix bugs</td><td>Common bugs → Edge cases → Dry-run mistakes → Debug checklist</td></tr>
+      <tr style="background:#f0fdf4"><td><strong>Phase 10</strong></td><td>🔄 Reverse Thinking</td><td>Handle follow-ups</td><td>Constraint changes → Solution changes → Alternative approaches → Why not X?</td></tr>
+      <tr><td><strong>Phase 11</strong></td><td>📈 Pattern Expansion</td><td>Generalize mastery</td><td>Easy → Medium → Hard → Similar pattern → Mixed pattern problems</td></tr>
+      <tr style="background:#f0fdf4"><td><strong>Phase 12</strong></td><td>✅ Mastery</td><td>Own it completely</td><td>Explain without notes → Draw from memory → Write template → Teach it back</td></tr>
+    </table>
+  </div>
+</div>
+
+<div>
+<div class="section-box" style="border:2px solid #059669">
+  <div class="section-header" style="background:#d1fae5;color:#047857">🧠 OUR MENTOR STYLE PRINCIPLES</div>
+  <div class="section-content">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
+      <div style="background:#f0fdf4;padding:5px 7px;border-radius:4px;border-left:3px solid #22c55e;font-size:0.72rem">🚫 <strong>Never memorize</strong> — Derive the algorithm from first principles</div>
+      <div style="background:#f0fdf4;padding:5px 7px;border-radius:4px;border-left:3px solid #22c55e;font-size:0.72rem">🚫 <strong>Never jump to code</strong> — Build intuition first, always</div>
+      <div style="background:#f0fdf4;padding:5px 7px;border-radius:4px;border-left:3px solid #22c55e;font-size:0.72rem">📖 <strong>Every algorithm has a story</strong> — Dijkstra as GPS, BFS as ripple in water</div>
+      <div style="background:#f0fdf4;padding:5px 7px;border-radius:4px;border-left:3px solid #22c55e;font-size:0.72rem">💡 <strong>Every topic has ONE Aha Moment</strong> — the mental shift that unlocks understanding</div>
+      <div style="background:#f0fdf4;padding:5px 7px;border-radius:4px;border-left:3px solid #22c55e;font-size:0.72rem">✏️ <strong>Draw before coding</strong> — visualize nodes, pointers, windows</div>
+      <div style="background:#f0fdf4;padding:5px 7px;border-radius:4px;border-left:3px solid #22c55e;font-size:0.72rem">🔨 <strong>Build brute force first</strong> — understand the problem before optimizing</div>
+      <div style="background:#f0fdf4;padding:5px 7px;border-radius:4px;border-left:3px solid #22c55e;font-size:0.72rem">📐 <strong>Template-first</strong> — Intuition → Algorithm → Template → Java code</div>
+      <div style="background:#f0fdf4;padding:5px 7px;border-radius:4px;border-left:3px solid #22c55e;font-size:0.72rem">🎓 <strong>Master the pattern, not the problem</strong> — solve 100 new problems from 15 templates</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #7c3aed;margin-top:12px">
+  <div class="section-header" style="background:#ede9fe;color:#6d28d9">🔄 OUR SIGNATURE WORKFLOW</div>
+  <div class="section-content">
+    <div style="display:flex;flex-direction:column;gap:3px">
+      <div class="flow-step" style="background:#ede9fe;border-color:#7c3aed;color:#5b21b6">📖 Read Problem Carefully</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">🔍 Find Clues (Keywords + N constraints)</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">🎯 Recognize Pattern Family</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="background:#fef9c3;border-color:#ca8a04">📋 Recall Generic Template</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">✂️ Customize Template for This Problem</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">▶️ Dry Run with Small Example</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="background:#dbeafe;border-color:#2563eb">☕ Write Clean Java Code</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">📊 Analyze Time + Space Complexity</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">🧪 Test Edge Cases</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="background:#dcfce7;border-color:#22c55e;color:#15803d">🚀 Optimize + Follow-ups</div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+
+<!-- Template Library Summary -->
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+
+<div class="section-box" style="border:2px solid #059669">
+  <div class="section-header" style="background:#d1fae5;color:#047857">🌳 TREE TEMPLATES (8 Total)</div>
+  <div class="section-content">
+    <table style="font-size:0.71rem">
+      <tr><th>#</th><th>Template</th><th>Key Insight</th></tr>
+      <tr><td>T1</td><td><strong>DFS Preorder</strong></td><td>Root first → Copy/Serialize</td></tr>
+      <tr><td>T2</td><td><strong>DFS Inorder</strong></td><td>Left→Root→Right → BST sorted order</td></tr>
+      <tr><td>T3</td><td><strong>DFS Postorder</strong></td><td>Leaves-up → Height/Diameter</td></tr>
+      <tr><td>T4</td><td><strong>BFS Level Order</strong></td><td>Freeze level size, Queue</td></tr>
+      <tr><td>T5</td><td><strong>Bottom-Up Height</strong></td><td>1 + max(L, R)</td></tr>
+      <tr><td>T6</td><td><strong>BST Search/Validate</strong></td><td>min/max bounds recursion</td></tr>
+      <tr><td>T7</td><td><strong>LCA</strong></td><td>Return node if == p or q</td></tr>
+      <tr><td>T8</td><td><strong>Serialize/Deserialize</strong></td><td>Preorder + null markers</td></tr>
+    </table>
+    <div class="aha-box" style="font-size:0.7rem;margin-top:4px">💡 Teaching flow: Draw → Parent/Child → Recursive Faith → Dry Run Stack → Template → Customize</div>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #2563eb">
+  <div class="section-header" style="background:#dbeafe;color:#1d4ed8">🌐 GRAPH TEMPLATES (11 Total)</div>
+  <div class="section-content">
+    <table style="font-size:0.71rem">
+      <tr><th>#</th><th>Template</th><th>Key DS</th></tr>
+      <tr><td>G1</td><td><strong>Build Undirected</strong></td><td>List&lt;List&lt;Integer&gt;&gt;</td></tr>
+      <tr><td>G2</td><td><strong>Build Weighted</strong></td><td>List&lt;List&lt;int[]&gt;&gt;</td></tr>
+      <tr><td>G3</td><td><strong>DFS (recursive)</strong></td><td>boolean[] visited</td></tr>
+      <tr><td>G4</td><td><strong>BFS shortest path</strong></td><td>Queue + dist[]</td></tr>
+      <tr><td>G5</td><td><strong>Multi-Source BFS</strong></td><td>All sources in Queue init</td></tr>
+      <tr><td>G6</td><td><strong>Grid DFS</strong></td><td>DIR4 + isValid()</td></tr>
+      <tr><td>G7</td><td><strong>Grid BFS</strong></td><td>Queue + visited[][]</td></tr>
+      <tr><td>G8</td><td><strong>Topological Sort</strong></td><td>indegree[] + Queue</td></tr>
+      <tr><td>G9</td><td><strong>Union-Find (DSU)</strong></td><td>parent[] + rank[]</td></tr>
+      <tr><td>G10</td><td><strong>Dijkstra</strong></td><td>PQ&lt;int[]&gt; + dist[]</td></tr>
+      <tr><td>G11</td><td><strong>Kruskal MST</strong></td><td>Sort edges + DSU</td></tr>
+    </table>
+    <div class="aha-box" style="font-size:0.7rem;margin-top:4px">💡 AHA: Grids = Graphs! Trees ⊂ Graphs! Most graph problems hide as word problems.</div>
+  </div>
+</div>
+
+<div class="section-box" style="border:2px solid #db2777">
+  <div class="section-header" style="background:#fce7f3;color:#9d174d">🌲 TRIE TEMPLATES (9 Total)</div>
+  <div class="section-content">
+    <table style="font-size:0.71rem">
+      <tr><th>#</th><th>Template</th><th>Key Insight</th></tr>
+      <tr><td>Tr1</td><td><strong>TrieNode Design</strong></td><td>TrieNode[26] + isEnd boolean</td></tr>
+      <tr><td>Tr2</td><td><strong>Insert</strong></td><td>Create nodes char by char</td></tr>
+      <tr><td>Tr3</td><td><strong>Search (exact)</strong></td><td>Traverse + check isEnd</td></tr>
+      <tr><td>Tr4</td><td><strong>StartsWith</strong></td><td>Traverse + return true (no isEnd check)</td></tr>
+      <tr><td>Tr5</td><td><strong>Prefix Count</strong></td><td>countChildren at prefix end</td></tr>
+      <tr><td>Tr6</td><td><strong>Word Search II</strong></td><td>Trie + DFS board backtrack</td></tr>
+      <tr><td>Tr7</td><td><strong>MapSum</strong></td><td>TrieNode with int val</td></tr>
+      <tr><td>Tr8</td><td><strong>Max XOR (Binary Trie)</strong></td><td>Bit-by-bit 31→0</td></tr>
+      <tr><td>Tr9</td><td><strong>Delete</strong></td><td>Postorder cleanup</td></tr>
+    </table>
+    <div class="aha-box" style="font-size:0.7rem;margin-top:4px">💡 Teaching flow: String → Characters → One char = One node → Build path → End marker → Insert → Search</div>
+  </div>
+</div>
+
+</div>
+
+<div class="rule-box" style="margin-top:12px">🎯 <strong>THE PHILOSOPHY:</strong> Master the 13-phase FAANG Learning Framework for every pattern. Derive the algorithm from first principles. Build the template. Write the code. The goal is to solve <em>any</em> unseen problem — not to memorize 300 solutions. <strong>Master the pattern. Master any problem.</strong></div>
+</div>
+
+</body>
+</html>

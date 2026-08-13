@@ -1,0 +1,329 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1><span style="background-color: #312e81; color: white; padding: 5px 15px; border-radius: 5px; margin-right: 15px;">3</span> TREE RECURSION TEMPLATE</h1>
+        </div>
+        <div style="text-align: right;">
+            <div class="page-number"></div>
+        </div>
+    </div>
+    
+    <div style="text-align: center; margin-bottom: 20px; font-weight: bold;">
+        &mdash;&mdash;&mdash;&mdash; Master this template, solve any tree problem! &mdash;&mdash;&mdash;&mdash;
+    </div>
+
+    <div class="grid-container">
+        <div class="col-left" style="flex: 1.5;">
+            <div class="section-box" style="border-color: #4338ca;">
+                <div class="section-header" style="background-color: #4338ca; color: white; padding: 10px;">3.1 THE RECURSION FLOW (FAITH &rarr; RECUR &rarr; COMBINE &rarr; RETURN)</div>
+                <div class="section-content" style="padding: 10px;">
+                    <table style="width: 100%; border-collapse: separate; border-spacing: 0 10px;">
+                        <tr>
+                            <td style="width: 30px;"><div style="background-color: #312e81; color: white; border-radius: 50%; width: 25px; height: 25px; text-align: center; line-height: 25px;">1</div></td>
+                            <td style="font-weight: bold; color: #312e81;">BASE CASE</td>
+                            <td>Check and handle the base condition.</td>
+                            <td><code style="border: 1px solid #ccc; padding: 5px; display: inline-block;">if (node == null)<br>&nbsp;&nbsp;return ...;</code></td>
+                        </tr>
+                        <tr>
+                            <td><div style="background-color: #1d4ed8; color: white; border-radius: 50%; width: 25px; height: 25px; text-align: center; line-height: 25px;">2</div></td>
+                            <td style="font-weight: bold; color: #1d4ed8;">FAITH</td>
+                            <td colspan="2">Assume left and right subtrees will give correct answers.</td>
+                        </tr>
+                        <tr>
+                            <td><div style="background-color: #15803d; color: white; border-radius: 50%; width: 25px; height: 25px; text-align: center; line-height: 25px;">3</div></td>
+                            <td style="font-weight: bold; color: #15803d;">RECUR LEFT</td>
+                            <td>Recur for the left subtree.</td>
+                            <td><code style="border: 1px solid #ccc; padding: 5px; display: inline-block;">left = solve(node.left);</code></td>
+                        </tr>
+                        <tr>
+                            <td><div style="background-color: #c2410c; color: white; border-radius: 50%; width: 25px; height: 25px; text-align: center; line-height: 25px;">4</div></td>
+                            <td style="font-weight: bold; color: #c2410c;">RECUR RIGHT</td>
+                            <td>Recur for the right subtree.</td>
+                            <td><code style="border: 1px solid #ccc; padding: 5px; display: inline-block;">right = solve(node.right);</code></td>
+                        </tr>
+                        <tr>
+                            <td><div style="background-color: #b91c1c; color: white; border-radius: 50%; width: 25px; height: 25px; text-align: center; line-height: 25px;">5</div></td>
+                            <td style="font-weight: bold; color: #b91c1c;">COMBINE</td>
+                            <td>Use left and right results.<br>Do the required work.</td>
+                            <td><code style="border: 1px solid #ccc; padding: 5px; display: inline-block;">ans = ...;</code></td>
+                        </tr>
+                        <tr>
+                            <td><div style="background-color: #1e3a8a; color: white; border-radius: 50%; width: 25px; height: 25px; text-align: center; line-height: 25px;">6</div></td>
+                            <td style="font-weight: bold; color: #1e3a8a;">RETURN</td>
+                            <td>Return the final answer.</td>
+                            <td><code style="border: 1px solid #ccc; padding: 5px; display: inline-block;">return ans;</code></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div style="background-color: #fef9c3; border: 1px solid #fde047; padding: 10px; text-align: center; font-weight: bold; margin-top: 10px; border-radius: 5px;">
+                ⭐ FAITH &rarr; You assume your recursive calls (left &amp; right) are correct and return the right answer.
+            </div>
+        </div>
+
+        <div class="col-right" style="flex: 1;">
+            <div class="section-box" style="border-color: #4338ca; height: 100%;">
+                <div class="section-header" style="background-color: #4338ca; color: white; padding: 10px;">UNIVERSAL TEMPLATE</div>
+                <div class="section-content" style="padding: 10px;">
+<pre style="background-color: #f8fafc; padding: 10px; border-radius: 5px; border: 1px solid #e2e8f0; font-size: 0.9em;"><code>Type solve(Node* node) {
+    if (node == null) {
+        return ...;         <span style="color: #64748b;">// Base Case</span>
+    }
+
+    Type left  = solve(node.left);  <span style="color: #64748b;">// Recur Left</span>
+    Type right = solve(node.right); <span style="color: #64748b;">// Recur Right</span>
+
+    Type ans = ...;         <span style="color: #64748b;">// Combine</span>
+    return ans;             <span style="color: #64748b;">// Return</span>
+}</code></pre>
+                    <div style="border: 1px solid #e2e8f0; border-radius: 5px; padding: 10px; margin-top: 15px;">
+                        <h4 style="margin-top: 0; color: #333;"><span style="font-size: 1.2em;">💡</span> KEY IDEA</h4>
+                        <ul style="padding-left: 20px; margin-bottom: 0; font-size: 0.9em;">
+                            <li>Break the problem into left and right subproblems.</li>
+                            <li>Solve both (faith).</li>
+                            <li>Combine their results.</li>
+                            <li>Return the final answer up the recursion stack.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container" style="margin-top: 20px;">
+        <div class="col-left">
+            <div class="section-box" style="border-color: #1d4ed8;">
+                <div class="section-header" style="background-color: #1d4ed8; color: white; padding: 10px;">3.2 RETURN TYPE DECIDES THE RECURSION</div>
+                <div class="section-content" style="padding: 0;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9em;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #e2e8f0;">
+                                <th style="padding: 8px;">Return Type</th>
+                                <th style="padding: 8px;">What it Means</th>
+                                <th style="padding: 8px;">Examples</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 8px; color: #1e40af; font-weight: bold;">int</td>
+                                <td style="padding: 8px;">Return some value<br>(height, count, sum, etc.)</td>
+                                <td style="padding: 8px;">Max Depth, Diameter,<br>Sum of Nodes</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 8px; color: #15803d; font-weight: bold;">boolean</td>
+                                <td style="padding: 8px;">Return true / false</td>
+                                <td style="padding: 8px;">Same Tree, Balanced Tree,<br>Valid BST</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 8px; color: #b45309; font-weight: bold;">TreeNode*</td>
+                                <td style="padding: 8px;">Return a node</td>
+                                <td style="padding: 8px;">LCA, Invert Tree,<br>Search in BST</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 8px; color: #6b21a8; font-weight: bold;">List / Vector</td>
+                                <td style="padding: 8px;">Return a list of values / nodes</td>
+                                <td style="padding: 8px;">All Paths, Level Order,<br>Right Side View</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; color: #b91c1c; font-weight: bold;">void</td>
+                                <td style="padding: 8px;">Do something (print / modify)</td>
+                                <td style="padding: 8px;">Print Traversals,<br>Populate Result</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-right">
+            <div class="section-box" style="border-color: #15803d;">
+                <div class="section-header" style="background-color: #15803d; color: white; padding: 10px;">3.3 WHICH TRAVERSAL TO USE?</div>
+                <div class="section-content" style="padding: 0;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9em;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #e2e8f0;">
+                                <th style="padding: 8px;">Goal</th>
+                                <th style="padding: 8px;">Need</th>
+                                <th style="padding: 8px;">Traversal</th>
+                                <th style="padding: 8px;">Why?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 8px;">Need parent<br>before children?</td>
+                                <td style="padding: 8px;">Parent info first</td>
+                                <td style="padding: 8px; font-weight: bold;">Preorder<br><span style="font-weight: normal; font-size: 0.9em;">(Root &rarr; Left &rarr; Right)</span></td>
+                                <td style="padding: 8px;">Visit root before<br>going to children.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 8px;">Need sorted order<br>(in BST)?</td>
+                                <td style="padding: 8px;">Left first, then<br>root, then right</td>
+                                <td style="padding: 8px; font-weight: bold;">Inorder<br><span style="font-weight: normal; font-size: 0.9em;">(Left &rarr; Root &rarr; Right)</span></td>
+                                <td style="padding: 8px;">In BST, Inorder<br>gives sorted order.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 8px;">Need children's<br>answers first?</td>
+                                <td style="padding: 8px;">Children results<br>before parent</td>
+                                <td style="padding: 8px; font-weight: bold;">Postorder<br><span style="font-weight: normal; font-size: 0.9em;">(Left &rarr; Right &rarr; Root)</span></td>
+                                <td style="padding: 8px;">Process children<br>before the root.</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px;">Need level by level?</td>
+                                <td style="padding: 8px;">Level wise<br>processing</td>
+                                <td style="padding: 8px; font-weight: bold;">BFS (Level Order)</td>
+                                <td style="padding: 8px;">Visit nodes level<br>by level using<br>Queue.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container" style="margin-top: 20px;">
+        <div class="col-left" style="flex: 1.5;">
+            <div class="section-box" style="border-color: #991b1b;">
+                <div class="section-header" style="background-color: #991b1b; color: white; padding: 10px;">3.4 PREORDER vs INORDER vs POSTORDER (DECISION GUIDE)</div>
+                <div class="section-content" style="padding: 10px; text-align: center;">
+                    <div class="mermaid">
+                    graph TD
+                        A[What do you need?]
+                        A --> B[Need parent<br>information first?]
+                        A --> C[Need sorted order<br>in BST?]
+                        A --> D[Need children's<br>results first?]
+                        A --> E[Need level<br>wise?]
+                        
+                        B --> B1[YES]
+                        C --> C1[YES]
+                        D --> D1[YES]
+                        E --> E1[YES]
+                        
+                        B1 --> B2[Use<br>PREORDER<br>Root &rarr; Left &rarr; Right]
+                        C1 --> C2[Use<br>INORDER<br>Left &rarr; Root &rarr; Right]
+                        D1 --> D2[Use<br>POSTORDER<br>Left &rarr; Right &rarr; Root]
+                        E1 --> E2[Use<br>BFS<br>Level Order]
+                        
+                        style A fill:#fff,stroke:#b91c1c
+                        style B fill:#f0f9ff,stroke:#3b82f6
+                        style C fill:#f0fdf4,stroke:#22c55e
+                        style D fill:#eff6ff,stroke:#3b82f6
+                        style E fill:#f8fafc,stroke:#94a3b8
+                        
+                        style B1 fill:#fff,stroke:#ccc
+                        style C1 fill:#fff,stroke:#ccc
+                        style D1 fill:#fff,stroke:#ccc
+                        style E1 fill:#fff,stroke:#ccc
+                        
+                        style B2 fill:#f8efff,stroke:#a855f7
+                        style C2 fill:#f0fdf4,stroke:#22c55e
+                        style D2 fill:#eff6ff,stroke:#3b82f6
+                        style E2 fill:#f8fafc,stroke:#94a3b8
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; text-align: left; font-size: 0.8em; margin-top: 10px;">
+                        <div style="flex: 1; border: 1px solid #ccc; padding: 8px; border-radius: 5px;">
+                            <strong>Examples</strong>
+                            <ul style="padding-left: 15px; margin: 5px 0 0 0;">
+                                <li>Build Tree (Pre + In)</li>
+                                <li>Serialize / Copy / Clone</li>
+                                <li>Prefix Expression</li>
+                            </ul>
+                        </div>
+                        <div style="flex: 1; border: 1px solid #ccc; padding: 8px; border-radius: 5px;">
+                            <strong>Examples</strong>
+                            <ul style="padding-left: 15px; margin: 5px 0 0 0;">
+                                <li>BST Problems</li>
+                                <li>Kth Smallest / Largest</li>
+                                <li>Validate BST (Iterative)</li>
+                            </ul>
+                        </div>
+                        <div style="flex: 1; border: 1px solid #ccc; padding: 8px; border-radius: 5px;">
+                            <strong>Examples</strong>
+                            <ul style="padding-left: 15px; margin: 5px 0 0 0;">
+                                <li>Height / Diameter</li>
+                                <li>Balanced Tree</li>
+                                <li>Delete / Free Tree</li>
+                                <li>Postfix Expression</li>
+                            </ul>
+                        </div>
+                        <div style="flex: 1; border: 1px solid #ccc; padding: 8px; border-radius: 5px;">
+                            <strong>Examples</strong>
+                            <ul style="padding-left: 15px; margin: 5px 0 0 0;">
+                                <li>Level Order Traversal</li>
+                                <li>Right Side View</li>
+                                <li>Zigzag Traversal</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 10px; border: 1px solid #ccc; padding: 10px; border-radius: 5px; margin-top: 15px; text-align: left; background-color: #f8fafc;">
+                        <div style="font-size: 2em;">🎯</div>
+                        <div>
+                            <strong>REMEMBER</strong>
+                        </div>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 0.9em;">
+                            <li>Understand the need, choose the traversal.</li>
+                            <li>Wrong traversal = more code / more mistakes.</li>
+                            <li>Right traversal = simple, clean, optimal.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-right" style="flex: 1;">
+            <div class="section-box" style="border-color: #1e3a8a;">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 10px;">3.5 COMMON BASE CASES</div>
+                <div class="section-content" style="padding: 10px; font-size: 0.9em;">
+                    <table style="width: 100%; border-collapse: separate; border-spacing: 0 10px;">
+                        <tr>
+                            <td><code style="background-color: #f1f5f9; padding: 4px; border-radius: 4px;">if (node == null)<br>&nbsp;&nbsp;return ...;</code></td>
+                            <td>Used in almost all problems.<br>Empty subtree.</td>
+                        </tr>
+                        <tr>
+                            <td><code style="background-color: #f1f5f9; padding: 4px; border-radius: 4px;">if (node.left == null &&<br>&nbsp;&nbsp;node.right == null)<br>&nbsp;&nbsp;return ...;</code></td>
+                            <td>Leaf node condition.</td>
+                        </tr>
+                        <tr>
+                            <td><code style="background-color: #f1f5f9; padding: 4px; border-radius: 4px;">if (node == target)<br>&nbsp;&nbsp;return ...;</code></td>
+                            <td>Found the target node.</td>
+                        </tr>
+                        <tr>
+                            <td><code style="background-color: #f1f5f9; padding: 4px; border-radius: 4px;">if (k == 0)<br>&nbsp;&nbsp;return ...;</code></td>
+                            <td>Base case for depth / distance<br>based problems.</td>
+                        </tr>
+                        <tr>
+                            <td><code style="background-color: #f1f5f9; padding: 4px; border-radius: 4px;">if (low > high)<br>&nbsp;&nbsp;return ...;</code></td>
+                            <td>Used in tree construction from<br>array / traversal.</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="section-box" style="border-color: #0f172a; margin-top: 15px;">
+                <div class="section-header" style="background-color: #0f172a; color: white; padding: 10px;">3.6 TIPS TO MASTER RECURSION</div>
+                <div class="section-content" style="padding: 10px; display: flex; font-size: 0.9em;">
+                    <div style="flex: 2;">
+                        <div style="margin-bottom: 5px;">✅ 1. Draw the tree and try dry run.</div>
+                        <div style="margin-bottom: 5px;">✅ 2. Identify what you need at each node.</div>
+                        <div style="margin-bottom: 5px;">✅ 3. Decide return type.</div>
+                        <div style="margin-bottom: 5px;">✅ 4. Write the template first.</div>
+                        <div style="margin-bottom: 5px;">✅ 5. Fill the combine logic.</div>
+                        <div>✅ 6. Dry run again and verify.</div>
+                    </div>
+                    <div style="flex: 1; border: 1px solid #f59e0b; background-color: #fef3c7; border-radius: 5px; padding: 10px; text-align: center;">
+                        <div style="font-weight: bold; margin-bottom: 5px; color: #b45309;">🏆 GOLDEN RULE</div>
+                        <div style="font-size: 0.85em;">Think small,<br>Recur small,<br>Combine smartly,<br>Return clearly.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="background-color: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 5px; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 20px;">
+        <div style="font-weight: bold; color: #312e81; font-size: 1.1em;">🚀 FINAL MANTRA</div>
+        <div style="font-weight: bold;">
+            Understand the problem &rarr; Choose the right traversal &rarr; Follow the template &rarr;<br>Combine correctly &rarr; Return the right answer.
+        </div>
+    </div>
+</div>

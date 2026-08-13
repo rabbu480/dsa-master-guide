@@ -1,0 +1,337 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline; justify-content: center; width: 100%;">
+            <h1 style="color: #fbbf24; text-transform: uppercase; font-size: 2.5rem; letter-spacing: 2px;">Arrays & Hashing Cheat Sheet</h1>
+        </div>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 15px;">
+        <thead>
+            <tr>
+                <th style="color: #60a5fa; text-align: left; padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">PROBLEM</th>
+                <th style="color: #4ade80; text-align: left; padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">KEY IDEA</th>
+                <th style="color: #e2e8f0; text-align: left; padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">APPROACH / FORMULA / PATTERN</th>
+                <th style="color: #fb923c; text-align: center; padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">TIME COMPLEXITY</th>
+                <th style="color: #60a5fa; text-align: center; padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">SPACE COMPLEXITY</th>
+                <th style="color: #f87171; text-align: left; padding: 8px; border-bottom: 1px solid #334155;">KEY TAKEAWAYS / PATTERNS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">
+                    <div style="color: #e2e8f0;">1. 217</div>
+                    <div style="color: #94a3b8;">Contains Duplicate</div>
+                    <div style="color: #4ade80; font-size: 0.75rem;">(Easy)</div>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; color: #94a3b8;">
+                    Use HashSet to track seen elements.
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">
+<pre style="margin: 0; background: transparent; padding: 0; color: #94a3b8; font-size: 0.75rem;"><code>Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+for (int x : nums) {
+    if (set.contains(x)) return true;
+    set.add(x);
+}
+return false;</code></pre>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; text-align: center; color: #fbbf24;">O(n)</td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; text-align: center; color: #60a5fa;">O(n)</td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; color: #e2e8f0;">
+                    <ul style="margin: 0; padding-left: 15px; font-size: 0.75rem;">
+                        <li>HashSet for fast lookup</li>
+                        <li>Detect duplicates</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">
+                    <div style="color: #e2e8f0;">2. 242</div>
+                    <div style="color: #94a3b8;">Valid Anagram</div>
+                    <div style="color: #4ade80; font-size: 0.75rem;">(Easy)</div>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; color: #94a3b8;">
+                    Two strings are anagrams if both have same character frequency.
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">
+<pre style="margin: 0; background: transparent; padding: 0; color: #94a3b8; font-size: 0.75rem;"><code>int[] count = new int[26];
+for (char c : s.toCharArray()) count[c-'a']++;
+for (char c : t.toCharArray()) count[c-'a']--;
+return all count[i] == 0;</code></pre>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; text-align: center; color: #fbbf24;">
+                    O(n)<br><span style="font-size: 0.7rem; color: #94a3b8;">(n = length of string)</span>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; text-align: center; color: #60a5fa;">
+                    O(1)<br><span style="font-size: 0.7rem; color: #94a3b8;">(26 letters)</span>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; color: #e2e8f0;">
+                    <ul style="margin: 0; padding-left: 15px; font-size: 0.75rem;">
+                        <li>Frequency counting</li>
+                        <li>Array of size 26</li>
+                        <li>Increment / decrement</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">
+                    <div style="color: #e2e8f0;">3. 1</div>
+                    <div style="color: #94a3b8;">Two Sum</div>
+                    <div style="color: #4ade80; font-size: 0.75rem;">(Easy)</div>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; color: #94a3b8;">
+                    Store number → index in a HashMap. For each num, check if target - num exists.
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">
+<pre style="margin: 0; background: transparent; padding: 0; color: #94a3b8; font-size: 0.75rem;"><code>Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+for (int i = 0; i &lt; nums.length; i++) {
+    int comp = target - nums[i];
+    if (map.containsKey(comp)) return new int[]{map.get(comp), i};
+    map.put(nums[i], i);
+}</code></pre>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; text-align: center; color: #fbbf24;">
+                    O(n)<br><span style="font-size: 0.7rem; color: #94a3b8;">(n = length of array)</span>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; text-align: center; color: #60a5fa;">O(n)</td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; color: #e2e8f0;">
+                    <ul style="margin: 0; padding-left: 15px; font-size: 0.75rem;">
+                        <li>HashMap for complement</li>
+                        <li>Store index, not value</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">
+                    <div style="color: #e2e8f0;">4. 49</div>
+                    <div style="color: #94a3b8;">Group Anagrams</div>
+                    <div style="color: #fbbf24; font-size: 0.75rem;">(Medium)</div>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; color: #94a3b8;">
+                    Sort each string to create a key. Anagrams have same sorted key.
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">
+<pre style="margin: 0; background: transparent; padding: 0; color: #94a3b8; font-size: 0.75rem;"><code>Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
+for (String s : strs) {
+    char[] arr = s.toCharArray();
+    Arrays.sort(arr);
+    String key = new String(arr);
+    map.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(s);
+}
+return new ArrayList&lt;&gt;(map.values());</code></pre>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; text-align: center; color: #fbbf24;">
+                    O(n * k log k)<br><span style="font-size: 0.7rem; color: #94a3b8;">(n = #strings, k = avg length)</span>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; text-align: center; color: #60a5fa;">O(n * k)</td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; color: #e2e8f0;">
+                    <ul style="margin: 0; padding-left: 15px; font-size: 0.75rem;">
+                        <li>Sorting as key</li>
+                        <li>HashMap&lt;String, List&lt;String&gt;&gt;</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">
+                    <div style="color: #e2e8f0;">5. 347</div>
+                    <div style="color: #94a3b8;">Top K Frequent<br>Elements</div>
+                    <div style="color: #fbbf24; font-size: 0.75rem;">(Medium)</div>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; color: #94a3b8;">
+                    Count frequency using HashMap, then use bucket sort (freq → list of numbers).
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">
+<pre style="margin: 0; background: transparent; padding: 0; color: #94a3b8; font-size: 0.75rem;"><code>1. Count freq: Map&lt;Integer, Integer&gt; freq = new HashMap&lt;&gt;();
+2. Bucket sort: List&lt;Integer&gt;[] bucket = new List[nums.length + 1];
+   for (int num : freq.keySet()) {
+       int f = freq.get(num);
+       if (bucket[f] == null) bucket[f] = new ArrayList&lt;&gt;();
+       bucket[f].add(num);
+   }
+3. Traverse from high freq to low, collect k elements.</code></pre>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; text-align: center; color: #fbbf24;">
+                    O(n)<br><span style="font-size: 0.7rem; color: #94a3b8;">(n = array length)</span>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; text-align: center; color: #60a5fa;">O(n)</td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; color: #e2e8f0;">
+                    <ul style="margin: 0; padding-left: 15px; font-size: 0.75rem;">
+                        <li>Frequency Map + Bucket Sort</li>
+                        <li>Buckets sized by frequency</li>
+                        <li>Read from high to low</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">
+                    <div style="color: #e2e8f0;">6. 271</div>
+                    <div style="color: #94a3b8;">Encode and Decode<br>Strings</div>
+                    <div style="color: #fbbf24; font-size: 0.75rem;">(Medium)</div>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; color: #94a3b8;">
+                    Use length-prefix encoding: length#string to uniquely separate strings.
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">
+<pre style="margin: 0; background: transparent; padding: 0; color: #94a3b8; font-size: 0.75rem;"><code>Encode: for (String s : strs) sb.append(s.length()).append("#").append(s);
+Decode: read number until '#', then next that many chars is the string.</code></pre>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; text-align: center; color: #fbbf24;">
+                    Encode: O(n)<br>Decode: O(n)<br><span style="font-size: 0.7rem; color: #94a3b8;">(n = total length<br>of all strings)</span>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; text-align: center; color: #60a5fa;">O(n)</td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; color: #e2e8f0;">
+                    <ul style="margin: 0; padding-left: 15px; font-size: 0.75rem;">
+                        <li>Length-prefix avoids ambiguity</li>
+                        <li>Unique & decodable</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">
+                    <div style="color: #e2e8f0;">7. 238</div>
+                    <div style="color: #94a3b8;">Product of Array<br>Except Self</div>
+                    <div style="color: #fbbf24; font-size: 0.75rem;">(Medium)</div>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; color: #94a3b8;">
+                    Use prefix & suffix products.<br>Avoid division.
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">
+<pre style="margin: 0; background: transparent; padding: 0; color: #94a3b8; font-size: 0.75rem;"><code>int n = nums.length;
+int[] left = new int[n], right = new int[n], ans = new int[n];
+left[0] = 1; for (int i=1; i&lt;n; i++) left[i] = left[i-1] * nums[i-1];
+right[n-1] = 1; for (int i=n-2; i&gt;=0; i--) right[i] = right[i+1] * nums[i+1];
+for (int i=0; i&lt;n; i++) ans[i] = left[i] * right[i];</code></pre>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; text-align: center; color: #fbbf24;">O(n)</td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; text-align: center; color: #60a5fa;">
+                    O(n)<br><span style="font-size: 0.7rem; color: #94a3b8;">(for output array)</span>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; color: #e2e8f0;">
+                    <ul style="margin: 0; padding-left: 15px; font-size: 0.75rem;">
+                        <li>Prefix products & suffix products</li>
+                        <li>No division</li>
+                        <li>Left[i] * Right[i]</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">
+                    <div style="color: #e2e8f0;">8. 128</div>
+                    <div style="color: #94a3b8;">Longest Consecutive<br>Sequence</div>
+                    <div style="color: #f87171; font-size: 0.75rem;">(Hard)</div>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; color: #94a3b8;">
+                    Use HashSet. Start counting only from the beginning of a sequence (num-1 not present).
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155;">
+<pre style="margin: 0; background: transparent; padding: 0; color: #94a3b8; font-size: 0.75rem;"><code>Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+for (int num : nums) set.add(num);
+int longest = 0;
+for (int num : set) {
+    if (!set.contains(num - 1)) { // start of sequence
+        int count = 1, cur = num;
+        while (set.contains(cur + 1)) { count++; cur++; }
+        longest = Math.max(longest, count);
+    }
+}</code></pre>
+                </td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; text-align: center; color: #fbbf24;">O(n)</td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; border-right: 1px solid #334155; text-align: center; color: #60a5fa;">O(n)</td>
+                <td style="padding: 8px; border-bottom: 1px solid #334155; color: #e2e8f0;">
+                    <ul style="margin: 0; padding-left: 15px; font-size: 0.75rem;">
+                        <li>HashSet for O(1) lookup</li>
+                        <li>Start from sequence beginning (num-1 not present)</li>
+                        <li>Each number visited once</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; border-right: 1px solid #334155;">
+                    <div style="color: #e2e8f0;">9. 36</div>
+                    <div style="color: #94a3b8;">Valid Sudoku</div>
+                    <div style="color: #fbbf24; font-size: 0.75rem;">(Medium)</div>
+                </td>
+                <td style="padding: 8px; border-right: 1px solid #334155; color: #94a3b8;">
+                    Check rows, columns and 3x3 sub-boxes using HashSet.
+                </td>
+                <td style="padding: 8px; border-right: 1px solid #334155;">
+<pre style="margin: 0; background: transparent; padding: 0; color: #94a3b8; font-size: 0.75rem;"><code>1. For each row → use Set&lt;Character&gt;
+2. For each column → use Set&lt;Character&gt;
+3. For each 3x3 box → use Set&lt;Character&gt;
+   Box loops: for (int r=0; r&lt;9; r+=3)
+                  for (int c=0; c&lt;9; c+=3)
+                      for (int i=r; i&lt;r+3; i++)
+                          for (int j=c; j&lt;c+3; j++)</code></pre>
+                </td>
+                <td style="padding: 8px; border-right: 1px solid #334155; text-align: center; color: #fbbf24;">
+                    O(1)<br><span style="font-size: 0.7rem; color: #94a3b8;">(Board size is fixed 9x9)</span>
+                </td>
+                <td style="padding: 8px; border-right: 1px solid #334155; text-align: center; color: #60a5fa;">
+                    O(1)<br><span style="font-size: 0.7rem; color: #94a3b8;">(Fixed size sets)</span>
+                </td>
+                <td style="padding: 8px; color: #e2e8f0;">
+                    <ul style="margin: 0; padding-left: 15px; font-size: 0.75rem;">
+                        <li>Use HashSet for rows, columns and 3x3 boxes</li>
+                        <li>Box traversal: jump by 3</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="display: flex; flex-wrap: wrap; border-top: 1px solid #334155; border-bottom: 1px solid #334155; font-size: 0.75rem;">
+        <div style="flex: 1; min-width: 200px; padding: 8px; border-right: 1px solid #334155;">
+            <div style="color: #60a5fa; text-align: center; margin-bottom: 5px;">COMMON HASHING DATA STRUCTURES</div>
+            <table style="width: 100%; color: #94a3b8; border-collapse: collapse;">
+                <tr><td style="padding: 2px;">• HashSet&lt;T&gt;</td><td style="padding: 2px;">→ Uniqueness, Fast lookup</td></tr>
+                <tr><td style="padding: 2px;">• HashMap&lt;K,V&gt;</td><td style="padding: 2px;">→ Key-Value, Frequency count</td></tr>
+                <tr><td style="padding: 2px;">• TreeMap&lt;K,V&gt;</td><td style="padding: 2px;">→ Sorted keys</td></tr>
+                <tr><td style="padding: 2px;">• LinkedHashMap</td><td style="padding: 2px;">→ Maintains insertion order</td></tr>
+            </table>
+        </div>
+        
+        <div style="flex: 1; min-width: 200px; padding: 8px; border-right: 1px solid #334155;">
+            <div style="color: #60a5fa; text-align: center; margin-bottom: 5px;">FREQUENCY COUNT PATTERN</div>
+<pre style="margin: 0; background: transparent; padding: 0; color: #94a3b8;"><code>Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+for (int num : nums) {
+    map.put(num, map.getOrDefault(num, 0) + 1);
+}</code></pre>
+        </div>
+
+        <div style="flex: 1.5; min-width: 250px; padding: 8px; border-right: 1px solid #334155;">
+            <div style="color: #60a5fa; text-align: center; margin-bottom: 5px;">BUCKET SORT (BY FREQUENCY)</div>
+<pre style="margin: 0; background: transparent; padding: 0; color: #94a3b8;"><code>List&lt;Integer&gt;[] bucket = new List[nums.length + 1];
+for (int num : map.keySet()) {
+    int f = map.get(num);
+    if (bucket[f] == null) bucket[f] = new ArrayList&lt;&gt;();
+    bucket[f].add(num);
+}</code></pre>
+        </div>
+
+        <div style="flex: 1.2; min-width: 220px; padding: 8px; border-right: 1px solid #334155;">
+            <div style="color: #60a5fa; text-align: center; margin-bottom: 5px;">3x3 BOX TRAVERSAL (SUDOKU)</div>
+<pre style="margin: 0; background: transparent; padding: 0; color: #94a3b8;"><code>for (int r = 0; r &lt; 9; r += 3) {
+    for (int c = 0; c &lt; 9; c += 3) {
+        for (int i = r; i &lt; r + 3; i++) {
+            for (int j = c; j &lt; c + 3; j++) {
+                // process board[i][j]
+            }
+        }
+    }
+}</code></pre>
+        </div>
+
+        <div style="flex: 0.8; min-width: 150px; padding: 8px;">
+            <div style="color: #60a5fa; text-align: center; margin-bottom: 5px;">COMPLEXITY REMINDER</div>
+            <ul style="margin: 0; padding-left: 15px; color: #fbbf24;">
+                <li>HashSet / HashMap<br><span style="color: #94a3b8;">Operations (avg):<br>add, remove, contains,<br>get, put → O(1)</span></li>
+                <li>Sorting <span style="color: #94a3b8;">→ O(n log n)</span></li>
+                <li>Traversal <span style="color: #94a3b8;">→ O(n)</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="padding: 10px; color: #e2e8f0; font-size: 0.8rem; display: flex; align-items: center;">
+        <span style="color: #fbbf24; font-size: 1.2rem; margin-right: 10px;">★</span>
+        <span><strong style="color: #fbbf24;">REMEMBER:</strong> Use the right tool for the right problem. Hashing improves lookup from O(n) to O(1) on average.</span>
+    </div>
+</div>

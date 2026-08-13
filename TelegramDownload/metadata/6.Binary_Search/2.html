@@ -1,0 +1,347 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1 style="background-color: #1e3a8a; color: white; padding: 5px 15px; border-radius: 5px; margin: 0; font-size: 32px; font-weight: 900; letter-spacing: 2px;">BINARY SEARCH</h1>
+            <div class="subtitle" style="background-color: #2563eb; color: white; padding: 5px 15px; border-radius: 20px; margin-left: 15px; font-weight: bold;">FAANG INTERVIEW CHEAT SHEET (JAVA)</div>
+        </div>
+        <div style="text-align: right; display: flex; justify-content: flex-end; gap: 20px;">
+            <div style="display: flex; align-items: center; border: 1px solid #ccc; padding: 5px 10px; border-radius: 5px;">
+                <div style="color: #ef4444; font-size: 24px; margin-right: 10px;">🎯</div>
+                <div style="text-align: left; font-size: 12px; line-height: 1.2;">
+                    <strong>GOAL:</strong><br>
+                    Reduce search space<br>by half in every step<br>O(log n) time
+                </div>
+            </div>
+            <div class="page-number" style="background-color: #1e3a8a; color: white; padding: 5px 15px; font-weight: bold; display: flex; align-items: center; border-radius: 0 0 5px 5px;">Page 2 of 4</div>
+        </div>
+    </div>
+
+    <div class="grid-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+        <!-- Left Column -->
+        <div class="col-left">
+            
+            <div class="section-box">
+                <div class="section-header" style="background-color: #5b21b6; color: white; padding: 5px 10px; font-weight: bold; border-radius: 5px 5px 0 0;"><span class="num">6.</span> VARIANTS OF BINARY SEARCH</div>
+                <div class="section-content" style="padding: 0; border: 1px solid #5b21b6; border-radius: 0 0 5px 5px;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
+                        <tr style="background-color: #4c1d95; color: white;">
+                            <th style="padding: 8px; border: 1px solid #d8b4fe;">Variant</th>
+                            <th style="padding: 8px; border: 1px solid #d8b4fe;">When to Use</th>
+                        </tr>
+                        <tr style="background-color: #f8fafc;">
+                            <td style="padding: 8px; border: 1px solid #cbd5e1; font-weight: bold;"><span style="font-size: 16px; margin-right: 5px;">🔍</span> Classic Binary Search</td>
+                            <td style="padding: 8px; border: 1px solid #cbd5e1;">Exact match in sorted array</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #cbd5e1; font-weight: bold;"><span style="color: #22c55e; font-size: 16px; margin-right: 5px;">📈</span> First Occurrence</td>
+                            <td style="padding: 8px; border: 1px solid #cbd5e1;">Find first index of target</td>
+                        </tr>
+                        <tr style="background-color: #f8fafc;">
+                            <td style="padding: 8px; border: 1px solid #cbd5e1; font-weight: bold;"><span style="color: #22c55e; font-size: 16px; margin-right: 5px;">📉</span> Last Occurrence</td>
+                            <td style="padding: 8px; border: 1px solid #cbd5e1;">Find last index of target</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #cbd5e1; font-weight: bold;"><span style="color: #f59e0b; font-size: 16px; margin-right: 5px;">🔄</span> Search in Rotated Sorted Array</td>
+                            <td style="padding: 8px; border: 1px solid #cbd5e1;">Array is sorted but rotated</td>
+                        </tr>
+                        <tr style="background-color: #f8fafc;">
+                            <td style="padding: 8px; border: 1px solid #cbd5e1; font-weight: bold;"><span style="color: #3b82f6; font-size: 16px; margin-right: 5px;">⛰️</span> Search in Peak Element</td>
+                            <td style="padding: 8px; border: 1px solid #cbd5e1;">Find peak element in bitonic array</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #cbd5e1; font-weight: bold;"><span style="color: #8b5cf6; font-size: 16px; margin-right: 5px;">❓</span> Binary Search on Answer</td>
+                            <td style="padding: 8px; border: 1px solid #cbd5e1;">Answer lies in a range, not searching element</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section-box" style="margin-top: 15px;">
+                <div class="section-header" style="background-color: #ea580c; color: white; padding: 5px 10px; font-weight: bold; border-radius: 5px 5px 0 0;"><span class="num">8.</span> SEARCH IN ROTATED SORTED ARRAY (UNIQUE ELEMENTS)</div>
+                <div class="section-content" style="border: 1px solid #ea580c; border-radius: 0 0 5px 5px; padding: 15px; text-align: center;">
+                    <div style="border: 1px solid #94a3b8; display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-bottom: 10px;">
+                        Example: nums = [4,5,6,7,0,1,2], target = <span style="color: #3b82f6;">0</span>
+                    </div>
+                    <div class="mermaid" style="font-size: 10px; margin-bottom: 10px;">
+                    graph TD
+                        A["Is nums[mid] == target?"]
+                        A -- YES --> B["Return mid"]
+                        A -- NO --> C["Is left half sorted?<br>(nums[left] <= nums[mid])"]
+                        C -->|Left half is sorted| F["Is target in left half?<br>nums[left] <= target < nums[mid]"]
+                        C -->|Right half is sorted| G["Is target in right half?<br>nums[mid] < target <= nums[right]"]
+                        F -- YES --> H["right = mid - 1"]
+                        F -- NO --> I["left = mid + 1"]
+                        G -- YES --> J["left = mid + 1"]
+                        G -- NO --> K["right = mid - 1"]
+                    </div>
+                    <div style="background-color: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 8px; border-radius: 5px; font-weight: bold; font-size: 13px;">
+                        <span style="color: #ef4444;">⭐</span> Always eliminate the half that is sorted first!
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box" style="margin-top: 15px;">
+                <div class="section-header" style="background-color: #4f46e5; color: white; padding: 5px 10px; font-weight: bold; border-radius: 5px 5px 0 0;"><span class="num">10.</span> VISUALIZING BINARY SEARCH (BOUNDARY SEARCH)</div>
+                <div class="section-content" style="border: 1px solid #4f46e5; border-radius: 0 0 5px 5px; padding: 15px;">
+                    <div style="font-size: 13px; margin-bottom: 15px; font-weight: bold; color: #1e3a8a;">
+                        Find First Occurrence of target = 4 in nums = [1, 2, 4, 4, 4, 5, 6]
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                        <div style="background-color: #eff6ff; color: #2563eb; padding: 5px 10px; border: 1px solid #bfdbfe; border-radius: 15px; font-size: 12px; font-weight: bold;">Step 1:</div>
+                        <div style="flex: 1; font-family: monospace; font-size: 12px;">
+                            <table style="border-collapse: collapse; text-align: center;">
+                                <tr>
+                                    <td style="padding: 0 5px; color: #64748b;">0</td><td style="padding: 0 5px; color: #64748b;">1</td><td style="padding: 0 5px; color: #64748b;">2</td><td style="padding: 0 5px; color: #64748b;">3</td><td style="padding: 0 5px; color: #64748b;">4</td><td style="padding: 0 5px; color: #64748b;">5</td><td style="padding: 0 5px; color: #64748b;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">1</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">2</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">4</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px; background-color: #fef08a; font-weight: bold;">4</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">4</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">5</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="color: #16a34a; padding-top: 5px;">&uarr;<br>l = 0</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="color: #2563eb; padding-top: 5px;">&uarr;<br>m = 3</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="color: #ef4444; padding-top: 5px;">&uarr;<br>r = 6</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div style="font-size: 11px; font-family: monospace; line-height: 1.4;">
+                            nums[m] == 4<br>
+                            ans = 3<br>
+                            r = m - 1 = 2
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                        <div style="background-color: #eff6ff; color: #2563eb; padding: 5px 10px; border: 1px solid #bfdbfe; border-radius: 15px; font-size: 12px; font-weight: bold;">Step 2:</div>
+                        <div style="flex: 1; font-family: monospace; font-size: 12px;">
+                            <table style="border-collapse: collapse; text-align: center;">
+                                <tr>
+                                    <td style="padding: 0 5px; color: #64748b;">0</td><td style="padding: 0 5px; color: #64748b;">1</td><td style="padding: 0 5px; color: #64748b;">2</td><td style="padding: 0 5px; color: #64748b;">3</td><td style="padding: 0 5px; color: #64748b;">4</td><td style="padding: 0 5px; color: #64748b;">5</td><td style="padding: 0 5px; color: #64748b;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">1</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px; background-color: #fef08a; font-weight: bold;">2</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">4</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">4</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">4</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">5</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="color: #16a34a; padding-top: 5px;">&uarr;<br>l = 0</td>
+                                    <td style="color: #2563eb; padding-top: 5px;">&uarr;<br>m = 1</td>
+                                    <td style="color: #ef4444; padding-top: 5px;">&uarr;<br>r = 2</td>
+                                    <td></td><td></td><td></td><td></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div style="font-size: 11px; font-family: monospace; line-height: 1.4;">
+                            nums[m] < 4 ? no<br>
+                            nums[m] == 4<br>
+                            ans = 1<br>
+                            r = m - 1 = 0
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <div style="background-color: #eff6ff; color: #2563eb; padding: 5px 10px; border: 1px solid #bfdbfe; border-radius: 15px; font-size: 12px; font-weight: bold;">Step 3:</div>
+                        <div style="flex: 1; font-family: monospace; font-size: 12px;">
+                            <table style="border-collapse: collapse; text-align: center;">
+                                <tr>
+                                    <td style="padding: 0 5px; color: #64748b;">0</td><td style="padding: 0 5px; color: #64748b;">1</td><td style="padding: 0 5px; color: #64748b;">2</td><td style="padding: 0 5px; color: #64748b;">3</td><td style="padding: 0 5px; color: #64748b;">4</td><td style="padding: 0 5px; color: #64748b;">5</td><td style="padding: 0 5px; color: #64748b;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px; background-color: #fef08a; font-weight: bold;">1</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">2</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">4</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">4</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">4</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">5</td>
+                                    <td style="border: 1px solid #94a3b8; padding: 5px 10px;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="color: #16a34a; padding-top: 5px;">&uarr;<br>l=0 m=0 r=0</td>
+                                    <td></td><td></td><td></td><td></td><td></td><td></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div style="font-size: 11px; font-family: monospace; line-height: 1.4;">
+                            nums[m] < 4<br>
+                            l = m + 1 = 1<br>
+                            Loop stops (l > r)
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; border: 2px solid #22c55e; color: #15803d; font-weight: bold; padding: 5px; border-radius: 5px; background-color: #f0fdf4; margin-top: 10px;">
+                        Answer = 1 (first index of 4)
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; display: flex; gap: 15px; border: 1px solid #94a3b8; padding: 15px; border-radius: 5px; background-color: #f8fafc; align-items: flex-start;">
+                <div style="font-size: 32px; color: #ef4444;">🎯</div>
+                <div>
+                    <div style="color: #1e3a8a; font-weight: 900; font-size: 16px; margin-bottom: 5px;">REMEMBER</div>
+                    <div style="font-size: 13px; color: #1e3a8a; font-weight: bold;">
+                        Binary Search is all about reducing the search space.<br>
+                        The key is to think about the answer, not the element!
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-right">
+            
+            <div class="section-box">
+                <div class="section-header" style="background-color: #15803d; color: white; padding: 5px 10px; font-weight: bold; border-radius: 5px 5px 0 0;"><span class="num">7.</span> FIRST & LAST OCCURRENCE TEMPLATES</div>
+                <div class="section-content" style="border: 1px solid #15803d; border-radius: 0 0 5px 5px; padding: 15px;">
+                    <div style="display: flex; gap: 15px;">
+                        <div style="flex: 1;">
+                            <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; text-align: center; font-weight: bold; color: #16a34a; padding: 5px; margin-bottom: 5px; border-radius: 20px; font-size: 12px;">First Occurrence (Lower Bound)</div>
+                            <div style="font-size: 11px; margin-bottom: 5px; text-align: center; color: #333;">Find the first index where <code style="color: #0284c7; font-weight: bold;">nums[mid] == target</code></div>
+                            <pre style="background-color: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 5px; font-size: 10px; overflow-x: auto; margin: 0; line-height: 1.4;"><code><span style="color: #569cd6;">int</span> firstOccurrence(<span style="color: #569cd6;">int</span>[] nums, <span style="color: #569cd6;">int</span> target) {
+    <span style="color: #569cd6;">int</span> left = <span style="color: #b5cea8;">0</span>, right = nums.length - <span style="color: #b5cea8;">1</span>;
+    <span style="color: #569cd6;">int</span> ans = -<span style="color: #b5cea8;">1</span>;
+    <span style="color: #c586c0;">while</span> (left &lt;= right) {
+        <span style="color: #569cd6;">int</span> mid = left + (right - left) / <span style="color: #b5cea8;">2</span>;
+        <span style="color: #c586c0;">if</span> (nums[mid] &gt;= target) {
+            <span style="color: #c586c0;">if</span> (nums[mid] == target) ans = mid;
+            right = mid - <span style="color: #b5cea8;">1</span>;  <span style="color: #6a9955;">// move left</span>
+        } <span style="color: #c586c0;">else</span> {
+            left = mid + <span style="color: #b5cea8;">1</span>;   <span style="color: #6a9955;">// move right</span>
+        }
+    }
+    <span style="color: #c586c0;">return</span> ans;
+}</code></pre>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; text-align: center; font-weight: bold; color: #16a34a; padding: 5px; margin-bottom: 5px; border-radius: 20px; font-size: 12px;">Last Occurrence (Upper Bound)</div>
+                            <div style="font-size: 11px; margin-bottom: 5px; text-align: center; color: #333;">Find the last index where <code style="color: #0284c7; font-weight: bold;">nums[mid] == target</code></div>
+                            <pre style="background-color: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 5px; font-size: 10px; overflow-x: auto; margin: 0; line-height: 1.4;"><code><span style="color: #569cd6;">int</span> lastOccurrence(<span style="color: #569cd6;">int</span>[] nums, <span style="color: #569cd6;">int</span> target) {
+    <span style="color: #569cd6;">int</span> left = <span style="color: #b5cea8;">0</span>, right = nums.length - <span style="color: #b5cea8;">1</span>;
+    <span style="color: #569cd6;">int</span> ans = -<span style="color: #b5cea8;">1</span>;
+    <span style="color: #c586c0;">while</span> (left &lt;= right) {
+        <span style="color: #569cd6;">int</span> mid = left + (right - left) / <span style="color: #b5cea8;">2</span>;
+        <span style="color: #c586c0;">if</span> (nums[mid] &lt;= target) {
+            <span style="color: #c586c0;">if</span> (nums[mid] == target) ans = mid;
+            left = mid + <span style="color: #b5cea8;">1</span>;   <span style="color: #6a9955;">// move right</span>
+        } <span style="color: #c586c0;">else</span> {
+            right = mid - <span style="color: #b5cea8;">1</span>;  <span style="color: #6a9955;">// move left</span>
+        }
+    }
+    <span style="color: #c586c0;">return</span> ans;
+}</code></pre>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; padding: 10px 15px; border: 1px solid #fde047; background-color: #fefce8; border-radius: 5px; display: flex; align-items: center; gap: 15px;">
+                        <div style="font-size: 24px;">💡</div>
+                        <div style="font-size: 12px; line-height: 1.5; color: #333; font-weight: bold;">
+                            <span style="text-decoration: underline; margin-right: 10px;">PRO TIP:</span>
+                            <span style="display: inline-block; vertical-align: top;">
+                                For First occurrence &rarr; shrink right when equal<br>
+                                For Last occurrence &rarr; shrink left when equal
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box" style="margin-top: 15px;">
+                <div class="section-header" style="background-color: #2563eb; color: white; padding: 5px 10px; font-weight: bold; border-radius: 5px 5px 0 0;"><span class="num">9.</span> BINARY SEARCH ON ANSWER</div>
+                <div class="section-content" style="border: 1px solid #2563eb; border-radius: 0 0 5px 5px; padding: 15px;">
+                    <div style="color: #1d4ed8; font-weight: bold; margin-bottom: 5px; font-size: 14px;">When to Use?</div>
+                    <ul style="margin: 0 0 15px 0; padding-left: 20px; font-size: 13px; color: #333; line-height: 1.5;">
+                        <li>Answer is not an element from array.</li>
+                        <li>We are asked to find minimum / maximum value that satisfies a condition.</li>
+                        <li>The condition is monotonic (T...T...T or F...F...F).</li>
+                    </ul>
+                    
+                    <div style="color: #1d4ed8; font-weight: bold; margin-bottom: 5px; font-size: 14px;">General Template</div>
+                    <pre style="background-color: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 5px; font-size: 11px; overflow-x: auto; margin: 0 0 15px 0; line-height: 1.4;"><code><span style="color: #569cd6;">int</span> left = <span style="color: #b5cea8;">0</span>;             <span style="color: #6a9955;">// minimum possible answer</span>
+<span style="color: #569cd6;">int</span> right = (<span style="color: #569cd6;">int</span>)<span style="color: #b5cea8;">1e9</span>;     <span style="color: #6a9955;">// maximum possible answer</span>
+<span style="color: #569cd6;">int</span> ans = -<span style="color: #b5cea8;">1</span>;
+<span style="color: #c586c0;">while</span> (left &lt;= right) {
+    <span style="color: #569cd6;">int</span> mid = left + (right - left) / <span style="color: #b5cea8;">2</span>;
+    <span style="color: #c586c0;">if</span> (isValid(mid)) {       <span style="color: #6a9955;">// condition check</span>
+        ans = mid;            <span style="color: #6a9955;">// store answer</span>
+        right = mid - <span style="color: #b5cea8;">1</span>;      <span style="color: #6a9955;">// try for better (smaller) answer</span>
+    } <span style="color: #c586c0;">else</span> {
+        left = mid + <span style="color: #b5cea8;">1</span>;       <span style="color: #6a9955;">// try for bigger answer</span>
+    }
+}
+<span style="color: #c586c0;">return</span> ans;</code></pre>
+
+                    <div style="color: #1d4ed8; font-weight: bold; margin-bottom: 5px; font-size: 14px;">Examples</div>
+                    <ul style="margin: 0; padding-left: 20px; font-size: 12px; color: #333; line-height: 1.5; column-count: 2; column-gap: 20px;">
+                        <li>Minimum days to make M bouquets</li>
+                        <li>Allocate minimum pages</li>
+                        <li>Koko eating bananas</li>
+                        <li>Split array largest sum</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-box" style="margin-top: 15px;">
+                <div class="section-header" style="background-color: #ef4444; color: white; padding: 5px 10px; font-weight: bold; border-radius: 5px 5px 0 0;"><span class="num">11.</span> COMMON MISTAKES & HOW TO AVOID THEM</div>
+                <div class="section-content" style="border: 1px solid #ef4444; border-radius: 0 0 5px 5px; padding: 0;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
+                        <tr style="background-color: #ef4444; color: white;">
+                            <th style="padding: 8px; border: 1px solid #fca5a5; text-align: center;">Mistake</th>
+                            <th style="padding: 8px; border: 1px solid #fca5a5; text-align: center;">Why It's Wrong</th>
+                            <th style="padding: 8px; border: 1px solid #fca5a5; text-align: center;">Fix</th>
+                        </tr>
+                        <tr style="background-color: #fef2f2;">
+                            <td style="padding: 8px; border: 1px solid #fecaca; font-weight: bold;"><span style="color: #ef4444; font-size: 16px; margin-right: 5px; vertical-align: middle;">❌</span> Using (left + right) / 2</td>
+                            <td style="padding: 8px; border: 1px solid #fecaca;">Can overflow when left and right are large</td>
+                            <td style="padding: 8px; border: 1px solid #fecaca;">Use <code style="background-color: #fff; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">left + (right - left) / 2</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #fecaca; font-weight: bold;"><span style="color: #ef4444; font-size: 16px; margin-right: 5px; vertical-align: middle;">❌</span> Incorrect boundary update</td>
+                            <td style="padding: 8px; border: 1px solid #fecaca;">Can cause infinite loop or wrong result</td>
+                            <td style="padding: 8px; border: 1px solid #fecaca;">Be careful with <br><code style="background-color: #f8fafc; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">left = mid + 1</code> or <br><code style="background-color: #f8fafc; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">right = mid - 1</code></td>
+                        </tr>
+                        <tr style="background-color: #fef2f2;">
+                            <td style="padding: 8px; border: 1px solid #fecaca; font-weight: bold;"><span style="color: #ef4444; font-size: 16px; margin-right: 5px; vertical-align: middle;">❌</span> Not handling edge cases</td>
+                            <td style="padding: 8px; border: 1px solid #fecaca;">Empty array, size 1 array, target not found</td>
+                            <td style="padding: 8px; border: 1px solid #fecaca;">Always test edge cases</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #fecaca; font-weight: bold;"><span style="color: #ef4444; font-size: 16px; margin-right: 5px; vertical-align: middle;">❌</span> Confusing first &amp; last occurrence</td>
+                            <td style="padding: 8px; border: 1px solid #fecaca;">Logic difference in shrinking</td>
+                            <td style="padding: 8px; border: 1px solid #fecaca;">Remember:<br>first &rarr; shrink right<br>last &rarr; shrink left</td>
+                        </tr>
+                        <tr style="background-color: #fef2f2;">
+                            <td style="padding: 8px; border: 1px solid #fecaca; font-weight: bold;"><span style="color: #ef4444; font-size: 16px; margin-right: 5px; vertical-align: middle;">❌</span> Wrong condition in rotated array</td>
+                            <td style="padding: 8px; border: 1px solid #fecaca;">Leads to eliminating wrong half</td>
+                            <td style="padding: 8px; border: 1px solid #fecaca;">Check which half is sorted first</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; display: flex; gap: 15px; border: 1px solid #facc15; padding: 15px; border-radius: 5px; background-color: #fefce8; align-items: flex-start;">
+                <div style="font-size: 32px; color: #f59e0b;">⭐</div>
+                <div>
+                    <div style="color: #d97706; font-weight: 900; font-size: 16px; margin-bottom: 5px;">INTERVIEW GOLDEN RULE</div>
+                    <div style="font-size: 13px; color: #333; font-weight: bold;">
+                        Dry run on paper. Visualize.<br>
+                        Write clean, bug-free code. Handle all edge cases.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

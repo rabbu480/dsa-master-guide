@@ -1,0 +1,391 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1><span style="font-size: 1.2em;">📖</span> GRAPH PATTERN GUIDE</h1>
+            <div class="subtitle">PAGE 5 — GRAPH DFS PROBLEM GUIDE (APPLY TEMPLATES)<br><small style="color:#64748b;font-weight:normal;">"Same DFS. Different problems. Only the changing parts."</small></div>
+        </div>
+        <div style="text-align: right;">
+            <div class="page-number">PAGE 5</div>
+        </div>
+    </div>
+
+    <!-- Top Info Boxes -->
+    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+        <!-- How to Use -->
+        <div style="flex: 1; border: 1px solid #4f46e5; border-radius: 6px; overflow: hidden;">
+            <div style="background-color: #4f46e5; color: white; padding: 6px 12px; font-weight: bold; font-size: 0.9em; text-align: center;">
+                HOW TO USE THIS PAGE
+            </div>
+            <div style="padding: 10px; font-size: 0.85em; display: flex; justify-content: space-between;">
+                <div>
+                    <div style="margin-bottom: 4px;">① Find the problem.</div>
+                    <div style="margin-bottom: 4px;">② Identify the Base Template (from Page 4).</div>
+                    <div style="margin-bottom: 4px;">③ Read the <strong>CHANGED LINES</strong>.</div>
+                    <div style="margin-bottom: 4px;">④ Understand the AHA.</div>
+                    <div>⑤ Write code in the interview.</div>
+                </div>
+                <div style="font-size: 2.5em; align-self: center; color: #4f46e5;">🎯</div>
+            </div>
+        </div>
+        
+        <!-- Legend -->
+        <div style="flex: 2; border: 1px solid #1e3a8a; border-radius: 6px; overflow: hidden;">
+            <div style="background-color: #1e3a8a; color: white; padding: 6px 12px; font-weight: bold; font-size: 0.9em; text-align: center;">
+                TEMPLATE LEGEND (From Page 4)
+            </div>
+            <div style="padding: 15px 10px; font-size: 0.9em; display: flex; justify-content: space-around; align-items: center; font-weight: bold;">
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="background-color: #4f46e5; color: white; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; justify-content: center; align-items: center;">G</span> Graph DFS (Adj List)</div>
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="background-color: #16a34a; color: white; border-radius: 4px; padding: 2px 6px;">Gd</span> Grid DFS</div>
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="background-color: #ea580c; color: white; border-radius: 4px; padding: 2px 6px;">N</span> Node DFS</div>
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="background-color: #2563eb; color: white; border-radius: 4px; padding: 2px 6px;">OL</span> Outer Loop DFS</div>
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="background-color: #ec4899; color: white; border-radius: 4px; padding: 2px 6px;">Bd</span> Border DFS</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3-Column Grid for Problems -->
+    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+        
+        <!-- COLUMN 1 -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
+            <!-- Box 1 -->
+            <div class="section-box" style="border-color: #e5e7eb; border-radius: 6px;">
+                <div class="section-header" style="background-color: white; border-bottom: 1px solid #e5e7eb; color: #1e1b4b; padding: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div><span class="num" style="background-color: #4f46e5; color: white; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">1</span> VALID PATH</div>
+                    <span style="background-color: #4f46e5; color: white; border-radius: 50%; width: 20px; height: 20px; display: inline-flex; justify-content: center; align-items: center; font-size: 0.8em; font-weight: bold;">G</span>
+                </div>
+                <div class="section-content" style="padding: 8px; font-size: 0.8em;">
+                    <div style="text-align: center; color: #4f46e5; font-weight: bold; margin-bottom: 8px;">Base Template: Graph DFS (Adjacency List)</div>
+                    <strong>Problem</strong>
+                    <p style="margin-top: 2px; margin-bottom: 8px;">Determine if there is a path between source and destination.</p>
+                    <div style="color: #b91c1c; font-weight: bold; border-bottom: 1px solid #fca5a5; margin-bottom: 4px;">Changed Lines (from Template)</div>
+                    <pre style="background: transparent; padding: 0; margin: 0; font-family: monospace; font-size: 0.9em;"><code><span style="color:#16a34a;">// 1. Add destination and return boolean</span>
+if (node == destination) return true;
+
+<span style="color:#16a34a;">// 2. Change return type and propagate</span>
+for (int neighbor : graph.get(node)) {
+    if (!visited[neighbor]) {
+        if (dfs(neighbor, destination, graph, visited))
+            return true;
+    }
+}
+return false;</code></pre>
+                    <table style="width: 100%; font-size: 0.9em; margin-top: 8px; border-collapse: collapse; text-align: center;">
+                        <tr style="border-bottom: 1px solid #e5e7eb;"><td style="padding: 2px;">Caller</td><td style="padding: 2px;">dfs(source, destination, graph, visited)</td><td style="padding: 2px;">Return<br><strong>boolean</strong></td><td style="padding: 2px;">Visited<br><strong>boolean[]</strong></td></tr>
+                    </table>
+                    <div style="margin-top: 8px; background-color: #fef9c3; padding: 6px; border-radius: 4px;">
+                        💡 Stop early when destination is found.
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.9em;">
+                        <div><strong>Complexity</strong><br>Time: O(V + E)<br>Space: O(V)</div>
+                        <div><strong>Interview Tip</strong><br>Mention early termination optimization.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Box 4 -->
+            <div class="section-box" style="border-color: #e5e7eb; border-radius: 6px;">
+                <div class="section-header" style="background-color: white; border-bottom: 1px solid #e5e7eb; color: #1e1b4b; padding: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div><span class="num" style="background-color: #16a34a; color: white; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">4</span> FLOOD FILL</div>
+                    <span style="background-color: #16a34a; color: white; border-radius: 4px; padding: 2px 6px; font-size: 0.8em; font-weight: bold;">Gd</span>
+                </div>
+                <div class="section-content" style="padding: 8px; font-size: 0.8em;">
+                    <div style="text-align: center; color: #16a34a; font-weight: bold; margin-bottom: 8px;">Base Template: Grid DFS</div>
+                    <strong>Problem</strong>
+                    <p style="margin-top: 2px; margin-bottom: 8px;">Replace the starting pixel's color with a new color.</p>
+                    <div style="color: #b91c1c; font-weight: bold; border-bottom: 1px solid #fca5a5; margin-bottom: 4px;">Changed Lines (from Template)</div>
+                    <pre style="background: transparent; padding: 0; margin: 0; font-family: monospace; font-size: 0.9em;"><code><span style="color:#16a34a;">// 1. Store starting color</span>
+char originalColor = image[sr][sc];
+
+<span style="color:#16a34a;">// 2. Add color check</span>
+if (image[r][c] != originalColor) return;
+
+<span style="color:#16a34a;">// 3. Change the color</span>
+image[r][c] = newColor;
+
+<span style="color:#16a34a;">// 4. Rest same (visited + 4 directions)</span></code></pre>
+                    <table style="width: 100%; font-size: 0.9em; margin-top: 8px; border-collapse: collapse; text-align: center;">
+                        <tr style="border-bottom: 1px solid #e5e7eb;"><td style="padding: 2px;">Caller</td><td style="padding: 2px;">dfs(sr, sc, image, visited, newColor, originalColor)</td><td style="padding: 2px;">Return<br><strong>void</strong></td><td style="padding: 2px;">Visited<br><strong>boolean[][]</strong></td></tr>
+                    </table>
+                    <div style="margin-top: 8px; background-color: #fef9c3; padding: 6px; border-radius: 4px;">
+                        💡 Only change pixels with the original color.
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.9em;">
+                        <div><strong>Complexity</strong><br>Time: O(m * n)<br>Space: O(V n)</div>
+                        <div><strong>Interview Tip</strong><br>Boundary + color check prevent extra work.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Box 7 -->
+            <div class="section-box" style="border-color: #e5e7eb; border-radius: 6px;">
+                <div class="section-header" style="background-color: white; border-bottom: 1px solid #e5e7eb; color: #1e1b4b; padding: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div><span class="num" style="background-color: #ea580c; color: white; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">7</span> CLONE GRAPH</div>
+                    <span style="background-color: #ea580c; color: white; border-radius: 4px; padding: 2px 6px; font-size: 0.8em; font-weight: bold;">N</span>
+                </div>
+                <div class="section-content" style="padding: 8px; font-size: 0.8em;">
+                    <div style="text-align: center; color: #ea580c; font-weight: bold; margin-bottom: 8px;">Base Template: Node Graph DFS</div>
+                    <strong>Problem</strong>
+                    <p style="margin-top: 2px; margin-bottom: 8px;">Clone an undirected graph.</p>
+                    <div style="color: #b91c1c; font-weight: bold; border-bottom: 1px solid #fca5a5; margin-bottom: 4px;">Changed Lines (from Template)</div>
+                    <pre style="background: transparent; padding: 0; margin: 0; font-family: monospace; font-size: 0.9em;"><code><span style="color:#16a34a;">// Already handled in template</span>
+<span style="color:#16a34a;">// Key idea:</span>
+<span style="color:#16a34a;">// If node not in map -> create clone</span>
+<span style="color:#16a34a;">// For each neighbor -> recurse and add edge</span></code></pre>
+                    <table style="width: 100%; font-size: 0.9em; margin-top: 8px; border-collapse: collapse; text-align: center;">
+                        <tr style="border-bottom: 1px solid #e5e7eb;"><td style="padding: 2px;">Caller</td><td style="padding: 2px;">dfs(node, map)</td><td style="padding: 2px;">Return<br><strong>Node (cloned)</strong></td><td style="padding: 2px;">Visited<br><strong>HashMap&lt;Node, Node&gt;</strong></td></tr>
+                    </table>
+                    <div style="margin-top: 8px; background-color: #fef9c3; padding: 6px; border-radius: 4px;">
+                        💡 HashMap avoids infinite loop in cycles.
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.9em;">
+                        <div><strong>Complexity</strong><br>Time: O(V + E)<br>Space: O(V)</div>
+                        <div><strong>Interview Tip</strong><br>Always check map before creating clone.</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- COLUMN 2 -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
+            <!-- Box 2 -->
+            <div class="section-box" style="border-color: #e5e7eb; border-radius: 6px;">
+                <div class="section-header" style="background-color: white; border-bottom: 1px solid #e5e7eb; color: #1e1b4b; padding: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div><span class="num" style="background-color: #16a34a; color: white; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">2</span> CONNECTED COMPONENTS</div>
+                    <span style="background-color: #4f46e5; color: white; border-radius: 50%; width: 20px; height: 20px; display: inline-flex; justify-content: center; align-items: center; font-size: 0.8em; font-weight: bold;">G</span>
+                </div>
+                <div class="section-content" style="padding: 8px; font-size: 0.8em;">
+                    <div style="text-align: center; color: #16a34a; font-weight: bold; margin-bottom: 8px;">Base Template: Outer Loop DFS (Graph DFS + Outer Loop)</div>
+                    <strong>Problem</strong>
+                    <p style="margin-top: 2px; margin-bottom: 8px;">Count number of connected components in an undirected graph.</p>
+                    <div style="color: #b91c1c; font-weight: bold; border-bottom: 1px solid #fca5a5; margin-bottom: 4px;">Changed Lines (from Template)</div>
+                    <pre style="background: transparent; padding: 0; margin: 0; font-family: monospace; font-size: 0.9em;"><code><span style="color:#16a34a;">// 1. Outer loop to cover all nodes</span>
+int count = 0;
+for (int i = 0; i < n; i++) {
+    if (!visited[i]) {
+        count++;
+        dfs(i, graph, visited);
+    }
+}
+<span style="color:#16a34a;">// 2. DFS remains same (void)</span></code></pre>
+                    <table style="width: 100%; font-size: 0.9em; margin-top: 8px; border-collapse: collapse; text-align: center;">
+                        <tr style="border-bottom: 1px solid #e5e7eb;"><td style="padding: 2px;">Caller</td><td style="padding: 2px;">for all nodes i</td><td style="padding: 2px;">Return<br><strong>int (count)</strong></td><td style="padding: 2px;">Visited<br><strong>boolean[]</strong></td></tr>
+                    </table>
+                    <div style="margin-top: 8px; background-color: #fef9c3; padding: 6px; border-radius: 4px;">
+                        💡 Each unvisited node starts a new component.
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.9em;">
+                        <div><strong>Complexity</strong><br>Time: O(V + E)<br>Space: O(V)</div>
+                        <div><strong>Interview Tip</strong><br>Explain why we need outer loop.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Box 5 -->
+            <div class="section-box" style="border-color: #e5e7eb; border-radius: 6px;">
+                <div class="section-header" style="background-color: white; border-bottom: 1px solid #e5e7eb; color: #1e1b4b; padding: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div><span class="num" style="background-color: #16a34a; color: white; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">5</span> PACIFIC ATLANTIC WATER FLOW</div>
+                    <span style="background-color: #ec4899; color: white; border-radius: 4px; padding: 2px 6px; font-size: 0.8em; font-weight: bold;">Bd</span>
+                </div>
+                <div class="section-content" style="padding: 8px; font-size: 0.8em;">
+                    <div style="text-align: center; color: #ec4899; font-weight: bold; margin-bottom: 8px;">Base Template: Border DFS (Multi-Source DFS)</div>
+                    <strong>Problem</strong>
+                    <p style="margin-top: 2px; margin-bottom: 8px;">Find cells that can flow water to both Pacific and Atlantic.</p>
+                    <div style="color: #b91c1c; font-weight: bold; border-bottom: 1px solid #fca5a5; margin-bottom: 4px;">Changed Lines (from Template)</div>
+                    <pre style="background: transparent; padding: 0; margin: 0; font-family: monospace; font-size: 0.85em;"><code><span style="color:#16a34a;">// 1. Run DFS from all Pacific borders</span>
+for (int r = 0; r < m; r++) dfs(r, 0, heights, pacific);
+for (int c = 0; c < n; c++) dfs(0, c, heights, pacific);
+
+<span style="color:#16a34a;">// 2. Run DFS from all Atlantic borders</span>
+for (int r = 0; r < m; r++) dfs(r, n-1, heights, atlantic);
+for (int c = 0; c < n; c++) dfs(m-1, c, heights, atlantic);
+
+<span style="color:#16a34a;">// 3. Collect intersection</span>
+if (pacific[r][c] && atlantic[r][c]) add to answer;</code></pre>
+                    <table style="width: 100%; font-size: 0.9em; margin-top: 8px; border-collapse: collapse; text-align: center;">
+                        <tr style="border-bottom: 1px solid #e5e7eb;"><td style="padding: 2px;">Caller</td><td style="padding: 2px;">Multiple border starts</td><td style="padding: 2px;">Return<br><strong>List&lt;List&lt;Integer&gt;&gt;</strong></td><td style="padding: 2px;">Visited<br><strong>boolean[][]<br>(two arrays)</strong></td></tr>
+                    </table>
+                    <div style="margin-top: 8px; background-color: #fef9c3; padding: 6px; border-radius: 4px;">
+                        💡 Flow is reverse. Start DFS from oceans.
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.9em;">
+                        <div><strong>Complexity</strong><br>Time: O(m * n)<br>Space: O(m * n)</div>
+                        <div><strong>Interview Tip</strong><br>Don't do DFS from every cell!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Reference Table Box -->
+            <div class="section-box" style="border-color: #1e3a8a; border-radius: 6px; background-color: #eff6ff;">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 8px; text-align: center; font-size: 0.9em;">
+                    QUICK REFERENCE (CHANGES OVERVIEW)
+                </div>
+                <div class="section-content" style="padding: 4px; font-size: 0.75em;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: center; background-color: white;">
+                        <tr style="border-bottom: 2px solid #e5e7eb;">
+                            <th style="padding: 4px;">Problem</th>
+                            <th style="padding: 4px;">Base Template</th>
+                            <th style="padding: 4px;">Main Change</th>
+                            <th style="padding: 4px;">Return</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 4px; text-align: left;"><span style="background-color: #4f46e5; color: white; border-radius: 4px; padding: 1px 4px; margin-right: 4px;">1</span> Valid Path</td>
+                            <td style="padding: 4px;"><span style="background-color: #4f46e5; color: white; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; justify-content: center; align-items: center; font-size: 0.9em;">G</span></td>
+                            <td style="padding: 4px;">Early stop + boolean</td>
+                            <td style="padding: 4px;">boolean</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 4px; text-align: left;"><span style="background-color: #16a34a; color: white; border-radius: 4px; padding: 1px 4px; margin-right: 4px;">2</span> Connected Components</td>
+                            <td style="padding: 4px;"><span style="background-color: #2563eb; color: white; border-radius: 4px; padding: 1px 4px;">OL</span></td>
+                            <td style="padding: 4px;">Outer loop + count</td>
+                            <td style="padding: 4px;">int</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 4px; text-align: left;"><span style="background-color: #16a34a; color: white; border-radius: 4px; padding: 1px 4px; margin-right: 4px;">3</span> Number of Islands</td>
+                            <td style="padding: 4px;"><span style="background-color: #2563eb; color: white; border-radius: 4px; padding: 1px 4px; margin-right: 2px;">OL</span> + <span style="background-color: #16a34a; color: white; border-radius: 4px; padding: 1px 4px;">Gd</span></td>
+                            <td style="padding: 4px;">Grid outer loop + count</td>
+                            <td style="padding: 4px;">int</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 4px; text-align: left;"><span style="background-color: #16a34a; color: white; border-radius: 4px; padding: 1px 4px; margin-right: 4px;">4</span> Flood Fill</td>
+                            <td style="padding: 4px;"><span style="background-color: #16a34a; color: white; border-radius: 4px; padding: 1px 4px;">Gd</span></td>
+                            <td style="padding: 4px;">Color check + change</td>
+                            <td style="padding: 4px;">void</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 4px; text-align: left;"><span style="background-color: #16a34a; color: white; border-radius: 4px; padding: 1px 4px; margin-right: 4px;">5</span> Pacific Atlantic</td>
+                            <td style="padding: 4px;"><span style="background-color: #ec4899; color: white; border-radius: 4px; padding: 1px 4px;">Bd</span></td>
+                            <td style="padding: 4px;">Multi-source + intersect</td>
+                            <td style="padding: 4px;">List&lt;List&lt;Integer&gt;&gt;</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 4px; text-align: left;"><span style="background-color: #ec4899; color: white; border-radius: 4px; padding: 1px 4px; margin-right: 4px;">6</span> Surrounded Regions</td>
+                            <td style="padding: 4px;"><span style="background-color: #ec4899; color: white; border-radius: 4px; padding: 1px 4px;">Bd</span></td>
+                            <td style="padding: 4px;">Mark safe + flip rest</td>
+                            <td style="padding: 4px;">void</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px; text-align: left;"><span style="background-color: #ea580c; color: white; border-radius: 4px; padding: 1px 4px; margin-right: 4px;">7</span> Clone Graph</td>
+                            <td style="padding: 4px;"><span style="background-color: #ea580c; color: white; border-radius: 4px; padding: 1px 4px;">N</span></td>
+                            <td style="padding: 4px;">HashMap for visited</td>
+                            <td style="padding: 4px;">Node</td>
+                        </tr>
+                    </table>
+                    <div style="display: flex; justify-content: center; gap: 4px; margin-top: 4px;">
+                        <span style="background-color: #4f46e5; color: white; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; justify-content: center; align-items: center; font-size: 0.8em;">G</span> Graph DFS
+                        <span style="background-color: #16a34a; color: white; border-radius: 4px; padding: 0 4px; margin-left: 4px;">Gd</span> Grid DFS
+                        <span style="background-color: #ea580c; color: white; border-radius: 4px; padding: 0 4px; margin-left: 4px;">N</span> Node DFS
+                        <span style="background-color: #2563eb; color: white; border-radius: 4px; padding: 0 4px; margin-left: 4px;">OL</span> Outer Loop DFS
+                        <span style="background-color: #ec4899; color: white; border-radius: 4px; padding: 0 4px; margin-left: 4px;">Bd</span> Border DFS
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- COLUMN 3 -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
+            <!-- Box 3 -->
+            <div class="section-box" style="border-color: #e5e7eb; border-radius: 6px;">
+                <div class="section-header" style="background-color: white; border-bottom: 1px solid #e5e7eb; color: #1e1b4b; padding: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div><span class="num" style="background-color: #16a34a; color: white; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">3</span> NUMBER OF ISLANDS</div>
+                    <span style="background-color: #16a34a; color: white; border-radius: 4px; padding: 2px 6px; font-size: 0.8em; font-weight: bold;">Gd</span>
+                </div>
+                <div class="section-content" style="padding: 8px; font-size: 0.8em;">
+                    <div style="text-align: center; color: #16a34a; font-weight: bold; margin-bottom: 8px;">Base Template: Outer Loop DFS (Grid DFS + Outer Loop)</div>
+                    <strong>Problem</strong>
+                    <p style="margin-top: 2px; margin-bottom: 8px;">Count number of islands (groups of 1s) in a 2D grid.</p>
+                    <div style="color: #b91c1c; font-weight: bold; border-bottom: 1px solid #fca5a5; margin-bottom: 4px;">Changed Lines (from Template)</div>
+                    <pre style="background: transparent; padding: 0; margin: 0; font-family: monospace; font-size: 0.9em;"><code><span style="color:#16a34a;">// 1. Outer loop over the entire grid</span>
+int count = 0;
+for (int r = 0; r < m; r++) {
+    for (int c = 0; c < n; c++) {
+        if (grid[r][c] == '1' && !visited[r][c]) {
+            count++;
+            dfs(r, c, grid, visited);
+        }
+    }
+}
+<span style="color:#16a34a;">// 2. DFS remains same (mark all connected land)</span></code></pre>
+                    <table style="width: 100%; font-size: 0.9em; margin-top: 8px; border-collapse: collapse; text-align: center;">
+                        <tr style="border-bottom: 1px solid #e5e7eb;"><td style="padding: 2px;">Caller</td><td style="padding: 2px;">for all cells (r, c)</td><td style="padding: 2px;">Return<br><strong>int (count)</strong></td><td style="padding: 2px;">Visited<br><strong>boolean[][]</strong></td></tr>
+                    </table>
+                    <div style="margin-top: 8px; background-color: #fef9c3; padding: 6px; border-radius: 4px;">
+                        💡 Every new unvisited land cell = new island.
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.9em;">
+                        <div><strong>Complexity</strong><br>Time: O(m * n)<br>Space: O(m * n)</div>
+                        <div><strong>Interview Tip</strong><br>Don't forget to mark visited.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Box 6 -->
+            <div class="section-box" style="border-color: #e5e7eb; border-radius: 6px;">
+                <div class="section-header" style="background-color: white; border-bottom: 1px solid #e5e7eb; color: #1e1b4b; padding: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div><span class="num" style="background-color: #16a34a; color: white; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">6</span> SURROUNDED REGIONS</div>
+                    <span style="background-color: #ec4899; color: white; border-radius: 4px; padding: 2px 6px; font-size: 0.8em; font-weight: bold;">Bd</span>
+                </div>
+                <div class="section-content" style="padding: 8px; font-size: 0.8em;">
+                    <div style="text-align: center; color: #ec4899; font-weight: bold; margin-bottom: 8px;">Base Template: Border DFS</div>
+                    <strong>Problem</strong>
+                    <p style="margin-top: 2px; margin-bottom: 8px;">Capture all regions not connected to boundary.</p>
+                    <div style="color: #b91c1c; font-weight: bold; border-bottom: 1px solid #fca5a5; margin-bottom: 4px;">Changed Lines (from Template)</div>
+                    <pre style="background: transparent; padding: 0; margin: 0; font-family: monospace; font-size: 0.9em;"><code><span style="color:#16a34a;">// 1. Mark boundary connected 'O's</span>
+Run DFS from all borders and mark as 'safe'
+
+<span style="color:#16a34a;">// 2. Flip remaining 'O's</span>
+for (int r = 0; r < m; r++) {
+    for (int c = 0; c < n; c++) {
+        if (board[r][c] == 'O' && !safe[r][c])
+            board[r][c] = 'X';
+    }
+}</code></pre>
+                    <table style="width: 100%; font-size: 0.9em; margin-top: 8px; border-collapse: collapse; text-align: center;">
+                        <tr style="border-bottom: 1px solid #e5e7eb;"><td style="padding: 2px;">Caller</td><td style="padding: 2px;">All border cells</td><td style="padding: 2px;">Return<br><strong>void</strong></td><td style="padding: 2px;">Visited<br><strong>boolean[][] (safe)</strong></td></tr>
+                    </table>
+                    <div style="margin-top: 8px; background-color: #fef9c3; padding: 6px; border-radius: 4px;">
+                        💡 Only border-connected regions are safe.
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.9em;">
+                        <div><strong>Complexity</strong><br>Time: O(m * n)<br>Space: O(m * n)</div>
+                        <div><strong>Interview Tip</strong><br>Two step thinking is the key.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Box 8 Interview Checklist -->
+            <div class="section-box" style="border-color: #1e3a8a; border-radius: 6px;">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 8px; display: flex; align-items: center; gap: 8px;">
+                    <span class="num" style="background-color: white; color: #1e3a8a; padding: 2px 8px; border-radius: 4px; font-weight: bold;">8</span> INTERVIEW CHECKLIST
+                </div>
+                <div class="section-content" style="padding: 12px; font-size: 0.85em; background-color: #f8fafc;">
+                    <div style="margin-bottom: 6px;"><input type="checkbox" checked onclick="return false;"> Identified the correct template?</div>
+                    <div style="margin-bottom: 6px;"><input type="checkbox" checked onclick="return false;"> Built correct representation?</div>
+                    <div style="margin-bottom: 6px;"><input type="checkbox" checked onclick="return false;"> Initialized visited structure correctly?</div>
+                    <div style="margin-bottom: 6px;"><input type="checkbox" checked onclick="return false;"> Handled all starting points?</div>
+                    <div style="margin-bottom: 6px;"><input type="checkbox" checked onclick="return false;"> Applied boundary / color / condition checks?</div>
+                    <div style="margin-bottom: 6px;"><input type="checkbox" checked onclick="return false;"> Returned correct type?</div>
+                    <div style="margin-bottom: 6px;"><input type="checkbox" checked onclick="return false;"> Considered disconnected components?</div>
+                    <div style="margin-bottom: 6px;"><input type="checkbox" checked onclick="return false;"> Can you explain time/space complexity?</div>
+                    <div style="margin-bottom: 6px;"><input type="checkbox" checked onclick="return false;"> Dry run on small example?</div>
+                    <div><input type="checkbox" checked onclick="return false;"> Optimized when possible?</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- Footer Process Bar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 0.8em; font-weight: bold; color: #374151;">
+        <div style="display: flex; align-items: center; gap: 4px;"><span>❔</span> <div>Problem<br><span style="font-weight:normal; font-size:0.9em;">(Understand)</span></div></div> <span>➔</span>
+        <div style="display: flex; align-items: center; gap: 4px;"><span>⌨️</span> <div>Input<br><span style="font-weight:normal; font-size:0.9em;">(What given)</span></div></div> <span>➔</span>
+        <div style="display: flex; align-items: center; gap: 4px;"><span>🧮</span> <div>Representation<br><span style="font-weight:normal; font-size:0.9em;">(How to model)</span></div></div> <span>➔</span>
+        <div style="display: flex; align-items: center; gap: 4px;"><span>🧩</span> <div>Helper Structure<br><span style="font-weight:normal; font-size:0.9em;">(Visited, dist, etc.)</span></div></div> <span>➔</span>
+        <div style="display: flex; align-items: center; gap: 4px;"><span>🎯</span> <div>Pattern<br><span style="font-weight:normal; font-size:0.9em;">(Choose DFS Template)</span></div></div> <span>➔</span>
+        <div style="display: flex; align-items: center; gap: 4px;"><span>📝</span> <div>Tiny Logic Change<br><span style="font-weight:normal; font-size:0.9em;">(Apply Changes)</span></div></div> <span>➔</span>
+        <div style="display: flex; align-items: center; gap: 4px;"><span>▶️</span> <div>Dry Run<br><span style="font-weight:normal; font-size:0.9em;">(Example)</span></div></div> <span>➔</span>
+        <div style="display: flex; align-items: center; gap: 4px;"><span>⏱️</span> <div>Optimize<br><span style="font-weight:normal; font-size:0.9em;">(Time/Space)</span></div></div>
+    </div>
+</div>

@@ -1,0 +1,2296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>1.Array&Hashing</title>
+    
+<style>
+    :root {
+        --bg-color: #0f172a;
+        --card-bg: #1e293b;
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --accent: #38bdf8;
+        --accent-secondary: #f59e0b;
+        --accent-tertiary: #10b981;
+        --border-color: #334155;
+    }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        line-height: 1.6;
+        margin: 0;
+        padding: 40px;
+    }
+    .page-title {
+        text-align: center;
+        font-size: 3rem;
+        font-weight: 800;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 50px;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 20px;
+    }
+    /* Masonry / Multi-column layout */
+    .masonry {
+        column-count: 2;
+        column-gap: 30px;
+    }
+    @media (max-width: 1000px) {
+        .masonry { column-count: 1; }
+    }
+    /* Cards for each section */
+    .card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 30px;
+        break-inside: avoid;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    }
+    .card > h2 {
+        margin-top: 0;
+        color: #fff;
+        font-size: 1.5rem;
+        border-left: 5px solid var(--accent-secondary);
+        padding-left: 12px;
+        margin-bottom: 20px;
+    }
+    h1, h3, h4, h5, h6 {
+        color: var(--accent);
+        margin-top: 24px;
+        margin-bottom: 16px;
+    }
+    h1 { font-size: 2em; }
+    h3 { font-size: 1.25em; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;}
+    p, ul, ol {
+        color: #e2e8f0;
+        margin-bottom: 16px;
+    }
+    li {
+        margin-bottom: 8px;
+    }
+    strong {
+        color: var(--accent-secondary);
+        font-weight: 700;
+    }
+    em {
+        color: var(--text-muted);
+    }
+    pre {
+        background-color: #020617;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 16px;
+        overflow-x: auto;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9em;
+        margin-bottom: 16px;
+    }
+    code {
+        background-color: #020617;
+        color: #a5b4fc;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9em;
+    }
+    pre code {
+        background-color: transparent;
+        padding: 0;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        background: #0f172a;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    th {
+        background: #2563eb;
+        color: white;
+        text-align: left;
+        padding: 12px 16px;
+        font-weight: 600;
+    }
+    td {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    tr:last-child td { border-bottom: none; }
+    blockquote {
+        border-left: 4px solid var(--accent-tertiary);
+        background: #1e293b;
+        padding: 16px 20px;
+        margin: 0 0 20px 0;
+        border-radius: 0 8px 8px 0;
+        font-style: italic;
+    }
+    img {
+        max-width: 100%;
+        border-radius: 8px;
+        margin-bottom: 16px;
+    }
+    .page-indicator {
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin: 40px 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    /* PRINT STYLES */
+    @media print {
+        body { background: white; color: black; padding: 0; margin: 0; }
+        .page-title { color: black; border-bottom: 2px solid #ccc; }
+        .card { background: white; border: 1px solid #ccc; box-shadow: none; break-inside: avoid; }
+        .card > h2 { color: black; border-left-color: #3b82f6; }
+        h1, h3, h4 { color: black; }
+        strong { color: #d97706; }
+        pre { background: #f1f5f9; border: 1px solid #ccc; }
+        code { color: #b91c1c; background: #f1f5f9; }
+        table { border: 1px solid #ccc; background: white; }
+        th { background: #3b82f6; color: white; }
+        tr:nth-child(even) td { background: #f8fafc; }
+        .masonry { column-count: 2; column-gap: 20px; }
+        .page-break { page-break-before: always; }
+        .page-indicator { display: none; }
+    }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Fira+Code&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <h1 class="page-title">1.Array&Hashing</h1>
+    <div class="masonry"><div class="card"><h2>🌟 ARRAYS &amp; HASHING - CHEAT SHEET (VOLUME 1)</h2></div><div class="card"><h2>1. INTERVIEW FLOW</h2><ol>
+<li><strong>Clarify</strong>
+   Constraints, edge cases, input range, duplicates?</li>
+<li><strong>Brute Force</strong>
+   Write simple solution</li>
+<li><strong>Better</strong>
+   Optimize Time</li>
+<li><strong>Optimal</strong>
+   Best approach</li>
+<li><strong>Complexity</strong>
+   Time &amp; Space</li>
+<li><strong>Code</strong>
+   Clean &amp; bug free</li>
+<li><strong>Explain</strong>
+   Walk through</li>
+</ol></div><div class="card"><h2>2. PATTERN RECOGNITION</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Need</th>
+<th style="text-align: left;">Data Structure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Need uniqueness?</td>
+<td style="text-align: left;"><strong>HashSet</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Need frequency count?</td>
+<td style="text-align: left;"><strong>HashMap</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Small fixed alphabet (a-z)?</td>
+<td style="text-align: left;"><strong>int[26]</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Need grouping?</td>
+<td style="text-align: left;"><strong>HashMap<key, list=""></key,></strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Need Top K frequent?</td>
+<td style="text-align: left;"><strong>HashMap + Heap</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Need Left &amp; Right products?</td>
+<td style="text-align: left;"><strong>Prefix / Suffix</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Need sequence (consecutive)?</td>
+<td style="text-align: left;"><strong>HashSet</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Need matrix validation?</td>
+<td style="text-align: left;"><strong>HashSet</strong></td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>3. PROBLEMS COVERED</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">LC</th>
+<th style="text-align: left;">Problem</th>
+<th style="text-align: left;">Pattern</th>
+<th style="text-align: left;">One-line Memory Trick</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">217</td>
+<td style="text-align: left;">Contains Duplicate</td>
+<td style="text-align: left;">HashSet</td>
+<td style="text-align: left;">Duplicate =&gt; !set.add()</td>
+</tr>
+<tr>
+<td style="text-align: left;">242</td>
+<td style="text-align: left;">Valid Anagram</td>
+<td style="text-align: left;">Freq Array</td>
+<td style="text-align: left;">Increment one, decrement other</td>
+</tr>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Two Sum</td>
+<td style="text-align: left;">HashMap</td>
+<td style="text-align: left;">Target - current</td>
+</tr>
+<tr>
+<td style="text-align: left;">49</td>
+<td style="text-align: left;">Group Anagrams</td>
+<td style="text-align: left;">HashMap + Freq</td>
+<td style="text-align: left;">26-count key</td>
+</tr>
+<tr>
+<td style="text-align: left;">347</td>
+<td style="text-align: left;">Top K Frequent</td>
+<td style="text-align: left;">HashMap + Heap</td>
+<td style="text-align: left;">Frequency -&gt; Min Heap</td>
+</tr>
+<tr>
+<td style="text-align: left;">271</td>
+<td style="text-align: left;">Encode &amp; Decode Strings</td>
+<td style="text-align: left;">String Encoding</td>
+<td style="text-align: left;">length#string</td>
+</tr>
+<tr>
+<td style="text-align: left;">238</td>
+<td style="text-align: left;">Product Except Self</td>
+<td style="text-align: left;">Prefix / Suffix</td>
+<td style="text-align: left;">Left x Right</td>
+</tr>
+<tr>
+<td style="text-align: left;">128</td>
+<td style="text-align: left;">Longest Consecutive Seq.</td>
+<td style="text-align: left;">HashSet</td>
+<td style="text-align: left;">Start only if num-1 absent</td>
+</tr>
+<tr>
+<td style="text-align: left;">36</td>
+<td style="text-align: left;">Valid Sudoku</td>
+<td style="text-align: left;">HashSet</td>
+<td style="text-align: left;">Rows, Columns, Boxes</td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>4. BIGGEST AHA MOMENTS</h2><p><strong>Group Anagrams</strong></p><pre><code class="language-python">key.append(freq).append("#")
+# avoids ambiguity
+</code></pre><p><strong>Top K Frequent</strong>
+HashMap -&gt; PriorityQueue (min heap)
+Keep only K elements</p><p><strong>Product Except Self</strong>
+Brute Force -&gt; Left[] -&gt; Right[] -&gt; Left x Right
+Result[] = rightProduct</p><p><strong>Longest Consecutive</strong>
+Sorting? -&gt; No -&gt; !contains(num-1) -&gt; while(contains(curr+1))
+The if is for avoiding repeated traversals, not for correctness.</p><p><strong>Encode &amp; Decode</strong>
+<code>length#string</code> e.g. <code>5#Hello</code>
+Never use split(). Parse length first.</p></div><div class="card"><h2>5. COMPLEXITY QUICK REFERENCE</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Operation</th>
+<th style="text-align: left;">Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">HashSet contains / add / remove</td>
+<td style="text-align: left;">O(1) avg</td>
+</tr>
+<tr>
+<td style="text-align: left;">HashMap get / put / containsKey</td>
+<td style="text-align: left;">O(1) avg</td>
+</tr>
+<tr>
+<td style="text-align: left;">Array access</td>
+<td style="text-align: left;">O(1)</td>
+</tr>
+<tr>
+<td style="text-align: left;">For loop (n times)</td>
+<td style="text-align: left;">O(n)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Two separate loops</td>
+<td style="text-align: left;">O(2n) = O(n)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Nested loops (n x n)</td>
+<td style="text-align: left;">O(n^2)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Sorting</td>
+<td style="text-align: left;">O(n log n)</td>
+</tr>
+<tr>
+<td style="text-align: left;">PriorityQueue offer / poll</td>
+<td style="text-align: left;">O(log n)</td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>6. BIG-O RULES</h2><p><strong>Sequential loops ADD</strong></p><pre><code class="language-java">for i in n
+...
+for j in n
+...
+= O(2n) = O(n)
+</code></pre><p><strong>Nested loops MULTIPLY</strong></p><pre><code class="language-java">for i in n
+  for j in n
+    ...
+= O(n^2)
+</code></pre><p><strong>Always drop constants.</strong>
+Focus on growth.</p></div><div class="card"><h2>7. JAVA APIS USED</h2><p><strong>HashMap</strong>
+*   <code>put(key, val)</code>
+*   <code>get(key)</code>
+*   <code>containsKey(key)</code>
+*   <code>getOrDefault(key, def)</code>
+*   <code>computeIfAbsent(key, k -&gt; val)</code>
+*   <code>keySet()</code> / <code>values()</code></p><p><strong>HashSet</strong>
+*   <code>add(val)</code>
+*   <code>contains(val)</code>
+*   <code>remove(val)</code></p><p><strong>StringBuilder</strong>
+*   <code>append(x)</code>
+*   <code>toString()</code></p><p><strong>Arrays</strong>
+*   <code>sort(arr)</code>
+*   <code>toString(arr)</code></p></div><div class="card"><h2>8. COMMON CONVERSIONS</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">From -&gt; To</th>
+<th style="text-align: left;">Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">String -&gt; char[]</td>
+<td style="text-align: left;"><code>s.toCharArray()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">char[] -&gt; String</td>
+<td style="text-align: left;"><code>new String(arr)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">int -&gt; String</td>
+<td style="text-align: left;"><code>String.valueOf(n)</code><br/><code>Integer.toString(n)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">String -&gt; int</td>
+<td style="text-align: left;"><code>Integer.parseInt(s)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">char -&gt; int</td>
+<td style="text-align: left;"><code>c - '0'</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">int -&gt; char</td>
+<td style="text-align: left;"><code>(char) (n + '0')</code></td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>9. LAMBDA EXPRESSIONS (QUICK)</h2><p><strong>Compute If Absent</strong></p><pre><code class="language-java">map.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;());
+</code></pre><p><strong>Comparator (Min Heap)</strong></p><pre><code class="language-java">(a, b) -&gt; a - b
+</code></pre><p><strong>Comparator (by frequency)</strong></p><pre><code class="language-java">(a, b) -&gt; freqMap.get(a) - freqMap.get(b)
+</code></pre><p><strong>Sort (custom)</strong></p><pre><code class="language-java">arr.sort((a, b) -&gt; b - a)
+</code></pre></div><div class="card"><h2>10. WHEN TO USE WHAT?</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Use This</th>
+<th style="text-align: left;">When?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">HashSet</td>
+<td style="text-align: left;">Check existence / uniqueness</td>
+</tr>
+<tr>
+<td style="text-align: left;">HashMap</td>
+<td style="text-align: left;">Count frequency / key-value</td>
+</tr>
+<tr>
+<td style="text-align: left;">int[26]</td>
+<td style="text-align: left;">Only lowercase letters a-z</td>
+</tr>
+<tr>
+<td style="text-align: left;">Heap (PQ)</td>
+<td style="text-align: left;">Top K / Priority based</td>
+</tr>
+<tr>
+<td style="text-align: left;">Prefix/Suffix</td>
+<td style="text-align: left;">Left/Right contribution problems</td>
+</tr>
+<tr>
+<td style="text-align: left;">HashSet (Seq)</td>
+<td style="text-align: left;">Consecutive sequence problems</td>
+</tr>
+<tr>
+<td style="text-align: left;">HashSet (Matrix)</td>
+<td style="text-align: left;">Row / Col / Box validation</td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>11. TIPS &amp; TRICKS</h2><ul>
+<li>Think pattern first, code later.</li>
+<li>Can HashSet replace sorting? Always ask!</li>
+<li>Avoid repeated work (like in Longest Consecutive).</li>
+<li>Use freq array for small fixed ranges (0-25).</li>
+<li>For Top K -&gt; use Min Heap of size K.</li>
+<li>Edge cases decide AC/TLE. Handle them early.</li>
+</ul></div><div class="card"><h2>12. COMMON PITFALLS</h2><ul>
+<li>Forgetting to handle empty input</li>
+<li>Not clearing data structure in multiple test cases</li>
+<li>Using split() in Encode/Decode (TLE)</li>
+<li>Wrong comparator in PriorityQueue</li>
+<li>Not checking num-1 before starting sequence (LC 128)</li>
+</ul></div><div class="card"><h2>13. MEMORY TRICKS</h2><ul>
+<li>Set for YES/NO (Exists?)</li>
+<li>Map for HOW MANY / VALUE (Count / Store)</li>
+<li>Heap for TOP K (Sorted partially)</li>
+<li>Left x Right (Product Except Self)</li>
+<li>Start from BEGINNING (num-1 not exists)</li>
+<li>Length#String (Encoding rule)</li>
+<li>Row, Col, Box (Sudoku rule)</li>
+</ul></div><div class="card"><h2>14. COMPLEXITY SUMMARY TABLE</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Approach</th>
+<th style="text-align: left;">Time Complexity</th>
+<th style="text-align: left;">Space Complexity</th>
+<th style="text-align: left;">Example Problems</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Brute Force (Nested Loop)</td>
+<td style="text-align: left;">O(n^2)</td>
+<td style="text-align: left;">O(1)</td>
+<td style="text-align: left;">Two Sum, Product Except Self</td>
+</tr>
+<tr>
+<td style="text-align: left;">Hashing (Set/Map)</td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">Contains Duplicate, Two Sum</td>
+</tr>
+<tr>
+<td style="text-align: left;">Sorting</td>
+<td style="text-align: left;">O(n log n)</td>
+<td style="text-align: left;">O(1) / O(n)</td>
+<td style="text-align: left;">Group Anagrams (alt), Longest Consecutive (alt)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Heap (Top K)</td>
+<td style="text-align: left;">O(n log k)</td>
+<td style="text-align: left;">O(k)</td>
+<td style="text-align: left;">Top K Frequent Elements</td>
+</tr>
+<tr>
+<td style="text-align: left;">Prefix / Suffix</td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">Product Except Self</td>
+</tr>
+</tbody>
+</table><hr/><p><strong>🏆 GOLDEN RULE: CLARIFY -&gt; THINK -&gt; CHOOSE RIGHT DS -&gt; OPTIMIZE -&gt; CODE -&gt; EXPLAIN ⭐️</strong>
+<strong>Keep Practicing. Keep Improving. Crack FAANG! 💪</strong></p><!-- PAGE_BREAK --></div><div class="card"><h2>ARRAYS &amp; HASHING CHEAT SHEET ✅</h2><p>★ Patterns, Tips &amp; Tricks for Coding Interviews ★</p></div><div class="card"><h2>1 CORE IDEA</h2><ul>
+<li><strong>HashSet</strong> → Uniqueness, fast lookups</li>
+<li><strong>HashMap</strong> → Frequency, mapping, counts</li>
+<li><strong>Frequency Array</strong> → When range is small</li>
+<li><strong>Sorting vs Hashing</strong> → Hashing is O(n), Sorting is O(n log n)</li>
+</ul></div><div class="card"><h2>2 COMPLEXITY</h2><p>n = size of input</p><table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>HashSet / HashMap</th>
+<th>Array / Loop</th>
+<th>Sorting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lookup</td>
+<td>O(1) avg</td>
+<td>O(n)</td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td>Insert</td>
+<td>O(1) avg</td>
+<td>O(1)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Delete</td>
+<td>O(1) avg</td>
+<td>O(n)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Traversal</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Space</td>
+<td>O(n)</td>
+<td>O(1)</td>
+<td>O(1)</td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>3 COMMON PATTERNS</h2><ul>
+<li>✅ <strong>Unordered data</strong> → HashSet / HashMap</li>
+<li>📊 <strong>Counting / Frequency</strong> → HashMap</li>
+<li>👥 <strong>Group by something</strong> → HashMap<key, list=""></key,></li>
+<li>🔍 <strong>Check existence</strong> → HashSet</li>
+<li>❌ <strong>Avoid duplicates</strong> → HashSet</li>
+<li>💡 <strong>Optimize lookup</strong> → Replace sorting with Hashing</li>
+</ul></div><div class="card"><h2>4 KEY PROBLEMS IN ARRAYS &amp; HASHING</h2><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Problem</th>
+<th>Pattern</th>
+<th>Key Idea</th>
+<th>Time</th>
+<th>Space</th>
+<th>Key Tip / Code Snippet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅ 217</td>
+<td>Contains Duplicate</td>
+<td>HashSet</td>
+<td>If size changes → duplicate exists</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td><code>if (!set.add(x)) return true;</code></td>
+</tr>
+<tr>
+<td>✅ 242</td>
+<td>Valid Anagram</td>
+<td>HashMap / Array[26]</td>
+<td>Count freq of both strings</td>
+<td>O(n)</td>
+<td>O(1/26)</td>
+<td><code>count[c]++; count[c]--;</code></td>
+</tr>
+<tr>
+<td>✅ 1</td>
+<td>Two Sum</td>
+<td>HashMap</td>
+<td>Store num → index</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td><code>if (map.containsKey(target-num))</code></td>
+</tr>
+<tr>
+<td>✅ 49</td>
+<td>Group Anagrams</td>
+<td>HashMap</td>
+<td>Sort string or count freq as key</td>
+<td>O(n * k log k)</td>
+<td>O(n * k)</td>
+<td><code>map.computeIfAbsent(key, k-&gt; new ArrayList&lt;&gt;())</code></td>
+</tr>
+<tr>
+<td>✅ 347</td>
+<td>Top K Frequent</td>
+<td>HashMap + Heap</td>
+<td>Count freq + Min Heap (size k)</td>
+<td>O(n log k)</td>
+<td>O(n)</td>
+<td><code>pq.offer(x); if (pq.size() &gt; k) pq.poll();</code></td>
+</tr>
+<tr>
+<td>✅ 271</td>
+<td>Encode &amp; Decode</td>
+<td>String Builder</td>
+<td>Length#string format</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td><code>sb.append(s.length()).append("#").append(s);</code></td>
+</tr>
+<tr>
+<td>✅ 238</td>
+<td>Product Except Self</td>
+<td>Prefix / Suffix</td>
+<td>Left &amp; Right products</td>
+<td>O(n)</td>
+<td>O(1)</td>
+<td><code>left[i] * right[i]</code></td>
+</tr>
+<tr>
+<td>✅ 128</td>
+<td>Longest Consecutive</td>
+<td>HashSet</td>
+<td>Start from sequence start only</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td><code>if (!set.contains(x-1)) { while(set.contains(x+1)) x++; }</code></td>
+</tr>
+<tr>
+<td>✅ 36</td>
+<td>Valid Sudoku</td>
+<td>HashSet</td>
+<td>Row, Col, 3x3 box → no duplicates</td>
+<td>O(1) (constant)</td>
+<td>O(1)</td>
+<td><code>Use set.clear() for each row/col/box</code></td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>5 QUICK TIPS &amp; TRICKS</h2><h3>✅ HashSet Uniqueness</h3><pre><code class="language-java">Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+for(int x : nums){
+    if(!set.add(x)) return true; // duplicate
+}
+</code></pre><h3>📈 Frequency with HashMap</h3><pre><code class="language-java">Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+for(int x : nums){
+    map.put(x, map.getOrDefault(x, 0) + 1);
+}
+</code></pre><h3>🔍 Two Sum Pattern</h3><pre><code class="language-java">Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+for(int i=0; i&lt;nums.length; i++){
+    int need = target - nums[i];
+    if(map.containsKey(need)) return new int[]{map.get(need), i};
+    map.put(nums[i], i);
+}
+</code></pre><h3>👥 Group Anagrams (Key by Count)</h3><pre><code class="language-java">int[] count = new int[26];
+for(char c : s.toCharArray()) count[c-'a']++;
+StringBuilder key = new StringBuilder();
+for(int c : count) key.append(c).append('#');
+map.computeIfAbsent(key.toString(), k-&gt; new ArrayList&lt;&gt;()).add(s);
+</code></pre><h3>🔥 Top K Frequent (Min Heap)</h3><pre><code class="language-java">PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;((a,b)-&gt; a[1] - b[1]); // [num, freq]
+for(int num : map.keySet()){
+    pq.offer(new int[]{num, map.get(num)});
+    if(pq.size() &gt; k) pq.poll();
+}
+</code></pre><h3>➗ Product Except Self (Without Division)</h3><pre><code class="language-java">int[] res = new int[n];
+int left = 1;
+for(int i=0;i&lt;n;i++){ res[i] = left; left *= nums[i]; }
+
+int right = 1;
+for(int i=n-1;i&gt;=0;i--){ res[i] *= right; right *= nums[i]; }
+</code></pre><h3>📏 Longest Consecutive Sequence</h3><pre><code class="language-java">Set&lt;Integer&gt; set = new HashSet&lt;&gt;(nums);
+int longest = 0;
+for(int x : set){
+    if(!set.contains(x-1)){
+        int len = 1;
+        while(set.contains(x+1)){ len++; x++; }
+        longest = Math.max(longest, len);
+    }
+}
+</code></pre><h3>🟩 Valid Sudoku (3 Steps)</h3><ol>
+<li>Check each row</li>
+<li>Check each column</li>
+<li>Check each 3x3 box</li>
+</ol><p><code>Use Set&lt;Character&gt; set = new HashSet&lt;&gt;();</code>
+<code>set.clear() after each check.</code></p></div><div class="card"><h2>GENERAL REMINDERS</h2><ul>
+<li>⭐ Think: Can I use HashSet / HashMap?</li>
+<li>⭐ Hashing beats sorting when order doesn't matter.</li>
+<li>⭐ Always analyze: Time &amp; Space.</li>
+<li>⭐ Edge cases make or break solutions.</li>
+<li>⭐ Clarity &gt; Cleverness in interviews.</li>
+</ul><p><strong>Master the Patterns. Solve with Confidence. Ace the Interviews. 🚀</strong></p><!-- PAGE_BREAK --></div><div class="card"><h2>VOLUME 1: ARRAYS &amp; HASHING CHEAT SHEET</h2><p>⭐ FAANG Interview Edition 🎯 Quick Lookup ⚡ Patterns First, Code Next</p></div><div class="card"><h2>1. INTERVIEW FLOW (ALWAYS FOLLOW)</h2><ol>
+<li><strong>Clarify</strong>
+Ask constraints, edge cases, duplicates, range, complexity.
+↓</li>
+<li><strong>Brute Force</strong>
+Get it working first.
+↓</li>
+<li><strong>Better</strong>
+Can we optimize?
+↓</li>
+<li><strong>Optimal</strong>
+Best approach (Time/Space).
+↓</li>
+<li><strong>Complexity</strong>
+Time and Space analysis.
+↓</li>
+<li><strong>Code</strong>
+Clean, bug-free code.
+↓</li>
+<li><strong>Explain</strong>
+Walkthrough + dry run.</li>
+</ol></div><div class="card"><h2>2. PATTERN RECOGNITION</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Need</th>
+<th style="text-align: left;">Use</th>
+<th style="text-align: left;">Example Problems</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">✅ Uniqueness / Duplicate</td>
+<td style="text-align: left;">HashSet</td>
+<td style="text-align: left;">217</td>
+</tr>
+<tr>
+<td style="text-align: left;">📊 Frequency / Count</td>
+<td style="text-align: left;">HashMap / <code>int[26]</code></td>
+<td style="text-align: left;">242, 347</td>
+</tr>
+<tr>
+<td style="text-align: left;">🔗 Pair / Complement</td>
+<td style="text-align: left;">HashMap</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr>
+<td style="text-align: left;">👥 Grouping</td>
+<td style="text-align: left;"><code>HashMap&lt;Key, List&gt;</code></td>
+<td style="text-align: left;">49</td>
+</tr>
+<tr>
+<td style="text-align: left;">⬇️ Top K Frequent</td>
+<td style="text-align: left;">HashMap + Min Heap</td>
+<td style="text-align: left;">347</td>
+</tr>
+<tr>
+<td style="text-align: left;">⬆️ Left &amp; Right Info</td>
+<td style="text-align: left;">Prefix / Suffix</td>
+<td style="text-align: left;">238</td>
+</tr>
+<tr>
+<td style="text-align: left;">⛓️ Consecutive Sequence</td>
+<td style="text-align: left;">HashSet</td>
+<td style="text-align: left;">128</td>
+</tr>
+<tr>
+<td style="text-align: left;">🧮 Matrix Validation</td>
+<td style="text-align: left;">HashSet</td>
+<td style="text-align: left;">36</td>
+</tr>
+<tr>
+<td style="text-align: left;">🔠 Encoding / Decoding</td>
+<td style="text-align: left;">Length + Delimiter</td>
+<td style="text-align: left;">271</td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>3. PROBLEMS AT A GLANCE</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">LC #</th>
+<th style="text-align: left;">Problem</th>
+<th style="text-align: left;">Pattern</th>
+<th style="text-align: left;">Key Idea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">217</td>
+<td style="text-align: left;">Contains Duplicate</td>
+<td style="text-align: left;">HashSet</td>
+<td style="text-align: left;">If <code>!set.add(x)</code> $\Rightarrow$ duplicate</td>
+</tr>
+<tr>
+<td style="text-align: left;">242</td>
+<td style="text-align: left;">Valid Anagram</td>
+<td style="text-align: left;">Frequency Array</td>
+<td style="text-align: left;">Count++ then Count--</td>
+</tr>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Two Sum</td>
+<td style="text-align: left;">HashMap</td>
+<td style="text-align: left;">target - num</td>
+</tr>
+<tr>
+<td style="text-align: left;">49</td>
+<td style="text-align: left;">Group Anagrams</td>
+<td style="text-align: left;">HashMap + Freq Sig</td>
+<td style="text-align: left;">26-count key string</td>
+</tr>
+<tr>
+<td style="text-align: left;">347</td>
+<td style="text-align: left;">Top K Frequent</td>
+<td style="text-align: left;">HashMap + Heap</td>
+<td style="text-align: left;">Min Heap of size K</td>
+</tr>
+<tr>
+<td style="text-align: left;">271</td>
+<td style="text-align: left;">Encode &amp; Decode</td>
+<td style="text-align: left;">Length + Delimiter</td>
+<td style="text-align: left;">length#string format</td>
+</tr>
+<tr>
+<td style="text-align: left;">238</td>
+<td style="text-align: left;">Product Except Self</td>
+<td style="text-align: left;">Prefix / Suffix</td>
+<td style="text-align: left;">Left[i] $\times$ Right[i]</td>
+</tr>
+<tr>
+<td style="text-align: left;">128</td>
+<td style="text-align: left;">Longest Consecutive</td>
+<td style="text-align: left;">HashSet</td>
+<td style="text-align: left;">Start if num-1 not present</td>
+</tr>
+<tr>
+<td style="text-align: left;">36</td>
+<td style="text-align: left;">Valid Sudoku</td>
+<td style="text-align: left;">HashSet</td>
+<td style="text-align: left;">Rows, Cols, 3x3 boxes</td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>4. KEY PATTERNS &amp; TRICKS (HIGH IMPACT)</h2><h3>4.1 Group Anagrams (LC 49)</h3><pre><code class="language-java">int[] freq = new int[26];
+for(char c : s.toCharArray())
+    freq[c - 'a']++;
+StringBuilder key = new StringBuilder();
+for(int f : freq) key.append(f).append('#');
+</code></pre><p>💡 <code>#</code> is important to avoid ambiguity.</p><h3>4.2 Top K Frequent (LC 347)</h3><pre><code class="language-java">Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+// count frequency
+PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;(
+    (a,b) -&gt; a[1] - b[1]); // min heap
+for(int key : map.keySet()){
+    pq.offer(new int[]{key, map.get(key)});
+    if(pq.size() &gt; k) pq.poll();
+}
+</code></pre><p>💡 Keep only K elements in heap.</p><h3>4.3 Product Except Self (LC 238)</h3><ol>
+<li>Left Product Array</li>
+<li>Right Product (in one pass)</li>
+<li><code>Result[i] = Left[i] * Right</code></li>
+</ol><pre><code class="language-text">nums:  [1, 2, 3, 4]
+left:  [1, 1, 2, 6]
+right: [24, 12, 4, 1]
+res:   [24, 12, 8, 6]
+</code></pre><p>💡 No division. O(n) time, O(1) extra space (excluding output).</p><h3>4.4 Longest Consecutive (LC 128)</h3><pre><code class="language-java">Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+// add all numbers
+int longest = 0;
+for(int num : set){
+    if(!set.contains(num - 1)){
+        int curr = num, count = 1;
+        while(set.contains(curr + 1)){
+            curr++; count++;
+        }
+        longest = Math.max(longest, count);
+    }
+}
+</code></pre><p>💡 Start count only if num-1 is absent.</p><h3>4.5 Encode &amp; Decode (LC 271)</h3><p><strong>ENCODE:</strong>
+<code>sb.append(s.length()).append('#').append(s);</code></p><p><strong>DECODE:</strong>
+Read length until '#', then take that many characters.</p><pre><code class="language-text">Example:
+Input: ["Hello", "World"]
+Encode: 5#Hello5#World
+Decode: ["Hello", "World"]
+</code></pre><p>💡 Never use <code>split()</code>. Parse length.</p></div><div class="card"><h2>5. COMPLEXITY QUICK REFERENCE</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Operation</th>
+<th style="text-align: left;">Time Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">HashSet add / contains / remove</td>
+<td style="text-align: left;">O(1) avg</td>
+</tr>
+<tr>
+<td style="text-align: left;">HashMap put / get / contains</td>
+<td style="text-align: left;">O(1) avg</td>
+</tr>
+<tr>
+<td style="text-align: left;">Loop (n times)</td>
+<td style="text-align: left;">O(n)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Two separate loops</td>
+<td style="text-align: left;">O(2n) = O(n)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Nested loops (n x m)</td>
+<td style="text-align: left;">O(n*m)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Sorting</td>
+<td style="text-align: left;">O(n log n)</td>
+</tr>
+<tr>
+<td style="text-align: left;">PriorityQueue offer / poll</td>
+<td style="text-align: left;">O(log n)</td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>6. JAVA COLLECTIONS &amp; APIS (MOST USED)</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;"><code>HashSet&lt;Integer&gt; set</code></th>
+<th style="text-align: left;"><code>HashMap&lt;K,V&gt; map</code></th>
+<th style="text-align: left;"><code>PriorityQueue&lt;int[]&gt; pq</code></th>
+<th style="text-align: left;">String / StringBuilder</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>add(x)</code></td>
+<td style="text-align: left;"><code>put(k,v)</code></td>
+<td style="text-align: left;"><code>offer(x)</code></td>
+<td style="text-align: left;"><code>toCharArray()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>contains(x)</code></td>
+<td style="text-align: left;"><code>get(k)</code></td>
+<td style="text-align: left;"><code>poll()</code></td>
+<td style="text-align: left;"><code>String.valueOf(x)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>remove(x)</code></td>
+<td style="text-align: left;"><code>containsKey(k)</code></td>
+<td style="text-align: left;"><code>peek()</code></td>
+<td style="text-align: left;"><code>Integer.parseInt(s)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>size()</code></td>
+<td style="text-align: left;"><code>getOrDefault(k, def)</code></td>
+<td style="text-align: left;"><code>size()</code></td>
+<td style="text-align: left;"><code>StringBuilder sb</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>clear()</code></td>
+<td style="text-align: left;"><code>computeIfAbsent(k, v-&gt;newV)</code></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>sb.append(x)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>keySet()</code>, <code>values()</code>, <code>entrySet()</code></td>
+<td style="text-align: left;"><strong>For min heap:</strong><br/><code>(a, b) -&gt; a[1] - b[1]</code></td>
+<td style="text-align: left;"><code>sb.toString()</code></td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>7. CONVERSIONS (QUICK RECALL)</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">From $\rightarrow$ To</th>
+<th style="text-align: left;">Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">String $\rightarrow$ char[]</td>
+<td style="text-align: left;"><code>s.toCharArray()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">char[] $\rightarrow$ String</td>
+<td style="text-align: left;"><code>new String(arr)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">int $\rightarrow$ String</td>
+<td style="text-align: left;"><code>String.valueOf(x)</code><br/><code>Integer.toString(x)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">String $\rightarrow$ int</td>
+<td style="text-align: left;"><code>Integer.parseInt(s)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">char $\rightarrow$ int</td>
+<td style="text-align: left;"><code>c - '0'</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">int $\rightarrow$ char</td>
+<td style="text-align: left;"><code>(char) (x + '0')</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">List $\rightarrow$ Array</td>
+<td style="text-align: left;"><code>list.toArray(new T[0])</code></td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>8. BIG-O RULES (DON'T FORGET)</h2><p><strong>Sequential loops ADD.</strong>
+<strong>Nested loops MULTIPLY.</strong></p><p><strong>Example 1 (Sequential):</strong></p><pre><code class="language-java">for i in n
+  for j in n
+// O(n) + O(n) = O(n)
+</code></pre><p><strong>Example 2 (Nested):</strong></p><pre><code class="language-java">for i in n
+  for j in n
+// O(n * n) = O(n^2)
+</code></pre><p><strong>One loop = O(n), Two loops sequential = O(n)</strong></p></div><div class="card"><h2>9. COMMON MISTAKES (AVOID)</h2><ul>
+<li>❌ Using sort when HashSet can solve in O(n).</li>
+<li>❌ Forgetting to check num-1 before counting sequence.</li>
+<li>❌ Using split() in Encode/Decode (causes errors with #).</li>
+<li>❌ Not handling negative numbers or edge cases.</li>
+<li>❌ Not analyzing complexity.</li>
+<li>❌ Over-complicating when a simpler pattern fits.</li>
+</ul></div><div class="card"><h2>10. INTERVIEW COMMUNICATION TIPS</h2><ul>
+<li>✅ Think out loud. Explain each step.</li>
+<li>✅ Start with brute force, then optimize.</li>
+<li>✅ Give examples and dry run.</li>
+<li>✅ State assumptions clearly.</li>
+<li>✅ Write clean, readable code.</li>
+<li>✅ Summarize time &amp; space at the end.</li>
+</ul><p><strong>Golden Line:</strong>
+"Brute Force $\rightarrow$ Better $\rightarrow$ Optimal $\rightarrow$ Complexity $\rightarrow$ Code $\rightarrow$ Explain"</p></div><div class="card"><h2>MEMORY MANTRAS</h2><ul>
+<li><strong>Need Unique?</strong> Use HashSet</li>
+<li><strong>Need Count?</strong> Use HashMap</li>
+<li><strong>Need Left &amp; Right?</strong> Use Prefix / Suffix</li>
+<li><strong>Need Top K?</strong> Use Heap</li>
+<li><strong>Need Consecutive?</strong> Use HashSet</li>
+<li>🏆 PRACTICE. PATTERNS. REPEAT. CRACK FAANG!</li>
+</ul><!-- PAGE_BREAK --></div><div class="card"><h2>ARRAYS &amp; HASHING – PATTERNS CHEAT SHEET</h2><p>Core Patterns, When to Use, Key Ideas &amp; Common Formulas</p></div><div class="card"><h2>1 DUPLICATE DETECTION (HashSet)</h2><p><strong>When to use</strong>
+* Find if any element appears more than once.</p><p><strong>Key Idea</strong>
+* Insert into set, if already present → duplicate.</p><p><strong>How it Works / Formula / Code</strong></p><pre><code class="language-java">Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+for (int x : nums) {
+    if (set.contains(x)) return true;
+    set.add(x);
+}
+return false;
+</code></pre><p><strong>Example</strong>
+Input: <code>[1, 2, 3, 1]</code>
+Output: <code>true</code></p><p>Visual:
+Array <code>1</code>, <code>2</code>, <code>3</code>, <code>1</code> with an arrow pointing to the second <code>1</code> labeled <code>duplicate</code></p><p><strong>Complexity</strong>
+Time: O(n) | Space: O(n)</p><hr/></div><div class="card"><h2>2 FREQUENCY COUNTING (HashMap / int[26])</h2><p><strong>When to use</strong>
+* Count occurrences of elements.</p><p><strong>Key Idea</strong>
+* Map each element → its frequency.</p><p><strong>How it Works / Formula / Code</strong>
+<strong>A) HashMap (any values)</strong></p><pre><code class="language-java">Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+for (int x : nums) {
+    map.put(x, map.getOrDefault(x, 0) + 1);
+}
+</code></pre><p><strong>B) Frequency Array (only for small range e.g. a-z)</strong></p><pre><code class="language-java">int[] freq = new int[26];
+for (char c : s.toCharArray()) {
+    freq[c - 'a']++;
+}
+</code></pre><p><strong>Example</strong>
+Input: <code>[1, 2, 2, 3, 3, 3]</code>
+Output: <code>1→1, 2→2, 3→3</code></p><table>
+<thead>
+<tr>
+<th>Num</th>
+<th>Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+</tr>
+</tbody>
+</table><p><strong>Complexity</strong>
+Time: O(n) | Space: O(n)</p><hr/></div><div class="card"><h2>3 COMPLEMENT / PAIR SEARCH (HashMap)</h2><p><strong>When to use</strong>
+* Find pair with given sum / target.</p><p><strong>Key Idea</strong>
+* For each x, check if <code>(target - x)</code> exists in map.</p><p><strong>How it Works / Formula / Code</strong></p><pre><code class="language-java">Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+for (int i = 0; i &lt; nums.length; i++) {
+    int complement = target - nums[i];
+    if (map.containsKey(complement))
+        return new int[]{map.get(complement), i};
+    map.put(nums[i], i);
+}
+return new int[]{};
+</code></pre><p><strong>Example</strong>
+Input: <code>nums=[2,7,11,15]</code>, target=9
+Output: <code>[0,1]</code></p><table>
+<thead>
+<tr>
+<th>Idx</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>2</td>
+<td>7</td>
+<td>11</td>
+<td>15</td>
+</tr>
+</tbody>
+</table><p>9 - 2 = 7
+found at idx 1</p><p><strong>Complexity</strong>
+Time: O(n) | Space: O(n)</p><hr/></div><div class="card"><h2>4 GROUPING / BUCKETING (HashMap<key, list="">)</key,></h2><p><strong>When to use</strong>
+* Group elements by key (e.g., anagrams, indices, values).</p><p><strong>Key Idea</strong>
+* Map key → list of elements.</p><p><strong>How it Works / Formula / Code</strong></p><pre><code class="language-java">Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
+for (String s : strs) {
+    String key = ...; // e.g. sorted string
+    map.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(s);
+}
+</code></pre><p><strong>Example (Group Anagrams)</strong>
+Input: <code>["eat", "tea", "tan", "ate", "nat", "bat"]</code>
+Output: <code>[["eat", "tea", "ate"], ["tan", "nat"], ["bat"]]</code></p><p>Visual mapping:
+* <code>[eat, ate]</code> → <code>key: aet</code>
+* <code>[tan, nat]</code> → <code>key: ant</code>
+* <code>[bat]</code> → <code>key: bat</code></p><p><strong>Complexity</strong>
+Time: O(n * k log k) | Space: O(n * k)
+<em>(n = #strings, k = avg length)</em></p><hr/></div><div class="card"><h2>5 ENCODING / DECODING STRINGS (StringBuilder)</h2><p><strong>When to use</strong>
+* Store and retrieve list of strings in single string.</p><p><strong>Key Idea</strong>
+* Prefix each string with its length.</p><p><strong>How it Works / Formula / Code</strong>
+<strong>Encode:</strong></p><pre><code class="language-java">for (String s : strs)
+    sb.append(s.length()).append('#').append(s);
+</code></pre><p><strong>Decode:</strong>
+Read number until '#', then next that many chars is the string.</p><p><strong>Example</strong>
+Input: <code>["we", "love", "leetcode"]</code>
+Encode: <code>"2#we4#love8#leetcode"</code>
+Decode: <code>["we", "love", "leetcode"]</code></p><p>Visual mapping:
+<code>2#we4#love8#leetcode</code></p><p><strong>Complexity</strong>
+Time: O(n) | Space: O(n)</p><hr/></div><div class="card"><h2>6 PREFIX / SUFFIX PATTERNS (Arrays)</h2><p><strong>When to use</strong>
+* Product except self, prefix sums, suffix sums, etc.</p><p><strong>Key Idea</strong>
+* Precompute left and right contributions.</p><p><strong>How it Works / Formula / Code (Product Except Self)</strong></p><pre><code>left[i] = product of all nums [0 ... i-1]
+right[i] = product of all nums [i+1 ... n-1]
+ans[i] = left[i] * right[i]
+</code></pre><pre><code class="language-java">int n = nums.length;
+int[] left = new int[n];
+int[] right = new int[n];
+int[] ans = new int[n];
+left[0] = 1;
+for (int i = 1; i &lt; n; i++) left[i] = left[i-1] * nums[i-1];
+right[n-1] = 1;
+for (int i = n-2; i &gt;= 0; i--) right[i] = right[i+1] * nums[i+1];
+for (int i = 0; i &lt; n; i++) ans[i] = left[i] * right[i];
+</code></pre><p><strong>Example</strong>
+<code>nums = [1,2,3,4]</code>
+<code>ans = [24,12,8,6]</code></p><table>
+<thead>
+<tr>
+<th>i</th>
+<th>nums</th>
+<th>left</th>
+<th>right</th>
+<th>ans</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>24</td>
+<td>24</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>12</td>
+<td>12</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4</td>
+<td>6</td>
+<td>1</td>
+<td>6</td>
+</tr>
+</tbody>
+</table><p><strong>Complexity</strong>
+Time: O(n) | Space: O(n)</p><hr/></div><div class="card"><h2>7 LONGEST CONSECUTIVE SEQUENCE (HashSet)</h2><p><strong>When to use</strong>
+* Find length of longest consecutive elements.</p><p><strong>Key Idea</strong>
+* Only start counting from the first element of a sequence (i.e., num-1 not present).</p><p><strong>How it Works / Formula / Code</strong></p><pre><code class="language-java">Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+for (int x : nums) set.add(x);
+int longest = 0;
+for (int x : set) {
+    if (!set.contains(x - 1)) { // start
+        int count = 1, cur = x;
+        while (set.contains(cur + 1)) {
+            cur++; count++;
+        }
+        longest = Math.max(longest, count);
+    }
+}
+return longest;
+</code></pre><p><strong>Example</strong>
+Input: <code>[100,4,200,1,3,2]</code>
+Output: <code>4</code>
+<code>(1,2,3,4)</code></p><p>Visual mapping:
+Boxes array: <code>100</code>, <code>4</code>, <code>200</code>, <code>1</code>, <code>3</code>, <code>2</code>
+Sequence: <code>1</code>, <code>2</code>, <code>3</code>, <code>4</code>
+<code>length = 4</code></p><p><strong>Complexity</strong>
+Time: O(n) | Space: O(n)</p><hr/></div><div class="card"><h2>8 MATRIX VALIDATION (SUDOKU) (HashSet (Rows, Cols, Boxes))</h2><p><strong>When to use</strong>
+* Validate Sudoku board.</p><p><strong>Key Idea</strong>
+* No duplicates in rows, columns and 3x3 boxes.</p><p><strong>How it Works</strong>
+1. Check each row using set
+2. Check each column using set
+3. Check each 3x3 box using set</p><p><strong>3x3 Box Traversal</strong></p><pre><code class="language-java">for (int r = 0; r &lt; 9; r += 3)
+    for (int c = 0; c &lt; 9; c += 3)
+        for (int i = r; i &lt; r + 3; i++)
+            for (int j = c; j &lt; c + 3; j++)
+                validate(board[i][j]);
+</code></pre><p><strong>Visual - 3x3 Boxes</strong>
+| (0,0) | (0,3) | (0,6) |
+|---|---|---|
+| (3,0) | (3,3) | (3,6) |
+| (6,0) | (6,3) | (6,6) |</p><p><strong>Complexity</strong>
+Time: O(9*9) = O(1) | Space: O(1)</p><hr/></div><div class="card"><h2>WHEN TO USE WHAT?</h2><ul>
+<li><strong>HashSet</strong>: Fast lookup, duplicates, membership</li>
+<li><strong>HashMap</strong>: Counts, mapping, complement search, grouping, index mapping</li>
+<li><strong>Frequency Array</strong>: Small fixed range (e.g., a-z, 0-26)</li>
+<li><strong>Sorting</strong>: Order matters, two pointers after sort, grouping</li>
+<li><strong>Heap / PQ</strong>: Top K frequent, K largest/smallest</li>
+<li><strong>Arrays</strong>: Prefix/Suffix, sliding window, simulation</li>
+</ul><hr/></div><div class="card"><h2>COMMON HASHING FORMULAS / TRICKS</h2><ul>
+<li><strong>Get or Insert</strong>: <code>map.getOrDefault(key, 0) + 1</code></li>
+<li><strong>Insert List</strong>: <code>map.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(val)</code></li>
+<li><strong>Check Key</strong>: <code>map.containsKey(key)</code></li>
+<li><strong>Check Value in Set</strong>: <code>set.contains(val)</code></li>
+<li><strong>Remove Key</strong>: <code>map.remove(key)</code></li>
+<li><strong>Iterate Entries</strong>: <code>for (Map.Entry&lt;K,V&gt; e : map.entrySet())</code></li>
+<li><strong>Convert Values to List</strong>: <code>new ArrayList&lt;&gt;(map.values())</code></li>
+<li><strong>Sort Map by Value</strong>:</li>
+</ul><pre><code class="language-java">map.entrySet().stream()
+    .sorted((a,b) -&gt; b.getValue() - a.getValue())
+    .collect(Collectors.toList());
+</code></pre><hr/></div><div class="card"><h2>CHAR / ASCII TRICKS</h2><ul>
+<li><strong>char to index</strong>: <code>c - 'a'</code> // 0 to 25</li>
+<li><strong>index to char</strong>: <code>(char)('a' + i)</code></li>
+<li><strong>char to int digit</strong>: <code>c - '0'</code></li>
+<li><strong>int to char digit</strong>: <code>(char)('0' + x)</code></li>
+<li><strong>Uppercase</strong>: <code>c - 'A'</code> // 0 to 25</li>
+</ul><h3>FREQUENCY ARRAY TEMPLATE (a-z)</h3><pre><code class="language-java">int[] freq = new int[26];
+for (char c : s.toCharArray())
+    freq[c - 'a']++;
+</code></pre><hr/></div><div class="card"><h2>TIME COMPLEXITY QUICK GUIDE (Average Case)</h2><table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>HashSet</th>
+<th>HashMap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Add / Put</td>
+<td>O(1)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>Remove</td>
+<td>O(1)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>Contains / Get</td>
+<td>O(1)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>Iterate All</td>
+<td>O(n)</td>
+<td>O(n)</td>
+</tr>
+</tbody>
+</table><h3>IMPORTANT NOTES</h3><ul>
+<li>Hashing gives O(1) average lookup but O(n) worst case (rare with good hash function).</li>
+<li>Choose the right pattern - it saves time and code.</li>
+<li>Think: Can I transform this into a lookup problem?</li>
+</ul><hr/><p><strong>Golden Rule:</strong> Understand the Pattern → Choose the Right Data Structure → Code Clean → Analyze Complexity → Optimize if Needed</p><!-- PAGE_BREAK --></div><div class="card"><h2>ARRAYS &amp; HASHING CHEAT SHEET</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">PROBLEM</th>
+<th style="text-align: left;">KEY IDEA</th>
+<th style="text-align: left;">APPROACH / FORMULA / PATTERN</th>
+<th style="text-align: left;">TIME COMPLEXITY</th>
+<th style="text-align: left;">SPACE COMPLEXITY</th>
+<th style="text-align: left;">KEY TAKEAWAYS / PATTERNS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1. 217</strong><br/>Contains Duplicate<br/>(Easy)</td>
+<td style="text-align: left;">Use HashSet to track seen elements.</td>
+<td style="text-align: left;"><code>java&lt;br&gt;Set&lt;Integer&gt; set = new HashSet&lt;&gt;();&lt;br&gt;for (int x : nums) {&lt;br&gt;    if (set.contains(x)) return true;&lt;br&gt;    set.add(x);&lt;br&gt;}&lt;br&gt;return false;&lt;br&gt;</code></td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">• HashSet for fast lookup<br/>• Detect duplicates</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2. 242</strong><br/>Valid Anagram<br/>(Easy)</td>
+<td style="text-align: left;">Two strings are anagrams if both have same character frequency.</td>
+<td style="text-align: left;"><code>java&lt;br&gt;int[26] count = new int[26];&lt;br&gt;for (char c : s.toCharArray()) count[c-'a']++;&lt;br&gt;for (char c : t.toCharArray()) count[c-'a']--;&lt;br&gt;return all count[i] == 0;&lt;br&gt;</code></td>
+<td style="text-align: left;">O(n)<br/>(n = length of string)</td>
+<td style="text-align: left;">O(1)<br/>(26 letters)</td>
+<td style="text-align: left;">• Frequency counting<br/>• Array of size 26<br/>• Increment / decrement</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3. 1</strong><br/>Two Sum<br/>(Easy)</td>
+<td style="text-align: left;">Store number → index in a HashMap. For each num, check if target - num exists.</td>
+<td style="text-align: left;"><code>java&lt;br&gt;Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();&lt;br&gt;for (int i = 0; i &lt; nums.length; i++) {&lt;br&gt;    int comp = target - nums[i];&lt;br&gt;    if (map.containsKey(comp)) return new int[]{map.get(comp), i};&lt;br&gt;    map.put(nums[i], i);&lt;br&gt;}&lt;br&gt;</code></td>
+<td style="text-align: left;">O(n)<br/>(n = length of array)</td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">• HashMap for complement<br/>• Store index, not value</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>4. 49</strong><br/>Group Anagrams<br/>(Medium)</td>
+<td style="text-align: left;">Sort each string to create a key. Anagrams have same sorted key.</td>
+<td style="text-align: left;"><code>java&lt;br&gt;Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();&lt;br&gt;for (String s : strs) {&lt;br&gt;    char[] arr = s.toCharArray();&lt;br&gt;    Arrays.sort(arr);&lt;br&gt;    String key = new String(arr);&lt;br&gt;    map.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(s);&lt;br&gt;}&lt;br&gt;return new ArrayList&lt;&gt;(map.values());&lt;br&gt;</code></td>
+<td style="text-align: left;">O(n * k log k)<br/>(n = #strings,<br/>k = avg length)</td>
+<td style="text-align: left;">O(n * k)</td>
+<td style="text-align: left;">• Sorting as key<br/>• <code>HashMap&lt;String, List&lt;String&gt;&gt;</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>5. 347</strong><br/>Top K Frequent Elements<br/>(Medium)</td>
+<td style="text-align: left;">Count frequency using HashMap, then use bucket sort (freq → list of numbers).</td>
+<td style="text-align: left;">1. Count freq: <code>Map&lt;Integer, Integer&gt; freq = new HashMap&lt;&gt;();</code><br/>2. Bucket sort: <code>List&lt;Integer&gt;[] bucket = new List[nums.length + 1];</code><br/><code>java&lt;br&gt;for (int num : freq.keySet()) {&lt;br&gt;    int f = freq.get(num);&lt;br&gt;    if (bucket[f] == null) bucket[f] = new ArrayList&lt;&gt;();&lt;br&gt;    bucket[f].add(num);&lt;br&gt;}&lt;br&gt;</code><br/>3. Traverse from high freq to low, collect k elements.</td>
+<td style="text-align: left;">O(n)<br/>(n = array length)</td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">• Frequency Map + Bucket Sort<br/>• Buckets sized by frequency<br/>• Read from high to low</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>6. 271</strong><br/>Encode and Decode Strings<br/>(Medium)</td>
+<td style="text-align: left;">Use length-prefix encoding: length#string to uniquely separate strings.</td>
+<td style="text-align: left;">Encode: <code>for (String s : strs) sb.append(s.length()).append("#").append(s);</code><br/>Decode: read number until '#', then next that many chars is the string.</td>
+<td style="text-align: left;">Encode: O(n)<br/>Decode: O(n)<br/>(n = total length<br/>of all strings)</td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">• Length-prefix avoids ambiguity<br/>• Unique &amp; decodable</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>7. 238</strong><br/>Product of Array Except Self<br/>(Medium)</td>
+<td style="text-align: left;">Use prefix &amp; suffix products. Avoid division.</td>
+<td style="text-align: left;"><code>java&lt;br&gt;int n = nums.length;&lt;br&gt;int[] left = new int[n], right = new int[n], ans = new int[n];&lt;br&gt;left[0] = 1; for (int i=1; i&lt;n; i++) left[i] = left[i-1] * nums[i-1];&lt;br&gt;right[n-1] = 1; for (int i=n-2; i&gt;=0; i--) right[i] = right[i+1] * nums[i+1];&lt;br&gt;for (int i=0; i&lt;n; i++) ans[i] = left[i] * right[i];&lt;br&gt;</code></td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">O(n)<br/>(for output array)</td>
+<td style="text-align: left;">• Prefix products &amp; suffix products<br/>• No division<br/>• <code>Left[i] * Right[i]</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>8. 128</strong><br/>Longest Consecutive Sequence<br/>(Hard)</td>
+<td style="text-align: left;">Use HashSet. Start counting only from the beginning of a sequence (num-1 not present).</td>
+<td style="text-align: left;"><code>java&lt;br&gt;Set&lt;Integer&gt; set = new HashSet&lt;&gt;();&lt;br&gt;for (int num : nums) set.add(num);&lt;br&gt;int longest = 0;&lt;br&gt;for (int num : set) {&lt;br&gt;    if (!set.contains(num - 1)) { // start of sequence&lt;br&gt;        int count = 1, cur = num;&lt;br&gt;        while (set.contains(cur + 1)) { count++; cur++; }&lt;br&gt;        longest = Math.max(longest, count);&lt;br&gt;    }&lt;br&gt;}&lt;br&gt;</code></td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">• HashSet for O(1) lookup<br/>• Start from sequence beginning<br/>  (num-1 not present)<br/>• Each number visited once</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>9. 36</strong><br/>Valid Sudoku<br/>(Medium)</td>
+<td style="text-align: left;">Check rows, columns and 3x3 sub-boxes using HashSet.</td>
+<td style="text-align: left;">1. For each row → use <code>Set&lt;Character&gt;</code><br/>2. For each column → use <code>Set&lt;Character&gt;</code><br/>3. For each 3x3 box → use <code>Set&lt;Character&gt;</code><br/><code>java&lt;br&gt;3. Box loops: for (int r=0; r&lt;9; r+=3)&lt;br&gt;                 for (int c=0; c&lt;9; c+=3)&lt;br&gt;                     for (int i=r; i&lt;r+3; i++)&lt;br&gt;                         for (int j=c; j&lt;c+3; j++)&lt;br&gt;</code></td>
+<td style="text-align: left;">O(1)<br/>(Board size is fixed 9x9)</td>
+<td style="text-align: left;">O(1)<br/>(Fixed size sets)</td>
+<td style="text-align: left;">• Use HashSet for rows, columns and 3x3 boxes<br/>• Box traversal: jump by 3</td>
+</tr>
+</tbody>
+</table><h3>COMMON HASHING DATA STRUCTURES</h3><ul>
+<li><code>HashSet&lt;T&gt;</code> → Uniqueness, Fast lookup</li>
+<li><code>HashMap&lt;K,V&gt;</code> → Key-Value, Frequency count</li>
+<li><code>TreeMap&lt;K,V&gt;</code> → Sorted keys</li>
+<li><code>LinkedHashMap</code> → Maintains insertion order</li>
+</ul><h3>FREQUENCY COUNT PATTERN</h3><pre><code class="language-java">Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+for (int num : nums) {
+    map.put(num, map.getOrDefault(num, 0) + 1);
+}
+</code></pre><h3>BUCKET SORT (BY FREQUENCY)</h3><pre><code class="language-java">List&lt;Integer&gt;[] bucket = new List[nums.length + 1];
+for (int num : map.keySet()) {
+    int f = map.get(num);
+    if (bucket[f] == null) bucket[f] = new ArrayList&lt;&gt;();
+    bucket[f].add(num);
+}
+</code></pre><h3>3x3 BOX TRAVERSAL (SUDOKU)</h3><pre><code class="language-java">for (int r = 0; r &lt; 9; r += 3) {
+    for (int c = 0; c &lt; 9; c += 3) {
+        for (int i = r; i &lt; r + 3; i++) {
+            for (int j = c; j &lt; c + 3; j++) {
+                // process board[i][j]
+            }
+        }
+    }
+}
+</code></pre><h3>COMPLEXITY REMINDER</h3><ul>
+<li><strong>HashSet / HashMap Operations (avg):</strong> add, remove, contains, get, put → O(1)</li>
+<li><strong>Sorting</strong> → O(n log n)</li>
+<li><strong>Traversal</strong> → O(n)</li>
+</ul><p>⭐ <strong>REMEMBER:</strong> Use the right tool for the right problem. Hashing improves lookup from O(n) to O(1) on average.</p><!-- PAGE_BREAK --></div><div class="card"><h2>ARRAYS &amp; HASHING – PATTERNS CHEAT SHEET (IMAGE 1)</h2><p>Master these patterns. They solve 80% of Array + Hashing problems in interviews.</p></div><div class="card"><h2>1. DUPLICATE DETECTION</h2><p><strong>Use Case:</strong> Check if any element appears more than once.
+<strong>Data Structure:</strong> <code>HashSet</code>
+<strong>Key Idea:</strong>
+Add elements to a set.
+If already present → duplicate found.</p><pre><code class="language-java">Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+for (int x : nums) {
+    if (!set.add(x)) return true; // already exists
+}
+return false;
+</code></pre><p><strong>Problems</strong>
+* 217. Contains Duplicate
+* 219. Contains Duplicate II
+* 220. Contains Duplicate III</p><p><strong>Time Complexity:</strong> O(n)
+<strong>Space Complexity:</strong> O(n)</p></div><div class="card"><h2>2. FREQUENCY COUNTING</h2><p><strong>Use Case:</strong> Count frequency of each element / character.
+<strong>Data Structure:</strong> <code>HashMap</code> / <code>int[26]</code> (for lowercase letters)
+<strong>Key Idea:</strong>
+Count occurrences and store.
+Helps in anagrams, top K freq, majority element etc.</p><p><strong>HashMap approach:</strong></p><pre><code class="language-java">Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+for (int x : nums) {
+    map.put(x, map.getOrDefault(x, 0) + 1);
+}
+</code></pre><p><strong>Array approach (chars 'a'-'z'):</strong></p><pre><code class="language-java">int[] freq = new int[26];
+for (char c : s.toCharArray()) freq[c - 'a']++;
+</code></pre><p><strong>Problems</strong>
+* 242. Valid Anagram
+* 383. Ransom Note
+* 49. Group Anagrams
+* 347. Top K Frequent
+* 169. Majority Element</p><p><strong>Time Complexity:</strong> O(n)
+<strong>Space Complexity:</strong> O(n)</p></div><div class="card"><h2>3. COMPLEMENT / PAIR SEARCH</h2><p><strong>Use Case:</strong> Find if a pair exists with given sum / target.
+<strong>Data Structure:</strong> <code>HashMap (value -&gt; index)</code>
+<strong>Key Idea:</strong>
+For each element x, check if (target - x) exists.
+Store seen elements with their index.</p><pre><code class="language-java">Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+for (int i = 0; i &lt; nums.length; i++) {
+    int complement = target - nums[i];
+    if (map.containsKey(complement))
+        return new int[]{map.get(complement), i};
+    map.put(nums[i], i);
+}
+return new int[]{};
+</code></pre><p><strong>Problems</strong>
+* 1. Two Sum
+* 167. Two Sum II
+* 560. Subarray Sum = K
+* 454. 4Sum II</p><p><strong>Time Complexity:</strong> O(n)
+<strong>Space Complexity:</strong> O(n)</p></div><div class="card"><h2>4. GROUPING / BUCKETING</h2><p><strong>Use Case:</strong> Group elements by a key (anagram, index diff, etc).
+<strong>Data Structure:</strong> <code>HashMap&lt;Key, List/Count&gt;</code>
+<strong>Key Idea:</strong>
+Use key as group identifier and store list of elements.
+Very useful in anagram problems.</p><pre><code class="language-java">Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
+for (String s : strs) {
+    char[] arr = s.toCharArray();
+    Arrays.sort(arr);
+    String key = new String(arr);
+    map.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(s);
+}
+return new ArrayList&lt;&gt;(map.values());
+</code></pre><p><strong>Problems</strong>
+* 49. Group Anagrams
+* 438. Find All Anagrams in a String
+* 128. Longest Consecutive Sequence (variant)</p><p><strong>Time Complexity:</strong> O(n * k log k) (k = avg length of string)
+<strong>Space Complexity:</strong> O(n * k)</p></div><div class="card"><h2>5. ENCODING / SERIALIZATION</h2><p><strong>Use Case:</strong> Encode list of strings / decode back.
+<strong>Pattern:</strong> <code>length#string</code>
+<strong>Key Idea:</strong>
+Prefix each string with its length and a delimiter.
+Avoid ambiguity ("ab#c" vs "a#bc").</p><pre><code class="language-java">// Encode
+StringBuilder sb = new StringBuilder();
+for (String s : strs) sb.append(s.length()).append('#').append(s);
+
+// Decode
+List&lt;String&gt; res = new ArrayList&lt;&gt;();
+for (int i = 0; i &lt; s.length(); ) {
+    int j = i;
+    while (s.charAt(j) != '#') j++;
+    int len = Integer.parseInt(s.substring(i, j));
+    i = j + 1;
+    res.add(s.substring(i, i + len));
+    i += len;
+}
+return res;
+</code></pre><p><strong>Problems</strong>
+* 271. Encode and Decode Strings</p><p><strong>Time Complexity:</strong> O(n)
+<strong>Space Complexity:</strong> O(n)</p></div><div class="card"><h2>6. PREFIX / SUFFIX TECHNIQUE</h2><p><strong>Use Case:</strong> Product except self, prefix sums, suffix sums.
+<strong>Key Idea:</strong>
+Precompute left (prefix) and right (suffix) values.
+Combine to get result in O(n) without extra structures.</p><pre><code class="language-java">int n = nums.length;
+int[] left = new int[n], right = new int[n], ans = new int[n];
+left[0] = 1;
+for (int i = 1; i &lt; n; i++) left[i] = left[i-1] * nums[i-1];
+right[n-1] = 1;
+for (int i = n-2; i &gt;= 0; i--) right[i] = right[i+1] * nums[i+1];
+for (int i = 0; i &lt; n; i++) ans[i] = left[i] * right[i];
+</code></pre><p><strong>Problems</strong>
+* 238. Product of Array Except Self
+* 724. Find Pivot Index</p><p><strong>Time Complexity:</strong> O(n)
+<strong>Space Complexity:</strong> O(1) (excluding output array)</p></div><div class="card"><h2>7. LONGEST CONSECUTIVE SEQUENCE</h2><p><strong>Use Case:</strong> Find length of longest sequence of consecutive integers.
+<strong>Data Structure:</strong> <code>HashSet</code>
+<strong>Key Idea:</strong>
+Store all numbers in a set.
+Start counting only from the beginning of a sequence (i.e., num-1 not present) to avoid duplicates.</p><pre><code class="language-java">Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+for (int x : nums) set.add(x);
+int longest = 0;
+for (int x : set) {
+    if (!set.contains(x - 1)) { // start of sequence
+        int cur = x, count = 1;
+        while (set.contains(cur + 1)) { cur++; count++; }
+        longest = Math.max(longest, count);
+    }
+}
+return longest;
+</code></pre><p><strong>Problems</strong>
+* 128. Longest Consecutive Sequence</p><p><strong>Time Complexity:</strong> O(n)
+<strong>Space Complexity:</strong> O(n)</p></div><div class="card"><h2>8. MATRIX VALIDATION (USING HASHING)</h2><p><strong>Use Case:</strong> Validate rows, columns, and sub-boxes (e.g., Sudoku).
+<strong>Key Idea:</strong>
+Use HashSet for each row, column and 3x3 box to check duplicates.</p><p><strong>Rows:</strong>
+For each row j, use a set. Check all 9 elements.</p><p><strong>Columns:</strong>
+For each col j, use a set. Check all 9 elements.</p><p><strong>3x3 Boxes:</strong>
+For top-left corners (0,0), (0,3), (0,6), (3,0), (3,3), (3,6), (6,0), (6,3), (6,6) check 3x3 elements.</p><p><strong>Problems</strong>
+* 36. Valid Sudoku</p><table>
+<thead>
+<tr>
+<th>5</th>
+<th>3</th>
+<th>.</th>
+<th>.</th>
+<th>7</th>
+<th>.</th>
+<th>.</th>
+<th>.</th>
+<th>.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6</td>
+<td>.</td>
+<td>.</td>
+<td>1</td>
+<td>9</td>
+<td>5</td>
+<td>.</td>
+<td>.</td>
+<td>.</td>
+</tr>
+<tr>
+<td>.</td>
+<td>9</td>
+<td>8</td>
+<td>.</td>
+<td>.</td>
+<td>.</td>
+<td>.</td>
+<td>6</td>
+<td>.</td>
+</tr>
+<tr>
+<td>8</td>
+<td>.</td>
+<td>.</td>
+<td>.</td>
+<td>6</td>
+<td>.</td>
+<td>.</td>
+<td>.</td>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>.</td>
+<td>.</td>
+<td>8</td>
+<td>.</td>
+<td>3</td>
+<td>.</td>
+<td>.</td>
+<td>1</td>
+</tr>
+<tr>
+<td>7</td>
+<td>.</td>
+<td>.</td>
+<td>.</td>
+<td>2</td>
+<td>.</td>
+<td>.</td>
+<td>.</td>
+<td>6</td>
+</tr>
+<tr>
+<td>.</td>
+<td>6</td>
+<td>.</td>
+<td>.</td>
+<td>.</td>
+<td>.</td>
+<td>2</td>
+<td>8</td>
+<td>.</td>
+</tr>
+<tr>
+<td>.</td>
+<td>.</td>
+<td>.</td>
+<td>4</td>
+<td>1</td>
+<td>9</td>
+<td>.</td>
+<td>.</td>
+<td>5</td>
+</tr>
+<tr>
+<td>.</td>
+<td>.</td>
+<td>.</td>
+<td>.</td>
+<td>8</td>
+<td>.</td>
+<td>.</td>
+<td>7</td>
+<td>9</td>
+</tr>
+</tbody>
+</table><p><strong>Time Complexity:</strong> O(1) -&gt; fixed 9x9 board (General: O(n^2))
+<strong>Space Complexity:</strong> O(1)</p></div><div class="card"><h2>WHEN TO USE WHAT?</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Scenario</th>
+<th style="text-align: left;">Best Choice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Check existence / duplicates</td>
+<td style="text-align: left;"><code>HashSet</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Count frequency / occurrence</td>
+<td style="text-align: left;"><code>HashMap</code> or Frequency Array</td>
+</tr>
+<tr>
+<td style="text-align: left;">Find pair / complement</td>
+<td style="text-align: left;"><code>HashMap</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Group by key</td>
+<td style="text-align: left;"><code>HashMap&lt;Key, List&gt;</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Top K frequent elements</td>
+<td style="text-align: left;"><code>HashMap</code> + Heap (<code>PriorityQueue</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Range / consecutive sequence</td>
+<td style="text-align: left;"><code>HashSet</code> (sequence start)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Product except self / prefix tasks</td>
+<td style="text-align: left;">Prefix &amp; Suffix Arrays</td>
+</tr>
+<tr>
+<td style="text-align: left;">Matrix / Sudoku validation</td>
+<td style="text-align: left;"><code>HashSet</code> per row/col/box</td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>TIPS &amp; REMINDERS</h2><ul>
+<li>Always think: Can I get O(1) average lookup? → Use HashSet / HashMap</li>
+<li>Read constraints carefully (size, value range, duplicates allowed?).</li>
+<li>Choose the simplest DS that fits the problem.</li>
+<li>Pay attention to space vs time trade-off.</li>
+</ul></div><div class="card"><h2>COMMON HASHMAP METHODS (JAVA)</h2><ul>
+<li><code>map.put(key, val)</code> → insert/update</li>
+<li><code>map.get(key)</code> → get value (null if not present)</li>
+<li><code>map.getOrDefault(key, def)</code> → get with default</li>
+<li><code>map.containsKey(key)</code> → check key exists</li>
+<li><code>map.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(val);</code></li>
+</ul></div><div class="card"><h2>COMPLEXITY REFERENCE</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Operation</th>
+<th style="text-align: left;">HashMap / HashSet</th>
+<th style="text-align: left;">Array</th>
+<th style="text-align: left;">Sorting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Lookup</td>
+<td style="text-align: left;">O(1) avg</td>
+<td style="text-align: left;">O(1)</td>
+<td style="text-align: left;">O(log n)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Insert</td>
+<td style="text-align: left;">O(1) avg</td>
+<td style="text-align: left;">O(1) amortized</td>
+<td style="text-align: left;">N/A</td>
+</tr>
+<tr>
+<td style="text-align: left;">Delete</td>
+<td style="text-align: left;">O(1) avg</td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">N/A</td>
+</tr>
+<tr>
+<td style="text-align: left;">Iteration</td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">O(n log n)</td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>SPACE RULE OF THUMB</h2><p>If n is the size of input:
+* HashSet / HashMap → O(n)
+* Frequency Array (26) → O(1)
+* Prefix / Suffix → O(n) or O(1) (extra space excluding output)</p><p><strong>REMEMBER:</strong> Patterns &gt; Problems. Master the pattern, solve any problem!</p><!-- PAGE_BREAK --></div><div class="card"><h2>ARRAYS &amp; HASHING – PROBLEMS, COMPLEXITY &amp; TEMPLATES CHEAT SHEET (IMAGE 3)</h2><p>🧠 Problems ➔ Approach / Key Idea ➔ Time Complexity</p></div><div class="card"><h2>A. PROBLEM WISE QUICK REFERENCE</h2><table>
+<thead>
+<tr>
+<th>#</th>
+<th>PROBLEM</th>
+<th>KEY IDEA / APPROACH</th>
+<th>TIME</th>
+<th>SPACE</th>
+<th>IMPORTANT NOTES / PATTERN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>217.<br/>Contains Duplicate</td>
+<td>HashSet - add while iterating, if already exists ➔ duplicate.</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td>Typical use: seen/visited tracking</td>
+</tr>
+<tr>
+<td>2</td>
+<td>242.<br/>Valid Anagram</td>
+<td>Frequency count (int[26])<br/>or HashMap<character, integer=""></character,></td>
+<td>O(n)</td>
+<td>O(1)</td>
+<td>Count &amp; compare all frequencies</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1.<br/>Two Sum</td>
+<td>HashMap (value ➔ index).<br/>Check complement (target - num).</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td>Store index, not just value</td>
+</tr>
+<tr>
+<td>4</td>
+<td>49.<br/>Group Anagrams</td>
+<td>Key = sorted string or 26-char frequency string.<br/>HashMap<key, list\<string="">&gt;</key,></td>
+<td>O(n * k log k)</td>
+<td>O(n * k)</td>
+<td>k = avg length of string</td>
+</tr>
+<tr>
+<td>5</td>
+<td>347.<br/>Top K Frequent Elements</td>
+<td>HashMap for freq +<br/>Bucket Sort (freq ➔ list)<br/>or Min-Heap (size k).</td>
+<td>O(n)<br/>Heap: O(n log k)</td>
+<td>O(n)</td>
+<td>Bucket sort is O(n) time</td>
+</tr>
+<tr>
+<td>6</td>
+<td>271.<br/>Encode and Decode Strings</td>
+<td>Encode: len#string<br/>Decode: read length, then string</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td># as delimiter avoids ambiguity</td>
+</tr>
+<tr>
+<td>7</td>
+<td>238.<br/>Product of Array Except Self</td>
+<td>Prefix products (left) +<br/>Suffix products (right)<br/>No division allowed.</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td>res[i] = left[i-1] * right[i+1]</td>
+</tr>
+<tr>
+<td>8</td>
+<td>128.<br/>Longest Consecutive Sequence</td>
+<td>HashSet - store all numbers.<br/>Start count only if !contains(num-1)</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td>Avoid duplicates by this trick</td>
+</tr>
+<tr>
+<td>9</td>
+<td>36.<br/>Valid Sudoku</td>
+<td>HashSet for<br/>Rows, Columns and 3x3 boxes</td>
+<td>O(1)<br/>(fixed 9x9 board)</td>
+<td>O(1)</td>
+<td>3 loops ➔ rows, cols, boxes</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Bonus Pattern:<br/>Character Count (lowercase)</td>
+<td>Use int[26], index = char - 'a'</td>
+<td>O(n)</td>
+<td>O(1)</td>
+<td>Fastest for lowercase letters</td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>B. TEMPLATES YOU SHOULD REMEMBER</h2><pre><code class="language-java">// 1. HASHSET - DUPLICATE CHECK
+Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+for (int x : nums) {
+    if (!set.add(x)) return true; // already exists
+}
+return false;
+</code></pre><pre><code class="language-java">// 2. HASHMAP - FREQUENCY COUNT
+Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+for (int x : nums) {
+    map.put(x, map.getOrDefault(x, 0) + 1);
+}
+</code></pre><pre><code class="language-java">// 3. TWO SUM (HASHMAP)
+Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+for (int i = 0; i &lt; nums.length; i++) {
+    int need = target - nums[i];
+    if (map.containsKey(need)) return new int[]{map.get(need), i};
+    map.put(nums[i], i);
+}
+return new int[0];
+</code></pre><pre><code class="language-java">// 4. GROUP ANAGRAMS (SORTED STRING KEY)
+Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
+for (String s : strs) {
+    char[] arr = s.toCharArray();
+    Arrays.sort(arr);
+    String key = new String(arr);
+    map.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(s);
+}
+return new ArrayList&lt;&gt;(map.values());
+</code></pre><pre><code class="language-java">// 5. TOP K FREQUENT (BUCKET SORT)
+Map&lt;Integer, Integer&gt; freq = new HashMap&lt;&gt;();
+for (int x : nums) freq.put(x, freq.getOrDefault(x, 0) + 1);
+List&lt;Integer&gt;[] bucket = new List[nums.length + 1];
+for (int num: freq.keySet()) {
+    int f = freq.get(num);
+    if (bucket[f] == null) bucket[f] = new ArrayList&lt;&gt;();
+    bucket[f].add(num);
+}
+List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+for (int f = bucket.length - 1; f &gt;= 0 &amp;&amp; res.size() &lt; k; f--) {
+    if (bucket[f] != null) res.addAll(bucket[f]);
+}
+return res.subList(0, k);
+</code></pre><pre><code class="language-java">// 6. LONGEST CONSECUTIVE SEQUENCE
+Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+for (int num : nums) set.add(num);
+int longest = 0;
+for (int num : set) {
+    if (!set.contains(num - 1)) { // start of sequence
+        int cur = num, len = 1;
+        while (set.contains(cur + 1)) { cur++; len++; }
+        longest = Math.max(longest, len);
+    }
+}
+return longest;
+</code></pre><pre><code class="language-java">// 7. VALID SUDOKU (3 CHECKS)
+// Rows
+for (int i = 0; i &lt; 9; i++) {
+    Set&lt;Character&gt; seen = new HashSet&lt;&gt;();
+    for (int j = 0; j &lt; 9; j++) {
+        char c = board[i][j];
+        if (c != '.') {
+            if (!seen.add(c)) return false;
+        }
+    }
+}
+
+// Columns
+for (int j = 0; j &lt; 9; j++) {
+    Set&lt;Character&gt; seen = new HashSet&lt;&gt;();
+    for (int i = 0; i &lt; 9; i++) {
+        char c = board[i][j];
+        if (c != '.') {
+            if (!seen.add(c)) return false;
+        }
+    }
+}
+
+// 3x3 Boxes
+for (int br = 0; br &lt; 9; br += 3) {
+    for (int bc = 0; bc &lt; 9; bc += 3) {
+        Set&lt;Character&gt; seen = new HashSet&lt;&gt;();
+        for (int i = br; i &lt; br + 3; i++) {
+            for (int j = bc; j &lt; bc + 3; j++) {
+                char c = board[i][j];
+                if (c != '.') {
+                    if (!seen.add(c)) return false;
+                }
+            }
+        }
+    }
+}
+</code></pre></div><div class="card"><h2>C. COMMON PATTERNS SUMMARY</h2><table>
+<thead>
+<tr>
+<th>PATTERN</th>
+<th>HOW TO THINK</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Seen / Visited</td>
+<td>Use HashSet</td>
+</tr>
+<tr>
+<td>Counting / Frequency</td>
+<td>HashMap or int[26]</td>
+</tr>
+<tr>
+<td>Complement Search</td>
+<td>HashMap (value ➔ index)</td>
+</tr>
+<tr>
+<td>Grouping</td>
+<td>HashMap<key, list=""></key,></td>
+</tr>
+<tr>
+<td>Top K / Min/Max K</td>
+<td>Heap or Bucket Sort</td>
+</tr>
+<tr>
+<td>Consecutive Sequence</td>
+<td>HashSet + check (num-1)</td>
+</tr>
+<tr>
+<td>Matrix Validation</td>
+<td>Separate set for row/col/box</td>
+</tr>
+<tr>
+<td>Prefix / Suffix</td>
+<td>Two passes (left ➔ right, right ➔ left)</td>
+</tr>
+<tr>
+<td>Encoding</td>
+<td>length#string</td>
+</tr>
+<tr>
+<td>Avoid Division</td>
+<td>Prefix &amp; suffix products</td>
+</tr>
+<tr>
+<td>Alphabet Count</td>
+<td>int[26] with (c - 'a')</td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>D. COMPLEXITY QUICK GUIDE</h2><table>
+<thead>
+<tr>
+<th>OPERATION</th>
+<th>TIME COMPLEXITY</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HashSet add/contains/remove</td>
+<td>O(1) avg</td>
+</tr>
+<tr>
+<td>HashMap get/put/containsKey</td>
+<td>O(1) avg</td>
+</tr>
+<tr>
+<td>Array access</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>Traverse Array</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Sort (Arrays.sort)</td>
+<td>O(n log n)</td>
+</tr>
+<tr>
+<td>Building Map/Set from n items</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Heap push / pop</td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td>Bucket Sort (by frequency)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Sudoku (fixed 9x9)</td>
+<td>O(1)</td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>E. HASHMAP / HASHSET REMINDERS</h2><h3>HashMap Notes</h3><ul>
+<li>map.put(key, value)</li>
+<li>map.get(key)</li>
+<li>map.getOrDefault(key, defaultValue)</li>
+<li>map.containsKey(key)</li>
+<li>map.containsValue(value)</li>
+<li>map.remove(key)</li>
+<li>map.size(), map.isEmpty()</li>
+<li>map.keySet(), map.values(), map.entrySet()</li>
+</ul><h3>HashSet Notes</h3><ul>
+<li>set.add(x) ➔ returns false if already exists</li>
+<li>set.contains(x)</li>
+<li>set.remove(x)</li>
+<li>set.size(), set.isEmpty()</li>
+<li>set.clear()</li>
+<li>set ➔ new ArrayList&lt;&gt;(set) to convert</li>
+</ul></div><div class="card"><h2>F. FREQUENTLY USED STRUCTURES</h2><table>
+<thead>
+<tr>
+<th>Structure</th>
+<th>When to Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HashSet</td>
+<td>Check existence, remove duplicates</td>
+</tr>
+<tr>
+<td>HashMap</td>
+<td>Count frequency, store mapping</td>
+</tr>
+<tr>
+<td>int[26]</td>
+<td>Lowercase character frequency</td>
+</tr>
+<tr>
+<td>PriorityQueue</td>
+<td>Top K, Min/Max problems</td>
+</tr>
+<tr>
+<td>Queue / Deque</td>
+<td>BFS / Sliding Window / Monotonic Queue</td>
+</tr>
+<tr>
+<td>Stack</td>
+<td>Monotonic Stack, Next Greater, Valid Parentheses</td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>G. TIME COMPLEXITY OF COMMON ALGORITHMS</h2><table>
+<thead>
+<tr>
+<th>Algorithm / Approach</th>
+<th>Time Complexity</th>
+<th>Best Case / Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Brute Force (single loop)</td>
+<td>O(n)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Brute Force (nested loops)</td>
+<td>O(n^2)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Hashing (build map/set)</td>
+<td>O(1)</td>
+<td>O(1) avg per op</td>
+</tr>
+<tr>
+<td>Sorting</td>
+<td>O(n log n)</td>
+<td>Timsort in Java</td>
+</tr>
+<tr>
+<td>Two Pointers (sorted)</td>
+<td>O(n)</td>
+<td>After sorting if needed</td>
+</tr>
+<tr>
+<td>Prefix / Suffix</td>
+<td>O(n)</td>
+<td>Two linear passes</td>
+</tr>
+<tr>
+<td>Sliding Window</td>
+<td>O(n)</td>
+<td>Each element visited at most twice</td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>H. MEMORY USAGE GUIDE</h2><table>
+<thead>
+<tr>
+<th>Structure</th>
+<th>Space Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HashSet (n elements)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>HashMap (n pairs)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>int[26]</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>Array / List (n)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Stack / Queue (n)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>PriorityQueue (n)</td>
+<td>O(n)</td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>GOLDEN TIPS</h2><ul>
+<li>Understand the pattern first, then code</li>
+<li>Choose the right data structure</li>
+<li>Analyze time &amp; space</li>
+<li>Handle edge cases</li>
+<li>Write clean &amp; simple code</li>
+<li>Practice consistently</li>
+</ul><!-- PAGE_BREAK --></div><div class="card"><h2>ARRAYS &amp; HASHING – JAVA CHEAT SHEET (IMAGE 2)</h2><p>Essential Java APIs, Syntax &amp; Utilities you use in Arrays + Hashing problems</p></div><div class="card"><h2>1. DATA STRUCTURES – QUICK REFERENCE</h2><h3>HashSet<e> (Unique Elements)</e></h3><pre><code class="language-java">Set&lt;Character&gt; set = new HashSet&lt;&gt;();
+set.add('a');          // true if added
+set.contains('a');     // O(1) avg
+set.remove('a');
+set.size();
+set.isEmpty();
+set.clear();
+</code></pre><p>Time Complexity: <code>add/contains/remove -&gt; O(1) avg</code></p><h3>HashMap<k, v=""> (Key -&gt; Value)</k,></h3><pre><code class="language-java">Map&lt;String, Integer&gt; map = new HashMap&lt;&gt;();
+map.put("a", 1);             // insert/update
+map.get("a");                // returns value or null
+map.getOrDefault("a", 0);    // default if not present
+map.containsKey("a");
+map.containsValue(1);
+map.remove("a");
+map.size(); map.isEmpty(); map.clear();
+</code></pre><p>Time Complexity: <code>put/get/containsKey -&gt; O(1) avg</code></p><h3>LinkedHashMap<k, v=""> (Maintains Insertion Order)</k,></h3><pre><code class="language-java">Map&lt;Integer, Integer&gt; lhm = new LinkedHashMap&lt;&gt;();
+lhm.put(1, 10); lhm.put(2, 20);
+// Iterates in insertion order
+</code></pre><h3>TreeMap<k, v=""> (Sorted by Key)</k,></h3><pre><code class="language-java">Map&lt;Integer, String&gt; tm = new TreeMap&lt;&gt;();
+tm.put(3, "c"); tm.put(1, "a"); tm.put(2, "b");
+// Keys iterated in sorted order: 1, 2, 3
+</code></pre><p>Time Complexity: <code>O(log n)</code></p><h3>PriorityQueue<e> (Min-Heap by default)</e></h3><pre><code class="language-java">PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+pq.add(5); pq.add(1); pq.add(3);
+pq.peek();    // 1 (min)
+pq.poll();    // 1
+pq.size();    pq.isEmpty();
+
+// For Max-Heap:
+PriorityQueue&lt;Integer&gt; pqMax = new PriorityQueue&lt;&gt;(
+        Collections.reverseOrder());
+</code></pre><p>Time Complexity: <code>add/poll/peek -&gt; O(log n)</code></p></div><div class="card"><h2>2. COMMON JAVA CONVERSIONS</h2><h3>String &lt;-&gt; char[]</h3><pre><code class="language-java">String s = "abc";
+char[] arr = s.toCharArray();
+String s2 = new String(arr);
+</code></pre><h3>String &lt;-&gt; int</h3><pre><code class="language-java">String s = "123";
+int x = Integer.parseInt(s);
+String s2 = String.valueOf(x);
+// or
+String s3 = x + "";
+</code></pre><h3>List &lt;-&gt; Array</h3><pre><code class="language-java">List&lt;Integer&gt; list = Arrays.asList(1,2,3);
+// Fixed-size list backed by array
+Integer[] arr = list.toArray(new Integer[0]);
+int[] arr2 = list.stream().mapToInt(i -&gt; i).toArray();
+</code></pre><h3>Array &lt;-&gt; List (Mutable)</h3><pre><code class="language-java">Integer[] arr = {1,2,3};
+List&lt;Integer&gt; list = new ArrayList&lt;&gt;(Arrays.asList(arr));
+</code></pre><h3>Set &lt;-&gt; List / Array</h3><pre><code class="language-java">Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+set.add(1); set.add(2);
+List&lt;Integer&gt; list = new ArrayList&lt;&gt;(set);
+Integer[] arr = set.toArray(new Integer[0]);
+</code></pre><h3>Map Values / Keys</h3><pre><code class="language-java">Collection&lt;Integer&gt; values = map.values();
+Set&lt;String&gt; keys = map.keySet();
+List&lt;Integer&gt; valuesList = new ArrayList&lt;&gt;(map.values());
+</code></pre><h3>StringBuilder (for Encoding / Building Strings)</h3><pre><code class="language-java">StringBuilder sb = new StringBuilder();
+sb.append('a'); sb.append("bc"); sb.append(123);
+sb.length(); sb.charAt(0); sb.toString();
+sb.setLength(0); // clear
+</code></pre><h3>Math Utilities</h3><pre><code class="language-java">Math.max(a, b);    Math.min(a, b);
+Math.abs(x);       Math.pow(a, b);
+Math.floor(x);     Math.ceil(x);
+</code></pre></div><div class="card"><h2>3. USEFUL JAVA PATTERNS &amp; METHODS</h2><h3>computeIfAbsent() – Very Important!</h3><pre><code class="language-java">Map&lt;Character, List&lt;Integer&gt;&gt; map = new HashMap&lt;&gt;();
+map.computeIfAbsent('a', k -&gt; new ArrayList&lt;&gt;()).add(1);
+// If key 'a' not present, creates new ArrayList&lt;&gt;
+// then adds 1. Else, directly adds to existing list.
+</code></pre><h3>getOrDefault()</h3><pre><code class="language-java">int count = map.getOrDefault(key, 0);
+// returns value if key exists, else default (0)
+</code></pre><h3>merge() – Another Powerful One</h3><pre><code class="language-java">map.merge(key, 1, Integer::sum);
+// If key absent -&gt; put(key,1)
+// If present -&gt; oldVal + 1
+</code></pre><h3>forEach() with Lambda</h3><pre><code class="language-java">map.forEach((key, val) -&gt; {
+    System.out.println(key + " -&gt; " + val);
+});
+</code></pre><h3>Stream APIs (Often Used)</h3><pre><code class="language-java">List&lt;Integer&gt; list = new ArrayList&lt;&gt;(map.values());
+list.stream().sorted().toList();
+list.stream().sorted(Comparator.reverseOrder()).toList();
+list.stream().limit(k).toList();
+list.stream().mapToInt(i -&gt; i).toArray();
+Arrays.stream(arr).boxed().collect(Collectors.toList());
+</code></pre><h3>Arrays Utility</h3><pre><code class="language-java">Arrays.sort(arr);
+Arrays.sort(arr, Comparator.reverseOrder());
+Arrays.fill(arr, 0);
+Arrays.copyOf(arr, newLength);
+Arrays.equals(arr1, arr2);
+</code></pre><h3>Queue / Deque</h3><pre><code class="language-java">Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();
+q.offer(1); q.poll(); q.peek();
+Deque&lt;Integer&gt; dq = new ArrayDeque&lt;&gt;();
+dq.offerFirst(1); dq.offerLast(2);
+dq.pollFirst(); dq.pollLast(); dq.peekFirst(); dq.peekLast();
+</code></pre><h3>Stack (Legacy) or Deque (Preferred)</h3><pre><code class="language-java">Stack&lt;Integer&gt; st = new Stack&lt;&gt;();
+st.push(1); st.pop(); st.peek(); st.isEmpty();
+Deque&lt;Integer&gt; st2 = new ArrayDeque&lt;&gt;(); // better
+st2.push(1); st2.pop(); st2.peek(); st2.isEmpty();
+</code></pre></div><div class="card"><h2>4. FREQUENCY ARRAY (For Lowercase Letters)</h2><pre><code class="language-java">int[] freq = new int[26];
+for (char c : s.toCharArray()) {
+    freq[c - 'a']++;
+}
+// index = char - 'a' (0 to 25)
+// Works for 'a' to 'z' only
+</code></pre></div><div class="card"><h2>5. BUCKET / GROUPING PATTERN</h2><pre><code class="language-java">Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
+for (String s : strs) {
+    char[] arr = s.toCharArray();
+    Arrays.sort(arr);
+    String key = new String(arr);
+    map.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(s);
+}
+List&lt;List&lt;String&gt;&gt; res = new ArrayList&lt;&gt;(map.values());
+</code></pre></div><div class="card"><h2>6. TOP K FREQUENT – TEMPLATE (HashMap + PQ)</h2><pre><code class="language-java">Map&lt;Integer, Integer&gt; freq = new HashMap&lt;&gt;();
+for (int n : nums) {
+    freq.merge(n, 1, Integer::sum);
+}
+PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;(
+    (a, b) -&gt; a[1] - b[1] // min-heap by freq
+);
+for (int[] e : freq.entrySet().stream()
+           .map(e -&gt; new int[]{e.getKey(), e.getValue()})
+           .toList()) {
+    pq.offer(e);
+    if (pq.size() &gt; k) pq.poll();
+}
+
+// Extract from pq (smallest to largest freq)
+int[][] ans = new int[k][2];
+for (int i = k - 1; i &gt;= 0; i--) ans[i] = pq.poll();
+</code></pre></div><div class="card"><h2>7. CHECKLIST – WHEN SOLVING</h2><ul>
+<li>[x] Understand constraints (n, values, range).</li>
+<li>[x] Think: Can I use HashSet for O(1) lookups?</li>
+<li>[x] Need counts? -&gt; Use HashMap / int[26]</li>
+<li>[x] Need order? -&gt; LinkedHashMap / TreeMap</li>
+<li>[x] Top K / Min/Max? -&gt; PriorityQueue (Heap)</li>
+<li>[x] Need grouping? -&gt; HashMap<key, list=""></key,></li>
+<li>[x] Need encoding? -&gt; length#string</li>
+<li>[x] Can I do prefix/suffix to avoid re-computation?</li>
+<li>[x] Always analyze time &amp; space complexity.</li>
+</ul></div><div class="card"><h2>8. QUICK SYNTAX REMINDER (One-Liners You Use Often)</h2><p><strong>Iterate HashMap</strong></p><pre><code class="language-java">for (Map.Entry&lt;K, V&gt; e : map.entrySet()) {
+    K key = e.getKey();
+    V val = e.getValue();
+}
+</code></pre><p><strong>Iterate HashSet</strong></p><pre><code class="language-java">for (E e : set) {
+    // use e
+}
+</code></pre><p><strong>Create List</strong></p><pre><code class="language-java">List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+List&lt;Integer&gt; list2 = Arrays.asList(1,2,3);
+List&lt;Integer&gt; list3 = new ArrayList&lt;&gt;(list2);
+</code></pre><p><strong>Convert List to Array</strong></p><pre><code class="language-java">Integer[] arr = list.toArray(new Integer[0]);
+int[] arr2 = list.stream().mapToInt(i -&gt; i).toArray();
+</code></pre><p><strong>Sort List</strong></p><pre><code class="language-java">Collections.sort(list);
+list.sort(Comparator.reverseOrder());
+</code></pre><p><strong>Reverse String</strong></p><pre><code class="language-java">new StringBuilder(s).reverse().toString();
+</code></pre></div><div class="card"><h2>MOST USED IN INTERVIEWS</h2><ul>
+<li>HashSet</li>
+<li>HashMap + computeIfAbsent</li>
+<li>getOrDefault / merge</li>
+<li>PriorityQueue</li>
+<li>Arrays.sort(), toArray(), asList()</li>
+<li>StringBuilder</li>
+</ul><p><strong>FOOTER:</strong>
+⭐ REMEMBER
+🧩 Pattern Recognition &gt; Code
+💡 Know your Tools
+🧠 Write Clean &amp; Simple Code
+⚙️ Analyze Complexity
+⏱️ Practice Consistently</p><!-- PAGE_BREAK --></div></div>
+</body>
+</html>

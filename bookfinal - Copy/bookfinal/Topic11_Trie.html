@@ -1,0 +1,1221 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 11: Trie (Prefix Tree) Masterclass (Visual FAANG Edition)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#ffffff',
+            primaryTextColor: '#0f172a',
+            primaryBorderColor: '#2563eb',
+            lineColor: '#64748b',
+            fontFamily: 'Inter'
+        }
+    });
+</script>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+    }
+
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 11.8px;
+        line-height: 1.4;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 8px 16px;
+        display: flex;
+        
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand { font-weight: 900; font-size: 1rem; color: #38bdf8; }
+    .top-nav .nav-controls { display: flex; gap: 4px; flex-wrap: wrap; }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+
+    /* Sticky Sidebar Layout */
+    .app-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+
+    .toc-title { font-weight: 900; font-size: 0.85rem; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+
+    .main-content { min-width: 0; }
+
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 20px 24px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+        
+        display: flex;
+        flex-direction: column;
+        
+    }
+    [data-theme="dark"] .page { background: #1e293b; color: #f8fafc; }
+
+    /* Header Top */
+    .header-top {
+        display: flex;
+        
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 6px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top { background: #0f172a; border-color: #38bdf8; border-left-color: #38bdf8; }
+    .header-title-group { display: flex; align-items: center; gap: 8px; }
+    .header-top h1 { margin: 0; font-size: 1.15rem; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+    .header-top .page-num { background: #1e3a8a; color: white; padding: 2px 8px; border-radius: 14px; font-weight: 800; font-size: 0.72rem; }
+
+    /* Goal Badge Box */
+    .goal-badge {
+        border: 2px dashed #3b82f6;
+        background: #eff6ff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: #1e40af;
+        margin-bottom: 6px;
+    }
+
+    .cross-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #e0e7ff;
+        color: #3730a3;
+        border: 1px solid #c7d2fe;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-decoration: none;
+        margin-bottom: 4px;
+    }
+
+    /* Section Box */
+    .section-box {
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        background: white;
+        border: 2px solid #3b82f6;
+        width: 100%;
+    }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+    .section-header { padding: 4px 8px; font-weight: 800; font-size: 0.8rem; color: white; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+    .section-header .num { background: white; color: #0f172a; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 900; }
+    .section-content { padding: 6px 8px; font-size: 0.76rem; }
+
+    /* Color Themes */
+    .box-blue { border-color: #2563eb !important; } .box-blue .section-header { background: #2563eb !important; }
+    .box-green { border-color: #22c55e !important; } .box-green .section-header { background: #22c55e !important; }
+    .box-purple { border-color: #8b5cf6 !important; } .box-purple .section-header { background: #8b5cf6 !important; }
+    .box-red { border-color: #ef4444 !important; } .box-red .section-header { background: #ef4444 !important; }
+    .box-orange { border-color: #f97316 !important; } .box-orange .section-header { background: #f97316 !important; }
+    .box-teal { border-color: #0d9488 !important; } .box-teal .section-header { background: #0d9488 !important; }
+    .box-indigo { border-color: #6366f1 !important; } .box-indigo .section-header { background: #6366f1 !important; }
+    .box-amber { border-color: #d97706 !important; } .box-amber .section-header { background: #d97706 !important; }
+
+    /* Problem Split Grid */
+    .problem-split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+    .problem-info { display: flex; flex-direction: column; gap: 3px; }
+    .problem-code { display: flex; flex-direction: column; }
+
+    .meta-card { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 3px 6px; border-radius: 4px; display: flex;  align-items: center; font-weight: 700; font-size: 0.7rem; }
+    [data-theme="dark"] .meta-card { background: #0f172a; border-color: #334155; }
+    .badge-easy { background: #10b981; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-medium { background: #f59e0b; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-hard { background: #ef4444; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .company-tag { background: #1e3a8a; color: white; padding: 1px 4px; border-radius: 3px; font-size: 0.65rem; }
+
+    .flowchart-box { background: #eff6ff; border: 1px solid #93c5fd; border-left: 3px solid #2563eb; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: 700; color: #1e40af; }
+    .whynot-box { background: #fff7ed; border: 1px solid #fdba74; border-left: 3px solid #f97316; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; color: #9a3412; }
+
+    /* Character-by-Character Insertion Box */
+    .trie-viz-box {
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        padding: 4px 6px;
+        margin: 3px 0;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.68rem;
+        line-height: 1.35;
+    }
+    .trie-state-title { font-weight: 800; color: #1e3a8a; font-family: 'Inter', sans-serif; }
+    [data-theme="dark"] .trie-state-title { color: #38bdf8; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    pre { background: #f8fafc; color: #0f172a; padding: 6px 8px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.71rem; line-height: 1.32; margin: 0; white-space: pre-wrap !important; word-break: break-word; border: 1px solid #cbd5e1; }
+    [data-theme="dark"] pre { background: #0f172a; color: #f8fafc; border-color: #334155; }
+    code { font-family: 'Fira Code', monospace; background: #f1f5f9; color: #0f172a; padding: 1px 3px; border-radius: 3px; font-size: 0.74rem; border: 1px solid #cbd5e1; }
+
+    .aha-box { background: #fefce8; border: 1px solid #eab308; border-left: 4px solid #ca8a04; color: #713f12; padding: 5px 8px; border-radius: 4px; font-size: 0.76rem; font-weight: 600; margin: 4px 0; }
+    .rule-box { padding: 4px 6px; border-radius: 4px; font-weight: 600; margin: 4px 0; font-size: 0.74rem; }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    .rule-purple { background: #faf5ff; border: 1px solid #a855f7; border-left: 4px solid #a855f7; color: #6b21a8; }
+    .rule-red { background: #fff1f2; border: 1px solid #ef4444; border-left: 4px solid #ef4444; color: #b91c1c; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+    table th, table td { border: 1px solid var(--border-color); padding: 3px 5px; text-align: left; }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+    .mermaid { display: flex; justify-content: center; margin: 2px 0; }
+    .back-to-top { position: fixed; bottom: 20px; right: 20px; background: #2563eb; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; border: none; z-index: 999; }
+
+    @page { size: A4 portrait; margin: 4mm; }
+    @media print {
+        body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .top-nav, .back-to-top, .toc-sidebar { display: none !important; }
+        .app-layout { display: block !important; }
+        .container { max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+        .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.72; }
+        pre { background-color: #f8fafc !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; }
+    }
+
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+</style>
+</head>
+<body>
+
+<!-- Sticky Top Nav -->
+<div class="top-nav">
+    <div class="brand">⚡ FAANG DSA HANDBOOK — TOPIC 11: TRIE (PREFIX TREE)</div>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn" style="background:#059669; border-color:#10b981; font-weight:800;">🏠 Index</a>
+        <button class="nav-btn" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="nav-btn" onclick="toggleSidebar()">↕️ Expand/Shrink TOC</button>
+        <a href="#page1" class="nav-btn">P1</a>
+        <a href="#page2" class="nav-btn">P2</a>
+        <a href="#page3" class="nav-btn">P3</a>
+        <a href="#page4" class="nav-btn">P4</a>
+        <a href="#page5" class="nav-btn">P5</a>
+        <a href="#page6" class="nav-btn">P6</a>
+        <a href="#page7" class="nav-btn">P7</a>
+        <a href="#page8" class="nav-btn">P8</a>
+        <a href="#page9" class="nav-btn">P9</a>
+        <a href="#page10" class="nav-btn">P10</a>
+        <a href="#page11" class="nav-btn">P11</a>
+        <button class="nav-btn" onclick="window.print()" style="background: #2563eb;">🖨️ PDF</button>
+    </div>
+</div>
+
+<div class="container">
+<div class="app-layout" id="appLayout">
+
+    <!-- Sticky Table of Contents Sidebar -->
+    <div class="toc-sidebar">
+        <div class="toc-header-bar"><span class="toc-title">📋 SECTIONS</span><button class="shrink-btn" onclick="toggleSidebar()"><span class="toc-text">➖ Shrink</span></button></div>
+        <ul class="toc-list">
+            <li><a href="#page1" class="toc-link">11.0 Foundation &amp; Real World</a></li>
+            <li><a href="#page2" class="toc-link">11.1 Construction &amp; TrieNode</a></li>
+            <li><a href="#page3" class="toc-link">11.2 Core Operations &amp; Insert</a></li>
+            <li><a href="#page4" class="toc-link">11.4 DFS + Trie (Word Search II)</a></li>
+            <li><a href="#page5" class="toc-link">11.5 Bitwise Binary Trie</a></li>
+            <li><a href="#page6" class="toc-link">11.6 Decision &amp; Cheat Sheet</a></li>
+            <li><a href="#page7" class="toc-link">11.8 Implement Trie (LC 208)</a></li>
+            <li><a href="#page8" class="toc-link">11.8 Wildcard &amp; Replace Words</a></li>
+            <li><a href="#page9" class="toc-link">11.8 Suggestions &amp; Map Sum</a></li>
+            <li><a href="#page10" class="toc-link">11.8 Word Search II &amp; Max XOR</a></li>
+            <li><a href="#page11" class="toc-link">11.9 Revision &amp; Summary</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Pages -->
+    <div class="main-content">
+
+    <!-- ========================================================= -->
+    <!-- PAGE 1: 11.0 TRIE FOUNDATION & REAL-WORLD USE CASES -->
+    <!-- ========================================================= -->
+    <div class="page" id="page1">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🌿</span>
+                    <h1>TOPIC 11.0: TRIE FOUNDATION &amp; REAL-WORLD USE CASES</h1>
+                </div>
+                <span class="page-num">PAGE 1 OF 11</span>
+            </div>
+
+            <!-- Cross-Link Badges -->
+            <a href="Topic10_Trees.html" class="cross-link">🔗 See Topic 10 → Trees &amp; BST Masterclass</a>
+
+            <!-- Goal Badge -->
+            <div class="goal-badge">
+                🎯 <strong>GOAL:</strong> Master Trie (Prefix Tree) data structures, understand shared prefix node re-use, solve Prefix Search, Autocomplete Suggestions, Word Search II (DFS Pruning), and Bitwise Maximum XOR!
+            </div>
+
+            <div class="section-box box-teal" style="margin-top:8px">
+                <div class="section-header">🧰 REUSABLE TRIE UTILITIES &amp; NODE CLASS</div>
+                <div class="section-content">
+<pre>
+class TrieNode {
+    TrieNode[] children = new TrieNode[26];
+    boolean isEnd = false;
+}
+void insert(TrieNode root, String word) {
+    TrieNode curr = root;
+    for (char c : word.toCharArray()) {
+        int idx = c - 'a';
+        if (curr.children[idx] == null) curr.children[idx] = new TrieNode();
+        curr = curr.children[idx];
+    }
+    curr.isEnd = true;
+}</pre>
+                </div>
+            </div>
+
+            <!-- AHA Box #1 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #1: WHY TRIE OVER HASHMAP OR BST?</strong><br/>
+                A HashMap gives $O(L)$ exact lookup (where $L$ is word length), BUT finding all words with prefix `"cat"` requires scanning ALL $N$ keys in $O(N \cdot L)$ time!
+                <br/>A <strong>Trie (Prefix Tree)</strong> shares common prefixes across words. Searching for prefix `"cat"` takes ONLY **$O(L)$ time**, independent of total dictionary size $N$!
+            </div>
+
+            <div class="grid-2">
+                <!-- Real World Applications -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> REAL-WORLD FAANG APPLICATIONS</div>
+                    <div class="section-content">
+                        <div>• <strong>Google Search Autocomplete:</strong> Suggesting top queries matching typed prefix.<br/>
+                        • <strong>Spell Checkers &amp; T9 Texting:</strong> Finding valid dictionary words matching prefix.<br/>
+                        • <strong>IP Routing Tables (Longest Prefix Match):</strong> Forwarding packets to destination subnets.<br/>
+                        • <strong>Genome Sequence Matching:</strong> Matching DNA prefix patterns.</div>
+                    </div>
+                </div>
+
+                <!-- Trie vs HashMap Comparison -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> TRIE VS HASHMAP VS BST MATRIX</div>
+                    <div class="section-content">
+                        <table>
+                            <thead>
+                                <tr><th>Feature</th><th>Trie (Prefix Tree)</th><th>HashMap</th><th>Binary Search Tree</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Exact Word Search</td><td>$O(L)$</td><td>$O(L)$</td><td>$O(L \log N)$</td></tr>
+                                <tr><td>Prefix Search (<code>startsWith</code>)</td><td>✅ <strong>$O(L)$</strong></td><td>❌ $O(N \cdot L)$</td><td>⚠️ $O(L \log N)$</td></tr>
+                                <tr><td>Space Complexity</td><td>Shared Prefix (Low)</td><td>No Sharing (High)</td><td>Pointers per node</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Reach for a Trie whenever a problem mentions "Prefix", "Autocomplete", "Dictionary Search", or "Maximum XOR"!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 2: 11.1 TRIE CONSTRUCTION & MEMORY LAYOUT -->
+    <!-- ========================================================= -->
+    <div class="page" id="page2">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🛠️</span>
+                    <h1>TOPIC 11.1: TRIE CONSTRUCTION &amp; MEMORY LAYOUT</h1>
+                </div>
+                <span class="page-num">PAGE 2 OF 11</span>
+            </div>
+
+            <!-- AHA Box #2 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #2: TrieNode STRUCTURE &amp; CHILDREN REPRESENTATION</strong><br/>
+                Each node in a Trie represents a single character link. Nodes do NOT store their own character value; instead, the character is implicit from the edge pointer index (`children[c - 'a']`)!
+            </div>
+
+            <div class="grid-2">
+                <!-- TrieNode Implementation -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> JAVA TrieNode CLASS IMPLEMENTATION</div>
+                    <div class="section-content">
+<pre>
+public class TrieNode {
+    // Array of 26 child pointers for 'a' through 'z'
+    public TrieNode[] children = new TrieNode[26];
+    
+    // Marks if a valid word ends at this node
+    public boolean isEnd = false;
+    
+    // Optional metadata counters:
+    public int prefixCount = 0; // Number of words sharing this prefix
+    public int wordCount = 0;   // Number of exact word completions
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Children Storage Comparison -->
+                <div class="section-box box-amber">
+                    <div class="section-header"><span class="num">2</span> ARRAY[26] VS HASHMAP CHILDREN</div>
+                    <div class="section-content">
+                        <table>
+                            <thead>
+                                <tr><th>Implementation</th><th>Pros</th><th>Cons</th><th>FAANG Verdict</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>TrieNode[26]</code></td><td>Instant $O(1)$ index access, 0 collision overhead</td><td>Wastes null memory for small alphabets</td><td>✅ <strong>BEST for a-z</strong></td></tr>
+                                <tr><td><code>HashMap&lt;Char, Node&gt;</code></td><td>Saves space for arbitrary Unicode / ASCII</td><td>HashMap object overhead &amp; hash lookup</td><td>Use for generic Unicode</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            ⚠️ <strong>COMMON BUG:</strong> Forgetting to subtract `'a'` when indexing `children[c - 'a']` causes `ArrayIndexOutOfBoundsException`!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 3: 11.2 CORE OPERATIONS & CHARACTER INSERTION VISUALIZER -->
+    <!-- ========================================================= -->
+    <div class="page" id="page3">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🎨</span>
+                    <h1>TOPIC 11.2: CORE OPERATIONS &amp; CHARACTER INSERTION VISUALIZER</h1>
+                </div>
+                <span class="page-num">PAGE 3 OF 11</span>
+            </div>
+
+            <!-- AHA Box #3 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #3: PREFIX SHARING &amp; RE-USE IN ACTION</strong><br/>
+                When inserting `"cat"` followed by `"car"`, the characters `'c'` and `'a'` ALREADY EXIST in the Trie. The algorithm reuses existing nodes `(root) ➔ c ➔ a` and creates ONLY a single new node `'r'` for `"car"`!
+            </div>
+
+            <!-- Character-by-Character Insertion Visualizer -->
+            <div class="section-box box-purple">
+                <div class="section-header">🎨 STEP-BY-STEP TRIE GROWTH ANIMATION: INSERT "cat", THEN INSERT "car"</div>
+                <div class="section-content">
+                    <div class="trie-viz-box">
+<span class="trie-state-title">1. INSERT "cat":</span>
+   Step 1 ('c'): (root) └── c
+   Step 2 ('a'): (root) └── c └── a
+   Step 3 ('t'): (root) └── c └── a └── t★ (isEnd = true)
+
+<span class="trie-state-title">2. NOW INSERT "car":</span>
+   Reuses existing shared prefix 'c' ➔ 'a'!
+   Step 1 ('c'): Reused existing node 'c'
+   Step 2 ('a'): Reused existing node 'a'
+   Step 3 ('r'): Created NEW node 'r★' (isEnd = true)
+
+<span class="trie-state-title">FINAL TRIE STRUCTURE:</span>
+   (root)
+    └── c  (reused)
+        └── a  (reused)
+            ├── t★ (word: "cat")
+            └── r★ (word: "car", new node!)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Space efficiency increases as dictionary size grows because thousands of words share common prefixes!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 4: 11.4 DFS + TRIE (WORD SEARCH II & PREFIX PRUNING) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page4">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔥</span>
+                    <h1>TOPIC 11.4: DFS + TRIE (WORD SEARCH II &amp; PREFIX PRUNING)</h1>
+                </div>
+                <span class="page-num">PAGE 4 OF 11</span>
+            </div>
+
+            <!-- AHA Box #4 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #4: 1000x SPEEDUP VIA TRIE PREFIX PRUNING</strong><br/>
+                Standard Grid Backtracking searches for each word independently ($O(N \cdot M \cdot 4^L)$ TLE!).
+                <br/>By building a **Trie of all target words**, we explore the grid ONCE. If the current grid path does NOT exist in the Trie, we **prune the entire DFS branch immediately**!
+            </div>
+
+            <!-- Flowchart Box -->
+            <div class="section-box box-blue">
+                <div class="section-header">📌 WORD SEARCH II PREFIX PRUNING FLOWCHART</div>
+                <div class="section-content">
+                    <div class="flowchart-box">
+Grid Cell (r, c) ➔ Step on character ➔ Check Trie node.children[c - 'a']
+   ├── If NULL ➔ PRUNE DFS BRANCH IMMEDIATELY! (Path is not a prefix of any word)
+   └── If EXISTS ➔ Move to child Trie node ➔ If node.isEnd == true ➔ Add word to result &amp; set isEnd=false!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>OPTIMIZATION TRICK:</strong> Store the entire string `node.word` directly inside the `TrieNode` to avoid `StringBuilder` append/delete string manipulation overhead!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 5: 11.5 BITWISE TRIE (MAXIMUM XOR OF TWO NUMBERS) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page5">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">⚡</span>
+                    <h1>TOPIC 11.5: BITWISE TRIE (MAXIMUM XOR OF TWO NUMBERS)</h1>
+                </div>
+                <span class="page-num">PAGE 5 OF 11</span>
+            </div>
+
+            <!-- AHA Box #5 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #5: GREEDY OPPOSITE BIT SELECTION IN BITWISE TRIE</strong><br/>
+                XOR ($A \oplus B$) produces `1` when bits differ ($1 \oplus 0 = 1$) and `0` when bits match ($1 \oplus 1 = 0$).
+                <br/>To maximize XOR of number $A$, insert all numbers as **31-bit Binary Trees** (left branch = 0, right branch = 1). For each bit $b$ of $A$ from MSB (31) down to 0, **greedily pick the OPPOSITE bit `1 - b`** in the Trie!
+            </div>
+
+            <!-- Binary Trie Diagram -->
+            <div class="section-box box-purple">
+                <div class="section-header">🎨 VISUALIZING 3-BIT BINARY TRIE FOR NUMBERS [3 (011), 5 (101)]</div>
+                <div class="section-content">
+                    <div class="trie-viz-box">
+         (root)
+        /      \
+      [0]      [1]    (Bit 2 - MSB)
+        \      /
+        [1]  [0]      (Bit 1)
+        /      \
+      [1]      [1]    (Bit 0 - LSB)
+    (val 3)  (val 5)
+
+To maximize XOR for number 3 (011):
+Bit 2 (0): Pick opposite bit 1 ➔ Moves to node [1]
+Bit 1 (1): Pick opposite bit 0 ➔ Moves to node [0]
+Bit 0 (1): Opposite bit 0 missing, take 1 ➔ Moves to node [1]
+Max XOR = 3 ^ 5 = 6 (110)!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> A Bitwise Trie cuts Maximum XOR pair search from $O(N^2)$ brute-force to $O(32 \cdot N) = O(N)$ linear time!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 6: DECISION TREE & PRINTABLE TRIE CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page6">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📜</span>
+                    <h1>TOPIC 11.6 &amp; 1-PAGE PRINTABLE TRIE CHEAT SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 6 OF 11</span>
+            </div>
+
+            <!-- Mermaid Decision Tree -->
+            <div class="section-box box-purple">
+                <div class="section-header">🌳 TRIE INTERVIEW DECISION TREE (MERMAID)</div>
+                <div class="section-content">
+                    <div class="mermaid">
+                        graph TD
+                            A[What is the Problem Type?]
+                            A --> B[Prefix Search / Autocomplete / Dict?]
+                            A --> C[Wildcard Pattern Matching '.']
+                            A --> D[Grid Word Search II?]
+                            A --> E[Maximum XOR Pair / Range?]
+                            B --> B1[Standard Trie children[26]]
+                            C --> C1[Trie + DFS Backtracking]
+                            D --> D1[Trie + Grid DFS Backtracking]
+                            E --> E1[Bitwise Binary Trie 0/1]
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1-Page Printable Cheat Sheet -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📜 PRINTABLE TRIE &amp; BITWISE TRIE CHEAT SHEET</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Pattern Type</th><th>Target Problem</th><th>Trie Architecture</th><th>Time Complexity</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Standard Prefix Tree</td><td>Implement Trie (LC 208)</td><td><code>TrieNode[26]</code> + <code>isEnd</code></td><td>Insert/Search: $O(L)$</td></tr>
+                            <tr><td>Wildcard Search</td><td>Add &amp; Search Words (LC 211)</td><td>Trie + DFS Backtracking on <code>'.'</code></td><td>Search: $O(26^L)$ worst</td></tr>
+                            <tr><td>Grid Backtracking</td><td>Word Search II (LC 212)</td><td>Trie + Grid DFS + Pruning</td><td>Time: $O(M \cdot N \cdot 4^L)$</td></tr>
+                            <tr><td>Search Suggestions</td><td>Search Suggestions (LC 1268)</td><td>Trie + Top-3 List at nodes</td><td>Search: $O(L)$</td></tr>
+                            <tr><td>Bitwise XOR</td><td>Max XOR Pair (LC 421)</td><td>Binary 31-bit Trie <code>[0, 1]</code></td><td>Insert/Find: $O(32)$</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Print this page and review it 10 minutes before your technical interview!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 7: EASY NEETCODE SUITE (LC 208 IMPLEMENT TRIE) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page7">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🧩</span>
+                    <h1>EASY NEETCODE: IMPLEMENT TRIE (PREFIX TREE)</h1>
+                </div>
+                <span class="page-num">PAGE 7 OF 11</span>
+            </div>
+
+            <!-- Problem 1: LC 208 -->
+            <div class="section-box box-blue">
+                <div class="section-header">1. LEETCODE 208 — IMPLEMENT TRIE (PREFIX TREE)</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Core Trie Operations</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Implement a Trie with <code>insert</code>, <code>search</code>, and <code>startsWith</code> methods.
+                        </div>
+                        <div class="problem-code">
+<pre>
+class Trie {
+    private class TrieNode {
+        TrieNode[] children = new TrieNode[26];
+        boolean isEnd = false;
+    }
+    private TrieNode root = new TrieNode();
+    
+    public void insert(String word) {
+        TrieNode curr = root;
+        for (char c : word.toCharArray()) {
+            int idx = c - 'a';
+            if (curr.children[idx] == null) curr.children[idx] = new TrieNode();
+            curr = curr.children[idx];
+        }
+        curr.isEnd = true;
+    }
+    
+    public boolean search(String word) {
+        TrieNode curr = find(word);
+        return curr != null &amp;&amp; curr.isEnd;
+    }
+    
+    public boolean startsWith(String prefix) {
+        return find(prefix) != null;
+    }
+    
+    private TrieNode find(String str) {
+        TrieNode curr = root;
+        for (char c : str.toCharArray()) {
+            int idx = c - 'a';
+            if (curr.children[idx] == null) return null;
+            curr = curr.children[idx];
+        }
+        return curr;
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 208):</strong> Helper method `find(str)` eliminates duplicate code between `search()` and `startsWith()`!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 8: MEDIUM NEETCODE (ADD & SEARCH WORDS & REPLACE WORDS) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page8">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔍</span>
+                    <h1>MEDIUM NEETCODE: WILDCARD DICTIONARY &amp; REPLACE WORDS</h1>
+                </div>
+                <span class="page-num">PAGE 8 OF 11</span>
+            </div>
+
+            <!-- Problem 2: LC 211 -->
+            <div class="section-box box-purple">
+                <div class="section-header">2. LEETCODE 211 — DESIGN ADD AND SEARCH WORDS DATA STRUCTURE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Trie + Wildcard DFS</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Support `addWord(word)` and `search(word)` where `.` matches any character.
+                        </div>
+                        <div class="problem-code">
+<pre>
+class WordDictionary {
+    private class TrieNode {
+        TrieNode[] children = new TrieNode[26];
+        boolean isEnd = false;
+    }
+    private TrieNode root = new TrieNode();
+    
+    public void addWord(String word) {
+        TrieNode curr = root;
+        for (char c : word.toCharArray()) {
+            int idx = c - 'a';
+            if (curr.children[idx] == null) curr.children[idx] = new TrieNode();
+            curr = curr.children[idx];
+        }
+        curr.isEnd = true;
+    }
+    
+    public boolean search(String word) {
+        return dfs(word, 0, root);
+    }
+    private boolean dfs(String word, int idx, TrieNode curr) {
+        if (curr == null) return false;
+        if (idx == word.length()) return curr.isEnd;
+        char c = word.charAt(idx);
+        if (c == '.') {
+            for (TrieNode child : curr.children) {
+                if (child != null &amp;&amp; dfs(word, idx + 1, child)) return true;
+            }
+            return false;
+        } else {
+            return dfs(word, idx + 1, curr.children[c - 'a']);
+        }
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 3: LC 648 -->
+            <div class="section-box box-green">
+                <div class="section-header">3. LEETCODE 648 — REPLACE WORDS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★☆</span>
+                                <span>Shortest Root Prefix</span>
+                                <span class="company-tag">Uber</span>
+                            </div>
+                            <strong>Problem:</strong> Replace words in sentence with shortest matching root prefix in dictionary.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public String replaceWords(List&lt;String&gt; dictionary, String sentence) {
+    TrieNode root = new TrieNode();
+    for (String word : dictionary) {
+        TrieNode curr = root;
+        for (char c : word.toCharArray()) {
+            int idx = c - 'a';
+            if (curr.children[idx] == null) curr.children[idx] = new TrieNode();
+            curr = curr.children[idx];
+        }
+        curr.isEnd = true;
+    }
+    StringBuilder res = new StringBuilder();
+    for (String word : sentence.split(" ")) {
+        if (res.length() &gt; 0) res.append(" ");
+        res.append(findRoot(word, root));
+    }
+    return res.toString();
+}
+private String findRoot(String word, TrieNode root) {
+    TrieNode curr = root;
+    StringBuilder prefix = new StringBuilder();
+    for (char c : word.toCharArray()) {
+        int idx = c - 'a';
+        if (curr.children[idx] == null) break;
+        prefix.append(c);
+        curr = curr.children[idx];
+        if (curr.isEnd) return prefix.toString(); // Found shortest root!
+    }
+    return word;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 648):</strong> Returning immediately when `curr.isEnd == true` guarantees finding the SHORTEST root prefix!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 9: MEDIUM NEETCODE (SEARCH SUGGESTIONS & MAP SUM) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page9">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💡</span>
+                    <h1>MEDIUM NEETCODE: SEARCH SUGGESTIONS &amp; MAP SUM PAIRS</h1>
+                </div>
+                <span class="page-num">PAGE 9 OF 11</span>
+            </div>
+
+            <!-- Problem 4: LC 1268 -->
+            <div class="section-box box-blue">
+                <div class="section-header">4. LEETCODE 1268 — SEARCH SUGGESTIONS SYSTEM</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Trie Top-3 Suggestion List</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Return top 3 lexicographically smallest matching products after typing each character of search word.
+                        </div>
+                        <div class="problem-code">
+<pre>
+class Solution {
+    class TrieNode {
+        TrieNode[] children = new TrieNode[26];
+        List&lt;String&gt; suggestions = new ArrayList&lt;&gt;();
+    }
+    public List&lt;List&lt;String&gt;&gt; suggestedProducts(String[] products, String searchWord) {
+        Arrays.sort(products); // Sorted for lexicographical order!
+        TrieNode root = new TrieNode();
+        for (String p : products) {
+            TrieNode curr = root;
+            for (char c : p.toCharArray()) {
+                int idx = c - 'a';
+                if (curr.children[idx] == null) curr.children[idx] = new TrieNode();
+                curr = curr.children[idx];
+                if (curr.suggestions.size() &lt; 3) curr.suggestions.add(p); // Store Top 3!
+            }
+        }
+        List&lt;List&lt;String&gt;&gt; res = new ArrayList&lt;&gt;();
+        TrieNode curr = root;
+        for (char c : searchWord.toCharArray()) {
+            if (curr != null) curr = curr.children[c - 'a'];
+            res.add(curr != null ? curr.suggestions : new ArrayList&lt;&gt;());
+        }
+        return res;
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 5: LC 677 -->
+            <div class="section-box box-teal">
+                <div class="section-header">5. LEETCODE 677 — MAP SUM PAIRS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★☆</span>
+                                <span>Prefix Sum Accumulation</span>
+                                <span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Sum values of all key-value pairs whose key starts with prefix.
+                        </div>
+                        <div class="problem-code">
+<pre>
+class MapSum {
+    private class TrieNode {
+        TrieNode[] children = new TrieNode[26];
+        int val = 0;
+    }
+    private TrieNode root = new TrieNode();
+    private Map&lt;String, Integer&gt; map = new HashMap&lt;&gt;();
+    
+    public void insert(String key, int val) {
+        int diff = val - map.getOrDefault(key, 0);
+        map.put(key, val);
+        TrieNode curr = root;
+        for (char c : key.toCharArray()) {
+            int idx = c - 'a';
+            if (curr.children[idx] == null) curr.children[idx] = new TrieNode();
+            curr = curr.children[idx];
+            curr.val += diff; // Accumulate delta sum!
+        }
+    }
+    
+    public int sum(String prefix) {
+        TrieNode curr = root;
+        for (char c : prefix.toCharArray()) {
+            int idx = c - 'a';
+            if (curr.children[idx] == null) return 0;
+            curr = curr.children[idx];
+        }
+        return curr.val; // Instant O(L) sum!
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 1268):</strong> Sorting `products` prior to Trie insertion allows populating top 3 suggestions in $O(1)$ during construction!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 10: HARD NEETCODE (WORD SEARCH II & MAX XOR) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page10">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔥</span>
+                    <h1>HARD NEETCODE: WORD SEARCH II &amp; MAXIMUM XOR</h1>
+                </div>
+                <span class="page-num">PAGE 10 OF 11</span>
+            </div>
+
+            <!-- Problem 6: LC 212 -->
+            <div class="section-box box-red">
+                <div class="section-header">6. LEETCODE 212 — WORD SEARCH II</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Trie + Grid DFS Pruning</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Find all dictionary words present on a 2D board.
+                        </div>
+                        <div class="problem-code">
+<pre>
+class Solution {
+    class TrieNode {
+        TrieNode[] children = new TrieNode[26];
+        String word = null;
+    }
+    public List&lt;String&gt; findWords(char[][] board, String[] words) {
+        TrieNode root = new TrieNode();
+        for (String w : words) {
+            TrieNode curr = root;
+            for (char c : w.toCharArray()) {
+                int idx = c - 'a';
+                if (curr.children[idx] == null) curr.children[idx] = new TrieNode();
+                curr = curr.children[idx];
+            }
+            curr.word = w; // Store full word at leaf!
+        }
+        List&lt;String&gt; res = new ArrayList&lt;&gt;();
+        for (int r = 0; r &lt; board.length; r++) {
+            for (int c = 0; c &lt; board[0].length; c++) dfs(board, r, c, root, res);
+        }
+        return res;
+    }
+    private void dfs(char[][] board, int r, int c, TrieNode node, List&lt;String&gt; res) {
+        char ch = board[r][c];
+        if (ch == '#' || node.children[ch - 'a'] == null) return; // Prune branch!
+        node = node.children[ch - 'a'];
+        if (node.word != null) { res.add(node.word); node.word = null; } // Avoid dups
+        board[r][c] = '#'; // Mark visited
+        int[][] dirs = {{0,1},{1,0},{0,-1},{-1,0}};
+        for (int[] d : dirs) {
+            int nr = r + d[0], nc = c + d[1];
+            if (nr &gt;= 0 &amp;&amp; nr &lt; board.length &amp;&amp; nc &gt;= 0 &amp;&amp; nc &lt; board[0].length) dfs(board, nr, nc, node, res);
+        }
+        board[r][c] = ch; // Backtrack
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 7: LC 421 -->
+            <div class="section-box box-indigo">
+                <div class="section-header">7. LEETCODE 421 — MAXIMUM XOR OF TWO NUMBERS IN AN ARRAY</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Bitwise 31-Bit Binary Trie</span>
+                                <span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Maximum result of $A \oplus B$ for two numbers in array in $O(N)$ time.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int findMaximumXOR(int[] nums) {
+    class Node { Node[] children = new Node[2]; }
+    Node root = new Node();
+    for (int num : nums) {
+        Node curr = root;
+        for (int i = 31; i &gt;= 0; i--) {
+            int bit = (num &gt;&gt; i) &amp; 1;
+            if (curr.children[bit] == null) curr.children[bit] = new Node();
+            curr = curr.children[bit];
+        }
+    }
+    int maxXor = 0;
+    for (int num : nums) {
+        Node curr = root; int currXor = 0;
+        for (int i = 31; i &gt;= 0; i--) {
+            int bit = (num &gt;&gt; i) &amp; 1, opp = 1 - bit;
+            if (curr.children[opp] != null) {
+                currXor |= (1 &lt;&lt; i); curr = curr.children[opp]; // Greedy opp bit!
+            } else curr = curr.children[bit];
+        }
+        maxXor = Math.max(maxXor, currXor);
+    }
+    return maxXor;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Setting `node.word = null` after adding to `res` prevents duplicate word insertions in Word Search II!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 11: MASTER REVISION & REFERENCE CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page11">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💎</span>
+                    <h1>IF YOU REMEMBER ONLY ONE PAGE... MASTER REVISION SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 11 OF 11</span>
+            </div>
+
+            <!-- 4 Golden Laws -->
+            <div class="section-box box-green">
+                <div class="section-header">⭐ THE 4 GOLDEN LAWS OF TRIES</div>
+                <div class="section-content">
+                    <div style="font-size:0.78rem; line-height:1.45;">
+                        1. <strong>Array vs Map Children:</strong> Use <code>TrieNode[26]</code> for lowercase english (`a-z`). Use <code>HashMap</code> for generic Unicode.<br/>
+                        2. <strong>Shared Prefix Efficiency:</strong> Insert/Search time is $O(L)$ (where $L$ is word length), independent of total words $N$.<br/>
+                        3. <strong>DFS Grid Pruning (Word Search II):</strong> Pass Trie node along grid DFS. Prune immediately if <code>curr.children[c - 'a'] == null</code>!<br/>
+                        4. <strong>Bitwise Binary Trie:</strong> To maximize XOR $A \oplus B$, greedily pick the opposite bit `1 - bit` at each of the 32 bit positions!
+                    </div>
+                </div>
+            </div>
+
+            <!-- When Trie Fails -->
+            <div class="section-box box-amber">
+                <div class="section-header">⛔ WHEN TRIE FAILS (DO NOT USE!)</div>
+                <div class="section-content">
+                    <div>• <strong>Exact Key Lookups without Prefix Queries:</strong> Standard key-value lookup ➔ Use <strong>HashMap</strong>!</div>
+                    <div>• <strong>Range Queries (e.g. Find values between X and Y):</strong> Trie does not maintain binary ordering ➔ Use <strong>TreeMap (BST)</strong>!</div>
+                </div>
+            </div>
+
+            <!-- NeetCode & Blind 75 Tracker -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📊 NEETCODE &amp; BLIND 75 CONFIDENCE TRACKER</div>
+                <div class="section-content">
+                    <div class="grid-3">
+                        <div><span class="badge-medium">🟡 Med</span> LC 208 Implement Trie</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 211 Add &amp; Search Words</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 648 Replace Words</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 1268 Search Suggestions</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 677 Map Sum Pairs</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 212 Word Search II</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 421 Maximum XOR</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forward Cross Link -->
+            <a href="index.html" class="cross-link" style="background:#dcfce7; color:#15803d; border-color:#86efac; font-size:0.78rem;">👉 Next Master Topic: Topic 12 → Graphs Masterclass (BFS / DFS / Topological Sort)</a>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🎉 <strong>TOPIC 11 TRIE MASTERCLASS COMPLETE!</strong> Turn the page to <strong>Topic 12: Graphs Masterclass</strong>!
+        </div>
+    </div>
+
+    </div> <!-- end .main-content -->
+</div> <!-- end .app-layout -->
+</div> <!-- end .container -->
+
+<!-- Floating Back to Top Button -->
+<button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆</button>
+
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout') || document.querySelector('.app-layout');
+        const btn = document.querySelector('.shrink-btn span');
+        if (layout) {
+            layout.classList.toggle('shrunk');
+            if (btn) {
+                btn.innerText = layout.classList.contains('shrunk') ? '➕ Expand' : '➖ Shrink';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+

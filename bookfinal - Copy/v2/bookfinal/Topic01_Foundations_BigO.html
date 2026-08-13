@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Topic 01: Orientation, Big-O &amp; Foundations Masterclass — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 14px; }
+.ph h1 { font-size: 1.8rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.88rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.75rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; }
+.bh  { background: var(--pri); color: white; padding: 6px 12px;
+  font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; }
+.bc  { padding: 10px 12px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.72rem; line-height: 1.4; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.76rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+th, td { border: 1px solid var(--bdr); padding: 5px 7px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 8px 10px; margin-top: 6px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.82rem; margin-bottom: 3px; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 6px 10px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.85; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- PAGE 1: DISCOVERY & WHY BIG-O -->
+<div class="page">
+<div class="ph">
+  <div><h1>FOUNDATIONS &amp; BIG-O ANALYSIS</h1><div class="sub">FAANG Interview Orientation — Mentor Guide</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 1 OF 4</div><div class="ptag">ORIENTATION · DISCOVERY · TIME &amp; SPACE COMPLEXITY</div></div>
+</div>
+
+<div class="g3" style="margin-bottom:12px">
+  <div class="box pur">
+    <div class="bh">🎬 THE REAL-WORLD STORY</div>
+    <div class="bc">
+      <p style="margin-bottom:6px">Imagine transferring a 100 GB file to your friend across town. Should you send it over internet Wi-Fi or carry it on a physical USB drive?</p>
+      <ul style="padding-left:14px;font-size:0.76rem">
+        <li><strong>Wi-Fi Transfer:</strong> Time scales linearly with file size (1 GB = 2 min, 100 GB = 200 min) $\rightarrow$ <strong>O(N)</strong></li>
+        <li><strong>Car Drive:</strong> Time is constant regardless of USB size (1 GB = 30 min, 100 GB = 30 min) $\rightarrow$ <strong>O(1)</strong></li>
+      </ul>
+      <div class="aha">
+        <div class="aha-t">💡 THE BIG-O AHA MOMENT</div>
+        Big-O notation measures how runtime or memory scales as input size N grows to infinity, ignoring hardware speed differences!
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bh">🤔 WHY NOT MEASURE SECONDS?</div>
+    <div class="bc">
+      <p style="margin-bottom:6px">Measuring code execution in milliseconds is unreliable in FAANG interviews because:</p>
+      <ul style="padding-left:14px;font-size:0.76rem">
+        <li>A fast CPU runs bad code quickly on small inputs.</li>
+        <li>Network jitter and background OS processes alter timings.</li>
+        <li>Big-O provides a universal mathematical upper bound guaranteed on all machines!</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box sky">
+    <div class="bh">📈 THE BIG-O HIERARCHY</div>
+    <div class="bc">
+      <table style="font-size:0.72rem">
+        <tr><th>Big-O</th><th>Name</th><th>Max N for 1 Sec (10^8 ops)</th></tr>
+        <tr><td><strong>O(1)</strong></td><td>Constant</td><td>Unlimited</td></tr>
+        <tr><td><strong>O(log N)</strong></td><td>Logarithmic</td><td>10^18 (Binary Search)</td></tr>
+        <tr><td><strong>O(N)</strong></td><td>Linear</td><td>10^8 (Single Pass)</td></tr>
+        <tr><td><strong>O(N log N)</strong></td><td>Linearithmic</td><td>10^6 (Efficient Sorting)</td></tr>
+        <tr><td><strong>O(N^2)</strong></td><td>Quadratic</td><td>10^4 (Nested Loops)</td></tr>
+        <tr><td><strong>O(2^N)</strong></td><td>Exponential</td><td>20 (Subsets / Recursion)</td></tr>
+        <tr><td><strong>O(N!)</strong></td><td>Factorial</td><td>11 (Permutations)</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">📐 THE 3 BIG-O REDUCTION RULES</div>
+    <div class="bc">
+      <div style="font-size:0.78rem">
+        <p style="margin-bottom:4px"><strong>Rule 1 — Drop Constants:</strong> O(2N + 5) $\rightarrow$ <strong>O(N)</strong>. We care about growth rate, not constant multipliers.</p>
+        <p style="margin-bottom:4px"><strong>Rule 2 — Drop Non-Dominant Terms:</strong> O(N^2 + 100N + 500) $\rightarrow$ <strong>O(N^2)</strong>. As N grows to infinity, N^2 completely dominates N.</p>
+        <p style="margin-bottom:4px"><strong>Rule 3 — Multi-Variable Rules:</strong> Array A size N, Array B size M $\rightarrow$ <strong>O(N + M)</strong> for sequential loops, <strong>O(N · M)</strong> for nested loops!</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="box amb">
+    <div class="bh">⚡ FAANG INTERVIEW PROBLEM SOLVING FRAMEWORK</div>
+    <div class="bc">
+      <ol style="padding-left:14px;font-size:0.76rem">
+        <li><strong>Clarify Constraints:</strong> Ask N limits ($N \le 10^5 \implies O(N \log N)$ target).</li>
+        <li><strong>State Brute Force:</strong> Mention naive solution and its complexity first.</li>
+        <li><strong>Identify Bottleneck:</strong> Find repeated work (e.g. repeated linear search $\implies$ HashMap/Binary Search).</li>
+        <li><strong>Optimize &amp; Code:</strong> Write clean, bug-free Java code using standard naming.</li>
+        <li><strong>Dry Run Test Cases:</strong> Trace step-by-step with small inputs and edge cases!</li>
+      </ol>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 2: RECURSION & SPACE COMPLEXITY -->
+<div class="page">
+<div class="ph">
+  <div><h1>FOUNDATIONS &amp; RECURSION</h1><div class="sub">Call Stack &amp; Auxiliary Space</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 2 OF 4</div><div class="ptag">RECURSION · CALL STACK · AUXILIARY SPACE</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:12px">
+  <div class="box pur">
+    <div class="bh">💡 AUXILIARY SPACE VS TOTAL SPACE</div>
+    <div class="bc">
+      <p style="margin-bottom:6px">Interviewer asks: <em>"What is the space complexity of your algorithm?"</em></p>
+      <ul style="padding-left:14px;font-size:0.76rem">
+        <li><strong>Input Space:</strong> Memory used to hold input data (e.g. input array of size N).</li>
+        <li><strong>Auxiliary Space:</strong> Extra memory created by your algorithm (data structures + recursion call stack).</li>
+        <li><strong>Golden Rule:</strong> Unless specified otherwise, space complexity refers to <strong>Auxiliary Space</strong>!</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bh">🔄 RECURSION CALL STACK VISUALIZATION</div>
+    <div class="bc">
+      <div style="font-weight:700;color:var(--pri);margin-bottom:4px">Call Stack for `factorial(3)`:</div>
+<pre>factorial(3) -> waits for factorial(2)
+  factorial(2) -> waits for factorial(1)
+    factorial(1) -> returns 1 (Base Case!)
+  factorial(2) -> returns 2 * 1 = 2
+factorial(3) -> returns 3 * 2 = 6
+Max Stack Depth = 3 -> Auxiliary Space: O(N)!</pre>
+    </div>
+  </div>
+</div>
+
+<div class="box grn">
+  <div class="bh">📊 HOW TO DEDUCE TARGET COMPLEXITY FROM INPUT CONSTRAINTS</div>
+  <div class="bc">
+    <table>
+      <tr><th>Input Size (N)</th><th>Target Time Complexity</th><th>Typical Algorithm Patterns</th></tr>
+      <tr><td>N $\le$ 10..12</td><td>O(N!) or O(2^N · N)</td><td>Permutations, N-Queens, Backtracking Bitmask</td></tr>
+      <tr><td>N $\le$ 20..25</td><td>O(2^N)</td><td>Subsets, Combination Sum, Meet-in-the-Middle</td></tr>
+      <tr><td>N $\le$ 500</td><td>O(N^3)</td><td>Floyd-Warshall, Matrix Chain Multiplication DP</td></tr>
+      <tr><td>N $\le$ 2,000</td><td>O(N^2)</td><td>Nested Loops, 2D Grid DP, All-Pairs Check</td></tr>
+      <tr><td>N $\le$ 10^5..10^6</td><td>O(N log N) or O(N)</td><td>Sorting, Binary Search, Two Pointers, HashMap, Sliding Window</td></tr>
+      <tr><td>N $\le$ 10^9..10^18</td><td>O(log N) or O(1)</td><td>Binary Search on Answer, Bit Manipulation, Math Formulas</td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 3: JAVA INTERVIEW ESSENTIALS & UTILITIES -->
+<div class="page">
+<div class="ph">
+  <div><h1>JAVA INTERVIEW ESSENTIALS</h1><div class="sub">Standard Data Structures &amp; Performance Shortcuts</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 3 OF 4</div><div class="ptag">JAVA UTILITIES · COLLECTION SNIPPETS · TRICKS</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:12px">
+  <div class="box">
+    <div class="bh">🛠 ESSENTIAL JAVA DATA STRUCTURES &amp; COMPLEXITIES</div>
+    <div class="bc">
+      <table>
+        <tr><th>Data Structure</th><th>Operation</th><th>Time Complexity</th></tr>
+        <tr><td>`ArrayList<T>`</td><td>`add()`, `get(i)`, `remove(last)`</td><td>O(1) amortized</td></tr>
+        <tr><td>`HashMap<K, V>`</td><td>`put()`, `get()`, `containsKey()`</td><td>O(1) average, O(N) worst</td></tr>
+        <tr><td>`HashSet<T>`</td><td>`add()`, `contains()`, `remove()`</td><td>O(1) average</td></tr>
+        <tr><td>`ArrayDeque<T>`</td><td>`push()`, `pop()`, `offer()`, `poll()`</td><td>O(1) strictly faster than Stack!</td></tr>
+        <tr><td>`PriorityQueue<T>`</td><td>`offer()`, `poll()`, `peek()`</td><td>O(log N) offer/poll, O(1) peek</td></tr>
+        <tr><td>`TreeMap<K, V>`</td><td>`put()`, `firstKey()`, `higherKey()`</td><td>O(log N) ordered ops</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh">⚡ JAVA INTERVIEW POWER SNIPPETS</div>
+    <div class="bc">
+<pre>// 1. Frequency Map Shortcut:
+map.put(key, map.getOrDefault(key, 0) + 1);
+
+// 2. Sort Array in Reverse Order:
+Arrays.sort(arr, (a, b) -> Integer.compare(b, a));
+
+// 3. Min Heap & Max Heap Declarations:
+PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+PriorityQueue&lt;Integer&gt; maxHeap = new PriorityQueue&lt;&gt;((a, b) -&gt; b - a);
+
+// 4. String Array to Char Manipulation:
+char[] chars = str.toCharArray();
+String sortedStr = new String(chars);</pre>
+    </div>
+  </div>
+</div>
+
+<div class="box amb">
+  <div class="bh">💼 COMMON JAVA INTERVIEW PITFALLS &amp; BUGS</div>
+  <div class="bc">
+    <div class="g2" style="gap:8px">
+      <div>
+        <strong>1. Integer Overflow in Binary Search:</strong><br>
+        `int mid = (left + right) / 2;` $\rightarrow$ ❌ Causes integer overflow if `left + right > 2^31 - 1`!<br>
+        `int mid = left + (right - left) / 2;` $\rightarrow$ ✅ Safe formula!
+      </div>
+      <div>
+        <strong>2. String Immutability Overhead:</strong><br>
+        `String s += "a";` inside loop $\rightarrow$ ❌ Recreates string in O(N^2) total time!<br>
+        `StringBuilder sb = new StringBuilder(); sb.append('a');` $\rightarrow$ ✅ O(1) amortized!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 4: DRY RUN METHOD & REVISION CHECKLIST -->
+<div class="page">
+<div class="ph">
+  <div><h1>DRY RUN METHOD &amp; CHECKLIST</h1><div class="sub">FAANG Execution &amp; Verification Protocol</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 4 OF 4</div><div class="ptag">DRY RUN TRACE · DEBUGGING · MASTERY CHECKLIST</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:12px">
+  <div class="box">
+    <div class="bh">🔍 THE 4-STEP FAANG DRY RUN METHOD</div>
+    <div class="bc">
+      <p style="margin-bottom:4px">Never declare your code finished until you perform a structured dry run on whiteboards or interview code pads!</p>
+      <ol style="padding-left:14px;font-size:0.76rem">
+        <li><strong>Pick a Small Concrete Input:</strong> e.g. `nums = [2, 7, 11]`, `target = 9`.</li>
+        <li><strong>Create a Variable State Table:</strong> Track loop counters, pointers, and memory variables explicitly.</li>
+        <li><strong>Step Line-by-Line:</strong> Execute code manually without skipping steps or assuming output!</li>
+        <li><strong>Test Edge Cases:</strong> Test empty inputs, single element arrays, duplicate values, and negative numbers.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh">📊 SAMPLE VARIABLE STATE TRACE TABLE</div>
+    <div class="bc">
+      <table>
+        <tr><th>Line</th><th>i</th><th>nums[i]</th><th>complement</th><th>map state</th><th>Action</th></tr>
+        <tr><td>1</td><td>0</td><td>2</td><td>7</td><td>{}</td><td>`map.put(2, 0)`</td></tr>
+        <tr><td>2</td><td>1</td><td>7</td><td>2</td><td>{2: 0}</td><td>`map.containsKey(2)` $\rightarrow$ Match Found! Return `[0, 1]`</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">✅ ORIENTATION MASTERY CHECKLIST</div>
+    <div class="bc">
+      <ul style="font-size:0.76rem;list-style:none;padding:0">
+        <li>☐ Explain Big-O from first principles using real-world analogies</li>
+        <li>☐ Deduce target algorithm complexity directly from input size N</li>
+        <li>☐ State 3 Big-O reduction rules without hesitation</li>
+        <li>☐ Use safe mid formula `left + (right - left) / 2`</li>
+        <li>☐ Differentiate Input Space vs Auxiliary Call Stack Space</li>
+        <li>☐ Perform 4-step line-by-line variable trace dry runs</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+    <div class="bc">
+      <div class="aha" style="margin-bottom:4px;padding:5px">
+        <div class="aha-t">Rule 1 — State Brute Force First</div>
+        Always state the obvious brute force solution and its time/space complexity before jumping into optimization! It shows structured thinking.
+      </div>
+      <div class="aha" style="padding:5px">
+        <div class="aha-t">Rule 2 — Dry Run Saves You from Rejection</div>
+        90% of interview bugs (off-by-one errors, null pointers, unhandled edge cases) are caught during your dry run before running tests!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

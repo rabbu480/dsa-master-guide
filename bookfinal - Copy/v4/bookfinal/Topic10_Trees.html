@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Topic 10: Trees &amp; BST Masterclass — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 14px; }
+.ph h1 { font-size: 1.8rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.88rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.75rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; }
+.bh  { background: var(--pri); color: white; padding: 6px 12px;
+  font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 18px; height: 18px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 10px 12px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 6px 12px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.75rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.95rem; }
+.psub   { color: var(--sub); font-size: 0.8rem; }
+.prow-body { display: flex; }
+.pc { padding: 8px 10px; font-size: 0.78rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.72rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; }
+.prob-head { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.75rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.70rem; line-height: 1.4; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.76rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+th, td { border: 1px solid var(--bdr); padding: 5px 7px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.badge-b { background: #dbeafe; color: #1e40af; }
+.badge-g { background: #dcfce7; color: #166534; }
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.tip  { background: #f0fdf4; border-left: 4px solid var(--grn); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 8px 10px; margin-top: 6px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.82rem; margin-bottom: 3px; }
+
+.dt-wrap { font-size: 0.76rem; }
+.dt-root { background: var(--pri); color: white; padding: 5px 10px; border-radius: 5px; text-align: center; font-weight: 700; margin-bottom: 8px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 5px 7px; font-weight: 600; color: #1e40af; font-size: 0.72rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 5px 7px; color: #065f46; font-weight: 700; font-size: 0.72rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.75rem; padding: 4px 3px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 6px 10px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.85; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- PAGE 1: FOUNDATION & WHY -->
+<div class="page">
+<div class="ph">
+  <div><h1>TREES &amp; BST</h1><div class="sub">FAANG Master Guide — Java Edition</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 1 OF 10</div><div class="ptag">FOUNDATION · HIERARCHICAL DATA · TRAVERSALS</div></div>
+</div>
+
+<div class="g3" style="margin-bottom:12px">
+  <div class="box pur">
+    <div class="bh">💡 WHY TREES?</div>
+    <div class="bc">
+      <p style="margin-bottom:6px">Trees store data in a non-linear hierarchy (DOM elements, file systems, organizational charts). Binary Search Trees (BST) enable <strong>O(log N) lookup, insertion, and deletion</strong>!</p>
+      <div class="aha">
+        <div class="aha-t">💡 THE BST INORDER AHA</div>
+        An <strong>Inorder Traversal</strong> (`left -> root -> right`) of a Binary Search Tree ALWAYS produces elements in strictly **sorted ascending order**!
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bh"><span class="n">1</span> CORE NODE STRUCTURE</div>
+    <div class="bc">
+<pre>public class TreeNode {
+  int val;
+  TreeNode left;
+  TreeNode right;
+  TreeNode(int val) { this.val = val; }
+  TreeNode(int val, TreeNode left, TreeNode right) {
+    this.val = val; this.left = left; this.right = right;
+  }
+}</pre>
+    </div>
+  </div>
+
+  <div class="box sky">
+    <div class="bh"><span class="n">2</span> VISUALIZING 3 DFS TRAVERSALS</div>
+    <div class="bc">
+      <div style="font-weight:700;color:var(--pri);margin-bottom:4px">Tree: [2] with left [1], right [3]:</div>
+<pre>Preorder (Root, L, R) :  2 -> 1 -> 3  (Copy/Serialize)
+Inorder  (L, Root, R) :  1 -> 2 -> 3  (Sorted BST!)
+Postorder(L, R, Root) :  1 -> 3 -> 2  (Delete/Bottom-Up)</pre>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">📚 PREREQUISITES &amp; COMPLEXITY REASONING</div>
+    <div class="bc">
+      <table style="font-size:0.76rem">
+        <tr><th>Traversal / Operation</th><th>Time Complexity</th><th>Auxiliary Space</th></tr>
+        <tr><td>Balanced BST Lookup / Insert</td><td><strong>O(log N)</strong></td><td><strong>O(log N) stack</strong></td></tr>
+        <tr><td>Skewed Tree (Worst Case)</td><td><strong>O(N)</strong></td><td><strong>O(N) stack</strong></td></tr>
+        <tr><td>Tree DFS (Pre / In / Post)</td><td><strong>O(N)</strong></td><td><strong>O(H) recursion stack</strong></td></tr>
+        <tr><td>Tree BFS (Level Order)</td><td><strong>O(N)</strong></td><td><strong>O(W) Queue width</strong></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box amb">
+    <div class="bh">⚡ CLUES THAT SCREAM TREE DFS / BFS</div>
+    <div class="bc">
+      <p style="font-size:0.8rem">1. <em>"Max depth / Height of tree"</em> \rightarrow Bottom-Up Postorder DFS</p>
+      <p style="font-size:0.8rem">2. <em>"Level order / Right side view"</em> \rightarrow BFS with Queue level size</p>
+      <p style="font-size:0.8rem">3. <em>"Lowest Common Ancestor"</em> \rightarrow Postorder DFS return non-null</p>
+      <p style="font-size:0.8rem">4. <em>"Validate BST / Kth Smallest"</em> \rightarrow Inorder DFS tracking prev node</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 2: API & TOOLKIT -->
+<div class="page">
+<div class="ph">
+  <div><h1>TREES &amp; BST</h1><div class="sub">Java Utilities &amp; Helper Toolkit</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 2 OF 10</div><div class="ptag">TREE UTILS · BUILDERS · TRAVERSAL TEMPLATES</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:12px">
+  <div class="box">
+    <div class="bh"><span class="n">1</span> LEVEL ORDER BFS TEMPLATE (`TreeUtils`)</div>
+    <div class="bc">
+<pre>public static List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {
+  List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+  if (root == null) return res;
+  Queue&lt;TreeNode&gt; q = new LinkedList&lt;&gt;();
+  q.offer(root);
+  while (!q.isEmpty()) {
+    int size = q.size();
+    List&lt;Integer&gt; level = new ArrayList&lt;&gt;();
+    for (int i = 0; i < size; i++) {
+      TreeNode curr = q.poll();
+      level.add(curr.val);
+      if (curr.left != null) q.offer(curr.left);
+      if (curr.right != null) q.offer(curr.right);
+    }
+    res.add(level);
+  }
+  return res;
+}</pre>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh"><span class="n">2</span> RECURSIVE INORDER TRAVERSAL</div>
+    <div class="bc">
+<pre>public static void inorder(TreeNode root, List&lt;Integer&gt; res) {
+  if (root == null) return;
+  inorder(root.left, res);
+  res.add(root.val); // Process root in middle
+  inorder(root.right, res);
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box sky">
+    <div class="bh"><span class="n">3</span> BST SEARCH HELPER</div>
+    <div class="bc">
+<pre>public static TreeNode searchBST(TreeNode root, int val) {
+  if (root == null || root.val == val) return root;
+  if (val < root.val) return searchBST(root.left, val);
+  return searchBST(root.right, val);
+}</pre>
+    </div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh"><span class="n">4</span> MAXIMUM DEPTH / HEIGHT</div>
+    <div class="bc">
+<pre>public static int maxDepth(TreeNode root) {
+  if (root == null) return 0;
+  return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+}</pre>
+      <div class="rule" style="margin-top:6px">Pure bottom-up recursion: $1 + \max(\text{leftHeight}, \text{rightHeight})$.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 3: CORE PATTERNS (RECURSIVE DFS & TREE INVERSION) -->
+<div class="page">
+<div class="ph">
+  <div><h1>TREES &amp; BST</h1><div class="sub">Core Patterns — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 3 OF 10</div><div class="ptag">RECURSIVE DFS · TREE INVERSION · SUBTREE</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 1</div>
+    <div class="ptitle">TREE INVERSION &amp; SYMMETRY (Preorder DFS)</div>
+    <div class="psub">e.g. Invert Binary Tree (LC 226), Same Tree (LC 100)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.78rem">Swapping left and right pointers at every node or verifying structural identity between two trees.</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 226</div>
+<pre>public TreeNode invertTree(TreeNode root) {
+  if (root == null) return null;
+  TreeNode temp = root.left;
+  root.left = invertTree(root.right);
+  root.right = invertTree(temp);
+  return root;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 2</div>
+    <div class="ptitle">SAME TREE &amp; SUBTREE MATCHING</div>
+    <div class="psub">e.g. Same Tree (LC 100), Subtree of Another Tree (LC 572)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.78rem">Check if tree `subRoot` matches any node in `root`.</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 572</div>
+<pre>public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+  if (root == null) return false;
+  if (isSame(root, subRoot)) return true;
+  return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
+}
+private boolean isSame(TreeNode p, TreeNode q) {
+  if (p == null && q == null) return true;
+  if (p == null || q == null || p.val != q.val) return false;
+  return isSame(p.left, q.left) && isSame(p.right, q.right);
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 4: CORE PATTERNS (BST PROPERTY & VALIDATION) -->
+<div class="page">
+<div class="ph">
+  <div><h1>TREES &amp; BST</h1><div class="sub">Core Patterns — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 4 OF 10</div><div class="ptag">VALIDATE BST · KTH SMALLEST · INORDER STACK</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 3</div>
+    <div class="ptitle">VALIDATE BINARY SEARCH TREE (Min / Max Bound Range)</div>
+    <div class="psub">e.g. Validate Binary Search Tree (LC 98)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Boundary Pass Strategy</div>
+      <div style="font-size:0.78rem">
+        Pass valid range `[min, max]` down recursion. For left child, range becomes `[min, root.val]`. For right child, range becomes `[root.val, max]`.
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 98</div>
+<pre>public boolean isValidBST(TreeNode root) {
+  return validate(root, null, null);
+}
+private boolean validate(TreeNode node, Integer min, Integer max) {
+  if (node == null) return true;
+  if ((min != null && node.val <= min) || (max != null && node.val >= max)) return false;
+  return validate(node.left, min, node.val) && validate(node.right, node.val, max);
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 4</div>
+    <div class="ptitle">KTH SMALLEST ELEMENT IN BST (Inorder Traversal)</div>
+    <div class="psub">e.g. Kth Smallest Element in a BST (LC 230)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Inorder Stack Mechanics</div>
+      <div style="font-size:0.78rem">
+        Use explicit stack to simulate inorder traversal. The K-th popped element is guaranteed to be the K-th smallest value!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 230</div>
+<pre>public int kthSmallest(TreeNode root, int k) {
+  Deque&lt;TreeNode&gt; stack = new ArrayDeque&lt;&gt;();
+  TreeNode curr = root;
+  while (curr != null || !stack.isEmpty()) {
+    while (curr != null) { stack.push(curr); curr = curr.left; }
+    curr = stack.pop();
+    if (--k == 0) return curr.val;
+    curr = curr.right;
+  }
+  return -1;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 5: CORE PATTERNS (LOWEST COMMON ANCESTOR & BFS VIEWS) -->
+<div class="page">
+<div class="ph">
+  <div><h1>TREES &amp; BST</h1><div class="sub">Core Patterns — Part 3</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 5 OF 10</div><div class="ptag">LOWEST COMMON ANCESTOR · RIGHT SIDE VIEW</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 5</div>
+    <div class="ptitle">LOWEST COMMON ANCESTOR (LCA in BST &amp; Binary Tree)</div>
+    <div class="psub">e.g. LCA of a BST (LC 235), LCA of a Binary Tree (LC 236)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">LCA Logic</div>
+      <div style="font-size:0.78rem">
+        For BST: If both $p, q < \text{root}, go left. If both > \text{root}$, go right. Otherwise current node is split point (LCA)!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 235</div>
+<pre>public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+  if (p.val < root.val && q.val < root.val) return lowestCommonAncestor(root.left, p, q);
+  if (p.val > root.val && q.val > root.val) return lowestCommonAncestor(root.right, p, q);
+  return root;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 6</div>
+    <div class="ptitle">RIGHT SIDE VIEW (Level Order BFS Last Element)</div>
+    <div class="psub">e.g. Binary Tree Right Side View (LC 199)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">BFS Last Element Strategy</div>
+      <div style="font-size:0.78rem">
+        Run level order BFS. When loop reaches last element of current level (`i == size - 1`), record node value in result list!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 199</div>
+<pre>public List&lt;Integer&gt; rightSideView(TreeNode root) {
+  List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+  if (root == null) return res;
+  Queue&lt;TreeNode&gt; q = new LinkedList&lt;&gt;(); q.offer(root);
+  while (!q.isEmpty()) {
+    int size = q.size();
+    for (int i = 0; i < size; i++) {
+      TreeNode curr = q.poll();
+      if (i == size - 1) res.add(curr.val);
+      if (curr.left != null) q.offer(curr.left);
+      if (curr.right != null) q.offer(curr.right);
+    }
+  }
+  return res;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 6: ADVANCED (MAX PATH SUM & TREE CONSTRUCTION) -->
+<div class="page">
+<div class="ph">
+  <div><h1>TREES &amp; BST</h1><div class="sub">Advanced Patterns</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 6 OF 10</div><div class="ptag">BINARY TREE MAX PATH SUM · CONSTRUCT FROM PREORDER/INORDER</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 7</div>
+    <div class="ptitle">MAXIMUM PATH SUM (Postorder Global Max State)</div>
+    <div class="psub">e.g. Binary Tree Maximum Path Sum (LC 124)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">State Update Formula</div>
+      <div style="font-size:0.78rem">
+        At each node, max path through node $= \text{node.val} + \max(0, \text{left}) + \max(0, \text{right}). Update global max. Return max single branch \text{node.val} + \max(0, \max(\text{left}, \text{right}))$.
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 124</div>
+<pre>private int maxPath = Integer.MIN_VALUE;
+public int maxPathSum(TreeNode root) {
+  gain(root); return maxPath;
+}
+private int gain(TreeNode node) {
+  if (node == null) return 0;
+  int leftGain = Math.max(0, gain(node.left));
+  int rightGain = Math.max(0, gain(node.right));
+  maxPath = Math.max(maxPath, node.val + leftGain + rightGain);
+  return node.val + Math.max(leftGain, rightGain);
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 8</div>
+    <div class="ptitle">CONSTRUCT TREE FROM PREORDER &amp; INORDER (HashMap Index Map)</div>
+    <div class="psub">e.g. Construct Binary Tree from Preorder and Inorder Traversal (LC 105)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Construction Logic</div>
+      <div style="font-size:0.78rem">
+        Preorder first element is root. Inorder divides tree into left subtree and right subtree! Map inorder values to indices for O(1) lookup.
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 105</div>
+<pre>private Map&lt;Integer, Integer&gt; inMap = new HashMap&lt;&gt;();
+private int preIdx = 0;
+public TreeNode buildTree(int[] preorder, int[] inorder) {
+  for (int i = 0; i < inorder.length; i++) inMap.put(inorder[i], i);
+  return build(preorder, 0, inorder.length - 1);
+}
+private TreeNode build(int[] preorder, int inStart, int inEnd) {
+  if (inStart > inEnd) return null;
+  int rootVal = preorder[preIdx++];
+  TreeNode root = new TreeNode(rootVal);
+  int inIdx = inMap.get(rootVal);
+  root.left = build(preorder, inStart, inIdx - 1);
+  root.right = build(preorder, inIdx + 1, inEnd);
+  return root;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 7: DECISION TREE & TRIGGER WORDS -->
+<div class="page">
+<div class="ph">
+  <div><h1>TREES &amp; BST</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 7 OF 10</div><div class="ptag">DECISION TREE · TRIGGER WORDS · TRADE-OFFS</div></div>
+</div>
+
+<div class="g2">
+  <div class="box">
+    <div class="bh">TREES &amp; BST — WHICH PATTERN TO USE?</div>
+    <div class="bc dt-wrap">
+      <div class="dt-root">Start: What is the tree problem goal?</div>
+      <div class="dt-grid">
+        <div class="dt-row">
+          <div class="dt-q">🔄 Invert / Swap left &amp; right</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Preorder DFS<br><span style="font-weight:400;font-size:0.7rem">Swap pointers recursively</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">📏 Height / Max Path Sum</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Postorder DFS<br><span style="font-weight:400;font-size:0.7rem">Bottom-up left/right result</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🔍 Validate BST / Kth Smallest</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Inorder Traversal<br><span style="font-weight:400;font-size:0.7rem">Produces sorted values</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">📊 Level-by-Level / Right View</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">BFS Queue<br><span style="font-weight:400;font-size:0.7rem">Process level size</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">👪 Shared Ancestor of 2 Nodes</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Lowest Common Ancestor<br><span style="font-weight:400;font-size:0.7rem">BST val check / Postorder</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div class="box pur">
+      <div class="bh">🎯 TRIGGER WORDS DIRECTORY</div>
+      <div class="bc">
+        <table>
+          <tr><th>Trigger Word</th><th>Variant</th><th>Action</th></tr>
+          <tr><td>"Sorted order in BST"</td><td>Inorder Traversal</td><td>`left -> root -> right`</td></tr>
+          <tr><td>"Level order", "Right view"</td><td>BFS Queue</td><td>Loop `i = 0..size-1`</td></tr>
+          <tr><td>"Lowest common ancestor"</td><td>LCA Pattern</td><td>Compare p, q to root</td></tr>
+          <tr><td>"Max path sum"</td><td>Postorder DFS</td><td>Return $\text{node} + \max(\text{L}, \text{R})$</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="box amb">
+      <div class="bh">💼 INTERVIEW TRADE-OFFS &amp; FOLLOW-UPS</div>
+      <div class="bc">
+        <table>
+          <tr><th>Interviewer Asks</th><th>Your Answer</th></tr>
+          <tr><td>DFS vs BFS memory on trees?</td><td>DFS stack memory is O(H) (tree height). BFS queue memory is O(W) (max level width)!</td></tr>
+          <tr><td>Why does BST Inorder sort?</td><td>By definition, all left children are smaller than root, and all right children are larger!</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 8: PROBLEM LADDER PART 1 (5 PROBLEMS) -->
+<div class="page">
+<div class="ph">
+  <div><h1>TREES &amp; BST</h1><div class="sub">Problem Ladder — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 8 OF 10</div><div class="ptag">PROBLEM LADDER — EASY · MEDIUM</div></div>
+</div>
+
+<div class="g2" style="gap:10px">
+<div>
+  <div style="background:var(--grn);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟢 EASY — Fundamental Tree DFS Operations</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 226 · Invert Binary Tree</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Preorder DFS</div>
+        <div><strong>Key Insight:</strong> Swap left &amp; right recursively.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public TreeNode invertTree(TreeNode root) {
+  if (root == null) return null;
+  TreeNode tmp = root.left;
+  root.left = invertTree(root.right);
+  root.right = invertTree(tmp);
+  return root;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 104 · Max Depth of Binary Tree</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Postorder DFS</div>
+        <div><strong>Key Insight:</strong> $1 + \max(\text{left}, \text{right})$.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public int maxDepth(TreeNode root) {
+  if (root == null) return 0;
+  return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 100 · Same Tree</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Dual Tree DFS</div>
+        <div><strong>Key Insight:</strong> Compare `p.val == q.val` &amp; structural match.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public boolean isSameTree(TreeNode p, TreeNode q) {
+  if (p == null && q == null) return true;
+  if (p == null || q == null || p.val != q.val) return false;
+  return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — Subtree &amp; Level Order BFS</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 572 · Subtree of Another Tree</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> DFS Subtree Match</div>
+        <div><strong>Key Insight:</strong> `isSame(root, subRoot)` or check children.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.60rem">public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+  if (root == null) return false;
+  if (isSame(root, subRoot)) return true;
+  return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 102 · Binary Tree Level Order</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Queue BFS</div>
+        <div><strong>Key Insight:</strong> Process `size` elements per level.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.60rem">public List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {
+  List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+  if (root == null) return res;
+  Queue&lt;TreeNode&gt; q = new LinkedList&lt;&gt;(); q.offer(root);
+  while (!q.isEmpty()) {
+    int sz = q.size(); List&lt;Integer&gt; lvl = new ArrayList&lt;&gt;();
+    for (int i=0; i<sz; i++) {
+      TreeNode c = q.poll(); lvl.add(c.val);
+      if (c.left != null) q.offer(c.left);
+      if (c.right != null) q.offer(c.right);
+    }
+    res.add(lvl);
+  }
+  return res;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: PROBLEM LADDER PART 2 (5 PROBLEMS + SUMMARY TABLE) -->
+<div class="page">
+<div class="ph">
+  <div><h1>TREES &amp; BST</h1><div class="sub">Problem Ladder — Part 2 &amp; Summary</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 9 OF 10</div><div class="ptag">PROBLEM LADDER — MEDIUM · HARD · SUMMARY</div></div>
+</div>
+
+<div class="g2" style="gap:10px;margin-bottom:10px">
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — BST Validation, LCA &amp; Right View</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 98 · Validate BST</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Min/Max Boundary DFS</div>
+        <div><strong>Key Insight:</strong> Pass valid `[min, max]` range down recursion.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public boolean isValidBST(TreeNode root) { return val(root, null, null); }
+private boolean val(TreeNode n, Integer min, Integer max) {
+  if (n == null) return true;
+  if ((min != null && n.val <= min) || (max != null && n.val >= max)) return false;
+  return val(n.left, min, n.val) && val(n.right, n.val, max);
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 235 · LCA of BST</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> BST LCA Search</div>
+        <div><strong>Key Insight:</strong> Move left if both &lt; root, right if &gt; root.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+  if (p.val < root.val && q.val < root.val) return lowestCommonAncestor(root.left, p, q);
+  if (p.val > root.val && q.val > root.val) return lowestCommonAncestor(root.right, p, q);
+  return root;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--red);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🔴 HARD — Max Path Sum &amp; Construction</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fee2e2">
+      <span class="ptitle" style="color:var(--red)">LC 124 · Binary Tree Max Path Sum</span>
+      <span class="diff-h">HARD</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Postorder State Max</div>
+        <div><strong>Key Insight:</strong> Update global max with `node + left + right`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">int maxP = Integer.MIN_VALUE;
+public int maxPathSum(TreeNode root) { gain(root); return maxP; }
+private int gain(TreeNode n) {
+  if (n == null) return 0;
+  int l = Math.max(0, gain(n.left)), r = Math.max(0, gain(n.right));
+  maxP = Math.max(maxP, n.val + l + r);
+  return n.val + Math.max(l, r);
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 230 · Kth Smallest in BST</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Inorder Stack</div>
+        <div><strong>Key Insight:</strong> K-th popped element is K-th smallest!</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public int kthSmallest(TreeNode root, int k) {
+  Deque&lt;TreeNode&gt; st = new ArrayDeque&lt;&gt;(); TreeNode c = root;
+  while (c != null || !st.isEmpty()) {
+    while (c != null) { st.push(c); c = c.left; }
+    c = st.pop();
+    if (--k == 0) return c.val;
+    c = c.right;
+  }
+  return -1;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Master Summary Table -->
+<div class="box">
+  <div class="bh" style="padding:3px 6px;font-size:0.76rem">📊 COMPLETE TREES &amp; BST PROBLEM LADDER SUMMARY</div>
+  <div class="bc" style="padding:4px 6px">
+    <table>
+      <tr><th>LC #</th><th>Problem</th><th>Pattern</th><th>Time</th><th>Space</th><th>Diff</th></tr>
+      <tr><td>226</td><td>Invert Binary Tree</td><td>Preorder DFS</td><td>O(N)</td><td>O(H)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>104</td><td>Max Depth of Binary Tree</td><td>Postorder DFS</td><td>O(N)</td><td>O(H)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>100</td><td>Same Tree</td><td>Dual Tree DFS</td><td>O(N)</td><td>O(H)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>572</td><td>Subtree of Another Tree</td><td>DFS Subtree Match</td><td>O(N × M)</td><td>O(H)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>102</td><td>Level Order Traversal</td><td>Queue BFS</td><td>O(N)</td><td>O(W)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>98</td><td>Validate BST</td><td>Min/Max Boundary DFS</td><td>O(N)</td><td>O(H)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>235</td><td>LCA of BST</td><td>BST LCA Search</td><td>O(H)</td><td>O(H)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>230</td><td>Kth Smallest in BST</td><td>Inorder Stack</td><td>O(H + K)</td><td>O(H)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>124</td><td>Max Path Sum</td><td>Postorder State Max</td><td>O(N)</td><td>O(H)</td><td><span class="diff-h">H</span></td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 10: DRY RUN, MATH PROOFS & CHEAT SHEET -->
+<div class="page">
+<div class="ph">
+  <div><h1>TREES &amp; BST</h1><div class="sub">Dry Run, Math Proofs &amp; Cheat Sheet</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 10 OF 10</div><div class="ptag">DRY RUN · PROOFS · CHEAT SHEET</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:10px">
+  <div class="box">
+    <div class="bh">🔍 DRY RUN — Validate BST (Root [2], Left [1], Right [3])</div>
+    <div class="bc">
+      <table style="font-size:0.70rem">
+        <tr><th>Node</th><th>Min Bound</th><th>Max Bound</th><th>Condition Check</th><th>Result</th></tr>
+        <tr><td>2 (Root)</td><td>null</td><td>null</td><td>null &lt; 2 &lt; null \rightarrow Valid!</td><td>Check left (1) &amp; right (3)</td></tr>
+        <tr><td>1 (Left)</td><td>null</td><td>2</td><td>null &lt; 1 &lt; 2 \rightarrow Valid!</td><td>Returns true</td></tr>
+        <tr><td>3 (Right)</td><td>2</td><td>null</td><td>2 &lt; 3 &lt; null \rightarrow Valid!</td><td>Returns true \rightarrow Tree is valid BST! ✅</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh">📐 MATHEMATICAL PROOF — BALANCED BST LOOKUP</div>
+    <div class="bc">
+      <div style="font-size:0.76rem">
+        <p style="margin-bottom:4px"><strong>Claim:</strong> Searching in a balanced Binary Search Tree takes O(\log N) time.</p>
+        <p style="margin-bottom:4px"><strong>Proof:</strong> At each step, comparing target with `root.val` eliminates half of the remaining tree (left or right subtree). Total nodes remaining after k steps $= N / 2^k. When N / 2^k = 1 => 2^k = N => k = log₂ N \rightarrow$ <strong>O(\log N) Time!</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+    <div class="bc">
+      <div class="g2" style="gap:6px">
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Invert Binary Tree in 2m</li>
+          <li>☐ Write Level Order BFS Queue from memory</li>
+          <li>☐ Validate BST using `[min, max]` boundaries</li>
+          <li>☐ Code Kth Smallest in BST via Inorder</li>
+        </ul>
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Code LCA of BST in 3 minutes</li>
+          <li>☐ Implement Binary Tree Right Side View</li>
+          <li>☐ Write Binary Tree Max Path Sum (LC 124)</li>
+          <li>☐ Prove why BST lookup is O(\log N)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+    <div class="bc">
+      <div class="aha" style="margin-bottom:4px;padding:5px">
+        <div class="aha-t">Rule 1 — Inorder BST = Sorted Array</div>
+        Inorder traversal of BST ALWAYS yields sorted values. Use this property for BST validation and K-th smallest elements!
+      </div>
+      <div class="aha" style="padding:5px">
+        <div class="aha-t">Rule 2 — Guard Against Integer Overflow in BST Bounds</div>
+        In Validate BST, use `Integer` objects (`null`) or `Long.MIN_VALUE` / `Long.MAX_VALUE` instead of `Integer.MIN_VALUE` to avoid boundary overflow!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

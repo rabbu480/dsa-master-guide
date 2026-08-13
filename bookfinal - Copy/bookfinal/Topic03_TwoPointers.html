@@ -1,0 +1,1687 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 03: Two Pointers Masterclass (Strict 2-Column Split Edition)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+    }
+
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 12.5px;
+        line-height: 1.45;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 10px 20px;
+        display: flex;
+        
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand {
+        font-weight: 900;
+        font-size: 1.05rem;
+        color: #38bdf8;
+    }
+    .top-nav .nav-controls {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 4px 10px;
+        border-radius: 5px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+
+    /* Page Container */
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 24px 28px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+        
+        display: flex;
+        flex-direction: column;
+        
+    }
+    [data-theme="dark"] .page {
+        background: #1e293b;
+        color: #f8fafc;
+    }
+
+    /* Perfect Aligned Header Top */
+    .header-top {
+        display: flex;
+        
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 8px 14px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top {
+        background: #0f172a;
+        border-color: #38bdf8;
+        border-left-color: #38bdf8;
+    }
+    .header-title-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .header-top h1 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 900;
+        color: #1e3a8a;
+        text-transform: uppercase;
+        letter-spacing: -0.3px;
+        line-height: 1.2;
+    }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+
+    .header-top .page-num {
+        background: #1e3a8a;
+        color: white;
+        padding: 3px 10px;
+        border-radius: 16px;
+        font-weight: 800;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    /* Multi-Color Section Boxes */
+    .section-box {
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 12px;
+        background: white;
+        border: 2px solid #3b82f6;
+        width: 100%;
+    }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+
+    .section-header {
+        padding: 6px 10px;
+        font-weight: 800;
+        font-size: 0.85rem;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .section-header .num {
+        background: white;
+        color: #0f172a;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.72rem;
+        font-weight: 900;
+    }
+    .section-content {
+        padding: 10px 12px;
+        font-size: 0.82rem;
+    }
+
+    /* Color Themes */
+    .box-blue { border-color: #2563eb !important; }
+    .box-blue .section-header { background: #2563eb !important; }
+
+    .box-green { border-color: #22c55e !important; }
+    .box-green .section-header { background: #22c55e !important; }
+
+    .box-purple { border-color: #8b5cf6 !important; }
+    .box-purple .section-header { background: #8b5cf6 !important; }
+
+    .box-red { border-color: #ef4444 !important; }
+    .box-red .section-header { background: #ef4444 !important; }
+
+    .box-skyblue { border-color: #0284c7 !important; }
+    .box-skyblue .section-header { background: #0284c7 !important; }
+
+    .box-orange { border-color: #f97316 !important; }
+    .box-orange .section-header { background: #f97316 !important; }
+
+    .box-teal { border-color: #0d9488 !important; }
+    .box-teal .section-header { background: #0d9488 !important; }
+
+    .box-indigo { border-color: #6366f1 !important; }
+    .box-indigo .section-header { background: #6366f1 !important; }
+
+    .box-rose { border-color: #e11d48 !important; }
+    .box-rose .section-header { background: #e11d48 !important; }
+
+    .box-amber { border-color: #d97706 !important; }
+    .box-amber .section-header { background: #d97706 !important; }
+
+    .box-slate { border-color: #0f172a !important; }
+    .box-slate .section-header { background: #0f172a !important; }
+
+    /* Problem Metadata Card inside Left Column */
+    .meta-card {
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-bottom: 4px;
+        display: flex;
+        
+        font-weight: 700;
+        font-size: 0.72rem;
+    }
+    [data-theme="dark"] .meta-card { background: #0f172a; border-color: #334155; }
+
+    /* Strict 2-Column Problem Grid: Left = Metadata + Problem + Intuition, Right = ONLY Java Code */
+    .problem-split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        align-items: start;
+    }
+
+    .problem-info {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .problem-code {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Dialogue Callout Box */
+    .dialogue-box {
+        background: #f8fafc;
+        border: 1px solid #3b82f6;
+        border-left: 4px solid #2563eb;
+        padding: 6px 10px;
+        border-radius: 4px;
+        margin: 4px 0;
+        font-size: 0.78rem;
+    }
+    .dialogue-speaker { font-weight: 800; color: #1e3a8a; }
+    [data-theme="dark"] .dialogue-speaker { color: #38bdf8; }
+
+    /* Structured Pointer Movement Steps Box */
+    .step-box {
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 5px;
+        padding: 6px 10px;
+        margin: 4px 0;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.75rem;
+        line-height: 1.4;
+    }
+    .step-title {
+        font-weight: 800;
+        color: #2563eb;
+        margin-bottom: 2px;
+    }
+
+    /* Decision Tree Card Structure */
+    .tree-card {
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin-top: 6px;
+    }
+    .tree-node {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+        font-weight: 700;
+    }
+    .tree-badge {
+        background: #2563eb;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.72rem;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    /* Clean Printable Light Code Blocks (NO BLACK BACKGROUNDS) */
+    pre {
+        background: #f8fafc;
+        color: #0f172a;
+        padding: 8px 10px;
+        border-radius: 5px;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.74rem;
+        line-height: 1.38;
+        margin: 0;
+        white-space: pre-wrap !important;
+        word-break: break-word;
+        border: 1px solid #cbd5e1;
+    }
+    [data-theme="dark"] pre {
+        background: #0f172a;
+        color: #f8fafc;
+        border-color: #334155;
+    }
+    code {
+        font-family: 'Fira Code', monospace;
+        background: #f1f5f9;
+        color: #0f172a;
+        padding: 1px 4px;
+        border-radius: 3px;
+        font-size: 0.78rem;
+        border: 1px solid #cbd5e1;
+    }
+
+    /* AHA Callout Box */
+    .aha-box {
+        background: #fefce8;
+        border: 1px solid #eab308;
+        border-left: 5px solid #ca8a04;
+        color: #713f12;
+        padding: 7px 10px;
+        border-radius: 5px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin: 6px 0;
+    }
+    [data-theme="dark"] .aha-box { background: #713f12; color: #fef9c3; border-color: #fde047; }
+
+    .rule-box {
+        padding: 6px 10px;
+        border-radius: 5px;
+        font-weight: 600;
+        margin: 6px 0;
+        font-size: 0.78rem;
+    }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    .rule-purple { background: #faf5ff; border: 1px solid #a855f7; border-left: 4px solid #a855f7; color: #6b21a8; }
+    .rule-red { background: #fff1f2; border: 1px solid #ef4444; border-left: 4px solid #ef4444; color: #b91c1c; }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.76rem;
+    }
+    table th, table td {
+        border: 1px solid var(--border-color);
+        padding: 5px 7px;
+        text-align: left;
+    }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+
+    .back-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #2563eb;
+        color: white;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        border: none;
+        z-index: 999;
+    }
+
+    /* HARDCORE PRINT SCALING FIT FOR EXACT 12 PAGES */
+    @page {
+        size: A4 portrait;
+        margin: 4mm;
+    }
+
+    @media print {
+        body {
+            background: white !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            color: black !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .top-nav, .back-to-top, .toc-sidebar { display: none !important; }
+        .app-layout { display: block !important; }
+        .container { max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+        .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.72; }
+        .header-top {
+            border: 2px solid #1e3a8a !important;
+            border-left: 6px solid #1e3a8a !important;
+            background: #f8fafc !important;
+            padding: 5px 8px !important;
+            margin-bottom: 5px !important;
+        }
+        .section-box, .rule-box, table, pre, .aha-box, .dialogue-box, .step-box, .tree-card {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+        pre {
+            background-color: #f8fafc !important;
+            color: #0f172a !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+    }
+
+    /* Sticky Sidebar Layout */
+    .app-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+
+    .toc-title { font-weight: 900; font-size: 0.85rem; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+
+    .main-content { min-width: 0; }
+
+
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+</style>
+</head>
+<body>
+
+<!-- Sticky Top Nav -->
+<div class="top-nav">
+    <div class="brand">⚡ FAANG DSA HANDBOOK — TOPIC 03: TWO POINTERS</div>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn" style="background:#059669; border-color:#10b981; font-weight:800;">🏠 Index</a>
+        <button class="nav-btn" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="nav-btn" onclick="toggleSidebar()">↕️ Expand/Shrink TOC</button>
+        <a href="#page1" class="nav-btn">P1</a>
+        <a href="#page2" class="nav-btn">P2</a>
+        <a href="#page3" class="nav-btn">P3</a>
+        <a href="#page4" class="nav-btn">P4</a>
+        <a href="#page5" class="nav-btn">P5</a>
+        <a href="#page6" class="nav-btn">P6</a>
+        <a href="#page7" class="nav-btn">P7</a>
+        <a href="#page8" class="nav-btn">P8</a>
+        <a href="#page9" class="nav-btn">P9</a>
+        <a href="#page10" class="nav-btn">P10</a>
+        <a href="#page11" class="nav-btn">P11</a>
+        <a href="#page12" class="nav-btn">P12</a>
+        <button class="nav-btn" onclick="window.print()" style="background: #2563eb;">🖨️ PDF</button>
+    </div>
+</div>
+
+<div class="container">
+<div class="app-layout" id="appLayout">
+    <!-- Sticky Table of Contents Sidebar -->
+    <div class="toc-sidebar">
+        <div class="toc-header-bar"><span class="toc-title">📋 SECTIONS</span><button class="shrink-btn" onclick="toggleSidebar()"><span class="toc-text">➖ Shrink</span></button></div>
+        <ul class="toc-list">
+            <li><a href="#page1" class="toc-link">03.0 Two Pointers Found</a></li>
+            <li><a href="#page2" class="toc-link">03.1 Opposite Direction</a></li>
+            <li><a href="#page3" class="toc-link">03.2 Same Direction</a></li>
+            <li><a href="#page4" class="toc-link">03.3 Dutch National Flag</a></li>
+            <li><a href="#page5" class="toc-link">03.4 Recognition Matrix</a></li>
+            <li><a href="#page6" class="toc-link">03.5 Valid Palindrome & 2Sum</a></li>
+            <li><a href="#page7" class="toc-link">03.5 Remove Dup & Move Zeroes</a></li>
+            <li><a href="#page8" class="toc-link">03.5 Merge Sorted Array</a></li>
+            <li><a href="#page9" class="toc-link">03.5 Three Sum & Sort Colors</a></li>
+            <li><a href="#page10" class="toc-link">03.5 String Compression</a></li>
+            <li><a href="#page11" class="toc-link">03.5 Container Water & Rain</a></li>
+            <li><a href="#page12" class="toc-link">03.6 Master Revision Sheet</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Pages -->
+    <div class="main-content">
+
+    <!-- ========================================================= -->
+    <!-- PAGE 1: 03.0 UNIFIED INTRODUCTION & MENTAL MODEL -->
+    <!-- ========================================================= -->
+    <div class="page" id="page1">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">👉👈</span>
+                    <h1>TOPIC 03.0: TWO POINTERS FOUNDATION &amp; MENTAL MODEL</h1>
+                </div>
+
+            <div class="section-box box-teal" style="margin-top:8px">
+                <div class="section-header">🧰 REUSABLE TWO POINTERS UTILITIES</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">Element Swapping &amp; Reversal:</p>
+<pre>
+void swap(int[] arr, int i, int j) {
+    int temp = arr[i]; arr[i] = arr[j]; arr[j] = temp;
+}
+void reverse(int[] arr, int left, int right) {
+    while (left &lt; right) swap(arr, left++, right--);
+}</pre>
+                        </div>
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">Array Partition Utility (Lomuto):</p>
+<pre>
+int partition(int[] arr, int low, int high) {
+    int pivot = arr[high], i = low;
+    for (int j = low; j &lt; high; j++) {
+        if (arr[j] &lt;= pivot) swap(arr, i++, j);
+    }
+    swap(arr, i, high);
+    return i;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <span class="page-num">PAGE 1 OF 12</span>
+            </div>
+
+            <!-- AHA Box -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #1: WHY TWO POINTERS WORKS</strong><br/>
+                Instead of checking all $O(N^2)$ pairs using nested loops, Two Pointers leverages array properties (like sorting or monotonicity) to prune entire invalid search spaces at every single step, cutting execution time to linear $O(N)$!
+            </div>
+
+            <!-- Unified Foundation Box -->
+            <div class="section-box box-blue">
+                <div class="section-header"><span class="num">1</span> TWO POINTERS FOUNDATION, MECHANICS &amp; BOUNDARIES</div>
+                <div class="section-content">
+                    <div class="grid-3">
+                        <div style="background:#eff6ff; padding:8px; border-radius:5px; border:1px solid #bfdbfe;">
+                            <strong>What is Two Pointers?</strong>
+                            <p style="margin:4px 0 0 0;">An algorithmic technique using two integer index variables traversing an array or string simultaneously to eliminate nested loop iterations.</p>
+                        </div>
+                        <div style="background:#f0fdf4; padding:8px; border-radius:5px; border:1px solid #bbf7d0;">
+                            <strong>When to Use:</strong>
+                            <p style="margin:4px 0 0 0;">• Sorted Arrays (Pair Sums)<br/>• String Palindromes<br/>• In-Place Element Overwriting<br/>• Container Area Bounding</p>
+                        </div>
+                        <div style="background:#fff1f2; padding:8px; border-radius:5px; border:1px solid #fecdd3;">
+                            <strong>When NOT to Use:</strong>
+                            <p style="margin:4px 0 0 0;">• Unsorted arrays where original indices matter.<br/>• Dynamic variable-length target windows (use Sliding Window instead).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decision Tree -->
+            <div class="section-box box-purple">
+                <div class="section-header">🌳 TWO POINTER PATTERN SELECTION DECISION TREE</div>
+                <div class="section-content">
+                    <div class="tree-card">
+                        <div class="tree-node"><span class="tree-badge">STEP 1</span> Is array sorted OR checking palindrome/container bounds?</div>
+                        <div style="margin-left:20px; margin-bottom:8px;">↳ <strong>YES:</strong> Use <code>OPPOSITE DIRECTION POINTERS (L = 0, R = N - 1)</code></div>
+                        
+                        <div class="tree-node"><span class="tree-badge">STEP 2</span> Is problem asking for in-place overwriting / filtering?</div>
+                        <div style="margin-left:20px; margin-bottom:8px;">↳ <strong>YES:</strong> Use <code>SAME DIRECTION POINTERS (Reader / Writer)</code></div>
+                        
+                        <div class="tree-node"><span class="tree-badge">STEP 3</span> Is problem partitioning 3 distinct values (e.g. 0, 1, 2)?</div>
+                        <div style="margin-left:20px;">↳ <strong>YES:</strong> Use <code>DUTCH NATIONAL FLAG (Low, Mid, High)</code></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Two Pointers converts $O(N^2)$ brute-force pair searching into $O(N)$ linear scans by pruning invalid search space!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 2: 03.1 OPPOSITE DIRECTION PATTERN & CLARIFICATION -->
+    <!-- ========================================================= -->
+    <div class="page" id="page2">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">↔️</span>
+                    <h1>TOPIC 03.1: OPPOSITE DIRECTION PATTERN</h1>
+                </div>
+                <span class="page-num">PAGE 2 OF 12</span>
+            </div>
+
+            <!-- AHA Box -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #2: IS SORTING ALWAYS REQUIRED FOR OPPOSITE POINTERS?</strong><br/>
+                • <strong>FOR PAIR SUMS:</strong> YES! Sorting is strictly mandatory so <code>L++</code> guarantees sum increases and <code>R--</code> guarantees sum decreases.<br/>
+                • <strong>FOR PALINDROMES &amp; WATER CONTAINERS:</strong> NO! Palindromes check symmetric character equality from outer bounds inward, and Container Water uses structural height bounds!
+            </div>
+
+            <div class="grid-2">
+                <!-- Concept & Mechanism -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> OPPOSITE DIRECTION CORE CONCEPT</div>
+                    <div class="section-content">
+                        <div>Pointers start at opposite ends: <code>left = 0</code> and <code>right = nums.length - 1</code>. The loop runs while <code>left &lt; right</code>. One pointer moves inward per iteration based on comparison logic.</div>
+                    </div>
+                </div>
+
+                <!-- Template Code -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">2</span> OPPOSITE DIRECTION JAVA TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+public void oppositePointersTemplate(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    while (left &lt; right) {
+        int sum = nums[left] + nums[right];
+        if (sum == target) {
+            left++; right--; // Match found
+        } else if (sum &lt; target) {
+            left++; // Need larger sum
+        } else {
+            right--; // Need smaller sum
+        }
+    }
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Structured Pointer Movement Steps -->
+            <div class="section-box box-purple">
+                <div class="section-header">🎨 STEP-BY-STEP POINTER MOVEMENT VISUALIZATION: PAIR SUM</div>
+                <div class="section-content">
+                    <div style="margin-bottom:4px; font-weight:700;">Input Array: <code>nums = [1, 2, 3, 4, 6]</code>, Target = <code>6</code></div>
+                    
+                    <div class="step-box">
+                        <div class="step-title">STEP 1: Initial Bounds</div>
+                        <div>L = 0 (val 1), R = 4 (val 6) │ Sum = 1 + 6 = 7 (7 &gt; 6) │ <strong>Action: R--</strong></div>
+                    </div>
+                    
+                    <div class="step-box">
+                        <div class="step-title">STEP 2: Shrink Right Bound</div>
+                        <div>L = 0 (val 1), R = 3 (val 4) │ Sum = 1 + 4 = 5 (5 &lt; 6) │ <strong>Action: L++</strong></div>
+                    </div>
+                    
+                    <div class="step-box">
+                        <div class="step-title">STEP 3: Advance Left Bound</div>
+                        <div>L = 1 (val 2), R = 3 (val 4) │ Sum = 2 + 4 = 6 │ <strong>MATCH FOUND! Return [1, 3]</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            ⚠️ <strong>COMMON POINTER BUG:</strong> Using <code>left &lt;= right</code> in pair sum algorithms causes an element to pair with itself! Use <code>left &lt; right</code>.
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 3: 03.2 SAME DIRECTION PATTERN & TEMPLATE -->
+    <!-- ========================================================= -->
+    <div class="page" id="page3">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">➡️</span>
+                    <h1>TOPIC 03.2: SAME DIRECTION (READER / WRITER) PATTERN</h1>
+                </div>
+                <span class="page-num">PAGE 3 OF 12</span>
+            </div>
+
+            <!-- AHA Box -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #3: IN-PLACE MEMORY OVERWRITING</strong><br/>
+                Same Direction Two Pointers acts like a memory filter! The <code>reader</code> pointer scans raw unverified input data, while the <code>writer</code> pointer maintains the boundary of processed valid output elements in $O(1)$ extra space.
+            </div>
+
+            <div class="grid-2">
+                <!-- Concept -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> SAME DIRECTION CORE CONCEPT</div>
+                    <div class="section-content">
+                        <div>Both pointers start at index 0 and move right. <code>reader</code> inspects every element, while <code>writer</code> updates only when a valid element is found.</div>
+                    </div>
+                </div>
+
+                <!-- Template Code -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">2</span> SAME DIRECTION JAVA TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+public int sameDirectionTemplate(int[] nums, int val) {
+    int writer = 0;
+    for (int reader = 0; reader &lt; nums.length; reader++) {
+        if (nums[reader] != val) {
+            nums[writer] = nums[reader];
+            writer++; // Advance output length
+        }
+    }
+    return writer;
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pointer Movement Visualization -->
+            <div class="section-box box-orange">
+                <div class="section-header">🎨 STEP-BY-STEP POINTER MOVEMENT: REMOVE ELEMENT</div>
+                <div class="section-content">
+                    <div style="margin-bottom:4px; font-weight:700;">Input Array: <code>nums = [3, 2, 2, 3]</code>, val = <code>3</code></div>
+                    
+                    <div class="step-box">
+                        <div class="step-title">STEP 1: reader = 0 (val 3 == target val 3)</div>
+                        <div>Action: Skip write, advance reader ➔ W=0, R=1</div>
+                    </div>
+                    
+                    <div class="step-box">
+                        <div class="step-title">STEP 2: reader = 1 (val 2 != target val 3)</div>
+                        <div>Action: Copy nums[1] to nums[W=0], W++ ➔ Array: <code>[2, 2, 2, 3]</code>, W=1, R=2</div>
+                    </div>
+                    
+                    <div class="step-box">
+                        <div class="step-title">STEP 3: reader = 2 (val 2 != target val 3)</div>
+                        <div>Action: Copy nums[2] to nums[W=1], W++ ➔ Array: <code>[2, 2, 2, 3]</code>, W=2, R=3</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Same Direction Two Pointers allows removing elements or filtering duplicates in $O(N)$ time with ZERO extra memory allocation!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 4: 03.3 MULTIPLE POINTERS & 03.4 PARTITION PATTERN -->
+    <!-- ========================================================= -->
+    <div class="page" id="page4">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">🔀</span>
+                    <h1>MULTIPLE POINTERS &amp; PARTITION PATTERNS</h1>
+                </div>
+                <span class="page-num">PAGE 4 OF 12</span>
+            </div>
+
+            <!-- 03.3 Multiple Pointer Pattern -->
+            <div class="section-box box-indigo">
+                <div class="section-header"><span class="num">1</span> MULTIPLE POINTER PATTERN (DUTCH NATIONAL FLAG)</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <strong>Three Pointer Region Bounding:</strong>
+                            <div>• <code>low</code>: Tracks boundary of 0s.</div>
+                            <div>• <code>mid</code>: Current scanner pointer.</div>
+                            <div>• <code>high</code>: Tracks boundary of 2s.</div>
+                            <div>Classifies 3 regions in a single pass $O(N)$ time!</div>
+                        </div>
+                        <div>
+<pre>
+// DUTCH NATIONAL FLAG TEMPLATE
+public void sortColors(int[] nums) {
+    int low = 0, mid = 0, high = nums.length - 1;
+    while (mid &lt;= high) {
+        if (nums[mid] == 0) swap(nums, low++, mid++);
+        else if (nums[mid] == 1) mid++;
+        else swap(nums, mid, high--);
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 03.4 Partition Pattern -->
+            <div class="section-box box-rose">
+                <div class="section-header"><span class="num">2</span> PARTITION PATTERN (QUICKSORT &amp; PIVOT)</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <strong>Pivot Partitioning Mechanics:</strong>
+                            <div>Selects a pivot element and partitions array into elements $\le$ pivot on left and elements $>$ pivot on right. Foundation for QuickSort and QuickSelect ($O(N)$ average K-th largest selection)!</div>
+                        </div>
+                        <div>
+<pre>
+public int partition(int[] nums, int low, int high) {
+    int pivot = nums[high], i = low - 1;
+    for (int j = low; j &lt; high; j++) {
+        if (nums[j] &lt;= pivot) swap(nums, ++i, j);
+    }
+    swap(nums, i + 1, high);
+    return i + 1;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Java Two Pointer Toolkit Hacks -->
+            <div class="section-box box-teal">
+                <div class="section-header">🛠️ JAVA TWO POINTER TOOLKIT &amp; UTILITY HACKS</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <strong>In-Place Element Swap Helper:</strong>
+<pre style="margin:0;">
+private void swap(int[] nums, int i, int j) {
+    int temp = nums[i];
+    nums[i] = nums[j];
+    nums[j] = temp;
+}</pre>
+                        </div>
+                        <div>
+                            <strong>Duplicate Skipping Loop Trick:</strong>
+<pre style="margin:0;">
+// Skip duplicates in 3Sum to avoid duplicate triplets
+while (l &lt; r &amp;&amp; nums[l] == nums[l + 1]) l++;
+while (l &lt; r &amp;&amp; nums[r] == nums[r - 1]) r--;
+l++; r--;</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT:</strong> Three Pointers (Dutch National Flag) partitions 3 distinct regions in one pass without sorting overhead!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 5: 03.5 PATTERN RECOGNITION & DECISION MATRIX -->
+    <!-- ========================================================= -->
+    <div class="page" id="page5">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">🎯</span>
+                    <h1>TOPIC 03.5: PATTERN RECOGNITION &amp; DECISION MATRIX</h1>
+                </div>
+                <span class="page-num">PAGE 5 OF 12</span>
+            </div>
+
+            <!-- Pattern Recognition Matrix -->
+            <div class="section-box box-amber">
+                <div class="section-header">🎯 RECOGNITION SIGNALS: KEYWORD TO POINTER PATTERN MAPPING</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Problem Trigger Keyword</th>
+                                <th>Two Pointer Pattern Choice</th>
+                                <th>Pointer Initialization</th>
+                                <th>Target Complexity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>"Sorted Array Target Pair Sum"</td>
+                                <td>Opposite Direction</td>
+                                <td><code>left = 0, right = N - 1</code></td>
+                                <td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td>
+                            </tr>
+                            <tr>
+                                <td>"Check Palindrome String"</td>
+                                <td>Opposite Direction</td>
+                                <td><code>left = 0, right = N - 1</code></td>
+                                <td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td>
+                            </tr>
+                            <tr>
+                                <td>"In-Place Remove / Overwrite"</td>
+                                <td>Same Direction (Reader / Writer)</td>
+                                <td><code>writer = 0, reader = 0</code></td>
+                                <td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td>
+                            </tr>
+                            <tr>
+                                <td>"Move Zeros / Compact Array"</td>
+                                <td>Same Direction (Reader / Writer)</td>
+                                <td><code>writer = 0, reader = 0</code></td>
+                                <td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td>
+                            </tr>
+                            <tr>
+                                <td>"Sort Colors / 3-Way Partition"</td>
+                                <td>Multiple Pointers (Dutch Flag)</td>
+                                <td><code>low = 0, mid = 0, high = N - 1</code></td>
+                                <td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td>
+                            </tr>
+                            <tr>
+                                <td>"Container Max Area Bounding"</td>
+                                <td>Opposite Direction Shrinking</td>
+                                <td><code>left = 0, right = N - 1</code></td>
+                                <td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Clean Structured Decision Cards -->
+            <div class="section-box box-purple">
+                <div class="section-header">🌳 TWO POINTER ARCHITECTURAL DECISION MATRIX</div>
+                <div class="section-content">
+                    <div class="grid-3">
+                        <div style="background:#eff6ff; padding:8px; border-radius:5px; border:1px solid #bfdbfe;">
+                            <strong style="color:#1e40af;">Opposite Direction</strong>
+                            <p style="margin:4px 0 0 0;">Use when array is sorted or checking symmetric bounds from ends inward.</p>
+                        </div>
+                        <div style="background:#f0fdf4; padding:8px; border-radius:5px; border:1px solid #bbf7d0;">
+                            <strong style="color:#15803d;">Same Direction</strong>
+                            <p style="margin:4px 0 0 0;">Use for in-place overwriting, zero shifting, or string compression.</p>
+                        </div>
+                        <div style="background:#faf5ff; padding:8px; border-radius:5px; border:1px solid #e9d5ff;">
+                            <strong style="color:#6b21a8;">Three Pointers</strong>
+                            <p style="margin:4px 0 0 0;">Use for 3-way partitioning (Dutch National Flag) or 3Sum anchors.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🗣️ <strong>FAANG INTERVIEW PRINCIPLE:</strong> "State your pointer orientation strategy to the interviewer BEFORE writing code to demonstrate clarity!"
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 6: EASY NEETCODE DRILLS (LC 125 & LC 167) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page6">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">🧩</span>
+                    <h1>EASY NEETCODE: VALID PALINDROME &amp; TWO SUM II</h1>
+                </div>
+                <span class="page-num">PAGE 6 OF 12</span>
+            </div>
+
+            <!-- Problem 1: LC 125 -->
+            <div class="section-box box-blue">
+                <div class="section-header">1. LEETCODE 125 — VALID PALINDROME</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span>Difficulty: Easy</span>
+                                <span>Pattern: Opposite Direction</span>
+                                <span>Meta, Amazon</span>
+                                <span>★★★★★</span>
+                            </div>
+                            <strong>Problem:</strong> Return <code>true</code> if string <code>s</code> is a palindrome considering alphanumeric chars only.<br/><em>Example:</em> <code>s = "A man, a plan, a canal: Panama"</code> → <code>true</code>.
+
+                            <div class="step-box">
+                                <div class="step-title">STEP-BY-STEP POINTER CLEANING &amp; MATCHING</div>
+                                <div>1. <code>left</code> skips non-alphanumeric symbols from left.</div>
+                                <div>2. <code>right</code> skips non-alphanumeric symbols from right.</div>
+                                <div>3. Compare <code>toLowerCase(s.charAt(left)) == toLowerCase(s.charAt(right))</code>.</div>
+                            </div>
+
+                            <strong>Complexity:</strong> Time: <code>O(N)</code>, Space: <code>O(1)</code>.
+                            
+                            <div style="background:#fff7ed; padding:4px 8px; border-radius:4px; font-size:0.73rem; border:1px solid #ffedd5; margin-top:2px;">
+                                ❓ <strong>Why Not Regex Replace?</strong> Creating a new cleaned string takes <code>O(N)</code> extra space. Two Pointers cleans in <code>O(1)</code> space!
+                            </div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean isPalindrome(String s) {
+    int left = 0, right = s.length() - 1;
+    while (left &lt; right) {
+        // Step 1: Skip non-alphanumeric chars from left
+        while (left &lt; right &amp;&amp; !Character.isLetterOrDigit(s.charAt(left))) left++;
+        // Step 2: Skip non-alphanumeric chars from right
+        while (left &lt; right &amp;&amp; !Character.isLetterOrDigit(s.charAt(right))) right--;
+        // Step 3: Case-insensitive comparison
+        if (Character.toLowerCase(s.charAt(left)) != Character.toLowerCase(s.charAt(right))) {
+            return false;
+        }
+        left++; right--;
+    }
+    return true;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 2: LC 167 -->
+            <div class="section-box box-purple">
+                <div class="section-header">2. LEETCODE 167 — TWO SUM II (SORTED ARRAY)</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span>Difficulty: Easy</span>
+                                <span>Pattern: Opposite Direction</span>
+                                <span>Amazon, Google</span>
+                                <span>★★★★★</span>
+                            </div>
+                            <strong>Problem:</strong> Return 1-based indices of two numbers in sorted array adding to <code>target</code>.<br/><em>Example:</em> <code>numbers = [2,7,11,15], target = 9</code> → <code>[1, 2]</code>.
+
+                            <div class="step-box">
+                                <div class="step-title">POINTER STEPS</div>
+                                <div>L=0 (val 2), R=3 (val 15) ➔ Sum = 17 &gt; 9 ➔ R--<br/>L=0 (val 2), R=1 (val 7) ➔ Sum = 9 == 9 ➔ Match!</div>
+                            </div>
+
+                            <strong>Complexity:</strong> Time: <code>O(N)</code>, Space: <code>O(1)</code>.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int[] twoSum(int[] numbers, int target) {
+    int left = 0, right = numbers.length - 1;
+    while (left &lt; right) {
+        int sum = numbers[left] + numbers[right];
+        if (sum == target) return new int[]{left + 1, right + 1}; // 1-based
+        else if (sum &lt; target) left++; // Need larger sum
+        else right--; // Need smaller sum
+    }
+    return new int[0];
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT:</strong> Because Two Sum II provides a SORTED array, we trade HashMap's $O(N)$ extra space for $O(1)$ space using Opposite Pointers!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 7: EASY NEETCODE DRILLS (LC 26, LC 27 & LC 283) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page7">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">✂️</span>
+                    <h1>EASY NEETCODE: REMOVE DUPLICATES, ELEMENT &amp; MOVE ZEROES</h1>
+                </div>
+                <span class="page-num">PAGE 7 OF 12</span>
+            </div>
+
+            <!-- Problem 3: LC 26 -->
+            <div class="section-box box-green">
+                <div class="section-header">3. LEETCODE 26 — REMOVE DUPLICATES FROM SORTED ARRAY</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span>Easy</span>
+                                <span>Same Direction</span>
+                                <span>Google, Meta</span>
+                                <span>★★★★★</span>
+                            </div>
+                            <strong>Problem:</strong> Remove duplicates in-place from sorted <code>nums</code>. Return <code>k</code>.<br/><em>Example:</em> <code>nums = [1, 1, 2]</code> → <code>k = 2, nums = [1, 2, _]</code>.
+                            <div><strong>Complexity:</strong> Time: <code>O(N)</code>, Space: <code>O(1)</code>.</div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int removeDuplicates(int[] nums) {
+    if (nums.length == 0) return 0;
+    int k = 1; // Writer pointer
+    for (int i = 1; i &lt; nums.length; i++) { // Reader
+        if (nums[i] != nums[i - 1]) nums[k++] = nums[i];
+    }
+    return k;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 4: LC 27 -->
+            <div class="section-box box-skyblue">
+                <div class="section-header">4. LEETCODE 27 — REMOVE ELEMENT</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span>Easy</span>
+                                <span>Same Direction</span>
+                                <span>Amazon, Microsoft</span>
+                                <span>★★★★☆</span>
+                            </div>
+                            <strong>Problem:</strong> Remove occurrences of <code>val</code> in <code>nums</code> in-place. Return <code>k</code>.<br/><em>Example:</em> <code>nums = [3, 2, 2, 3], val = 3</code> → <code>k = 2</code>.
+                            <div><strong>Complexity:</strong> Time: <code>O(N)</code>, Space: <code>O(1)</code>.</div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int removeElement(int[] nums, int val) {
+    int k = 0; // Writer
+    for (int i = 0; i &lt; nums.length; i++) { // Reader
+        if (nums[i] != val) nums[k++] = nums[i];
+    }
+    return k;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 5: LC 283 -->
+            <div class="section-box box-orange">
+                <div class="section-header">5. LEETCODE 283 — MOVE ZEROES</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span>Easy</span>
+                                <span>Same Direction Swap</span>
+                                <span>Facebook, Apple</span>
+                                <span>★★★★★</span>
+                            </div>
+                            <strong>Problem:</strong> Move all 0's to the end of <code>nums</code> while preserving relative order.<br/><em>Example:</em> <code>nums = [0, 1, 0, 3, 12]</code> → <code>[1, 3, 12, 0, 0]</code>.
+                            <div><strong>Complexity:</strong> Time: <code>O(N)</code>, Space: <code>O(1)</code>.</div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public void moveZeroes(int[] nums) {
+    int write = 0;
+    for (int read = 0; read &lt; nums.length; read++) {
+        if (nums[read] != 0) {
+            int temp = nums[write];
+            nums[write] = nums[read];
+            nums[read] = temp;
+            write++;
+        }
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Reader/Writer Two Pointers modifies arrays in linear time without creating new array copies!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 8: EASY (MERGE SORTED) & MEDIUM (STRING COMPRESSION) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page8">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">⚡</span>
+                    <h1>EASY (MERGE SORTED) &amp; MEDIUM (STRING COMPRESS)</h1>
+                </div>
+                <span class="page-num">PAGE 8 OF 12</span>
+            </div>
+
+            <!-- Problem 6: LC 88 -->
+            <div class="section-box box-blue">
+                <div class="section-header">6. LEETCODE 88 — MERGE SORTED ARRAY (BACKWARDS FILL)</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span>Difficulty: Easy</span>
+                                <span>Pattern: Backwards Three Pointers</span>
+                                <span>Meta, Amazon, MS</span>
+                                <span>★★★★★</span>
+                            </div>
+                            <strong>Problem:</strong> Merge sorted <code>nums2</code> into sorted <code>nums1</code> in-place.<br/><em>Example:</em> <code>nums1 = [1,2,3,0,0,0], m=3, nums2 = [2,5,6], n=3</code> → <code>[1,2,2,3,5,6]</code>.
+
+                            <strong>Key Insight:</strong> Merge from index <code>m+n-1</code> backwards!
+                        </div>
+                        <div class="problem-code">
+<pre>
+public void merge(int[] nums1, int m, int[] nums2, int n) {
+    int p1 = m - 1, p2 = n - 1, p = m + n - 1;
+    while (p2 &gt;= 0) {
+        if (p1 &gt;= 0 &amp;&amp; nums1[p1] &gt; nums2[p2]) nums1[p--] = nums1[p1--];
+        else nums1[p--] = nums2[p2--];
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 7: LC 443 -->
+            <div class="section-box box-teal">
+                <div class="section-header">7. LEETCODE 443 — STRING COMPRESSION</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span>Difficulty: Medium</span>
+                                <span>Pattern: Reader / Writer</span>
+                                <span>Amazon, Microsoft</span>
+                                <span>★★★★☆</span>
+                            </div>
+                            <strong>Problem:</strong> Compress character array in-place using consecutive counts.<br/><em>Example:</em> <code>chars = ["a","a","b","b","c","c","c"]</code> → <code>["a","2","b","2","c","3"]</code>, return <code>6</code>.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int compress(char[] chars) {
+    int write = 0, read = 0;
+    while (read &lt; chars.length) {
+        char currentChar = chars[read];
+        int count = 0;
+        while (read &lt; chars.length &amp;&amp; chars[read] == currentChar) {
+            read++; count++;
+        }
+        chars[write++] = currentChar;
+        if (count &gt; 1) {
+            for (char c : String.valueOf(count).toCharArray()) {
+                chars[write++] = c;
+            }
+        }
+    }
+    return write;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 443):</strong> Using inner while loop inside Reader/Writer advances `read` through contiguous duplicate blocks cleanly!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 9: MEDIUM NEETCODE DRILLS (LC 15 & LC 75) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page9">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">🔀</span>
+                    <h1>MEDIUM NEETCODE: THREE SUM &amp; SORT COLORS</h1>
+                </div>
+                <span class="page-num">PAGE 9 OF 12</span>
+            </div>
+
+            <!-- Problem 8: LC 15 -->
+            <div class="section-box box-purple">
+                <div class="section-header">8. LEETCODE 15 — 3SUM (SORT + ANCHOR + TWO POINTERS)</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span>Difficulty: Medium</span>
+                                <span>Pattern: Anchor + Opposite Pointers</span>
+                                <span>Meta, Amazon, Google</span>
+                                <span>★★★★★</span>
+                            </div>
+                            <strong>Problem:</strong> Return all unique triplets <code>[nums[i], nums[j], nums[k]]</code> such that sum is <code>0</code>.<br/><em>Example:</em> <code>nums = [-1, 0, 1, 2, -1, -4]</code> → <code>[[-1,-1,2], [-1,0,1]]</code>.
+
+                            <strong>Evolution Strategy:</strong>
+                            <div>1. Sort array.</div>
+                            <div>2. Fix anchor <code>i</code> from <code>0</code> to <code>N-3</code>.</div>
+                            <div>3. Run Two Pointers (<code>left = i+1, right = N-1</code>) for target <code>-nums[i]</code>!</div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public List&lt;List&lt;Integer&gt;&gt; threeSum(int[] nums) {
+    Arrays.sort(nums);
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    for (int i = 0; i &lt; nums.length - 2; i++) {
+        if (i &gt; 0 &amp;&amp; nums[i] == nums[i - 1]) continue; // Skip dup anchor
+        int l = i + 1, r = nums.length - 1;
+        while (l &lt; r) {
+            int sum = nums[i] + nums[l] + nums[r];
+            if (sum == 0) {
+                res.add(Arrays.asList(nums[i], nums[l], nums[r]));
+                while (l &lt; r &amp;&amp; nums[l] == nums[l + 1]) l++; // Skip dup L
+                while (l &lt; r &amp;&amp; nums[r] == nums[r - 1]) r--; // Skip dup R
+                l++; r--;
+            } else if (sum &lt; 0) l++; else r--;
+        }
+    }
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 9: LC 75 -->
+            <div class="section-box box-rose">
+                <div class="section-header">9. LEETCODE 75 — SORT COLORS (DUTCH NATIONAL FLAG)</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span>Difficulty: Medium</span>
+                                <span>Pattern: Dutch National Flag</span>
+                                <span>Meta, Amazon, MS</span>
+                                <span>★★★★★</span>
+                            </div>
+                            <strong>Problem:</strong> Sort array with 0s, 1s, and 2s in-place in a single pass.<br/><em>Example:</em> <code>nums = [2,0,2,1,1,0]</code> → <code>[0,0,1,1,2,2]</code>.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public void sortColors(int[] nums) {
+    int low = 0, mid = 0, high = nums.length - 1;
+    while (mid &lt;= high) {
+        if (nums[mid] == 0) {
+            swap(nums, low++, mid++);
+        } else if (nums[mid] == 1) {
+            mid++;
+        } else {
+            swap(nums, mid, high--);
+        }
+    }
+}
+private void swap(int[] nums, int i, int j) {
+    int temp = nums[i]; nums[i] = nums[j]; nums[j] = temp;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 15):</strong> Sorting reduces 3Sum from $O(N^3)$ to $O(N^2)$ and allows duplicate skipping via simple pointer checks!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 10: HARD NEETCODE (LC 11 & LC 42) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page10">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">💧</span>
+                    <h1>HARD NEETCODE: CONTAINER WATER &amp; TRAPPING RAIN WATER</h1>
+                </div>
+                <span class="page-num">PAGE 10 OF 12</span>
+            </div>
+
+            <!-- Problem 10: LC 11 -->
+            <div class="section-box box-blue">
+                <div class="section-header">10. LEETCODE 11 — CONTAINER WITH MOST WATER</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span>Medium/Hard</span>
+                                <span>Area Bounds Shrinking</span>
+                                <span>Meta, Amazon, Google</span>
+                                <span>★★★★★</span>
+                            </div>
+                            <strong>Problem:</strong> Find two lines that together with x-axis form container holding max water.<br/><em>Example:</em> <code>height = [1,8,6,2,5,4,8,3,7]</code> → <code>49</code>.
+
+                            <div class="step-box">
+                                <div class="step-title">AREA SHRINKING LOGIC</div>
+                                <div>Always move the SHORTER line pointer inward because moving the taller line can NEVER increase area!</div>
+                            </div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int maxArea(int[] height) {
+    int left = 0, right = height.length - 1, maxWater = 0;
+    while (left &lt; right) {
+        int w = right - left;
+        int h = Math.min(height[left], height[right]);
+        maxWater = Math.max(maxWater, w * h);
+        if (height[left] &lt; height[right]) left++;
+        else right--;
+    }
+    return maxWater;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 11: LC 42 -->
+            <div class="section-box box-indigo">
+                <div class="section-header">11. LEETCODE 42 — TRAPPING RAIN WATER (TWO POINTER OPTIMAL)</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span>Difficulty: Hard</span>
+                                <span>Two Pointer Bounds</span>
+                                <span>Google, Meta, Amazon</span>
+                                <span>★★★★★</span>
+                            </div>
+                            <strong>Problem:</strong> Compute total water trapped given elevation map <code>height</code>.<br/><em>Example:</em> <code>height = [0,1,0,2,1,0,1,3,2,1,2,1]</code> → <code>6</code>.
+
+                            <strong>O(1) Space Improvement:</strong>
+                            <div>Replaces $O(N)$ prefix/suffix arrays with dynamic two-pointer max bounds!</div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int trap(int[] height) {
+    int l = 0, r = height.length - 1;
+    int leftMax = 0, rightMax = 0, water = 0;
+    while (l &lt; r) {
+        if (height[l] &lt; height[r]) {
+            if (height[l] &gt;= leftMax) leftMax = height[l];
+            else water += leftMax - height[l];
+            l++;
+        } else {
+            if (height[r] &gt;= rightMax) rightMax = height[r];
+            else water += rightMax - height[r];
+            r--;
+        }
+    }
+    return water;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🧠 <strong>MEMORY BOX:</strong> Moving the shorter height pointer in Container Water guarantees we never skip a potentially larger water container!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 11: TOP 10 POINTER BUGS & REVERSE DECISION TREES -->
+    <!-- ========================================================= -->
+    <div class="page" id="page11">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <h1>TOP 10 TWO POINTER BUGS &amp; REVERSE DECISION TREES</h1>
+                </div>
+                <span class="page-num">PAGE 11 OF 12</span>
+            </div>
+
+            <!-- Top 10 Pointer Bugs -->
+            <div class="section-box box-red">
+                <div class="section-header">⚠️ TOP 10 COMMON TWO POINTER BUGS &amp; FAANG TRAPS</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <div>1. <strong>Loop Termination Crash:</strong> Using <code>while(l &lt;= r)</code> instead of <code>while(l &lt; r)</code> in pair sum algorithms.</div>
+                            <div>2. <strong>Missing Boundary Checks in Duplicate Skips:</strong> Forgetting <code>l &lt; r</code> in inner duplicate loops causing <code>IndexOutOfBounds</code>.</div>
+                            <div>3. <strong>Applying Two Pointers on Unsorted Inputs:</strong> Running Opposite Pointers on unsorted arrays for pair sum!</div>
+                            <div>4. <strong>Forgetting to Advance Both Pointers on Match:</strong> Advancing only one pointer after finding a valid 3Sum triplet.</div>
+                            <div>5. <strong>Modifying Read Pointer Incorrectly:</strong> Modifying `read` pointer inside `write` logic.</div>
+                        </div>
+                        <div>
+                            <div>6. <strong>Off-By-One In-Place Output Length:</strong> Returning `write + 1` instead of `write`.</div>
+                            <div>7. <strong>Integer Overflow in Area Math:</strong> Failing to cast width/height multiplication in large arrays.</div>
+                            <div>8. <strong>Moving Taller Pointer in Water Container:</strong> Violating area optimization logic.</div>
+                            <div>9. <strong>Inappropriate Pointer Direction:</strong> Using Same Direction for Palindrome checks.</div>
+                            <div>10. <strong>Skipping Duplicate Anchor in 3Sum:</strong> Forgetting `i > 0 && nums[i] == nums[i-1]` duplicate check.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reverse Decision Tree Box -->
+            <div class="section-box box-amber">
+                <div class="section-header">❓ REVERSE QUESTIONS DECISION TREE ("WHY NOT?")</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Alternative Choice</th>
+                                <th>Why We Reject It In FAANG Interviews</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Why Not Brute Force O(N²)?</strong></td>
+                                <td>Nested loops exceed time limits ($N \ge 10^5$). Two Pointers prunes search space to $O(N)$!</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Why Not HashMap O(N) Space?</strong></td>
+                                <td>When array is ALREADY sorted, Two Pointers achieves $O(1)$ auxiliary space complexity.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Why Not Binary Search O(N log N)?</strong></td>
+                                <td>Binary search takes $O(N \log N)$ total time for $N$ queries vs $O(N)$ total time for Two Pointers.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Mentioning why Two Pointers eliminates HashMap $O(N)$ space overhead proves your memory optimization mastery!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 12: MASTER CHEAT SHEETS, BLIND 75 & READINESS CHECKLIST -->
+    <!-- ========================================================= -->
+    <div class="page" id="page12">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">📋</span>
+                    <h1>MASTER CHEAT SHEETS &amp; TOPIC 04 CHECKLIST</h1>
+                </div>
+                <span class="page-num">PAGE 12 OF 12</span>
+            </div>
+
+            <!-- Two Pointer Cheat Sheet -->
+            <div class="section-box box-indigo">
+                <div class="section-header">⭐ TWO POINTER MASTER PATTERN MATRIX</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pattern Variant</th>
+                                <th>Pointer Setup</th>
+                                <th>Optimal Complexity</th>
+                                <th>Representative LeetCode Problem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Opposite Direction</strong></td><td><code>L = 0, R = N - 1</code></td><td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td><td>LC 125 Palindrome, LC 167 Two Sum II</td></tr>
+                            <tr><td><strong>Same Direction</strong></td><td><code>writer = 0, reader = 0</code></td><td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td><td>LC 26 Remove Dupes, LC 283 Move Zeroes</td></tr>
+                            <tr><td><strong>Fixed Anchor + Two Pointers</strong></td><td><code>i</code> loop + <code>L = i+1, R = N-1</code></td><td>Time: <code>O(N²)</code>, Space: <code>O(1)</code></td><td>LC 15 3Sum</td></tr>
+                            <tr><td><strong>Dutch National Flag</strong></td><td><code>low = 0, mid = 0, high = N-1</code></td><td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td><td>LC 75 Sort Colors</td></tr>
+                            <tr><td><strong>Two Pointer Area Bounds</strong></td><td><code>L = 0, R = N - 1</code></td><td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td><td>LC 11 Container Water, LC 42 Rain Water</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- NeetCode & Blind 75 Progress Tracker -->
+            <div class="section-box box-green">
+                <div class="section-header">📊 NEETCODE &amp; BLIND 75 PROGRESS TRACKER</div>
+                <div class="section-content">
+                    <div class="grid-3">
+                        <div>☑ LC 125 Valid Palindrome</div>
+                        <div>☑ LC 167 Two Sum II</div>
+                        <div>☑ LC 26 Remove Duplicates</div>
+                        <div>☑ LC 27 Remove Element</div>
+                        <div>☑ LC 283 Move Zeroes</div>
+                        <div>☑ LC 88 Merge Sorted Array</div>
+                        <div>☑ LC 15 Three Sum</div>
+                        <div>☑ LC 75 Sort Colors</div>
+                        <div>☑ LC 443 String Compression</div>
+                        <div>☑ LC 11 Container Water</div>
+                        <div>☑ LC 42 Trapping Rain Water</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Readiness Checklist -->
+            <div class="section-box box-blue">
+                <div class="section-header">✅ CHECKLIST BEFORE MOVING TO TOPIC 04 (SLIDING WINDOW)</div>
+                <div class="section-content">
+                    <div style="display:flex; flex-direction:column; gap:3px;">
+                        <label>☑ I understand Opposite Direction vs Same Direction vs Dutch National Flag patterns.</label>
+                        <label>☑ I master duplicate skipping loops in 3Sum and in-place Reader/Writer overwriting.</label>
+                        <label>☑ I can write Two Sum II, 3Sum, Sort Colors &amp; Container Water from memory in &lt;3 mins.</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🎉 <strong>TOPIC 03 TWO POINTERS COMPLETE!</strong> Turn the page to <strong>Topic 04: Sliding Window Masterclass</strong>!
+        </div>
+    </div>
+
+</div>
+
+    </div> <!-- end .main-content -->
+</div> <!-- end .app-layout -->
+
+<!-- Floating Back to Top Button -->
+<button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆</button>
+
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout') || document.querySelector('.app-layout');
+        const btn = document.querySelector('.shrink-btn span');
+        if (layout) {
+            layout.classList.toggle('shrunk');
+            if (btn) {
+                btn.innerText = layout.classList.contains('shrunk') ? '➕ Expand' : '➖ Shrink';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+

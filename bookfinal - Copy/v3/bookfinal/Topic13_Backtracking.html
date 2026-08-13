@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BACKTRACKING — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 12px; }
+.ph h1 { font-size: 1.7rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.85rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.74rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.bh  { background: var(--pri); color: white; padding: 5px 10px;
+  font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 16px; height: 16px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.70rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 8px 10px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 5px 10px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.72rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.90rem; }
+.psub   { color: var(--sub); font-size: 0.76rem; }
+.prow-body { display: flex; }
+.pc { padding: 8px 10px; font-size: 0.76rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.70rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.prob-head { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.76rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.68rem; line-height: 1.38; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.74rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.74rem; }
+th, td { border: 1px solid var(--bdr); padding: 4px 6px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 5px 8px; border-radius: 0 4px 4px 0; font-size: 0.76rem; margin-top: 4px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 6px 8px; margin-top: 4px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.80rem; margin-bottom: 2px; }
+
+.dt-wrap { font-size: 0.76rem; }
+.dt-root { background: var(--pri); color: white; padding: 4px 8px; border-radius: 4px; text-align: center; font-weight: 700; margin-bottom: 6px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 4px 6px; font-weight: 600; color: #1e40af; font-size: 0.72rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 4px 6px; color: #065f46; font-weight: 700; font-size: 0.72rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.72rem; padding: 2px 4px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 8px 12px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- PAGE 1: DISCOVERY & ORIENTATION -->
+<div class="page">
+<div class="ph">
+  <div><h1>BACKTRACKING</h1><div class="sub">FAANG Master Guide — Java Edition</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 1 OF 10</div><div class="ptag">DISCOVERY JOURNEY · FIRST PRINCIPLES</div></div>
+</div>
+<div class="g3" style="margin-bottom:12px">
+<div class="box pur">
+<div class="bh">💡 WHY BACKTRACKING?</div>
+<div class="bc">
+<p style="margin-bottom:6px">Backtracking is a controlled DFS search over a **State Space Tree**. It explores candidate solutions and **backtracks (undoes choice)** as soon as a path violates constraints!</p>
+<div class="aha">
+<div class="aha-t">💡 THE 3-STEP TRINITY</div>
+        1. <strong>CHOOSE:</strong> Add candidate to path (`list.add(val)`).<br/>
+        2. <strong>EXPLORE:</strong> Recurse to next level (`dfs(...)`).<br/>
+        3. <strong>UNDO:</strong> Remove candidate (`list.remove(list.size() - 1)`).
+      </div>
+</div>
+</div>
+<div class="box">
+<div class="bh"><span class="n">1</span> 3 CORE CATEGORIES</div>
+<div class="bc">
+<ul style="margin-bottom:8px;padding-left:16px">
+<li><strong>Subsets (2^N):</strong> Pick or skip each element (`start` pointer increments).</li>
+<li><strong>Combinations ($N! / K!$):</strong> Choose K elements out of N (`start` pointer).</li>
+<li><strong>Permutations ($N!$):</strong> Order matters (`visited[]` array or element swapping).</li>
+</ul>
+</div>
+</div>
+<div class="box sky">
+<div class="bh"><span class="n">2</span> VISUALIZING STATE SPACE TREE</div>
+<div class="bc">
+<div style="font-weight:700;color:var(--pri);margin-bottom:4px">Subsets of [1, 2]:</div>
+<pre>[]
+├── [1]
+│   └── [1, 2]
+└── [2]
+Total Subsets = 2^N = 4 ({}, {1}, {1,2}, {2})</pre>
+</div>
+</div>
+</div><div class="g2">
+<div class="box grn">
+<div class="bh">📚 PREREQUISITES &amp; COMPLEXITY REASONING</div>
+<div class="bc">
+<table style="font-size:0.76rem">
+<tr><th>Category</th><th>Time Complexity</th><th>Auxiliary Space</th></tr>
+<tr><td>Subsets (2^N)</td><td><strong>O(N · 2^N)</strong></td><td><strong>O(N) recursion stack</strong></td></tr>
+<tr><td>Combinations (nCr)</td><td><strong>O(K · nCr)</strong></td><td><strong>O(K) stack</strong></td></tr>
+<tr><td>Permutations ($N!$)</td><td><strong>O(N · N!)</strong></td><td><strong>O(N) stack</strong></td></tr>
+<tr><td>N-Queens / Sudoku</td><td><strong>O(N!)</strong></td><td><strong>O(N) board state</strong></td></tr>
+</table>
+</div>
+</div>
+<div class="box amb">
+<div class="bh">⚡ CLUES THAT SCREAM BACKTRACKING</div>
+<div class="bc">
+<p style="font-size:0.8rem">1. <em>"Return all possible combinations / subsets / permutations"</em></p>
+<p style="font-size:0.8rem">2. <em>"Duplicates allowed in input, output must contain UNIQUE results"</em> -&gt; Sort + Skip duplicate adjacent elements</p>
+<p style="font-size:0.8rem">3. <em>"Place N queens on board / solve Sudoku"</em> -&gt; Constraint Validation Grid DFS</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 2: API & TOOLKIT -->
+<div class="page">
+<div class="ph">
+  <div><h1>BACKTRACKING</h1><div class="sub">Java Master Toolkit &amp; Utility Classes</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 2 OF 10</div><div class="ptag">JAVA UTILITIES · REUSABLE TEMPLATES</div></div>
+</div>
+
+</div>
+
+<!-- PAGE 3: CORE PATTERN 1 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BACKTRACKING</h1><div class="sub">Core Patterns — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 3 OF 10</div><div class="ptag">PATTERN 1</div></div>
+</div>
+<div class="prow" style="margin-bottom:12px">
+<div class="prow-head">
+<div class="ptag2">PATTERN 1</div>
+<div class="ptitle">SUBSETS I (Power Set Generation)</div>
+<div class="psub">e.g. Subsets (LC 78)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">When to Use</div>
+<div style="font-size:0.78rem">Generate all 2^N subsets. Every node in the state space tree is a valid subset snapshot!</div>
+</div>
+<div class="pc" style="flex:1.5">
+<div class="pc-head">Template — LC 78</div>
+<pre>public List&lt;List&lt;Integer&gt;&gt; subsets(int[] nums) {
+  List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+  dfs(res, new ArrayList&lt;&gt;(), nums, 0);
+  return res;
+}
+private void dfs(List&lt;List&lt;Integer&gt;&gt; res, List&lt;Integer&gt; track, int[] nums, int start) {
+  res.add(new ArrayList&lt;&gt;(track));
+  for (int i = start; i &lt; nums.length; i++) {
+    track.add(nums[i]);
+    dfs(res, track, nums, i + 1);
+    track.remove(track.size() - 1);
+  }
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 4: CORE PATTERN 2 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BACKTRACKING</h1><div class="sub">Core Patterns — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 4 OF 10</div><div class="ptag">PATTERN 2</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 2</div>
+<div class="ptitle">SUBSETS II (Duplicates in Input)</div>
+<div class="psub">e.g. Subsets II (LC 90)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">When to Use</div>
+<div style="font-size:0.78rem">Input array contains duplicates. Must sort and skip duplicate branch at same level (`i &gt; start`).</div>
+</div>
+<div class="pc" style="flex:1.5">
+<div class="pc-head">Template — LC 90</div>
+<pre>public List&lt;List&lt;Integer&gt;&gt; subsetsWithDup(int[] nums) {
+  Arrays.sort(nums);
+  List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+  dfs(res, new ArrayList&lt;&gt;(), nums, 0);
+  return res;
+}
+private void dfs(List&lt;List&lt;Integer&gt;&gt; res, List&lt;Integer&gt; track, int[] nums, int start) {
+  res.add(new ArrayList&lt;&gt;(track));
+  for (int i = start; i &lt; nums.length; i++) {
+    if (i &gt; start &amp;&amp; nums[i] == nums[i - 1]) continue;
+    track.add(nums[i]);
+    dfs(res, track, nums, i + 1);
+    track.remove(track.size() - 1);
+  }
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 5: CORE PATTERN 3 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BACKTRACKING</h1><div class="sub">Core Patterns — Part 3</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 5 OF 10</div><div class="ptag">PATTERN 3</div></div>
+</div>
+<div class="prow" style="margin-bottom:12px">
+<div class="prow-head">
+<div class="ptag2">PATTERN 5</div>
+<div class="ptitle">PERMUTATIONS I (Order Matters, Distinct Elements)</div>
+<div class="psub">e.g. Permutations (LC 46)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">Visited Tracking</div>
+<div style="font-size:0.78rem">
+        Order matters, so loop from `0` to `N-1` at every level. Track used elements via `boolean[] visited` or `track.contains()`.
+      </div>
+</div>
+<div class="pc" style="flex:1.5">
+<div class="pc-head">Template — LC 46</div>
+<pre>public List&lt;List&lt;Integer&gt;&gt; permute(int[] nums) {
+  List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+  dfs(res, new ArrayList&lt;&gt;(), nums, new boolean[nums.length]);
+  return res;
+}
+private void dfs(List&lt;List&lt;Integer&gt;&gt; res, List&lt;Integer&gt; track, int[] nums, boolean[] vis) {
+  if (track.size() == nums.length) { res.add(new ArrayList&lt;&gt;(track)); return; }
+  for (int i = 0; i &lt; nums.length; i++) {
+    if (vis[i]) continue;
+    vis[i] = true; track.add(nums[i]);
+    dfs(res, track, nums, vis);
+    track.remove(track.size() - 1); vis[i] = false;
+  }
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 6: CORE PATTERN 4 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BACKTRACKING</h1><div class="sub">Core Patterns — Part 4</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 6 OF 10</div><div class="ptag">PATTERN 4</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 6</div>
+<div class="ptitle">PERMUTATIONS II (Order Matters + Input Duplicates)</div>
+<div class="psub">e.g. Permutations II (LC 47)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">Visited Pruning Condition</div>
+<div style="font-size:0.78rem">
+        Sort array first. Skip duplicate if `nums[i] == nums[i-1]` AND `!visited[i-1]`.
+      </div>
+</div>
+<div class="pc" style="flex:1.5">
+<div class="pc-head">Template — LC 47</div>
+<pre>public List&lt;List&lt;Integer&gt;&gt; permuteUnique(int[] nums) {
+  Arrays.sort(nums);
+  List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+  dfs(res, new ArrayList&lt;&gt;(), nums, new boolean[nums.length]);
+  return res;
+}
+private void dfs(List&lt;List&lt;Integer&gt;&gt; res, List&lt;Integer&gt; track, int[] nums, boolean[] vis) {
+  if (track.size() == nums.length) { res.add(new ArrayList&lt;&gt;(track)); return; }
+  for (int i = 0; i &lt; nums.length; i++) {
+    if (vis[i] || (i &gt; 0 &amp;&amp; nums[i] == nums[i - 1] &amp;&amp; !vis[i - 1])) continue;
+    vis[i] = true; track.add(nums[i]);
+    dfs(res, track, nums, vis);
+    track.remove(track.size() - 1); vis[i] = false;
+  }
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 7: DECISION TREE & TRIGGER WORDS -->
+<div class="page">
+<div class="ph">
+  <div><h1>BACKTRACKING</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 7 OF 10</div><div class="ptag">DECISION TREE · TRIGGER WORDS · TRADE-OFFS</div></div>
+</div>
+<div class="box">
+<div class="bh" style="padding:3px 6px;font-size:0.76rem">📊 COMPLETE BACKTRACKING PROBLEM LADDER SUMMARY</div>
+<div class="bc" style="padding:4px 6px">
+<table>
+<tr><th>LC #</th><th>Problem</th><th>Pattern</th><th>Time</th><th>Space</th><th>Diff</th></tr>
+<tr><td>78</td><td>Subsets</td><td>Subsets I</td><td>O(N · 2^N)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>90</td><td>Subsets II</td><td>Subsets II Dup Pruning</td><td>O(N · 2^N)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>39</td><td>Combination Sum</td><td>Unlimited Reuse</td><td>O(2^T)</td><td>O(T)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>40</td><td>Combination Sum II</td><td>Single Use + Dup Pruning</td><td>O(2^N)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>46</td><td>Permutations</td><td>Visited Permutations</td><td>O(N · N!)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>47</td><td>Permutations II</td><td>Permutations Dup Pruning</td><td>O(N · N!)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>79</td><td>Word Search</td><td>Grid DFS Backtracking</td><td>O(N · 4^L)</td><td>O(L)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>131</td><td>Palindrome Partitioning</td><td>Substring Partitioning</td><td>O(N · 2^N)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>51</td><td>N-Queens</td><td>Constraint Grid DFS</td><td>O(N!)</td><td>O(N²)</td><td><span class="diff-h">H</span></td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<!-- PAGE 8: PROBLEM LADDER PART 1 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BACKTRACKING</h1><div class="sub">Curated Problem Ladder — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 8 OF 10</div><div class="ptag">PROBLEM LADDER · EASY &amp; MEDIUM</div></div>
+</div>
+<div class="g2">
+<div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#f0fdf4">
+<span class="ptitle" style="color:var(--grn)">LC 78 · Subsets</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Subsets I</div>
+<div><strong>Key Insight:</strong> Snapshot copy at every node.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.62rem">public List&lt;List&lt;Integer&gt;&gt; subsets(int[] nums) {
+  List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+  dfs(res, new ArrayList&lt;&gt;(), nums, 0); return res;
+}
+private void dfs(List&lt;List&lt;Integer&gt;&gt; res, List&lt;Integer&gt; trk, int[] n, int s) {
+  res.add(new ArrayList&lt;&gt;(trk));
+  for (int i = s; i &lt; n.length; i++) {
+    trk.add(n[i]); dfs(res, trk, n, i + 1); trk.remove(trk.size() - 1);
+  }
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 90 · Subsets II</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Subsets II Dup Pruning</div>
+<div><strong>Key Insight:</strong> Sort + `i &gt; start &amp;&amp; nums[i] == nums[i-1]`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.62rem">public List&lt;List&lt;Integer&gt;&gt; subsetsWithDup(int[] nums) {
+  Arrays.sort(nums); List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+  dfs(res, new ArrayList&lt;&gt;(), nums, 0); return res;
+}
+private void dfs(List&lt;List&lt;Integer&gt;&gt; res, List&lt;Integer&gt; trk, int[] n, int s) {
+  res.add(new ArrayList&lt;&gt;(trk));
+  for (int i = s; i &lt; n.length; i++) {
+    if (i &gt; s &amp;&amp; n[i] == n[i - 1]) continue;
+    trk.add(n[i]); dfs(res, trk, n, i + 1); trk.remove(trk.size() - 1);
+  }
+}</pre>
+</div>
+</div>
+</div><div class="prob">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 39 · Combination Sum</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Unlimited Element Reuse</div>
+<div><strong>Key Insight:</strong> Pass `i` to next recursive call.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.62rem">public List&lt;List&lt;Integer&gt;&gt; combinationSum(int[] cand, int target) {
+  List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+  dfs(res, new ArrayList&lt;&gt;(), cand, target, 0); return res;
+}
+private void dfs(List&lt;List&lt;Integer&gt;&gt; res, List&lt;Integer&gt; trk, int[] c, int rem, int s) {
+  if (rem &lt; 0) return;
+  if (rem == 0) { res.add(new ArrayList&lt;&gt;(trk)); return; }
+  for (int i = s; i &lt; c.length; i++) {
+    trk.add(c[i]); dfs(res, trk, c, rem - c[i], i); trk.remove(trk.size() - 1);
+  }
+}</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: PROBLEM LADDER PART 2 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BACKTRACKING</h1><div class="sub">Curated Problem Ladder — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 9 OF 10</div><div class="ptag">PROBLEM LADDER · MEDIUM &amp; HARD</div></div>
+</div>
+<div class="g2">
+<div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 40 · Combination Sum II</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Single Use + Dup Pruning</div>
+<div><strong>Key Insight:</strong> Sort + `i + 1` + skip duplicate.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.60rem">public List&lt;List&lt;Integer&gt;&gt; combinationSum2(int[] cand, int target) {
+  Arrays.sort(cand); List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+  dfs(res, new ArrayList&lt;&gt;(), cand, target, 0); return res;
+}
+private void dfs(List&lt;List&lt;Integer&gt;&gt; res, List&lt;Integer&gt; trk, int[] c, int rem, int s) {
+  if (rem &lt; 0) return;
+  if (rem == 0) { res.add(new ArrayList&lt;&gt;(trk)); return; }
+  for (int i = s; i &lt; c.length; i++) {
+    if (i &gt; s &amp;&amp; c[i] == c[i - 1]) continue;
+    trk.add(c[i]); dfs(res, trk, c, rem - c[i], i + 1); trk.remove(trk.size() - 1);
+  }
+}</pre>
+</div>
+</div>
+</div><div class="prob">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 46 · Permutations</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Visited Boolean Permutations</div>
+<div><strong>Key Insight:</strong> Loop $0..N-1$, skip if `visited[i]`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.60rem">public List&lt;List&lt;Integer&gt;&gt; permute(int[] nums) {
+  List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+  dfs(res, new ArrayList&lt;&gt;(), nums, new boolean[nums.length]); return res;
+}
+private void dfs(List&lt;List&lt;Integer&gt;&gt; res, List&lt;Integer&gt; trk, int[] n, boolean[] vis) {
+  if (trk.size() == n.length) { res.add(new ArrayList&lt;&gt;(trk)); return; }
+  for (int i = 0; i &lt; n.length; i++) {
+    if (vis[i]) continue;
+    vis[i] = true; trk.add(n[i]); dfs(res, trk, n, vis);
+    trk.remove(trk.size() - 1); vis[i] = false;
+  }
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 79 · Word Search</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Grid DFS Backtracking</div>
+<div><strong>Key Insight:</strong> Temp replace `board[r][c] = '#'`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.58rem">private boolean dfs(char[][] b, String w, int r, int c, int idx) {
+  if (idx == w.length()) return true;
+  if (r&lt;0||r&gt;=b.length||c&lt;0||c&gt;=b[0].length||b[r][c] != w.charAt(idx)) return false;
+  char tmp = b[r][c]; b[r][c] = '#';
+  for (int[] d : DIRS) if (dfs(b, w, r + d[0], c + d[1], idx + 1)) return true;
+  b[r][c] = tmp; return false;
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 131 · Palindrome Partitioning</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Substring Partitioning</div>
+<div><strong>Key Insight:</strong> Recurse if `isPalindrome(s, start, i)`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.58rem">private void dfs(List&lt;List&lt;String&gt;&gt; res, List&lt;String&gt; trk, String s, int start) {
+  if (start == s.length()) { res.add(new ArrayList&lt;&gt;(trk)); return; }
+  for (int i = start; i &lt; s.length(); i++) {
+    if (isPal(s, start, i)) {
+      trk.add(s.substring(start, i + 1));
+      dfs(res, trk, s, i + 1);
+      trk.remove(trk.size() - 1);
+    }
+  }
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fee2e2">
+<span class="ptitle" style="color:var(--red)">LC 51 · N-Queens</span>
+<span class="diff-h">HARD</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Constraint Grid DFS</div>
+<div><strong>Key Insight:</strong> Validate row, column, and diagonals.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.58rem">private void dfs(List&lt;List&lt;String&gt;&gt; res, char[][] b, int row, int n) {
+  if (row == n) { res.add(construct(b)); return; }
+  for (int col = 0; col &lt; n; col++) {
+    if (isValid(b, row, col, n)) {
+      b[row][col] = 'Q'; dfs(res, b, row + 1, n); b[row][col] = '.';
+    }
+  }
+}</pre>
+</div>
+</div>
+</div><div class="prob">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 17 · Phone Number Combinations</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Digit Keypad Mapping</div>
+<div><strong>Key Insight:</strong> Map digits to letters string array.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.58rem">private void dfs(List&lt;String&gt; res, StringBuilder sb, String digits, int idx, String[] map) {
+  if (idx == digits.length()) { res.add(sb.toString()); return; }
+  String letters = map[digits.charAt(idx) - '0'];
+  for (char c : letters.toCharArray()) {
+    sb.append(c); dfs(res, sb, digits, idx + 1, map); sb.deleteCharAt(sb.length() - 1);
+  }
+}</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 10: DRY RUN, PROOFS & MASTERY CHEAT SHEET -->
+<div class="page">
+<div class="ph">
+  <div><h1>BACKTRACKING</h1><div class="sub">Dry Run, Proofs &amp; Mastery Cheat Sheet</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 10 OF 10</div><div class="ptag">DRY RUN · PROOFS · MASTERY CHECKLIST</div></div>
+</div>
+<div class="g2" style="margin-bottom:10px">
+<div class="box">
+<div class="bh">🔍 DRY RUN — Subsets ([1, 2])</div>
+<div class="bc">
+<table style="font-size:0.70rem">
+<tr><th>Step</th><th>Track State</th><th>Action</th><th>Snapshot Added to Result</th></tr>
+<tr><td>1</td><td>[]</td><td>`res.add([])`</td><td>`[]`</td></tr>
+<tr><td>2</td><td>[1]</td><td>Add 1, recurse `start=1` -&gt; `res.add([1])`</td><td>`[1]`</td></tr>
+<tr><td>3</td><td>[1, 2]</td><td>Add 2, recurse `start=2` -&gt; `res.add([1, 2])`</td><td>`[1, 2]`</td></tr>
+<tr><td>4</td><td>[1]</td><td>Pop 2 -&gt; Return to level 1</td><td>-</td></tr>
+<tr><td>5</td><td>[]</td><td>Pop 1 -&gt; Loop `i=1` (add 2) -&gt; `res.add([2])`</td><td>`[2]` ✅</td></tr>
+</table>
+</div>
+</div>
+<div class="box grn">
+<div class="bh">📐 MATHEMATICAL PROOF — 2^N SUBSETS DERIVATION</div>
+<div class="bc">
+<div style="font-size:0.76rem">
+<p style="margin-bottom:4px"><strong>Claim:</strong> An array of N distinct elements produces exactly 2^N subsets.</p>
+<p style="margin-bottom:4px"><strong>Proof:</strong> For each element $x_i \in [1..N]$, we have binary choices: INCLUDE x_i or EXCLUDE x_i. Total subsets $= 2 \times 2 \times \dots \times 2 = 2^N$. Snapshot copy takes O(N) time -&gt; <strong>O(N · 2^N) Time!</strong></p>
+</div>
+</div>
+</div>
+</div><div class="g2">
+<div class="box grn">
+<div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+<div class="bc">
+<div class="g2" style="gap:6px">
+<ul style="font-size:0.75rem;list-style:none;padding:0">
+<li>☐ Write Subsets I in 3m</li>
+<li>☐ Code Subsets II duplicate pruning</li>
+<li>☐ Write Combination Sum (element reuse `i`)</li>
+<li>☐ Code Permutations with `boolean[] visited`</li>
+</ul>
+<ul style="font-size:0.75rem;list-style:none;padding:0">
+<li>☐ Write Permutations II duplicate check</li>
+<li>☐ Code Word Search 2D Grid DFS</li>
+<li>☐ Write N-Queens board placement DFS</li>
+<li>☐ Prove why Subsets is O(N · 2^N)</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="box pur">
+<div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+<div class="bc">
+<div class="aha" style="margin-bottom:4px;padding:5px">
+<div class="aha-t">Rule 1 — Always Make a Copy for Result</div>
+        Always add a NEW copy to result list (`res.add(new ArrayList&lt;&gt;(track))`), NOT the original reference `res.add(track)`!
+      </div>
+<div class="aha" style="padding:5px">
+<div class="aha-t">Rule 2 — Always Undo the Last Element</div>
+        After the recursive call returns, immediately undo the choice: `track.remove(track.size() - 1)`!
+      </div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

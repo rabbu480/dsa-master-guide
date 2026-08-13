@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 2 - Section 4: Top Problems & One-Page Glance Sheets</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+    :root { --primary: #1e3a8a; --emerald: #059669; --text-dark: #0f172a; --bg-light: #f8fafc; --border-color: #cbd5e1; }
+    body { font-family: 'Inter', sans-serif; background-color: #cbd5e1; color: var(--text-dark); margin: 0; padding: 20px; font-size: 13px; line-height: 1.5; }
+    .page { background: white; max-width: 1100px; margin: 0 auto 30px auto; padding: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 8px; page-break-after: always; }
+    .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--primary); padding-bottom: 12px; margin-bottom: 25px; background: #f1f5f9; padding: 15px 20px; border-radius: 6px; }
+    .header-top h1 { margin: 0; font-size: 1.8rem; color: var(--primary); font-weight: 900; text-transform: uppercase; }
+    .badge { background: var(--emerald); color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; }
+    .section-box { border: 2px solid var(--primary); border-radius: 8px; margin-bottom: 25px; overflow: hidden; background: white; page-break-inside: avoid; }
+    .section-header { background: var(--primary); color: white; padding: 10px 18px; font-size: 1.1rem; font-weight: 800; }
+    .section-content { padding: 18px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 10px 0; }
+    table th, table td { border: 1px solid var(--border-color); padding: 8px 12px; text-align: left; }
+    table th { background: #f1f5f9; font-weight: 800; }
+    @media print { body { background: white; padding: 0; } .page { box-shadow: none; border: none; margin: 0; padding: 15px 0; max-width: 100%; } }
+</style>
+</head>
+<body>
+
+<div class="page">
+    <div class="header-top">
+        <div>
+            <h1>Book 2 — Section 4: Topic Glance Sheets</h1>
+            <div style="font-size: 0.95rem; color: #475569; font-weight: 600;">Rapid Revision Glance Sheets & Cram Sequence</div>
+        </div>
+        <span class="badge">Section 4</span>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">Topic Glance: Graph Algorithms</div>
+        <div class="section-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Use Case</th>
+                        <th>Time Complexity</th>
+                        <th>Space Complexity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>DFS</td><td>Path finding, Connectivity, Cycle Detection</td><td>O(V + E)</td><td>O(V)</td></tr>
+                    <tr><td>BFS</td><td>Unweighted Shortest Path, Level Order</td><td>O(V + E)</td><td>O(V)</td></tr>
+                    <tr><td>Topological Sort</td><td>Prerequisites, DAG Ordering</td><td>O(V + E)</td><td>O(V)</td></tr>
+                    <tr><td>Union-Find</td><td>Dynamic Connected Components</td><td>O(α(N))</td><td>O(N)</td></tr>
+                    <tr><td>Dijkstra</td><td>Weighted Shortest Path (non-negative)</td><td>O((V+E) log V)</td><td>O(V+E)</td></tr>
+                    <tr><td>Bellman-Ford</td><td>Negative Weight Edges & Cycle Detection</td><td>O(V × E)</td><td>O(V)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

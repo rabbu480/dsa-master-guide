@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Topic 18: Math &amp; Geometry Masterclass — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 14px; }
+.ph h1 { font-size: 1.8rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.88rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.75rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; }
+.bh  { background: var(--pri); color: white; padding: 6px 12px;
+  font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 18px; height: 18px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 10px 12px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 6px 12px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.75rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.95rem; }
+.psub   { color: var(--sub); font-size: 0.8rem; }
+.prow-body { display: flex; }
+.pc { padding: 8px 10px; font-size: 0.78rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.72rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; }
+.prob-head { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.75rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.70rem; line-height: 1.4; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.76rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+th, td { border: 1px solid var(--bdr); padding: 5px 7px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.badge-b { background: #dbeafe; color: #1e40af; }
+.badge-g { background: #dcfce7; color: #166534; }
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.tip  { background: #f0fdf4; border-left: 4px solid var(--grn); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 8px 10px; margin-top: 6px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.82rem; margin-bottom: 3px; }
+
+.dt-wrap { font-size: 0.76rem; }
+.dt-root { background: var(--pri); color: white; padding: 5px 10px; border-radius: 5px; text-align: center; font-weight: 700; margin-bottom: 8px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 5px 7px; font-weight: 600; color: #1e40af; font-size: 0.72rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 5px 7px; color: #065f46; font-weight: 700; font-size: 0.72rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.75rem; padding: 4px 3px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 6px 10px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.85; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- PAGE 1: FOUNDATION & WHY -->
+<div class="page">
+<div class="ph">
+  <div><h1>MATH &amp; GEOMETRY</h1><div class="sub">FAANG Master Guide — Java Edition</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 1 OF 10</div><div class="ptag">FOUNDATION · 2D MATRIX TRANSFORMS · BINARY EXPONENTIATION</div></div>
+</div>
+
+<div class="g3" style="margin-bottom:12px">
+  <div class="box pur">
+    <div class="bh">💡 WHY MATH &amp; GEOMETRY?</div>
+    <div class="bc">
+      <p style="margin-bottom:6px">Matrix transformations (rotations, spirals, zeroing) and numerical algorithms (binary exponentiation, digit manipulation) rely on **pure mathematical symmetries** instead of complex data structures!</p>
+      <div class="aha">
+        <div class="aha-t">💡 THE 90° ROTATION AHA</div>
+        Rotating an $N \times N$ matrix 90° clockwise in-place is mathematically equivalent to:
+        1. **Transpose Matrix** (`swap(matrix[i][j], matrix[j][i])`)
+        2. **Reverse Each Row** (`swap(matrix[i][l], matrix[i][r])`)!
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bh"><span class="n">1</span> 3 CORE GEOMETRIC PATTERNS</div>
+    <div class="bc">
+      <ul style="margin-bottom:8px;padding-left:16px;font-size:0.78rem">
+        <li><strong>Matrix Transpose &amp; Reverse:</strong> 90° clockwise rotation in $O(N^2)$ time and $O(1)$ space.</li>
+        <li><strong>4-Boundary Spiral Scan:</strong> Shrink `top`, `bottom`, `left`, `right` boundaries after scanning each edge.</li>
+        <li><strong>First Row/Col State Markers:</strong> Mark zeroes in row 0 and col 0 for $O(1)$ auxiliary space in Set Matrix Zeroes!</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box sky">
+    <div class="bh"><span class="n">2</span> VISUALIZING MATRIX ROTATION</div>
+    <div class="bc">
+      <div style="font-weight:700;color:var(--pri);margin-bottom:4px">Original -> Transpose -> Reversed Rows:</div>
+<pre>Original:     Transpose:    Reversed Rows (90°):
+[1 2]   ───>  [1 3]   ───>  [3 1]
+[3 4]         [2 4]         [4 2]</pre>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">📚 PREREQUISITES &amp; COMPLEXITY REASONING</div>
+    <div class="bc">
+      <table style="font-size:0.76rem">
+        <tr><th>Algorithm / Operation</th><th>Time Complexity</th><th>Auxiliary Space</th></tr>
+        <tr><td>Rotate Image (Transpose + Reverse)</td><td><strong>O(N^2)</strong></td><td><strong>O(1) in-place</strong></td></tr>
+        <tr><td>Spiral Matrix (4 Boundaries)</td><td><strong>O(M · N)</strong></td><td><strong>O(1) space</strong></td></tr>
+        <tr><td>Set Matrix Zeroes (Row/Col 0 Markers)</td><td><strong>O(M · N)</strong></td><td><strong>O(1) space</strong></td></tr>
+        <tr><td>Pow(x, n) (Binary Exponentiation)</td><td><strong>O(log N)</strong></td><td><strong>O(log N) stack</strong></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box amb">
+    <div class="bh">⚡ CLUES THAT SCREAM MATH &amp; GEOMETRY</div>
+    <div class="bc">
+      <p style="font-size:0.8rem">1. <em>"Rotate 2D matrix 90 degrees in-place"</em> $\rightarrow$ Transpose + Reverse Rows</p>
+      <p style="font-size:0.8rem">2. <em>"Traverse 2D matrix in spiral order"</em> $\rightarrow$ 4 Boundary Pointers (`top`, `bot`, `left`, `right`)</p>
+      <p style="font-size:0.8rem">3. <em>"Compute x^n in O(log n) time"</em> $\rightarrow$ Binary Exponentiation (`n / 2` recursive squarings)</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 2: API & TOOLKIT -->
+<div class="page">
+<div class="ph">
+  <div><h1>MATH &amp; GEOMETRY</h1><div class="sub">Java Matrix &amp; Number Toolkit</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 2 OF 10</div><div class="ptag">TRANSPOSE · REVERSE · BINARY EXPONENTIATION</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:12px">
+  <div class="box">
+    <div class="bh"><span class="n">1</span> MATRIX TRANSPOSE HELPER</div>
+    <div class="bc">
+<pre>public static void transpose(int[][] matrix) {
+  int n = matrix.length;
+  for (int i = 0; i < n; i++) {
+    for (int j = i + 1; j < n; j++) {
+      int temp = matrix[i][j];
+      matrix[i][j] = matrix[j][i];
+      matrix[j][i] = temp;
+    }
+  }
+}</pre>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh"><span class="n">2</span> BINARY EXPONENTIATION (`Pow(x, n)`)</div>
+    <div class="bc">
+<pre>public double myPow(double x, int n) {
+  long N = n;
+  if (N < 0) { x = 1 / x; N = -N; }
+  return fastPow(x, N);
+}
+private double fastPow(double x, long n) {
+  if (n == 0) return 1.0;
+  double half = fastPow(x, n / 2);
+  if (n % 2 == 0) return half * half;
+  else return half * half * x;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 3: CORE PATTERNS (ROTATE IMAGE & SPIRAL MATRIX) -->
+<div class="page">
+<div class="ph">
+  <div><h1>MATH &amp; GEOMETRY</h1><div class="sub">Core Patterns — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 3 OF 10</div><div class="ptag">ROTATE IMAGE · SPIRAL MATRIX</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 1</div>
+    <div class="ptitle">ROTATE IMAGE (Transpose + Row Reversal)</div>
+    <div class="psub">e.g. Rotate Image (LC 48)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.78rem">Rotate $N \times N$ 2D matrix 90° clockwise in-place ($O(1)$ space).</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 48</div>
+<pre>public void rotate(int[][] matrix) {
+  int n = matrix.length;
+  // Step 1: Transpose matrix (swap matrix[i][j] with matrix[j][i])
+  for (int i = 0; i < n; i++) {
+    for (int j = i + 1; j < n; j++) {
+      int tmp = matrix[i][j]; matrix[i][j] = matrix[j][i]; matrix[j][i] = tmp;
+    }
+  }
+  // Step 2: Reverse each row
+  for (int i = 0; i < n; i++) {
+    for (int l = 0, r = n - 1; l < r; l++, r--) {
+      int tmp = matrix[i][l]; matrix[i][l] = matrix[i][r]; matrix[i][r] = tmp;
+    }
+  }
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 2</div>
+    <div class="ptitle">SPIRAL MATRIX (4-Boundary Shrinking Loop)</div>
+    <div class="psub">e.g. Spiral Matrix (LC 54)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Boundary Shrink Logic</div>
+      <div style="font-size:0.78rem">
+        Traverse top row, right col, bottom row, left col. Increment `top++`, `left++`, decrement `bot--`, `right--`!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 54</div>
+<pre>public List&lt;Integer&gt; spiralOrder(int[][] matrix) {
+  List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+  int top = 0, bot = matrix.length - 1, left = 0, right = matrix[0].length - 1;
+  while (top <= bot && left <= right) {
+    for (int c = left; c <= right; c++) res.add(matrix[top][c]); top++;
+    for (int r = top; r <= bot; r++) res.add(matrix[r][right]); right--;
+    if (top <= bot) { for (int c = right; c >= left; c--) res.add(matrix[bot][c]); bot--; }
+    if (left <= right) { for (int r = bot; r >= top; r--) res.add(matrix[r][left]); left++; }
+  }
+  return res;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 4: CORE PATTERNS (SET MATRIX ZEROES & HAPPY NUMBER) -->
+<div class="page">
+<div class="ph">
+  <div><h1>MATH &amp; GEOMETRY</h1><div class="sub">Core Patterns — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 4 OF 10</div><div class="ptag">SET MATRIX ZEROES · HAPPY NUMBER</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 3</div>
+    <div class="ptitle">SET MATRIX ZEROES (First Row/Col Marker O(1) Space)</div>
+    <div class="psub">e.g. Set Matrix Zeroes (LC 73)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">In-Place Marker Trick</div>
+      <div style="font-size:0.78rem">
+        Use `matrix[r][0]` and `matrix[0][c]` as flag markers! Track `rowZero` and `colZero` booleans for the first row and column.
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 73</div>
+<pre>public void setZeroes(int[][] matrix) {
+  int rows = matrix.length, cols = matrix[0].length;
+  boolean rowZero = false, colZero = false;
+  for (int r = 0; r < rows; r++) if (matrix[r][0] == 0) colZero = true;
+  for (int c = 0; c < cols; c++) if (matrix[0][c] == 0) rowZero = true;
+  for (int r = 1; r < rows; r++)
+    for (int c = 1; c < cols; c++)
+      if (matrix[r][c] == 0) { matrix[r][0] = 0; matrix[0][c] = 0; }
+  for (int r = 1; r < rows; r++)
+    for (int c = 1; c < cols; c++)
+      if (matrix[r][0] == 0 || matrix[0][c] == 0) matrix[r][c] = 0;
+  if (colZero) for (int r = 0; r < rows; r++) matrix[r][0] = 0;
+  if (rowZero) for (int c = 0; c < cols; c++) matrix[0][c] = 0;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 4</div>
+    <div class="ptitle">HAPPY NUMBER (Floyd's Fast &amp; Slow Digits Cycle Detection)</div>
+    <div class="psub">e.g. Happy Number (LC 202)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Fast/Slow Digit Cycle</div>
+      <div style="font-size:0.78rem">
+        Sum of squared digits forms a sequence. Treat digit transformation as a linked list: `slow` steps 1x, `fast` steps 2x. Cycle at 1 = Happy!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 202</div>
+<pre>public boolean isHappy(int n) {
+  int slow = n, fast = sumSquare(n);
+  while (fast != 1 && slow != fast) {
+    slow = sumSquare(slow);
+    fast = sumSquare(sumSquare(fast));
+  }
+  return fast == 1;
+}
+private int sumSquare(int n) {
+  int sum = 0;
+  while (n > 0) { int d = n % 10; sum += d * d; n /= 10; }
+  return sum;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 5: CORE PATTERNS (PLUS ONE & MULTIPLY STRINGS) -->
+<div class="page">
+<div class="ph">
+  <div><h1>MATH &amp; GEOMETRY</h1><div class="sub">Core Patterns — Part 3</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 5 OF 10</div><div class="ptag">PLUS ONE · MULTIPLY STRINGS</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 5</div>
+    <div class="ptitle">PLUS ONE (Backwards Carry Propagation)</div>
+    <div class="psub">e.g. Plus One (LC 66)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Carry Propagation</div>
+      <div style="font-size:0.78rem">
+        Scan backwards. If digit $< 9$, increment and return! If all digits were 9 (e.g. 999), return array `[1, 0, 0, 0]`.
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 66</div>
+<pre>public int[] plusOne(int[] digits) {
+  for (int i = digits.length - 1; i >= 0; i--) {
+    if (digits[i] < 9) { digits[i]++; return digits; }
+    digits[i] = 0;
+  }
+  int[] res = new int[digits.length + 1];
+  res[0] = 1;
+  return res;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 6</div>
+    <div class="ptitle">MULTIPLY STRINGS (Position Index Product Array)</div>
+    <div class="psub">e.g. Multiply Strings (LC 43)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Position Math (`i + j + 1`)</div>
+      <div style="font-size:0.78rem">
+        Product of `num1[i]` and `num2[j]` maps to positions `p1 = i + j` and `p2 = i + j + 1` in result array of size $M + N$.
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 43</div>
+<pre>public String multiply(String num1, String num2) {
+  int m = num1.length(), n = num2.length();
+  int[] pos = new int[m + n];
+  for (int i = m - 1; i >= 0; i--) {
+    for (int j = n - 1; j >= 0; j--) {
+      int mul = (num1.charAt(i) - '0') * (num2.charAt(j) - '0');
+      int p1 = i + j, p2 = i + j + 1;
+      int sum = mul + pos[p2];
+      pos[p1] += sum / 10;
+      pos[p2] = sum % 10;
+    }
+  }
+  StringBuilder sb = new StringBuilder();
+  for (int p : pos) if (!(sb.length() == 0 && p == 0)) sb.append(p);
+  return sb.length() == 0 ? "0" : sb.toString();
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 6: DETECT SQUARES & GEOMETRY HASHMAP -->
+<div class="page">
+<div class="ph">
+  <div><h1>MATH &amp; GEOMETRY</h1><div class="sub">Geometric Coordinate Hashing</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 6 OF 10</div><div class="ptag">DETECT SQUARES · COORDINATE COUNTING</div></div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 7</div>
+    <div class="ptitle">DETECT SQUARES (Diagonal Point Matching)</div>
+    <div class="psub">e.g. Detect Squares (LC 2013)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Diagonal Alignment Match</div>
+      <div style="font-size:0.78rem">
+        For query point `(px, py)`, iterate over recorded points `(x, y)`. If `|x - px| == |y - py| > 0` (diagonal!), count matches of `(px, y)` and `(x, py)`!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 2013</div>
+<pre>class DetectSquares {
+  private List&lt;int[]&gt; points = new ArrayList&lt;&gt;();
+  private Map&lt;String, Integer&gt; count = new HashMap&lt;&gt;();
+
+  public void add(int[] point) {
+    points.add(point);
+    String key = point[0] + "@" + point[1];
+    count.put(key, count.getOrDefault(key, 0) + 1);
+  }
+
+  public int count(int[] point) {
+    int px = point[0], py = point[1], ans = 0;
+    for (int[] pt : points) {
+      int x = pt[0], y = pt[1];
+      if (Math.abs(px - x) != Math.abs(py - y) || px == x || py == y) continue;
+      ans += count.getOrDefault(px + "@" + y, 0) * count.getOrDefault(x + "@" + py, 0);
+    }
+    return ans;
+  }
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 7: DECISION TREE & TRIGGER WORDS -->
+<div class="page">
+<div class="ph">
+  <div><h1>MATH &amp; GEOMETRY</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 7 OF 10</div><div class="ptag">DECISION TREE · TRIGGER WORDS · TRADE-OFFS</div></div>
+</div>
+
+<div class="g2">
+  <div class="box">
+    <div class="bh">MATH &amp; GEOMETRY — WHICH PATTERN TO USE?</div>
+    <div class="bc dt-wrap">
+      <div class="dt-root">Start: What is the input type &amp; operation?</div>
+      <div class="dt-grid">
+        <div class="dt-row">
+          <div class="dt-q">🔄 Rotate 2D matrix 90° clockwise</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Transpose + Reverse<br><span style="font-weight:400;font-size:0.7rem">`swap(i,j)` then reverse rows</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🌀 Spiral traversal of matrix</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">4 Boundary Pointers<br><span style="font-weight:400;font-size:0.7rem">Shrink `top`, `bot`, `left`, `right`</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">⚡ Compute x^n in O(log n) time</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Binary Exponentiation<br><span style="font-weight:400;font-size:0.7rem">`fastPow(x, n / 2)`</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">📐 Count axis-aligned squares</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Diagonal Point Match<br><span style="font-weight:400;font-size:0.7rem">`|x - px| == |y - py| > 0`</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div class="box pur">
+      <div class="bh">🎯 TRIGGER WORDS DIRECTORY</div>
+      <div class="bc">
+        <table>
+          <tr><th>Trigger Word</th><th>Variant</th><th>Action</th></tr>
+          <tr><td>"Rotate matrix 90 deg"</td><td>Transpose + Reverse</td><td>`swap(i, j)`, reverse rows</td></tr>
+          <tr><td>"Spiral matrix"</td><td>4 Boundaries</td><td>Loop 4 edges, shrink bounds</td></tr>
+          <tr><td>"Set matrix zeroes O(1) space"</td><td>First Row/Col Markers</td><td>Use row 0 &amp; col 0 as flags</td></tr>
+          <tr><td>"Pow(x, n) fast"</td><td>Binary Exponentiation</td><td>Recurse `n / 2` squarings</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="box amb">
+      <div class="bh">💼 INTERVIEW TRADE-OFFS &amp; FOLLOW-UPS</div>
+      <div class="bc">
+        <table>
+          <tr><th>Interviewer Asks</th><th>Your Answer</th></tr>
+          <tr><td>How to rotate 90° COUNTER-clockwise?</td><td>Either Transpose then Reverse Columns, OR Reverse Rows first then Transpose!</td></tr>
+          <tr><td>How to handle `n = -2147483648` in `Pow(x, n)`?</td><td>Cast `n` to `long N = n` to prevent integer overflow when taking `-n`!</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 8: PROBLEM LADDER PART 1 (5 PROBLEMS) -->
+<div class="page">
+<div class="ph">
+  <div><h1>MATH &amp; GEOMETRY</h1><div class="sub">Problem Ladder — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 8 OF 10</div><div class="ptag">PROBLEM LADDER — EASY · MEDIUM</div></div>
+</div>
+
+<div class="g2" style="gap:10px">
+<div>
+  <div style="background:var(--grn);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟢 EASY &amp; MEDIUM — Array Math &amp; Rotations</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 66 · Plus One</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Backwards Carry</div>
+        <div><strong>Key Insight:</strong> Increment and return if digit $< 9$.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public int[] plusOne(int[] digits) {
+  for (int i = digits.length - 1; i >= 0; i--) {
+    if (digits[i] < 9) { digits[i]++; return digits; }
+    digits[i] = 0;
+  }
+  int[] res = new int[digits.length + 1]; res[0] = 1;
+  return res;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 48 · Rotate Image</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Transpose + Reverse</div>
+        <div><strong>Key Insight:</strong> `swap(i,j)` then reverse each row.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public void rotate(int[][] m) {
+  int n = m.length;
+  for (int i = 0; i < n; i++)
+    for (int j = i + 1; j < n; j++) { int t = m[i][j]; m[i][j] = m[j][i]; m[j][i] = t; }
+  for (int i = 0; i < n; i++)
+    for (int l = 0, r = n - 1; l < r; l++, r--) { int t = m[i][l]; m[i][l] = m[i][r]; m[i][r] = t; }
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 54 · Spiral Matrix</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> 4-Boundary Loop</div>
+        <div><strong>Key Insight:</strong> Shrink `top`, `bot`, `left`, `right`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public List&lt;Integer&gt; spiralOrder(int[][] m) {
+  List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+  int t = 0, b = m.length - 1, l = 0, r = m[0].length - 1;
+  while (t <= b && l <= r) {
+    for (int c = l; c <= r; c++) res.add(m[t][c]); t++;
+    for (int row = t; row <= b; row++) res.add(m[row][r]); r--;
+    if (t <= b) { for (int c = r; c >= l; c--) res.add(m[b][c]); b--; }
+    if (l <= r) { for (int row = b; row >= t; row--) res.add(m[row][l]); l++; }
+  }
+  return res;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — Matrix Zeroes &amp; Pow(x,n)</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 73 · Set Matrix Zeroes</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> First Row/Col Marker</div>
+        <div><strong>Key Insight:</strong> Use row 0 &amp; col 0 as flag storage.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.60rem">public void setZeroes(int[][] m) {
+  int R = m.length, C = m[0].length; boolean r0 = false, c0 = false;
+  for (int r = 0; r < R; r++) if (m[r][0] == 0) c0 = true;
+  for (int c = 0; c < C; c++) if (m[0][c] == 0) r0 = true;
+  for (int r = 1; r < R; r++)
+    for (int c = 1; c < C; c++)
+      if (m[r][c] == 0) { m[r][0] = 0; m[0][c] = 0; }
+  for (int r = 1; r < R; r++)
+    for (int c = 1; c < C; c++)
+      if (m[r][0] == 0 || m[0][c] == 0) m[r][c] = 0;
+  if (c0) for (int r = 0; r < R; r++) m[r][0] = 0;
+  if (r0) for (int c = 0; c < C; c++) m[0][c] = 0;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 50 · Pow(x, n)</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Binary Exponentiation</div>
+        <div><strong>Key Insight:</strong> `fastPow(x, n/2)`. Cast `long N = n`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.60rem">public double myPow(double x, int n) {
+  long N = n; if (N < 0) { x = 1 / x; N = -N; }
+  return fastPow(x, N);
+}
+private double fastPow(double x, long n) {
+  if (n == 0) return 1.0;
+  double half = fastPow(x, n / 2);
+  return (n % 2 == 0) ? half * half : half * half * x;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: PROBLEM LADDER PART 2 (3 PROBLEMS + SUMMARY TABLE) -->
+<div class="page">
+<div class="ph">
+  <div><h1>MATH &amp; GEOMETRY</h1><div class="sub">Problem Ladder — Part 2 &amp; Summary</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 9 OF 10</div><div class="ptag">PROBLEM LADDER — MEDIUM · SUMMARY</div></div>
+</div>
+
+<div class="g2" style="gap:10px;margin-bottom:10px">
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — String Multiplication</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 43 · Multiply Strings</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Product Position Map</div>
+        <div><strong>Key Insight:</strong> `num1[i] * num2[j]` maps to `i+j` and `i+j+1`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public String multiply(String num1, String num2) {
+  int m = num1.length(), n = num2.length();
+  int[] pos = new int[m + n];
+  for (int i = m - 1; i >= 0; i--) {
+    for (int j = n - 1; j >= 0; j--) {
+      int mul = (num1.charAt(i) - '0') * (num2.charAt(j) - '0');
+      int p1 = i + j, p2 = i + j + 1, sum = mul + pos[p2];
+      pos[p1] += sum / 10; pos[p2] = sum % 10;
+    }
+  }
+  StringBuilder sb = new StringBuilder();
+  for (int p : pos) if (!(sb.length() == 0 && p == 0)) sb.append(p);
+  return sb.length() == 0 ? "0" : sb.toString();
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — Detect Squares Geometry</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 2013 · Detect Squares</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Diagonal Match</div>
+        <div><strong>Key Insight:</strong> Match `|px - x| == |py - y| > 0`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public int count(int[] point) {
+  int px = point[0], py = point[1], ans = 0;
+  for (int[] pt : points) {
+    int x = pt[0], y = pt[1];
+    if (Math.abs(px - x) != Math.abs(py - y) || px == x || py == y) continue;
+    ans += count.getOrDefault(px + "@" + y, 0) * count.getOrDefault(x + "@" + py, 0);
+  }
+  return ans;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Master Summary Table -->
+<div class="box">
+  <div class="bh" style="padding:3px 6px;font-size:0.76rem">📊 COMPLETE MATH &amp; GEOMETRY PROBLEM LADDER SUMMARY</div>
+  <div class="bc" style="padding:4px 6px">
+    <table>
+      <tr><th>LC #</th><th>Problem</th><th>Pattern</th><th>Time</th><th>Space</th><th>Diff</th></tr>
+      <tr><td>66</td><td>Plus One</td><td>Backwards Carry</td><td>O(N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>48</td><td>Rotate Image</td><td>Transpose + Reverse Rows</td><td>O(N^2)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>54</td><td>Spiral Matrix</td><td>4-Boundary Shrinking Loop</td><td>O(M · N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>73</td><td>Set Matrix Zeroes</td><td>First Row/Col Markers</td><td>O(M · N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>202</td><td>Happy Number</td><td>Floyd's Fast/Slow Digits</td><td>O(log N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>50</td><td>Pow(x, n)</td><td>Binary Exponentiation</td><td>O(log N)</td><td>O(log N)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>43</td><td>Multiply Strings</td><td>Product Position Map</td><td>O(M · N)</td><td>O(M + N)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>2013</td><td>Detect Squares</td><td>Diagonal Point Match</td><td>O(N)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 10: DRY RUN, MATH PROOFS & CHEAT SHEET -->
+<div class="page">
+<div class="ph">
+  <div><h1>MATH &amp; GEOMETRY</h1><div class="sub">Dry Run, Math Proofs &amp; Cheat Sheet</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 10 OF 10</div><div class="ptag">DRY RUN · PROOFS · CHEAT SHEET</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:10px">
+  <div class="box">
+    <div class="bh">🔍 DRY RUN — Rotate Image 90° Clockwise</div>
+    <div class="bc">
+      <table style="font-size:0.70rem">
+        <tr><th>Step</th><th>Input State</th><th>Operation</th><th>Output State</th></tr>
+        <tr><td>1</td><td>`[[1,2],[3,4]]`</td><td>Transpose `swap(matrix[0][1], matrix[1][0])`</td><td>`[[1,3],[2,4]]`</td></tr>
+        <tr><td>2</td><td>`[[1,3],[2,4]]`</td><td>Reverse row 0: `[1, 3] -> [3, 1]`</td><td>`[[3,1],[2,4]]`</td></tr>
+        <tr><td>3</td><td>`[[3,1],[2,4]]`</td><td>Reverse row 1: `[2, 4] -> [4, 2]`</td><td>`[[3,1],[4,2]]` ✅</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh">📐 MATHEMATICAL PROOF — 90° CLOCKWISE MATRIX ROTATION</div>
+    <div class="bc">
+      <div style="font-size:0.76rem">
+        <p style="margin-bottom:4px"><strong>Claim:</strong> Transposing a matrix and reversing each row rotates the matrix 90° clockwise.</p>
+        <p style="margin-bottom:4px"><strong>Proof:</strong> Transpose maps element $(r, c) \rightarrow (c, r)$. Reversing rows maps element $(c, r) \rightarrow (c, N - 1 - r)$. Under 90° clockwise rotation, original coordinate $(r, c)$ moves to $(c, N - 1 - r) \rightarrow$ <strong>Exact Mathematical Identity!</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+    <div class="bc">
+      <div class="g2" style="gap:6px">
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Rotate matrix 90° in-place with Transpose + Reverse</li>
+          <li>☐ Code Spiral Matrix 4-boundary loop</li>
+          <li>☐ Set Matrix Zeroes in $O(1)$ space with row/col 0 flags</li>
+          <li>☐ Code Pow(x, n) via binary exponentiation</li>
+        </ul>
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Write Happy Number with Floyd's fast/slow digits</li>
+          <li>☐ Code Plus One backwards carry propagation</li>
+          <li>☐ Write Multiply Strings position index mapping</li>
+          <li>☐ Prove why Transpose + Reverse = 90° Rotation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+    <div class="bc">
+      <div class="aha" style="margin-bottom:4px;padding:5px">
+        <div class="aha-t">Rule 1 — Cast Negative Powers to Long</div>
+        In `Pow(x, n)`, if $n = -2147483648$, taking `-n` causes 32-bit signed integer overflow! Cast to `long N = n` before negation!
+      </div>
+      <div class="aha" style="padding:5px">
+        <div class="aha-t">Rule 2 — Guard Extra Loops in Spiral Matrix</div>
+        In Spiral Matrix, check `if (top <= bot)` before scanning bottom row and `if (left <= right)` before scanning left column to prevent duplicate row scans on odd dimensions!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

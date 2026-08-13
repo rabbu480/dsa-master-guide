@@ -1,0 +1,1279 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 07: Stack Masterclass (Visual FAANG Edition)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#ffffff',
+            primaryTextColor: '#0f172a',
+            primaryBorderColor: '#2563eb',
+            lineColor: '#64748b',
+            fontFamily: 'Inter'
+        }
+    });
+</script>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+    }
+
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 11.8px;
+        line-height: 1.4;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 8px 16px;
+        display: flex;
+        
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand { font-weight: 900; font-size: 1rem; color: #38bdf8; }
+    .top-nav .nav-controls { display: flex; gap: 4px; flex-wrap: wrap; }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+
+    /* Sticky Sidebar Layout */
+    .app-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+
+    .toc-title { font-weight: 900; font-size: 0.85rem; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+
+    .main-content { min-width: 0; }
+
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 20px 24px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+        
+        display: flex;
+        flex-direction: column;
+        
+    }
+    [data-theme="dark"] .page { background: #1e293b; color: #f8fafc; }
+
+    /* Header Top */
+    .header-top {
+        display: flex;
+        
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 6px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top { background: #0f172a; border-color: #38bdf8; border-left-color: #38bdf8; }
+    .header-title-group { display: flex; align-items: center; gap: 8px; }
+    .header-top h1 { margin: 0; font-size: 1.15rem; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+    .header-top .page-num { background: #1e3a8a; color: white; padding: 2px 8px; border-radius: 14px; font-weight: 800; font-size: 0.72rem; }
+
+    /* Goal Badge Box */
+    .goal-badge {
+        border: 2px dashed #3b82f6;
+        background: #eff6ff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: #1e40af;
+        margin-bottom: 6px;
+    }
+
+    .cross-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #e0e7ff;
+        color: #3730a3;
+        border: 1px solid #c7d2fe;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-decoration: none;
+        margin-bottom: 4px;
+    }
+
+    /* Section Box */
+    .section-box {
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        background: white;
+        border: 2px solid #3b82f6;
+        width: 100%;
+    }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+    .section-header { padding: 4px 8px; font-weight: 800; font-size: 0.8rem; color: white; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+    .section-header .num { background: white; color: #0f172a; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 900; }
+    .section-content { padding: 6px 8px; font-size: 0.76rem; }
+
+    /* Color Themes */
+    .box-blue { border-color: #2563eb !important; } .box-blue .section-header { background: #2563eb !important; }
+    .box-green { border-color: #22c55e !important; } .box-green .section-header { background: #22c55e !important; }
+    .box-purple { border-color: #8b5cf6 !important; } .box-purple .section-header { background: #8b5cf6 !important; }
+    .box-red { border-color: #ef4444 !important; } .box-red .section-header { background: #ef4444 !important; }
+    .box-orange { border-color: #f97316 !important; } .box-orange .section-header { background: #f97316 !important; }
+    .box-teal { border-color: #0d9488 !important; } .box-teal .section-header { background: #0d9488 !important; }
+    .box-indigo { border-color: #6366f1 !important; } .box-indigo .section-header { background: #6366f1 !important; }
+    .box-amber { border-color: #d97706 !important; } .box-amber .section-header { background: #d97706 !important; }
+
+    /* Problem Split Grid */
+    .problem-split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+    .problem-info { display: flex; flex-direction: column; gap: 3px; }
+    .problem-code { display: flex; flex-direction: column; }
+
+    .meta-card { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 3px 6px; border-radius: 4px; display: flex;  align-items: center; font-weight: 700; font-size: 0.7rem; }
+    [data-theme="dark"] .meta-card { background: #0f172a; border-color: #334155; }
+    .badge-easy { background: #10b981; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-medium { background: #f59e0b; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-hard { background: #ef4444; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .company-tag { background: #1e3a8a; color: white; padding: 1px 4px; border-radius: 3px; font-size: 0.65rem; }
+
+    .flowchart-box { background: #eff6ff; border: 1px solid #93c5fd; border-left: 3px solid #2563eb; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: 700; color: #1e40af; }
+    .whynot-box { background: #fff7ed; border: 1px solid #fdba74; border-left: 3px solid #f97316; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; color: #9a3412; }
+    .why-var-box { background: #f0fdf4; border: 1px solid #86efac; border-left: 3px solid #22c55e; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; color: #15803d; }
+    .draw-exercise-box { background: #faf5ff; border: 1px dashed #c084fc; border-left: 3px solid #9333ea; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; color: #6b21a8; }
+
+    /* Push / Pop Animation Box */
+    .stack-viz-box {
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        padding: 4px 6px;
+        margin: 3px 0;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.68rem;
+        line-height: 1.35;
+    }
+    .stack-state-title { font-weight: 800; color: #1e3a8a; font-family: 'Inter', sans-serif; }
+    [data-theme="dark"] .stack-state-title { color: #38bdf8; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    pre { background: #f8fafc; color: #0f172a; padding: 6px 8px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.71rem; line-height: 1.32; margin: 0; white-space: pre-wrap !important; word-break: break-word; border: 1px solid #cbd5e1; }
+    [data-theme="dark"] pre { background: #0f172a; color: #f8fafc; border-color: #334155; }
+    code { font-family: 'Fira Code', monospace; background: #f1f5f9; color: #0f172a; padding: 1px 3px; border-radius: 3px; font-size: 0.74rem; border: 1px solid #cbd5e1; }
+
+    .aha-box { background: #fefce8; border: 1px solid #eab308; border-left: 4px solid #ca8a04; color: #713f12; padding: 5px 8px; border-radius: 4px; font-size: 0.76rem; font-weight: 600; margin: 4px 0; }
+    .rule-box { padding: 4px 6px; border-radius: 4px; font-weight: 600; margin: 4px 0; font-size: 0.74rem; }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    .rule-purple { background: #faf5ff; border: 1px solid #a855f7; border-left: 4px solid #a855f7; color: #6b21a8; }
+    .rule-red { background: #fff1f2; border: 1px solid #ef4444; border-left: 4px solid #ef4444; color: #b91c1c; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+    table th, table td { border: 1px solid var(--border-color); padding: 3px 5px; text-align: left; }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+    .mermaid { display: flex; justify-content: center; margin: 2px 0; }
+    .back-to-top { position: fixed; bottom: 20px; right: 20px; background: #2563eb; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; border: none; z-index: 999; }
+
+    @page { size: A4 portrait; margin: 4mm; }
+    @media print {
+        body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .top-nav, .back-to-top, .toc-sidebar { display: none !important; }
+        .app-layout { display: block !important; }
+        .container { max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+        .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.72; }
+        pre { background-color: #f8fafc !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; }
+    }
+
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+</style>
+</head>
+<body>
+
+<!-- Sticky Top Nav -->
+<div class="top-nav">
+    <div class="brand">⚡ FAANG DSA HANDBOOK — TOPIC 07: STACK</div>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn" style="background:#059669; border-color:#10b981; font-weight:800;">🏠 Index</a>
+        <button class="nav-btn" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="nav-btn" onclick="toggleSidebar()">↕️ Expand/Shrink TOC</button>
+        <a href="#page1" class="nav-btn">P1</a>
+        <a href="#page2" class="nav-btn">P2</a>
+        <a href="#page3" class="nav-btn">P3</a>
+        <a href="#page4" class="nav-btn">P4</a>
+        <a href="#page5" class="nav-btn">P5</a>
+        <a href="#page6" class="nav-btn">P6</a>
+        <a href="#page7" class="nav-btn">P7</a>
+        <a href="#page8" class="nav-btn">P8</a>
+        <a href="#page9" class="nav-btn">P9</a>
+        <a href="#page10" class="nav-btn">P10</a>
+        <a href="#page11" class="nav-btn">P11</a>
+        <button class="nav-btn" onclick="window.print()" style="background: #2563eb;">🖨️ PDF</button>
+    </div>
+</div>
+
+<div class="container">
+<div class="app-layout" id="appLayout">
+
+    <!-- Sticky Table of Contents Sidebar -->
+    <div class="toc-sidebar">
+        <div class="toc-header-bar"><span class="toc-title">📋 SECTIONS</span><button class="shrink-btn" onclick="toggleSidebar()"><span class="toc-text">➖ Shrink</span></button></div>
+        <ul class="toc-list">
+            <li><a href="#page1" class="toc-link">07.0 Foundation &amp; LIFO</a></li>
+            <li><a href="#page2" class="toc-link">07.1 Java ArrayDeque Toolkit</a></li>
+            <li><a href="#page3" class="toc-link">07.2 Parentheses &amp; RPN</a></li>
+            <li><a href="#page4" class="toc-link">07.3 Monotonic Stack</a></li>
+            <li><a href="#page5" class="toc-link">07.5 Decision &amp; Cheat Sheet</a></li>
+            <li><a href="#page6" class="toc-link">07.7 Easy NeetCode Suite</a></li>
+            <li><a href="#page7" class="toc-link">07.7 RPN &amp; Daily Temps</a></li>
+            <li><a href="#page8" class="toc-link">07.7 Min Stack &amp; Car Fleet</a></li>
+            <li><a href="#page9" class="toc-link">07.7 Generate &amp; Asteroids</a></li>
+            <li><a href="#page10" class="toc-link">07.7 Histogram &amp; Rain Water</a></li>
+            <li><a href="#page11" class="toc-link">07.8 Revision &amp; Summary</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Pages -->
+    <div class="main-content">
+
+    <!-- ========================================================= -->
+    <!-- PAGE 1: 07.0 STACK FOUNDATION & LIFO PRINCIPLE -->
+    <!-- ========================================================= -->
+    <div class="page" id="page1">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📚</span>
+                    <h1>TOPIC 07.0: STACK FOUNDATION &amp; LIFO PRINCIPLE</h1>
+                </div>
+                <span class="page-num">PAGE 1 OF 11</span>
+            </div>
+
+            <!-- Cross-Link Badges -->
+            <a href="Topic06_LinkedList.html" class="cross-link">🔗 See Topic 06 → Linked List Masterclass</a>
+
+            <!-- Goal Badge -->
+            <div class="goal-badge">
+                🎯 <strong>GOAL:</strong> Master LIFO (Last In, First Out) thinking, recognize matching bracket/NGE patterns instantly, and master Monotonic Stacks in $O(N)$ time!
+            </div>
+
+            <div class="section-box box-teal" style="margin-top:8px">
+                <div class="section-header">🧰 REUSABLE STACK UTILITIES &amp; APIS</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">ArrayDeque as Stack (Fast &amp; Modern):</p>
+<pre>
+Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+stack.push(val); // Push onto top
+int top = stack.pop(); // Pop top element
+int peek = stack.peek(); // Peek top without popping
+boolean empty = stack.isEmpty();</pre>
+                        </div>
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">Monotonic Stack Template (Next Greater):</p>
+<pre>
+int[] nextGreater(int[] nums) {
+    int[] res = new int[nums.length];
+    Arrays.fill(res, -1);
+    Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;(); // stores indices
+    for (int i = 0; i &lt; nums.length; i++) {
+        while (!stack.isEmpty() &amp;&amp; nums[i] &gt; nums[stack.peek()]) {
+            res[stack.pop()] = nums[i];
+        }
+        stack.push(i);
+    }
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AHA Box #1: LIFO Paradigm -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #1: LAST IN, FIRST OUT (LIFO) REVERSAL &amp; PAIR MATCHING</strong><br/>
+                A Stack is like a stack of plates: you can ONLY add to the top (<code>push</code>) or remove from the top (<code>pop</code>). This structure naturally remembers the <strong>most recent state</strong>, making it the perfect tool for matching nested pairs (e.g. <code>()</code>, <code>{}</code>), undo history, and finding Next Greater Elements!
+            </div>
+
+            <div class="grid-2">
+                <!-- Stack Operations -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> CORE STACK OPERATIONS ($O(1)$ TIME)</div>
+                    <div class="section-content">
+                        <div>• <code>push(x)</code>: Adds element `x` to top of stack ($O(1)$).<br/>
+                        • <code>pop()</code>: Removes and returns top element ($O(1)$).<br/>
+                        • <code>peek()</code>: Views top element without removing ($O(1)$).<br/>
+                        • <code>isEmpty()</code>: Returns true if stack contains 0 elements ($O(1)$).</div>
+                    </div>
+                </div>
+
+                <!-- Call Stack Model -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> JAVA MEMORY CALL STACK MODEL</div>
+                    <div class="section-content">
+                        <div>Every method call in Java creates a <strong>Stack Frame</strong> on the JVM Call Stack storing local variables. When method returns, its frame is popped! Stack overflow happens when recursion exceeds JVM stack limit!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stack Growth Animation Box -->
+            <div class="section-box box-green">
+                <div class="section-header">🎨 VISUALIZING STACK PUSH / POP GROWTH</div>
+                <div class="section-content">
+                    <div class="stack-viz-box">
+<span class="stack-state-title">1. PUSH(10), PUSH(20), PUSH(30):</span>
+   │ 30 │ ◄── TOP (peek/pop)
+   │ 20 │
+   │ 10 │ ◄── BOTTOM
+   └────┘
+
+<span class="stack-state-title">2. POP() ➔ Returns 30:</span>
+   │ 20 │ ◄── NEW TOP
+   │ 10 │
+   └────┘
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Whenever a problem requires processing elements in reverse order of arrival or matching nested structures, reach for a Stack!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 2: 07.1 IMPLEMENTATION & JAVA STACK TOOLKIT -->
+    <!-- ========================================================= -->
+    <div class="page" id="page2">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🛠️</span>
+                    <h1>TOPIC 07.1 &amp; 07.6: JAVA STACK TOOLKIT &amp; ARRAYDEQUE</h1>
+                </div>
+                <span class="page-num">PAGE 2 OF 11</span>
+            </div>
+
+            <!-- AHA Box: Why Legacy Stack is Bad -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #2: WHY java.util.Stack IS LEGACY &amp; DEPRECATED IN FAANG INTERVIEWS</strong><br/>
+                Never use <code>java.util.Stack</code>! It was created in Java 1.0 extending <code>Vector</code>. Because it inherits vector indexing methods like <code>stack.get(index)</code>, it breaks LIFO encapsulation! Furthermore, every method is <code>synchronized</code>, adding unneeded locking overhead.
+                <br/><strong>FAANG PREFERRED CHOICE:</strong> <code>Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();</code>!
+            </div>
+
+            <div class="grid-2">
+                <!-- ArrayDeque Implementation -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> FAANG PREFERRED: ArrayDeque METHOD MAPPING</div>
+                    <div class="section-content">
+                        <table>
+                            <thead>
+                                <tr><th>Stack Operation</th><th>ArrayDeque Method</th><th>Time Complexity</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Push Element</td><td><code>stack.push(x)</code></td><td>$O(1)$ amortized</td></tr>
+                                <tr><td>Pop Element</td><td><code>stack.pop()</code></td><td>$O(1)$</td></tr>
+                                <tr><td>Peek Top</td><td><code>stack.peek()</code></td><td>$O(1)$</td></tr>
+                                <tr><td>Check Empty</td><td><code>stack.isEmpty()</code></td><td>$O(1)$</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Performance Comparison Table -->
+                <div class="section-box box-amber">
+                    <div class="section-header"><span class="num">2</span> STACK PERFORMANCE BENCHMARK</div>
+                    <div class="section-content">
+                        <table>
+                            <thead>
+                                <tr><th>Class</th><th>Synchronization</th><th>Cache Locality</th><th>FAANG Verdict</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>ArrayDeque</code></td><td>Non-synchronized</td><td>Contiguous Array (High)</td><td>✅ <strong>BEST / PREFERRED</strong></td></tr>
+                                <tr><td><code>LinkedList</code></td><td>Non-synchronized</td><td>Heap Nodes (Low)</td><td>⚠️ Extra node overhead</td></tr>
+                                <tr><td><code>java.util.Stack</code></td><td>Synchronized</td><td>Contiguous Vector</td><td>❌ LEGACY / AVOID</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Code Snippet -->
+            <div class="section-box box-indigo">
+                <div class="section-header">🛠️ JAVA ARRAYDEQUE STACK SNIPPET</div>
+                <div class="section-content">
+<pre>
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+stack.push(10);
+stack.push(20);
+int topVal = stack.peek(); // 20
+int popped = stack.pop();  // 20
+boolean empty = stack.isEmpty(); // false</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            ⚠️ <strong>COMMON BUG:</strong> Calling <code>stack.pop()</code> or <code>stack.peek()</code> on an empty `ArrayDeque` throws a `NoSuchElementException`! Always check `!stack.isEmpty()` first!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 3: PARENTHESES PATTERN & EXPRESSION EVALUATION -->
+    <!-- ========================================================= -->
+    <div class="page" id="page3">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🧪</span>
+                    <h1>TOPIC 07.2 &amp; 07.4: PARENTHESES &amp; EXPRESSION EVALUATION</h1>
+                </div>
+                <span class="page-num">PAGE 3 OF 11</span>
+            </div>
+
+            <div class="grid-2">
+                <!-- Parentheses Pattern -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> BALANCED PARENTHESES MECHANICS</div>
+                    <div class="section-content">
+                        <div>• <strong>Opening Brackets <code>(</code>, <code>{</code>, <code>[</code>:</strong> Push onto stack.<br/>
+                        • <strong>Closing Brackets <code>)</code>, <code>}</code>, <code>]</code>:</strong> Peek top of stack. If stack is empty OR top bracket does not match closing type ➔ Invalid! Pop top on valid match.<br/>
+                        • <strong>Final Check:</strong> If stack is empty at end ➔ Valid!</div>
+                    </div>
+                </div>
+
+                <!-- Expression Evaluation RPN -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">2</span> REVERSE POLISH NOTATION (RPN)</div>
+                    <div class="section-content">
+                        <div>In RPN (Postfix notation e.g. <code>["2", "1", "+", "3", "*"]</code>):<br/>
+                        • <strong>Operands (Numbers):</strong> Push to stack.<br/>
+                        • <strong>Operators (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>):</strong> Pop <code>b</code> (2nd operand), pop <code>a</code> (1st operand), evaluate <code>a op b</code>, and push result back to stack!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trace Visual Diagram -->
+            <div class="section-box box-purple">
+                <div class="section-header">🎨 RPN EXPRESSION EVALUATION TRACE: ["2", "1", "+", "3", "*"]</div>
+                <div class="section-content">
+                    <div class="stack-viz-box">
+1. Push 2, Push 1  ➔ Stack: [2, 1] (Top: 1)
+2. Operator '+'    ➔ Pop 1, Pop 2. Compute 2 + 1 = 3. Push 3 ➔ Stack: [3]
+3. Push 3          ➔ Stack: [3, 3] (Top: 3)
+4. Operator '*'    ➔ Pop 3, Pop 3. Compute 3 * 3 = 9. Push 9 ➔ Stack: [9]
+Final Result = 9!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> For operator evaluation in RPN, the FIRST popped element is the SECOND operand (<code>b = stack.pop()</code>, <code>a = stack.pop()</code>)!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 4: 07.3 MONOTONIC STACK MASTERCLASS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page4">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📈</span>
+                    <h1>TOPIC 07.3: MONOTONIC STACK MASTERCLASS</h1>
+                </div>
+                <span class="page-num">PAGE 4 OF 11</span>
+            </div>
+
+            <!-- AHA Box #3 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #3: MONOTONIC STACK ($O(N)$ NEXT GREATER / SMALLER ELEMENT)</strong><br/>
+                A Monotonic Stack maintains elements in strictly sorted order (Monotonic Increasing or Monotonic Decreasing).
+                <br/>• <strong>Monotonic Decreasing Stack:</strong> Used to find <strong>Next Greater Element (NGE)</strong>! When current element `num > stack.peek()`, pop smaller elements because `num` is their Next Greater Element!
+                <br/>• Each element is pushed and popped AT MOST ONCE, guaranteeing $O(N)$ linear total runtime!
+            </div>
+
+            <!-- NGE Step-by-Step Table -->
+            <div class="section-box box-purple">
+                <div class="section-header">📊 STEP-BY-STEP NGE TRACE TABLE: INPUT = [2, 1, 5, 6, 2, 3]</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Index i</th><th>Value nums[i]</th><th>Monotonic Decreasing Stack Action</th><th>NGE Result State</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>0</td><td>2</td><td>Push 2 ➔ Stack: <code>[2]</code></td><td><code>[-1, -1, -1, -1, -1, -1]</code></td></tr>
+                            <tr><td>1</td><td>1</td><td>1 &lt; 2 ➔ Push 1 ➔ Stack: <code>[2, 1]</code></td><td><code>[-1, -1, -1, -1, -1, -1]</code></td></tr>
+                            <tr><td>2</td><td>5</td><td>5 &gt; 1 ➔ Pop 1 (NGE of 1 is 5!). 5 &gt; 2 ➔ Pop 2 (NGE of 2 is 5!). Push 5 ➔ Stack: <code>[5]</code></td><td><code>[5, 5, -1, -1, -1, -1]</code></td></tr>
+                            <tr><td>3</td><td>6</td><td>6 &gt; 5 ➔ Pop 5 (NGE of 5 is 6!). Push 6 ➔ Stack: <code>[6]</code></td><td><code>[5, 5, 6, -1, -1, -1]</code></td></tr>
+                            <tr><td>4</td><td>2</td><td>2 &lt; 6 ➔ Push 2 ➔ Stack: <code>[6, 2]</code></td><td><code>[5, 5, 6, -1, -1, -1]</code></td></tr>
+                            <tr><td>5</td><td>3</td><td>3 &gt; 2 ➔ Pop 2 (NGE of 2 is 3!). Push 3 ➔ Stack: <code>[6, 3]</code></td><td><code>[5, 5, 6, -1, 3, -1]</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>MONOTONIC RULE:</strong> To find Next Greater Element ➔ Maintain Decreasing Stack. To find Next Smaller Element ➔ Maintain Increasing Stack!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 5: DECISION TREE & PRINTABLE STACK CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page5">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📜</span>
+                    <h1>TOPIC 07.5 &amp; 1-PAGE PRINTABLE STACK CHEAT SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 5 OF 11</span>
+            </div>
+
+            <!-- Mermaid Decision Tree -->
+            <div class="section-box box-purple">
+                <div class="section-header">🌳 STACK INTERVIEW DECISION TREE (MERMAID)</div>
+                <div class="section-content">
+                    <div class="mermaid">
+                        graph TD
+                            A[What is the Stack problem type?]
+                            A --> B[Matching Brackets or Nested Pairs?]
+                            A --> C[Next Greater or Previous Smaller Element?]
+                            A --> D[Expression Evaluation RPN?]
+                            B --> B1[Character Matching Stack]
+                            C --> C1[Monotonic Stack Increasing/Decreasing]
+                            D --> D1[Operand Evaluation Stack]
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1-Page Printable Cheat Sheet -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📜 PRINTABLE STACK &amp; MONOTONIC CHEAT SHEET</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Pattern Type</th><th>Primary Target Question</th><th>Stack Variant</th><th>Key Code Mechanism</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Parentheses Matching</td><td>Valid Parentheses (LC 20)</td><td>Character Stack</td><td>Push open bracket, pop &amp; match on closing bracket</td></tr>
+                            <tr><td>Next Greater Element</td><td>Daily Temperatures (LC 739)</td><td>Monotonic Decreasing Stack</td><td><code>while (!s.isEmpty() &amp;&amp; arr[i] &gt; arr[s.peek()]) pop()</code></td></tr>
+                            <tr><td>Next Smaller Element</td><td>Histogram Rectangle (LC 84)</td><td>Monotonic Increasing Stack</td><td><code>while (!s.isEmpty() &amp;&amp; arr[i] &lt; arr[s.peek()]) pop()</code></td></tr>
+                            <tr><td>Expression Evaluation</td><td>Evaluate RPN (LC 150)</td><td>Operand Stack</td><td>Push numbers; on operator, pop <code>b</code> then <code>a</code>, push <code>a op b</code></td></tr>
+                            <tr><td>$O(1)$ Min Tracking</td><td>Min Stack (LC 155)</td><td>Two Stacks or Diff Encoding</td><td>Auxiliary stack tracks minimum value at every depth</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Print this page and review it 10 minutes before your technical interview!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 6: EASY NEETCODE SUITE (LC 20, LC 682, LC 844) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page6">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🧩</span>
+                    <h1>EASY NEETCODE: VALID PARENTHESES, BASEBALL &amp; BACKSPACE</h1>
+                </div>
+                <span class="page-num">PAGE 6 OF 11</span>
+            </div>
+
+            <!-- Problem 1: LC 20 -->
+            <div class="section-box box-blue">
+                <div class="section-header">1. LEETCODE 20 — VALID PARENTHESES</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>Character Matching</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span><span class="company-tag">Google</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: Open bracket ➔ push corresponding close bracket. Close bracket ➔ check stack.peek()!
+                            </div>
+
+                            <strong>Problem:</strong> Given a string <code>s</code> containing <code>()[]{}</code>, determine if valid.<br/>
+                            <em>Example:</em> <code>s = "()[]{}"</code> → Output: <code>true</code>. <code>s = "(]"</code> → Output: <code>false</code>.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean isValid(String s) {
+    Deque&lt;Character&gt; stack = new ArrayDeque&lt;&gt;();
+    for (char c : s.toCharArray()) {
+        if (c == '(') stack.push(')');
+        else if (c == '{') stack.push('}');
+        else if (c == '[') stack.push(']');
+        else if (stack.isEmpty() || stack.pop() != c) return false;
+    }
+    return stack.isEmpty();
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 2: LC 682 -->
+            <div class="section-box box-green">
+                <div class="section-header">2. LEETCODE 682 — BASEBALL GAME</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★☆</span>
+                                <span>Score Stack</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Track baseball scores using operations <code>+</code>, <code>D</code>, <code>C</code>, or integer scores.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int calPoints(String[] operations) {
+    Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+    for (String op : operations) {
+        if (op.equals("+")) {
+            int top = stack.pop(), newTop = top + stack.peek();
+            stack.push(top); stack.push(newTop);
+        } else if (op.equals("D")) stack.push(2 * stack.peek());
+        else if (op.equals("C")) stack.pop();
+        else stack.push(Integer.parseInt(op));
+    }
+    int sum = 0; for (int score : stack) sum += score;
+    return sum;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 3: LC 844 -->
+            <div class="section-box box-purple">
+                <div class="section-header">3. LEETCODE 844 — BACKSPACE STRING COMPARE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★☆</span>
+                                <span>String Editing</span>
+                                <span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Compare two strings <code>s</code> and <code>t</code> where <code>#</code> represents backspacing.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean backspaceCompare(String s, String t) {
+    return build(s).equals(build(t));
+}
+private String build(String str) {
+    Deque&lt;Character&gt; stack = new ArrayDeque&lt;&gt;();
+    for (char c : str.toCharArray()) {
+        if (c != '#') stack.push(c);
+        else if (!stack.isEmpty()) stack.pop();
+    }
+    return String.valueOf(stack);
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>ELEGANT TRICK (LC 20):</strong> Pushing expected CLOSING brackets onto stack makes closing matching a 1-line check `stack.pop() != c`!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 7: MEDIUM NEETCODE (EVALUATE RPN & DAILY TEMPS) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page7">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🧪</span>
+                    <h1>MEDIUM NEETCODE: EVALUATE RPN &amp; DAILY TEMPERATURES</h1>
+                </div>
+                <span class="page-num">PAGE 7 OF 11</span>
+            </div>
+
+            <!-- Problem 4: LC 150 -->
+            <div class="section-box box-blue">
+                <div class="section-header">4. LEETCODE 150 — EVALUATE REVERSE POLISH NOTATION</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Operand Stack</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span><span class="company-tag">Google</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: Number ➔ push. Operator ➔ b=pop(), a=pop(), compute a op b, push result!
+                            </div>
+
+                            <strong>Problem:</strong> Evaluate value of arithmetic expression in Reverse Polish Notation.<br/>
+                            <em>Example:</em> <code>tokens = ["2","1","+","3","*"]</code> → Output: <code>9</code> ((2 + 1) * 3).
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int evalRPN(String[] tokens) {
+    Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+    for (String t : tokens) {
+        if (t.equals("+")) stack.push(stack.pop() + stack.pop());
+        else if (t.equals("*")) stack.push(stack.pop() * stack.pop());
+        else if (t.equals("-")) {
+            int b = stack.pop(), a = stack.pop(); stack.push(a - b);
+        } else if (t.equals("/")) {
+            int b = stack.pop(), a = stack.pop(); stack.push(a / b);
+        } else stack.push(Integer.parseInt(t));
+    }
+    return stack.pop();
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 5: LC 739 -->
+            <div class="section-box box-purple">
+                <div class="section-header">5. LEETCODE 739 — DAILY TEMPERATURES</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Monotonic Decreasing Stack</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: Maintain Monotonic Decreasing Stack of indices! When T[i] > T[stack.peek()], pop and record i - prevIndex!
+                            </div>
+
+                            <strong>Problem:</strong> Given array of temperatures, return array <code>answer</code> where <code>answer[i]</code> is number of days to wait for a warmer temperature.<br/>
+                            <em>Example:</em> <code>temperatures = [73,74,75,71,69,72,76,73]</code> → <code>[1,1,4,2,1,1,0,0]</code>.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int[] dailyTemperatures(int[] temperatures) {
+    int n = temperatures.length;
+    int[] res = new int[n];
+    Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;(); // Stores indices
+    for (int i = 0; i &lt; n; i++) {
+        while (!stack.isEmpty() &amp;&amp; temperatures[i] &gt; temperatures[stack.peek()]) {
+            int prevIdx = stack.pop();
+            res[prevIdx] = i - prevIdx; // Calculate day distance!
+        }
+        stack.push(i);
+    }
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 739):</strong> Storing INDICES instead of values in the Monotonic Stack allows calculating both the Next Greater Element AND the distance index difference `i - prevIdx`!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 8: MEDIUM NEETCODE (MIN STACK & CAR FLEET) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page8">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🚗</span>
+                    <h1>MEDIUM NEETCODE: MIN STACK &amp; CAR FLEET</h1>
+                </div>
+                <span class="page-num">PAGE 8 OF 11</span>
+            </div>
+
+            <!-- Problem 6: LC 155 -->
+            <div class="section-box box-green">
+                <div class="section-header">6. LEETCODE 155 — MIN STACK</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Auxiliary Min Stack</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Microsoft</span>
+                            </div>
+                            <strong>Problem:</strong> Design a stack supporting <code>push</code>, <code>pop</code>, <code>top</code>, and retrieving minimum element in $O(1)$ time.
+                        </div>
+                        <div class="problem-code">
+<pre>
+class MinStack {
+    private Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+    private Deque&lt;Integer&gt; minStack = new ArrayDeque&lt;&gt;();
+    public void push(int val) {
+        stack.push(val);
+        val = Math.min(val, minStack.isEmpty() ? val : minStack.peek());
+        minStack.push(val);
+    }
+    public void pop() { stack.pop(); minStack.pop(); }
+    public int top() { return stack.peek(); }
+    public int getMin() { return minStack.peek(); }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 7: LC 853 -->
+            <div class="section-box box-orange">
+                <div class="section-header">7. LEETCODE 853 — CAR FLEET</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Monotonic Arrival Time</span>
+                                <span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> `n` cars heading to target. Return number of car fleets formed.<br/>
+                            <em>Formula:</em> `time = (target - position) / speed`. Sort cars by position descending!
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int carFleet(int target, int[] position, int[] speed) {
+    int n = position.length;
+    double[][] cars = new double[n][2];
+    for (int i = 0; i &lt; n; i++) {
+        cars[i][0] = position[i];
+        cars[i][1] = (double)(target - position[i]) / speed[i];
+    }
+    Arrays.sort(cars, (a, b) -&gt; Double.compare(b[0], a[0])); // Position desc
+    Deque&lt;Double&gt; stack = new ArrayDeque&lt;&gt;();
+    for (double[] car : cars) {
+        double time = car[1];
+        if (stack.isEmpty() || time &gt; stack.peek()) stack.push(time);
+    }
+    return stack.size(); // Number of fleets!
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 853):</strong> Sorting cars by position descending lets us evaluate arrival times from closest to furthest! If a car takes $\le$ time of car ahead, it merges into that fleet!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 9: MEDIUM NEETCODE (GENERATE PARENTHESES & ASTEROID) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page9">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">☄️</span>
+                    <h1>MEDIUM NEETCODE: GENERATE PARENTHESES &amp; ASTEROIDS</h1>
+                </div>
+                <span class="page-num">PAGE 9 OF 11</span>
+            </div>
+
+            <!-- Problem 8: LC 22 -->
+            <div class="section-box box-teal">
+                <div class="section-header">8. LEETCODE 22 — GENERATE PARENTHESES</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Backtracking Stack</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Given `n` pairs of parentheses, generate all combinations of well-formed parentheses.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public List&lt;String&gt; generateParenthesis(int n) {
+    List&lt;String&gt; res = new ArrayList&lt;&gt;();
+    backtrack(res, new StringBuilder(), 0, 0, n);
+    return res;
+}
+private void backtrack(List&lt;String&gt; res, StringBuilder sb, int open, int close, int max) {
+    if (sb.length() == max * 2) { res.add(sb.toString()); return; }
+    if (open &lt; max) {
+        sb.append('('); backtrack(res, sb, open + 1, close, max); sb.deleteCharAt(sb.length() - 1);
+    }
+    if (close &lt; open) {
+        sb.append(')'); backtrack(res, sb, open, close + 1, max); sb.deleteCharAt(sb.length() - 1);
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 9: LC 735 -->
+            <div class="section-box box-rose">
+                <div class="section-header">9. LEETCODE 735 — ASTEROID COLLISION</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Collision Stack</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Asteroids moving right (+val) or left (-val). Find state of asteroids after all collisions.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int[] asteroidCollision(int[] asteroids) {
+    Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+    for (int ast : asteroids) {
+        boolean destroyed = false;
+        while (!stack.isEmpty() &amp;&amp; ast &lt; 0 &amp;&amp; stack.peek() &gt; 0) {
+            if (stack.peek() &lt; -ast) stack.pop(); // Pop smaller right-moving
+            else if (stack.peek() == -ast) { stack.pop(); destroyed = true; break; }
+            else { destroyed = true; break; }
+        }
+        if (!destroyed) stack.push(ast);
+    }
+    int[] res = new int[stack.size()];
+    for (int i = res.length - 1; i &gt;= 0; i--) res[i] = stack.pop();
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🧠 <strong>MEMORY BOX:</strong> Collision happens ONLY when stack top moves RIGHT (`> 0`) and current asteroid moves LEFT (`< 0`)!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 10: HARD NEETCODE (HISTOGRAM & TRAPPING RAIN WATER) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page10">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔥</span>
+                    <h1>HARD NEETCODE: LARGEST RECTANGLE &amp; TRAPPING RAIN WATER</h1>
+                </div>
+                <span class="page-num">PAGE 10 OF 11</span>
+            </div>
+
+            <!-- Problem 10: LC 84 -->
+            <div class="section-box box-red">
+                <div class="section-header">10. LEETCODE 84 — LARGEST RECTANGLE IN HISTOGRAM</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Monotonic Increasing Stack</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Given array of heights, return area of largest rectangle in histogram in $O(N)$ time.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int largestRectangleArea(int[] heights) {
+    int n = heights.length, maxArea = 0;
+    Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+    for (int i = 0; i &lt;= n; i++) {
+        int h = (i == n) ? 0 : heights[i];
+        while (!stack.isEmpty() &amp;&amp; h &lt; heights[stack.peek()]) {
+            int height = heights[stack.pop()];
+            int width = stack.isEmpty() ? i : (i - stack.peek() - 1);
+            maxArea = Math.max(maxArea, height * width);
+        }
+        stack.push(i);
+    }
+    return maxArea;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 11: LC 42 Stack -->
+            <div class="section-box box-indigo">
+                <div class="section-header">11. LEETCODE 42 — TRAPPING RAIN WATER (STACK APPROACH)</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Monotonic Decreasing Stack</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Compute trapped rain water after raining using Monotonic Decreasing Stack.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int trap(int[] height) {
+    int water = 0, current = 0;
+    Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+    while (current &lt; height.length) {
+        while (!stack.isEmpty() &amp;&amp; height[current] &gt; height[stack.peek()]) {
+            int top = stack.pop();
+            if (stack.isEmpty()) break;
+            int distance = current - stack.peek() - 1;
+            int boundedHeight = Math.min(height[current], height[stack.peek()]) - height[top];
+            water += distance * boundedHeight;
+        }
+        stack.push(current++);
+    }
+    return water;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> For Histogram Rectangle, appending a dummy height of 0 at index `N` forces the stack to flush and evaluate all remaining bars!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 11: MASTER REVISION & REFERENCE CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page11">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💎</span>
+                    <h1>IF YOU REMEMBER ONLY ONE PAGE... MASTER REVISION SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 11 OF 11</span>
+            </div>
+
+            <!-- 4 Golden Laws -->
+            <div class="section-box box-green">
+                <div class="section-header">⭐ THE 4 GOLDEN LAWS OF STACKS</div>
+                <div class="section-content">
+                    <div style="font-size:0.78rem; line-height:1.45;">
+                        1. <strong>Use ArrayDeque:</strong> Always declare <code>Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();</code> (Never use legacy <code>java.util.Stack</code>!).<br/>
+                        2. <strong>Monotonic Decreasing NGE:</strong> Maintain decreasing stack to find Next Greater Element in $O(N)$ time.<br/>
+                        3. <strong>Store Indices in Stack:</strong> Store array indices instead of raw values to compute distances (e.g. <code>i - stack.peek()</code>).<br/>
+                        4. <strong>Empty Stack Safety:</strong> Always check <code>!stack.isEmpty()</code> before calling <code>pop()</code> or <code>peek()</code>!
+                    </div>
+                </div>
+            </div>
+
+            <!-- When Stack Fails -->
+            <div class="section-box box-amber">
+                <div class="section-header">⛔ WHEN STACK FAILS (DO NOT USE!)</div>
+                <div class="section-content">
+                    <div>• <strong>Random Index Access:</strong> Stack ONLY allows viewing top element ($O(1)$) ➔ Use <strong>Array / ArrayList</strong>!</div>
+                    <div>• <strong>FIFO Processing (First Come First Served):</strong> Stack reverses arrival order ➔ Use <strong>Queue / LinkedList</strong>!</div>
+                </div>
+            </div>
+
+            <!-- NeetCode & Blind 75 Tracker -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📊 NEETCODE &amp; BLIND 75 CONFIDENCE TRACKER</div>
+                <div class="section-content">
+                    <div class="grid-3">
+                        <div><span class="badge-easy">🟢 Easy</span> LC 20 Valid Parentheses</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 682 Baseball Game</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 844 Backspace Compare</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 150 Evaluate RPN</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 739 Daily Temperatures</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 155 Min Stack</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 853 Car Fleet</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 22 Generate Parentheses</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 735 Asteroid Collision</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 84 Histogram Rectangle</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 42 Trapping Rain Water</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forward Cross Link -->
+            <a href="index.html" class="cross-link" style="background:#dcfce7; color:#15803d; border-color:#86efac; font-size:0.78rem;">👉 Next Master Topic: Topic 08 → Queue &amp; Monotonic Queue Masterclass</a>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🎉 <strong>TOPIC 07 STACK MASTERCLASS COMPLETE!</strong> Turn the page to <strong>Topic 08: Queue &amp; Monotonic Queue Masterclass</strong>!
+        </div>
+    </div>
+
+    </div> <!-- end .main-content -->
+</div> <!-- end .app-layout -->
+</div> <!-- end .container -->
+
+<!-- Floating Back to Top Button -->
+<button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆</button>
+
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout') || document.querySelector('.app-layout');
+        const btn = document.querySelector('.shrink-btn span');
+        if (layout) {
+            layout.classList.toggle('shrunk');
+            if (btn) {
+                btn.innerText = layout.classList.contains('shrunk') ? '➕ Expand' : '➖ Shrink';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+

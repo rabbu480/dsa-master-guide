@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 17: Bit Manipulation Masterclass (Visual FAANG Edition)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#ffffff',
+            primaryTextColor: '#0f172a',
+            primaryBorderColor: '#2563eb',
+            lineColor: '#64748b',
+            fontFamily: 'Inter'
+        }
+    });
+</script>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+    }
+
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 11.8px;
+        line-height: 1.4;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 8px 16px;
+        display: flex;
+        
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand { font-weight: 900; font-size: 1rem; color: #38bdf8; }
+    .top-nav .nav-controls { display: flex; gap: 4px; flex-wrap: wrap; }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+
+    /* Sticky Sidebar Layout */
+    .app-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+
+    .toc-title { font-weight: 900; font-size: 0.85rem; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+
+    .main-content { min-width: 0; }
+
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 20px 24px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+        
+        display: flex;
+        flex-direction: column;
+        
+    }
+    [data-theme="dark"] .page { background: #1e293b; color: #f8fafc; }
+
+    /* Header Top */
+    .header-top {
+        display: flex;
+        
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 6px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top { background: #0f172a; border-color: #38bdf8; border-left-color: #38bdf8; }
+    .header-title-group { display: flex; align-items: center; gap: 8px; }
+    .header-top h1 { margin: 0; font-size: 1.15rem; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+    .header-top .page-num { background: #1e3a8a; color: white; padding: 2px 8px; border-radius: 14px; font-weight: 800; font-size: 0.72rem; }
+
+    /* Goal Badge Box */
+    .goal-badge {
+        border: 2px dashed #3b82f6;
+        background: #eff6ff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: #1e40af;
+        margin-bottom: 6px;
+    }
+
+    .cross-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #e0e7ff;
+        color: #3730a3;
+        border: 1px solid #c7d2fe;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-decoration: none;
+        margin-bottom: 4px;
+    }
+
+    /* Section Box */
+    .section-box {
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        background: white;
+        border: 2px solid #3b82f6;
+        width: 100%;
+    }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+    .section-header { padding: 4px 8px; font-weight: 800; font-size: 0.8rem; color: white; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+    .section-header .num { background: white; color: #0f172a; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 900; }
+    .section-content { padding: 6px 8px; font-size: 0.76rem; }
+
+    /* Color Themes */
+    .box-blue { border-color: #2563eb !important; } .box-blue .section-header { background: #2563eb !important; }
+    .box-green { border-color: #22c55e !important; } .box-green .section-header { background: #22c55e !important; }
+    .box-purple { border-color: #8b5cf6 !important; } .box-purple .section-header { background: #8b5cf6 !important; }
+    .box-red { border-color: #ef4444 !important; } .box-red .section-header { background: #ef4444 !important; }
+    .box-orange { border-color: #f97316 !important; } .box-orange .section-header { background: #f97316 !important; }
+    .box-teal { border-color: #0d9488 !important; } .box-teal .section-header { background: #0d9488 !important; }
+    .box-indigo { border-color: #6366f1 !important; } .box-indigo .section-header { background: #6366f1 !important; }
+    .box-amber { border-color: #d97706 !important; } .box-amber .section-header { background: #d97706 !important; }
+
+    /* Problem Split Grid */
+    .problem-split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+    .problem-info { display: flex; flex-direction: column; gap: 3px; }
+    .problem-code { display: flex; flex-direction: column; }
+
+    .meta-card { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 3px 6px; border-radius: 4px; display: flex;  align-items: center; font-weight: 700; font-size: 0.7rem; }
+    [data-theme="dark"] .meta-card { background: #0f172a; border-color: #334155; }
+    .badge-easy { background: #10b981; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-medium { background: #f59e0b; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-hard { background: #ef4444; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .company-tag { background: #1e3a8a; color: white; padding: 1px 4px; border-radius: 3px; font-size: 0.65rem; }
+
+    .flowchart-box { background: #eff6ff; border: 1px solid #93c5fd; border-left: 3px solid #2563eb; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: 700; color: #1e40af; }
+    .whynot-box { background: #fff7ed; border: 1px solid #fdba74; border-left: 3px solid #f97316; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; color: #9a3412; }
+
+    /* Binary Transformation Box */
+    .binary-box {
+        background: #fdf4ff;
+        border: 1px solid #f0abfc;
+        border-left: 4px solid #c084fc;
+        padding: 4px 6px;
+        margin: 3px 0;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.68rem;
+        line-height: 1.35;
+        color: #701a75;
+    }
+    [data-theme="dark"] .binary-box { background: #4a044e; color: #f5d0fe; border-color: #e879f9; }
+    .binary-title { font-weight: 800; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.3px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    pre { background: #f8fafc; color: #0f172a; padding: 6px 8px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.71rem; line-height: 1.32; margin: 0; white-space: pre-wrap !important; word-break: break-word; border: 1px solid #cbd5e1; }
+    [data-theme="dark"] pre { background: #0f172a; color: #f8fafc; border-color: #334155; }
+    code { font-family: 'Fira Code', monospace; background: #f1f5f9; color: #0f172a; padding: 1px 3px; border-radius: 3px; font-size: 0.74rem; border: 1px solid #cbd5e1; }
+
+    .aha-box { background: #fefce8; border: 1px solid #eab308; border-left: 4px solid #ca8a04; color: #713f12; padding: 5px 8px; border-radius: 4px; font-size: 0.76rem; font-weight: 600; margin: 4px 0; }
+    .rule-box { padding: 4px 6px; border-radius: 4px; font-weight: 600; margin: 4px 0; font-size: 0.74rem; }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    .rule-purple { background: #faf5ff; border: 1px solid #a855f7; border-left: 4px solid #a855f7; color: #6b21a8; }
+    .rule-red { background: #fff1f2; border: 1px solid #ef4444; border-left: 4px solid #ef4444; color: #b91c1c; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+    table th, table td { border: 1px solid var(--border-color); padding: 3px 5px; text-align: left; }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+    .mermaid { display: flex; justify-content: center; margin: 2px 0; }
+    .back-to-top { position: fixed; bottom: 20px; right: 20px; background: #2563eb; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; border: none; z-index: 999; }
+
+    @page { size: A4 portrait; margin: 4mm; }
+    @media print {
+        body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .top-nav, .back-to-top, .toc-sidebar { display: none !important; }
+        .app-layout { display: block !important; }
+        .container { max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+        .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.72; }
+        pre { background-color: #f8fafc !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; }
+    }
+
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+</style>
+</head>
+<body>
+
+<!-- Sticky Top Nav -->
+<div class="top-nav">
+    <div class="brand">⚡ FAANG DSA HANDBOOK — TOPIC 17: BIT MANIPULATION</div>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn" style="background:#059669; border-color:#10b981; font-weight:800;">🏠 Index</a>
+        <button class="nav-btn" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="nav-btn" onclick="toggleSidebar()">↕️ Expand/Shrink TOC</button>
+        <a href="#page1" class="nav-btn">P1</a>
+        <a href="#page2" class="nav-btn">P2</a>
+        <a href="#page3" class="nav-btn">P3</a>
+        <a href="#page4" class="nav-btn">P4</a>
+        <a href="#page5" class="nav-btn">P5</a>
+        <a href="#page6" class="nav-btn">P6</a>
+        <a href="#page7" class="nav-btn">P7</a>
+        <a href="#page8" class="nav-btn">P8</a>
+        <a href="#page9" class="nav-btn">P9</a>
+        <a href="#page10" class="nav-btn">P10</a>
+        <a href="#page11" class="nav-btn">P11</a>
+        <a href="#page12" class="nav-btn">P12</a>
+        <a href="#page13" class="nav-btn">P13</a>
+        <a href="#page14" class="nav-btn">P14</a>
+        <a href="#page15" class="nav-btn">P15</a>
+        <a href="#page16" class="nav-btn">P16</a>
+        <button class="nav-btn" onclick="window.print()" style="background: #2563eb;">🖨️ PDF</button>
+    </div>
+</div>
+
+<div class="container">
+<div class="app-layout" id="appLayout">
+
+    <!-- Sticky Table of Contents Sidebar -->
+    <div class="toc-sidebar">
+        <div class="toc-header-bar"><span class="toc-title">📋 SECTIONS</span><button class="shrink-btn" onclick="toggleSidebar()"><span class="toc-text">➖ Shrink</span></button></div>
+        <ul class="toc-list">
+            <li><a href="#page1" class="toc-link">17.0 Foundation &amp; Two's Comp</a></li>
+            <li><a href="#page2" class="toc-link">17.1 Bitwise Operators</a></li>
+            <li><a href="#page3" class="toc-link">17.2 The 8 Fundamental Tricks</a></li>
+            <li><a href="#page4" class="toc-link">17.3 XOR Pattern &amp; Laws</a></li>
+            <li><a href="#page5" class="toc-link">17.4 Bitmask &amp; Subset Enum</a></li>
+            <li><a href="#page6" class="toc-link">17.5 Advanced Bit &amp; Java APIs</a></li>
+            <li><a href="#page7" class="toc-link">17.6 Sum of Two Integers</a></li>
+            <li><a href="#page8" class="toc-link">17.7 Decision Tree &amp; Cheat Sheet</a></li>
+            <li><a href="#page9" class="toc-link">Template Library (Part 1)</a></li>
+            <li><a href="#page10" class="toc-link">Template Library (Part 2)</a></li>
+            <li><a href="#page11" class="toc-link">17.10 Easy NeetCode Suite</a></li>
+            <li><a href="#page12" class="toc-link">17.10 Counting &amp; Reverse Bits</a></li>
+            <li><a href="#page13" class="toc-link">17.10 Missing Num &amp; Bit Addition</a></li>
+            <li><a href="#page14" class="toc-link">17.10 Range AND &amp; Subsets Mask</a></li>
+            <li><a href="#page15" class="toc-link">17.10 Single Number III &amp; Trie</a></li>
+            <li><a href="#page16" class="toc-link">17.11 Revision &amp; Summary</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Pages -->
+    <div class="main-content">
+
+    <!-- ========================================================= -->
+    <!-- PAGE 1: 17.0 BIT FOUNDATION & TWO'S COMPLEMENT -->
+    <!-- ========================================================= -->
+    <div class="page" id="page1">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">⚡</span>
+                    <h1>TOPIC 17.0: BIT FOUNDATION &amp; TWO'S COMPLEMENT</h1>
+                </div>
+                <span class="page-num">PAGE 1 OF 16</span>
+            </div>
+
+            <!-- Cross-Link Badges -->
+            <a href="Topic16_Intervals.html" class="cross-link">🔗 See Topic 16 → Intervals Masterclass</a>
+
+            <!-- Goal Badge -->
+            <div class="goal-badge">
+                🎯 <strong>GOAL:</strong> Think in Binary! Master the 8 Fundamental Bit Tricks, XOR Cancellation Laws, Bitmask Subset Enumeration, Bitwise Addition (`Sum of Two Integers`), and solve all NeetCode Bit Manipulation questions!
+            </div>
+
+            <div class="section-box box-teal" style="margin-top:8px">
+                <div class="section-header">🧰 REUSABLE BITWISE UTILITIES</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">Core Bit Operations:</p>
+<pre>
+// Clear lowest set bit: n & (n - 1)
+n = n & (n - 1);
+// Isolate lowest set bit: n & -n
+int lowestBit = n & -n;
+// Check if i-th bit is set: (n >> i) & 1 == 1
+boolean isSet = ((n &gt;&gt; i) &amp; 1) == 1;</pre>
+                        </div>
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">Bitmask Subset Enumeration:</p>
+<pre>
+// Iterate over all submasks of a bitmask
+for (int sub = mask; sub &gt; 0; sub = (sub - 1) &amp; mask) {
+    // Process submask
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AHA Box #1 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #1: HARDWARE-LEVEL $O(1)$ CONSTANT TIME EXECUTION</strong><br/>
+                Bitwise operations execute directly on the CPU's Arithmetic Logic Unit (ALU) in a SINGLE clock cycle! They bypass memory allocation and object creation, running up to **$100\times$ faster** than standard data structure operations!
+            </div>
+
+            <div class="grid-2">
+                <!-- Two's Complement Explanation -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> TWO'S COMPLEMENT REPRESENTATION</div>
+                    <div class="section-content">
+                        <div>In Java, 32-bit signed integers use **Two's Complement** to represent negative numbers:
+                        <br/>Formula: <code>-x = ~x + 1</code>
+                        <br/>• To negate `x`, invert all bits (`~x`) and add `1`!
+                        <br/>• <strong>Lowest Set Bit Trick (`x & -x`):</strong> Exploits Two's Complement to isolate the rightmost 1-bit instantly!</div>
+                    </div>
+                </div>
+
+                <!-- Signed vs Unsigned -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> ARITHMETIC VS UNSIGNED RIGHT SHIFT</div>
+                    <div class="section-content">
+                        <table>
+                            <thead>
+                                <tr><th>Operator</th><th>Name</th><th>Behavior for Negative Numbers</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>>></code></td><td>Arithmetic Right Shift</td><td>Fills left bits with <strong>Sign Bit (1s)</strong></td></tr>
+                                <tr><td><code>>>></code></td><td>Unsigned Right Shift</td><td>Fills left bits with <strong>ZEROES (0s)</strong></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Binary Box Transformation -->
+            <div class="section-box box-green">
+                <div class="section-header">🎨 TWO'S COMPLEMENT VISUALIZATION (x = 6 ➔ -x = -6)</div>
+                <div class="section-content">
+                    <div class="binary-box">
+<span class="binary-title">BINARY TRANSFORMATION:</span>
+   Decimal  6 = 00000000 00000000 00000000 00000110
+   Invert (~6) = 11111111 11111111 11111111 11111001
+   Add 1 (+ 1) = 11111111 11111111 11111111 11111010  (-6 in Binary!)
+
+   Lowest Set Bit (6 & -6):
+     00000000 00000000 00000000 00000110  (6)
+   & 11111111 11111111 11111111 11111010  (-6)
+   -----------------------------------------
+   = 00000000 00000000 00000000 00000010  (Decimal 2 - Isolates lowest set bit!)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Always use `>>>` (unsigned right shift) when shifting bit patterns where sign extension is unwanted!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 2: 17.1 BITWISE OPERATORS & TRUTH TABLES -->
+    <!-- ========================================================= -->
+    <div class="page" id="page2">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔣</span>
+                    <h1>TOPIC 17.1: BITWISE OPERATORS &amp; TRUTH TABLES</h1>
+                </div>
+                <span class="page-num">PAGE 2 OF 16</span>
+            </div>
+
+            <!-- AHA Box #2 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #2: THE 4 BITWISE TRUTH TABLES</strong><br/>
+                • <strong>AND (`&`):</strong> `1` ONLY if BOTH bits are `1`. (Used for Masking / Checking).
+                <br/>• <strong>OR (`|`):</strong> `1` if AT LEAST ONE bit is `1`. (Used for Setting bits).
+                <br/>• <strong>XOR (`^`):</strong> `1` if bits are DIFFERENT (`1 ^ 0 = 1`, `1 ^ 1 = 0`). (Used for Cancellation / Toggling).
+                <br/>• <strong>NOT (`~`):</strong> Inverts every bit (`0 -> 1`, `1 -> 0`).
+            </div>
+
+            <!-- Truth Table Matrix -->
+            <div class="section-box box-purple">
+                <div class="section-header">📊 BITWISE OPERATOR TRUTH TABLE MATRIX</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>A</th><th>B</th><th>A &amp; B (AND)</th><th>A | B (OR)</th><th>A ^ B (XOR)</th><th>~A (NOT A)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+                            <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td></tr>
+                            <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+                            <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> `x ^ x = 0` and `x ^ 0 = x` are the foundation of XOR-based cancellation algorithms!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 3: 17.2 THE 8 FUNDAMENTAL BIT TRICKS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page3">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🛠️</span>
+                    <h1>TOPIC 17.2: THE 8 FUNDAMENTAL BIT TRICKS</h1>
+                </div>
+                <span class="page-num">PAGE 3 OF 16</span>
+            </div>
+
+            <!-- AHA Box #3 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #3: BRIAN KERNIGHAN'S ALGORITHM (`n & (n - 1)`)</strong><br/>
+                Subtracting `1` from `n` flips all trailing zeroes to `1`s and the rightmost `1` to `0`.
+                <br/>Executing <code>n & (n - 1)</code> clears the lowest set bit in EXACTLY 1 operation! Repeating this counts set bits in $O(\text{set bits})$ iterations!
+            </div>
+
+            <div class="grid-2">
+                <!-- Tricks 1-4 -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> BASIC BIT MANIPULATIONS</div>
+                    <div class="section-content">
+                        <div>• <strong>1. Check Odd/Even:</strong> <code>(n & 1) != 0</code><br/>
+                        • <strong>2. Set Bit $k$:</strong> <code>n | (1 &lt;&lt; k)</code><br/>
+                        • <strong>3. Clear Bit $k$:</strong> <code>n &amp; ~(1 &lt;&lt; k)</code><br/>
+                        • <strong>4. Toggle Bit $k$:</strong> <code>n ^ (1 &lt;&lt; k)</code></div>
+                    </div>
+                </div>
+
+                <!-- Tricks 5-8 -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">2</span> ADVANCED BIT TRICKS</div>
+                    <div class="section-content">
+                        <div>• <strong>5. Check Bit $k$:</strong> <code>((n &gt;&gt; k) &amp; 1) != 0</code><br/>
+                        • <strong>6. Clear Lowest Set Bit:</strong> <code>n &amp; (n - 1)</code><br/>
+                        • <strong>7. Extract Lowest Set Bit:</strong> <code>n &amp; -n</code><br/>
+                        • <strong>8. Check Power of Two:</strong> <code>n &gt; 0 &amp;&amp; (n &amp; (n - 1)) == 0</code></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            ⚠️ <strong>OPERATOR PRECEDENCE BUG:</strong> In Java, `==` has HIGHER precedence than `&`! Always write `(n & 1) == 0` with parentheses around `n & 1`!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 4: 17.3 XOR PATTERN & LAWS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page4">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">♾️</span>
+                    <h1>TOPIC 17.3: XOR PATTERN &amp; CANCELLATION LAWS</h1>
+                </div>
+                <span class="page-num">PAGE 4 OF 16</span>
+            </div>
+
+            <!-- AHA Box #4 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #4: XOR PAIR CANCELLATION PROPERTY</strong><br/>
+                Because $x \oplus x = 0$ and $x \oplus 0 = x$, XORing all elements in an array where every number appears twice EXCEPT one will **cancel out all duplicates**, leaving ONLY the unique number in $O(N)$ time and $O(1)$ space!
+            </div>
+
+            <div class="grid-2">
+                <!-- Single Number Code -->
+                <div class="section-box box-purple">
+                    <div class="section-header">🛠️ SINGLE NUMBER (LC 136) $O(N)$ TIME, $O(1)$ SPACE</div>
+                    <div class="section-content">
+<pre>
+public int singleNumber(int[] nums) {
+    int xor = 0;
+    for (int num : nums) xor ^= num; // Duplicate numbers cancel out to 0!
+    return xor;
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Missing Number XOR -->
+                <div class="section-box box-blue">
+                    <div class="section-header">🛠️ MISSING NUMBER (LC 268) XOR TRICK</div>
+                    <div class="section-content">
+<pre>
+public int missingNumber(int[] nums) {
+    int xor = nums.length;
+    for (int i = 0; i &lt; nums.length; i++) {
+        xor ^= i ^ nums[i]; // XOR indices 0..N with array values!
+    }
+    return xor; // Remaining value is the missing number!
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> XOR eliminates duplicate pairs without needing HashMap or HashSet memory storage!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 5: 17.4 BITMASK PATTERN & SUBSET ENUMERATION -->
+    <!-- ========================================================= -->
+    <div class="page" id="page5">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🎭</span>
+                    <h1>TOPIC 17.4: BITMASK PATTERN &amp; SUBSET ENUMERATION</h1>
+                </div>
+                <span class="page-num">PAGE 5 OF 16</span>
+            </div>
+
+            <!-- AHA Box #5 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #5: INTEGER AS A DYNAMIC SET (BITMASK)</strong><br/>
+                An integer `mask` represents a set of items up to size 32:
+                <br/>• Bit `i` is `1` ➔ Element `i` is INCLUDED in the subset.
+                <br/>• Bit `i` is `0` ➔ Element `i` is EXCLUDED.
+                <br/>Iterating `mask` from `0` to `(1 << N) - 1` generates all $2^N$ subsets iteratively without recursion!
+            </div>
+
+            <!-- Bitmask Subset Code -->
+            <div class="section-box box-blue">
+                <div class="section-header">🛠️ ITERATIVE SUBSET GENERATION USING BITMASK (LC 78)</div>
+                <div class="section-content">
+<pre>
+public List&lt;List&lt;Integer&gt;&gt; subsets(int[] nums) {
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    int totalSubsets = 1 &lt;&lt; nums.length; // 2^N
+    for (int mask = 0; mask &lt; totalSubsets; mask++) {
+        List&lt;Integer&gt; subset = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; nums.length; i++) {
+            if ((mask &amp; (1 &lt;&lt; i)) != 0) subset.add(nums[i]); // Bit i is set!
+        }
+        res.add(subset);
+    }
+    return res;
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-blue" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Bitmasking replaces recursive call stack memory with a simple $O(2^N)$ integer loop!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 6: 17.5 ADVANCED BIT MANIPULATION & BUILT-IN APIS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page6">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📈</span>
+                    <h1>TOPIC 17.5: ADVANCED BIT MANIPULATIONS &amp; JAVA APIS</h1>
+                </div>
+                <span class="page-num">PAGE 6 OF 16</span>
+            </div>
+
+            <!-- AHA Box #6 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #6: COUNTING BITS DP RECURRENCE (`dp[i] = dp[i >> 1] + (i & 1)`)</strong><br/>
+                The number of 1-bits in integer `i` is equal to the number of 1-bits in `i >> 1` plus `1` if `i` is odd (`i & 1`)!
+            </div>
+
+            <div class="grid-2">
+                <!-- Counting Bits Code -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">1</span> COUNTING BITS DP (LC 338)</div>
+                    <div class="section-content">
+<pre>
+public int[] countBits(int n) {
+    int[] dp = new int[n + 1];
+    for (int i = 1; i &lt;= n; i++) {
+        dp[i] = dp[i &gt;&gt; 1] + (i &amp; 1); // Right-shift + LSB
+    }
+    return dp;
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Java Built-in Bit APIs -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> JAVA BUILT-IN `Integer` BIT APIS</div>
+                    <div class="section-content">
+                        <div>• <code>Integer.bitCount(n)</code> ➔ Count set bits.<br/>
+                        • <code>Integer.highestOneBit(n)</code> ➔ Keep only MSB.<br/>
+                        • <code>Integer.lowestOneBit(n)</code> ➔ Keep only LSB.<br/>
+                        • <code>Integer.numberOfLeadingZeros(n)</code> ➔ Leading zeroes.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Native Java bit methods like `Integer.bitCount()` are optimized into single CPU instructions (`POPCNT`)!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 7: 17.6 SUM OF TWO INTEGERS (BITWISE ADDITION) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page7">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">➕</span>
+                    <h1>TOPIC 17.6: SUM OF TWO INTEGERS (BITWISE ADDITION)</h1>
+                </div>
+                <span class="page-num">PAGE 7 OF 16</span>
+            </div>
+
+            <!-- AHA Box #7 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #7: ADDITION WITHOUT `+` OR `-` OPERATORS</strong><br/>
+                Binary addition consists of two parts:
+                <br/>1. <strong>Sum without Carry:</strong> `a ^ b` (XOR adds bits without carrying over).
+                <br/>2. <strong>Carry:</strong> `(a & b) << 1` (AND detects carry bits, left-shifted by 1).
+                <br/>Repeat until `carry == 0`!
+            </div>
+
+            <!-- Bitwise Addition Code -->
+            <div class="section-box box-blue">
+                <div class="section-header">🛠️ SUM OF TWO INTEGERS (LC 371) IMPLEMENTATION</div>
+                <div class="section-content">
+<pre>
+public int getSum(int a, int b) {
+    while (b != 0) {
+        int carry = (a &amp; b) &lt;&lt; 1; // Calculate carry bits
+        a = a ^ b;                // Calculate sum without carry
+        b = carry;                // Carry becomes new b
+    }
+    return a;
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> `a ^ b` computes addition modulo 2, while `(a & b) << 1` propagates carry overflow!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 8: DECISION TREE & PRINTABLE BIT CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page8">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📜</span>
+                    <h1>TOPIC 17.7 &amp; 1-PAGE PRINTABLE BIT CHEAT SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 8 OF 16</span>
+            </div>
+
+            <!-- Mermaid Decision Tree -->
+            <div class="section-box box-purple">
+                <div class="section-header">🌳 BIT MANIPULATION INTERVIEW DECISION TREE (MERMAID)</div>
+                <div class="section-content">
+                    <div class="mermaid">
+                        graph TD
+                            A[What is the Bit Problem Type?]
+                            A --> B[Single / Missing Number?]
+                            A --> C[Check Power of 2 / 4?]
+                            A --> D[Count Set Bits?]
+                            A --> E[Generate Subsets / State Mask?]
+                            A --> F[Add Numbers Without + Operator?]
+                            B --> B1[XOR Property x ^ x = 0]
+                            C --> C1[Bit Trick n > 0 && n & n-1 == 0]
+                            D --> D1[Brian Kernighan n & n-1]
+                            E --> E1[Iterate mask 0 to 1<<N - 1]
+                            F --> F1[Bitwise Addition a ^ b and a & b << 1]
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1-Page Printable Cheat Sheet -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📜 PRINTABLE BIT MANIPULATION CHEAT SHEET</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Trick / Operation</th><th>Code Expression</th><th>Explanation &amp; Use Case</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Check Odd/Even</td><td><code>(n &amp; 1) != 0</code></td><td>Checks lowest bit (1 = Odd, 0 = Even)</td></tr>
+                            <tr><td>Set Bit $k$</td><td><code>n | (1 &lt;&lt; k)</code></td><td>Forces bit $k$ to `1`</td></tr>
+                            <tr><td>Clear Bit $k$</td><td><code>n &amp; ~(1 &lt;&lt; k)</code></td><td>Forces bit $k$ to `0`</td></tr>
+                            <tr><td>Toggle Bit $k$</td><td><code>n ^ (1 &lt;&lt; k)</code></td><td>Flips bit $k$ (`0 -> 1`, `1 -> 0`)</td></tr>
+                            <tr><td>Clear Lowest 1-Bit</td><td><code>n &amp; (n - 1)</code></td><td>Flips rightmost set bit to `0` (Kernighan)</td></tr>
+                            <tr><td>Extract Lowest 1-Bit</td><td><code>n &amp; -n</code></td><td>Isolates rightmost set bit using Two's Comp</td></tr>
+                            <tr><td>Power of Two Check</td><td><code>n &gt; 0 &amp;&amp; (n &amp; (n - 1)) == 0</code></td><td>`true` if $n$ has EXACTLY one `1` bit</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Print this page and review it 10 minutes before your technical interview!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 9: DEDICATED BIT TEMPLATE LIBRARY (PART 1) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page9">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💻</span>
+                    <h1>BIT TEMPLATE LIBRARY (FUNDAMENTAL OPERATIONS)</h1>
+                </div>
+                <span class="page-num">PAGE 9 OF 16</span>
+            </div>
+
+            <div class="grid-2">
+                <!-- Bit Manipulation Suite -->
+                <div class="section-box box-blue">
+                    <div class="section-header">1. FUNDAMENTAL BIT TRICKS SUITE</div>
+                    <div class="section-content">
+<pre>
+boolean checkBit(int n, int k) { return ((n &gt;&gt; k) &amp; 1) != 0; }
+int setBit(int n, int k) { return n | (1 &lt;&lt; k); }
+int clearBit(int n, int k) { return n &amp; ~(1 &lt;&lt; k); }
+int toggleBit(int n, int k) { return n ^ (1 &lt;&lt; k); }</pre>
+                    </div>
+                </div>
+
+                <!-- Power of Two Template -->
+                <div class="section-box box-purple">
+                    <div class="section-header">2. POWER OF TWO &amp; FOUR TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+boolean isPowerOfTwo(int n) {
+    return n &gt; 0 &amp;&amp; (n &amp; (n - 1)) == 0;
+}
+boolean isPowerOfFour(int n) {
+    return n &gt; 0 &amp;&amp; (n &amp; (n - 1)) == 0 &amp;&amp; (n &amp; 0x55555555) != 0;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>REUSABLE CODE:</strong> Copy-paste these templates directly into your interview whiteboard or IDE!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 10: DEDICATED BIT TEMPLATE LIBRARY (PART 2) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page10">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💻</span>
+                    <h1>BIT TEMPLATE LIBRARY (KERNIGHAN &amp; BITMASK)</h1>
+                </div>
+                <span class="page-num">PAGE 10 OF 16</span>
+            </div>
+
+            <div class="grid-2">
+                <!-- Brian Kernighan Template -->
+                <div class="section-box box-blue">
+                    <div class="section-header">3. BRIAN KERNIGHAN BIT COUNT TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+int countSetBits(int n) {
+    int count = 0;
+    while (n != 0) {
+        n &amp;= (n - 1); // Clears lowest set bit!
+        count++;
+    }
+    return count;
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Bitmask Subset Template -->
+                <div class="section-box box-green">
+                    <div class="section-header">4. BITMASK SUBSET ENUMERATION TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+void enumerateSubsets(int[] nums) {
+    int total = 1 &lt;&lt; nums.length;
+    for (int mask = 0; mask &lt; total; mask++) {
+        for (int i = 0; i &lt; nums.length; i++) {
+            if ((mask &amp; (1 &lt;&lt; i)) != 0) {
+                // Element nums[i] is included in subset!
+            }
+        }
+    }
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submask Iteration & XOR Swap -->
+            <div class="section-box box-amber">
+                <div class="section-header">5. SUBMASK ITERATION &amp; XOR IN-PLACE SWAP TRICKS</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <p style="font-weight:700;margin:0 0 3px">Submask Decrement Iteration:</p>
+<pre>
+// Iterate over all non-empty submasks of 'mask'
+for (int sub = mask; sub &gt; 0; sub = (sub - 1) &amp; mask) {
+    // Process submask in O(2^K) time!
+}</pre>
+                        </div>
+                        <div>
+                            <p style="font-weight:700;margin:0 0 3px">In-Place XOR Swap (Zero Temp Memory):</p>
+<pre>
+// Swap a and b without temporary variable
+a ^= b;
+b ^= a;
+a ^= b;</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Memorize these core templates to solve 95% of FAANG Bit Manipulation problems!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 11: EASY NEETCODE SUITE (SINGLE NUMBER & 1-BITS) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page11">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">⚡</span>
+                    <h1>EASY NEETCODE: SINGLE NUMBER &amp; NUMBER OF 1 BITS</h1>
+                </div>
+                <span class="page-num">PAGE 11 OF 16</span>
+            </div>
+
+            <!-- Problem 1: LC 136 -->
+            <div class="section-box box-blue">
+                <div class="section-header">1. LEETCODE 136 — SINGLE NUMBER</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>XOR Pair Cancellation</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Every element appears twice except for one unique element. Find it in $O(N)$ time and $O(1)$ space.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int singleNumber(int[] nums) {
+    int xor = 0;
+    for (int num : nums) xor ^= num;
+    return xor;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 2: LC 191 -->
+            <div class="section-box box-green">
+                <div class="section-header">2. LEETCODE 191 — NUMBER OF 1 BITS (HAMMING WEIGHT)</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>Brian Kernighan Algorithm</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Apple</span>
+                            </div>
+                            <strong>Problem:</strong> Return the number of set bits ('1' bits) in an unsigned integer.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int hammingWeight(int n) {
+    int count = 0;
+    while (n != 0) {
+        n &amp;= (n - 1); // Clears rightmost set bit
+        count++;
+    }
+    return count;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 191):</strong> `n & (n - 1)` loops ONLY as many times as there are set 1-bits, making it faster than checking all 32 bits!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 12: EASY & MEDIUM NEETCODE (COUNTING & REVERSE BITS) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page12">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔄</span>
+                    <h1>EASY &amp; MEDIUM NEETCODE: COUNTING BITS &amp; REVERSE BITS</h1>
+                </div>
+                <span class="page-num">PAGE 12 OF 16</span>
+            </div>
+
+            <!-- Problem 3: LC 338 -->
+            <div class="section-box box-blue">
+                <div class="section-header">3. LEETCODE 338 — COUNTING BITS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>DP + Bit Shift Relation</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Return an array `ans` where `ans[i]` is the number of 1 bits in $i$ for $0 \le i \le n$.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int[] countBits(int n) {
+    int[] dp = new int[n + 1];
+    for (int i = 1; i &lt;= n; i++) {
+        dp[i] = dp[i &gt;&gt; 1] + (i &amp; 1);
+    }
+    return dp;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 4: LC 190 -->
+            <div class="section-box box-purple">
+                <div class="section-header">4. LEETCODE 190 — REVERSE BITS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>32-Bit Shift Construction</span>
+                                <span class="company-tag">Apple</span>
+                            </div>
+                            <strong>Problem:</strong> Reverse bits of a given 32-bit unsigned integer.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int reverseBits(int n) {
+    int res = 0;
+    for (int i = 0; i &lt; 32; i++) {
+        res = (res &lt;&lt; 1) | (n &amp; 1); // Shift res left, append LSB of n
+        n &gt;&gt;&gt;= 1;                   // Unsigned right shift n
+    }
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 190):</strong> Always use unsigned right shift `n >>>= 1` to prevent sign-bit extension bugs during bit reversal!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 13: MEDIUM NEETCODE (MISSING NUMBER & BIT ADDITION) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page13">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">➕</span>
+                    <h1>MEDIUM NEETCODE: MISSING NUMBER &amp; SUM OF TWO INTEGERS</h1>
+                </div>
+                <span class="page-num">PAGE 13 OF 16</span>
+            </div>
+
+            <!-- Problem 5: LC 268 -->
+            <div class="section-box box-blue">
+                <div class="section-header">5. LEETCODE 268 — MISSING NUMBER</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>Index-Value XOR Cancellation</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Given array of $N$ distinct numbers in range `[0, n]`, return the missing number.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int missingNumber(int[] nums) {
+    int xor = nums.length;
+    for (int i = 0; i &lt; nums.length; i++) {
+        xor ^= i ^ nums[i]; // XOR index and value
+    }
+    return xor;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 6: LC 371 -->
+            <div class="section-box box-teal">
+                <div class="section-header">6. LEETCODE 371 — SUM OF TWO INTEGERS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Bitwise Addition (No + Operator)</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Calculate sum of two integers `a` and `b` without using operators `+` and `-`.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int getSum(int a, int b) {
+    while (b != 0) {
+        int carry = (a &amp; b) &lt;&lt; 1;
+        a = a ^ b;
+        b = carry;
+    }
+    return a;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 268):</strong> XORing array values with their 0-to-N indices cancels out all existing pairs, leaving ONLY the missing number!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 14: MEDIUM NEETCODE (RANGE AND & SUBSETS BITMASK) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page14">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🎭</span>
+                    <h1>MEDIUM NEETCODE: BITWISE AND OF RANGE &amp; SUBSETS BITMASK</h1>
+                </div>
+                <span class="page-num">PAGE 14 OF 18</span>
+            </div>
+
+            <!-- Problem 7: LC 201 -->
+            <div class="section-box box-blue">
+                <div class="section-header">7. LEETCODE 201 — BITWISE AND OF NUMBERS RANGE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Common Binary Prefix Search</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Return bitwise AND of all numbers in range `[left, right]` inclusive.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int rangeBitwiseAnd(int left, int right) {
+    int shifts = 0;
+    while (left != right) { // Find common binary prefix!
+        left &gt;&gt;= 1;
+        right &gt;&gt;= 1;
+        shifts++;
+    }
+    return left &lt;&lt; shifts;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 8: LC 78 -->
+            <div class="section-box box-purple">
+                <div class="section-header">8. LEETCODE 78 — SUBSETS (BITMASK APPROACH)</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Bitmask Iteration</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Return power set using iterative $0 \dots 2^N-1$ bitmasking.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public List&lt;List&lt;Integer&gt;&gt; subsets(int[] nums) {
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    int total = 1 &lt;&lt; nums.length;
+    for (int mask = 0; mask &lt; total; mask++) {
+        List&lt;Integer&gt; subset = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; nums.length; i++) {
+            if ((mask &amp; (1 &lt;&lt; i)) != 0) subset.add(nums[i]);
+        }
+        res.add(subset);
+    }
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> LC 201 finds the common binary prefix of `left` and `right` because non-matching trailing bits flip to 0 during range ANDing!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 15: MEDIUM & HARD NEETCODE (SINGLE NUMBER III & MAX XOR) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page15">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔥</span>
+                    <h1>MEDIUM &amp; HARD NEETCODE: SINGLE NUMBER III &amp; MAX XOR</h1>
+                </div>
+                <span class="page-num">PAGE 15 OF 16</span>
+            </div>
+
+            <!-- Problem 9: LC 260 -->
+            <div class="section-box box-purple">
+                <div class="section-header">9. LEETCODE 260 — SINGLE NUMBER III</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Lowest Set Bit Partitioning</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Exactly two elements appear once, all others appear twice. Find the two unique elements in $O(N)$ time and $O(1)$ space.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int[] singleNumber(int[] nums) {
+    int xor = 0;
+    for (int num : nums) xor ^= num; // xor = num1 ^ num2
+    int diffBit = xor &amp; -xor;        // Extract lowest set bit where num1 & num2 differ!
+    int[] res = new int[2];
+    for (int num : nums) {
+        if ((num &amp; diffBit) == 0) res[0] ^= num; // Group 1
+        else res[1] ^= num;                      // Group 2
+    }
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 10: LC 421 Reference -->
+            <div class="section-box box-red">
+                <div class="section-header">10. LEETCODE 421 — MAXIMUM XOR OF TWO NUMBERS (TRIE INTEGRATION)</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>31-Bit Binary Trie Search</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Maximum result of `nums[i] ^ nums[j]`. (Refer to <strong>Topic 11: Trie Masterclass</strong> for full Bitwise Trie implementation!).
+                        </div>
+                        <div class="problem-code">
+<pre>
+// 31-Bit Binary Trie Insert &amp; Max Query:
+// Insert each integer bit-by-bit from bit 31 down to 0.
+// For query x, greedily pick opposite bit (1 - bit) in Trie to maximize XOR!
+// Time: O(32 * N) = O(N), Space: O(32 * N)</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> `diffBit = xor & -xor` isolates a bit position where `num1` has `1` and `num2` has `0`, splitting array into 2 independent XOR buckets!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 16: MASTER REVISION & REFERENCE CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page16">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💎</span>
+                    <h1>IF YOU REMEMBER ONLY ONE PAGE... MASTER REVISION SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 16 OF 16</span>
+            </div>
+
+            <!-- 4 Golden Laws -->
+            <div class="section-box box-green">
+                <div class="section-header">⭐ THE 4 GOLDEN LAWS OF BIT MANIPULATION</div>
+                <div class="section-content">
+                    <div style="font-size:0.78rem; line-height:1.45;">
+                        1. <strong>Kernighan Law:</strong> <code>n &amp; (n - 1)</code> clears lowest set 1-bit in $O(1)$ constant time.<br/>
+                        2. <strong>Lowest Set Bit Law:</strong> <code>n &amp; -n</code> isolates the rightmost 1-bit using Two's Complement.<br/>
+                        3. <strong>XOR Cancellation Law:</strong> <code>x ^ x = 0</code> and <code>x ^ 0 = x</code> eliminate duplicate pairs.<br/>
+                        4. <strong>Unsigned Shift Law:</strong> Always use <code>&gt;&gt;&gt;</code> (unsigned right shift) to prevent sign bit extension bugs!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Common Bit Bugs -->
+            <div class="section-box box-amber">
+                <div class="section-header">⛔ COMMON BIT BUGS &amp; PITFALLS</div>
+                <div class="section-content">
+                    <div>• <strong>Operator Precedence:</strong> `==` has higher precedence than `&`! Always write `(n & 1) == 0`.</div>
+                    <div>• <strong>Shift Overflow:</strong> `1 << 31` creates negative integer! Use `1L << k` for long 64-bit masks.</div>
+                </div>
+            </div>
+
+            <!-- NeetCode & Blind 75 Tracker -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📊 NEETCODE &amp; BLIND 75 CONFIDENCE TRACKER</div>
+                <div class="section-content">
+                    <div class="grid-3">
+                        <div><span class="badge-easy">🟢 Easy</span> LC 136 Single Number</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 191 Number of 1 Bits</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 338 Counting Bits</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 190 Reverse Bits</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 268 Missing Number</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 371 Sum Two Integers</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 201 Bitwise AND Range</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 78 Subsets Bitmask</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 260 Single Number III</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 421 Bitwise Trie Max XOR</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forward Cross Link -->
+            <a href="index.html" class="cross-link" style="background:#dcfce7; color:#15803d; border-color:#86efac; font-size:0.78rem;">👉 Next Master Topic: Topic 18 → Math Basics Masterclass</a>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🎉 <strong>TOPIC 17 BIT MANIPULATION MASTERCLASS COMPLETE!</strong> Turn the page to <strong>Topic 18: Math Basics Masterclass</strong>!
+        </div>
+    </div>
+
+    </div> <!-- end .main-content -->
+</div> <!-- end .app-layout -->
+</div> <!-- end .container -->
+
+<!-- Floating Back to Top Button -->
+<button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆</button>
+
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout') || document.querySelector('.app-layout');
+        const btn = document.querySelector('.shrink-btn span');
+        if (layout) {
+            layout.classList.toggle('shrunk');
+            if (btn) {
+                btn.innerText = layout.classList.contains('shrunk') ? '➕ Expand' : '➖ Shrink';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+

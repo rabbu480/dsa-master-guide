@@ -1,0 +1,358 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1>TREE FOUNDATIONS</h1>
+            <div class="subtitle">The base you must be 100% clear on.<br><small style="color:#64748b;font-weight:normal;">(FAANG Cheat Sheet)</small></div>
+        </div>
+        <div style="text-align: right;">
+            <div class="page-number">1</div>
+        </div>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header" style="background-color: #1e3a8a; color: white; text-align: center; padding: 5px;">1.1 TREE vs BINARY TREE vs BINARY SEARCH TREE (BST)</div>
+        <div class="section-content">
+            <div style="display: flex; justify-content: space-between;">
+                <div style="width: 30%;">
+                    <h3 style="color: #16a34a; text-align: center;">TREE</h3>
+                    <ul style="font-size: 0.9em; padding-left: 20px;">
+                        <li>A hierarchical structure.</li>
+                        <li>Each node can have 0 or more children.</li>
+                        <li>No ordering between child nodes.</li>
+                    </ul>
+                    <div class="mermaid">
+                    graph TD
+                        style A stroke:#16a34a,fill:white
+                        style B stroke:#16a34a,fill:white
+                        style C stroke:#16a34a,fill:white
+                        style D stroke:#16a34a,fill:white
+                        A((1)) --> B((2))
+                        A --> C((3))
+                        A --> D((4))
+                    </div>
+                </div>
+                <div style="border-left: 1px dashed #ccc;"></div>
+                <div style="width: 30%;">
+                    <h3 style="color: #7e22ce; text-align: center;">BINARY TREE</h3>
+                    <ul style="font-size: 0.9em; padding-left: 20px;">
+                        <li>Each node has at most 2 children: Left and Right.</li>
+                        <li>No ordering between left and right subtree.</li>
+                    </ul>
+                    <div class="mermaid">
+                    graph TD
+                        style A stroke:#7e22ce,fill:white
+                        style B stroke:#7e22ce,fill:white
+                        style C stroke:#7e22ce,fill:white
+                        style D stroke:#7e22ce,fill:white
+                        style E stroke:#7e22ce,fill:white
+                        style F stroke:#7e22ce,fill:white
+                        A((1)) --> B((2))
+                        A --> C((3))
+                        B --> D((4))
+                        B --> E((5))
+                        C --> F((6))
+                    </div>
+                </div>
+                <div style="border-left: 1px dashed #ccc;"></div>
+                <div style="width: 30%;">
+                    <h3 style="color: #ea580c; text-align: center;">BINARY SEARCH TREE (BST)</h3>
+                    <ul style="font-size: 0.9em; padding-left: 20px;">
+                        <li>Binary Tree + Left < Root < Right for every node.</li>
+                        <li>Inorder traversal gives sorted order.</li>
+                    </ul>
+                    <div class="mermaid">
+                    graph TD
+                        style A stroke:#ea580c,fill:white
+                        style B stroke:#ea580c,fill:white
+                        style C stroke:#ea580c,fill:white
+                        style D stroke:#ea580c,fill:white
+                        style E stroke:#ea580c,fill:white
+                        style F stroke:#ea580c,fill:white
+                        A((8)) --> B((3))
+                        A --> C((10))
+                        B --> D((1))
+                        B --> E((6))
+                        C --> F((14))
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header" style="background-color: #1e3a8a; color: white; text-align: center; padding: 5px;">1.2 TYPES OF BINARY TREES</div>
+        <div class="section-content" style="display: flex; justify-content: space-between; text-align: center; font-size: 0.85em;">
+            <div style="width: 18%;">
+                <h4 style="color: #16a34a; margin-bottom: 5px;">FULL BINARY TREE</h4>
+                <p style="margin-bottom: 10px;">Every node has 0 or 2 children.</p>
+                <div class="mermaid">
+                graph TD
+                    style A stroke:#16a34a,fill:white
+                    style B stroke:#16a34a,fill:white
+                    style C stroke:#16a34a,fill:white
+                    style D stroke:#16a34a,fill:white
+                    style E stroke:#16a34a,fill:white
+                    style F stroke:#16a34a,fill:white
+                    style G stroke:#16a34a,fill:white
+                    A((1)) --> B((2))
+                    A --> C((3))
+                    B --> D((4))
+                    B --> E((5))
+                    C --> F((6))
+                    C --> G((7))
+                </div>
+            </div>
+            <div style="border-left: 1px solid #ccc;"></div>
+            
+            <div style="width: 18%;">
+                <h4 style="color: #7e22ce; margin-bottom: 5px;">COMPLETE BINARY TREE</h4>
+                <p style="margin-bottom: 10px;">All levels are completely filled except possibly the last level, and all nodes are as far left as possible.</p>
+                <div class="mermaid">
+                graph TD
+                    style A stroke:#7e22ce,fill:white
+                    style B stroke:#7e22ce,fill:white
+                    style C stroke:#7e22ce,fill:white
+                    style D stroke:#7e22ce,fill:white
+                    style E stroke:#7e22ce,fill:white
+                    style F stroke:#7e22ce,fill:white
+                    A((1)) --> B((2))
+                    A --> C((3))
+                    B --> D((4))
+                    B --> E((5))
+                    C --> F((6))
+                </div>
+            </div>
+            <div style="border-left: 1px solid #ccc;"></div>
+            
+            <div style="width: 18%;">
+                <h4 style="color: #ea580c; margin-bottom: 5px;">PERFECT BINARY TREE</h4>
+                <p style="margin-bottom: 10px;">All internal nodes have 2 children and all leaves are at the same level.</p>
+                <div class="mermaid">
+                graph TD
+                    style A stroke:#ea580c,fill:white
+                    style B stroke:#ea580c,fill:white
+                    style C stroke:#ea580c,fill:white
+                    style D stroke:#ea580c,fill:white
+                    style E stroke:#ea580c,fill:white
+                    style F stroke:#ea580c,fill:white
+                    style G stroke:#ea580c,fill:white
+                    A((1)) --> B((2))
+                    A --> C((3))
+                    B --> D((4))
+                    B --> E((5))
+                    C --> F((6))
+                    C --> G((7))
+                </div>
+            </div>
+            <div style="border-left: 1px solid #ccc;"></div>
+
+            <div style="width: 18%;">
+                <h4 style="color: #0284c7; margin-bottom: 5px;">BALANCED BINARY TREE</h4>
+                <p style="margin-bottom: 10px;">For every node, |height(left) - height(right)| ≤ 1</p>
+                <div class="mermaid">
+                graph TD
+                    style A stroke:#0284c7,fill:white
+                    style B stroke:#0284c7,fill:white
+                    style C stroke:#0284c7,fill:white
+                    style D stroke:#0284c7,fill:white
+                    style E stroke:#0284c7,fill:white
+                    style F stroke:#0284c7,fill:white
+                    A((1)) --> B((2))
+                    A --> C((3))
+                    B --> D((4))
+                    C --> E((5))
+                    C --> F((6))
+                </div>
+            </div>
+            <div style="border-left: 1px solid #ccc;"></div>
+
+            <div style="width: 18%;">
+                <h4 style="color: #dc2626; margin-bottom: 5px;">SKEWED BINARY TREE</h4>
+                <p style="margin-bottom: 10px;">Every node has only one child.<br>(Left Skewed or Right Skewed)</p>
+                <div style="display: flex; justify-content: center; gap: 10px; align-items: center;">
+                    <div class="mermaid">
+                    graph TD
+                        style A stroke:#dc2626,fill:white
+                        style B stroke:#dc2626,fill:white
+                        style C stroke:#dc2626,fill:white
+                        style D stroke:#dc2626,fill:white
+                        A((1)) --> B((2))
+                        B --> C((3))
+                        C --> D((4))
+                    </div>
+                    <span>or</span>
+                    <div class="mermaid">
+                    graph TD
+                        style A stroke:#dc2626,fill:white
+                        style B stroke:#dc2626,fill:white
+                        style C stroke:#dc2626,fill:white
+                        style D stroke:#dc2626,fill:white
+                        A((1)) --> B((2))
+                        B --> C((3))
+                        C --> D((4))
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header" style="background-color: #1e3a8a; color: white; text-align: center; padding: 5px;">1.3 KEY TERMINOLOGY</div>
+        <div class="section-content">
+            <div class="grid-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 0.9em;">
+                <div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 10px; width: 40px; text-align: center;"><div style="width:20px; height:20px; background-color:#16a34a; border-radius:50%; display:inline-block;"></div></td>
+                            <td style="padding: 10px; font-weight: bold; color: #16a34a; width: 100px;">Node</td>
+                            <td style="padding: 10px;">: Basic unit of a tree.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; text-align: center;"><div style="width:20px; height:20px; border:2px solid #16a34a; border-radius:50%; display:inline-block;"></div></td>
+                            <td style="padding: 10px; font-weight: bold; color: #16a34a;">Root</td>
+                            <td style="padding: 10px;">: Topmost node of the tree.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; text-align: center;"><div style="width:20px; height:2px; background-color:#16a34a; display:inline-block; margin-bottom:8px;"></div></td>
+                            <td style="padding: 10px; font-weight: bold; color: #16a34a;">Edge</td>
+                            <td style="padding: 10px;">: Connection between two nodes.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; text-align: center;">
+                                <div class="mermaid">
+                                graph TD
+                                A((A)):::highlight --> B((B))
+                                A --> C((C))
+                                classDef highlight stroke:#7e22ce,stroke-width:2px;
+                                </div>
+                            </td>
+                            <td style="padding: 10px; font-weight: bold; color: #7e22ce;">Parent</td>
+                            <td style="padding: 10px;">: Immediate ancestor of a node.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; text-align: center;">
+                                <div class="mermaid">
+                                graph TD
+                                A((A)) --> B((B)):::highlight
+                                classDef highlight stroke:#7e22ce,stroke-width:2px;
+                                </div>
+                            </td>
+                            <td style="padding: 10px; font-weight: bold; color: #7e22ce;">Child</td>
+                            <td style="padding: 10px;">: Immediate descendant of a node.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; text-align: center;"><span style="color:#16a34a; font-size:1.5em;">🍃</span></td>
+                            <td style="padding: 10px; font-weight: bold; color: #16a34a;">Leaf Node</td>
+                            <td style="padding: 10px;">: Node with no children.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; text-align: center;">
+                                <div class="mermaid">
+                                graph TD
+                                A(( )) --> B(( )):::highlight
+                                B --> C(( ))
+                                classDef highlight stroke:#ea580c,stroke-width:2px;
+                                </div>
+                            </td>
+                            <td style="padding: 10px; font-weight: bold; color: #ea580c;">Internal Node</td>
+                            <td style="padding: 10px;">: Node with at least one child.</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 10px; text-align: center;">
+                                <div class="mermaid">
+                                graph TD
+                                A((A)) --> B((B)):::highlight
+                                A --> C((C)):::highlight
+                                classDef highlight stroke:#0284c7,stroke-width:2px;
+                                </div>
+                            </td>
+                            <td style="padding: 10px; font-weight: bold; color: #0284c7; width: 100px;">Siblings</td>
+                            <td style="padding: 10px;">: Children of the same parent.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; text-align: center;">
+                                <div class="mermaid">
+                                graph TD
+                                A((A)) -.-> B((B))
+                                </div>
+                            </td>
+                            <td style="padding: 10px; font-weight: bold; color: #0284c7;">Depth of Node</td>
+                            <td style="padding: 10px;">: Number of edges from root to the node.<br>(Root depth = 0)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; text-align: center;">
+                                <div class="mermaid">
+                                graph TD
+                                A((A)) --> B((B))
+                                B --> D((D))
+                                A --> C((C))
+                                B --> E((E))
+                                </div>
+                            </td>
+                            <td style="padding: 10px; font-weight: bold; color: #0284c7;">Level of Node</td>
+                            <td style="padding: 10px;">: Depth + 1<br>(Root level = 1)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; text-align: center;">
+                                <div class="mermaid">
+                                graph TD
+                                A((A)):::highlight --> B((B)):::highlight
+                                classDef highlight stroke:#16a34a,stroke-width:2px;
+                                </div>
+                            </td>
+                            <td style="padding: 10px; font-weight: bold; color: #16a34a;">Height of Node</td>
+                            <td style="padding: 10px;">: Number of edges on the longest path from the node to a leaf.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; text-align: center;">
+                                <div class="mermaid">
+                                graph TD
+                                A((A)):::highlight --> B((B)):::highlight
+                                classDef highlight stroke:#16a34a,stroke-width:2px;
+                                </div>
+                            </td>
+                            <td style="padding: 10px; font-weight: bold; color: #16a34a;">Height of Tree</td>
+                            <td style="padding: 10px;">: Height of the root node.<br>(Longest path from root to a leaf)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; text-align: center;">
+                                <div class="mermaid">
+                                graph LR
+                                A((A)):::highlight --> B((B)):::highlight
+                                B --> C((C)):::highlight
+                                classDef highlight stroke:#7e22ce,stroke-width:2px;
+                                </div>
+                            </td>
+                            <td style="padding: 10px; font-weight: bold; color: #7e22ce;">Path</td>
+                            <td style="padding: 10px;">: Sequence of nodes connected by edges.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; text-align: center;">
+                                <div class="mermaid">
+                                graph TD
+                                A(( )) --> B(( ))
+                                A --> C(( ))
+                                classDef default stroke:#ea580c;
+                                </div>
+                            </td>
+                            <td style="padding: 10px; font-weight: bold; color: #ea580c;">Subtree</td>
+                            <td style="padding: 10px;">: A tree formed by a node and its descendants.</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div style="background-color: #f0f9ff; padding: 15px; border-radius: 8px; margin-top: 15px; display: flex; align-items: center; gap: 15px;">
+                <div style="background-color: #1e3a8a; color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-weight: bold;">💡</div>
+                <div>
+                    <strong>Remember:</strong> Tree is a hierarchical structure. Understanding these basics makes every tree problem easier!
+                </div>
+                <div style="margin-left: auto; color: #1e3a8a; font-size: 1.5em;">🎯</div>
+            </div>
+        </div>
+    </div>
+</div>

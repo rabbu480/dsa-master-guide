@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 2 - Section 3: The Seven Indexes & Section 4: Glance Sheets</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+    :root { --primary: #1e3a8a; --emerald: #059669; --text-dark: #0f172a; --bg-light: #f8fafc; --border-color: #cbd5e1; }
+    body { font-family: 'Inter', sans-serif; background-color: #cbd5e1; color: var(--text-dark); margin: 0; padding: 20px; font-size: 13px; line-height: 1.5; }
+    .page { background: white; max-width: 1100px; margin: 0 auto 30px auto; padding: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 8px; page-break-after: always; }
+    .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--primary); padding-bottom: 12px; margin-bottom: 25px; background: #f1f5f9; padding: 15px 20px; border-radius: 6px; }
+    .header-top h1 { margin: 0; font-size: 1.8rem; color: var(--primary); font-weight: 900; text-transform: uppercase; }
+    .badge { background: var(--emerald); color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; }
+    .section-box { border: 2px solid var(--primary); border-radius: 8px; margin-bottom: 25px; overflow: hidden; background: white; page-break-inside: avoid; }
+    .section-header { background: var(--primary); color: white; padding: 10px 18px; font-size: 1.1rem; font-weight: 800; }
+    .section-content { padding: 18px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 10px 0; }
+    table th, table td { border: 1px solid var(--border-color); padding: 8px 12px; text-align: left; }
+    table th { background: #f1f5f9; font-weight: 800; }
+    @media print { body { background: white; padding: 0; } .page { box-shadow: none; border: none; margin: 0; padding: 15px 0; max-width: 100%; } }
+</style>
+</head>
+<body>
+
+<!-- Section 3 -->
+<div class="page">
+    <div class="header-top">
+        <div>
+            <h1>Book 2 — Section 3: The Seven Indexes</h1>
+            <div style="font-size: 0.95rem; color: #475569; font-weight: 600;">Cross-Referenced Navigation Tables</div>
+        </div>
+        <span class="badge">Section 3</span>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">3.2 Index by Pattern (Cross-linked to DNA Cards & Templates)</div>
+        <div class="section-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pattern Name</th>
+                        <th>DNA Card #</th>
+                        <th>Template ID</th>
+                        <th>Core Representative Problems</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>DFS Traversal</td><td>DNA #1</td><td>A.1, A.2</td><td>Number of Islands, Path Sum</td></tr>
+                    <tr><td>Tree DFS</td><td>DNA #2</td><td>A.3</td><td>Max Depth, Diameter of BT, Max Path Sum</td></tr>
+                    <tr><td>Grid DFS</td><td>DNA #3</td><td>A.4</td><td>Flood Fill, Surrounded Regions</td></tr>
+                    <tr><td>Topological Sort</td><td>DNA #10</td><td>A.7, A.8</td><td>Course Schedule I & II, Alien Dictionary</td></tr>
+                    <tr><td>Binary Search Bounds</td><td>DNA #11</td><td>A.9</td><td>First and Last Position, Rotated Sorted Search</td></tr>
+                    <tr><td>Binary Search on Answer</td><td>DNA #12</td><td>A.10</td><td>Koko Eating Bananas, Capacity to Ship</td></tr>
+                    <tr><td>Sliding Window Variable</td><td>DNA #14</td><td>A.12</td><td>Longest Substring Without Repeating, Min Window Substring</td></tr>
+                    <tr><td>Monotonic Stack</td><td>DNA #17</td><td>A.14</td><td>Daily Temperatures, Largest Rectangle in Histogram</td></tr>
+                    <tr><td>Union-Find</td><td>DNA #21</td><td>A.18</td><td>Redundant Connection, Accounts Merge</td></tr>
+                    <tr><td>Dijkstra</td><td>DNA #22</td><td>A.19</td><td>Network Delay Time, Path With Min Effort</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Section 4 -->
+<div class="page">
+    <div class="header-top">
+        <div>
+            <h1>Book 2 — Section 4: One-Page Glance Sheets</h1>
+            <div style="font-size: 0.95rem; color: #475569; font-weight: 600;">Interview Day Rapid Review Sheets</div>
+        </div>
+        <span class="badge">Section 4</span>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">Topic Glance: Dynamic Programming</div>
+        <div class="section-content">
+            <p><strong>Recognition Signals:</strong> "max profit", "min cost", "number of ways", "overlapping decisions"</p>
+            <p><strong>Core Framework:</strong> SC→RBR→MTS (Subproblem Choice → Recurrence Relation → State Memo/Tabulation/Space)</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>DP Pattern</th>
+                        <th>State Definition</th>
+                        <th>Recurrence Key</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1D DP (House Robber)</td><td>dp[i] = max profit up to i</td><td>dp[i] = max(dp[i-1], val[i] + dp[i-2])</td></tr>
+                    <tr><td>0/1 Knapsack</td><td>dp[w] = max value with capacity w</td><td>dp[w] = max(dp[w], val[i] + dp[w - wt[i]])</td></tr>
+                    <tr><td>LCS</td><td>dp[i][j] = LCS of s1[0..i] & s2[0..j]</td><td>match: 1 + dp[i-1][j-1], else: max(dp[i-1][j], dp[i][j-1])</td></tr>
+                    <tr><td>LIS</td><td>dp[i] = LIS ending at index i</td><td>dp[i] = 1 + max(dp[j]) for j &lt; i where nums[j] &lt; nums[i]</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

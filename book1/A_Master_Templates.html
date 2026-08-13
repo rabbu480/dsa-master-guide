@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 - Appendix A: Master Java Template Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --accent: #d97706;
+        --text-dark: #0f172a;
+        --bg-light: #f8fafc;
+        --border-color: #cbd5e1;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #cbd5e1;
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+    .page {
+        background: white;
+        max-width: 1100px;
+        margin: 0 auto 30px auto;
+        padding: 35px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        page-break-after: always;
+    }
+    .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 3px solid var(--primary);
+        padding-bottom: 12px;
+        margin-bottom: 25px;
+        background: #f1f5f9;
+        padding: 15px 20px;
+        border-radius: 6px;
+    }
+    .header-top h1 {
+        margin: 0;
+        font-size: 1.8rem;
+        color: var(--primary);
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: -0.5px;
+    }
+    .header-top .subtitle {
+        font-size: 0.95rem;
+        color: #475569;
+        font-weight: 600;
+    }
+    .badge {
+        background: var(--primary);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.85rem;
+    }
+    .template-box {
+        border: 2px solid var(--primary);
+        border-radius: 8px;
+        margin-bottom: 25px;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        page-break-inside: avoid;
+    }
+    .template-header {
+        background: var(--primary);
+        color: white;
+        padding: 10px 18px;
+        font-size: 1.1rem;
+        font-weight: 800;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .template-num {
+        background: white;
+        color: var(--primary);
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        font-weight: 900;
+    }
+    .meta-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px;
+        background: #f8fafc;
+        padding: 12px 18px;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 0.85rem;
+    }
+    .meta-item strong {
+        color: #334155;
+        display: block;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    pre {
+        background: var(--code-bg);
+        color: var(--code-text);
+        padding: 16px;
+        margin: 0;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        white-space: pre-wrap !important;
+        word-break: break-word !important;
+        overflow-x: auto;
+    }
+    code {
+        font-family: 'Fira Code', monospace;
+    }
+    .code-keyword { color: #f43f5e; font-weight: bold; }
+    .code-type { color: #38bdf8; font-weight: bold; }
+    .code-comment { color: #94a3b8; font-style: italic; }
+    .code-func { color: #fbbf24; }
+    .gotcha-box {
+        background: #fffbeb;
+        border-top: 1px solid #fde68a;
+        padding: 10px 18px;
+        font-size: 0.85rem;
+        color: #b45309;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    @media print {
+        body { background: white; padding: 0; }
+        .page { box-shadow: none; border: none; margin: 0; padding: 15px 0; max-width: 100%; page-break-after: auto; }
+        .template-box { page-break-inside: avoid !important; break-inside: avoid !important; }
+        pre { white-space: pre-wrap !important; word-wrap: break-word !important; }
+    }
+</style>
+</head>
+<body>
+
+<div class="page">
+    <div class="header-top">
+        <div>
+            <h1>Book 1 — Appendix A: Master Java Template Library</h1>
+            <div class="subtitle">24 Production-Grade Canonical Java Data Structures & Algorithms Templates</div>
+        </div>
+        <span class="badge">Reference Only</span>
+    </div>
+
+    <!-- A.1 DFS Recursive -->
+    <div class="template-box" id="A.1">
+        <div class="template-header">
+            <span>A.1 — Depth-First Search (DFS) Recursive</span>
+            <span class="template-num">A.1</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "all paths", "connected components", "explore deeply", "tree/graph traversal"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(V + E) Graph / O(N) Tree</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(V) Recursion Stack</div>
+        </div>
+        <pre><code><span class="code-keyword">public void</span> <span class="code-func">dfs</span>(<span class="code-type">int</span> u, <span class="code-type">List</span>&lt;<span class="code-type">List</span>&lt;<span class="code-type">Integer</span>&gt;&gt; adj, <span class="code-type">boolean</span>[] visited) {
+    <span class="code-comment">// Base Case & State Mark</span>
+    visited[u] = <span class="code-keyword">true</span>;
+    <span class="code-comment">// Process Node u (e.g. add to path)</span>
+    
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> v : adj.get(u)) {
+        <span class="code-keyword">if</span> (!visited[v]) {
+            dfs(v, adj, visited);
+        }
+    }
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Always mark visited BEFORE making recursive calls to avoid infinite cycles in undirected or graph cyclic inputs.</div>
+    </div>
+
+    <!-- A.2 DFS Iterative -->
+    <div class="template-box" id="A.2">
+        <div class="template-header">
+            <span>A.2 — Depth-First Search (DFS) Iterative</span>
+            <span class="template-num">A.2</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "deep recursion protection", "explicit stack DFS", "avoid stack overflow"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(V + E)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(V) Explicit Stack</div>
+        </div>
+        <pre><code><span class="code-keyword">public void</span> <span class="code-func">dfsIterative</span>(<span class="code-type">int</span> start, <span class="code-type">List</span>&lt;<span class="code-type">List</span>&lt;<span class="code-type">Integer</span>&gt;&gt; adj, <span class="code-type">int</span> n) {
+    <span class="code-type">boolean</span>[] visited = <span class="code-keyword">new boolean</span>[n];
+    <span class="code-type">Deque</span>&lt;<span class="code-type">Integer</span>&gt; stack = <span class="code-keyword">new ArrayDeque</span>&lt;&gt;();
+    
+    stack.push(start);
+    
+    <span class="code-keyword">while</span> (!stack.isEmpty()) {
+        <span class="code-type">int</span> u = stack.pop();
+        <span class="code-keyword">if</span> (visited[u]) <span class="code-keyword">continue</span>;
+        visited[u] = <span class="code-keyword">true</span>;
+        
+        <span class="code-keyword">for</span> (<span class="code-type">int</span> v : adj.get(u)) {
+            <span class="code-keyword">if</span> (!visited[v]) {
+                stack.push(v);
+            }
+        }
+    }
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Pop from stack and check `visited[u]` inside the loop because nodes may be pushed multiple times before visiting.</div>
+    </div>
+
+    <!-- A.3 Tree DFS -->
+    <div class="template-box" id="A.3">
+        <div class="template-header">
+            <span>A.3 — Tree DFS (Pre-Order / In-Order / Post-Order)</span>
+            <span class="template-num">A.3</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "tree traversal", "bottom-up calculation", "path evaluation"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(N)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(H) where H = tree height</div>
+        </div>
+        <pre><code><span class="code-keyword">public int</span> <span class="code-func">treeDFS</span>(<span class="code-type">TreeNode</span> root) {
+    <span class="code-keyword">if</span> (root == <span class="code-keyword">null</span>) <span class="code-keyword">return</span> 0; <span class="code-comment">// Base case</span>
+    
+    <span class="code-comment">// Pre-order work here (Top-down)</span>
+    <span class="code-type">int</span> left = treeDFS(root.left);
+    <span class="code-comment">// In-order work here (BST sorted order)</span>
+    <span class="code-type">int</span> right = treeDFS(root.right);
+    <span class="code-comment">// Post-order work here (Bottom-up aggregate, e.g. Height = 1 + Math.max(left, right))</span>
+    
+    <span class="code-keyword">return</span> 1 + Math.max(left, right);
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Use Post-order (bottom-up) when child results are mandatory to compute current node result.</div>
+    </div>
+
+    <!-- A.4 Grid DFS -->
+    <div class="template-box" id="A.4">
+        <div class="template-header">
+            <span>A.4 — 2D Grid DFS (Islands / Matrix Exploration)</span>
+            <span class="template-num">A.4</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "connected islands", "matrix traversal", "grid search"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(R × C)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(R × C) Stack worst case</div>
+        </div>
+        <pre><code><span class="code-keyword">private static final int</span>[][] DIRS = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+
+<span class="code-keyword">public void</span> <span class="code-func">gridDFS</span>(<span class="code-type">char</span>[][] grid, <span class="code-type">int</span> r, <span class="code-type">int</span> c) {
+    <span class="code-type">int</span> rows = grid.length, cols = grid[0].length;
+    <span class="code-keyword">if</span> (r &lt; 0 || r &gt;= rows || c &lt; 0 || c &gt;= cols || grid[r][c] != <span class="code-string">'1'</span>) {
+        <span class="code-keyword">return</span>;
+    }
+    
+    grid[r][c] = <span class="code-string">'0'</span>; <span class="code-comment">// Mark visited in-place</span>
+    <span class="code-keyword">for</span> (<span class="code-type">int</span>[] d : DIRS) {
+        gridDFS(grid, r + d[0], c + d[1]);
+    }
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Check boundary conditions `r &lt; 0 || r &gt;= rows || c &lt; 0 || c &gt;= cols` FIRST before indexing matrix.</div>
+    </div>
+
+    <!-- A.5 BFS Standard -->
+    <div class="template-box" id="A.5">
+        <div class="template-header">
+            <span>A.5 — Breadth-First Search (BFS Standard / Level-Order)</span>
+            <span class="template-num">A.5</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "shortest path unweighted", "minimum steps", "level order"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(V + E)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(V) Queue size</div>
+        </div>
+        <pre><code><span class="code-keyword">public int</span> <span class="code-func">bfsShortestPath</span>(<span class="code-type">int</span> start, <span class="code-type">int</span> target, <span class="code-type">List</span>&lt;<span class="code-type">List</span>&lt;<span class="code-type">Integer</span>&gt;&gt; adj, <span class="code-type">int</span> n) {
+    <span class="code-type">Queue</span>&lt;<span class="code-type">Integer</span>&gt; queue = <span class="code-keyword">new ArrayDeque</span>&lt;&gt;();
+    <span class="code-type">boolean</span>[] visited = <span class="code-keyword">new boolean</span>[n];
+    
+    queue.offer(start);
+    visited[start] = <span class="code-keyword">true</span>;
+    <span class="code-type">int</span> level = 0;
+    
+    <span class="code-keyword">while</span> (!queue.isEmpty()) {
+        <span class="code-type">int</span> size = queue.size();
+        <span class="code-keyword">for</span> (<span class="code-type">int</span> i = 0; i &lt; size; i++) {
+            <span class="code-type">int</span> u = queue.poll();
+            <span class="code-keyword">if</span> (u == target) <span class="code-keyword">return</span> level;
+            
+            <span class="code-keyword">for</span> (<span class="code-type">int</span> v : adj.get(u)) {
+                <span class="code-keyword">if</span> (!visited[v]) {
+                    visited[v] = <span class="code-keyword">true</span>;
+                    queue.offer(v);
+                }
+            }
+        }
+        level++;
+    }
+    <span class="code-keyword">return</span> -1;
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Mark `visited[v] = true` IMMEDIATELY upon pushing into Queue to prevent duplicate queue entries.</div>
+    </div>
+
+    <!-- A.6 Multi-Source BFS -->
+    <div class="template-box" id="A.6">
+        <div class="template-header">
+            <span>A.6 — Multi-Source BFS</span>
+            <span class="template-num">A.6</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "distance to nearest 0/fire/source", "simultaneous spreading"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(R × C)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(R × C)</div>
+        </div>
+        <pre><code><span class="code-keyword">public int</span>[][] <span class="code-func">updateMatrix</span>(<span class="code-type">int</span>[][] mat) {
+    <span class="code-type">int</span> r = mat.length, c = mat[0].length;
+    <span class="code-type">Queue</span>&lt;<span class="code-type">int</span>[]&gt; queue = <span class="code-keyword">new ArrayDeque</span>&lt;&gt;();
+    <span class="code-type">boolean</span>[][] visited = <span class="code-keyword">new boolean</span>[r][c];
+    
+    <span class="code-comment">// Add ALL initial sources to queue at step 0</span>
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> i = 0; i &lt; r; i++) {
+        <span class="code-keyword">for</span> (<span class="code-type">int</span> j = 0; j &lt; c; j++) {
+            <span class="code-keyword">if</span> (mat[i][j] == 0) {
+                queue.offer(<span class="code-keyword">new int</span>[]{i, j});
+                visited[i][j] = <span class="code-keyword">true</span>;
+            }
+        }
+    }
+    <span class="code-comment">// Standard BFS queue drain follows...</span>
+    <span class="code-keyword">return</span> mat;
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Push ALL starting sources into the queue before starting the level-by-level loop.</div>
+    </div>
+
+    <!-- A.7 Topological Sort Kahn's -->
+    <div class="template-box" id="A.7">
+        <div class="template-header">
+            <span>A.7 — Topological Sort (Kahn's BFS Algorithm)</span>
+            <span class="template-num">A.7</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "prerequisites", "dependency order", "cycle detection DAG"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(V + E)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(V + E)</div>
+        </div>
+        <pre><code><span class="code-keyword">public int</span>[] <span class="code-func">findOrder</span>(<span class="code-type">int</span> numCourses, <span class="code-type">int</span>[][] prerequisites) {
+    <span class="code-type">int</span>[] indegree = <span class="code-keyword">new int</span>[numCourses];
+    <span class="code-type">List</span>&lt;<span class="code-type">List</span>&lt;<span class="code-type">Integer</span>&gt;&gt; adj = <span class="code-keyword">new ArrayList</span>&lt;&gt;();
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> i = 0; i &lt; numCourses; i++) adj.add(<span class="code-keyword">new ArrayList</span>&lt;&gt;());
+    
+    <span class="code-keyword">for</span> (<span class="code-type">int</span>[] p : prerequisites) {
+        adj.get(p[1]).add(p[0]);
+        indegree[p[0]]++;
+    }
+    
+    <span class="code-type">Queue</span>&lt;<span class="code-type">Integer</span>&gt; q = <span class="code-keyword">new ArrayDeque</span>&lt;&gt;();
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> i = 0; i &lt; numCourses; i++) {
+        <span class="code-keyword">if</span> (indegree[i] == 0) q.offer(i);
+    }
+    
+    <span class="code-type">int</span>[] order = <span class="code-keyword">new int</span>[numCourses];
+    <span class="code-type">int</span> idx = 0;
+    <span class="code-keyword">while</span> (!q.isEmpty()) {
+        <span class="code-type">int</span> u = q.poll();
+        order[idx++] = u;
+        <span class="code-keyword">for</span> (<span class="code-type">int</span> v : adj.get(u)) {
+            <span class="code-keyword">if</span> (--indegree[v] == 0) q.offer(v);
+        }
+    }
+    <span class="code-keyword">return</span> idx == numCourses ? order : <span class="code-keyword">new int</span>[0]; <span class="code-comment">// If idx != N -> Cycle exists!</span>
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: If `processedCount != V` at the end, the graph has a cycle (not a valid DAG).</div>
+    </div>
+
+    <!-- A.8 Topological Sort DFS -->
+    <div class="template-box" id="A.8">
+        <div class="template-header">
+            <span>A.8 — Topological Sort (DFS Post-Order Reverse)</span>
+            <span class="template-num">A.8</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "cycle detection via 3-color DFS", "post-order stack topological"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(V + E)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(V)</div>
+        </div>
+        <pre><code><span class="code-comment">// State: 0 = Unvisited, 1 = Visiting (In Current Path), 2 = Visited (Done)</span>
+<span class="code-keyword">public boolean</span> <span class="code-func">hasCycle</span>(<span class="code-type">int</span> u, <span class="code-type">List</span>&lt;<span class="code-type">List</span>&lt;<span class="code-type">Integer</span>&gt;&gt; adj, <span class="code-type">int</span>[] state, <span class="code-type">Deque</span>&lt;<span class="code-type">Integer</span>&gt; stack) {
+    state[u] = 1; <span class="code-comment">// Mark Visiting</span>
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> v : adj.get(u)) {
+        <span class="code-keyword">if</span> (state[v] == 1) <span class="code-keyword">return true</span>; <span class="code-comment">// Cycle detected!</span>
+        <span class="code-keyword">if</span> (state[v] == 0 &amp;&amp; hasCycle(v, adj, state, stack)) <span class="code-keyword">return true</span>;
+    }
+    state[u] = 2; <span class="code-comment">// Mark Visited</span>
+    stack.push(u); <span class="code-comment">// Add to result in post-order</span>
+    <span class="code-keyword">return false</span>;
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: `state == 1` means back-edge found (cycle). Reverse the post-order stack to get valid topological order.</div>
+    </div>
+
+    <!-- A.9 Binary Search Exact / Lower / Upper -->
+    <div class="template-box" id="A.9">
+        <div class="template-header">
+            <span>A.9 — Binary Search (Exact, Lower Bound, Upper Bound)</span>
+            <span class="template-num">A.9</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "sorted array lookup", "first position >=", "last position <="</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(log N)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(1)</div>
+        </div>
+        <pre><code><span class="code-comment">// Lower Bound: First index where arr[i] >= target</span>
+<span class="code-keyword">public int</span> <span class="code-func">lowerBound</span>(<span class="code-type">int</span>[] arr, <span class="code-type">int</span> target) {
+    <span class="code-type">int</span> lo = 0, hi = arr.length; <span class="code-comment">// Note: hi = arr.length</span>
+    <span class="code-keyword">while</span> (lo &lt; hi) {
+        <span class="code-type">int</span> mid = lo + (hi - lo) / 2;
+        <span class="code-keyword">if</span> (arr[mid] &gt;= target) hi = mid;
+        <span class="code-keyword">else</span> lo = mid + 1;
+    }
+    <span class="code-keyword">return</span> lo;
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Use `lo + (hi - lo) / 2` to avoid integer overflow compared to `(lo + hi) / 2`.</div>
+    </div>
+
+    <!-- A.10 Binary Search on Answer -->
+    <div class="template-box" id="A.10">
+        <div class="template-header">
+            <span>A.10 — Binary Search on Answer (Monotonic Predicate)</span>
+            <span class="template-num">A.10</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "minimum capacity to...", "maximum min distance", "canDo(mid)"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(N log(Range))</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(1)</div>
+        </div>
+        <pre><code><span class="code-keyword">public int</span> <span class="code-func">minCapability</span>(<span class="code-type">int</span>[] nums, <span class="code-type">int</span> k) {
+    <span class="code-type">int</span> lo = 1, hi = 1_000_000_000, ans = hi;
+    <span class="code-keyword">while</span> (lo &lt;= hi) {
+        <span class="code-type">int</span> mid = lo + (hi - lo) / 2;
+        <span class="code-keyword">if</span> (isValid(nums, k, mid)) {
+            ans = mid;    <span class="code-comment">// Record candidate answer</span>
+            hi = mid - 1; <span class="code-comment">// Try finding smaller valid answer</span>
+        } <span class="code-keyword">else</span> {
+            lo = mid + 1;
+        }
+    }
+    <span class="code-keyword">return</span> ans;
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Ensure `isValid(mid)` is strictly monotonic (e.g. false, false, true, true...).</div>
+    </div>
+
+    <!-- A.11 Two Pointers -->
+    <div class="template-box" id="A.11">
+        <div class="template-header">
+            <span>A.11 — Two Pointers (Opposite Ends & Same Direction)</span>
+            <span class="template-num">A.11</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "sorted array pair sum", "container with water", "remove duplicates"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(N)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(1)</div>
+        </div>
+        <pre><code><span class="code-keyword">public int</span>[] <span class="code-func">twoSumSorted</span>(<span class="code-type">int</span>[] numbers, <span class="code-type">int</span> target) {
+    <span class="code-type">int</span> left = 0, right = numbers.length - 1;
+    <span class="code-keyword">while</span> (left &lt; right) {
+        <span class="code-type">int</span> sum = numbers[left] + numbers[right];
+        <span class="code-keyword">if</span> (sum == target) <span class="code-keyword">return new int</span>[]{left + 1, right + 1};
+        <span class="code-keyword">else if</span> (sum &lt; target) left++;
+        <span class="code-keyword">else</span> right--;
+    }
+    <span class="code-keyword">return new int</span>[]{-1, -1};
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Opposite direction pointers require array to be SORTED.</div>
+    </div>
+
+    <!-- A.12 Sliding Window -->
+    <div class="template-box" id="A.12">
+        <div class="template-header">
+            <span>A.12 — Sliding Window (Variable Size)</span>
+            <span class="template-num">A.12</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "longest substring with at most K...", "minimum window substring"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(N) Amortized</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(K) Frequency Map</div>
+        </div>
+        <pre><code><span class="code-keyword">public int</span> <span class="code-func">lengthOfLongestSubstring</span>(<span class="code-type">String</span> s) {
+    <span class="code-type">Map</span>&lt;<span class="code-type">Character</span>, <span class="code-type">Integer</span>&gt; counts = <span class="code-keyword">new HashMap</span>&lt;&gt;();
+    <span class="code-type">int</span> left = 0, maxLen = 0;
+    
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> right = 0; right &lt; s.length(); right++) {
+        <span class="code-type">char</span> c = s.charAt(right);
+        counts.put(c, counts.getOrDefault(c, 0) + 1);
+        
+        <span class="code-comment">// Shrink window if constraint is violated</span>
+        <span class="code-keyword">while</span> (counts.get(c) &gt; 1) { 
+            <span class="code-type">char</span> leftChar = s.charAt(left);
+            counts.put(leftChar, counts.get(leftChar) - 1);
+            left++;
+        }
+        maxLen = Math.max(maxLen, right - left + 1);
+    }
+    <span class="code-keyword">return</span> maxLen;
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Both `left` and `right` move rightward only; each element is processed at most twice (O(N) total).</div>
+    </div>
+
+    <!-- A.13 Prefix Sum & Difference Array -->
+    <div class="template-box" id="A.13">
+        <div class="template-header">
+            <span>A.13 — Prefix Sum & Difference Array</span>
+            <span class="template-num">A.13</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "range sum queries O(1)", "range additions [L, R] + val"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> Build O(N), Query O(1)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(N)</div>
+        </div>
+        <pre><code><span class="code-comment">// Difference Array: Add val to range [l, r]</span>
+<span class="code-keyword">public void</span> <span class="code-func">rangeUpdate</span>(<span class="code-type">int</span>[] diff, <span class="code-type">int</span> l, <span class="code-type">int</span> r, <span class="code-type">int</span> val) {
+    diff[l] += val;
+    <span class="code-keyword">if</span> (r + 1 &lt; diff.length) {
+        diff[r + 1] -= val;
+    }
+}
+<span class="code-comment">// Compute final array using Prefix Sum of diff array: res[i] = res[i-1] + diff[i]</span></code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: For difference array of size N, create diff array of size N+1 to safely handle `r + 1` boundary.</div>
+    </div>
+
+    <!-- A.14 Monotonic Stack -->
+    <div class="template-box" id="A.14">
+        <div class="template-header">
+            <span>A.14 — Monotonic Stack (Next Greater Element)</span>
+            <span class="template-num">A.14</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "next greater / smaller element", "histogram area", "daily temperatures"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(N) Amortized</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(N)</div>
+        </div>
+        <pre><code><span class="code-keyword">public int</span>[] <span class="code-func">nextGreaterElement</span>(<span class="code-type">int</span>[] nums) {
+    <span class="code-type">int</span> n = nums.length;
+    <span class="code-type">int</span>[] res = <span class="code-keyword">new int</span>[n];
+    <span class="code-type">Deque</span>&lt;<span class="code-type">Integer</span>&gt; stack = <span class="code-keyword">new ArrayDeque</span>&lt;&gt;(); <span class="code-comment">// Stores indices</span>
+    
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> i = 0; i &lt; n; i++) {
+        <span class="code-keyword">while</span> (!stack.isEmpty() &amp;&amp; nums[stack.peek()] &lt; nums[i]) {
+            <span class="code-type">int</span> prevIdx = stack.pop();
+            res[prevIdx] = nums[i];
+        }
+        stack.push(i);
+    }
+    <span class="code-keyword">while</span> (!stack.isEmpty()) res[stack.pop()] = -1;
+    <span class="code-keyword">return</span> res;
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Always store INDICES in stack rather than raw values to easily calculate distances/windows.</div>
+    </div>
+
+    <!-- A.15 Monotonic Queue -->
+    <div class="template-box" id="A.15">
+        <div class="template-header">
+            <span>A.15 — Monotonic Queue (Sliding Window Maximum)</span>
+            <span class="template-num">A.15</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "max/min of every sliding window of size K"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(N) Total</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(K) Deque size</div>
+        </div>
+        <pre><code><span class="code-keyword">public int</span>[] <span class="code-func">maxSlidingWindow</span>(<span class="code-type">int</span>[] nums, <span class="code-type">int</span> k) {
+    <span class="code-type">Deque</span>&lt;<span class="code-type">Integer</span>&gt; q = <span class="code-keyword">new ArrayDeque</span>&lt;&gt;(); <span class="code-comment">// Monotonic Decreasing Deque of indices</span>
+    <span class="code-type">int</span>[] res = <span class="code-keyword">new int</span>[nums.length - k + 1];
+    
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> i = 0; i &lt; nums.length; i++) {
+        <span class="code-comment">// Remove indices out of window bounds</span>
+        <span class="code-keyword">if</span> (!q.isEmpty() &amp;&amp; q.peekFirst() &lt; i - k + 1) q.pollFirst();
+        <span class="code-comment">// Maintain monotonic decreasing property</span>
+        <span class="code-keyword">while</span> (!q.isEmpty() &amp;&amp; nums[q.peekLast()] &lt;= nums[i]) q.pollLast();
+        
+        q.offerLast(i);
+        <span class="code-keyword">if</span> (i &gt;= k - 1) res[i - k + 1] = nums[q.peekFirst()];
+    }
+    <span class="code-keyword">return</span> res;
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Front of deque `q.peekFirst()` always holds index of maximum element in current window.</div>
+    </div>
+
+    <!-- A.16 Heap Top-K -->
+    <div class="template-box" id="A.16">
+        <div class="template-header">
+            <span>A.16 — PriorityQueue / Min-Heap for Top-K Problems</span>
+            <span class="template-num">A.16</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "Kth largest element", "top K frequent", "k closest points"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(N log K)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(K)</div>
+        </div>
+        <pre><code><span class="code-keyword">public int</span> <span class="code-func">findKthLargest</span>(<span class="code-type">int</span>[] nums, <span class="code-type">int</span> k) {
+    <span class="code-comment">// Min-heap of size K</span>
+    <span class="code-type">PriorityQueue</span>&lt;<span class="code-type">Integer</span>&gt; minHeap = <span class="code-keyword">new PriorityQueue</span>&lt;&gt;();
+    
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> num : nums) {
+        minHeap.offer(num);
+        <span class="code-keyword">if</span> (minHeap.size() &gt; k) {
+            minHeap.poll(); <span class="code-comment">// Evict smallest element</span>
+        }
+    }
+    <span class="code-keyword">return</span> minHeap.peek(); <span class="code-comment">// Root is K-th largest</span>
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Use MIN-HEAP for Kth LARGEST problem to keep memory capped at O(K).</div>
+    </div>
+
+    <!-- A.17 K-Way Merge -->
+    <div class="template-box" id="A.17">
+        <div class="template-header">
+            <span>A.17 — K-Way Merge (PriorityQueue)</span>
+            <span class="template-num">A.17</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "merge K sorted lists/arrays", "kth smallest in sorted matrix"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(N log K)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(K) Heap size</div>
+        </div>
+        <pre><code><span class="code-keyword">public ListNode</span> <span class="code-func">mergeKLists</span>(<span class="code-type">ListNode</span>[] lists) {
+    <span class="code-type">PriorityQueue</span>&lt;<span class="code-type">ListNode</span>&gt; pq = <span class="code-keyword">new PriorityQueue</span>&lt;&gt;((a, b) -&gt; a.val - b.val);
+    <span class="code-keyword">for</span> (<span class="code-type">ListNode</span> node : lists) {
+        <span class="code-keyword">if</span> (node != <span class="code-keyword">null</span>) pq.offer(node);
+    }
+    
+    <span class="code-type">ListNode</span> dummy = <span class="code-keyword">new ListNode</span>(0), curr = dummy;
+    <span class="code-keyword">while</span> (!pq.isEmpty()) {
+        <span class="code-type">ListNode</span> node = pq.poll();
+        curr.next = node;
+        curr = curr.next;
+        <span class="code-keyword">if</span> (node.next != <span class="code-keyword">null</span>) pq.offer(node.next);
+    }
+    <span class="code-keyword">return</span> dummy.next;
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Offer `node.next` back to heap immediately after polling `node`.</div>
+    </div>
+
+    <!-- A.18 Union-Find -->
+    <div class="template-box" id="A.18">
+        <div class="template-header">
+            <span>A.18 — Disjoint Set Union (Union-Find with Path Compression & Rank)</span>
+            <span class="template-num">A.18</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "connected components", "dynamic connectivity", "redundant connection"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(α(N)) ≈ O(1) Amortized</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(N)</div>
+        </div>
+        <pre><code><span class="code-keyword">class</span> <span class="code-type">UnionFind</span> {
+    <span class="code-type">int</span>[] parent, rank;
+    <span class="code-type">int</span> count;
+    
+    <span class="code-keyword">public</span> <span class="code-func">UnionFind</span>(<span class="code-type">int</span> n) {
+        parent = <span class="code-keyword">new int</span>[n];
+        rank = <span class="code-keyword">new int</span>[n];
+        count = n;
+        <span class="code-keyword">for</span> (<span class="code-type">int</span> i = 0; i &lt; n; i++) parent[i] = i;
+    }
+    
+    <span class="code-keyword">public int</span> <span class="code-func">find</span>(<span class="code-type">int</span> i) {
+        <span class="code-keyword">if</span> (parent[i] != i) parent[i] = find(parent[i]); <span class="code-comment">// Path compression</span>
+        <span class="code-keyword">return</span> parent[i];
+    }
+    
+    <span class="code-keyword">public boolean</span> <span class="code-func">union</span>(<span class="code-type">int</span> i, <span class="code-type">int</span> j) {
+        <span class="code-type">int</span> rootI = find(i), rootJ = find(j);
+        <span class="code-keyword">if</span> (rootI == rootJ) <span class="code-keyword">return false</span>;
+        
+        <span class="code-keyword">if</span> (rank[rootI] &lt; rank[rootJ]) parent[rootI] = rootJ;
+        <span class="code-keyword">else if</span> (rank[rootI] &gt; rank[rootJ]) parent[rootJ] = rootI;
+        <span class="code-keyword">else</span> { parent[rootJ] = rootI; rank[rootI]++; }
+        count--;
+        <span class="code-keyword">return true</span>;
+    }
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Always execute `find(i)` to get root components before doing comparisons or updates.</div>
+    </div>
+
+    <!-- A.19 Dijkstra -->
+    <div class="template-box" id="A.19">
+        <div class="template-header">
+            <span>A.19 — Dijkstra's Algorithm (Single Source Shortest Path)</span>
+            <span class="template-num">A.19</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "shortest path non-negative weights", "minimum effort/cost network"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O((V + E) log V)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(V + E)</div>
+        </div>
+        <pre><code><span class="code-keyword">public int</span>[] <span class="code-func">dijkstra</span>(<span class="code-type">int</span> start, <span class="code-type">List</span>&lt;<span class="code-type">List</span>&lt;<span class="code-type">int</span>[]&gt;&gt; adj, <span class="code-type">int</span> n) {
+    <span class="code-type">int</span>[] dist = <span class="code-keyword">new int</span>[n];
+    Arrays.fill(dist, Integer.MAX_VALUE);
+    dist[start] = 0;
+    
+    <span class="code-type">PriorityQueue</span>&lt;<span class="code-type">int</span>[]&gt; pq = <span class="code-keyword">new PriorityQueue</span>&lt;&gt;((a, b) -&gt; a[1] - b[1]); <span class="code-comment">// [node, distance]</span>
+    pq.offer(<span class="code-keyword">new int</span>[]{start, 0});
+    
+    <span class="code-keyword">while</span> (!pq.isEmpty()) {
+        <span class="code-type">int</span>[] curr = pq.poll();
+        <span class="code-type">int</span> u = curr[0], d = curr[1];
+        
+        <span class="code-keyword">if</span> (d &gt; dist[u]) <span class="code-keyword">continue</span>; <span class="code-comment">// Skip stale entries</span>
+        
+        <span class="code-keyword">for</span> (<span class="code-type">int</span>[] edge : adj.get(u)) {
+            <span class="code-type">int</span> v = edge[0], weight = edge[1];
+            <span class="code-keyword">if</span> (dist[u] + weight &lt; dist[v]) {
+                dist[v] = dist[u] + weight;
+                pq.offer(<span class="code-keyword">new int</span>[]{v, dist[v]});
+            }
+        }
+    }
+    <span class="code-keyword">return</span> dist;
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Dijkstra DOES NOT work with negative edge weights. Use `if (d &gt; dist[u]) continue;` to discard stale PQ nodes.</div>
+    </div>
+
+    <!-- A.20 Bellman-Ford -->
+    <div class="template-box" id="A.20">
+        <div class="template-header">
+            <span>A.20 — Bellman-Ford Algorithm (Handles Negative Edges & Cycles)</span>
+            <span class="template-num">A.20</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "negative edge weights", "detect negative weight cycle", "at most K stops"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(V × E)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(V)</div>
+        </div>
+        <pre><code><span class="code-keyword">public int</span>[] <span class="code-func">bellmanFord</span>(<span class="code-type">int</span> start, <span class="code-type">int</span>[][] edges, <span class="code-type">int</span> n) {
+    <span class="code-type">int</span>[] dist = <span class="code-keyword">new int</span>[n];
+    Arrays.fill(dist, Integer.MAX_VALUE);
+    dist[start] = 0;
+    
+    <span class="code-comment">// Relax all edges V-1 times</span>
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> i = 1; i &lt; n; i++) {
+        <span class="code-keyword">for</span> (<span class="code-type">int</span>[] e : edges) {
+            <span class="code-type">int</span> u = e[0], v = e[1], w = e[2];
+            <span class="code-keyword">if</span> (dist[u] != Integer.MAX_VALUE &amp;&amp; dist[u] + w &lt; dist[v]) {
+                dist[v] = dist[u] + w;
+            }
+        }
+    }
+    <span class="code-keyword">return</span> dist;
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: If an N-th iteration successfully relaxes any edge, a negative weight cycle exists in the graph.</div>
+    </div>
+
+    <!-- A.21 Trie -->
+    <div class="template-box" id="A.21">
+        <div class="template-header">
+            <span>A.21 — Trie (Prefix Tree Canonical Class)</span>
+            <span class="template-num">A.21</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "prefix matching", "autocomplete", "word search II dictionary"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(L) per insert/search</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(N × L × Alphabet)</div>
+        </div>
+        <pre><code><span class="code-keyword">class</span> <span class="code-type">Trie</span> {
+    <span class="code-keyword">private static class</span> <span class="code-type">TrieNode</span> {
+        <span class="code-type">TrieNode</span>[] children = <span class="code-keyword">new TrieNode</span>[26];
+        <span class="code-type">boolean</span> isWord = <span class="code-keyword">false</span>;
+    }
+    
+    <span class="code-keyword">private final</span> <span class="code-type">TrieNode</span> root = <span class="code-keyword">new TrieNode</span>();
+    
+    <span class="code-keyword">public void</span> <span class="code-func">insert</span>(<span class="code-type">String</span> word) {
+        <span class="code-type">TrieNode</span> node = root;
+        <span class="code-keyword">for</span> (<span class="code-type">char</span> c : word.toCharArray()) {
+            <span class="code-type">int</span> idx = c - <span class="code-string">'a'</span>;
+            <span class="code-keyword">if</span> (node.children[idx] == <span class="code-keyword">null</span>) node.children[idx] = <span class="code-keyword">new TrieNode</span>();
+            node = node.children[idx];
+        }
+        node.isWord = <span class="code-keyword">true</span>;
+    }
+    
+    <span class="code-keyword">public boolean</span> <span class="code-func">startsWith</span>(<span class="code-type">String</span> prefix) {
+        <span class="code-type">TrieNode</span> node = root;
+        <span class="code-keyword">for</span> (<span class="code-type">char</span> c : prefix.toCharArray()) {
+            <span class="code-type">int</span> idx = c - <span class="code-string">'a'</span>;
+            <span class="code-keyword">if</span> (node.children[idx] == <span class="code-keyword">null</span>) <span class="code-keyword">return false</span>;
+            node = node.children[idx];
+        }
+        <span class="code-keyword">return true</span>;
+    }
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: `startsWith` checks for non-null node path, while `search` additionally verifies `node.isWord == true`.</div>
+    </div>
+
+    <!-- A.22 Backtracking Skeleton -->
+    <div class="template-box" id="A.22">
+        <div class="template-header">
+            <span>A.22 — Backtracking Universal Template</span>
+            <span class="template-num">A.22</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "subsets", "permutations", "combination sum", "n-queens"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(2^N) or O(N!)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(N) Recursion Depth</div>
+        </div>
+        <pre><code><span class="code-keyword">public void</span> <span class="code-func">backtrack</span>(<span class="code-type">int</span> start, <span class="code-type">List</span>&lt;<span class="code-type">Integer</span>&gt; path, <span class="code-type">int</span>[] nums, <span class="code-type">List</span>&lt;<span class="code-type">List</span>&lt;<span class="code-type">Integer</span>&gt;&gt; res) {
+    <span class="code-comment">// 1. Add valid candidate to result</span>
+    res.add(<span class="code-keyword">new ArrayList</span>&lt;&gt;(path));
+    
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> i = start; i &lt; nums.length; i++) {
+        <span class="code-comment">// Skip duplicates if array is sorted: if (i > start && nums[i] == nums[i-1]) continue;</span>
+        
+        <span class="code-comment">// 2. CHOOSE</span>
+        path.add(nums[i]);
+        <span class="code-comment">// 3. EXPLORE</span>
+        backtrack(i + 1, path, nums, res); <span class="code-comment">// Use (i) if elements can be reused</span>
+        <span class="code-comment">// 4. UNCHOOSE</span>
+        path.remove(path.size() - 1);
+    }
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Always pass a new copy `new ArrayList&lt;&gt;(path)` when adding to final result list.</div>
+    </div>
+
+    <!-- A.23 DP Memoization Skeleton -->
+    <div class="template-box" id="A.23">
+        <div class="template-header">
+            <span>A.23 — DP Memoization Skeleton (Top-Down)</span>
+            <span class="template-num">A.23</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "overlapping subproblems", "min/max profit", "count ways"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(States × Transitions)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(States) Cache + Stack</div>
+        </div>
+        <pre><code><span class="code-keyword">public int</span> <span class="code-func">solveDP</span>(<span class="code-type">int</span> i, <span class="code-type">int</span> j, <span class="code-type">int</span>[][] memo, <span class="code-type">int</span>[] nums) {
+    <span class="code-keyword">if</span> (i &gt;= nums.length) <span class="code-keyword">return</span> 0; <span class="code-comment">// Base Case</span>
+    <span class="code-keyword">if</span> (memo[i][j] != -1) <span class="code-keyword">return</span> memo[i][j]; <span class="code-comment">// Cache hit</span>
+    
+    <span class="code-comment">// Recurrence Relation</span>
+    <span class="code-type">int</span> option1 = solveDP(i + 1, j, memo, nums);
+    <span class="code-type">int</span> option2 = nums[i] + solveDP(i + 2, j, memo, nums);
+    
+    <span class="code-keyword">return</span> memo[i][j] = Math.max(option1, option2); <span class="code-comment">// Store & Return</span>
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: Initialize memo table with a Sentinel value (e.g. `-1`) that cannot be a valid state result.</div>
+    </div>
+
+    <!-- A.24 DP Tabulation Skeleton -->
+    <div class="template-box" id="A.24">
+        <div class="template-header">
+            <span>A.24 — DP Tabulation Skeleton (Bottom-Up)</span>
+            <span class="template-num">A.24</span>
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item"><strong>Trigger Keywords</strong> "iterative DP", "space optimization", "no stack overflow"</div>
+            <div class="meta-item"><strong>Time Complexity</strong> O(N × M)</div>
+            <div class="meta-item"><strong>Space Complexity</strong> O(N × M) or O(M)</div>
+        </div>
+        <pre><code><span class="code-keyword">public int</span> <span class="code-func">knapsackTab</span>(<span class="code-type">int</span>[] wt, <span class="code-type">int</span>[] val, <span class="code-type">int</span> W) {
+    <span class="code-type">int</span> n = wt.length;
+    <span class="code-type">int</span>[][] dp = <span class="code-keyword">new int</span>[n + 1][W + 1];
+    
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> i = 1; i &lt;= n; i++) {
+        <span class="code-keyword">for</span> (<span class="code-type">int</span> w = 0; w &lt;= W; w++) {
+            <span class="code-keyword">if</span> (wt[i - 1] &lt;= w) {
+                dp[i][w] = Math.max(dp[i - 1][w], val[i - 1] + dp[i - 1][w - wt[i - 1]]);
+            } <span class="code-keyword">else</span> {
+                dp[i][w] = dp[i - 1][w];
+            }
+        }
+    }
+    <span class="code-keyword">return</span> dp[n][W];
+}</code></pre>
+        <div class="gotcha-box">⚠️ GOTCHA: When optimizing 2D DP to 1D DP array, iterate capacity backwards `for (int w = W; w >= wt[i]; w--)` to avoid overwriting values from current item iteration.</div>
+    </div>
+
+</div>
+
+</body>
+</html>

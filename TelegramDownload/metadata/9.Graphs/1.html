@@ -1,0 +1,497 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1>GRAPH PATTERN GUIDE</h1>
+            <div class="subtitle">PAGE 1 &mdash; GRAPH FOUNDATIONS<br><small style="color:#64748b;font-weight:normal;">"Think like a FAANG interviewer before writing a single line of code."</small></div>
+        </div>
+        <div style="text-align: right;">
+            <div class="page-number" style="background: #1e293b; color: white; padding: 5px 15px; border-radius: 4px; font-weight: bold;">PAGE 1</div>
+        </div>
+    </div>
+
+    <div class="grid-container" style="display: flex; gap: 20px; margin-top: 15px;">
+        <div class="col-left" style="flex: 1;">
+            <div class="section-box">
+                <div class="section-header"><span class="num">1</span> PLAIN ENGLISH</div>
+                <div class="section-content">
+                    <p>A Graph is a collection of nodes connected by edges.</p>
+                    <p>Trees are special graphs.</p>
+                    <p>Grids are graphs.</p>
+                    <p>Most interview problems hide graphs.</p>
+                </div>
+            </div>
+
+            <div class="section-box" style="margin-top: 15px;">
+                <div class="section-header"><span class="num">3</span> BRAIN SWITCH</div>
+                <div class="section-content" style="display: flex; align-items: center;">
+                    <div style="flex: 1;">
+                        <p style="font-style: italic; color: #64748b;">Interview gives...</p>
+                        <ul style="list-style: none; padding: 0; font-size: 0.9em; line-height: 1.5;">
+                            <li>&#127982; Cities &amp; Roads</li>
+                            <li>&#128101; Friends</li>
+                            <li>&#9992;&#65039; Flights</li>
+                            <li>&#128218; Courses</li>
+                            <li>&#128421;&#65039; Computer Network</li>
+                            <li>&#127983; Maze</li>
+                            <li>&#128279; Dependencies</li>
+                            <li>&#128100;&#128100; Social Network</li>
+                        </ul>
+                    </div>
+                    <div style="padding: 10px; text-align: center; font-weight: bold; font-size: 1.2em;">
+                        &#10145;&#65039;<br>THINK<br>GRAPH
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-right" style="flex: 2.5;">
+            <div class="section-box">
+                <div class="section-header"><span class="num">2</span> VISUAL EXAMPLES</div>
+                <div class="section-content" style="display: flex; justify-content: space-around; align-items: center; text-align: center;">
+                    <div>
+                        <strong style="color: #15803d;">TREE</strong>
+                        <div class="mermaid">
+                        graph TD
+                            1((1)) --- 2((2))
+                            1((1)) --- 3((3))
+                            2((2)) --- 4((4))
+                            2((2)) --- 5((5))
+                            3((3)) --- 6((6))
+                        </div>
+                        <div style="background-color: #dcfce7; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; border: 1px solid #15803d; color: #15803d;">No Cycles, Connected</div>
+                    </div>
+                    <div style="font-size: 1.5em; font-weight: bold;">
+                        &sub;<br><small style="font-size: 0.5em; font-weight: normal;">Tree &sub; Graph</small>
+                    </div>
+                    <div>
+                        <strong style="color: #0369a1;">GRAPH</strong>
+                        <div class="mermaid">
+                        graph TD
+                            1((1)) --- 2((2))
+                            1((1)) --- 4((4))
+                            2((2)) --- 5((5))
+                            4((4)) --- 6((6))
+                            5((5)) --- 6((6))
+                        </div>
+                        <div style="background-color: #e0f2fe; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; border: 1px solid #0369a1; color: #0369a1;">May Have Cycles,<br>May Be Disconnected</div>
+                    </div>
+                    <div>
+                        <strong style="color: #c2410c;">GRID (2D)</strong>
+                        <div class="mermaid">
+                        graph TD
+                            00((0,0)) --- 01((0,1))
+                            01((0,1)) --- 02((0,2))
+                            00((0,0)) --- 10((1,0))
+                            01((0,1)) --- 11((1,1))
+                            02((0,2)) --- 12((1,2))
+                            10((1,0)) --- 11((1,1))
+                            11((1,1)) --- 12((1,2))
+                            10((1,0)) --- 20((2,0))
+                            11((1,1)) --- 21((2,1))
+                            12((1,2)) --- 22((2,2))
+                            20((2,0)) --- 21((2,1))
+                            21((2,1)) --- 22((2,2))
+                        </div>
+                        <div style="background-color: #ffedd5; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; border: 1px solid #c2410c; color: #c2410c;">Cells as Nodes,<br>Neighbors as Edges</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box" style="margin-top: 15px;">
+                <div class="section-header"><span class="num">4</span> GRAPH TYPES</div>
+                <div class="section-content" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; text-align: center; font-size: 0.8em;">
+                    <div style="border: 1px solid #cbd5e1; padding: 5px; border-radius: 4px;">
+                        <strong style="color: #334155;">UNDIRECTED</strong>
+                        <div class="mermaid">
+                        graph TD
+                            1((1)) --- 2((2))
+                            1((1)) --- 3((3))
+                            2((2)) --- 3((3))
+                        </div>
+                        <p style="margin: 5px 0 0 0;">Edges have no direction.</p>
+                        <p style="margin: 0; color: #64748b;">Ex: Friends</p>
+                    </div>
+                    <div style="border: 1px solid #cbd5e1; padding: 5px; border-radius: 4px;">
+                        <strong style="color: #2563eb;">DIRECTED</strong>
+                        <div class="mermaid">
+                        graph TD
+                            1((1)) --> 2((2))
+                            2((2)) --> 3((3))
+                            1((1)) --> 3((3))
+                        </div>
+                        <p style="margin: 5px 0 0 0;">Edges have direction.</p>
+                        <p style="margin: 0; color: #64748b;">Ex: Flights</p>
+                    </div>
+                    <div style="border: 1px solid #cbd5e1; padding: 5px; border-radius: 4px;">
+                        <strong style="color: #7e22ce;">WEIGHTED</strong>
+                        <div class="mermaid">
+                        graph TD
+                            1((1)) -- 5 --> 2((2))
+                            1((1)) -- 2 --> 3((3))
+                            2((2)) -- 5 --> 3((3))
+                        </div>
+                        <p style="margin: 5px 0 0 0;">Edges have weights/costs.</p>
+                        <p style="margin: 0; color: #64748b;">Ex: Roads</p>
+                    </div>
+                    <div style="border: 1px solid #cbd5e1; padding: 5px; border-radius: 4px;">
+                        <strong style="color: #0d9488;">UNWEIGHTED</strong>
+                        <div class="mermaid">
+                        graph TD
+                            1((1)) --- 2((2))
+                            2((2)) --- 3((3))
+                        </div>
+                        <p style="margin: 5px 0 0 0;">All edges have equal weight.</p>
+                        <p style="margin: 0; color: #64748b;">Ex: Social Network</p>
+                    </div>
+                    <div style="border: 1px solid #cbd5e1; padding: 5px; border-radius: 4px;">
+                        <strong style="color: #ea580c;">CONNECTED</strong>
+                        <div class="mermaid">
+                        graph TD
+                            1((1)) --- 2((2))
+                            1((1)) --- 4((4))
+                            2((2)) --- 3((3))
+                            4((4)) --- 3((3))
+                        </div>
+                        <p style="margin: 5px 0 0 0;">There is a path between every pair of nodes.</p>
+                        <p style="margin: 0; color: #64748b;">Ex: Network</p>
+                    </div>
+                    <div style="border: 1px solid #cbd5e1; padding: 5px; border-radius: 4px;">
+                        <strong style="color: #ef4444;">DISCONNECTED</strong>
+                        <div class="mermaid">
+                        graph TD
+                            1((1)) --- 2((2))
+                            3((3)) --- 4((4))
+                        </div>
+                        <p style="margin: 5px 0 0 0;">Not all nodes are reachable.</p>
+                        <p style="margin: 0; color: #64748b;">Ex: Components</p>
+                    </div>
+                    <div style="border: 1px solid #cbd5e1; padding: 5px; border-radius: 4px;">
+                        <strong style="color: #7c3aed;">CYCLIC</strong>
+                        <div class="mermaid">
+                        graph TD
+                            1((1)) --> 2((2))
+                            2((2)) --> 3((3))
+                            3((3)) --> 1((1))
+                        </div>
+                        <p style="margin: 5px 0 0 0;">Contains at least one cycle.</p>
+                        <p style="margin: 0; color: #64748b;">Ex: Dependencies</p>
+                    </div>
+                    <div style="border: 1px solid #cbd5e1; padding: 5px; border-radius: 4px;">
+                        <strong style="color: #16a34a;">ACYCLIC</strong>
+                        <div class="mermaid">
+                        graph TD
+                            1((1)) --> 2((2))
+                            2((2)) --> 3((3))
+                        </div>
+                        <p style="margin: 5px 0 0 0;">No cycles.</p>
+                        <p style="margin: 0; color: #64748b;">Ex: Tree</p>
+                    </div>
+                    <div style="border: 1px solid #cbd5e1; padding: 5px; border-radius: 4px;">
+                        <strong style="color: #0284c7;">DAG (DIRECTED ACYCLIC GRAPH)</strong>
+                        <div class="mermaid">
+                        graph TD
+                            1((1)) --> 2((2))
+                            1((1)) --> 4((4))
+                            2((2)) --> 3((3))
+                            4((4)) --> 3((3))
+                        </div>
+                        <p style="margin: 5px 0 0 0;">Directed and no cycles.</p>
+                        <p style="margin: 0; color: #64748b;">Ex: Course Schedule</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-box" style="margin-top: 15px;">
+        <div class="section-header"><span class="num">5</span> GRAPH TERMINOLOGY</div>
+        <div class="section-content" style="display: flex; align-items: center; justify-content: space-around;">
+            <div class="mermaid" style="flex: 1; text-align: center;">
+            graph TD
+                A((A)) -- 1 --> B((B))
+                A((A)) -- 1 --> C((C))
+                B((B)) -- 3 --> D((D))
+                C((C)) -- 2 --> D((D))
+                C((C)) -- 4 --> E((E))
+                D((D)) -- 5 --> E((E))
+                E((E)) --> B((B))
+            </div>
+            <div style="flex: 1; font-size: 0.8em; line-height: 1.6;">
+                <p><strong>Vertex (Node):</strong> The entities (e.g. A, B, C)</p>
+                <p><strong>Edge:</strong> The connections between nodes.</p>
+                <p><strong>Neighbor:</strong> Nodes connected directly by an edge (e.g. A's neighbors are B, C)</p>
+                <p><strong>Weight:</strong> Cost/distance of an edge (e.g. 5)</p>
+                <p><strong>Degree (A) = 2:</strong> Edges connected to A</p>
+                <p><strong>Path:</strong> A &rarr; C &rarr; E</p>
+                <p><strong>Cycle:</strong> B &rarr; C &rarr; D &rarr; B</p>
+                <p><strong>Connected Component:</strong> A subgraph where any two vertices are connected.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container" style="display: flex; gap: 20px; margin-top: 15px;">
+        <div class="col-left" style="flex: 1.5;">
+            <div class="section-box">
+                <div class="section-header"><span class="num">6</span> TREE vs GRAPH</div>
+                <div class="section-content">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.8em; text-align: left;">
+                        <tr style="border-bottom: 1px solid #cbd5e1; background: #f8fafc;">
+                            <th style="padding: 5px;">Aspect</th>
+                            <th style="padding: 5px;">TREE</th>
+                            <th style="padding: 5px;">GENERAL GRAPH</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-weight: bold;">Root</td>
+                            <td style="padding: 5px;">Has a root</td>
+                            <td style="padding: 5px;">No root (usually)</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-weight: bold;">Parent</td>
+                            <td style="padding: 5px;">Each node (except root) has exactly one parent</td>
+                            <td style="padding: 5px;">A node can have multiple parents</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-weight: bold;">Neighbor</td>
+                            <td style="padding: 5px;">Limited by parent-child relationship</td>
+                            <td style="padding: 5px;">Any connected node is a neighbor</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-weight: bold;">Cycles</td>
+                            <td style="padding: 5px;">No cycles</td>
+                            <td style="padding: 5px;">May have cycles</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-weight: bold;">Connected</td>
+                            <td style="padding: 5px;">Always connected</td>
+                            <td style="padding: 5px;">May be connected or disconnected</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-weight: bold;">Edges</td>
+                            <td style="padding: 5px;">For n nodes, edges = n - 1</td>
+                            <td style="padding: 5px;">Edges can be any number</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-weight: bold;">Traversal</td>
+                            <td style="padding: 5px;">DFS / BFS works</td>
+                            <td style="padding: 5px;">DFS / BFS works</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-weight: bold;">Need visited[]</td>
+                            <td style="padding: 5px;">Usually Not Needed</td>
+                            <td style="padding: 5px;">Usually Needed</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px; font-weight: bold;">Interview Examples</td>
+                            <td style="padding: 5px;">Binary Tree, N-ary Tree</td>
+                            <td style="padding: 5px;">Social Network, Roads, Flights, Dependencies</td>
+                        </tr>
+                    </table>
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px; font-weight: bold; font-size: 0.9em;">
+                        <span style="color: #15803d; background: #dcfce7; padding: 2px 5px; border-radius: 4px;">A Tree is always a Graph.</span>
+                        <span style="color: #b91c1c; background: #fee2e2; padding: 2px 5px; border-radius: 4px;">A Graph is NOT always a Tree.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-right" style="flex: 1;">
+            <div class="section-box">
+                <div class="section-header"><span class="num">8</span> AHA MOMENTS</div>
+                <div class="section-content" style="font-size: 0.85em;">
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 10px;">&#128161; A Tree is a Graph.</li>
+                        <li style="margin-bottom: 10px;">&#128161; A Grid is a Graph.</li>
+                        <li style="margin-bottom: 10px;">&#128161; Representation changes. Algorithm usually doesn't.</li>
+                        <li style="margin-bottom: 10px;">&#128161; Interview problems rarely say "Graph".</li>
+                        <li>&#128161; Always identify the hidden graph first.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container" style="display: flex; gap: 20px; margin-top: 15px;">
+        <div class="col-left" style="flex: 2;">
+            <div class="section-box">
+                <div class="section-header"><span class="num">7</span> GRAPH REPRESENTATIONS (OVERVIEW)</div>
+                <div class="section-content">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.8em; text-align: left;">
+                        <tr style="border-bottom: 1px solid #cbd5e1; background: #f8fafc;">
+                            <th style="padding: 5px;">Representation</th>
+                            <th style="padding: 5px;">Typical Input</th>
+                            <th style="padding: 5px;">Interview Usage</th>
+                            <th style="padding: 5px;">Memory</th>
+                            <th style="padding: 5px;">Highlight</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-weight: bold;">Edge List</td>
+                            <td style="padding: 5px;">List of edges<br>[u, v, w]</td>
+                            <td style="padding: 5px;">Kruskal, Some Graph Problems</td>
+                            <td style="padding: 5px;">O(E)</td>
+                            <td style="padding: 5px;">Simple to read</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-weight: bold; color: #15803d;">Adjacency List &starf;</td>
+                            <td style="padding: 5px;">[[1,2], [2,3], ...]</td>
+                            <td style="padding: 5px;">Most Common in Interviews</td>
+                            <td style="padding: 5px;">O(V + E)</td>
+                            <td style="padding: 5px; font-weight: bold;">&#11088;&#11088;&#11088;&#11088;&#11088;<br>Most commonly used</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-weight: bold;">Adjacency Matrix</td>
+                            <td style="padding: 5px;">2D Matrix<br>[n x n]</td>
+                            <td style="padding: 5px;">Dense Graphs, Quick Edge Check</td>
+                            <td style="padding: 5px;">O(V^2)</td>
+                            <td style="padding: 5px;">Good for dense graphs</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-weight: bold;">Grid</td>
+                            <td style="padding: 5px;">2D Characters / Integers</td>
+                            <td style="padding: 5px;">Islands, Paths, Flood Fill</td>
+                            <td style="padding: 5px;">O(m x n)</td>
+                            <td style="padding: 5px;">Grid treated as Graph</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px; font-weight: bold;">Node Graph</td>
+                            <td style="padding: 5px;">Nodes with Neighbors</td>
+                            <td style="padding: 5px;">Clone Graph, Complex Structures</td>
+                            <td style="padding: 5px;">O(V + E)</td>
+                            <td style="padding: 5px;">Used in advanced problems</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 5px; font-size: 0.8em; color: #1e293b; font-weight: bold; text-align: center;">
+                        &starf; Adjacency List is the most commonly used representation in interviews.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-right" style="flex: 1;">
+            <div class="section-box">
+                <div class="section-header"><span class="num">11</span> INTERVIEW THINKING</div>
+                <div class="section-content" style="font-size: 0.8em;">
+                    <p style="margin: 0 0 5px 0; font-weight: bold;">Before writing code ask:</p>
+                    <ol style="padding-left: 20px; margin: 0; line-height: 1.6;">
+                        <li><strong>What is the input?</strong></li>
+                        <li><strong>Is it Directed?</strong></li>
+                        <li><strong>Is it Weighted?</strong></li>
+                        <li><strong>Is it Connected?</strong></li>
+                        <li><strong>Which Representation should I build?</strong></li>
+                        <li><strong>Which Algorithm family will probably solve it?</strong></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container" style="display: flex; gap: 20px; margin-top: 15px;">
+        <div class="col-left" style="flex: 1;">
+            <div class="section-box">
+                <div class="section-header"><span class="num">9</span> PATTERN RECOGNITION</div>
+                <div class="section-content">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.75em; text-align: left;">
+                        <tr style="border-bottom: 1px solid #cbd5e1; background: #f8fafc;">
+                            <th style="padding: 4px;">Interview Says</th>
+                            <th style="padding: 4px;">Think</th>
+                            <th style="padding: 4px;">Expected Graph Type</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 4px;">&#127982; Cities / Roads</td>
+                            <td style="padding: 4px;">Graph</td>
+                            <td style="padding: 4px;">Undirected, Often Weighted</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 4px;">&#9992;&#65039; Flights</td>
+                            <td style="padding: 4px;">Graph</td>
+                            <td style="padding: 4px;">Directed, Often Weighted</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 4px;">&#128218; Courses / Prerequisites</td>
+                            <td style="padding: 4px;">Graph</td>
+                            <td style="padding: 4px;">Directed, DAG</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 4px;">&#128302; Grid / Matrix</td>
+                            <td style="padding: 4px;">Graph</td>
+                            <td style="padding: 4px;">Grid Graph (4 / 8 direction)</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 4px;">&#128421;&#65039; Network (Servers / Computers)</td>
+                            <td style="padding: 4px;">Graph</td>
+                            <td style="padding: 4px;">Undirected or Directed</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 4px;">&#128101; Friends / Social Network</td>
+                            <td style="padding: 4px;">Graph</td>
+                            <td style="padding: 4px;">Undirected, Unweighted</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 4px;">&#127983; Maze / Labyrinth</td>
+                            <td style="padding: 4px;">Graph</td>
+                            <td style="padding: 4px;">Grid Graph</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px;">&#128279; Dependencies / Build Order</td>
+                            <td style="padding: 4px;">Graph</td>
+                            <td style="padding: 4px;">Directed, DAG</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-middle" style="flex: 1;">
+            <div class="section-box">
+                <div class="section-header"><span class="num">10</span> COMMON INTERVIEW MISTAKES</div>
+                <div class="section-content" style="font-size: 0.8em;">
+                    <ul style="list-style: none; padding: 0; margin: 0; line-height: 1.6;">
+                        <li><span style="color: #ef4444;">&#10060;</span> Forgetting graphs may be disconnected.</li>
+                        <li><span style="color: #ef4444;">&#10060;</span> Confusing Tree with Graph.</li>
+                        <li><span style="color: #ef4444;">&#10060;</span> Ignoring direction (Directed vs Undirected).</li>
+                        <li><span style="color: #ef4444;">&#10060;</span> Ignoring weights.</li>
+                        <li><span style="color: #ef4444;">&#10060;</span> Choosing wrong representation.</li>
+                        <li><span style="color: #ef4444;">&#10060;</span> Thinking Grid is different from Graph.</li>
+                        <li><span style="color: #ef4444;">&#10060;</span> Not defining neighbors clearly.</li>
+                        <li><span style="color: #ef4444;">&#10060;</span> Forgetting to validate with small examples.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-right" style="flex: 1;">
+            <div class="section-box">
+                <div class="section-header"><span class="num">12</span> SUMMARY</div>
+                <div class="section-content" style="font-size: 0.8em; text-align: center;">
+                    <p style="font-weight: bold; margin-bottom: 10px;">REMEMBER<br><span style="font-weight: normal;">Graph problems are solved in this order.</span></p>
+                    <div style="display: flex; justify-content: space-around; align-items: center; margin-bottom: 10px; font-size: 1.5em;">
+                        <span>&#128269;</span> &rarr;
+                        <span>&#128270;</span> &rarr;
+                        <span>&#128193;</span> &rarr;
+                        <span>&#128295;</span> &rarr;
+                        <span>&#9989;</span> &rarr;
+                        <span>&#9881;&#65039;</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-around; align-items: flex-start; font-size: 0.75em;">
+                        <span style="width: 16%;">Identify Input</span>
+                        <span style="width: 16%;">Identify Graph Type</span>
+                        <span style="width: 16%;">Choose Representation</span>
+                        <span style="width: 16%;">Build Graph</span>
+                        <span style="width: 16%;">Validate</span>
+                        <span style="width: 16%;">Choose Algorithm</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; font-size: 0.8em; font-weight: bold; padding: 10px; border-top: 2px solid #e2e8f0;">
+        <span>&#10067; Problem &rarr;</span>
+        <span>Input &rarr;</span>
+        <span>Representation &rarr;</span>
+        <span>Helper Structure &rarr;</span>
+        <span>&#9881;&#65039; Algorithm &rarr;</span>
+        <span>Tiny Logic Change &rarr;</span>
+        <span>&#9654;&#65039; Dry Run &rarr;</span>
+        <span>&#128640; Optimize</span>
+    </div>
+</div>

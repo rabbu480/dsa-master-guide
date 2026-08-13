@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BINARY SEARCH MASTERCLASS — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 12px; }
+.ph h1 { font-size: 1.7rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.85rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.74rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.bh  { background: var(--pri); color: white; padding: 5px 10px;
+  font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 16px; height: 16px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.70rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 8px 10px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 5px 10px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.72rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.90rem; }
+.psub   { color: var(--sub); font-size: 0.76rem; }
+.prow-body { display: flex; }
+.pc { padding: 8px 10px; font-size: 0.76rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.70rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.prob-head { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.76rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.68rem; line-height: 1.38; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.74rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.74rem; }
+th, td { border: 1px solid var(--bdr); padding: 4px 6px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 5px 8px; border-radius: 0 4px 4px 0; font-size: 0.76rem; margin-top: 4px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 6px 8px; margin-top: 4px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.80rem; margin-bottom: 2px; }
+
+.dt-wrap { font-size: 0.76rem; }
+.dt-root { background: var(--pri); color: white; padding: 4px 8px; border-radius: 4px; text-align: center; font-weight: 700; margin-bottom: 6px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 4px 6px; font-weight: 600; color: #1e40af; font-size: 0.72rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 4px 6px; color: #065f46; font-weight: 700; font-size: 0.72rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.72rem; padding: 2px 4px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 8px 12px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- PAGE 1: DISCOVERY & ORIENTATION -->
+<div class="page">
+<div class="ph">
+  <div><h1>BINARY SEARCH MASTERCLASS</h1><div class="sub">FAANG Master Guide — Java Edition</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 1 OF 10</div><div class="ptag">DISCOVERY JOURNEY · FIRST PRINCIPLES</div></div>
+</div>
+<div class="g3" style="margin-bottom:12px">
+<div class="box pur">
+<div class="bh">🎬 THE REAL-WORLD STORY</div>
+<div class="bc">
+<p style="margin-bottom:6px">Imagine guessing a secret number between 1 and 100. Every time you guess, the host tells you either <em>"Too High"</em> or <em>"Too Low"</em>.</p>
+<div class="aha">
+<div class="aha-t">💡 THE BINARY SEARCH AHA MOMENT</div>
+        Guessing 50 splits the search space EXACTLY in half! If too low, eliminate 1..50. Next guess 75. Search space shrinks exponentially: 100 -&gt; 50 -&gt; 25 -&gt; 12 -&gt; 6 -&gt; 3 -&gt; 1. Found in at most <strong>7 steps (log2 100)</strong>!
+      </div>
+</div>
+</div>
+<div class="box">
+<div class="bh">🤔 WHY LINEAR SEARCH FAILS</div>
+<div class="bc">
+<ul style="padding-left:14px;font-size:0.76rem">
+<li><strong>Linear Search O(N):</strong> Checks elements 1 by 1. For N = 1,000,000,000 elements, requires up to 1 Billion checks!</li>
+<li><strong>Binary Search O(log N):</strong> Needs at most <strong>30 checks</strong> for 1 Billion elements!</li>
+<li><strong>Monotonic Property:</strong> Works on ANY search space that transitions monotonically from `False -&gt; True`!</li>
+</ul>
+</div>
+</div>
+<div class="box sky">
+<div class="bh">📌 SEARCH RANGE NARROWING</div>
+<div class="bc">
+<div style="font-weight:700;color:var(--pri);margin-bottom:4px">Safe Middle Index Formula:</div>
+<pre>// Prevents Integer Overflow when (L + R) &gt; Integer.MAX_VALUE!
+int mid = left + (right - left) / 2;
+
+If arr[mid] &lt; target -&gt; left = mid + 1
+If arr[mid] &gt; target -&gt; right = mid - 1
+If arr[mid] == target -&gt; Found!</pre>
+</div>
+</div>
+</div><div class="g2">
+<div class="box grn">
+<div class="bh">📚 PREREQUISITES &amp; COMPLEXITY REASONING</div>
+<div class="bc">
+<table style="font-size:0.76rem">
+<tr><th>Pattern / Operation</th><th>Time Complexity</th><th>Auxiliary Space</th></tr>
+<tr><td>Classic Binary Search (Exact Value)</td><td><strong>O(log N)</strong></td><td><strong>O(1) in-place</strong></td></tr>
+<tr><td>Lower Bound / Upper Bound</td><td><strong>O(log N)</strong></td><td><strong>O(1) space</strong></td></tr>
+<tr><td>Search in Rotated Sorted Array</td><td><strong>O(log N)</strong></td><td><strong>O(1) space</strong></td></tr>
+<tr><td>Search on Answer (Koko Eating Bananas)</td><td><strong>O(N log(Max - Min))</strong></td><td><strong>O(1) space</strong></td></tr>
+</table>
+</div>
+</div>
+<div class="box amb">
+<div class="bh">⚡ CLUES THAT SCREAM BINARY SEARCH</div>
+<div class="bc">
+<p style="font-size:0.8rem">1. <em>"Array is SORTED"</em> and target index requested -&gt; Classic Binary Search / Lower Bound</p>
+<p style="font-size:0.8rem">2. <em>"Find minimum speed / maximum capacity satisfying condition C"</em> -&gt; Search on Answer</p>
+<p style="font-size:0.8rem">3. <em>"Sorted array rotated at unknown pivot"</em> -&gt; Modified Rotated Binary Search</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 2: API & TOOLKIT -->
+<div class="page">
+<div class="ph">
+  <div><h1>BINARY SEARCH MASTERCLASS</h1><div class="sub">Java Master Toolkit &amp; Utility Classes</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 2 OF 10</div><div class="ptag">JAVA UTILITIES · REUSABLE TEMPLATES</div></div>
+</div>
+
+</div>
+
+<!-- PAGE 3: CORE PATTERN 1 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BINARY SEARCH MASTERCLASS</h1><div class="sub">Core Patterns — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 3 OF 10</div><div class="ptag">PATTERN 1</div></div>
+</div>
+<div class="prow" style="margin-bottom:12px">
+<div class="prow-head">
+<div class="ptag2">PATTERN 1</div>
+<div class="ptitle">SEARCH IN ROTATED SORTED ARRAY (Half Sorted Check)</div>
+<div class="psub">e.g. Search in Rotated Sorted Array (LC 33)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">When to Use</div>
+<div style="font-size:0.78rem">Array is rotated at pivot. Determine which half (`left..mid` or `mid..right`) is strictly sorted, then check if target lies within that sorted range!</div>
+</div>
+<div class="pc" style="flex:1.5">
+<div class="pc-head">Template — LC 33</div>
+<pre>public int search(int[] nums, int target) {
+  int l = 0, r = nums.length - 1;
+  while (l &lt;= r) {
+    int mid = l + (r - l) / 2;
+    if (nums[mid] == target) return mid;
+    // Left half is sorted:
+    if (nums[l] &lt;= nums[mid]) {
+      if (nums[l] &lt;= target &amp;&amp; target &lt; nums[mid]) r = mid - 1;
+      else l = mid + 1;
+    } else { // Right half is sorted:
+      if (nums[mid] &lt; target &amp;&amp; target &lt;= nums[r]) l = mid + 1;
+      else r = mid - 1;
+    }
+  }
+  return -1;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 4: CORE PATTERN 2 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BINARY SEARCH MASTERCLASS</h1><div class="sub">Core Patterns — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 4 OF 10</div><div class="ptag">PATTERN 2</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 2</div>
+<div class="ptitle">SEARCH A 2D MATRIX (Virtual 1D Flattening)</div>
+<div class="psub">e.g. Search a 2D Matrix (LC 74)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">When to Use</div>
+<div style="font-size:0.78rem">Flatten M x N matrix virtually to 1D index `0 .. M*N - 1`. Row = `mid / cols`, Col = `mid % cols` in O(log(M · N)) time.</div>
+</div>
+<div class="pc" style="flex:1.5">
+<div class="pc-head">Template — LC 74</div>
+<pre>public boolean searchMatrix(int[][] matrix, int target) {
+  int rows = matrix.length, cols = matrix[0].length;
+  int l = 0, r = rows * cols - 1;
+  while (l &lt;= r) {
+    int mid = l + (r - l) / 2;
+    int val = matrix[mid / cols][mid % cols];
+    if (val == target) return true;
+    if (val &lt; target) l = mid + 1; else r = mid - 1;
+  }
+  return false;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 5: CORE PATTERN 3 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BINARY SEARCH MASTERCLASS</h1><div class="sub">Core Patterns — Part 3</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 5 OF 10</div><div class="ptag">PATTERN 3</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 4</div>
+<div class="ptitle">FIND MINIMUM IN ROTATED SORTED ARRAY (Pivot Search)</div>
+<div class="psub">e.g. Find Minimum in Rotated Sorted Array (LC 153)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">Right Element Comparison</div>
+<div style="font-size:0.78rem">
+        Compare `nums[mid]` against `nums[right]`. If `nums[mid] &gt; nums[right]`, pivot lies on the right half (`l = mid + 1`). Otherwise pivot is on left half (`r = mid`)!
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — LC 153</div>
+<pre>public int findMin(int[] nums) {
+  int l = 0, r = nums.length - 1;
+  while (l &lt; r) {
+    int mid = l + (r - l) / 2;
+    if (nums[mid] &gt; nums[r]) {
+      l = mid + 1; // Pivot is in right half!
+    } else {
+      r = mid;     // Pivot is mid or in left half!
+    }
+  }
+  return nums[l];
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 6: CORE PATTERN 4 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BINARY SEARCH MASTERCLASS</h1><div class="sub">Core Patterns — Part 4</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 6 OF 10</div><div class="ptag">PATTERN 4</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 5</div>
+<div class="ptitle">MEDIAN OF TWO SORTED ARRAYS (Binary Search on Partition)</div>
+<div class="psub">e.g. Median of Two Sorted Arrays (LC 4)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">Partition Math O(log(min(M, N)))</div>
+<div style="font-size:0.78rem">
+        Binary search partition `i` on smaller array A. Calculate corresponding partition `j` on array B. Check `A[i-1] &lt;= B[j]` and `B[j-1] &lt;= A[i]`!
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — LC 4</div>
+<pre>public double findMedianSortedArrays(int[] A, int[] B) {
+  if (A.length &gt; B.length) return findMedianSortedArrays(B, A);
+  int m = A.length, n = B.length;
+  int l = 0, r = m;
+  while (l &lt;= r) {
+    int i = l + (r - l) / 2;
+    int j = (m + n + 1) / 2 - i;
+    int maxLeftA = (i == 0) ? Integer.MIN_VALUE : A[i - 1];
+    int minRightA = (i == m) ? Integer.MAX_VALUE : A[i];
+    int maxLeftB = (j == 0) ? Integer.MIN_VALUE : B[j - 1];
+    int minRightB = (j == n) ? Integer.MAX_VALUE : B[j];
+    if (maxLeftA &lt;= minRightB &amp;&amp; maxLeftB &lt;= minRightA) {
+      if ((m + n) % 2 == 1) return Math.max(maxLeftA, maxLeftB);
+      return (Math.max(maxLeftA, maxLeftB) + Math.min(minRightA, minRightB)) / 2.0;
+    } else if (maxLeftA &gt; minRightB) r = i - 1;
+    else l = i + 1;
+  }
+  return 0.0;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 7: DECISION TREE & TRIGGER WORDS -->
+<div class="page">
+<div class="ph">
+  <div><h1>BINARY SEARCH MASTERCLASS</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 7 OF 10</div><div class="ptag">DECISION TREE · TRIGGER WORDS · TRADE-OFFS</div></div>
+</div>
+<div class="box">
+<div class="bh" style="padding:3px 6px;font-size:0.76rem">📊 COMPLETE BINARY SEARCH PROBLEM LADDER SUMMARY</div>
+<div class="bc" style="padding:4px 6px">
+<table>
+<tr><th>LC #</th><th>Problem</th><th>Pattern</th><th>Time</th><th>Space</th><th>Diff</th></tr>
+<tr><td>704</td><td>Binary Search</td><td>Classic Binary Search</td><td>O(log N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+<tr><td>33</td><td>Search in Rotated Sorted Array</td><td>Rotated Half Check</td><td>O(log N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>74</td><td>Search a 2D Matrix</td><td>Virtual 1D Flattening</td><td>O(log(M · N))</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>875</td><td>Koko Eating Bananas</td><td>Search on Answer</td><td>O(N log(Max))</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>153</td><td>Find Min in Rotated Array</td><td>Pivot Search</td><td>O(log N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>34</td><td>First &amp; Last Position</td><td>Lower &amp; Upper Bound</td><td>O(log N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>4</td><td>Median of Two Sorted Arrays</td><td>Binary Search on Partition</td><td>O(log(min(M, N)))</td><td>O(1)</td><td><span class="diff-h">H</span></td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<!-- PAGE 8: PROBLEM LADDER PART 1 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BINARY SEARCH MASTERCLASS</h1><div class="sub">Curated Problem Ladder — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 8 OF 10</div><div class="ptag">PROBLEM LADDER · EASY &amp; MEDIUM</div></div>
+</div>
+<div class="g2">
+<div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#f0fdf4">
+<span class="ptitle" style="color:var(--grn)">LC 704 · Binary Search</span>
+<span class="diff-e">EASY</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Classic BS</div>
+<div><strong>Key Insight:</strong> Standard `l &lt;= r` convergence.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.62rem">public int search(int[] nums, int target) {
+  int l = 0, r = nums.length - 1;
+  while (l &lt;= r) {
+    int m = l + (r - l) / 2;
+    if (nums[m] == target) return m;
+    if (nums[m] &lt; target) l = m + 1; else r = m - 1;
+  }
+  return -1;
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 33 · Search in Rotated Array</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Rotated Half Check</div>
+<div><strong>Key Insight:</strong> Check if left half is sorted.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.62rem">public int search(int[] nums, int target) {
+  int l = 0, r = nums.length - 1;
+  while (l &lt;= r) {
+    int m = l + (r - l) / 2;
+    if (nums[m] == target) return m;
+    if (nums[l] &lt;= nums[m]) {
+      if (nums[l] &lt;= target &amp;&amp; target &lt; nums[m]) r = m - 1; else l = m + 1;
+    } else {
+      if (nums[m] &lt; target &amp;&amp; target &lt;= nums[r]) l = m + 1; else r = m - 1;
+    }
+  }
+  return -1;
+}</pre>
+</div>
+</div>
+</div><div class="prob">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 74 · Search a 2D Matrix</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Virtual 1D Flatten</div>
+<div><strong>Key Insight:</strong> `row = mid / cols`, `col = mid % cols`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.62rem">public boolean searchMatrix(int[][] matrix, int target) {
+  int R = matrix.length, C = matrix[0].length, l = 0, r = R * C - 1;
+  while (l &lt;= r) {
+    int m = l + (r - l) / 2, val = matrix[m / C][m % C];
+    if (val == target) return true;
+    if (val &lt; target) l = m + 1; else r = m - 1;
+  }
+  return false;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: PROBLEM LADDER PART 2 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BINARY SEARCH MASTERCLASS</h1><div class="sub">Curated Problem Ladder — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 9 OF 10</div><div class="ptag">PROBLEM LADDER · MEDIUM &amp; HARD</div></div>
+</div>
+<div class="g2">
+<div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 875 · Koko Eating Bananas</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Search on Answer</div>
+<div><strong>Key Insight:</strong> BS speed `1 .. max(piles)`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.60rem">public int minEatingSpeed(int[] piles, int h) {
+  int l = 1, r = 1000000000;
+  while (l &lt; r) {
+    int m = l + (r - l) / 2, hrs = 0;
+    for (int p : piles) hrs += (p + m - 1) / m;
+    if (hrs &lt;= h) r = m; else l = m + 1;
+  }
+  return l;
+}</pre>
+</div>
+</div>
+</div><div class="prob">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 153 · Find Min in Rotated Array</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Pivot Search</div>
+<div><strong>Key Insight:</strong> Compare `nums[mid]` against `nums[r]`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.60rem">public int findMin(int[] nums) {
+  int l = 0, r = nums.length - 1;
+  while (l &lt; r) {
+    int m = l + (r - l) / 2;
+    if (nums[m] &gt; nums[r]) l = m + 1; else r = m;
+  }
+  return nums[l];
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fee2e2">
+<span class="ptitle" style="color:var(--red)">LC 4 · Median of Two Sorted Arrays</span>
+<span class="diff-h">HARD</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Partition BS</div>
+<div><strong>Key Insight:</strong> BS partition on smaller array.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.58rem">public double findMedianSortedArrays(int[] A, int[] B) {
+  if (A.length &gt; B.length) return findMedianSortedArrays(B, A);
+  int m = A.length, n = B.length, l = 0, r = m;
+  while (l &lt;= r) {
+    int i = l + (r - l) / 2, j = (m + n + 1) / 2 - i;
+    int maxLA = (i == 0) ? Integer.MIN_VALUE : A[i - 1];
+    int minRA = (i == m) ? Integer.MAX_VALUE : A[i];
+    int maxLB = (j == 0) ? Integer.MIN_VALUE : B[j - 1];
+    int minRB = (j == n) ? Integer.MAX_VALUE : B[j];
+    if (maxLA &lt;= minRB &amp;&amp; maxLB &lt;= minRA) {
+      if ((m + n) % 2 == 1) return Math.max(maxLA, maxLB);
+      return (Math.max(maxLA, maxLB) + Math.min(minRA, minRB)) / 2.0;
+    } else if (maxLA &gt; minRB) r = i - 1; else l = i + 1;
+  }
+  return 0.0;
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 34 · First &amp; Last Position</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Lower &amp; Upper Bound</div>
+<div><strong>Key Insight:</strong> `lowerBound(target)` and `upperBound(target) - 1`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.58rem">public int[] searchRange(int[] nums, int target) {
+  int first = lowerBound(nums, target);
+  if (first == nums.length || nums[first] != target) return new int[]{-1, -1};
+  int last = upperBound(nums, target) - 1;
+  return new int[]{first, last};
+}</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 10: DRY RUN, PROOFS & MASTERY CHEAT SHEET -->
+<div class="page">
+<div class="ph">
+  <div><h1>BINARY SEARCH MASTERCLASS</h1><div class="sub">Dry Run, Proofs &amp; Mastery Cheat Sheet</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 10 OF 10</div><div class="ptag">DRY RUN · PROOFS · MASTERY CHECKLIST</div></div>
+</div>
+<div class="g2" style="margin-bottom:10px">
+<div class="box">
+<div class="bh">🔍 DRY RUN — Search in Rotated Array ([4, 5, 6, 7, 0, 1, 2], target = 0)</div>
+<div class="bc">
+<table style="font-size:0.70rem">
+<tr><th>Step</th><th>l (val)</th><th>r (val)</th><th>mid (val)</th><th>Sorted Half Check</th><th>Action</th></tr>
+<tr><td>1</td><td>0 (4)</td><td>6 (2)</td><td>3 (7)</td><td>Left half [4..7] is sorted (`4 &lt;= 7`). Target 0 NOT in [4, 7).</td><td>`l = mid + 1` (4)</td></tr>
+<tr><td>2</td><td>4 (0)</td><td>6 (2)</td><td>5 (1)</td><td>Left half [0..1] is sorted (`0 &lt;= 1`). Target 0 IS in [0, 1).</td><td>`r = mid - 1` (4)</td></tr>
+<tr><td>3</td><td>4 (0)</td><td>4 (0)</td><td>4 (0)</td><td>`nums[4] == 0` -&gt; Target Match Found!</td><td>Return index 4 ✅</td></tr>
+</table>
+</div>
+</div>
+<div class="box grn">
+<div class="bh">📐 MATHEMATICAL PROOF — LOGARITHMIC TIME COMPLEXITY O(log N)</div>
+<div class="bc">
+<div style="font-size:0.76rem">
+<p style="margin-bottom:4px"><strong>Claim:</strong> Binary Search terminates in at most `ceil(log2 N)` steps.</p>
+<p style="margin-bottom:4px"><strong>Proof:</strong> At step k, search space size is N / 2^k. Loop terminates when $N / 2^k = 1 \implies 2^k = N \implies k = \log_2 N$. Thus, max steps required for 1 Billion items is \log_2(10^9) ≈ 30 -&gt; <strong>Exact O(log N) Proof!</strong></p>
+</div>
+</div>
+</div>
+</div><div class="g2">
+<div class="box grn">
+<div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+<div class="bc">
+<div class="g2" style="gap:6px">
+<ul style="font-size:0.75rem;list-style:none;padding:0">
+<li>☐ Write Classic Binary Search in 2m without off-by-one errors</li>
+<li>☐ Code Lower Bound template (`first idx &gt;= target`)</li>
+<li>☐ Code Upper Bound template (`first idx &gt; target`)</li>
+<li>☐ Write Search in Rotated Sorted Array in O(log N)</li>
+</ul>
+<ul style="font-size:0.75rem;list-style:none;padding:0">
+<li>☐ Code Search a 2D Matrix with virtual 1D flattening</li>
+<li>☐ Implement Koko Eating Bananas search on answer</li>
+<li>☐ Code Find Minimum in Rotated Sorted Array</li>
+<li>☐ Prove why `mid = l + (r - l) / 2` avoids overflow</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="box pur">
+<div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+<div class="bc">
+<div class="aha" style="margin-bottom:4px;padding:5px">
+<div class="aha-t">Rule 1 — Always Check Which Half is Sorted First</div>
+        In Rotated Array Binary Search, ALWAYS check `if (nums[l] &lt;= nums[mid])` to determine which side is monotonically increasing before checking if target is bounded in that range!
+      </div>
+<div class="aha" style="padding:5px">
+<div class="aha-t">Rule 2 — Search on Answer Requires Monotonicity</div>
+        You can apply Search on Answer ONLY if the feasibility predicate function `isPossible(x)` is monotonic: `False, False, False, True, True, True`!
+      </div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

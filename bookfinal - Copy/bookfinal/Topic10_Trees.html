@@ -1,0 +1,1457 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 10: Trees &amp; Binary Search Trees (BST) Masterclass (Visual FAANG Edition)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#ffffff',
+            primaryTextColor: '#0f172a',
+            primaryBorderColor: '#2563eb',
+            lineColor: '#64748b',
+            fontFamily: 'Inter'
+        }
+    });
+</script>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+    }
+
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 11.8px;
+        line-height: 1.4;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 8px 16px;
+        display: flex;
+        
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand { font-weight: 900; font-size: 1rem; color: #38bdf8; }
+    .top-nav .nav-controls { display: flex; gap: 4px; flex-wrap: wrap; }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+
+    /* Sticky Sidebar Layout */
+    .app-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+
+    .toc-title { font-weight: 900; font-size: 0.85rem; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+
+    .main-content { min-width: 0; }
+
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 20px 24px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+        
+        display: flex;
+        flex-direction: column;
+        
+    }
+    [data-theme="dark"] .page { background: #1e293b; color: #f8fafc; }
+
+    /* Header Top */
+    .header-top {
+        display: flex;
+        
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 6px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top { background: #0f172a; border-color: #38bdf8; border-left-color: #38bdf8; }
+    .header-title-group { display: flex; align-items: center; gap: 8px; }
+    .header-top h1 { margin: 0; font-size: 1.15rem; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+    .header-top .page-num { background: #1e3a8a; color: white; padding: 2px 8px; border-radius: 14px; font-weight: 800; font-size: 0.72rem; }
+
+    /* Goal Badge Box */
+    .goal-badge {
+        border: 2px dashed #3b82f6;
+        background: #eff6ff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: #1e40af;
+        margin-bottom: 6px;
+    }
+
+    .cross-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #e0e7ff;
+        color: #3730a3;
+        border: 1px solid #c7d2fe;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-decoration: none;
+        margin-bottom: 4px;
+    }
+
+    /* Section Box */
+    .section-box {
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        background: white;
+        border: 2px solid #3b82f6;
+        width: 100%;
+    }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+    .section-header { padding: 4px 8px; font-weight: 800; font-size: 0.8rem; color: white; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+    .section-header .num { background: white; color: #0f172a; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 900; }
+    .section-content { padding: 6px 8px; font-size: 0.76rem; }
+
+    /* Color Themes */
+    .box-blue { border-color: #2563eb !important; } .box-blue .section-header { background: #2563eb !important; }
+    .box-green { border-color: #22c55e !important; } .box-green .section-header { background: #22c55e !important; }
+    .box-purple { border-color: #8b5cf6 !important; } .box-purple .section-header { background: #8b5cf6 !important; }
+    .box-red { border-color: #ef4444 !important; } .box-red .section-header { background: #ef4444 !important; }
+    .box-orange { border-color: #f97316 !important; } .box-orange .section-header { background: #f97316 !important; }
+    .box-teal { border-color: #0d9488 !important; } .box-teal .section-header { background: #0d9488 !important; }
+    .box-indigo { border-color: #6366f1 !important; } .box-indigo .section-header { background: #6366f1 !important; }
+    .box-amber { border-color: #d97706 !important; } .box-amber .section-header { background: #d97706 !important; }
+
+    /* Problem Split Grid */
+    .problem-split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+    .problem-info { display: flex; flex-direction: column; gap: 3px; }
+    .problem-code { display: flex; flex-direction: column; }
+
+    .meta-card { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 3px 6px; border-radius: 4px; display: flex;  align-items: center; font-weight: 700; font-size: 0.7rem; }
+    [data-theme="dark"] .meta-card { background: #0f172a; border-color: #334155; }
+    .badge-easy { background: #10b981; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-medium { background: #f59e0b; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-hard { background: #ef4444; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .company-tag { background: #1e3a8a; color: white; padding: 1px 4px; border-radius: 3px; font-size: 0.65rem; }
+
+    .flowchart-box { background: #eff6ff; border: 1px solid #93c5fd; border-left: 3px solid #2563eb; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: 700; color: #1e40af; }
+    .whynot-box { background: #fff7ed; border: 1px solid #fdba74; border-left: 3px solid #f97316; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; color: #9a3412; }
+
+    /* Call Stack Timeline Box */
+    .callstack-box {
+        background: #faf5ff;
+        border: 1px solid #d8b4fe;
+        border-left: 4px solid #9333ea;
+        padding: 4px 6px;
+        margin: 3px 0;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.67rem;
+        line-height: 1.35;
+        color: #581c87;
+    }
+    [data-theme="dark"] .callstack-box { background: #2e1065; color: #f3e8ff; border-color: #c084fc; }
+    .stack-title { font-weight: 800; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.3px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    pre { background: #f8fafc; color: #0f172a; padding: 6px 8px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.71rem; line-height: 1.32; margin: 0; white-space: pre-wrap !important; word-break: break-word; border: 1px solid #cbd5e1; }
+    [data-theme="dark"] pre { background: #0f172a; color: #f8fafc; border-color: #334155; }
+    code { font-family: 'Fira Code', monospace; background: #f1f5f9; color: #0f172a; padding: 1px 3px; border-radius: 3px; font-size: 0.74rem; border: 1px solid #cbd5e1; }
+
+    .aha-box { background: #fefce8; border: 1px solid #eab308; border-left: 4px solid #ca8a04; color: #713f12; padding: 5px 8px; border-radius: 4px; font-size: 0.76rem; font-weight: 600; margin: 4px 0; }
+    .rule-box { padding: 4px 6px; border-radius: 4px; font-weight: 600; margin: 4px 0; font-size: 0.74rem; }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    .rule-purple { background: #faf5ff; border: 1px solid #a855f7; border-left: 4px solid #a855f7; color: #6b21a8; }
+    .rule-red { background: #fff1f2; border: 1px solid #ef4444; border-left: 4px solid #ef4444; color: #b91c1c; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+    table th, table td { border: 1px solid var(--border-color); padding: 3px 5px; text-align: left; }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+    .mermaid { display: flex; justify-content: center; margin: 2px 0; }
+    .back-to-top { position: fixed; bottom: 20px; right: 20px; background: #2563eb; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; border: none; z-index: 999; }
+
+    @page { size: A4 portrait; margin: 4mm; }
+    @media print {
+        body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .top-nav, .back-to-top, .toc-sidebar { display: none !important; }
+        .app-layout { display: block !important; }
+        .container { max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+        .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.72; }
+        pre { background-color: #f8fafc !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; }
+    }
+
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+</style>
+</head>
+<body>
+
+<!-- Sticky Top Nav -->
+<div class="top-nav">
+    <div class="brand">⚡ FAANG DSA HANDBOOK — TOPIC 10: TREES &amp; BST</div>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn" style="background:#059669; border-color:#10b981; font-weight:800;">🏠 Index</a>
+        <button class="nav-btn" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="nav-btn" onclick="toggleSidebar()">↕️ Expand/Shrink TOC</button>
+        <a href="#page1" class="nav-btn">P1</a>
+        <a href="#page2" class="nav-btn">P2</a>
+        <a href="#page3" class="nav-btn">P3</a>
+        <a href="#page4" class="nav-btn">P4</a>
+        <a href="#page5" class="nav-btn">P5</a>
+        <a href="#page6" class="nav-btn">P6</a>
+        <a href="#page7" class="nav-btn">P7</a>
+        <a href="#page8" class="nav-btn">P8</a>
+        <a href="#page9" class="nav-btn">P9</a>
+        <a href="#page10" class="nav-btn">P10</a>
+        <a href="#page11" class="nav-btn">P11</a>
+        <a href="#page12" class="nav-btn">P12</a>
+        <a href="#page13" class="nav-btn">P13</a>
+        <a href="#page14" class="nav-btn">P14</a>
+        <button class="nav-btn" onclick="window.print()" style="background: #2563eb;">🖨️ PDF</button>
+    </div>
+</div>
+
+<div class="container">
+<div class="app-layout" id="appLayout">
+
+    <!-- Sticky Table of Contents Sidebar -->
+    <div class="toc-sidebar">
+        <div class="toc-header-bar"><span class="toc-title">📋 SECTIONS</span><button class="shrink-btn" onclick="toggleSidebar()"><span class="toc-text">➖ Shrink</span></button></div>
+        <ul class="toc-list">
+            <li><a href="#page1" class="toc-link">10.0 Foundation &amp; Terminology</a></li>
+            <li><a href="#page2" class="toc-link">10.1 DFS Pre/In/Postorder</a></li>
+            <li><a href="#page3" class="toc-link">10.2 BFS Level Order Queue</a></li>
+            <li><a href="#page4" class="toc-link">10.4 BST Property &amp; 10.5 LCA</a></li>
+            <li><a href="#page5" class="toc-link">10.8 Decision Tree &amp; Cheat Sheet</a></li>
+            <li><a href="#page6" class="toc-link">10.10 Easy NeetCode Suite</a></li>
+            <li><a href="#page7" class="toc-link">10.10 Subtree &amp; Balanced Tree</a></li>
+            <li><a href="#page8" class="toc-link">10.10 Level Order &amp; Right Side</a></li>
+            <li><a href="#page9" class="toc-link">10.10 Good Nodes &amp; Validate BST</a></li>
+            <li><a href="#page10" class="toc-link">10.10 Kth Smallest &amp; LCA BST/BT</a></li>
+            <li><a href="#page11" class="toc-link">10.10 Build Tree &amp; Flatten</a></li>
+            <li><a href="#page12" class="toc-link">10.10 Max Path Sum &amp; Serialize</a></li>
+            <li><a href="#page13" class="toc-link">10.10 Vertical Order Traversal</a></li>
+            <li><a href="#page14" class="toc-link">10.11 Revision &amp; Summary</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Pages -->
+    <div class="main-content">
+
+    <!-- ========================================================= -->
+    <!-- PAGE 1: 10.0 TREE FOUNDATION & TERMINOLOGY -->
+    <!-- ========================================================= -->
+    <div class="page" id="page1">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🌳</span>
+                    <h1>TOPIC 10.0: TREE FOUNDATION &amp; TERMINOLOGY</h1>
+                </div>
+                <span class="page-num">PAGE 1 OF 14</span>
+            </div>
+
+            <!-- Cross-Link Badges -->
+            <a href="Topic09_Heap.html" class="cross-link">🔗 See Topic 09 → Heap Masterclass</a>
+
+            <!-- Goal Badge -->
+            <div class="goal-badge">
+                🎯 <strong>GOAL:</strong> Master recursive tree thinking, DFS Call Stack timelines, BFS Queue level snapshots, BST properties, and solve all NeetCode Tree problems!
+            </div>
+
+            <div class="section-box box-teal" style="margin-top:8px">
+                <div class="section-header">🧰 REUSABLE TREE &amp; BST UTILITIES</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">TreeNode Definition &amp; Construction:</p>
+<pre>
+public class TreeNode {
+    public int val;
+    public TreeNode left, right;
+    public TreeNode(int val) { this.val = val; }
+}</pre>
+                        </div>
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">Height &amp; Depth Helper Function:</p>
+<pre>
+int height(TreeNode root) {
+    if (root == null) return 0;
+    return 1 + Math.max(height(root.left), height(root.right));
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AHA Box #1 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #1: TREES ARE RECURSIVE BY DEFINITION</strong><br/>
+                A Binary Tree is either `null` OR a root node pointing to a **Left Subtree** and a **Right Subtree**. Because every subtree is a valid tree itself, tree algorithms are naturally solved using **Recursion (DFS)** or **Queue Level Snapshots (BFS)**!
+            </div>
+
+            <div class="grid-2">
+                <!-- Terminology -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> CORE TREE TERMINOLOGY</div>
+                    <div class="section-content">
+                        <div>• <strong>Root:</strong> Topmost node with zero parent.<br/>
+                        • <strong>Leaf:</strong> Node with zero children (`left == null && right == null`).<br/>
+                        • <strong>Height:</strong> Max edges from node down to a leaf (Root height = H).<br/>
+                        • <strong>Depth:</strong> Edges from root down to node (Root depth = 0).<br/>
+                        • <strong>Balanced:</strong> Left &amp; Right subtree heights differ by $\le 1$ ($O(\log N)$ height).</div>
+                    </div>
+                </div>
+
+                <!-- Java TreeNode Definition -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> JAVA TreeNode NODE STRUCTURE</div>
+                    <div class="section-content">
+<pre>
+public class TreeNode {
+    public int val;
+    public TreeNode left;
+    public TreeNode right;
+    public TreeNode(int val) { this.val = val; }
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tree Classifications Diagram -->
+            <div class="section-box box-green">
+                <div class="section-header">🎨 TREE TYPES: BALANCED VS SKEWED</div>
+                <div class="section-content">
+                    <div style="font-family:'Fira Code',monospace; font-size:0.68rem; line-height:1.35;">
+<strong>1. BALANCED TREE (Height O(log N)):</strong>        <strong>2. SKEWED TREE (Height O(N) - Linked List):</strong>
+        [10]                                   [10]
+       /    \                                     \
+     [5]    [15]                                  [15]
+     / \     / \                                     \
+   [2] [7] [12] [20]                                 [20]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> In a balanced tree, operations run in $O(\log N)$ time. In a skewed tree, operations degrade to $O(N)$!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 2: 10.1 DFS TRAVERSALS & CALL STACK TIMELINE -->
+    <!-- ========================================================= -->
+    <div class="page" id="page2">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔁</span>
+                    <h1>TOPIC 10.1: DFS TRAVERSALS &amp; CALL STACK TIMELINE</h1>
+                </div>
+                <span class="page-num">PAGE 2 OF 14</span>
+            </div>
+
+            <!-- AHA Box #2 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #2: THE 3 DFS ORDERS (PRE, IN, POST)</strong><br/>
+                • <strong>Preorder (Root ➔ Left ➔ Right):</strong> Use for cloning, serializing, and passing values down.<br/>
+                • <strong>Inorder (Left ➔ Root ➔ Right):</strong> Yields **sorted order** in a Binary Search Tree (BST)!<br/>
+                • <strong>Postorder (Left ➔ Right ➔ Root):</strong> Use for bottom-up calculation (compute children first, then return to parent)!
+            </div>
+
+            <!-- DFS Traversal Comparison Table -->
+            <div class="section-box box-purple">
+                <div class="section-header">📊 DFS TRAVERSAL COMPARISON TABLE</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Traversal</th><th>Order</th><th>Primary FAANG Use Case</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Preorder</strong></td><td>Root ➔ Left ➔ Right</td><td>Serialize/Deserialize, Clone Tree, Top-Down Path Sum</td></tr>
+                            <tr><td><strong>Inorder</strong></td><td>Left ➔ Root ➔ Right</td><td>BST Validation, Kth Smallest in BST, Sorted Processing</td></tr>
+                            <tr><td><strong>Postorder</strong></td><td>Left ➔ Right ➔ Root</td><td>Max Depth, Diameter, Tree Deletion, Bottom-Up Path Sum</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Call Stack Timeline Box -->
+            <div class="section-box box-indigo">
+                <div class="section-header">🧠 RECURSIVE CALL STACK TIMELINE DEMO (TREE: 3 / 9, 20 / 15, 7)</div>
+                <div class="section-content">
+                    <div class="callstack-box">
+<span class="stack-title">DFS CALL STACK TIMELINE (INORDER):</span>
+1. inorder(3) ➔ Calls inorder(9)
+2. inorder(9) ➔ Calls inorder(null) ➔ returns ➔ Visit [9] ➔ Calls inorder(null) ➔ returns
+3. Back to inorder(3) ➔ Visit [3] ➔ Calls inorder(20)
+4. inorder(20) ➔ Calls inorder(15) ➔ Visit [15] ➔ returns ➔ Visit [20] ➔ Calls inorder(7) ➔ Visit [7]
+Output Order: [9, 3, 15, 20, 7]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>INORDER BST RULE:</strong> An Inorder traversal of a valid BST ALWAYS produces a strictly increasing sorted sequence!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 3: 10.2 BFS TRAVERSAL & LEVEL ORDER QUEUE -->
+    <!-- ========================================================= -->
+    <div class="page" id="page3">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📥</span>
+                    <h1>TOPIC 10.2: BFS LEVEL ORDER TRAVERSAL &amp; QUEUE SNAPSHOT</h1>
+                </div>
+                <span class="page-num">PAGE 3 OF 14</span>
+            </div>
+
+            <!-- AHA Box #3 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #3: THE LEVEL SNAPSHOT PATTERN</strong><br/>
+                To traverse a tree level-by-level (BFS), use a **FIFO Queue**. To separate nodes by level, freeze the queue size at the start of each level:
+                <br/><code>int size = q.size(); for (int i = 0; i &lt; size; i++) { TreeNode curr = q.poll(); ... }</code>
+                <br/>This guarantees that all nodes in the current loop belong strictly to the SAME level!
+            </div>
+
+            <!-- BFS Queue Evolution Visual Diagram -->
+            <div class="section-box box-blue">
+                <div class="section-header">🎨 VISUALIZING BFS QUEUE EVOLUTION (LEVEL-BY-LEVEL)</div>
+                <div class="section-content">
+                    <div class="callstack-box">
+<span class="stack-title">BFS QUEUE EVOLUTION:</span>
+Level 0: Queue = [3]       ➔ Poll 3 ➔ Offer children 9, 20 ➔ Level 0 Result = [3]
+Level 1: Queue = [9, 20]   ➔ Poll 9, 20 ➔ Offer children 15, 7 ➔ Level 1 Result = [9, 20]
+Level 2: Queue = [15, 7]   ➔ Poll 15, 7 ➔ Level 2 Result = [15, 7]
+                    </div>
+                </div>
+            </div>
+
+            <!-- Java BFS Template -->
+            <div class="section-box box-green">
+                <div class="section-header">🛠️ STANDARD JAVA BFS LEVEL ORDER TEMPLATE</div>
+                <div class="section-content">
+<pre>
+Queue&lt;TreeNode&gt; q = new ArrayDeque&lt;&gt;();
+if (root != null) q.offer(root);
+while (!q.isEmpty()) {
+    int levelSize = q.size(); // Freeze current level size!
+    for (int i = 0; i &lt; levelSize; i++) {
+        TreeNode curr = q.poll();
+        if (curr.left != null) q.offer(curr.left);
+        if (curr.right != null) q.offer(curr.right);
+    }
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Use BFS whenever a problem asks for "shortest distance", "level-by-level", or "nearest leaf"!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 4: 10.4 BINARY SEARCH TREE & 10.5 LCA MECHANICS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page4">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🌲</span>
+                    <h1>TOPIC 10.4 &amp; 10.5: BST PROPERTIES &amp; LCA MECHANICS</h1>
+                </div>
+                <span class="page-num">PAGE 4 OF 14</span>
+            </div>
+
+            <!-- AHA Box #4 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #4: BST SEARCH DISCARDING &amp; LCA ELEGANCE</strong><br/>
+                • <strong>BST Property:</strong> For every node, `left.val < node.val < right.val`. This allows discarding half the tree at each step during search in $O(\log N)$ time!
+                <br/>• <strong>BST LCA:</strong> If `p` and `q` are both smaller than `root` ➔ LCA is in left subtree. If both larger ➔ right subtree. Otherwise, `root` is the split point (LCA)!
+            </div>
+
+            <div class="grid-2">
+                <!-- BST Operations -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> BST SEARCH &amp; INSERT ($O(\log N)$)</div>
+                    <div class="section-content">
+<pre>
+public TreeNode searchBST(TreeNode root, int val) {
+    if (root == null || root.val == val) return root;
+    return val &lt; root.val ? 
+           searchBST(root.left, val) : searchBST(root.right, val);
+}</pre>
+                    </div>
+                </div>
+
+                <!-- BST LCA Logic -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> BST LCA 1-LINE SPLIT LOGIC</div>
+                    <div class="section-content">
+<pre>
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if (p.val &lt; root.val &amp;&amp; q.val &lt; root.val) return lowestCommonAncestor(root.left, p, q);
+    if (p.val &gt; root.val &amp;&amp; q.val &gt; root.val) return lowestCommonAncestor(root.right, p, q);
+    return root; // Split point is LCA!
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> In a general Binary Tree (non-BST), LCA requires bottom-up postorder bubbling checking if left and right returns are non-null!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 5: DECISION TREE & PRINTABLE TREE CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page5">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📜</span>
+                    <h1>TOPIC 10.8 &amp; 1-PAGE PRINTABLE TREE CHEAT SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 5 OF 14</span>
+            </div>
+
+            <!-- Mermaid Decision Tree -->
+            <div class="section-box box-purple">
+                <div class="section-header">🌳 TREE INTERVIEW DECISION TREE (MERMAID)</div>
+                <div class="section-content">
+                    <div class="mermaid">
+                        graph TD
+                            A[What is the Tree Problem Type?]
+                            A --> B[Level Order / Shortest Path / Right Side?]
+                            A --> C[Height / Subtree / Path Sum / Mirror?]
+                            A --> D[BST Search / Validate / Kth Smallest?]
+                            B --> B1[BFS Queue Level Snapshot]
+                            C --> C1[Bottom-Up / Top-Down DFS Recursion]
+                            D --> D1[Inorder Traversal / BST Range Properties]
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1-Page Printable Cheat Sheet -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📜 PRINTABLE TREE &amp; BST CHEAT SHEET</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Pattern Type</th><th>Target Problem</th><th>Primary Method</th><th>Complexity</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Bottom-Up DFS</td><td>Max Depth (LC 104)</td><td><code>1 + Math.max(left, right)</code></td><td>Time: $O(N)$, Space: $O(H)$</td></tr>
+                            <tr><td>Top-Down DFS</td><td>Good Nodes (LC 1448)</td><td>Pass <code>maxSoFar</code> in parameters</td><td>Time: $O(N)$, Space: $O(H)$</td></tr>
+                            <tr><td>BFS Level Order</td><td>Level Order (LC 102)</td><td>Queue Snapshot <code>q.size()</code></td><td>Time: $O(N)$, Space: $O(W)$</td></tr>
+                            <tr><td>BST Validation</td><td>Validate BST (LC 98)</td><td>Range Check <code>[min, max]</code></td><td>Time: $O(N)$, Space: $O(H)$</td></tr>
+                            <tr><td>LCA in BST</td><td>LCA BST (LC 235)</td><td>Compare <code>p.val</code> and <code>q.val</code> with root</td><td>Time: $O(H)$, Space: $O(H)$</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Print this page and review it 10 minutes before your technical interview!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 6: EASY NEETCODE (INVERT TREE, MAX DEPTH, SAME TREE) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page6">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🧩</span>
+                    <h1>EASY NEETCODE: INVERT TREE, MAX DEPTH &amp; SAME TREE</h1>
+                </div>
+                <span class="page-num">PAGE 6 OF 14</span>
+            </div>
+
+            <!-- Problem 1: LC 226 -->
+            <div class="section-box box-blue">
+                <div class="section-header">1. LEETCODE 226 — INVERT BINARY TREE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>Postorder Swap</span>
+                                <span class="company-tag">Google</span><span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Invert (mirror) a binary tree so left and right children are swapped.
+
+                            <!-- Call Stack Timeline -->
+                            <div class="callstack-box">
+<span class="stack-title">CALL STACK TIMELINE (TREE: 4 / 2, 7):</span>
+1. invert(4) ➔ Calls invert(2)
+2. invert(2) ➔ Swaps 2's children ➔ returns 2
+3. invert(7) ➔ Swaps 7's children ➔ returns 7
+4. Swaps 4's left and right subtrees ➔ returns 4!
+                            </div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public TreeNode invertTree(TreeNode root) {
+    if (root == null) return null;
+    TreeNode left = invertTree(root.left);
+    TreeNode right = invertTree(root.right);
+    root.left = right;
+    root.right = left;
+    return root;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 2: LC 104 -->
+            <div class="section-box box-green">
+                <div class="section-header">2. LEETCODE 104 — MAXIMUM DEPTH OF BINARY TREE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>Bottom-Up DFS</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Return maximum depth (number of nodes along longest path from root to leaf).
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int maxDepth(TreeNode root) {
+    if (root == null) return 0;
+    return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 3: LC 100 -->
+            <div class="section-box box-purple">
+                <div class="section-header">3. LEETCODE 100 — SAME TREE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>Dual Tree DFS</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Check if two binary trees `p` and `q` are structurally identical with same values.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean isSameTree(TreeNode p, TreeNode q) {
+    if (p == null &amp;&amp; q == null) return true;
+    if (p == null || q == null || p.val != q.val) return false;
+    return isSameTree(p.left, q.left) &amp;&amp; isSameTree(p.right, q.right);
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 104):</strong> Bottom-up DFS computes children depths first, then returns `1 + max(left, right)` to parent!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 7: EASY NEETCODE (SUBTREE & BALANCED TREE) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page7">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🌲</span>
+                    <h1>EASY NEETCODE: SUBTREE &amp; BALANCED BINARY TREE</h1>
+                </div>
+                <span class="page-num">PAGE 7 OF 14</span>
+            </div>
+
+            <!-- Problem 4: LC 572 -->
+            <div class="section-box box-blue">
+                <div class="section-header">4. LEETCODE 572 — SUBTREE OF ANOTHER TREE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>Subtree Matching</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Return `true` if tree `subRoot` is a valid subtree of `root`.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+    if (root == null) return false;
+    if (isSame(root, subRoot)) return true;
+    return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
+}
+private boolean isSame(TreeNode s, TreeNode t) {
+    if (s == null &amp;&amp; t == null) return true;
+    if (s == null || t == null || s.val != t.val) return false;
+    return isSame(s.left, t.left) &amp;&amp; isSame(s.right, t.right);
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 5: LC 110 -->
+            <div class="section-box box-green">
+                <div class="section-header">5. LEETCODE 110 — BALANCED BINARY TREE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>Bottom-Up Height Checking</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Determine if binary tree is height-balanced (left/right depth diff $\le 1$).
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean isBalanced(TreeNode root) {
+    return checkHeight(root) != -1;
+}
+private int checkHeight(TreeNode node) {
+    if (node == null) return 0;
+    int left = checkHeight(node.left);
+    if (left == -1) return -1;
+    int right = checkHeight(node.right);
+    if (right == -1) return -1;
+    if (Math.abs(left - right) &gt; 1) return -1; // Unbalanced sentinel!
+    return 1 + Math.max(left, right);
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 110):</strong> Returning `-1` as a sentinel value prunes early and avoids recalculating height at every node ($O(N)$ vs $O(N^2)$)!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 8: MEDIUM NEETCODE (LEVEL ORDER & RIGHT SIDE VIEW) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page8">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📥</span>
+                    <h1>MEDIUM NEETCODE: LEVEL ORDER &amp; RIGHT SIDE VIEW</h1>
+                </div>
+                <span class="page-num">PAGE 8 OF 14</span>
+            </div>
+
+            <!-- Problem 6: LC 102 -->
+            <div class="section-box box-blue">
+                <div class="section-header">6. LEETCODE 102 — BINARY TREE LEVEL ORDER TRAVERSAL</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>BFS Queue Level Snapshot</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Return level order traversal of nodes' values (left to right, level by level).
+                        </div>
+                        <div class="problem-code">
+<pre>
+public List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    if (root == null) return res;
+    Queue&lt;TreeNode&gt; q = new ArrayDeque&lt;&gt;();
+    q.offer(root);
+    while (!q.isEmpty()) {
+        int levelSize = q.size();
+        List&lt;Integer&gt; level = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; levelSize; i++) {
+            TreeNode curr = q.poll();
+            level.add(curr.val);
+            if (curr.left != null) q.offer(curr.left);
+            if (curr.right != null) q.offer(curr.right);
+        }
+        res.add(level);
+    }
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 7: LC 199 -->
+            <div class="section-box box-purple">
+                <div class="section-header">7. LEETCODE 199 — BINARY TREE RIGHT SIDE VIEW</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>BFS Last Element / Preorder DFS</span>
+                                <span class="company-tag">Meta</span><span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Return values of nodes visible when standing on right side of tree.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public List&lt;Integer&gt; rightSideView(TreeNode root) {
+    List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+    if (root == null) return res;
+    Queue&lt;TreeNode&gt; q = new ArrayDeque&lt;&gt;();
+    q.offer(root);
+    while (!q.isEmpty()) {
+        int levelSize = q.size();
+        for (int i = 0; i &lt; levelSize; i++) {
+            TreeNode curr = q.poll();
+            if (i == levelSize - 1) res.add(curr.val); // Last node in level!
+            if (curr.left != null) q.offer(curr.left);
+            if (curr.right != null) q.offer(curr.right);
+        }
+    }
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 199):</strong> In BFS Level Order, the LAST element polled in each level (`i == levelSize - 1`) is the rightmost visible node!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 9: MEDIUM NEETCODE (GOOD NODES & VALIDATE BST) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page9">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🎯</span>
+                    <h1>MEDIUM NEETCODE: GOOD NODES &amp; VALIDATE BST</h1>
+                </div>
+                <span class="page-num">PAGE 9 OF 14</span>
+            </div>
+
+            <!-- Problem 8: LC 1448 -->
+            <div class="section-box box-green">
+                <div class="section-header">8. LEETCODE 1448 — COUNT GOOD NODES IN BINARY TREE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Top-Down DFS Parameter</span>
+                                <span class="company-tag">Microsoft</span>
+                            </div>
+                            <strong>Problem:</strong> Node $X$ is "good" if path from root to $X$ contains no nodes with value $> X$.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int goodNodes(TreeNode root) {
+    return dfs(root, root.val);
+}
+private int dfs(TreeNode node, int maxSoFar) {
+    if (node == null) return 0;
+    int count = (node.val &gt;= maxSoFar) ? 1 : 0;
+    maxSoFar = Math.max(maxSoFar, node.val);
+    count += dfs(node.left, maxSoFar);
+    count += dfs(node.right, maxSoFar);
+    return count;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 9: LC 98 -->
+            <div class="section-box box-orange">
+                <div class="section-header">9. LEETCODE 98 — VALIDATE BINARY SEARCH TREE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Range Boundary Check</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Validate if binary tree satisfies strict BST property `left < root < right`.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean isValidBST(TreeNode root) {
+    return validate(root, null, null);
+}
+private boolean validate(TreeNode node, Integer min, Integer max) {
+    if (node == null) return true;
+    if ((min != null &amp;&amp; node.val &lt;= min) || (max != null &amp;&amp; node.val &gt;= max)) {
+        return false; // Out of bounds!
+    }
+    return validate(node.left, min, node.val) &amp;&amp; validate(node.right, node.val, max);
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 98):</strong> Checking only immediate children is wrong! Pass valid range `[min, max]` boundaries down through recursion!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 10: MEDIUM NEETCODE (KTH SMALLEST & LCA BST/BT) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page10">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">⚖️</span>
+                    <h1>MEDIUM NEETCODE: KTH SMALLEST &amp; LCA BST / BINARY TREE</h1>
+                </div>
+                <span class="page-num">PAGE 10 OF 14</span>
+            </div>
+
+            <!-- Problem 10: LC 230 -->
+            <div class="section-box box-blue">
+                <div class="section-header">10. LEETCODE 230 — KTH SMALLEST ELEMENT IN A BST</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Inorder Monotonic Traversal</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Find $K^{\text{th}}$ smallest value in a BST using Inorder traversal.
+                        </div>
+                        <div class="problem-code">
+<pre>
+private int count = 0, result = -1;
+public int kthSmallest(TreeNode root, int k) {
+    inorder(root, k); return result;
+}
+private void inorder(TreeNode node, int k) {
+    if (node == null || count &gt;= k) return;
+    inorder(node.left, k);
+    count++;
+    if (count == k) { result = node.val; return; }
+    inorder(node.right, k);
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 11: LC 236 -->
+            <div class="section-box box-purple">
+                <div class="section-header">11. LEETCODE 236 — LOWEST COMMON ANCESTOR OF BINARY TREE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Bottom-Up Postorder Bubbling</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Find LCA of nodes `p` and `q` in a general binary tree.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if (root == null || root == p || root == q) return root;
+    TreeNode left = lowestCommonAncestor(root.left, p, q);
+    TreeNode right = lowestCommonAncestor(root.right, p, q);
+    if (left != null &amp;&amp; right != null) return root; // Root is split point!
+    return left != null ? left : right;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🧠 <strong>MEMORY BOX:</strong> If both `left` and `right` subtrees return non-null, current `root` is the Lowest Common Ancestor!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 11: MEDIUM NEETCODE (BUILD TREE & FLATTEN TREE) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page11">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🛠️</span>
+                    <h1>MEDIUM NEETCODE: BUILD TREE &amp; FLATTEN BINARY TREE</h1>
+                </div>
+                <span class="page-num">PAGE 11 OF 14</span>
+            </div>
+
+            <!-- Problem 12: LC 105 -->
+            <div class="section-box box-teal">
+                <div class="section-header">12. LEETCODE 105 — CONSTRUCT TREE FROM PREORDER &amp; INORDER</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Preorder Root + Inorder Split</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Build binary tree from preorder and inorder traversal arrays.
+                        </div>
+                        <div class="problem-code">
+<pre>
+private int preIdx = 0;
+private Map&lt;Integer, Integer&gt; inMap = new HashMap&lt;&gt;();
+public TreeNode buildTree(int[] preorder, int[] inorder) {
+    for (int i = 0; i &lt; inorder.length; i++) inMap.put(inorder[i], i);
+    return helper(preorder, 0, inorder.length - 1);
+}
+private TreeNode helper(int[] pre, int inStart, int inEnd) {
+    if (inStart &gt; inEnd) return null;
+    int rootVal = pre[preIdx++];
+    TreeNode root = new TreeNode(rootVal);
+    int inIndex = inMap.get(rootVal);
+    root.left = helper(pre, inStart, inIndex - 1);
+    root.right = helper(pre, inIndex + 1, inEnd);
+    return root;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 13: LC 114 -->
+            <div class="section-box box-rose">
+                <div class="section-header">13. LEETCODE 114 — FLATTEN BINARY TREE TO LINKED LIST</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★☆</span>
+                                <span>Reverse Postorder / Morris</span>
+                                <span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Flatten tree into a single right-skewed linked list in-place.
+                        </div>
+                        <div class="problem-code">
+<pre>
+private TreeNode prev = null;
+public void flatten(TreeNode root) {
+    if (root == null) return;
+    flatten(root.right); // Right first
+    flatten(root.left);  // Left second
+    root.right = prev;
+    root.left = null;
+    prev = root;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 114):</strong> Traversing Right ➔ Left ➔ Root (Reverse Postorder) makes flattening a simple pointer assignment `root.right = prev`!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 12: HARD NEETCODE (MAX PATH SUM & SERIALIZE) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page12">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔥</span>
+                    <h1>HARD NEETCODE: MAX PATH SUM &amp; SERIALIZE / DESERIALIZE</h1>
+                </div>
+                <span class="page-num">PAGE 12 OF 14</span>
+            </div>
+
+            <!-- Problem 14: LC 124 -->
+            <div class="section-box box-red">
+                <div class="section-header">14. LEETCODE 124 — BINARY TREE MAXIMUM PATH SUM</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Bottom-Up Postorder + Max Update</span>
+                                <span class="company-tag">Meta</span><span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Max path sum between any two nodes in binary tree.
+                        </div>
+                        <div class="problem-code">
+<pre>
+private int maxSum = Integer.MIN_VALUE;
+public int maxPathSum(TreeNode root) {
+    gain(root); return maxSum;
+}
+private int gain(TreeNode node) {
+    if (node == null) return 0;
+    int leftGain = Math.max(0, gain(node.left));
+    int rightGain = Math.max(0, gain(node.right));
+    maxSum = Math.max(maxSum, node.val + leftGain + rightGain); // Split path
+    return node.val + Math.max(leftGain, rightGain);            // Single branch
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 15: LC 297 -->
+            <div class="section-box box-indigo">
+                <div class="section-header">15. LEETCODE 297 — SERIALIZE AND DESERIALIZE BINARY TREE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Preorder DFS String Queue</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Convert tree to string and back to identical tree structure.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public String serialize(TreeNode root) {
+    if (root == null) return "N,";
+    return root.val + "," + serialize(root.left) + serialize(root.right);
+}
+public TreeNode deserialize(String data) {
+    Queue&lt;String&gt; q = new ArrayDeque&lt;&gt;(Arrays.asList(data.split(",")));
+    return build(q);
+}
+private TreeNode build(Queue&lt;String&gt; q) {
+    String val = q.poll();
+    if (val.equals("N")) return null;
+    TreeNode node = new TreeNode(Integer.parseInt(val));
+    node.left = build(q); node.right = build(q);
+    return node;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> For Max Path Sum, return ONLY a single branch `node.val + max(left, right)` up to parent, while updating global `maxSum` with the split path `node.val + left + right`!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 13: HARD NEETCODE (VERTICAL ORDER TRAVERSAL) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page13">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📍</span>
+                    <h1>HARD NEETCODE: VERTICAL ORDER TRAVERSAL</h1>
+                </div>
+                <span class="page-num">PAGE 13 OF 14</span>
+            </div>
+
+            <!-- Problem 16: LC 314 / 987 -->
+            <div class="section-box box-purple">
+                <div class="section-header">16. LEETCODE 314 / 987 — VERTICAL ORDER TRAVERSAL</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>BFS + Column Coordinate Map</span>
+                                <span class="company-tag">Meta</span><span class="company-tag">Amazon</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: Assign root column = 0. Left child = col-1, Right child = col+1. Group by column!
+                            </div>
+
+                            <strong>Problem:</strong> Return vertical order traversal of binary tree from leftmost column to rightmost column.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public List&lt;List&lt;Integer&gt;&gt; verticalOrder(TreeNode root) {
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    if (root == null) return res;
+    Map&lt;Integer, List&lt;Integer&gt;&gt; map = new TreeMap&lt;&gt;(); // Keep columns sorted!
+    Queue&lt;TreeNode&gt; nodeQ = new ArrayDeque&lt;&gt;();
+    Queue&lt;Integer&gt; colQ = new ArrayDeque&lt;&gt;();
+    nodeQ.offer(root); colQ.offer(0);
+    while (!nodeQ.isEmpty()) {
+        TreeNode curr = nodeQ.poll();
+        int col = colQ.poll();
+        map.computeIfAbsent(col, k -&gt; new ArrayList&lt;&gt;()).add(curr.val);
+        if (curr.left != null) { nodeQ.offer(curr.left); colQ.offer(col - 1); }
+        if (curr.right != null) { nodeQ.offer(curr.right); colQ.offer(col + 1); }
+    }
+    return new ArrayList&lt;&gt;(map.values());
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Pairing node Queue with Column Queue (`colQ`) keeps coordinates perfectly synchronized during BFS!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 14: MASTER REVISION & REFERENCE CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page14">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💎</span>
+                    <h1>IF YOU REMEMBER ONLY ONE PAGE... MASTER REVISION SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 14 OF 14</span>
+            </div>
+
+            <!-- 4 Golden Laws -->
+            <div class="section-box box-green">
+                <div class="section-header">⭐ THE 4 GOLDEN LAWS OF TREES &amp; BSTS</div>
+                <div class="section-content">
+                    <div style="font-size:0.78rem; line-height:1.45;">
+                        1. <strong>Subtrees are Trees:</strong> Always write base cases for `root == null` first!<br/>
+                        2. <strong>Inorder BST Sorted Property:</strong> Inorder traversal of valid BST is ALWAYS monotonically ascending.<br/>
+                        3. <strong>BFS Level Snapshot:</strong> Freeze size `int size = q.size()` before processing levels.<br/>
+                        4. <strong>Bottom-Up vs Top-Down DFS:</strong> Use Bottom-Up (postorder) when returning subtree computations up to parent!
+                    </div>
+                </div>
+            </div>
+
+            <!-- When Recursion Fails -->
+            <div class="section-box box-amber">
+                <div class="section-header">⛔ WHEN RECURSION FAILS (DO NOT USE!)</div>
+                <div class="section-content">
+                    <div>• <strong>Deep Skewed Trees ($N > 10^4$):</strong> Unchecked deep recursion causes `StackOverflowError` ➔ Use **Iterative Stack/Queue**!</div>
+                </div>
+            </div>
+
+            <!-- NeetCode & Blind 75 Tracker -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📊 NEETCODE &amp; BLIND 75 CONFIDENCE TRACKER</div>
+                <div class="section-content">
+                    <div class="grid-3">
+                        <div><span class="badge-easy">🟢 Easy</span> LC 226 Invert Tree</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 104 Max Depth</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 100 Same Tree</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 572 Subtree</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 110 Balanced Tree</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 102 Level Order</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 199 Right Side View</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 1448 Good Nodes</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 98 Validate BST</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 230 Kth Smallest</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 235/236 LCA</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 105 Build Tree</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 124 Max Path Sum</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 297 Serialize/Deserialize</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 314 Vertical Order</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forward Cross Link -->
+            <a href="index.html" class="cross-link" style="background:#dcfce7; color:#15803d; border-color:#86efac; font-size:0.78rem;">👉 Next Master Topic: Topic 11 → Tries Masterclass</a>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🎉 <strong>TOPIC 10 TREES MASTERCLASS COMPLETE!</strong> Turn the page to <strong>Topic 11: Tries Masterclass</strong>!
+        </div>
+    </div>
+
+    </div> <!-- end .main-content -->
+</div> <!-- end .app-layout -->
+</div> <!-- end .container -->
+
+<!-- Floating Back to Top Button -->
+<button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆</button>
+
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout') || document.querySelector('.app-layout');
+        const btn = document.querySelector('.shrink-btn span');
+        if (layout) {
+            layout.classList.toggle('shrunk');
+            if (btn) {
+                btn.innerText = layout.classList.contains('shrunk') ? '➕ Expand' : '➖ Shrink';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,445 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1>GRAPH PATTERN GUIDE</h1>
+            <div class="subtitle">PAGE 8 &mdash; MASTER TOPOLOGICAL SORT TEMPLATE GUIDE<br><small style="color:#64748b;font-weight:normal;">(FAANG Cheat Sheet)</small></div>
+        </div>
+        <div style="text-align: right;">
+            <div class="page-number">PAGE 8</div>
+        </div>
+    </div>
+
+    <div style="text-align: center; font-style: italic; margin-bottom: 20px; font-size: 1.1em; color: #333;">
+        "Order matters. Use Topological Sort."
+    </div>
+
+    <div style="display: flex; gap: 20px;">
+        <!-- Left Column for Section 1 -->
+        <div style="flex: 0 0 250px;">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 5px 10px; font-weight: bold;"><span class="num" style="background-color: white; color: #1e3a8a; padding: 2px 6px; border-radius: 4px; margin-right: 5px;">1</span> MASTER IDEA</div>
+                <div class="section-content" style="padding: 15px; background-color: #f8fafc; border: 1px solid #e2e8f0; height: 100%;">
+                    <p style="margin-bottom: 15px;"><strong>Use Topological Sort when dependencies exist.</strong></p>
+                    <p style="margin-bottom: 15px;">It gives a valid linear order of tasks.</p>
+                    <p style="margin-bottom: 15px;">If impossible &rarr; <strong style="color: #ef4444;">CYCLE exists.</strong></p>
+                    <div style="background-color: #e0f2fe; padding: 10px; border-left: 4px solid #0284c7; font-size: 0.9em;">
+                        <strong>TIP:</strong> If <code>order.size() != numCourses</code> &rarr; Cycle exists (impossible order).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column for Section 2 -->
+        <div style="flex: 1;">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 5px 10px; font-weight: bold;">
+                    <span class="num" style="background-color: white; color: #1e3a8a; padding: 2px 6px; border-radius: 4px; margin-right: 5px;">2</span> KAHN'S ALGORITHM (BFS TOPOLOGICAL SORT) &starf;&starf;&starf;&starf;&starf;
+                </div>
+                <div class="section-content" style="padding: 10px; display: flex; gap: 15px;">
+                    <table style="font-size: 0.85em; flex: 1;">
+                        <tr><td style="font-weight: bold;">Input</td><td>Directed Graph (Adj List)</td></tr>
+                        <tr><td style="font-weight: bold;">Caller</td><td><code>topoSort(numCourses, edges)</code></td></tr>
+                        <tr><td style="font-weight: bold;">Key Idea</td><td>Remove 0 indegree nodes repeatedly</td></tr>
+                        <tr><td style="font-weight: bold;">Data Structure</td><td><code>Queue&lt;Integer&gt; + indegree[]</code></td></tr>
+                        <tr><td style="font-weight: bold;">Return</td><td><code>List&lt;Integer&gt; order</code></td></tr>
+                        <tr><td style="font-weight: bold; vertical-align: top;">Used In</td><td>
+                            <ul style="margin: 0; padding-left: 15px;">
+                                <li>Course Schedule</li>
+                                <li>Course Schedule II</li>
+                                <li>Alien Dictionary</li>
+                                <li>Build Order</li>
+                            </ul>
+                        </td></tr>
+                    </table>
+
+                    <div style="flex: 2; position: relative;">
+                        <div style="background-color: #f1f8e9; padding: 2px 8px; font-size: 0.8em; font-weight: bold; color: #33691e; display: inline-block; margin-bottom: 5px;">Java Template</div>
+                        <pre style="margin: 0; padding: 10px; font-size: 0.75em; background-color: #f8fafc; border: 1px solid #e2e8f0;"><code>public List&lt;Integer&gt; topoSort(int numCourses, int[][] edges) {
+    List&lt;List&lt;Integer&gt;&gt; graph = new ArrayList&lt;&gt;();
+    for (int i = 0; i &lt; numCourses; i++) graph.add(new ArrayList&lt;&gt;());
+    for (int[] e : edges) {
+        int u = e[1], v = e[0]; // u -> v
+        graph.get(u).add(v);
+        indegree[v]++;
+    }
+
+    Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();
+    for (int i = 0; i &lt; numCourses; i++) {
+        if (indegree[i] == 0) q.offer(i); // all starting points
+    }
+
+    List&lt;Integer&gt; order = new ArrayList&lt;&gt;();
+    while (!q.isEmpty()) {
+        int node = q.poll();
+        order.add(node);
+        for (int nei : graph.get(node)) {
+            indegree[nei]--;
+            if (indegree[nei] == 0) q.offer(nei);
+        }
+    }
+
+    return (order.size() == numCourses) ? order : new ArrayList&lt;&gt;(); // empty -> cycle
+}</code></pre>
+                    </div>
+
+                    <div style="flex: 1;">
+                        <div style="background-color: #6b21a8; color: white; text-align: center; padding: 4px; font-weight: bold; font-size: 0.8em; margin-bottom: 10px;">AHA MOMENTS</div>
+                        <ul style="font-size: 0.8em; padding-left: 15px; margin-bottom: 15px;">
+                            <li>Indegree 0 nodes are "ready" to take.</li>
+                            <li>Remove it, reduce indegree of neighbors.</li>
+                            <li>If all nodes are taken &rarr; DAG (no cycle).</li>
+                            <li>If not all nodes &rarr; cycle exists.</li>
+                        </ul>
+
+                        <div style="background-color: #b91c1c; color: white; text-align: center; padding: 4px; font-weight: bold; font-size: 0.8em; margin-bottom: 10px;">COMMON MISTAKES</div>
+                        <ul style="font-size: 0.8em; padding-left: 15px;">
+                            <li>Forgot <code>indegree[]</code> initialization.</li>
+                            <li>Didn't add all 0 indegree nodes first.</li>
+                            <li>Used Stack instead of Queue (wrong order).</li>
+                            <li>Didn't check cycle (<code>order.size()</code> test).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section-box" style="margin-top: 15px;">
+        <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 5px 10px; font-weight: bold;">
+            <span class="num" style="background-color: white; color: #1e3a8a; padding: 2px 6px; border-radius: 4px; margin-right: 5px;">3</span> TOPO SORT (DFS + STACK METHOD) &starf;&starf;&starf;&starf;
+        </div>
+        <div class="section-content" style="padding: 10px; display: flex; gap: 15px;">
+            <table style="font-size: 0.85em; flex: 1;">
+                <tr><td style="font-weight: bold;">Input</td><td>Directed Graph (Adj List)</td></tr>
+                <tr><td style="font-weight: bold;">Caller</td><td><code>topoSortDFS(numCourses, edges)</code></td></tr>
+                <tr><td style="font-weight: bold;">Key Idea</td><td>Finish node &rarr; push to stack</td></tr>
+                <tr><td style="font-weight: bold;">Data Structure</td><td><code>Stack&lt;Integer&gt; + visited[] + recStack[]</code></td></tr>
+                <tr><td style="font-weight: bold;">Return</td><td><code>List&lt;Integer&gt; order</code></td></tr>
+                <tr><td style="font-weight: bold; vertical-align: top;">Used In</td><td>
+                    <ul style="margin: 0; padding-left: 15px;">
+                        <li>Course Schedule II (Alt)</li>
+                        <li>Alien Dictionary (Alt)</li>
+                        <li>Build Order (Alt)</li>
+                    </ul>
+                </td></tr>
+            </table>
+
+            <div style="flex: 2; position: relative;">
+                <div style="background-color: #f1f8e9; padding: 2px 8px; font-size: 0.8em; font-weight: bold; color: #33691e; display: inline-block; margin-bottom: 5px;">Java Template</div>
+                <pre style="margin: 0; padding: 10px; font-size: 0.7em; background-color: #f8fafc; border: 1px solid #e2e8f0; height: 100%; overflow: auto;"><code>public List&lt;Integer&gt; topoSortDFS(int numCourses, int[][] edges) {
+    List&lt;List&lt;Integer&gt;&gt; graph = new ArrayList&lt;&gt;();
+    for (int i = 0; i &lt; numCourses; i++) graph.add(new ArrayList&lt;&gt;());
+    for (int[] e : edges) graph.get(e[1]).add(e[0]);
+
+    boolean[] visited = new boolean[numCourses];
+    boolean[] recStack = new boolean[numCourses];
+    Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
+
+    for (int i = 0; i &lt; numCourses; i++) {
+        if (!visited[i]) {
+            if (dfs(i, graph, visited, recStack, stack)) return new ArrayList&lt;&gt;(); // cycle
+        }
+    }
+
+    List&lt;Integer&gt; order = new ArrayList&lt;&gt;();
+    while (!stack.isEmpty()) order.add(stack.pop());
+    return order;
+}
+
+private boolean dfs(int node, List&lt;List&lt;Integer&gt;&gt; graph, 
+                    boolean[] visited, boolean[] recStack, Stack&lt;Integer&gt; stack) {
+    visited[node] = true;
+    recStack[node] = true;
+    
+    for (int nei : graph.get(node)) {
+        if (!visited[nei]) {
+            if (dfs(nei, graph, visited, recStack, stack)) return true;
+        } else if (recStack[nei]) {
+            return true; // cycle
+        }
+    }
+    recStack[node] = false;
+    stack.push(node);
+    return false;
+}</code></pre>
+            </div>
+
+            <div style="flex: 1.2; display: flex; flex-direction: column; gap: 15px;">
+                <div>
+                    <div style="background-color: #6b21a8; color: white; text-align: center; padding: 4px; font-weight: bold; font-size: 0.8em; margin-bottom: 10px;">AHA</div>
+                    <ul style="font-size: 0.8em; padding-left: 15px;">
+                        <li>Postorder of DFS gives a valid topological order.</li>
+                        <li><code>recStack</code> detects back-edge &rarr; cycle.</li>
+                        <li>Stack reversed = correct order.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div style="background-color: #1e3a8a; color: white; text-align: center; padding: 4px; font-weight: bold; font-size: 0.8em; margin-bottom: 5px;">WHEN TO USE WHICH?</div>
+                    <table style="width: 100%; font-size: 0.8em; text-align: center; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <th style="padding: 5px;">Approach</th>
+                            <th style="padding: 5px;">Use When</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-weight: bold;">Kahn's (BFS)</td>
+                            <td style="padding: 5px;">Need lexicographically smallest order</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-weight: bold;">Kahn's (BFS)</td>
+                            <td style="padding: 5px;">Graph is large / iterative preferred</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-weight: bold;">DFS + Stack</td>
+                            <td style="padding: 5px;">Easy cycle detection in recursion</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px; font-weight: bold;">DFS + Stack</td>
+                            <td style="padding: 5px;">Natural for recursive thinking</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sections 4 and 5 next to each other -->
+    <div style="display: flex; gap: 20px; margin-top: 15px;">
+        <!-- Section 4 -->
+        <div style="flex: 1.5;">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 5px 10px; font-weight: bold;">
+                    <span class="num" style="background-color: white; color: #1e3a8a; padding: 2px 6px; border-radius: 4px; margin-right: 5px;">4</span> LEXICOGRAPHICALLY SMALLEST ORDER (BFS + MIN HEAP) &starf;&starf;&starf;&starf;
+                </div>
+                <div class="section-content" style="padding: 10px; display: flex; gap: 15px;">
+                    <table style="font-size: 0.8em; flex: 1;">
+                        <tr><td style="font-weight: bold;">Change From Kahn's Algorithm</td><td>Use PriorityQueue (Min Heap)</td></tr>
+                        <tr><td style="font-weight: bold;">Data Structure</td><td><code>PriorityQueue&lt;Integer&gt; pq</code></td></tr>
+                        <tr><td style="font-weight: bold; vertical-align: top;">Use In</td><td>
+                            <ul style="margin: 0; padding-left: 15px;">
+                                <li>Course Schedule II (Lexico)</li>
+                                <li>Smallest Order Problems</li>
+                            </ul>
+                        </td></tr>
+                    </table>
+                    <div style="flex: 1.5;">
+                        <div style="background-color: #f1f8e9; padding: 2px 8px; font-size: 0.8em; font-weight: bold; color: #33691e; display: inline-block; margin-bottom: 5px;">Java Template</div>
+                        <pre style="margin: 0; padding: 5px; font-size: 0.7em; background-color: #f8fafc; border: 1px solid #e2e8f0;"><code>PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+for (int i = 0; i &lt; numCourses; i++) {
+    if (indegree[i] == 0) pq.offer(i); // min heap instead of queue
+}
+List&lt;Integer&gt; order = new ArrayList&lt;&gt;();
+while (!pq.isEmpty()) {
+    int node = pq.poll(); // smallest node first
+    order.add(node);
+    for (int nei : graph.get(node)) {
+        indegree[nei]--;
+        if (indegree[nei] == 0) pq.offer(nei);
+    }
+}</code></pre>
+                    </div>
+                </div>
+                <div style="background-color: #e0e7ff; padding: 5px 10px; font-size: 0.85em; font-weight: bold; color: #1e3a8a; text-align: center; border-top: 1px solid #c7d2fe;">
+                    <span style="background-color: #1e3a8a; color: white; padding: 2px 6px; border-radius: 4px; margin-right: 5px;">AHA</span> Min Heap ensures smallest available node is always picked.
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5 -->
+        <div style="flex: 1;">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 5px 10px; font-weight: bold;">
+                    <span class="num" style="background-color: white; color: #1e3a8a; padding: 2px 6px; border-radius: 4px; margin-right: 5px;">5</span> CYCLE DETECTION (IN DAG CHECK) &starf;&starf;&starf;&starf;
+                </div>
+                <div class="section-content" style="padding: 10px;">
+                    <table style="width: 100%; font-size: 0.85em; margin-bottom: 10px;">
+                        <tr><td style="font-weight: bold; padding: 4px;">Method</td><td style="padding: 4px;">Kahn's (BFS)</td></tr>
+                        <tr><td style="font-weight: bold; padding: 4px;">Check</td><td style="padding: 4px;"><code>order.size() != V</code></td></tr>
+                        <tr><td style="font-weight: bold; padding: 4px;">Result</td><td style="padding: 4px;">Cycle Exists</td></tr>
+                        <tr><td style="font-weight: bold; padding: 4px;">Why?</td><td style="padding: 4px;">Some nodes always have <code>indegree &gt; 0</code> (cycle)</td></tr>
+                    </table>
+
+                    <div style="background-color: #6b21a8; color: white; text-align: center; padding: 4px; font-weight: bold; font-size: 0.8em; margin-bottom: 5px;">AHA MOMENT</div>
+                    <div style="font-size: 0.8em; padding: 5px; margin-bottom: 10px; border: 1px solid #e2e8f0; background-color: #f8fafc; text-align: center;">
+                        If we cannot remove all nodes &rarr; cycle exists.
+                    </div>
+
+                    <div style="background-color: #b91c1c; color: white; text-align: center; padding: 4px; font-weight: bold; font-size: 0.8em; margin-bottom: 5px;">COMMON PITFALLS</div>
+                    <ul style="font-size: 0.8em; padding-left: 15px; margin: 0; padding-bottom: 10px;">
+                        <li>Not returning empty list on cycle.</li>
+                        <li>Confusing 0 indegree concept.</li>
+                        <li>Not building graph properly.</li>
+                        <li>Forgetting disconnected components.</li>
+                    </ul>
+                </div>
+                <div style="background-color: #e0f2fe; padding: 5px 10px; font-size: 0.85em; font-weight: bold; color: #0284c7; text-align: center; border-top: 1px solid #bae6fd;">
+                    <span style="background-color: #0284c7; color: white; padding: 2px 6px; border-radius: 4px; margin-right: 5px;">TIP</span> Always verify <code>order.size() == numCourses</code> (or V).
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="section-box" style="margin-top: 15px;">
+        <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 5px 10px; font-weight: bold;">
+            <span class="num" style="background-color: white; color: #1e3a8a; padding: 2px 6px; border-radius: 4px; margin-right: 5px;">6</span> WHAT ACTUALLY CHANGES? &starf;&starf;&starf;&starf;&starf;
+        </div>
+        <div class="section-content" style="padding: 10px;">
+            <table style="width: 100%; font-size: 0.85em; text-align: center; border-collapse: collapse;">
+                <tr style="background-color: #f1f5f9; border-bottom: 2px solid #cbd5e1;">
+                    <th style="padding: 8px;">Template</th>
+                    <th style="padding: 8px;">Graph Type</th>
+                    <th style="padding: 8px;">Core Idea</th>
+                    <th style="padding: 8px;">Data Structure</th>
+                    <th style="padding: 8px;">Only Thing That Changes<br><small>(Queue vs Min Heap)</small></th>
+                    <th style="padding: 8px;">Typical Problems</th>
+                </tr>
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 8px; font-weight: bold; color: #15803d; background-color: #f0fdf4;">Kahn's (BFS)</td>
+                    <td style="padding: 8px;">Directed Acyclic Graph</td>
+                    <td style="padding: 8px;">Remove 0 indegree nodes</td>
+                    <td style="padding: 8px;">Queue + indegree[]</td>
+                    <td style="padding: 8px;">How we pick next node</td>
+                    <td style="padding: 8px; font-style: italic;">Course Schedule, Alien Dictionary, Build Order</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 8px; font-weight: bold; color: #15803d;">Kahn's (BFS + Min Heap)</td>
+                    <td style="padding: 8px;">DAG</td>
+                    <td style="padding: 8px;">Remove smallest 0 indegree</td>
+                    <td style="padding: 8px;">Min Heap + indegree[]</td>
+                    <td style="padding: 8px;">Use PriorityQueue instead of Queue</td>
+                    <td style="padding: 8px; font-style: italic;">Course Schedule II (Lexico)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 8px; font-weight: bold;">DFS + Stack</td>
+                    <td style="padding: 8px;">DAG</td>
+                    <td style="padding: 8px;">Finish node &rarr; push stack</td>
+                    <td style="padding: 8px;">Stack + visited[] + recStack[]</td>
+                    <td style="padding: 8px;">Order from stack (reverse)</td>
+                    <td style="padding: 8px; font-style: italic;">Course Schedule II, Alien Dictionary</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; font-weight: bold;">Cycle Detection</td>
+                    <td style="padding: 8px;">Directed Graph</td>
+                    <td style="padding: 8px;">If not all nodes visited &rarr; cycle</td>
+                    <td style="padding: 8px;">Same as above</td>
+                    <td style="padding: 8px;">Check <code>order.size() != V</code></td>
+                    <td style="padding: 8px; font-style: italic;">Course Schedule (cycle check)</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Sections 7, 8, 9 -->
+    <div style="display: flex; gap: 15px; margin-top: 15px;">
+        <!-- Section 7 -->
+        <div style="flex: 1.5;">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 5px 10px; font-weight: bold;">
+                    <span class="num" style="background-color: white; color: #1e3a8a; padding: 2px 6px; border-radius: 4px; margin-right: 5px;">7</span> RETURN TYPE GUIDE &starf;&starf;&starf;&starf;&starf;
+                </div>
+                <div class="section-content" style="padding: 10px;">
+                    <table style="width: 100%; font-size: 0.8em; text-align: center; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <th style="padding: 5px;">Return Type</th>
+                            <th style="padding: 5px;">Purpose</th>
+                            <th style="padding: 5px;">Typical Problems</th>
+                            <th style="padding: 5px;">Interview Meaning</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-family: monospace;">List&lt;Integer&gt;</td>
+                            <td style="padding: 5px;">Valid order</td>
+                            <td style="padding: 5px; font-style: italic;">Course Schedule II,<br>Alien Dictionary</td>
+                            <td style="padding: 5px;">Provide correct order</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-family: monospace;">boolean</td>
+                            <td style="padding: 5px;">Cycle exists?</td>
+                            <td style="padding: 5px; font-style: italic;">Course Schedule</td>
+                            <td style="padding: 5px;">Feasibility check</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 5px; font-family: monospace;">int[]</td>
+                            <td style="padding: 5px;">Order as array</td>
+                            <td style="padding: 5px; font-style: italic;">Build Order</td>
+                            <td style="padding: 5px;">Return index-based order</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px; font-family: monospace;">String</td>
+                            <td style="padding: 5px;">Order as string</td>
+                            <td style="padding: 5px; font-style: italic;">Alien Dictionary</td>
+                            <td style="padding: 5px;">Lexico order (characters)</td>
+                        </tr>
+                    </table>
+                    <div style="text-align: center; margin-top: 10px; font-size: 0.85em; font-weight: bold; color: #d97706;">
+                        &starf; Changing return type usually changes the solution slightly.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 8 -->
+        <div style="flex: 1.5;">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 5px 10px; font-weight: bold;">
+                    <span class="num" style="background-color: white; color: #1e3a8a; padding: 2px 6px; border-radius: 4px; margin-right: 5px;">8</span> INTERVIEW THINKING FLOW &starf;&starf;&starf;&starf;&starf;
+                </div>
+                <div class="section-content" style="padding: 10px; text-align: center;">
+                    <div class="mermaid">
+                    graph TD
+                        A[Problem] --> B{Dependencies exist?}
+                        B -- No --> C[Use DFS / BFS]
+                        B -- Yes --> D[Directed Graph]
+                        D --> E{Need order?}
+                        E -- Yes --> F[Topological Sort]
+                        E -- No --> G[Check cycle?]
+                        G -- Yes --> H[Cycle Only Check]
+                        F --> I[Choose Template --> Write Code]
+                        H --> I
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 9 -->
+        <div style="flex: 1;">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 5px 10px; font-weight: bold;">
+                    <span class="num" style="background-color: white; color: #1e3a8a; padding: 2px 6px; border-radius: 4px; margin-right: 5px;">9</span> PAGE 9 PREVIEW &starf;&starf;&starf;&starf;&starf;
+                </div>
+                <div class="section-content" style="padding: 10px; font-size: 0.85em;">
+                    <p style="margin-bottom: 10px;">Next page contains <strong>TOPOLOGICAL SORT PROBLEM GUIDE</strong>.</p>
+                    <p style="margin-bottom: 10px;">For each problem, you will see:</p>
+                    <div style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 15px;">
+                        <div>&#128221; Base Template</div>
+                        <div>&#128257; Changed Lines</div>
+                        <div>&#128161; AHA Moment</div>
+                        <div>&#9201; Complexity</div>
+                        <div>&#128104;&zwj;&#127979; Interview Tip</div>
+                    </div>
+                    <p style="font-weight: bold; color: #1e40af; text-align: center;">Apply these templates with tiny changes and solve any Topo Sort problem with confidence!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer Process -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; font-size: 0.75em; font-weight: bold; padding: 10px; background-color: #f8fafc; border-top: 2px solid #e2e8f0; color: #334155;">
+        <div>(?) Problem<br><small style="font-weight: normal;">(Understand)</small></div>
+        <div>&rarr;</div>
+        <div>Input<br><small style="font-weight: normal;">(What given)</small></div>
+        <div>&rarr;</div>
+        <div>Representation<br><small style="font-weight: normal;">(Graph + Indegree)</small></div>
+        <div>&rarr;</div>
+        <div>Helper Structure<br><small style="font-weight: normal;">(Queue / Stack / PQ)</small></div>
+        <div>&rarr;</div>
+        <div>Pattern<br><small style="font-weight: normal;">(Topo Sort Template)</small></div>
+        <div>&rarr;</div>
+        <div>Tiny Logic Change<br><small style="font-weight: normal;">(Apply Changes)</small></div>
+        <div>&rarr;</div>
+        <div>Dry Run<br><small style="font-weight: normal;">(Example)</small></div>
+        <div>&rarr;</div>
+        <div>Optimize<br><small style="font-weight: normal;">(Time/Space)</small></div>
+    </div>
+</div>

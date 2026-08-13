@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Topic 15: Greedy Algorithms Masterclass — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 14px; }
+.ph h1 { font-size: 1.8rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.88rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.75rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; }
+.bh  { background: var(--pri); color: white; padding: 6px 12px;
+  font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 18px; height: 18px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 10px 12px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 6px 12px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.75rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.95rem; }
+.psub   { color: var(--sub); font-size: 0.8rem; }
+.prow-body { display: flex; }
+.pc { padding: 8px 10px; font-size: 0.78rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.72rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; }
+.prob-head { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.75rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.70rem; line-height: 1.4; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.76rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+th, td { border: 1px solid var(--bdr); padding: 5px 7px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.badge-b { background: #dbeafe; color: #1e40af; }
+.badge-g { background: #dcfce7; color: #166534; }
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.tip  { background: #f0fdf4; border-left: 4px solid var(--grn); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 8px 10px; margin-top: 6px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.82rem; margin-bottom: 3px; }
+
+.dt-wrap { font-size: 0.76rem; }
+.dt-root { background: var(--pri); color: white; padding: 5px 10px; border-radius: 5px; text-align: center; font-weight: 700; margin-bottom: 8px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 5px 7px; font-weight: 600; color: #1e40af; font-size: 0.72rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 5px 7px; color: #065f46; font-weight: 700; font-size: 0.72rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.75rem; padding: 4px 3px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 6px 10px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.85; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- PAGE 1: FOUNDATION & WHY -->
+<div class="page">
+<div class="ph">
+  <div><h1>GREEDY ALGORITHMS</h1><div class="sub">FAANG Master Guide — Java Edition</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 1 OF 10</div><div class="ptag">FOUNDATION · LOCAL OPTIMUM · GLOBAL CHOICE</div></div>
+</div>
+
+<div class="g3" style="margin-bottom:12px">
+  <div class="box pur">
+    <div class="bh">💡 WHY GREEDY?</div>
+    <div class="bc">
+      <p style="margin-bottom:6px">Greedy algorithms make the **locally optimal choice at each step**, hoping that this choice leads to a globally optimal solution without ever looking back or backtracking!</p>
+      <div class="aha">
+        <div class="aha-t">💡 THE GREEDY PROOF AHA</div>
+        Greedy works ONLY when local choices never restrict optimal future choices (Greedy Choice Property). If choices depend on future outcomes, use **Dynamic Programming**!
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bh"><span class="n">1</span> 3 CORE PATTERNS</div>
+    <div class="bc">
+      <ul style="margin-bottom:8px;padding-left:16px">
+        <li><strong>Farthest Reach (Jump Game):</strong> Maintain `maxReach` boundary iteratively.</li>
+        <li><strong>Gas Station Circuit:</strong> If total gas >= total cost, a valid starting station is guaranteed!</li>
+        <li><strong>Kadane's Algorithm:</strong> Reset running subarray sum to 0 if it drops below 0!</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box sky">
+    <div class="bh"><span class="n">2</span> VISUALIZING JUMP GAME</div>
+    <div class="bc">
+      <div style="font-weight:700;color:var(--pri);margin-bottom:4px">Nums = [2, 3, 1, 1, 4]:</div>
+<pre>Index 0 (val 2) ➔ maxReach = max(0, 0+2) = 2
+Index 1 (val 3) ➔ maxReach = max(2, 1+3) = 4!
+maxReach (4) >= Last Index (4) ➔ True!</pre>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">📚 PREREQUISITES &amp; COMPLEXITY REASONING</div>
+    <div class="bc">
+      <table style="font-size:0.76rem">
+        <tr><th>Algorithm</th><th>Time Complexity</th><th>Auxiliary Space</th></tr>
+        <tr><td>Jump Game I &amp; II</td><td><strong>O(N) single pass</strong></td><td><strong>O(1) space</strong></td></tr>
+        <tr><td>Gas Station (LC 134)</td><td><strong>O(N) single pass</strong></td><td><strong>O(1) space</strong></td></tr>
+        <tr><td>Kadane's Max Subarray</td><td><strong>O(N) single pass</strong></td><td><strong>O(1) space</strong></td></tr>
+        <tr><td>Task Scheduler (LC 621)</td><td><strong>O(N) frequency</strong></td><td><strong>O(1) hashmap</strong></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box amb">
+    <div class="bh">⚡ CLUES THAT SCREAM GREEDY</div>
+    <div class="bc">
+      <p style="font-size:0.8rem">1. <em>"Minimum jumps to reach end" / "Can reach last index"</em> \rightarrow Farthest Reach</p>
+      <p style="font-size:0.8rem">2. <em>"Complete circular gas circuit"</em> \rightarrow Cumulative Tank Reset</p>
+      <p style="font-size:0.8rem">3. <em>"Maximum sum contiguous subarray"</em> \rightarrow Kadane's Algorithm</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 2: API & TOOLKIT -->
+<div class="page">
+<div class="ph">
+  <div><h1>GREEDY ALGORITHMS</h1><div class="sub">Java Master Toolkit</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 2 OF 10</div><div class="ptag">FARTHEST REACH · KADANE · FREQUENCY COUNTING</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:12px">
+  <div class="box">
+    <div class="bh"><span class="n">1</span> FARTHEST REACH TEMPLATE</div>
+    <div class="bc">
+<pre>public boolean canJump(int[] nums) {
+  int maxReach = 0;
+  for (int i = 0; i < nums.length; i++) {
+    if (i > maxReach) return false; // Cannot reach index i!
+    maxReach = Math.max(maxReach, i + nums[i]);
+  }
+  return true;
+}</pre>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh"><span class="n">2</span> KADANE'S MAX SUBARRAY TEMPLATE</div>
+    <div class="bc">
+<pre>public int maxSubArray(int[] nums) {
+  int maxSum = nums[0], currSum = 0;
+  for (int num : nums) {
+    currSum = Math.max(num, currSum + num);
+    maxSum = Math.max(maxSum, currSum);
+  }
+  return maxSum;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 3: CORE PATTERNS (JUMP GAME I & II) -->
+<div class="page">
+<div class="ph">
+  <div><h1>GREEDY ALGORITHMS</h1><div class="sub">Core Patterns — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 3 OF 10</div><div class="ptag">JUMP GAME I &amp; II · BFS GREEDY WINDOW</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 1</div>
+    <div class="ptitle">JUMP GAME I (Farthest Reach Boundary)</div>
+    <div class="psub">e.g. Jump Game (LC 55)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.78rem">Check if last index is reachable in O(N) time and O(1) space.</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 55</div>
+<pre>public boolean canJump(int[] nums) {
+  int maxReach = 0;
+  for (int i = 0; i < nums.length; i++) {
+    if (i > maxReach) return false;
+    maxReach = Math.max(maxReach, i + nums[i]);
+  }
+  return true;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 2</div>
+    <div class="ptitle">JUMP GAME II (Minimum Jumps BFS Window)</div>
+    <div class="psub">e.g. Jump Game II (LC 45)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">BFS Window Strategy</div>
+      <div style="font-size:0.78rem">
+        Maintain current jump boundary `currEnd`. When loop reaches `currEnd`, increment `jumps++` and update `currEnd = maxReach`!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 45</div>
+<pre>public int jump(int[] nums) {
+  int jumps = 0, currEnd = 0, maxReach = 0;
+  for (int i = 0; i < nums.length - 1; i++) {
+    maxReach = Math.max(maxReach, i + nums[i]);
+    if (i == currEnd) {
+      jumps++;
+      currEnd = maxReach;
+    }
+  }
+  return jumps;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 4: CORE PATTERNS (GAS STATION & PARTITION LABELS) -->
+<div class="page">
+<div class="ph">
+  <div><h1>GREEDY ALGORITHMS</h1><div class="sub">Core Patterns — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 4 OF 10</div><div class="ptag">GAS STATION · PARTITION LABELS</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 3</div>
+    <div class="ptitle">GAS STATION (Circular Tank Reset)</div>
+    <div class="psub">e.g. Gas Station (LC 134)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Reset Condition</div>
+      <div style="font-size:0.78rem">
+        If `totalGas >= totalCost`, a valid start exists! If `currTank < 0`, reset `start = i + 1` and `currTank = 0`.
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 134</div>
+<pre>public int canCompleteCircuit(int[] gas, int[] cost) {
+  int totalTank = 0, currTank = 0, start = 0;
+  for (int i = 0; i < gas.length; i++) {
+    int diff = gas[i] - cost[i];
+    totalTank += diff; currTank += diff;
+    if (currTank < 0) {
+      start = i + 1; // Reset candidate station!
+      currTank = 0;
+    }
+  }
+  return totalTank >= 0 ? start : -1;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 4</div>
+    <div class="ptitle">PARTITION LABELS (Last Index Boundary Tracking)</div>
+    <div class="psub">e.g. Partition Labels (LC 763)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Last Seen Map</div>
+      <div style="font-size:0.78rem">
+        Record last occurrence index of each char. Loop string, update partition `end = Math.max(end, last[char])`. When `i == end`, partition complete!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 763</div>
+<pre>public List&lt;Integer&gt; partitionLabels(String s) {
+  int[] last = new int[26];
+  for (int i = 0; i < s.length(); i++) last[s.charAt(i) - 'a'] = i;
+  List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+  int start = 0, end = 0;
+  for (int i = 0; i < s.length(); i++) {
+    end = Math.max(end, last[s.charAt(i) - 'a']);
+    if (i == end) {
+      res.add(end - start + 1);
+      start = i + 1;
+    }
+  }
+  return res;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 5: CORE PATTERNS (TASK SCHEDULER & VALID PARENTHESES) -->
+<div class="page">
+<div class="ph">
+  <div><h1>GREEDY ALGORITHMS</h1><div class="sub">Core Patterns — Part 3</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 5 OF 10</div><div class="ptag">TASK SCHEDULER · VALID PARENTHESIS STRING</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 5</div>
+    <div class="ptitle">TASK SCHEDULER (Max Frequency Idle Slot Formula)</div>
+    <div class="psub">e.g. Task Scheduler (LC 621)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Formula Intuition</div>
+      <div style="font-size:0.78rem">
+        Find max frequency `maxFreq`. Minimum slots needed $= (\text{maxFreq} - 1) × (n + 1) + \text{countMaxFreq}. Return \max(\text{tasks.length}, \text{slots})$.
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 621</div>
+<pre>public int leastInterval(char[] tasks, int n) {
+  int[] freq = new int[26];
+  for (char t : tasks) freq[t - 'A']++;
+  Arrays.sort(freq);
+  int maxFreq = freq[25];
+  int countMaxFreq = 0;
+  for (int f : freq) if (f == maxFreq) countMaxFreq++;
+  int partCount = maxFreq - 1;
+  int partLength = n - (countMaxFreq - 1);
+  int emptySlots = partCount * partLength;
+  int availableTasks = tasks.length - maxFreq * countMaxFreq;
+  int idles = Math.max(0, emptySlots - availableTasks);
+  return tasks.length + idles;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 6</div>
+    <div class="ptitle">VALID PARENTHESIS STRING (Min / Max Open Bounds)</div>
+    <div class="psub">e.g. Valid Parenthesis String (LC 678)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Range Bound Tracking</div>
+      <div style="font-size:0.78rem">
+        Track `[cmin, cmax]` range of possible open brackets. `*` expands range `[cmin-1, cmax+1]`. Valid if `cmin == 0` at end!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 678</div>
+<pre>public boolean checkValidString(String s) {
+  int cmin = 0, cmax = 0;
+  for (char c : s.toCharArray()) {
+    if (c == '(') { cmin++; cmax++; }
+    else if (c == ')') { cmin--; cmax--; }
+    else { cmin--; cmax++; } // '*' can be ')', empty, or '('
+    if (cmax < 0) return false;
+    cmin = Math.max(cmin, 0);
+  }
+  return cmin == 0;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 6: KADANE'S ALGORITHM -->
+<div class="page">
+<div class="ph">
+  <div><h1>GREEDY ALGORITHMS</h1><div class="sub">Kadane's Algorithm</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 6 OF 10</div><div class="ptag">MAXIMUM SUBARRAY · KADANE'S ALGORITHM</div></div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 7</div>
+    <div class="ptitle">KADANE'S ALGORITHM (Maximum Subarray Sum)</div>
+    <div class="psub">e.g. Maximum Subarray (LC 53)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Reset Sum Mechanics</div>
+      <div style="font-size:0.78rem">
+        If `currSum < 0`, reset running sum to current number `num`. Update `maxSum = Math.max(maxSum, currSum)`.
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 53</div>
+<pre>public int maxSubArray(int[] nums) {
+  int maxSum = nums[0], currSum = 0;
+  for (int num : nums) {
+    currSum = Math.max(num, currSum + num);
+    maxSum = Math.max(maxSum, currSum);
+  }
+  return maxSum;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 7: DECISION TREE & TRIGGER WORDS -->
+<div class="page">
+<div class="ph">
+  <div><h1>GREEDY ALGORITHMS</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 7 OF 10</div><div class="ptag">DECISION TREE · TRIGGER WORDS · TRADE-OFFS</div></div>
+</div>
+
+<div class="g2">
+  <div class="box">
+    <div class="bh">GREEDY — WHICH ALGORITHM TO USE?</div>
+    <div class="bc dt-wrap">
+      <div class="dt-root">Start: What is the problem goal?</div>
+      <div class="dt-grid">
+        <div class="dt-row">
+          <div class="dt-q">🏃 Reach end of array in jumps</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Farthest Reach / BFS Window<br><span style="font-weight:400;font-size:0.7rem">`maxReach = Math.max(..., i + nums[i])`</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">⛽ Complete circular circuit</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Gas Station Reset<br><span style="font-weight:400;font-size:0.7rem">Reset `start = i + 1` if `tank < 0`</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">📊 Max contiguous sum subarray</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Kadane's Algorithm<br><span style="font-weight:400;font-size:0.7rem">`currSum = Math.max(num, currSum + num)`</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">⏱️ CPU Task Scheduling with Cooldown</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Max Freq Slot Formula<br><span style="font-weight:400;font-size:0.7rem">`partCount * partLength`</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div class="box pur">
+      <div class="bh">🎯 TRIGGER WORDS DIRECTORY</div>
+      <div class="bc">
+        <table>
+          <tr><th>Trigger Word</th><th>Variant</th><th>Action</th></tr>
+          <tr><td>"Can reach last index"</td><td>Jump Game I</td><td>Track `maxReach = max(maxReach, i + nums[i])`</td></tr>
+          <tr><td>"Min jumps"</td><td>Jump Game II</td><td>Update `currEnd = maxReach` on boundary</td></tr>
+          <tr><td>"Gas station circuit"</td><td>Gas Station</td><td>Reset `start = i + 1` when `currTank < 0`</td></tr>
+          <tr><td>"Max subarray sum"</td><td>Kadane's</td><td>Reset `currSum` to `num` if negative</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="box amb">
+      <div class="bh">💼 INTERVIEW TRADE-OFFS &amp; FOLLOW-UPS</div>
+      <div class="bc">
+        <table>
+          <tr><th>Interviewer Asks</th><th>Your Answer</th></tr>
+          <tr><td>Greedy vs DP for Jump Game?</td><td>Greedy runs in O(N) time and O(1) space. DP runs in O(N^2) time! Greedy is optimal.</td></tr>
+          <tr><td>Why does Gas Station reset work?</td><td>If sum from station A to B drops negative, NO station between A and B can reach B either!</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 8: PROBLEM LADDER PART 1 (5 PROBLEMS) -->
+<div class="page">
+<div class="ph">
+  <div><h1>GREEDY ALGORITHMS</h1><div class="sub">Problem Ladder — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 8 OF 10</div><div class="ptag">PROBLEM LADDER — EASY · MEDIUM</div></div>
+</div>
+
+<div class="g2" style="gap:10px">
+<div>
+  <div style="background:var(--grn);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟢 EASY &amp; MEDIUM — Jumps &amp; Max Subarray</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 53 · Maximum Subarray</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Kadane's Algorithm</div>
+        <div><strong>Key Insight:</strong> Reset sum if negative.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public int maxSubArray(int[] nums) {
+  int mx = nums[0], cur = 0;
+  for (int n : nums) {
+    cur = Math.max(n, cur + n); mx = Math.max(mx, cur);
+  }
+  return mx;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 55 · Jump Game</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Farthest Reach</div>
+        <div><strong>Key Insight:</strong> Return false if `i > maxReach`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public boolean canJump(int[] nums) {
+  int mx = 0;
+  for (int i = 0; i < nums.length; i++) {
+    if (i > mx) return false;
+    mx = Math.max(mx, i + nums[i]);
+  }
+  return true;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 45 · Jump Game II</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> BFS Window Greedy</div>
+        <div><strong>Key Insight:</strong> `jumps++` when `i == currEnd`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public int jump(int[] nums) {
+  int j = 0, curEnd = 0, mx = 0;
+  for (int i = 0; i < nums.length - 1; i++) {
+    mx = Math.max(mx, i + nums[i]);
+    if (i == curEnd) { j++; curEnd = mx; }
+  }
+  return j;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — Gas Station &amp; Partition Labels</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 134 · Gas Station</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Tank Reset</div>
+        <div><strong>Key Insight:</strong> Reset `start = i + 1` if `currTank < 0`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.60rem">public int canCompleteCircuit(int[] gas, int[] cost) {
+  int tot = 0, cur = 0, st = 0;
+  for (int i = 0; i < gas.length; i++) {
+    int d = gas[i] - cost[i]; tot += d; cur += d;
+    if (cur < 0) { st = i + 1; cur = 0; }
+  }
+  return tot >= 0 ? st : -1;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 763 · Partition Labels</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Last Index Window</div>
+        <div><strong>Key Insight:</strong> Partition when `i == end`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.60rem">public List&lt;Integer&gt; partitionLabels(String s) {
+  int[] last = new int[26];
+  for (int i = 0; i < s.length(); i++) last[s.charAt(i) - 'a'] = i;
+  List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+  int st = 0, end = 0;
+  for (int i = 0; i < s.length(); i++) {
+    end = Math.max(end, last[s.charAt(i) - 'a']);
+    if (i == end) { res.add(end - st + 1); st = i + 1; }
+  }
+  return res;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: PROBLEM LADDER PART 2 (3 PROBLEMS + SUMMARY TABLE) -->
+<div class="page">
+<div class="ph">
+  <div><h1>GREEDY ALGORITHMS</h1><div class="sub">Problem Ladder — Part 2 &amp; Summary</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 9 OF 10</div><div class="ptag">PROBLEM LADDER — MEDIUM · SUMMARY</div></div>
+</div>
+
+<div class="g2" style="gap:10px;margin-bottom:10px">
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — Task Scheduler &amp; Parenthesis Bounds</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 621 · Task Scheduler</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Frequency Formula</div>
+        <div><strong>Key Insight:</strong> Slots $= (\text{maxFreq} - 1) × (n + 1) + \text{countMax}$.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public int leastInterval(char[] tasks, int n) {
+  int[] f = new int[26]; for (char t : tasks) f[t - 'A']++;
+  Arrays.sort(f); int maxF = f[25], countMax = 0;
+  for (int v : f) if (v == maxF) countMax++;
+  return Math.max(tasks.length, (maxF - 1) * (n + 1) + countMax);
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — Min/Max Open Bounds</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 678 · Valid Parenthesis String</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Min/Max Open Bounds</div>
+        <div><strong>Key Insight:</strong> Track `[cmin, cmax]`. Return `cmin == 0`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public boolean checkValidString(String s) {
+  int cmin = 0, cmax = 0;
+  for (char c : s.toCharArray()) {
+    if (c == '(') { cmin++; cmax++; }
+    else if (c == ')') { cmin--; cmax--; }
+    else { cmin--; cmax++; }
+    if (cmax < 0) return false;
+    cmin = Math.max(cmin, 0);
+  }
+  return cmin == 0;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Master Summary Table -->
+<div class="box">
+  <div class="bh" style="padding:3px 6px;font-size:0.76rem">📊 COMPLETE GREEDY PROBLEM LADDER SUMMARY</div>
+  <div class="bc" style="padding:4px 6px">
+    <table>
+      <tr><th>LC #</th><th>Problem</th><th>Pattern</th><th>Time</th><th>Space</th><th>Diff</th></tr>
+      <tr><td>53</td><td>Maximum Subarray</td><td>Kadane's Algorithm</td><td>O(N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>55</td><td>Jump Game</td><td>Farthest Reach Boundary</td><td>O(N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>45</td><td>Jump Game II</td><td>BFS Window Greedy</td><td>O(N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>134</td><td>Gas Station</td><td>Circular Tank Reset</td><td>O(N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>763</td><td>Partition Labels</td><td>Last Index Boundary</td><td>O(N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>621</td><td>Task Scheduler</td><td>Max Frequency Formula</td><td>O(N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>678</td><td>Valid Parenthesis String</td><td>Min/Max Open Bounds</td><td>O(N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 10: DRY RUN, MATH PROOFS & CHEAT SHEET -->
+<div class="page">
+<div class="ph">
+  <div><h1>GREEDY ALGORITHMS</h1><div class="sub">Dry Run, Math Proofs &amp; Cheat Sheet</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 10 OF 10</div><div class="ptag">DRY RUN · PROOFS · CHEAT SHEET</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:10px">
+  <div class="box">
+    <div class="bh">🔍 DRY RUN — Gas Station (gas=[1,2,3,4,5], cost=[3,4,5,1,2])</div>
+    <div class="bc">
+      <table style="font-size:0.70rem">
+        <tr><th>Index</th><th>gas[i] - cost[i]</th><th>currTank</th><th>start Candidate</th><th>Action</th></tr>
+        <tr><td>0</td><td>1 - 3 = -2</td><td>-2</td><td>1</td><td>Reset `currTank = 0`, candidate `start = 1`</td></tr>
+        <tr><td>1</td><td>2 - 4 = -2</td><td>-2</td><td>2</td><td>Reset `currTank = 0`, candidate `start = 2`</td></tr>
+        <tr><td>2</td><td>3 - 5 = -2</td><td>-2</td><td>3</td><td>Reset `currTank = 0`, candidate `start = 3`</td></tr>
+        <tr><td>3</td><td>4 - 1 = +3</td><td>+3</td><td>3</td><td>Valid tank (+3)</td></tr>
+        <tr><td>4</td><td>5 - 2 = +3</td><td>+6</td><td>3</td><td>Return `start = 3` ✅</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh">📐 MATHEMATICAL PROOF — KADANE'S ALGORITHM</div>
+    <div class="bc">
+      <div style="font-size:0.76rem">
+        <p style="margin-bottom:4px"><strong>Claim:</strong> Resetting running sum to 0 when it drops below 0 yields the maximum subarray sum.</p>
+        <p style="margin-bottom:4px"><strong>Proof:</strong> Any prefix subarray with a negative sum $\sum_{k=i}^j A[k] < 0 can ONLY decrease the sum of any future subarray starting at j+1. Therefore, discarding this negative prefix is strictly optimal \rightarrow$ <strong>O(N) Time!</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+    <div class="bc">
+      <div class="g2" style="gap:6px">
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Code Kadane's algorithm in O(1) space</li>
+          <li>☐ Write Jump Game I farthest reach in 2m</li>
+          <li>☐ Implement Jump Game II BFS window</li>
+          <li>☐ Code Gas Station circuit tank reset</li>
+        </ul>
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Write Partition Labels last occurrence map</li>
+          <li>☐ Code Task Scheduler max frequency formula</li>
+          <li>☐ Write Valid Parenthesis String min/max bounds</li>
+          <li>☐ Prove why Kadane's resets negative sums</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+    <div class="bc">
+      <div class="aha" style="margin-bottom:4px;padding:5px">
+        <div class="aha-t">Rule 1 — Verify Total Sum Before Returning</div>
+        In Gas Station, if total gas >= total cost across the entire array, a valid starting station is guaranteed to exist!
+      </div>
+      <div class="aha" style="padding:5px">
+        <div class="aha-t">Rule 2 — Loop to N-1 for Jump Game II</div>
+        In Jump Game II, stop the loop at `N - 2` because once you reach `N - 1`, you are already at the destination and don't need another jump!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

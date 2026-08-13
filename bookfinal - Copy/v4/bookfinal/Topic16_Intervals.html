@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Topic 16: Intervals Masterclass — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 14px; }
+.ph h1 { font-size: 1.8rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.88rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.75rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; }
+.bh  { background: var(--pri); color: white; padding: 6px 12px;
+  font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 18px; height: 18px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 10px 12px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 6px 12px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.75rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.95rem; }
+.psub   { color: var(--sub); font-size: 0.8rem; }
+.prow-body { display: flex; }
+.pc { padding: 8px 10px; font-size: 0.78rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.72rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; }
+.prob-head { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.75rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.70rem; line-height: 1.4; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.76rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+th, td { border: 1px solid var(--bdr); padding: 5px 7px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.badge-b { background: #dbeafe; color: #1e40af; }
+.badge-g { background: #dcfce7; color: #166534; }
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.tip  { background: #f0fdf4; border-left: 4px solid var(--grn); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 8px 10px; margin-top: 6px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.82rem; margin-bottom: 3px; }
+
+.dt-wrap { font-size: 0.76rem; }
+.dt-root { background: var(--pri); color: white; padding: 5px 10px; border-radius: 5px; text-align: center; font-weight: 700; margin-bottom: 8px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 5px 7px; font-weight: 600; color: #1e40af; font-size: 0.72rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 5px 7px; color: #065f46; font-weight: 700; font-size: 0.72rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.75rem; padding: 4px 3px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 6px 10px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.85; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- PAGE 1: FOUNDATION & WHY -->
+<div class="page">
+<div class="ph">
+  <div><h1>INTERVALS</h1><div class="sub">FAANG Master Guide — Java Edition</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 1 OF 10</div><div class="ptag">FOUNDATION · OVERLAP CONDITION · SORTING BY START/END</div></div>
+</div>
+
+<div class="g3" style="margin-bottom:12px">
+  <div class="box pur">
+    <div class="bh">💡 WHY INTERVALS?</div>
+    <div class="bc">
+      <p style="margin-bottom:6px">Intervals represent ranges `[start, end]` (time slots, meeting rooms, line segments). Almost all interval problems reduce to **sorting by start or end time**, then scanning linearly in O(N \log N)!</p>
+      <div class="aha">
+        <div class="aha-t">💡 THE OVERLAP CONDITION AHA</div>
+        Two intervals `A` and `B` overlap if and only if **`max(A.start, B.start) <= min(A.end, B.end)`**!
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bh"><span class="n">1</span> 3 CORE SORTING STRATEGIES</div>
+    <div class="bc">
+      <ul style="margin-bottom:8px;padding-left:16px">
+        <li><strong>Sort by Start Ascending (`a[0] - b[0]`):</strong> Standard for Merge Intervals, Insert Interval, Meeting Rooms.</li>
+        <li><strong>Sort by End Ascending (`a[1] - b[1]`):</strong> Optimal greedy choice for Non-Overlapping Intervals (leave max room for future!).</li>
+        <li><strong>Min-Heap PriorityQueue:</strong> Track active ending times for Meeting Rooms II.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box sky">
+    <div class="bh"><span class="n">2</span> VISUALIZING INTERVAL MERGING</div>
+    <div class="bc">
+      <div style="font-weight:700;color:var(--pri);margin-bottom:4px">Merge [1, 3] and [2, 6]:</div>
+<pre>Interval A: [1 ─── 3]
+Interval B:   [2 ────── 6]
+Overlap check: 2 <= 3 ➔ OVERLAP!
+Merged Result: [1 ──────── 6] (max(3, 6) = 6)</pre>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">📚 PREREQUISITES &amp; COMPLEXITY REASONING</div>
+    <div class="bc">
+      <table style="font-size:0.76rem">
+        <tr><th>Operation / Algorithm</th><th>Time Complexity</th><th>Auxiliary Space</th></tr>
+        <tr><td>Merge Intervals (Sort + Scan)</td><td><strong>O(N log N)</strong></td><td><strong>O(N) output</strong></td></tr>
+        <tr><td>Insert Interval (Pre-sorted input)</td><td><strong>O(N) single pass</strong></td><td><strong>O(N) output</strong></td></tr>
+        <tr><td>Non-overlapping (Greedy Sort End)</td><td><strong>O(N log N)</strong></td><td><strong>O(1) space</strong></td></tr>
+        <tr><td>Meeting Rooms II (Min-Heap PQ)</td><td><strong>O(N log N)</strong></td><td><strong>O(N) PriorityQueue</strong></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box amb">
+    <div class="bh">⚡ CLUES THAT SCREAM INTERVALS</div>
+    <div class="bc">
+      <p style="font-size:0.8rem">1. <em>"Merge overlapping ranges"</em> \rightarrow Sort by Start + Link `end = Math.max(end, next.end)`</p>
+      <p style="font-size:0.8rem">2. <em>"Minimum conference rooms required"</em> \rightarrow Min-Heap PQ of End Times</p>
+      <p style="font-size:0.8rem">3. <em>"Minimum removals to eliminate overlaps"</em> \rightarrow Greedy Sort by End Time</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 2: API & TOOLKIT -->
+<div class="page">
+<div class="ph">
+  <div><h1>INTERVALS</h1><div class="sub">Java Master Toolkit</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 2 OF 10</div><div class="ptag">INTERVAL SORTING · MIN-HEAP PQ · OVERLAP HELPERS</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:12px">
+  <div class="box">
+    <div class="bh"><span class="n">1</span> INTERVAL SORTING COMPARATOR</div>
+    <div class="bc">
+<pre>// Sort by Start Time Ascending (Avoid Integer Overflow!):
+Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+
+// Sort by End Time Ascending:
+Arrays.sort(intervals, (a, b) -> Integer.compare(a[1], b[1]));</pre>
+      <div class="tip" style="margin-top:6px">💡 Always use `Integer.compare(a, b)` instead of `a - b` to prevent integer underflow/overflow bugs!</div>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh"><span class="n">2</span> MERGE INTERVALS SCANNER</div>
+    <div class="bc">
+<pre>public int[][] merge(int[][] intervals) {
+  Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+  List&lt;int[]&gt; merged = new ArrayList&lt;&gt;();
+  int[] curr = intervals[0];
+  merged.add(curr);
+  for (int[] interval : intervals) {
+    if (interval[0] <= curr[1]) { // Overlap!
+      curr[1] = Math.max(curr[1], interval[1]);
+    } else {
+      curr = interval;
+      merged.add(curr);
+    }
+  }
+  return merged.toArray(new int[merged.size()][]);
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 3: CORE PATTERNS (INSERT INTERVAL & MERGE INTERVALS) -->
+<div class="page">
+<div class="ph">
+  <div><h1>INTERVALS</h1><div class="sub">Core Patterns — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 3 OF 10</div><div class="ptag">INSERT INTERVAL · MERGE INTERVALS</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 1</div>
+    <div class="ptitle">INSERT INTERVAL (3-Phase Single Pass)</div>
+    <div class="psub">e.g. Insert Interval (LC 57)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">3-Phase Strategy</div>
+      <div style="font-size:0.78rem">
+        1. Add all before new interval (`interval[1] < new[0]`).<br>
+        2. Merge overlapping (`interval[0] <= new[1]`).<br>
+        3. Add all after. O(N) time!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 57</div>
+<pre>public int[][] insert(int[][] intervals, int[] newInterval) {
+  List&lt;int[]&gt; res = new ArrayList&lt;&gt;();
+  int i = 0, n = intervals.length;
+  while (i < n && intervals[i][1] < newInterval[0]) res.add(intervals[i++]);
+  while (i < n && intervals[i][0] <= newInterval[1]) {
+    newInterval[0] = Math.min(newInterval[0], intervals[i][0]);
+    newInterval[1] = Math.max(newInterval[1], intervals[i][1]);
+    i++;
+  }
+  res.add(newInterval);
+  while (i < n) res.add(intervals[i++]);
+  return res.toArray(new int[res.size()][]);
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 2</div>
+    <div class="ptitle">MERGE INTERVALS (Sort by Start Time)</div>
+    <div class="psub">e.g. Merge Intervals (LC 56)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.78rem">Combine all overlapping intervals into single continuous intervals.</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 56</div>
+<pre>public int[][] merge(int[][] intervals) {
+  Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+  List&lt;int[]&gt; res = new ArrayList&lt;&gt;();
+  int[] curr = intervals[0]; res.add(curr);
+  for (int[] in : intervals) {
+    if (in[0] <= curr[1]) curr[1] = Math.max(curr[1], in[1]);
+    else { curr = in; res.add(curr); }
+  }
+  return res.toArray(new int[res.size()][]);
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 4: CORE PATTERNS (NON-OVERLAPPING & BALLOONS) -->
+<div class="page">
+<div class="ph">
+  <div><h1>INTERVALS</h1><div class="sub">Core Patterns — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 4 OF 10</div><div class="ptag">NON-OVERLAPPING · SORT BY END TIME</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 3</div>
+    <div class="ptitle">NON-OVERLAPPING INTERVALS (Greedy Sort by End Time)</div>
+    <div class="psub">e.g. Non-overlapping Intervals (LC 435), Minimum Arrows to Burst Balloons (LC 452)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Why Sort by End Time</div>
+      <div style="font-size:0.78rem">
+        Sorting by END time leaves the MAXIMUM possible room for subsequent intervals, minimizing total removals!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 435</div>
+<pre>public int eraseOverlapIntervals(int[][] intervals) {
+  Arrays.sort(intervals, (a, b) -> Integer.compare(a[1], b[1]));
+  int removals = 0, prevEnd = intervals[0][1];
+  for (int i = 1; i < intervals.length; i++) {
+    if (intervals[i][0] < prevEnd) {
+      removals++; // Overlap! Remove current interval (keeps smaller end)
+    } else {
+      prevEnd = intervals[i][1];
+    }
+  }
+  return removals;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 4</div>
+    <div class="ptitle">MINIMUM ARROWS TO BURST BALLOONS</div>
+    <div class="psub">e.g. Minimum Number of Arrows to Burst Balloons (LC 452)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Arrow Intersection Mechanics</div>
+      <div style="font-size:0.78rem">
+        Sort balloons by end coordinate. Shoot arrow at `prevEnd`. If `balloon[0] > prevEnd`, need new arrow!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 452</div>
+<pre>public int findMinArrowShots(int[][] points) {
+  if (points.length == 0) return 0;
+  Arrays.sort(points, (a, b) -> Integer.compare(a[1], b[1]));
+  int arrows = 1, prevEnd = points[0][1];
+  for (int i = 1; i < points.length; i++) {
+    if (points[i][0] > prevEnd) {
+      arrows++;
+      prevEnd = points[i][1];
+    }
+  }
+  return arrows;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 5: CORE PATTERNS (MEETING ROOMS I & II) -->
+<div class="page">
+<div class="ph">
+  <div><h1>INTERVALS</h1><div class="sub">Core Patterns — Part 3</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 5 OF 10</div><div class="ptag">MEETING ROOMS I &amp; II · MIN-HEAP PQ</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 5</div>
+    <div class="ptitle">MEETING ROOMS I (Single Person Attendance Check)</div>
+    <div class="psub">e.g. Meeting Meetings (LC 252)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.78rem">Check if a single person can attend all meetings without overlap.</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 252</div>
+<pre>public boolean canAttendMeetings(int[][] intervals) {
+  Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+  for (int i = 0; i < intervals.length - 1; i++) {
+    if (intervals[i][1] > intervals[i + 1][0]) return false;
+  }
+  return true;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 6</div>
+    <div class="ptitle">MEETING ROOMS II (Min-Heap PriorityQueue)</div>
+    <div class="psub">e.g. Meeting Rooms II (LC 253)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Min-Heap Strategy</div>
+      <div style="font-size:0.78rem">
+        Sort by start time. Maintain Min-Heap storing end times of active meetings. If `start >= pq.peek()`, reuse room (`pq.poll()`)!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 253</div>
+<pre>public int minMeetingRooms(int[][] intervals) {
+  if (intervals.length == 0) return 0;
+  Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+  PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+  minHeap.offer(intervals[0][1]);
+  for (int i = 1; i < intervals.length; i++) {
+    if (intervals[i][0] >= minHeap.peek()) {
+      minHeap.poll(); // Reuse room!
+    }
+    minHeap.offer(intervals[i][1]);
+  }
+  return minHeap.size();
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 6: CHRONOLOGICAL LINE SWEEP -->
+<div class="page">
+<div class="ph">
+  <div><h1>INTERVALS</h1><div class="sub">Line Sweep Pattern</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 6 OF 10</div><div class="ptag">CHRONOLOGICAL SWEEP · OVERLAP COUNTER</div></div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 7</div>
+    <div class="ptitle">CHRONOLOGICAL LINE SWEEP (Separate Starts &amp; Ends)</div>
+    <div class="psub">e.g. Meeting Rooms II Alternative Line Sweep</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">2-Pointer Line Sweep</div>
+      <div style="font-size:0.78rem">
+        Separate `starts[]` and `ends[]` arrays, sort both. Advance `startPtr`. If `starts[s] < ends[e]`, increment active rooms!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — Line Sweep</div>
+<pre>public int minMeetingRoomsSweep(int[][] intervals) {
+  int n = intervals.length;
+  int[] starts = new int[n], ends = new int[n];
+  for (int i = 0; i < n; i++) {
+    starts[i] = intervals[i][0]; ends[i] = intervals[i][1];
+  }
+  Arrays.sort(starts); Arrays.sort(ends);
+  int rooms = 0, endPtr = 0;
+  for (int s = 0; s < n; s++) {
+    if (starts[s] < ends[endPtr]) rooms++;
+    else endPtr++;
+  }
+  return rooms;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 7: DECISION TREE & TRIGGER WORDS -->
+<div class="page">
+<div class="ph">
+  <div><h1>INTERVALS</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 7 OF 10</div><div class="ptag">DECISION TREE · TRIGGER WORDS · TRADE-OFFS</div></div>
+</div>
+
+<div class="g2">
+  <div class="box">
+    <div class="bh">INTERVALS — WHICH PATTERN TO USE?</div>
+    <div class="bc dt-wrap">
+      <div class="dt-root">Start: What is the interval operation?</div>
+      <div class="dt-grid">
+        <div class="dt-row">
+          <div class="dt-q">🔗 Combine all overlapping ranges</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Merge Intervals<br><span style="font-weight:400;font-size:0.7rem">Sort by start, update `curr[1]`</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">➕ Insert new range into sorted list</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Insert Interval<br><span style="font-weight:400;font-size:0.7rem">3-phase single pass</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🚫 Min removals for no overlap</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Sort by End Time<br><span style="font-weight:400;font-size:0.7rem">Greedily pick earliest ending</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🏢 Min meeting rooms required</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Min-Heap PQ / Line Sweep<br><span style="font-weight:400;font-size:0.7rem">PQ of active end times</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div class="box pur">
+      <div class="bh">🎯 TRIGGER WORDS DIRECTORY</div>
+      <div class="bc">
+        <table>
+          <tr><th>Trigger Word</th><th>Variant</th><th>Action</th></tr>
+          <tr><td>"Merge overlapping"</td><td>Merge Intervals</td><td>Sort `a[0] - b[0]`, update `curr[1]`</td></tr>
+          <tr><td>"Insert interval"</td><td>Insert Interval</td><td>3-phase loop (before, merge, after)</td></tr>
+          <tr><td>"Minimum removals"</td><td>Non-overlapping</td><td>Sort `a[1] - b[1]`, track `prevEnd`</td></tr>
+          <tr><td>"Min meeting rooms"</td><td>Meeting Rooms II</td><td>Min-Heap storing ending times</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="box amb">
+      <div class="bh">💼 INTERVIEW TRADE-OFFS &amp; FOLLOW-UPS</div>
+      <div class="bc">
+        <table>
+          <tr><th>Interviewer Asks</th><th>Your Answer</th></tr>
+          <tr><td>Why sort by end vs start for non-overlapping?</td><td>Sorting by END time leaves the maximum remaining time available for future non-overlapping intervals!</td></tr>
+          <tr><td>PQ vs Line Sweep for Meeting Rooms II?</td><td>Min-Heap PQ uses O(N \log N) time and O(N) space. Line Sweep separates arrays and is often faster in practice!</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 8: PROBLEM LADDER PART 1 (5 PROBLEMS) -->
+<div class="page">
+<div class="ph">
+  <div><h1>INTERVALS</h1><div class="sub">Problem Ladder — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 8 OF 10</div><div class="ptag">PROBLEM LADDER — EASY · MEDIUM</div></div>
+</div>
+
+<div class="g2" style="gap:10px">
+<div>
+  <div style="background:var(--grn);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟢 EASY &amp; MEDIUM — Meeting Rooms &amp; Merge</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 252 · Meeting Rooms</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Single Person Check</div>
+        <div><strong>Key Insight:</strong> Sort start. `curr.end > next.start` = false.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public boolean canAttendMeetings(int[][] intervals) {
+  Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+  for (int i = 0; i < intervals.length - 1; i++) {
+    if (intervals[i][1] > intervals[i + 1][0]) return false;
+  }
+  return true;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 56 · Merge Intervals</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Merge Overlapping</div>
+        <div><strong>Key Insight:</strong> Update `curr[1] = Math.max(...)`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public int[][] merge(int[][] intervals) {
+  Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+  List&lt;int[]&gt; res = new ArrayList&lt;&gt;();
+  int[] curr = intervals[0]; res.add(curr);
+  for (int[] in : intervals) {
+    if (in[0] <= curr[1]) curr[1] = Math.max(curr[1], in[1]);
+    else { curr = in; res.add(curr); }
+  }
+  return res.toArray(new int[res.size()][]);
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 57 · Insert Interval</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> 3-Phase Single Pass</div>
+        <div><strong>Key Insight:</strong> Before, overlap merge, after.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public int[][] insert(int[][] in, int[] newIn) {
+  List&lt;int[]&gt; res = new ArrayList&lt;&gt;(); int i = 0, n = in.length;
+  while (i < n && in[i][1] < newIn[0]) res.add(in[i++]);
+  while (i < n && in[i][0] <= newIn[1]) {
+    newIn[0] = Math.min(newIn[0], in[i][0]);
+    newIn[1] = Math.max(newIn[1], in[i][1]); i++;
+  }
+  res.add(newIn);
+  while (i < n) res.add(in[i++]);
+  return res.toArray(new int[res.size()][]);
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — Meeting Rooms II &amp; Non-Overlapping</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 253 · Meeting Rooms II</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Min-Heap PQ</div>
+        <div><strong>Key Insight:</strong> If `start >= pq.peek()`, reuse room (`pq.poll()`).</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.60rem">public int minMeetingRooms(int[][] intervals) {
+  Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+  PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+  pq.offer(intervals[0][1]);
+  for (int i = 1; i < intervals.length; i++) {
+    if (intervals[i][0] >= pq.peek()) pq.poll();
+    pq.offer(intervals[i][1]);
+  }
+  return pq.size();
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 435 · Non-overlapping Intervals</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Greedy Sort by End</div>
+        <div><strong>Key Insight:</strong> If overlap, `removals++`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.60rem">public int eraseOverlapIntervals(int[][] intervals) {
+  Arrays.sort(intervals, (a, b) -> Integer.compare(a[1], b[1]));
+  int rem = 0, prevEnd = intervals[0][1];
+  for (int i = 1; i < intervals.length; i++) {
+    if (intervals[i][0] < prevEnd) rem++;
+    else prevEnd = intervals[i][1];
+  }
+  return rem;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: PROBLEM LADDER PART 2 (1 PROBLEM + SUMMARY TABLE) -->
+<div class="page">
+<div class="ph">
+  <div><h1>INTERVALS</h1><div class="sub">Problem Ladder — Part 2 &amp; Summary</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 9 OF 10</div><div class="ptag">PROBLEM LADDER — MEDIUM · SUMMARY</div></div>
+</div>
+
+<div class="g2" style="gap:10px;margin-bottom:10px">
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — Minimum Arrows to Burst Balloons</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 452 · Minimum Arrows for Balloons</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Sort by End Coordinate</div>
+        <div><strong>Key Insight:</strong> Shoot arrow at `prevEnd`. `Integer.compare` avoids overflow!</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public int findMinArrowShots(int[][] points) {
+  if (points.length == 0) return 0;
+  Arrays.sort(points, (a, b) -> Integer.compare(a[1], b[1]));
+  int arrows = 1, prevEnd = points[0][1];
+  for (int i = 1; i < points.length; i++) {
+    if (points[i][0] > prevEnd) {
+      arrows++; prevEnd = points[i][1];
+    }
+  }
+  return arrows;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Master Summary Table -->
+<div class="box">
+  <div class="bh" style="padding:3px 6px;font-size:0.76rem">📊 COMPLETE INTERVALS PROBLEM LADDER SUMMARY</div>
+  <div class="bc" style="padding:4px 6px">
+    <table>
+      <tr><th>LC #</th><th>Problem</th><th>Pattern</th><th>Time</th><th>Space</th><th>Diff</th></tr>
+      <tr><td>252</td><td>Meeting Rooms</td><td>Single Person Check</td><td>O(N log N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>56</td><td>Merge Intervals</td><td>Merge Overlapping</td><td>O(N log N)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>57</td><td>Insert Interval</td><td>3-Phase Single Pass</td><td>O(N)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>253</td><td>Meeting Rooms II</td><td>Min-Heap PriorityQueue</td><td>O(N log N)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>435</td><td>Non-overlapping Intervals</td><td>Greedy Sort by End</td><td>O(N log N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>452</td><td>Minimum Arrows to Burst Balloons</td><td>Sort by End Coordinate</td><td>O(N log N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 10: DRY RUN, MATH PROOFS & CHEAT SHEET -->
+<div class="page">
+<div class="ph">
+  <div><h1>INTERVALS</h1><div class="sub">Dry Run, Math Proofs &amp; Cheat Sheet</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 10 OF 10</div><div class="ptag">DRY RUN · PROOFS · CHEAT SHEET</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:10px">
+  <div class="box">
+    <div class="bh">🔍 DRY RUN — Merge Intervals ([[1,3],[2,6],[8,10]])</div>
+    <div class="bc">
+      <table style="font-size:0.70rem">
+        <tr><th>Step</th><th>Interval</th><th>curr Interval</th><th>Overlap Check</th><th>Result List State</th></tr>
+        <tr><td>1</td><td>[1, 3]</td><td>[1, 3]</td><td>Initial</td><td>`[[1, 3]]`</td></tr>
+        <tr><td>2</td><td>[2, 6]</td><td>[1, 3]</td><td>2 <= 3 \rightarrow Overlap! `curr[1] = max(3, 6) = 6`</td><td>`[[1, 6]]`</td></tr>
+        <tr><td>3</td><td>[8, 10]</td><td>[1, 6]</td><td>$8 > 6 \rightarrow$ No overlap! `curr = [8, 10]`</td><td>`[[1, 6], [8, 10]]` ✅</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh">📐 MATHEMATICAL PROOF — GREEDY END SORT FOR NON-OVERLAPPING</div>
+    <div class="bc">
+      <div style="font-size:0.76rem">
+        <p style="margin-bottom:4px"><strong>Claim:</strong> Sorting by end time E_i maximizes the number of non-overlapping intervals.</p>
+        <p style="margin-bottom:4px"><strong>Proof:</strong> Choosing the interval with the EARLIEST end time E_1 leaves the maximum possible timeline available for all remaining intervals. Any alternative choice ending later can only restrict future choices \rightarrow <strong>Strictly Optimal Greedy Choice!</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+    <div class="bc">
+      <div class="g2" style="gap:6px">
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Use `Integer.compare(a, b)` for sorting</li>
+          <li>☐ Write Merge Intervals (LC 56) in 3m</li>
+          <li>☐ Code Insert Interval 3-phase loop</li>
+          <li>☐ Write Meeting Rooms II with Min-Heap PQ</li>
+        </ul>
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Code Non-overlapping Intervals (sort by end)</li>
+          <li>☐ Implement Minimum Arrows to Burst Balloons</li>
+          <li>☐ Code Meeting Rooms II Line Sweep alternative</li>
+          <li>☐ Prove why sorting by end time is greedy optimal</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+    <div class="bc">
+      <div class="aha" style="margin-bottom:4px;padding:5px">
+        <div class="aha-t">Rule 1 — Integer.compare Prevents Overflow</div>
+        Never use `(a, b) -> a[0] - b[0]`! If $a[0] = -2147483648$, subtraction overflows. Always use `Integer.compare(a[0], b[0])`!
+      </div>
+      <div class="aha" style="padding:5px">
+        <div class="aha-t">Rule 2 — Strict vs Non-Strict Overlap</div>
+        Meeting Rooms II considers `[1, 5]` and `[5, 10]` NON-overlapping (room reused at 5). Balloon shooting considers `[1, 5]` and `[5, 10]` OVERLAPPING (arrow at 5 bursts both)!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

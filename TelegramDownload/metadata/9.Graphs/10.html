@@ -1,0 +1,533 @@
+<div class="page">
+
+<div class="header-top">
+    <div style="display: flex; align-items: baseline;">
+        <h1>GRAPH PATTERN GUIDE</h1>
+        <div class="subtitle" style="margin-left: 10px;">TOPIC: TOPOLOGICAL SORT PROBLEM GUIDE (APPLY TEMPLATES)<br><small style="color:#64748b;font-weight:normal;">"Same algorithm. Different problems. Only the changing parts."</small></div>
+    </div>
+    <div style="text-align: right;">
+        <div class="page-number">PAGE 9</div>
+    </div>
+</div>
+
+<div style="display: flex; gap: 20px; margin-bottom: 20px;">
+    <div class="section-box" style="flex: 1; margin-bottom: 0;">
+        <div class="section-header" style="background-color: #4338ca; color: white;">HOW TO USE THIS PAGE</div>
+        <div class="section-content">
+            <ol style="margin: 0; padding-left: 20px; font-size: 14px;">
+                <li>Find the problem.</li>
+                <li>Identify the base template (from Page 8).</li>
+                <li>Read the CHANGED LINES.</li>
+                <li>Understand the AHA.</li>
+                <li>Review complexity & interview tip.</li>
+                <li>Practice writing from memory.</li>
+            </ol>
+        </div>
+    </div>
+    <div class="section-box" style="flex: 2; margin-bottom: 0;">
+        <div class="section-header" style="background-color: #1e3a8a; color: white;">TEMPLATE LEGEND (From Page 8)</div>
+        <div class="section-content" style="display: flex; justify-content: space-around; align-items: center; padding: 15px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="background-color: #1e3a8a; color: white; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 4px;">K</div>
+                <div style="font-size: 12px; font-weight: bold;">Kahn's (BFS)<br><span style="font-weight: normal; color: #475569;">Indegree + Queue</span></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="background-color: #166534; color: white; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 4px;">S</div>
+                <div style="font-size: 12px; font-weight: bold;">DFS + Stack<br><span style="font-weight: normal; color: #475569;">Postorder</span></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="background-color: #d97706; color: white; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 4px;">H</div>
+                <div style="font-size: 12px; font-weight: bold;">Kahn's + Min Heap<br><span style="font-weight: normal; color: #475569;">Lexicographically Smallest</span></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="background-color: #6d28d9; color: white; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 4px;">C</div>
+                <div style="font-size: 12px; font-weight: bold;">Cycle Check<br><span style="font-weight: normal; color: #475569;">(Any Method)</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid-container" style="grid-template-columns: 1fr 1fr 1fr; display: grid; gap: 20px;">
+    
+    <!-- 1. COURSE SCHEDULE -->
+    <div class="section-box">
+        <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div><span class="num" style="background-color: #1e3a8a;">1</span> COURSE SCHEDULE</div>
+            <div style="background-color: #1e3a8a; color: white; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 2px;">K</div>
+        </div>
+        <div class="section-content" style="font-size: 12px;">
+            <div style="text-align: center; font-size: 11px; margin-bottom: 10px; font-weight: bold;">Base Template: Kahn's Algorithm (BFS)</div>
+            <strong>Problem</strong>
+            <p style="margin: 4px 0 10px 0;">Can we finish all courses? (No cycle)</p>
+            <strong style="color: #4338ca;">Changed Lines (from Template)</strong>
+<pre style="margin-top: 5px; padding: 8px; background: #f8fafc; border: 1px solid #e2e8f0; font-size: 10px;"><code class="language-java">// 1. Graph: for each [a, b] -> b -> a (take b then a)
+for (int[] p : prerequisites) {
+    int a = p[0], b = p[1];
+    graph.get(b).add(a);
+    indegree[a]++;
+}
+
+// 2. Return true if we process all courses
+return count == numCourses;</code></pre>
+            <table style="width: 100%; font-size: 10px; margin-top: 10px; text-align: center; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid #e2e8f0; color: #1e3a8a;">
+                    <th style="padding: 4px;">Caller</th>
+                    <th style="padding: 4px;">Return</th>
+                    <th style="padding: 4px;">Key Idea</th>
+                </tr>
+                <tr>
+                    <td style="padding: 4px;">canFinish(numCourses, prereq)</td>
+                    <td style="padding: 4px; font-family: monospace;">boolean</td>
+                    <td style="padding: 4px;">All courses processed?</td>
+                </tr>
+            </table>
+            <div style="margin-top: 10px; padding: 8px; background-color: #fffbeb; border-left: 3px solid #f59e0b; display: flex; gap: 8px; align-items: flex-start;">
+                <span style="font-size: 14px;">💡</span>
+                <div><strong>AHA:</strong> If any course has remaining indegree -> cycle.</div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 10px;">
+                <div>
+                    <strong>Complexity</strong><br>
+                    Time: O(V + E)<br>
+                    Space: O(V + E)
+                </div>
+                <div>
+                    <strong style="color: #1e3a8a;">Interview Tip</strong><br>
+                    Think in terms of ordering<br>dependencies.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. COURSE SCHEDULE II -->
+    <div class="section-box">
+        <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div><span class="num" style="background-color: #1e3a8a;">2</span> COURSE SCHEDULE II</div>
+            <div style="background-color: #1e3a8a; color: white; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 2px;">K</div>
+        </div>
+        <div class="section-content" style="font-size: 12px;">
+            <div style="text-align: center; font-size: 11px; margin-bottom: 10px; font-weight: bold;">Base Template: Kahn's Algorithm (BFS)</div>
+            <strong>Problem</strong>
+            <p style="margin: 4px 0 10px 0;">Return any valid order to finish all courses.</p>
+            <strong style="color: #4338ca;">Changed Lines (from Template)</strong>
+<pre style="margin-top: 5px; padding: 8px; background: #f8fafc; border: 1px solid #e2e8f0; font-size: 10px;"><code class="language-java">// 1. Same graph as Course Schedule
+for (int[] p : prerequisites) {
+    int a = p[0], b = p[1];
+    graph.get(b).add(a);
+    indegree[a]++;
+}
+// 2. Store order while processing
+List&lt;Integer&gt; order = new ArrayList&lt;&gt;();
+...
+order.add(node);
+// 3. Final check
+if (order.size() != numCourses) return new int[0];
+// cycle
+return order.stream().mapToInt(i -> i).toArray();</code></pre>
+            <table style="width: 100%; font-size: 10px; margin-top: 10px; text-align: center; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid #e2e8f0; color: #1e3a8a;">
+                    <th style="padding: 4px;">Caller</th>
+                    <th style="padding: 4px;">Return</th>
+                    <th style="padding: 4px;">Key Idea</th>
+                </tr>
+                <tr>
+                    <td style="padding: 4px;">findOrder(numCourses, prereq)</td>
+                    <td style="padding: 4px; font-family: monospace;">int[]</td>
+                    <td style="padding: 4px;">Build order while processing</td>
+                </tr>
+            </table>
+            <div style="margin-top: 10px; padding: 8px; background-color: #fffbeb; border-left: 3px solid #f59e0b; display: flex; gap: 8px; align-items: flex-start;">
+                <span style="font-size: 14px;">💡</span>
+                <div><strong>AHA:</strong> Kahn's gives order naturally.</div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 10px;">
+                <div>
+                    <strong>Complexity</strong><br>
+                    Time: O(V + E)<br>
+                    Space: O(V + E)
+                </div>
+                <div>
+                    <strong style="color: #1e3a8a;">Interview Tip</strong><br>
+                    If size &lt; numCourses -><br>cycle, return empty.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. ALIEN DICTIONARY -->
+    <div class="section-box">
+        <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="color: #166534;"><span class="num" style="background-color: #166534;">3</span> ALIEN DICTIONARY</div>
+            <div style="background-color: #166534; color: white; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 2px;">S</div>
+        </div>
+        <div class="section-content" style="font-size: 12px;">
+            <div style="text-align: center; font-size: 11px; margin-bottom: 10px; font-weight: bold;">Base Template: DFS + Stack (Postorder)</div>
+            <strong>Problem</strong>
+            <p style="margin: 4px 0 10px 0;">Find order of characters from sorted dictionary.</p>
+            <strong style="color: #166534;">Changed Lines (from Template)</strong>
+<pre style="margin-top: 5px; padding: 8px; background: #f8fafc; border: 1px solid #e2e8f0; font-size: 10px;"><code class="language-java">// 1. Build graph from first diff char
+// Word1 comes before Word2
+// Edge: char1 -> char2
+for (int i = 0; i &lt; words.length - 1; i++) {
+    String w1 = words[i], w2 = words[i + 1];
+    int len = Math.min(w1.length(), w2.length());
+    for (int j = 0; j &lt; len; j++) {
+        if (w1.charAt(j) != w2.charAt(j)) {
+            graph.get(w1.charAt(j)).add(w2.charAt(j));
+            break;
+        }
+    }
+}
+// 2. DFS postorder gives character order</code></pre>
+            <table style="width: 100%; font-size: 10px; margin-top: 10px; text-align: center; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid #e2e8f0; color: #166534;">
+                    <th style="padding: 4px;">Caller</th>
+                    <th style="padding: 4px;">Return</th>
+                    <th style="padding: 4px;">Key Idea</th>
+                </tr>
+                <tr>
+                    <td style="padding: 4px;">alienOrder(words)</td>
+                    <td style="padding: 4px; font-family: monospace;">String</td>
+                    <td style="padding: 4px;">Edges from first diff char</td>
+                </tr>
+            </table>
+            <div style="margin-top: 10px; padding: 8px; background-color: #fffbeb; border-left: 3px solid #f59e0b; display: flex; gap: 8px; align-items: flex-start;">
+                <span style="font-size: 14px;">💡</span>
+                <div><strong>AHA:</strong> Postorder of DFS = valid character order.</div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 10px;">
+                <div>
+                    <strong>Complexity</strong><br>
+                    Time: O(V + E)<br>
+                    Space: O(V + E)
+                </div>
+                <div>
+                    <strong style="color: #1e3a8a;">Interview Tip</strong><br>
+                    Also handle invalid case:<br>"abc" before "ab".
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. BUILD ORDER -->
+    <div class="section-box">
+        <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div><span class="num" style="background-color: #1e3a8a;">4</span> BUILD ORDER</div>
+            <div style="background-color: #1e3a8a; color: white; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 2px;">K</div>
+        </div>
+        <div class="section-content" style="font-size: 12px;">
+            <div style="text-align: center; font-size: 11px; margin-bottom: 10px; font-weight: bold;">Base Template: Kahn's Algorithm (BFS)</div>
+            <strong>Problem</strong>
+            <p style="margin: 4px 0 10px 0;">Given projects and dependencies, return build order.</p>
+            <strong style="color: #4338ca;">Changed Lines (from Template)</strong>
+<pre style="margin-top: 5px; padding: 8px; background: #f8fafc; border: 1px solid #e2e8f0; font-size: 10px;"><code class="language-java">// 1. Graph: for each [a, b] -> b -> a
+// means build b before a
+for (int[] d : dependencies) {
+    int a = d[0], b = d[1];
+    graph.get(b).add(a);
+    indegree[a]++;
+}
+// 2. Return order list
+if (order.size() != numProjects) return new int[0];</code></pre>
+            <table style="width: 100%; font-size: 10px; margin-top: 10px; text-align: center; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid #e2e8f0; color: #1e3a8a;">
+                    <th style="padding: 4px;">Caller</th>
+                    <th style="padding: 4px;">Return</th>
+                    <th style="padding: 4px;">Key Idea</th>
+                </tr>
+                <tr>
+                    <td style="padding: 4px;">findBuildOrder(numProjects, deps)</td>
+                    <td style="padding: 4px; font-family: monospace;">int[]</td>
+                    <td style="padding: 4px;">Standard topo order</td>
+                </tr>
+            </table>
+            <div style="margin-top: 10px; padding: 8px; background-color: #fffbeb; border-left: 3px solid #f59e0b; display: flex; gap: 8px; align-items: flex-start;">
+                <span style="font-size: 14px;">💡</span>
+                <div><strong>AHA:</strong> Same as Course Schedule II.</div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 10px;">
+                <div>
+                    <strong>Complexity</strong><br>
+                    Time: O(V + E)<br>
+                    Space: O(V + E)
+                </div>
+                <div>
+                    <strong style="color: #1e3a8a;">Interview Tip</strong><br>
+                    Exactly same pattern,<br>different story.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. TASK SCHEDULER -->
+    <div class="section-box">
+        <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-size: 12px;"><span class="num" style="background-color: #1e3a8a;">5</span> TASK SCHEDULER (WITH ADVANCED CONSTRAINT)</div>
+            <div style="background-color: #1e3a8a; color: white; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 2px;">K</div>
+        </div>
+        <div class="section-content" style="font-size: 12px;">
+            <div style="text-align: center; font-size: 11px; margin-bottom: 10px; font-weight: bold;">Base Template: Kahn's Algorithm (BFS)</div>
+            <strong>Problem</strong>
+            <p style="margin: 4px 0 10px 0;">Return order if possible, else empty.</p>
+            <strong style="color: #4338ca;">Changed Lines (from Template)</strong>
+<pre style="margin-top: 5px; padding: 8px; background: #f8fafc; border: 1px solid #e2e8f0; font-size: 10px;"><code class="language-java">// 1. Build graph from conditions
+for (int[] c : conditions) {
+    int u = c[0], v = c[1]; // u before v
+    graph.get(u).add(v);
+    indegree[v]++;
+}
+
+// 2. Standard Kahn's
+// Return order only if all tasks processed</code></pre>
+            <table style="width: 100%; font-size: 10px; margin-top: 10px; text-align: center; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid #e2e8f0; color: #1e3a8a;">
+                    <th style="padding: 4px;">Caller</th>
+                    <th style="padding: 4px;">Return</th>
+                    <th style="padding: 4px;">Key Idea</th>
+                </tr>
+                <tr>
+                    <td style="padding: 4px;">taskOrder(tasks, conditions)</td>
+                    <td style="padding: 4px; font-family: monospace;">int[]</td>
+                    <td style="padding: 4px;">Dependencies between tasks</td>
+                </tr>
+            </table>
+            <div style="margin-top: 10px; padding: 8px; background-color: #fffbeb; border-left: 3px solid #f59e0b; display: flex; gap: 8px; align-items: flex-start;">
+                <span style="font-size: 14px;">💡</span>
+                <div><strong>AHA:</strong> If some tasks remain -> cycle.</div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 10px;">
+                <div>
+                    <strong>Complexity</strong><br>
+                    Time: O(V + E)<br>
+                    Space: O(V + E)
+                </div>
+                <div>
+                    <strong style="color: #1e3a8a;">Interview Tip</strong><br>
+                    Check indegree[] after<br>processing all nodes.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. MINIMUM SEMESTERS -->
+    <div class="section-box">
+        <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div><span class="num" style="background-color: #1e3a8a;">6</span> MINIMUM SEMESTERS</div>
+            <div style="background-color: #1e3a8a; color: white; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 2px;">K</div>
+        </div>
+        <div class="section-content" style="font-size: 12px;">
+            <div style="text-align: center; font-size: 11px; margin-bottom: 10px; font-weight: bold;">Base Template: Kahn's Algorithm (BFS)</div>
+            <strong>Problem</strong>
+            <p style="margin: 4px 0 10px 0;">Return minimum semesters to finish all courses.</p>
+            <strong style="color: #4338ca;">Changed Lines (from Template)</strong>
+<pre style="margin-top: 5px; padding: 8px; background: #f8fafc; border: 1px solid #e2e8f0; font-size: 9px;"><code class="language-java">// 1. Standard graph from prerequisites
+// 2. Use level-based processing (BFS levels)
+int semesters = 0;
+while (!q.isEmpty()) {
+    int size = q.size();
+    semesters++;
+    for (int i = 0; i &lt; size; i++) {
+        int node = q.poll();
+        for (int nei : graph.get(node)) {
+            indegree[nei]--;
+            if (indegree[nei] == 0) q.offer(nei);
+        }
+    }
+}
+return (count == numCourses) ? semesters : -1;</code></pre>
+            <table style="width: 100%; font-size: 10px; margin-top: 10px; text-align: center; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid #e2e8f0; color: #1e3a8a;">
+                    <th style="padding: 4px;">Caller</th>
+                    <th style="padding: 4px;">Return</th>
+                    <th style="padding: 4px;">Key Idea</th>
+                </tr>
+                <tr>
+                    <td style="padding: 4px;">minimumSemesters(numCourses, prereq)</td>
+                    <td style="padding: 4px; font-family: monospace;">int</td>
+                    <td style="padding: 4px;">BFS levels = semesters</td>
+                </tr>
+            </table>
+            <div style="margin-top: 10px; padding: 8px; background-color: #fffbeb; border-left: 3px solid #f59e0b; display: flex; gap: 8px; align-items: flex-start;">
+                <span style="font-size: 14px;">💡</span>
+                <div><strong>AHA:</strong> Levels in BFS give minimum time.</div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 10px;">
+                <div>
+                    <strong>Complexity</strong><br>
+                    Time: O(V + E)<br>
+                    Space: O(V + E)
+                </div>
+                <div>
+                    <strong style="color: #1e3a8a;">Interview Tip</strong><br>
+                    Count levels, not nodes.<br>That's the answer.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display: flex; gap: 15px; margin-top: 20px;">
+    
+    <!-- 7 CHANGED LINES SUMMARY -->
+    <div class="section-box" style="flex: 1.5; margin-bottom: 0;">
+        <div class="section-header" style="background-color: #4f46e5; color: white;">7 CHANGED LINES SUMMARY</div>
+        <div class="section-content" style="padding: 10px;">
+            <table style="width: 100%; font-size: 9px; text-align: left; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <th style="padding: 4px; width: 20px;">#</th>
+                    <th style="padding: 4px;">Problem</th>
+                    <th style="padding: 4px;">Base Template</th>
+                    <th style="padding: 4px;">Main Change</th>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 4px;">1</td><td style="padding: 4px;">Course Schedule</td><td style="padding: 4px;">Kahn's (BFS)</td><td style="padding: 4px;">Return boolean (processed all?)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 4px;">2</td><td style="padding: 4px;">Course Schedule II</td><td style="padding: 4px;">Kahn's (BFS)</td><td style="padding: 4px;">Store order (list) & return array</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 4px;">3</td><td style="padding: 4px;">Alien Dictionary</td><td style="padding: 4px;">DFS + Stack</td><td style="padding: 4px;">Build graph from words (First diff)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 4px;">4</td><td style="padding: 4px;">Build Order</td><td style="padding: 4px;">Kahn's (BFS)</td><td style="padding: 4px;">Same as Course Schedule II</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 4px;">5</td><td style="padding: 4px;">Task Scheduler</td><td style="padding: 4px;">Kahn's (BFS)</td><td style="padding: 4px;">General dependencies</td>
+                </tr>
+                <tr>
+                    <td style="padding: 4px;">6</td><td style="padding: 4px;">Minimum Semesters</td><td style="padding: 4px;">Kahn's (BFS)</td><td style="padding: 4px;">Level BFS -> count semesters</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- 8 TOPO SORT TEMPLATE RECAP -->
+    <div class="section-box" style="flex: 1.2; margin-bottom: 0;">
+        <div class="section-header" style="background-color: #059669; color: white;">8 TOPO SORT TEMPLATE RECAP</div>
+        <div class="section-content" style="font-size: 10px; padding: 10px;">
+            <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
+                <div>
+                    <strong>Kahn's (BFS)</strong>
+                    <ul style="padding-left: 15px; margin: 4px 0 0 0;">
+                        <li>Indegree[]</li>
+                        <li>Queue of 0 indegree</li>
+                        <li>Process -> reduce indegree</li>
+                        <li>Detect cycle if not all processed</li>
+                    </ul>
+                </div>
+                <div style="text-align: center;">
+                    <div style="display: flex; gap: 2px; margin-bottom: 5px;">
+                        <div style="border: 1px solid #94a3b8; width: 12px; height: 12px;"></div>
+                        <div style="border: 1px solid #94a3b8; width: 12px; height: 12px; display: flex; align-items: center; justify-content: center; font-size: 8px;">0</div>
+                        <div style="border: 1px solid #94a3b8; width: 12px; height: 12px;"></div>
+                    </div>
+                    <div style="border: 1px solid #94a3b8; width: 40px; height: 15px; margin-top: 10px;">Queue</div>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <div>
+                    <strong>DFS + Stack</strong>
+                    <ul style="padding-left: 15px; margin: 4px 0 0 0;">
+                        <li>DFS all nodes</li>
+                        <li>Push after visiting neighbors</li>
+                        <li>Reverse stack -> order</li>
+                        <li>Detect cycle with recursion stack</li>
+                    </ul>
+                </div>
+                <div>
+                    <div style="border: 1px solid #94a3b8; width: 25px; height: 40px; border-top: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9 RETURN TYPE GUIDE -->
+    <div class="section-box" style="flex: 1; margin-bottom: 0;">
+        <div class="section-header" style="background-color: #1e3a8a; color: white;">9 RETURN TYPE GUIDE</div>
+        <div class="section-content" style="padding: 10px;">
+            <table style="width: 100%; font-size: 9px; text-align: left; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <th style="padding: 4px;">Return Type</th>
+                    <th style="padding: 4px;">Use When</th>
+                    <th style="padding: 4px;">Example Problems</th>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 4px; font-family: monospace;">boolean</td><td style="padding: 4px;">Check if order is possible</td><td style="padding: 4px;">Course Schedule</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 4px; font-family: monospace;">int[] / List&lt;Integer&gt;</td><td style="padding: 4px;">Need the order</td><td style="padding: 4px;">Course Schedule II, Build Order</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 4px; font-family: monospace;">String</td><td style="padding: 4px;">Order of characters</td><td style="padding: 4px;">Alien Dictionary</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 4px; font-family: monospace;">int</td><td style="padding: 4px;">Minimum time / levels</td><td style="padding: 4px;">Minimum Semesters</td>
+                </tr>
+                <tr>
+                    <td style="padding: 4px; font-family: monospace;">-1 / Empty</td><td style="padding: 4px;">Cycle exists</td><td style="padding: 4px;">All problems when impossible</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- 10 INTERVIEW CHECKLIST -->
+    <div class="section-box" style="flex: 1; margin-bottom: 0;">
+        <div class="section-header" style="background-color: #1e3a8a; color: white;">10 INTERVIEW CHECKLIST</div>
+        <div class="section-content" style="font-size: 10px; padding: 10px;">
+            <ul style="list-style-type: none; padding: 0; margin: 0;">
+                <li style="margin-bottom: 4px;"><span style="color: #2563eb;">☑</span> Built correct graph direction?</li>
+                <li style="margin-bottom: 4px;"><span style="color: #2563eb;">☑</span> Calculated indegree[] correctly?</li>
+                <li style="margin-bottom: 4px;"><span style="color: #2563eb;">☑</span> Added all nodes (even with 0 indegree)?</li>
+                <li style="margin-bottom: 4px;"><span style="color: #2563eb;">☑</span> Used correct template (Kahn's or DFS)?</li>
+                <li style="margin-bottom: 4px;"><span style="color: #2563eb;">☑</span> Handled cycle case?</li>
+                <li style="margin-bottom: 4px;"><span style="color: #2563eb;">☑</span> Returned correct type?</li>
+                <li style="margin-bottom: 4px;"><span style="color: #2563eb;">☑</span> Time & space complexity?</li>
+                <li style="margin-bottom: 4px;"><span style="color: #2563eb;">☑</span> Dry run on small example?</li>
+                <li><span style="color: #2563eb;">☑</span> Can you explain your approach clearly?</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- 11 INTERVIEW THINKING FLOW -->
+<div class="section-box" style="margin-top: 20px;">
+    <div class="section-header" style="background-color: #1e3a8a; color: white; text-align: center;">11 INTERVIEW THINKING FLOW</div>
+    <div class="section-content" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 40px;">
+        <div class="mermaid">
+        graph LR
+            A((?)) -->|Problem<br>(Understand)| B[Dependencies<br>Exist?]
+            B -->|Yes| C(( ))
+            C -->|Directed<br>Graph<br>Yes| D{Need Order?}
+            D -->|Yes -> Topo Sort| E[Kahn's BFS<br>or DFS + Stack?]
+            D -->|No -> Other Algo| D
+            E -->|BFS if easier| F(Write Code<br>Template)
+            E -->|DFS if recursion<br>preferred| F
+            F --> G(Test & Verify<br>Cycle? Output?)
+            G --> H((Win))
+            
+            classDef default fill:#fff,stroke:#333,stroke-width:2px;
+            classDef decision fill:#fff,stroke:#333,stroke-width:2px,shape:diamond;
+            class D decision;
+        </div>
+    </div>
+    <div style="text-align: center; font-weight: bold; font-size: 12px; margin-top: -10px; padding-bottom: 10px;">CHEAT PIPELINE (INTERVIEW SUCCESS FORMULA)</div>
+    <div style="display: flex; justify-content: space-around; align-items: center; padding: 10px 40px; font-size: 10px; border-top: 1px solid #e2e8f0; color: #475569;">
+        <div style="display: flex; align-items: center; gap: 5px;"><span>(?)</span> <strong>Problem</strong> (Understand)</div>
+        <div>→</div>
+        <div style="display: flex; align-items: center; gap: 5px;"><span>⌨</span> <strong>Input</strong> (What given)</div>
+        <div>→</div>
+        <div style="display: flex; align-items: center; gap: 5px;"><span>⛙</span> <strong>Representation</strong> (Graph + Indegree)</div>
+        <div>→</div>
+        <div style="display: flex; align-items: center; gap: 5px;"><span>☰</span> <strong>Helper Structure</strong> (Queue / Stack + Indegree)</div>
+        <div>→</div>
+        <div style="display: flex; align-items: center; gap: 5px;"><span>⚙</span> <strong>Pattern</strong> (Topo Sort Template)</div>
+        <div>→</div>
+        <div style="display: flex; align-items: center; gap: 5px;"><span>✎</span> <strong>Tiny Logic Change</strong> (Apply Changes)</div>
+        <div>→</div>
+        <div style="display: flex; align-items: center; gap: 5px;"><span>⟳</span> <strong>Dry Run</strong> (Example)</div>
+        <div>→</div>
+        <div style="display: flex; align-items: center; gap: 5px;"><span>⏱</span> <strong>Optimize</strong> (Time/Space)</div>
+    </div>
+</div>
+
+</div>

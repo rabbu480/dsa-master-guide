@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 - Part 12: Staff-Level Data Structures</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+    :root { --primary: #1e3a8a; --secondary: #2563eb; --accent: #d97706; --emerald: #059669; --text-dark: #0f172a; --bg-light: #f8fafc; --border-color: #cbd5e1; --code-bg: #1e293b; --code-text: #f8fafc; }
+    body { font-family: 'Inter', sans-serif; background-color: #cbd5e1; color: var(--text-dark); margin: 0; padding: 20px; font-size: 13px; line-height: 1.5; }
+    .page { background: white; max-width: 1100px; margin: 0 auto 30px auto; padding: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 8px; page-break-after: always; }
+    .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--primary); padding-bottom: 12px; margin-bottom: 25px; background: #f1f5f9; padding: 15px 20px; border-radius: 6px; }
+    .header-top h1 { margin: 0; font-size: 1.8rem; color: var(--primary); font-weight: 900; text-transform: uppercase; }
+    .badge { background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; }
+    .section-box { border: 2px solid var(--primary); border-radius: 8px; margin-bottom: 25px; overflow: hidden; background: white; page-break-inside: avoid; }
+    .section-header { background: var(--primary); color: white; padding: 10px 18px; font-size: 1.1rem; font-weight: 800; }
+    .section-content { padding: 18px; }
+    pre { background: var(--code-bg); color: var(--code-text); padding: 16px; margin: 10px 0; border-radius: 6px; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 1.5; white-space: pre-wrap !important; word-break: break-word !important; }
+    @media print { body { background: white; padding: 0; } .page { box-shadow: none; border: none; margin: 0; padding: 15px 0; max-width: 100%; } .section-box { page-break-inside: avoid !important; break-inside: avoid !important; } }
+</style>
+</head>
+<body>
+
+<div class="page">
+    <div class="header-top">
+        <div>
+            <h1>Book 1 — Part 12: Staff-Level Structures</h1>
+            <div style="font-size: 0.95rem; color: #475569; font-weight: 600;">Pages 181–188 · LRU Cache, LFU Cache & Rate Limiting</div>
+        </div>
+        <span class="badge">Part 12</span>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">12.1 LRU Cache Implementation (HashMap + Doubly LL)</div>
+        <div class="section-content">
+            <pre><code>class LRUCache {
+    private static class Node {
+        int key, value;
+        Node prev, next;
+        Node(int k, int v) { this.key = k; this.value = v; }
+    }
+    
+    private final int capacity;
+    private final Map&lt;Integer, Node&gt; map = new HashMap&lt;&gt;();
+    private final Node head = new Node(0, 0), tail = new Node(0, 0);
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        head.next = tail; tail.prev = head;
+    }
+
+    public int get(int key) {
+        if (!map.containsKey(key)) return -1;
+        Node node = map.get(key);
+        remove(node); insertToHead(node);
+        return node.value;
+    }
+
+    public void put(int key, int value) {
+        if (map.containsKey(key)) remove(map.get(key));
+        if (map.size() == capacity) {
+            map.remove(tail.prev.key);
+            remove(tail.prev);
+        }
+        Node newNode = new Node(key, value);
+        insertToHead(newNode);
+        map.put(key, newNode);
+    }
+
+    private void remove(Node node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+
+    private void insertToHead(Node node) {
+        node.next = head.next;
+        node.next.prev = node;
+        head.next = node;
+        node.prev = head;
+    }
+}</code></pre>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,458 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1>BST BIBLE (BINARY SEARCH TREE)</h1>
+            <div class="subtitle">The most important BST rules, operations and patterns<br><small style="color:#64748b;font-weight:normal;">(FAANG Cheat Sheet)</small></div>
+        </div>
+        <div style="text-align: right;">
+            <div class="page-number">PAGE 6</div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px;">
+        <!-- Col 1 -->
+        <div class="col">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #1e8b40; color: white;"><span class="num">1</span> BST RULE</div>
+                <div class="section-content">
+                    <p><strong>For every node N in BST</strong></p>
+                    <div style="background-color: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; text-align: center; margin-bottom: 10px;">
+                        All values in Left Subtree &lt; N &lt; All values in Right Subtree
+                    </div>
+                    <p><strong>Example</strong></p>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 14px;">All &lt; 8</span>
+                        <div class="mermaid">
+                        graph TD
+                            8((8)) --> 3((3))
+                            8 --> 10((10))
+                            3 --> 1((1))
+                            3 --> 6((6))
+                            10 --> 14((14))
+                        </div>
+                        <span style="font-size: 14px;">All &gt; 8</span>
+                    </div>
+                    <ul style="list-style-type: none; padding-left: 0;">
+                        <li><span style="color: #16a34a;">✔</span> Left subtree → smaller values</li>
+                        <li><span style="color: #16a34a;">✔</span> Right subtree → larger values</li>
+                        <li><span style="color: #16a34a;">✔</span> Inorder traversal gives sorted order</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Col 2 -->
+        <div class="col">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #4c1d95; color: white;"><span class="num">2</span> SEARCH IN BST</div>
+                <div class="section-content">
+                    <p><strong>Idea:</strong> Use BST property to decide the direction.</p>
+                    <pre style="background-color: #f8fafc; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px;"><code>if key == root.val    → found
+else if key &lt; root.val → go left
+else                  → go right</code></pre>
+                    <p><strong>Example</strong></p>
+                    <div style="display: flex; align-items: center;">
+                        <div class="mermaid">
+                        graph TD
+                            8((8)) --> 3((3))
+                            8 --> 10((10))
+                            3 --> 1((1))
+                            3 --> 6((6)):::highlight
+                            10 --> 14((14))
+                            classDef highlight stroke:#ef4444,stroke-width:2px,stroke-dasharray: 5 5
+                        </div>
+                        <div style="margin-left: 10px; font-size: 14px;">
+                            <strong>Search: 6</strong><br><br>
+                            8 &gt; 6 → go left<br><br>
+                            3 &lt; 6 → go right<br><br>
+                            <span style="color: #ef4444;">6 == 6 → found</span>
+                        </div>
+                    </div>
+                    <div style="background-color: #f5f3ff; border: 1px solid #ddd6fe; padding: 10px; margin-top: 10px; border-radius: 4px;">
+                        <div style="background-color: #4c1d95; color: white; display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 12px; margin-bottom: 5px;">Complexity</div>
+                        <div style="font-size: 14px;">Time: <strong>O(h)</strong> &nbsp;&nbsp;&nbsp; Space: <strong>O(1)</strong> iterative / <strong>O(h)</strong> recursive</div>
+                        <div style="font-size: 12px; color: #64748b;">(h = height of tree)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Col 3 -->
+        <div class="col">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #1e3a8a; color: white;"><span class="num">3</span> INSERT INTO BST</div>
+                <div class="section-content">
+                    <p><strong>Idea:</strong> Find correct position and insert.</p>
+                    <p><strong>Steps:</strong></p>
+                    <ol style="margin-top: 0; padding-left: 20px; font-size: 14px;">
+                        <li>If tree is empty → new node becomes root</li>
+                        <li>Else compare and go left or right</li>
+                        <li>Insert when NULL is found</li>
+                    </ol>
+                    <p><strong>Example: Insert 7</strong></p>
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div class="mermaid">
+                        graph TD
+                            8((8)) --> 3((3))
+                            8 --> 10((10))
+                            3 --> 1((1))
+                            3 --> 6((6))
+                            10 --> 14((14))
+                        </div>
+                        <strong style="color: #3b82f6; font-size: 20px;">→</strong>
+                        <div class="mermaid">
+                        graph TD
+                            8((8)) --> 3((3))
+                            8 --> 10((10))
+                            3 --> 1((1))
+                            3 --> 6((6))
+                            10 --> 14((14))
+                            6 --> empty1[ ]
+                            6 --> 7((7)):::newnode
+                            style empty1 fill:none,stroke:none
+                            classDef newnode stroke:#3b82f6,stroke-width:2px,stroke-dasharray: 5 5
+                        </div>
+                    </div>
+                    <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 10px; margin-top: 10px; border-radius: 4px;">
+                        <div style="background-color: #1e3a8a; color: white; display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 12px; margin-bottom: 5px;">Complexity</div>
+                        <div style="font-size: 14px;">Time: <strong>O(h)</strong> &nbsp;&nbsp;&nbsp; Space: <strong>O(1)</strong> iterative / <strong>O(h)</strong> recursive</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px;">
+        <!-- Col 1 -->
+        <div class="col">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #ea580c; color: white;"><span class="num">4</span> DELETE FROM BST</div>
+                <div class="section-content">
+                    <p style="font-size: 14px; margin-top: 0;">Cases to handle when deleting node X:</p>
+                    <p style="font-size: 14px; color: #ea580c; font-weight: bold; margin-bottom: 4px;">Case 1: X is a leaf node</p>
+                    <p style="font-size: 12px; margin-top: 0;">→ Just delete it.</p>
+                    <div style="display: flex; align-items: center; justify-content: space-around;">
+                        <div class="mermaid">
+                        graph TD
+                            6((6)) --> 5((5))
+                            6 --> 8((8)):::delete
+                            classDef delete stroke:#ea580c,stroke-width:2px,stroke-dasharray: 5 5
+                        </div>
+                        <strong>→</strong>
+                        <div class="mermaid">
+                        graph TD
+                            6((6)) --> 5((5))
+                        </div>
+                    </div>
+                    
+                    <p style="font-size: 14px; color: #ea580c; font-weight: bold; margin-bottom: 4px;">Case 2: X has one child</p>
+                    <p style="font-size: 12px; margin-top: 0;">→ Replace X with its child.</p>
+                    <div style="display: flex; align-items: center; justify-content: space-around;">
+                        <div class="mermaid">
+                        graph TD
+                            6((6)) --> 5((5))
+                            6 --> 8((8)):::delete
+                            8 --> empty[ ]
+                            8 --> 7((7))
+                            style empty fill:none,stroke:none
+                            classDef delete stroke:#ea580c,stroke-width:2px,stroke-dasharray: 5 5
+                        </div>
+                        <strong>→</strong>
+                        <div class="mermaid">
+                        graph TD
+                            6((6)) --> 5((5))
+                            6 --> 7((7))
+                        </div>
+                    </div>
+                    
+                    <p style="font-size: 14px; color: #ea580c; font-weight: bold; margin-bottom: 4px;">Case 3: X has two children</p>
+                    <p style="font-size: 12px; margin-top: 0;">→ Replace X with Inorder Successor (smallest in right subtree) or Inorder Predecessor (largest in left subtree).</p>
+                    <div style="display: flex; align-items: center; justify-content: space-around;">
+                        <div class="mermaid">
+                        graph TD
+                            6((6)):::delete --> 3((3))
+                            6 --> 8((8))
+                            3 --> 1((1))
+                            3 --> 4((4))
+                            8 --> 7((7)):::succ
+                            8 --> 9((9))
+                            classDef delete stroke:#ea580c,stroke-width:2px,stroke-dasharray: 5 5
+                            classDef succ stroke:#3b82f6,stroke-width:2px,stroke-dasharray: 5 5
+                        </div>
+                        <strong>→</strong>
+                        <div class="mermaid">
+                        graph TD
+                            7((7)) --> 3((3))
+                            7 --> 8((8))
+                            3 --> 1((1))
+                            3 --> 4((4))
+                            8 --> empty2[ ]
+                            8 --> 9((9))
+                            style empty2 fill:none,stroke:none
+                        </div>
+                    </div>
+
+                    <div style="background-color: #fff7ed; border: 1px solid #fed7aa; padding: 10px; margin-top: 10px; border-radius: 4px;">
+                        <div style="background-color: #ea580c; color: white; display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 12px; margin-bottom: 5px;">Complexity</div>
+                        <div style="font-size: 14px;">Time: <strong>O(h)</strong> &nbsp;&nbsp;&nbsp; Space: <strong>O(1)</strong> iterative / <strong>O(h)</strong> recursive</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Col 2 -->
+        <div class="col">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #2563eb; color: white;"><span class="num">5</span> Kth SMALLEST ELEMENT (LC 230)</div>
+                <div class="section-content">
+                    <p><strong>Idea:</strong> Inorder traversal of BST gives sorted order.</p>
+                    <p><strong>Steps:</strong></p>
+                    <ol style="margin-top: 0; padding-left: 20px; font-size: 14px;">
+                        <li>Do Inorder (Left → Root → Right)</li>
+                        <li>Count nodes</li>
+                        <li>When count == k → return node</li>
+                    </ol>
+                    <p><strong>Example</strong></p>
+                    <div style="display: flex; align-items: center;">
+                        <div class="mermaid">
+                        graph TD
+                            8((8)) --> 3((3))
+                            8 --> 10((10))
+                            3 --> 1((1))
+                            3 --> 6((6)):::highlight
+                            10 --> 14((14))
+                            classDef highlight stroke:#2563eb,stroke-width:2px
+                        </div>
+                        <div style="margin-left: 20px; font-size: 14px;">
+                            Inorder: 1, 3, 6, 8, 10, 14<br><br>
+                            <strong>k = 3 &nbsp;→&nbsp; Answer = <span style="border: 1px solid #94a3b8; padding: 2px 6px; border-radius: 4px;">6</span></strong>
+                        </div>
+                    </div>
+                    <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 10px; margin-top: 30px; border-radius: 4px;">
+                        <div style="background-color: #2563eb; color: white; display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 12px; margin-bottom: 5px;">Complexity</div>
+                        <div style="font-size: 14px;">Time: <strong>O(h + k)</strong> &nbsp;&nbsp;&nbsp; Space: <strong>O(h)</strong></div>
+                        <div style="font-size: 12px; color: #64748b; text-align: center;">(h = height, k = position of answer)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Col 3 -->
+        <div class="col">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #16a34a; color: white;"><span class="num">6</span> VALIDATE BST (LC 98)</div>
+                <div class="section-content">
+                    <p><strong>Idea:</strong> Each node must lie in a valid range.</p>
+                    <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px; text-align: center; margin-bottom: 10px;">
+                        For every node: <code>min &lt; node.val &lt; max</code>
+                    </div>
+                    <p><strong>Steps:</strong></p>
+                    <ol style="margin-top: 0; padding-left: 20px; font-size: 14px;">
+                        <li>Use two bounds: min and max</li>
+                        <li>Check: min &lt; node.val &lt; max</li>
+                        <li>Recur Left → (min, node.val)</li>
+                        <li>Recur Right → (node.val, max)</li>
+                    </ol>
+                    <p><strong>Example</strong></p>
+                    <div style="display: flex; align-items: center;">
+                        <div class="mermaid">
+                        graph TD
+                            8((8)) --> 3((3))
+                            8 --> 10((10))
+                            3 --> 1((1))
+                            3 --> 6((6))
+                            10 --> 14((14))
+                        </div>
+                        <div style="margin-left: 10px; font-size: 12px;">
+                            For node 6:<br>
+                            Range (3, 8) ✔<br><br>
+                            For node 14:<br>
+                            Range (10, +∞) ✔<br><br>
+                            All nodes satisfy → Valid BST
+                        </div>
+                    </div>
+                    <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px; margin-top: 10px; border-radius: 4px;">
+                        <div style="background-color: #16a34a; color: white; display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 12px; margin-bottom: 5px;">Complexity</div>
+                        <div style="font-size: 14px;">Time: <strong>O(n)</strong> &nbsp;&nbsp;&nbsp; Space: <strong>O(h)</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+        <!-- Col 1 -->
+        <div class="col">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #b91c1c; color: white;"><span class="num">7</span> LCA IN BST (LC 235)</div>
+                <div class="section-content">
+                    <p><strong>Idea:</strong> Use BST property to find LCA.</p>
+                    <pre style="background-color: #f8fafc; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px;"><code>If both p and q &lt; root → go left
+If both p and q &gt; root → go right
+Else → root is LCA</code></pre>
+                    <p><strong>Example: p = 1, q = 14</strong></p>
+                    <div style="display: flex; align-items: center;">
+                        <div class="mermaid">
+                        graph TD
+                            8((8)):::lca --> 3((3))
+                            8 --> 10((10))
+                            3 --> 1((1)):::pq
+                            3 --> 6((6))
+                            10 --> 14((14)):::pq
+                            classDef lca fill:#fca5a5,stroke:#b91c1c,stroke-width:2px
+                            classDef pq stroke:#000,stroke-width:2px,stroke-dasharray: 5 5
+                        </div>
+                        <div style="margin-left: 20px; font-size: 14px;">
+                            <span style="color: #b91c1c;">1 &lt; 8</span> and <span style="color: #b91c1c;">14 &gt; 8</span><br><br>
+                            → 8 is LCA
+                        </div>
+                    </div>
+                    <div style="background-color: #fef2f2; border: 1px solid #fecaca; padding: 10px; margin-top: 10px; border-radius: 4px;">
+                        <div style="background-color: #b91c1c; color: white; display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 12px; margin-bottom: 5px;">Complexity</div>
+                        <div style="font-size: 12px;">Time: <strong>O(h)</strong> &nbsp;&nbsp; Space: <strong>O(1)</strong> iterative / <strong>O(h)</strong> recursive</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Col 2 & 3 -->
+        <div class="col" style="grid-column: span 2;">
+            <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px;">
+                <!-- Inner Col 1 -->
+                <div>
+                    <div class="section-box" style="margin-bottom: 20px;">
+                        <div class="section-header" style="background-color: #1d4ed8; color: white; text-align: center;">BST CHEAT SHEET</div>
+                        <div class="section-content" style="padding: 0;">
+                            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
+                                <thead>
+                                    <tr style="background-color: #eff6ff;">
+                                        <th style="padding: 8px; border-bottom: 1px solid #bfdbfe;">Operation</th>
+                                        <th style="padding: 8px; border-bottom: 1px solid #bfdbfe;">Idea</th>
+                                        <th style="padding: 8px; border-bottom: 1px solid #bfdbfe;">Time</th>
+                                        <th style="padding: 8px; border-bottom: 1px solid #bfdbfe;">Space</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Search</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Use BST property</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">O(h)</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">O(1) / O(h)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Insert</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Find position &amp; insert</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">O(h)</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">O(1) / O(h)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Delete</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Handle 3 cases</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">O(h)</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">O(1) / O(h)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Kth Smallest</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Inorder + count</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">O(h + k)</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">O(h)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Validate BST</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Use range (min, max)</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">O(n)</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">O(h)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px;">LCA (BST)</td>
+                                        <td style="padding: 8px;">Use BST property</td>
+                                        <td style="padding: 8px;">O(h)</td>
+                                        <td style="padding: 8px;">O(1) / O(h)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1; border: 1px solid #e2e8f0; padding: 10px; border-radius: 4px; font-size: 12px; background-color: #f8fafc;">
+                            <strong style="display: block; margin-bottom: 5px;">BST PROPERTIES</strong>
+                            <ul style="list-style: none; padding-left: 0; margin: 0;">
+                                <li><span style="color: #16a34a;">✔</span> Left &lt; Root &lt; Right</li>
+                                <li><span style="color: #16a34a;">✔</span> Inorder = Sorted</li>
+                                <li><span style="color: #16a34a;">✔</span> No duplicates (by default)</li>
+                                <li><span style="color: #16a34a;">✔</span> Efficient operations: O(h)</li>
+                                <li><span style="color: #16a34a;">✔</span> Balanced BST → O(log n)</li>
+                            </ul>
+                        </div>
+                        <div style="flex: 1; border: 1px solid #fef08a; padding: 10px; border-radius: 4px; font-size: 12px; background-color: #fefce8;">
+                            <strong style="display: block; margin-bottom: 5px; color: #ca8a04;">⭐ REMEMBER</strong>
+                            <ul style="padding-left: 15px; margin: 0;">
+                                <li>Think in terms of range.</li>
+                                <li>Inorder is your best friend.</li>
+                                <li>BST gives you direction.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Inner Col 2 -->
+                <div>
+                    <div class="section-box" style="height: 100%;">
+                        <div class="section-header" style="background-color: #5b21b6; color: white;"><span class="num">8</span> INORDER = SORTED ORDER</div>
+                        <div class="section-content">
+                            <p><strong>Proof by Example</strong></p>
+                            <div style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                                <div class="mermaid">
+                                graph TD
+                                    8((8)) --> 3((3))
+                                    8 --> 10((10))
+                                    3 --> 1((1))
+                                    3 --> 6((6))
+                                    10 --> 14((14))
+                                </div>
+                                <div style="text-align: center; margin-top: 10px; font-size: 14px;">
+                                    <strong>Inorder Traversal</strong><br>
+                                    (Left → Root → Right)<br><br>
+                                    <strong>= 1, 3, 6, 8, 10, 14</strong><br>
+                                    (sorted order)
+                                </div>
+                            </div>
+                            <div style="background-color: #f3e8ff; border: 1px solid #e9d5ff; padding: 10px; margin-top: 20px; border-radius: 4px;">
+                                <strong>💡 Why?</strong>
+                                <p style="font-size: 13px; margin-top: 5px; margin-bottom: 0;">All left &lt; root &lt; all right<br>So visiting Left → Root → Right gives increasing order.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Mantra -->
+    <div style="background-color: #fffbeb; border: 1px solid #fde68a; padding: 15px; margin-top: 20px; border-radius: 8px; display: flex; align-items: center; justify-content: space-around; font-weight: bold; color: #92400e;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 24px;">🏆</span>
+            <span style="color: #1e3a8a; font-size: 18px;">FINAL MANTRA</span>
+        </div>
+        <div style="text-align: center; font-size: 12px; font-weight: normal; color: #333;">
+            Understand Rule<br>
+            (Left &lt; Root &lt; Right)
+        </div>
+        <span style="color: #f59e0b; font-size: 20px;">⇨</span>
+        <div style="text-align: center; font-size: 12px; font-weight: normal; color: #333;">
+            Use Property<br>
+            (Decide Direction)
+        </div>
+        <span style="color: #f59e0b; font-size: 20px;">⇨</span>
+        <div style="text-align: center; font-size: 12px; font-weight: normal; color: #333;">
+            Apply Pattern<br>
+            (Search / Insert / Delete)
+        </div>
+        <span style="color: #f59e0b; font-size: 20px;">⇨</span>
+        <div style="text-align: center; font-size: 12px; font-weight: normal; color: #333;">
+            Inorder for Sorted<br>
+            Range for Validation
+        </div>
+        <span style="color: #f59e0b; font-size: 20px;">⇨</span>
+        <div style="text-align: center; font-size: 12px; font-weight: normal; color: #333;">
+            Practice &amp; Master<br>
+            All BST Problems
+        </div>
+    </div>
+</div>

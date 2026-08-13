@@ -1,0 +1,1673 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 14: Dynamic Programming Masterclass (Visual FAANG Edition)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#ffffff',
+            primaryTextColor: '#0f172a',
+            primaryBorderColor: '#2563eb',
+            lineColor: '#64748b',
+            fontFamily: 'Inter'
+        }
+    });
+</script>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+    }
+
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 11.8px;
+        line-height: 1.4;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 8px 16px;
+        display: flex;
+        
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand { font-weight: 900; font-size: 1rem; color: #38bdf8; }
+    .top-nav .nav-controls { display: flex; gap: 4px; flex-wrap: wrap; }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+
+    /* Sticky Sidebar Layout */
+    .app-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+
+    .toc-title { font-weight: 900; font-size: 0.85rem; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+
+    .main-content { min-width: 0; }
+
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 20px 24px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+        
+        display: flex;
+        flex-direction: column;
+        
+    }
+    [data-theme="dark"] .page { background: #1e293b; color: #f8fafc; }
+
+    /* Header Top */
+    .header-top {
+        display: flex;
+        
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 6px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top { background: #0f172a; border-color: #38bdf8; border-left-color: #38bdf8; }
+    .header-title-group { display: flex; align-items: center; gap: 8px; }
+    .header-top h1 { margin: 0; font-size: 1.15rem; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+    .header-top .page-num { background: #1e3a8a; color: white; padding: 2px 8px; border-radius: 14px; font-weight: 800; font-size: 0.72rem; }
+
+    /* Goal Badge Box */
+    .goal-badge {
+        border: 2px dashed #3b82f6;
+        background: #eff6ff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: #1e40af;
+        margin-bottom: 6px;
+    }
+
+    .cross-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #e0e7ff;
+        color: #3730a3;
+        border: 1px solid #c7d2fe;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-decoration: none;
+        margin-bottom: 4px;
+    }
+
+    /* Section Box */
+    .section-box {
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        background: white;
+        border: 2px solid #3b82f6;
+        width: 100%;
+    }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+    .section-header { padding: 4px 8px; font-weight: 800; font-size: 0.8rem; color: white; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+    .section-header .num { background: white; color: #0f172a; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 900; }
+    .section-content { padding: 6px 8px; font-size: 0.76rem; }
+
+    /* Color Themes */
+    .box-blue { border-color: #2563eb !important; } .box-blue .section-header { background: #2563eb !important; }
+    .box-green { border-color: #22c55e !important; } .box-green .section-header { background: #22c55e !important; }
+    .box-purple { border-color: #8b5cf6 !important; } .box-purple .section-header { background: #8b5cf6 !important; }
+    .box-red { border-color: #ef4444 !important; } .box-red .section-header { background: #ef4444 !important; }
+    .box-orange { border-color: #f97316 !important; } .box-orange .section-header { background: #f97316 !important; }
+    .box-teal { border-color: #0d9488 !important; } .box-teal .section-header { background: #0d9488 !important; }
+    .box-indigo { border-color: #6366f1 !important; } .box-indigo .section-header { background: #6366f1 !important; }
+    .box-amber { border-color: #d97706 !important; } .box-amber .section-header { background: #d97706 !important; }
+
+    /* Problem Split Grid */
+    .problem-split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+    .problem-info { display: flex; flex-direction: column; gap: 3px; }
+    .problem-code { display: flex; flex-direction: column; }
+
+    .meta-card { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 3px 6px; border-radius: 4px; display: flex;  align-items: center; font-weight: 700; font-size: 0.7rem; }
+    [data-theme="dark"] .meta-card { background: #0f172a; border-color: #334155; }
+    .badge-easy { background: #10b981; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-medium { background: #f59e0b; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-hard { background: #ef4444; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .company-tag { background: #1e3a8a; color: white; padding: 1px 4px; border-radius: 3px; font-size: 0.65rem; }
+
+    .flowchart-box { background: #eff6ff; border: 1px solid #93c5fd; border-left: 3px solid #2563eb; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: 700; color: #1e40af; }
+    .whynot-box { background: #fff7ed; border: 1px solid #fdba74; border-left: 3px solid #f97316; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; color: #9a3412; }
+
+    /* Recurrence Formula Box */
+    .dp-formula-box {
+        background: #fdf4ff;
+        border: 1px solid #f0abfc;
+        border-left: 4px solid #c084fc;
+        padding: 4px 6px;
+        margin: 3px 0;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.68rem;
+        line-height: 1.35;
+        color: #701a75;
+    }
+    [data-theme="dark"] .dp-formula-box { background: #4a044e; color: #f5d0fe; border-color: #e879f9; }
+    .formula-title { font-weight: 800; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.3px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    pre { background: #f8fafc; color: #0f172a; padding: 6px 8px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.71rem; line-height: 1.32; margin: 0; white-space: pre-wrap !important; word-break: break-word; border: 1px solid #cbd5e1; }
+    [data-theme="dark"] pre { background: #0f172a; color: #f8fafc; border-color: #334155; }
+    code { font-family: 'Fira Code', monospace; background: #f1f5f9; color: #0f172a; padding: 1px 3px; border-radius: 3px; font-size: 0.74rem; border: 1px solid #cbd5e1; }
+
+    .aha-box { background: #fefce8; border: 1px solid #eab308; border-left: 4px solid #ca8a04; color: #713f12; padding: 5px 8px; border-radius: 4px; font-size: 0.76rem; font-weight: 600; margin: 4px 0; }
+    .rule-box { padding: 4px 6px; border-radius: 4px; font-weight: 600; margin: 4px 0; font-size: 0.74rem; }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    .rule-purple { background: #faf5ff; border: 1px solid #a855f7; border-left: 4px solid #a855f7; color: #6b21a8; }
+    .rule-red { background: #fff1f2; border: 1px solid #ef4444; border-left: 4px solid #ef4444; color: #b91c1c; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+    table th, table td { border: 1px solid var(--border-color); padding: 3px 5px; text-align: left; }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+    .mermaid { display: flex; justify-content: center; margin: 2px 0; }
+    .back-to-top { position: fixed; bottom: 20px; right: 20px; background: #2563eb; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; border: none; z-index: 999; }
+
+    @page { size: A4 portrait; margin: 4mm; }
+    @media print {
+        body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .top-nav, .back-to-top, .toc-sidebar { display: none !important; }
+        .app-layout { display: block !important; }
+        .container { max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+        .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.72; }
+        pre { background-color: #f8fafc !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; }
+    }
+
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+</style>
+</head>
+<body>
+
+<!-- Sticky Top Nav -->
+<div class="top-nav">
+    <div class="brand">⚡ FAANG DSA HANDBOOK — TOPIC 14: DYNAMIC PROGRAMMING</div>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn" style="background:#059669; border-color:#10b981; font-weight:800;">🏠 Index</a>
+        <button class="nav-btn" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="nav-btn" onclick="toggleSidebar()">↕️ Expand/Shrink TOC</button>
+        <a href="#page1" class="nav-btn">P1</a>
+        <a href="#page2" class="nav-btn">P2</a>
+        <a href="#page3" class="nav-btn">P3</a>
+        <a href="#page4" class="nav-btn">P4</a>
+        <a href="#page5" class="nav-btn">P5</a>
+        <a href="#page6" class="nav-btn">P6</a>
+        <a href="#page7" class="nav-btn">P7</a>
+        <a href="#page8" class="nav-btn">P8</a>
+        <a href="#page9" class="nav-btn">P9</a>
+        <a href="#page10" class="nav-btn">P10</a>
+        <a href="#page11" class="nav-btn">P11</a>
+        <a href="#page12" class="nav-btn">P12</a>
+        <a href="#page13" class="nav-btn">P13</a>
+        <a href="#page14" class="nav-btn">P14</a>
+        <a href="#page15" class="nav-btn">P15</a>
+        <a href="#page16" class="nav-btn">P16</a>
+        <a href="#page17" class="nav-btn">P17</a>
+        <a href="#page18" class="nav-btn">P18</a>
+        <button class="nav-btn" onclick="window.print()" style="background: #2563eb;">🖨️ PDF</button>
+    </div>
+</div>
+
+<div class="container">
+<div class="app-layout" id="appLayout">
+
+    <!-- Sticky Table of Contents Sidebar -->
+    <div class="toc-sidebar">
+        <div class="toc-header-bar"><span class="toc-title">📋 SECTIONS</span><button class="shrink-btn" onclick="toggleSidebar()"><span class="toc-text">➖ Shrink</span></button></div>
+        <ul class="toc-list">
+            <li><a href="#page1" class="toc-link">14.0 DP Foundation &amp; 2 Pillars</a></li>
+            <li><a href="#page2" class="toc-link">14.1 SC-RBR-MTS Framework</a></li>
+            <li><a href="#page3" class="toc-link">14.2 1D DP Pattern</a></li>
+            <li><a href="#page4" class="toc-link">14.3 2D Grid DP Pattern</a></li>
+            <li><a href="#page5" class="toc-link">14.4 Knapsack Patterns</a></li>
+            <li><a href="#page6" class="toc-link">14.5 String Matching (LCS)</a></li>
+            <li><a href="#page7" class="toc-link">14.6 Interval &amp; Tree DP</a></li>
+            <li><a href="#page8" class="toc-link">14.8 LIS &amp; Advanced DP</a></li>
+            <li><a href="#page9" class="toc-link">14.9 Decision Tree &amp; Cheat Sheet</a></li>
+            <li><a href="#page10" class="toc-link">Template Library (Part 1)</a></li>
+            <li><a href="#page11" class="toc-link">Template Library (Part 2)</a></li>
+            <li><a href="#page12" class="toc-link">14.12 Easy NeetCode Suite</a></li>
+            <li><a href="#page13" class="toc-link">14.12 House Robber I, II, Decode</a></li>
+            <li><a href="#page14" class="toc-link">14.12 Coin Change I &amp; II</a></li>
+            <li><a href="#page15" class="toc-link">14.12 Unique Paths &amp; Min Sum</a></li>
+            <li><a href="#page16" class="toc-link">14.12 Subset Sum &amp; LCS</a></li>
+            <li><a href="#page17" class="toc-link">14.12 LIS, Edit Dist &amp; Balloons</a></li>
+            <li><a href="#page18" class="toc-link">14.13 Revision &amp; Summary</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Pages -->
+    <div class="main-content">
+
+    <!-- ========================================================= -->
+    <!-- PAGE 1: 14.0 DP FOUNDATION & THE 2 PILLARS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page1">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">⚡</span>
+                    <h1>TOPIC 14.0: DYNAMIC PROGRAMMING FOUNDATION &amp; PILLARS</h1>
+                </div>
+                <span class="page-num">PAGE 1 OF 18</span>
+            </div>
+
+            <!-- Cross-Link Badges -->
+            <a href="Topic13_Backtracking.html" class="cross-link">🔗 See Topic 13 → Backtracking Masterclass</a>
+
+            <!-- Goal Badge -->
+            <div class="goal-badge">
+                🎯 <strong>GOAL:</strong> Master Dynamic Programming! Learn the 8-step `SC-RBR-MTS` Framework, Top-Down Memoization vs Bottom-Up Tabulation, Space Optimization tricks, 1D/2D/Grid DP, Knapsack, LCS, LIS, and solve all NeetCode DP problems!
+            </div>
+
+            <div class="section-box box-teal" style="margin-top:8px">
+                <div class="section-header">🧰 REUSABLE DYNAMIC PROGRAMMING UTILITIES</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">Memoization Table Initialization:</p>
+<pre>
+// 1D Memo initialization with -1
+int[] memo = new int[n + 1];
+Arrays.fill(memo, -1);
+
+// 2D Memo initialization with -1
+int[][] memo2D = new int[n + 1][m + 1];
+for (int[] row : memo2D) Arrays.fill(row, -1);</pre>
+                        </div>
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">Space Optimization Row Swap:</p>
+<pre>
+// 1D DP array space optimization (prev vs curr)
+int[] prev = new int[m + 1];
+int[] curr = new int[m + 1];
+// At end of outer loop step:
+prev = curr.clone();</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AHA Box #1 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #1: THE 2 REQUISITES FOR DYNAMIC PROGRAMMING</strong><br/>
+                Dynamic Programming is simply **Recursion + Caching (Memoization)** OR **Iterative Table Filling (Tabulation)**! It applies ONLY when a problem exhibits:
+                <br/>1. <strong>Overlapping Subproblems:</strong> The same smaller subproblems are computed repeatedly (e.g. `fib(3)` called multiple times in `fib(5)`).
+                <br/>2. <strong>Optimal Substructure:</strong> The optimal solution to the problem can be constructed from optimal solutions of its subproblems!
+            </div>
+
+            <div class="grid-2">
+                <!-- Core DP Terminology -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> CORE DP TERMINOLOGY</div>
+                    <div class="section-content">
+                        <div>• <strong>State Definition (`dp[i]`):</strong> Mathematical description of what index `i` represents.<br/>
+                        • <strong>Recurrence Relation:</strong> Equation linking current state `dp[i]` to smaller subproblems.<br/>
+                        • <strong>Base Cases:</strong> Trivial starting conditions (e.g., `dp[0] = 0, dp[1] = 1`).<br/>
+                        • <strong>Space Optimization:</strong> Keeping only `prev1` &amp; `prev2` variables instead of full $O(N)$ array!</div>
+                    </div>
+                </div>
+
+                <!-- Memoization vs Tabulation Matrix -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> MEMOIZATION VS TABULATION MATRIX</div>
+                    <div class="section-content">
+                        <table>
+                            <thead>
+                                <tr><th>Feature</th><th>Top-Down (Memoization)</th><th>Bottom-Up (Tabulation)</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Approach</td><td>Recursive (Root ➔ Base)</td><td>Iterative (Base ➔ Goal)</td></tr>
+                                <tr><td>Data Structure</td><td>HashMap / `Integer[] memo`</td><td>1D / 2D Primitive Array</td></tr>
+                                <tr><td>Call Overhead</td><td>Stack Frame Overhead</td><td>✅ <strong>Zero Stack Overhead (Fast!)</strong></td></tr>
+                                <tr><td>Space Optimization</td><td>Hard to optimize space</td><td>✅ <strong>Easy to compress to O(1) space</strong></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recursion Tree vs DP Array Diagram -->
+            <div class="section-box box-green">
+                <div class="section-header">🎨 VISUALIZING EXPONENTIAL RECURSION $O(2^N)$ VS DP TABULATION $O(N)$ (FIBONACCI)</div>
+                <div class="section-content">
+                    <div class="dp-formula-box">
+<span class="formula-title">EXPONENTIAL RECURSION TREE (O(2^N) - RECOMPUTING fib(2) 3 TIMES!):</span>
+                  fib(5)
+               /          \
+           fib(4)        fib(3)
+          /      \      /      \
+      fib(3)   fib(2) fib(2)   fib(1)
+
+<span class="formula-title">DP TABULATION ARRAY (O(N) TIME, O(1) SPACE):</span>
+   State: dp[i] = dp[i-1] + dp[i-2]
+   Array: [0, 1, 1, 2, 3, 5] ➔ Instant lookup in linear time!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Always start by writing the Top-Down recursion equation, then convert it to a Bottom-Up iterative table!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 2: 14.1 SC-RBR-MTS 8-STEP DP FRAMEWORK -->
+    <!-- ========================================================= -->
+    <div class="page" id="page2">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔄</span>
+                    <h1>TOPIC 14.1: THE SC-RBR-MTS 8-STEP DP THINKING FRAMEWORK</h1>
+                </div>
+                <span class="page-num">PAGE 2 OF 18</span>
+            </div>
+
+            <!-- AHA Box #2 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #2: THE SYSTEMATIC SC-RBR-MTS FRAMEWORK</strong><br/>
+                Never code DP blindly! Follow the 8-step `SC-RBR-MTS` progression:
+                <br/><strong>S</strong>tate ➔ <strong>C</strong>hoice ➔ <strong>R</strong>ecurrence ➔ <strong>B</strong>ase Case ➔ <strong>R</strong>ecursion ➔ <strong>M</strong>emoization ➔ <strong>T</strong>abulation ➔ <strong>S</strong>pace Optimization!
+            </div>
+
+            <div class="grid-2">
+                <!-- Step 1-4 -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> STAGE 1: FORMULATION (S-C-R-B)</div>
+                    <div class="section-content">
+                        <div>• <strong>State (`S`):</strong> `dp[i]` = max profit at index `i`.<br/>
+                        • <strong>Choice (`C`):</strong> Pick element vs Skip element.<br/>
+                        • <strong>Recurrence (`R`):</strong> `dp[i] = max(dp[i-1], val[i] + dp[i-2])`.<br/>
+                        • <strong>Base Case (`B`):</strong> `dp[0] = val[0], dp[1] = max(val[0], val[1])`.</div>
+                    </div>
+                </div>
+
+                <!-- Step 5-8 -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">2</span> STAGE 2: OPTIMIZATION (R-M-T-S)</div>
+                    <div class="section-content">
+                        <div>• <strong>Recursion (`R`):</strong> Brute force tree search.<br/>
+                        • <strong>Memoization (`M`):</strong> Cache answers in `memo[]`.<br/>
+                        • <strong>Tabulation (`T`):</strong> Iterative array loop `for(i=2..n)`.<br/>
+                        • <strong>Space Opt (`S`):</strong> Compress array to `prev1` &amp; `prev2`!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Framework Reusable Code -->
+            <div class="section-box box-purple">
+                <div class="section-header">🛠️ SC-RBR-MTS FRAMEWORK REUSABLE JAVA TRANSFORMATION</div>
+                <div class="section-content">
+<pre>
+// 1. MEMOIZATION (Top-Down)
+int solveMemo(int n, Integer[] memo) {
+    if (n &lt;= 1) return n;
+    if (memo[n] != null) return memo[n];
+    return memo[n] = solveMemo(n - 1, memo) + solveMemo(n - 2, memo);
+}
+
+// 2. TABULATION (Bottom-Up)
+int solveTab(int n) {
+    if (n &lt;= 1) return n;
+    int[] dp = new int[n + 1];
+    dp[0] = 0; dp[1] = 1;
+    for (int i = 2; i &lt;= n; i++) dp[i] = dp[i - 1] + dp[i - 2];
+    return dp[n];
+}
+
+// 3. SPACE OPTIMIZATION (O(1) Space)
+int solveSpaceOpt(int n) {
+    if (n &lt;= 1) return n;
+    int prev2 = 0, prev1 = 1;
+    for (int i = 2; i &lt;= n; i++) {
+        int curr = prev1 + prev2;
+        prev2 = prev1; prev1 = curr;
+    }
+    return prev1;
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>SPACE OPTIMIZATION RULE:</strong> If state `dp[i]` depends ONLY on previous $K$ states (`dp[i-1]`, `dp[i-2]`), replace array with $K$ primitive variables!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 3: 14.2 1D DP PATTERN (CLIMBING STAIRS, HOUSE ROBBER) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page3">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🏃‍♂️</span>
+                    <h1>TOPIC 14.2: 1D DYNAMIC PROGRAMMING PATTERN</h1>
+                </div>
+                <span class="page-num">PAGE 3 OF 18</span>
+            </div>
+
+            <!-- AHA Box #3 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #3: THE CHOICE PARADIGM (SKIP VS TAKE)</strong><br/>
+                In 1D DP problems like <strong>House Robber</strong>, at each step `i` you have a binary choice:
+                <br/>• <strong>Option A (Skip current):</strong> Profit remains `dp[i-1]`.
+                <br/>• <strong>Option B (Take current):</strong> Profit becomes `val[i] + dp[i-2]` (cannot rob adjacent house!).
+                <br/>Recurrence: <code>dp[i] = Math.max(dp[i-1], val[i] + dp[i-2])</code>
+            </div>
+
+            <!-- Recurrence Relation Box -->
+            <div class="section-box box-purple">
+                <div class="section-header">📐 1D DP RECURRENCE RELATION FORMULAS</div>
+                <div class="section-content">
+                    <div class="dp-formula-box">
+<span class="formula-title">CLIMBING STAIRS (LC 70):</span>
+   dp[i] = dp[i-1] + dp[i-2]   (Reach step i from step i-1 or step i-2)
+
+<span class="formula-title">HOUSE ROBBER (LC 198):</span>
+   dp[i] = Math.max(dp[i-1], nums[i] + dp[i-2])   (Skip house i vs Rob house i)
+
+<span class="formula-title">DECODE WAYS (LC 91):</span>
+   dp[i] = (valid 1-digit ? dp[i-1] : 0) + (valid 2-digit ? dp[i-2] : 0)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            ⚠️ <strong>COMMON BUG:</strong> Forgetting to initialize base cases (`dp[0]`, `dp[1]`) correctly leads to `ArrayIndexOutOfBoundsException` on small input arrays!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 4: 14.3 2D GRID DP PATTERN (UNIQUE PATHS, MIN PATH SUM) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page4">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🗺️</span>
+                    <h1>TOPIC 14.3: 2D GRID DYNAMIC PROGRAMMING PATTERN</h1>
+                </div>
+                <span class="page-num">PAGE 4 OF 18</span>
+            </div>
+
+            <!-- AHA Box #4 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #4: GRID PATH ACCUMULATION &amp; ROW SPACE COMPRESSION</strong><br/>
+                In a 2D Grid, moving only **Right** and **Down** means cell `(r, c)` can ONLY be reached from Top `(r-1, c)` or Left `(r, c-1)`.
+                <br/>Since row `r` depends ONLY on row `r-1`, compress $O(R \cdot C)$ 2D table into a single 1D row array `dp[c]`!
+            </div>
+
+            <!-- Recurrence Relation Box -->
+            <div class="section-box box-blue">
+                <div class="section-header">📐 2D GRID DP RECURRENCE FORMULAS &amp; SPACE COMPRESSION</div>
+                <div class="section-content">
+                    <div class="dp-formula-box">
+<span class="formula-title">UNIQUE PATHS (LC 62):</span>
+   dp[r][c] = dp[r-1][c] + dp[r][c-1]   (Top paths + Left paths)
+   Space-Optimized: dp[c] = dp[c] + dp[c-1]
+
+<span class="formula-title">MINIMUM PATH SUM (LC 64):</span>
+   dp[r][c] = grid[r][c] + Math.min(dp[r-1][c], dp[r][c-1])
+   Space-Optimized: dp[c] = grid[r][c] + Math.min(dp[c], dp[c-1])
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Initialize top row and leftmost column first as base cases before running inner loops!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 5: 14.4 KNAPSACK DP PATTERNS (0/1 VS UNBOUNDED) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page5">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🎒</span>
+                    <h1>TOPIC 14.4: KNAPSACK DP PATTERNS (0/1 VS UNBOUNDED)</h1>
+                </div>
+                <span class="page-num">PAGE 5 OF 18</span>
+            </div>
+
+            <!-- AHA Box #5 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #5: INNER LOOP DIRECTION (BACKWARDS VS FORWARDS)</strong><br/>
+                • <strong>0/1 Knapsack (Use item AT MOST ONCE):</strong> Inner loop runs <strong>BACKWARDS</strong> ($W \to w_i$) so `dp[w - weight]` references values from the PREVIOUS item, preventing double-counting!
+                <br/>• <strong>Unbounded Knapsack (Use item INFINITE TIMES):</strong> Inner loop runs <strong>FORWARDS</strong> ($w_i \to W$) allowing multiple inclusions of the same item!
+            </div>
+
+            <!-- Knapsack Comparison Table -->
+            <div class="section-box box-purple">
+                <div class="section-header">📊 0/1 KNAPSACK VS UNBOUNDED KNAPSACK MATRIX</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Knapsack Variant</th><th>Item Re-Use Allowed?</th><th>Inner Loop Direction</th><th>Target Problems</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>0/1 Knapsack</strong></td><td>❌ No (Pick once or zero)</td><td>⬅️ <strong>Backwards (`W` down to `w_i`)</strong></td><td>Partition Subset Sum (LC 416), Target Sum (LC 494)</td></tr>
+                            <tr><td><strong>Unbounded Knapsack</strong></td><td>✅ Yes (Pick infinite times)</td><td>➡️ <strong>Forwards (`w_i` up to `W`)</strong></td><td>Coin Change (LC 322), Coin Change II (LC 518)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            ⚠️ <strong>CRITICAL BUG:</strong> Running the inner loop forwards in a 0/1 Knapsack problem accidentally turns it into an Unbounded Knapsack!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 6: 14.5 STRING MATCHING DP (LCS & EDIT DISTANCE) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page6">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔤</span>
+                    <h1>TOPIC 14.5: STRING MATCHING DP (LCS &amp; EDIT DISTANCE)</h1>
+                </div>
+                <span class="page-num">PAGE 6 OF 18</span>
+            </div>
+
+            <!-- AHA Box #6 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #6: 2D STRING MATRIX COMPARISON</strong><br/>
+                For two strings `text1` (len $M$) and `text2` (len $N$), construct a 2D matrix `dp[i][j]` representing substring matches up to `text1[i-1]` and `text2[j-1]`.
+            </div>
+
+            <div class="grid-2">
+                <!-- LCS Formula -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> LONGEST COMMON SUBSEQUENCE (LC 1143)</div>
+                    <div class="section-content">
+<pre>
+if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+    dp[i][j] = 1 + dp[i - 1][j - 1]; // Character match!
+} else {
+    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]); // Skip char
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Edit Distance Formula -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> EDIT DISTANCE (LC 72)</div>
+                    <div class="section-content">
+<pre>
+if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+    dp[i][j] = dp[i - 1][j - 1]; // Zero edit cost
+} else {
+    // 1 + min(Insert, Delete, Replace)
+    dp[i][j] = 1 + Math.min(dp[i][j - 1], 
+                   Math.min(dp[i - 1][j], dp[i - 1][j - 1]));
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Base cases `dp[i][0] = i` (deletions) and `dp[0][j] = j` (insertions) initialize string matching grids!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 7: 14.6 INTERVAL DP & 14.7 TREE DP -->
+    <!-- ========================================================= -->
+    <div class="page" id="page7">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🎈</span>
+                    <h1>TOPIC 14.6 &amp; 14.7: INTERVAL DP &amp; TREE DP</h1>
+                </div>
+                <span class="page-num">PAGE 7 OF 18</span>
+            </div>
+
+            <!-- AHA Box #7 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #7: LAST BALLOON CHOICE &amp; TREE POSTORDER DP</strong><br/>
+                • <strong>Interval DP (Burst Balloons):</strong> Instead of picking which balloon to burst first, pick which balloon $k$ bursts **LAST** in interval `[left, right]` so boundaries `arr[left-1]` and `arr[right+1]` remain fixed!
+                <br/>• <strong>Tree DP (House Robber III):</strong> Postorder DFS returning `int[]{robRoot, skipRoot}` up the binary tree!
+            </div>
+
+            <div class="grid-2">
+                <!-- Burst Balloons Formula -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> BURST BALLOONS INTERVAL DP (LC 312)</div>
+                    <div class="section-content">
+<pre>
+for (int k = left; k &lt;= right; k++) {
+    int coins = arr[left - 1] * arr[k] * arr[right + 1];
+    dp[left][right] = Math.max(dp[left][right], 
+        coins + dp[left][k - 1] + dp[k + 1][right]);
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Tree DP Formula -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">2</span> HOUSE ROBBER III TREE DP (LC 337)</div>
+                    <div class="section-content">
+<pre>
+private int[] dfs(TreeNode root) {
+    if (root == null) return new int[]{0, 0};
+    int[] left = dfs(root.left), right = dfs(root.right);
+    int rob = root.val + left[1] + right[1];
+    int skip = Math.max(left[0], left[1]) + Math.max(right[0], right[1]);
+    return new int[]{rob, skip};
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Tree DP uses bottom-up postorder traversal to pass optimal state pairs `[rob, skip]` from leaves up to root!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 8: 14.8 ADVANCED DP (LIS PATIENCE SORT & BITMASK DP) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page8">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📈</span>
+                    <h1>TOPIC 14.8: ADVANCED DP (LIS $O(N \log N)$ &amp; BITMASK DP)</h1>
+                </div>
+                <span class="page-num">PAGE 8 OF 18</span>
+            </div>
+
+            <!-- AHA Box #8 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #8: PATIENCE SORTING &amp; BINARY SEARCH SPEEDUP</strong><br/>
+                Standard LIS DP runs in $O(N^2)$ time (`dp[i] = 1 + max(dp[j])` for $j < i$).
+                <br/>By maintaining an array `tails[]` storing the smallest tail of all increasing subsequences of length $i+1$, use **Binary Search** (`Arrays.binarySearch`) to update `tails[]` in <strong>$O(N \log N)$ time</strong>!
+            </div>
+
+            <!-- LIS O(N log N) Implementation -->
+            <div class="section-box box-purple">
+                <div class="section-header">🛠️ LIS $O(N \log N)$ BINARY SEARCH IMPLEMENTATION</div>
+                <div class="section-content">
+<pre>
+public int lengthOfLIS(int[] nums) {
+    int[] tails = new int[nums.length];
+    int size = 0;
+    for (int num : nums) {
+        int i = 0, j = size;
+        while (i &lt; j) {
+            int mid = (i + j) / 2;
+            if (tails[mid] &lt; num) i = mid + 1;
+            else j = mid;
+        }
+        tails[i] = num;
+        if (i == size) size++; // Expanded longest subsequence!
+    }
+    return size;
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> `tails[]` is always strictly sorted, allowing binary search to replace smaller tail elements greedily!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 9: DECISION TREE & PRINTABLE DP CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page9">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📜</span>
+                    <h1>TOPIC 14.9 &amp; 1-PAGE PRINTABLE DP CHEAT SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 9 OF 18</span>
+            </div>
+
+            <!-- Mermaid Decision Tree -->
+            <div class="section-box box-purple">
+                <div class="section-header">🌳 DP INTERVIEW DECISION TREE (MERMAID)</div>
+                <div class="section-content">
+                    <div class="mermaid">
+                        graph TD
+                            A[What is the DP Problem Type?]
+                            A --> B[1D Array / Non-Adjacent Choice?]
+                            A --> C[2D Grid / Matrix Paths?]
+                            A --> D[Subset / Target Sum / Item Choice?]
+                            A --> E[2 String Subsequences / Matching?]
+                            A --> F[Longest Subsequence / Envelopes?]
+                            B --> B1[1D DP dp[i] = max(dp[i-1], val + dp[i-2])]
+                            C --> C1[2D Grid DP dp[r][c] = grid + min(top, left)]
+                            D --> D1[Knapsack DP 0/1 Backwards vs Unbounded Forwards]
+                            E --> E1[2D String Matrix LCS / Edit Distance]
+                            F --> F1[LIS Patience Sort Binary Search O(N log N)]
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1-Page Printable Cheat Sheet -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📜 PRINTABLE DYNAMIC PROGRAMMING CHEAT SHEET</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Pattern Type</th><th>Target Problem</th><th>Recurrence Formula</th><th>Time &amp; Space</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1D DP</td><td>House Robber (LC 198)</td><td><code>dp[i] = max(dp[i-1], val + dp[i-2])</code></td><td>Time: $O(N)$, Space: $O(1)$</td></tr>
+                            <tr><td>2D Grid DP</td><td>Unique Paths (LC 62)</td><td><code>dp[r][c] = dp[r-1][c] + dp[r][c-1]</code></td><td>Time: $O(R \cdot C)$, Space: $O(C)$</td></tr>
+                            <tr><td>0/1 Knapsack</td><td>Partition Subset Sum (LC 416)</td><td><code>dp[w] = dp[w] || dp[w - num]</code> (Backwards)</td><td>Time: $O(N \cdot W)$, Space: $O(W)$</td></tr>
+                            <tr><td>Unbounded Knapsack</td><td>Coin Change (LC 322)</td><td><code>dp[a] = min(dp[a], 1 + dp[a - coin])</code> (Forwards)</td><td>Time: $O(N \cdot A)$, Space: $O(A)$</td></tr>
+                            <tr><td>LCS String DP</td><td>Longest Common Subseq (LC 1143)</td><td><code>if match: 1+dp[i-1][j-1]; else: max(top, left)</code></td><td>Time: $O(M \cdot N)$, Space: $O(N)$</td></tr>
+                            <tr><td>LIS Binary Search</td><td>Longest Increasing Subseq (LC 300)</td><td>Patience Sort Binary Search in <code>tails[]</code></td><td>Time: $O(N \log N)$, Space: $O(N)$</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Print this page and review it 10 minutes before your technical interview!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 10: DEDICATED DP TEMPLATE LIBRARY (PART 1) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page10">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💻</span>
+                    <h1>DP TEMPLATE LIBRARY (1D, 2D GRID, KNAPSACK)</h1>
+                </div>
+                <span class="page-num">PAGE 10 OF 18</span>
+            </div>
+
+            <div class="grid-2">
+                <!-- 1D DP Space Opt -->
+                <div class="section-box box-blue">
+                    <div class="section-header">1. 1D DP SPACE-OPTIMIZED TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+int dp1D(int[] nums) {
+    int prev2 = 0, prev1 = 0;
+    for (int num : nums) {
+        int curr = Math.max(prev1, num + prev2);
+        prev2 = prev1; prev1 = curr;
+    }
+    return prev1;
+}</pre>
+                    </div>
+                </div>
+
+                <!-- 2D Grid DP Space Opt -->
+                <div class="section-box box-green">
+                    <div class="section-header">2. 2D GRID DP SPACE-OPTIMIZED TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+int dpGrid(int[][] grid) {
+    int rows = grid.length, cols = grid[0].length;
+    int[] dp = new int[cols];
+    for (int r = 0; r &lt; rows; r++) {
+        for (int c = 0; c &lt; cols; c++) {
+            if (c &gt; 0) dp[c] = grid[r][c] + Math.min(dp[c], dp[c - 1]);
+            else dp[0] += grid[r][0];
+        }
+    }
+    return dp[cols - 1];
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <!-- 0/1 Knapsack -->
+                <div class="section-box box-purple">
+                    <div class="section-header">3. 0/1 KNAPSACK TEMPLATE (BACKWARDS)</div>
+                    <div class="section-content">
+<pre>
+boolean knapsack01(int[] nums, int target) {
+    boolean[] dp = new boolean[target + 1];
+    dp[0] = true;
+    for (int num : nums) {
+        for (int w = target; w &gt;= num; w--) { // Backwards!
+            dp[w] = dp[w] || dp[w - num];
+        }
+    }
+    return dp[target];
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Unbounded Knapsack -->
+                <div class="section-box box-orange">
+                    <div class="section-header">4. UNBOUNDED KNAPSACK TEMPLATE (FORWARDS)</div>
+                    <div class="section-content">
+<pre>
+int knapsackUnbounded(int[] coins, int amount) {
+    int[] dp = new int[amount + 1];
+    Arrays.fill(dp, amount + 1); dp[0] = 0;
+    for (int a = 1; a &lt;= amount; a++) {
+        for (int c : coins) {
+            if (a - c &gt;= 0) dp[a] = Math.min(dp[a], 1 + dp[a - c]); // Forwards!
+        }
+    }
+    return dp[amount] &gt; amount ? -1 : dp[amount];
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>REUSABLE CODE:</strong> Copy-paste these verified templates directly into your interview whiteboard or IDE!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 11: DEDICATED DP TEMPLATE LIBRARY (PART 2) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page11">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💻</span>
+                    <h1>DP TEMPLATE LIBRARY (LCS, LIS, INTERVAL, TREE DP)</h1>
+                </div>
+                <span class="page-num">PAGE 11 OF 18</span>
+            </div>
+
+            <div class="grid-2">
+                <!-- LCS Template -->
+                <div class="section-box box-blue">
+                    <div class="section-header">5. LCS STRING MATCHING TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+int lcs(String s1, String s2) {
+    int m = s1.length(), n = s2.length();
+    int[][] dp = new int[m + 1][n + 1];
+    for (int i = 1; i &lt;= m; i++) {
+        for (int j = 1; j &lt;= n; j++) {
+            if (s1.charAt(i-1) == s2.charAt(j-1)) dp[i][j] = 1 + dp[i-1][j-1];
+            else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+        }
+    }
+    return dp[m][n];
+}</pre>
+                    </div>
+                </div>
+
+                <!-- LIS Binary Search Template -->
+                <div class="section-box box-purple">
+                    <div class="section-header">6. LIS $O(N \log N)$ BINARY SEARCH TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+int lis(int[] nums) {
+    int[] tails = new int[nums.length];
+    int size = 0;
+    for (int x : nums) {
+        int i = 0, j = size;
+        while (i &lt; j) {
+            int m = (i + j) / 2;
+            if (tails[m] &lt; x) i = m + 1; else j = m;
+        }
+        tails[i] = x; if (i == size) size++;
+    }
+    return size;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Memorize these core templates to solve 95% of FAANG Dynamic Programming problems!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 12: EASY NEETCODE SUITE (CLIMBING STAIRS & MIN COST) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page12">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🧩</span>
+                    <h1>EASY NEETCODE: CLIMBING STAIRS &amp; MIN COST CLIMBING STAIRS</h1>
+                </div>
+                <span class="page-num">PAGE 12 OF 18</span>
+            </div>
+
+            <!-- Problem 1: LC 70 -->
+            <div class="section-box box-blue">
+                <div class="section-header">1. LEETCODE 70 — CLIMBING STAIRS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>1D DP / Fibonacci State</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Distinct ways to climb $N$ steps taking 1 or 2 steps at a time.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int climbStairs(int n) {
+    if (n &lt;= 2) return n;
+    int prev2 = 1, prev1 = 2;
+    for (int i = 3; i &lt;= n; i++) {
+        int curr = prev1 + prev2;
+        prev2 = prev1; prev1 = curr;
+    }
+    return prev1;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 2: LC 746 -->
+            <div class="section-box box-green">
+                <div class="section-header">2. LEETCODE 746 — MIN COST CLIMBING STAIRS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>1D DP Min Cost</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Minimum cost to reach top of staircase paying `cost[i]` per step.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int minCostClimbingStairs(int[] cost) {
+    int prev2 = cost[0], prev1 = cost[1];
+    for (int i = 2; i &lt; cost.length; i++) {
+        int curr = cost[i] + Math.min(prev1, prev2);
+        prev2 = prev1; prev1 = curr;
+    }
+    return Math.min(prev1, prev2);
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 70):</strong> Space-optimizing to `prev1` &amp; `prev2` reduces space from $O(N)$ to $O(1)$!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 13: MEDIUM NEETCODE (HOUSE ROBBER I & II & DECODE WAYS) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page13">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🏠</span>
+                    <h1>MEDIUM NEETCODE: HOUSE ROBBER I, II &amp; DECODE WAYS</h1>
+                </div>
+                <span class="page-num">PAGE 13 OF 18</span>
+            </div>
+
+            <!-- Problem 3: LC 198 -->
+            <div class="section-box box-blue">
+                <div class="section-header">3. LEETCODE 198 — HOUSE ROBBER</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>1D DP Non-Adjacent Choice</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Maximum money robbed without robbing adjacent houses.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int rob(int[] nums) {
+    int prev2 = 0, prev1 = 0;
+    for (int num : nums) {
+        int curr = Math.max(prev1, num + prev2);
+        prev2 = prev1; prev1 = curr;
+    }
+    return prev1;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 4: LC 91 -->
+            <div class="section-box box-purple">
+                <div class="section-header">4. LEETCODE 91 — DECODE WAYS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>String Decoding 1D DP</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Total number of ways to decode string of digits into letters ('A'-'Z').
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int numDecodings(String s) {
+    if (s == null || s.length() == 0 || s.charAt(0) == '0') return 0;
+    int n = s.length(), prev2 = 1, prev1 = 1;
+    for (int i = 1; i &lt; n; i++) {
+        int curr = 0;
+        int oneDigit = s.charAt(i) - '0';
+        int twoDigits = Integer.parseInt(s.substring(i - 1, i + 1));
+        if (oneDigit != 0) curr += prev1;
+        if (twoDigits &gt;= 10 &amp;&amp; twoDigits &lt;= 26) curr += prev2;
+        prev2 = prev1; prev1 = curr;
+    }
+    return prev1;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 91):</strong> Leading zeroes `'0'` cannot form valid decodings and immediately return 0!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 14: MEDIUM NEETCODE (COIN CHANGE I & II) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page14">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🪙</span>
+                    <h1>MEDIUM NEETCODE: COIN CHANGE I &amp; II</h1>
+                </div>
+                <span class="page-num">PAGE 14 OF 18</span>
+            </div>
+
+            <!-- Problem 5: LC 322 -->
+            <div class="section-box box-blue">
+                <div class="section-header">5. LEETCODE 322 — COIN CHANGE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Unbounded Knapsack Min Coins</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Fewest number of coins needed to make up target `amount`.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int coinChange(int[] coins, int amount) {
+    int[] dp = new int[amount + 1];
+    Arrays.fill(dp, amount + 1); dp[0] = 0;
+    for (int a = 1; a &lt;= amount; a++) {
+        for (int c : coins) {
+            if (a - c &gt;= 0) dp[a] = Math.min(dp[a], 1 + dp[a - c]);
+        }
+    }
+    return dp[amount] &gt; amount ? -1 : dp[amount];
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 6: LC 518 -->
+            <div class="section-box box-teal">
+                <div class="section-header">6. LEETCODE 518 — COIN CHANGE II</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Unbounded Knapsack Combinations</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Number of combinations to make up target `amount`.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int change(int amount, int[] coins) {
+    int[] dp = new int[amount + 1];
+    dp[0] = 1;
+    for (int c : coins) {
+        for (int a = c; a &lt;= amount; a++) {
+            dp[a] += dp[a - c];
+        }
+    }
+    return dp[amount];
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 518):</strong> Placing `coins` in the OUTER loop counts COMBINATIONS (order doesn't matter).
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 15: MEDIUM NEETCODE (UNIQUE PATHS & MIN PATH SUM) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page15">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🗺️</span>
+                    <h1>MEDIUM NEETCODE: UNIQUE PATHS &amp; MINIMUM PATH SUM</h1>
+                </div>
+                <span class="page-num">PAGE 15 OF 18</span>
+            </div>
+
+            <!-- Problem 7: LC 62 -->
+            <div class="section-box box-blue">
+                <div class="section-header">7. LEETCODE 62 — UNIQUE PATHS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>2D Grid DP Space-Optimized</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Number of possible unique paths from top-left to bottom-right cell in $M \times N$ grid.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int uniquePaths(int m, int n) {
+    int[] dp = new int[n];
+    Arrays.fill(dp, 1);
+    for (int r = 1; r &lt; m; r++) {
+        for (int c = 1; c &lt; n; c++) {
+            dp[c] += dp[c - 1];
+        }
+    }
+    return dp[n - 1];
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 8: LC 64 -->
+            <div class="section-box box-purple">
+                <div class="section-header">8. LEETCODE 64 — MINIMUM PATH SUM</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>2D Grid Min Cost</span>
+                                <span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Path from top-left to bottom-right minimizing sum of numbers along path.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int minPathSum(int[][] grid) {
+    int rows = grid.length, cols = grid[0].length;
+    int[] dp = new int[cols];
+    dp[0] = grid[0][0];
+    for (int c = 1; c &lt; cols; c++) dp[c] = dp[c - 1] + grid[0][c];
+    for (int r = 1; r &lt; rows; r++) {
+        dp[0] += grid[r][0];
+        for (int c = 1; c &lt; cols; c++) {
+            dp[c] = grid[r][c] + Math.min(dp[c], dp[c - 1]);
+        }
+    }
+    return dp[cols - 1];
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Space-optimizing 2D Grid DP into a single 1D row array cuts space from $O(M \cdot N)$ to $O(N)$!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 16: MEDIUM NEETCODE (PARTITION SUBSET SUM & LCS) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page16">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🎒</span>
+                    <h1>MEDIUM NEETCODE: PARTITION SUBSET SUM &amp; LCS</h1>
+                </div>
+                <span class="page-num">PAGE 16 OF 18</span>
+            </div>
+
+            <!-- Problem 9: LC 416 -->
+            <div class="section-box box-green">
+                <div class="section-header">9. LEETCODE 416 — PARTITION EQUAL SUBSET SUM</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>0/1 Knapsack Subset Sum</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Determine if array can be partitioned into two subsets with equal sum.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean canPartition(int[] nums) {
+    int sum = 0;
+    for (int num : nums) sum += num;
+    if (sum % 2 != 0) return false;
+    int target = sum / 2;
+    boolean[] dp = new boolean[target + 1];
+    dp[0] = true;
+    for (int num : nums) {
+        for (int w = target; w &gt;= num; w--) { // Backwards loop for 0/1!
+            dp[w] = dp[w] || dp[w - num];
+        }
+    }
+    return dp[target];
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 10: LC 1143 -->
+            <div class="section-box box-purple">
+                <div class="section-header">10. LEETCODE 1143 — LONGEST COMMON SUBSEQUENCE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>2D String Subsequence Matrix</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Length of longest common subsequence between `text1` and `text2`.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int longestCommonSubsequence(String text1, String text2) {
+    int m = text1.length(), n = text2.length();
+    int[][] dp = new int[m + 1][n + 1];
+    for (int i = 1; i &lt;= m; i++) {
+        for (int j = 1; j &lt;= n; j++) {
+            if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+                dp[i][j] = 1 + dp[i - 1][j - 1];
+            } else {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    return dp[m][n];
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 416):</strong> Target sum is `totalSum / 2`. If `totalSum` is odd, equal partition is mathematically impossible!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 17: HARD NEETCODE (LIS, EDIT DISTANCE & BURST BALLOONS) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page17">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔥</span>
+                    <h1>HARD NEETCODE: LIS, EDIT DISTANCE &amp; BURST BALLOONS</h1>
+                </div>
+                <span class="page-num">PAGE 17 OF 18</span>
+            </div>
+
+            <!-- Problem 11: LC 300 -->
+            <div class="section-box box-blue">
+                <div class="section-header">11. LEETCODE 300 — LONGEST INCREASING SUBSEQUENCE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Patience Sort $O(N \log N)$</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Length of longest strictly increasing subsequence in integer array.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int lengthOfLIS(int[] nums) {
+    int[] tails = new int[nums.length];
+    int size = 0;
+    for (int num : nums) {
+        int i = 0, j = size;
+        while (i &lt; j) {
+            int mid = (i + j) / 2;
+            if (tails[mid] &lt; num) i = mid + 1;
+            else j = mid;
+        }
+        tails[i] = num;
+        if (i == size) size++;
+    }
+    return size;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 12: LC 72 -->
+            <div class="section-box box-red">
+                <div class="section-header">12. LEETCODE 72 — EDIT DISTANCE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>2D String Transformation DP</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Minimum ops (Insert, Delete, Replace) to convert `word1` to `word2`.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int minDistance(String word1, String word2) {
+    int m = word1.length(), n = word2.length();
+    int[][] dp = new int[m + 1][n + 1];
+    for (int i = 0; i &lt;= m; i++) dp[i][0] = i;
+    for (int j = 0; j &lt;= n; j++) dp[0][j] = j;
+    for (int i = 1; i &lt;= m; i++) {
+        for (int j = 1; j &lt;= n; j++) {
+            if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                dp[i][j] = dp[i - 1][j - 1];
+            } else {
+                dp[i][j] = 1 + Math.min(dp[i][j - 1], 
+                               Math.min(dp[i - 1][j], dp[i - 1][j - 1]));
+            }
+        }
+    }
+    return dp[m][n];
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Master LCS and Edit Distance formulas to solve 90% of string DP interview problems!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 18: MASTER REVISION & REFERENCE CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page18">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💎</span>
+                    <h1>IF YOU REMEMBER ONLY ONE PAGE... MASTER REVISION SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 18 OF 18</span>
+            </div>
+
+            <!-- 4 Golden Laws -->
+            <div class="section-box box-green">
+                <div class="section-header">⭐ THE 4 GOLDEN LAWS OF DYNAMIC PROGRAMMING</div>
+                <div class="section-content">
+                    <div style="font-size:0.78rem; line-height:1.45;">
+                        1. <strong>Define State First:</strong> What does `dp[i]` or `dp[r][c]` represent in plain English?<br/>
+                        2. <strong>0/1 Knapsack Backwards Loop:</strong> Inner loop runs $W \to w_i$ backwards to prevent item re-use.<br/>
+                        3. <strong>Unbounded Knapsack Forwards Loop:</strong> Inner loop runs $w_i \to W$ forwards allowing item re-use.<br/>
+                        4. <strong>LIS $O(N \log N)$ Binary Search:</strong> Maintain `tails[]` array for patience sorting!
+                    </div>
+                </div>
+            </div>
+
+            <!-- When DP Fails -->
+            <div class="section-box box-amber">
+                <div class="section-header">⛔ WHEN DYNAMIC PROGRAMMING FAILS (DO NOT USE!)</div>
+                <div class="section-content">
+                    <div>• <strong>No Overlapping Subproblems:</strong> If all subproblems are unique ➔ Use **Divide &amp; Conquer / MergeSort**!</div>
+                    <div>• <strong>Local Choice Always Optimal:</strong> If picking local max always gives global max ➔ Use **Greedy**!</div>
+                </div>
+            </div>
+
+            <!-- NeetCode & Blind 75 Tracker -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📊 NEETCODE &amp; BLIND 75 CONFIDENCE TRACKER</div>
+                <div class="section-content">
+                    <div class="grid-3">
+                        <div><span class="badge-easy">🟢 Easy</span> LC 70 Climbing Stairs</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 746 Min Cost Stairs</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 198 House Robber</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 213 House Robber II</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 91 Decode Ways</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 322 Coin Change</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 518 Coin Change II</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 62 Unique Paths</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 64 Min Path Sum</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 416 Subset Sum</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 1143 LCS</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 300 LIS</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 72 Edit Distance</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 312 Burst Balloons</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forward Cross Link -->
+            <a href="index.html" class="cross-link" style="background:#dcfce7; color:#15803d; border-color:#86efac; font-size:0.78rem;">👉 Next Master Topic: Topic 15 → Greedy Algorithms Masterclass</a>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🎉 <strong>TOPIC 14 DYNAMIC PROGRAMMING MASTERCLASS COMPLETE!</strong> Turn the page to <strong>Topic 15: Greedy Algorithms Masterclass</strong>!
+        </div>
+    </div>
+
+    </div> <!-- end .main-content -->
+</div> <!-- end .app-layout -->
+</div> <!-- end .container -->
+
+<!-- Floating Back to Top Button -->
+<button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆</button>
+
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout') || document.querySelector('.app-layout');
+        const btn = document.querySelector('.shrink-btn span');
+        if (layout) {
+            layout.classList.toggle('shrunk');
+            if (btn) {
+                btn.innerText = layout.classList.contains('shrunk') ? '➕ Expand' : '➖ Shrink';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+

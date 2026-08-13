@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Topic 04: Sliding Window Masterclass — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11.2px; line-height: 1.38; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 16px 20px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 14px; }
+.ph h1 { font-size: 1.8rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.88rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.75rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; }
+.bh  { background: var(--pri); color: white; padding: 6px 12px;
+  font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 18px; height: 18px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 10px 12px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 6px 12px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.75rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.95rem; }
+.psub   { color: var(--sub); font-size: 0.8rem; }
+.prow-body { display: flex; }
+.pc { padding: 8px 10px; font-size: 0.78rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.72rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; }
+.prob-head { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.75rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.72rem; line-height: 1.45; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.76rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+th, td { border: 1px solid var(--bdr); padding: 5px 7px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.badge-b { background: #dbeafe; color: #1e40af; }
+.badge-g { background: #dcfce7; color: #166534; }
+.badge-r { background: #fee2e2; color: #991b1b; }
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.tip  { background: #f0fdf4; border-left: 4px solid var(--grn); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 8px 10px; margin-top: 6px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.82rem; margin-bottom: 3px; }
+
+.dt-wrap { font-size: 0.76rem; }
+.dt-root { background: var(--pri); color: white; padding: 5px 10px; border-radius: 5px; text-align: center; font-weight: 700; margin-bottom: 8px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 5px 7px; font-weight: 600; color: #1e40af; font-size: 0.72rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 5px 7px; color: #065f46; font-weight: 700; font-size: 0.72rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.75rem; padding: 4px 3px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 6px 10px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.85; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- PAGE 1: FOUNDATION & WHY -->
+<div class="page">
+<div class="ph">
+  <div><h1>SLIDING WINDOW</h1><div class="sub">FAANG Master Guide — Java Edition</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 1 OF 10</div><div class="ptag">FOUNDATION · SUBARRAY WINDOWS · RE-USE</div></div>
+</div>
+
+<div class="g3" style="margin-bottom:12px">
+  <div class="box pur">
+    <div class="bh">💡 WHY SLIDING WINDOW?</div>
+    <div class="bc">
+      <p style="margin-bottom:6px">Computing subarray sums or frequencies naively takes <strong>O(N²)</strong> or <strong>O(N³)</strong> time. Sliding Window re-uses computation from overlapping adjacent windows to achieve <strong>O(N)</strong> time.</p>
+      <div class="aha">
+        <div class="aha-t">💡 THE AHA MOMENT</div>
+        When moving from window `[left..right]` to `[left+1..right+1]`, do NOT recompute from scratch! Subtract `nums[left]` and add `nums[right+1]` in O(1)!
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bh"><span class="n">1</span> 3 CORE VARIANTS</div>
+    <div class="bc">
+      <ul style="margin-bottom:8px;padding-left:16px">
+        <li><strong>Fixed Window Size K:</strong> Window size K is fixed. Expand `right`, contracts `left` when `right - left + 1 > K`.</li>
+        <li><strong>Dynamic Window Longest:</strong> Expand `right` to include elements. Shrink `left` ONLY when constraint is violated.</li>
+        <li><strong>Dynamic Window Shortest:</strong> Expand `right` until constraint is satisfied. Shrink `left` greedily to minimize size.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box sky">
+    <div class="bh"><span class="n">2</span> VISUALIZING WINDOW SLIDING</div>
+    <div class="bc">
+      <div style="font-weight:700;color:var(--pri);margin-bottom:4px">Fixed Window K=3:</div>
+<pre>Window 1: [ 2,  1,  5 ], 1,  3,  2   Sum = 8
+              Subtract 2, Add 1 ➔
+Window 2:   2, [ 1,  5,  1 ], 3,  2   Sum = 7
+              Subtract 1, Add 3 ➔
+Window 3:   2,  1, [ 5,  1,  3 ], 2   Sum = 9 (Max!)</pre>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">📚 PREREQUISITES &amp; COMPLEXITY REASONING</div>
+    <div class="bc">
+      <table style="font-size:0.76rem">
+        <tr><th>Variant</th><th>Time Complexity</th><th>Auxiliary Space</th></tr>
+        <tr><td>Fixed Size K</td><td><strong>O(N)</strong></td><td><strong>O(1)</strong></td></tr>
+        <tr><td>Dynamic Window (Longest)</td><td><strong>O(N)</strong></td><td><strong>O(1) or O(K) freq array</strong></td></tr>
+        <tr><td>Dynamic Window (Shortest)</td><td><strong>O(N)</strong></td><td><strong>O(1) or O(K) map</strong></td></tr>
+        <tr><td>At Most K Transformation</td><td><strong>O(N)</strong></td><td><strong>O(K)</strong></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box amb">
+    <div class="bh">⚡ CLUES THAT SCREAM SLIDING WINDOW</div>
+    <div class="bc">
+      <p style="font-size:0.8rem">1. <em>"Contiguous subarray or substring"</em> + <em>"Maximum / Minimum / Target sum"</em></p>
+      <p style="font-size:0.8rem">2. <em>"Longest substring with at most K distinct characters"</em></p>
+      <p style="font-size:0.8rem">3. <em>"Find all anagrams in string"</em> \rightarrow Fixed Window Frequency Match</p>
+      <p style="font-size:0.8rem">4. <em>"Subarrays with exactly K distinct"</em> \rightarrow `atMost(K) - atMost(K - 1)`</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 2: API & TOOLKIT -->
+<div class="page">
+<div class="ph">
+  <div><h1>SLIDING WINDOW</h1><div class="sub">Java Utilities &amp; Frequency Helpers</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 2 OF 10</div><div class="ptag">FREQUENCY ARRAYS · FAST LOOKUP · HASHMAP HELPERS</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:12px">
+  <div class="box">
+    <div class="bh"><span class="n">1</span> FAST FREQUENCY ARRAY (`int[128]` vs `int[26]`)</div>
+    <div class="bc">
+<pre>// Fast ASCII Frequency Tracker (Replaces HashMap for O(1) performance!)
+int[] freq = new int[128]; // Fits all ASCII characters
+
+// Add character at right pointer
+freq[s.charAt(right)]++;
+
+// Remove character at left pointer
+freq[s.charAt(left)]--;</pre>
+      <div class="tip" style="margin-top:6px">💡 Avoids HashMap auto-boxing overhead. Executes 5x faster in FAANG benchmarks!</div>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh"><span class="n">2</span> AT MOST K TO EXACTLY K TRICK</div>
+    <div class="bc">
+<pre>// Mathematical Identity for "Exactly K" Subarrays:
+// exactly(K) = atMost(K) - atMost(K - 1)
+
+public int numSubarraysWithK(int[] nums, int k) {
+  return atMost(nums, k) - atMost(nums, k - 1);
+}</pre>
+      <div class="rule" style="margin-top:6px">Converts complex "Exactly K" problem into two simple "At Most K" sliding window passes!</div>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box sky">
+    <div class="bh"><span class="n">3</span> MATCH COUNT TRACKER (Minimum Window Substring)</div>
+    <div class="bc">
+<pre>int[] count = new int[128];
+int matched = 0; // Number of unique chars meeting frequency target
+for (char c : target.toCharArray()) count[c]++;
+
+// During right expansion:
+if (--count[s.charAt(right)] == 0) matched++;</pre>
+    </div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh"><span class="n">4</span> FREQUENCY ARRAY MATCH CHECK (Anagrams)</div>
+    <div class="bc">
+<pre>public static boolean matches(int[] f1, int[] f2) {
+  for (int i = 0; i < 26; i++) {
+    if (f1[i] != f2[i]) return false;
+  }
+  return true;
+}</pre>
+      <div class="rule" style="margin-top:6px">O(26) = O(1) time comparison between fixed size window and target string!</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 3: CORE PATTERNS (FIXED WINDOW SIZE K) -->
+<div class="page">
+<div class="ph">
+  <div><h1>SLIDING WINDOW</h1><div class="sub">Core Patterns — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 3 OF 10</div><div class="ptag">FIXED WINDOW SIZE K · MAXIMUM AVERAGE</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 1</div>
+    <div class="ptitle">FIXED WINDOW SIZE K (Add Right, Remove Left)</div>
+    <div class="psub">e.g. Maximum Average Subarray I (LC 643), Maximum Sum Subarray Size K</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <ul style="font-size:0.78rem">
+        <li>Subarray length K is fixed in problem description.</li>
+        <li>Build first window of size K, then slide across array.</li>
+      </ul>
+      <div class="aha" style="margin-top:6px">
+        <div class="aha-t">💡 AHA</div>
+        Maintain `sum += nums[i]`. Once `i >= K - 1`, update result, then subtract `nums[i - K + 1]`.
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — Maximum Average Subarray (LC 643)</div>
+<pre>public double findMaxAverage(int[] nums, int k) {
+  double sum = 0;
+  for (int i = 0; i < k; i++) sum += nums[i];
+  double max = sum;
+  for (int i = k; i < nums.length; i++) {
+    sum += nums[i] - nums[i - k];
+    max = Math.max(max, sum);
+  }
+  return max / k;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 2</div>
+    <div class="ptitle">FIXED WINDOW FREQUENCY MATCHING (Anagrams &amp; Permutations)</div>
+    <div class="psub">e.g. Permutation in String (LC 567), Find All Anagrams (LC 438)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.78rem">Finding subsegment of S2 that is an anagram/permutation of S1. Window length is fixed at `s1.length()`.</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — Find All Anagrams (LC 438)</div>
+<pre>public List&lt;Integer&gt; findAnagrams(String s, String p) {
+  List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+  if (s.length() < p.length()) return res;
+  int[] pCount = new int[26], sCount = new int[26];
+  for (int i = 0; i < p.length(); i++) {
+    pCount[p.charAt(i) - 'a']++;
+    sCount[s.charAt(i) - 'a']++;
+  }
+  if (Arrays.equals(pCount, sCount)) res.add(0);
+  for (int i = p.length(); i < s.length(); i++) {
+    sCount[s.charAt(i) - 'a']++;
+    sCount[s.charAt(i - p.length()) - 'a']--;
+    if (Arrays.equals(pCount, sCount)) res.add(i - p.length() + 1);
+  }
+  return res;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 4: CORE PATTERNS (DYNAMIC WINDOW LONGEST) -->
+<div class="page">
+<div class="ph">
+  <div><h1>SLIDING WINDOW</h1><div class="sub">Core Patterns — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 4 OF 10</div><div class="ptag">DYNAMIC WINDOW LONGEST · UNIQUE CHARACTERS</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 3</div>
+    <div class="ptitle">DYNAMIC WINDOW — LONGEST SUBSTRING (Expand Right, Shrink Left)</div>
+    <div class="psub">e.g. Longest Substring Without Repeating Characters (LC 3)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.78rem">Find maximum length subarray/substring satisfying a condition (e.g. all unique characters, max K replacements).</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 3</div>
+<pre>public int lengthOfLongestSubstring(String s) {
+  int[] map = new int[128];
+  int left = 0, maxLen = 0;
+  for (int right = 0; right < s.length(); right++) {
+    char c = s.charAt(right);
+    map[c]++;
+    while (map[c] > 1) { // Constraint violated -> shrink left
+      map[s.charAt(left)]--;
+      left++;
+    }
+    maxLen = Math.max(maxLen, right - left + 1);
+  }
+  return maxLen;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 4</div>
+    <div class="ptitle">LONGEST SUBSTRING WITH CHARACTER REPLACEMENT</div>
+    <div class="psub">e.g. Longest Repeating Character Replacement (LC 424)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Optimization Intuition</div>
+      <div style="font-size:0.78rem">
+        Valid window if `(windowLength - maxFreq) <= K`.<br>
+        We track `maxCount` of any character seen so far. If window becomes invalid, shrink left by 1!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 424</div>
+<pre>public int characterReplacement(String s, int k) {
+  int[] count = new int[26];
+  int left = 0, maxCount = 0, maxLen = 0;
+  for (int right = 0; right < s.length(); right++) {
+    maxCount = Math.max(maxCount, ++count[s.charAt(right) - 'A']);
+    if (right - left + 1 - maxCount > k) {
+      count[s.charAt(left) - 'A']--;
+      left++;
+    }
+    maxLen = Math.max(maxLen, right - left + 1);
+  }
+  return maxLen;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 5: CORE PATTERNS (DYNAMIC WINDOW SHORTEST & AT MOST K) -->
+<div class="page">
+<div class="ph">
+  <div><h1>SLIDING WINDOW</h1><div class="sub">Core Patterns — Part 3</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 5 OF 10</div><div class="ptag">MINIMUM WINDOW SUBSTRING · AT MOST K</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 5</div>
+    <div class="ptitle">DYNAMIC WINDOW — SHORTEST SUBSTRING (Minimum Window Substring)</div>
+    <div class="psub">e.g. Minimum Window Substring (LC 76)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Greedy Shrink Mechanics</div>
+      <div style="font-size:0.78rem">
+        1. Expand `right` until window contains all required chars.<br>
+        2. Once valid, record min length and shrink `left` as much as possible while maintaining validity!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 76</div>
+<pre>public String minWindow(String s, String t) {
+  int[] count = new int[128];
+  for (char c : t.toCharArray()) count[c]++;
+  int left = 0, minLen = Integer.MAX_VALUE, start = 0, matched = t.length();
+  for (int right = 0; right < s.length(); right++) {
+    if (count[s.charAt(right)]-- > 0) matched--;
+    while (matched == 0) {
+      if (right - left + 1 < minLen) { minLen = right - left + 1; start = left; }
+      if (++count[s.charAt(left++)] > 0) matched++;
+    }
+  }
+  return minLen == Integer.MAX_VALUE ? "" : s.substring(start, start + minLen);
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 6</div>
+    <div class="ptitle">AT MOST K DISTINCT SUBARRAYS (Counting Subarrays)</div>
+    <div class="psub">e.g. Subarrays with K Distinct Integers (LC 992), Fruit Into Baskets (LC 904)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Count Subarrays Formula</div>
+      <div style="font-size:0.78rem">
+        Number of valid ending subarrays at `right` is `right - left + 1`.<br>
+        `exactly(K) = atMost(K) - atMost(K - 1)`.
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — Subarrays with K Distinct</div>
+<pre>public int subarraysWithKDistinct(int[] nums, int k) {
+  return atMost(nums, k) - atMost(nums, k - 1);
+}
+private int atMost(int[] nums, int k) {
+  Map&lt;Integer, Integer&gt; count = new HashMap&lt;&gt;();
+  int left = 0, res = 0;
+  for (int right = 0; right < nums.length; right++) {
+    if (count.getOrDefault(nums[right], 0) == 0) k--;
+    count.put(nums[right], count.getOrDefault(nums[right], 0) + 1);
+    while (k < 0) {
+      count.put(nums[left], count.get(nums[left]) - 1);
+      if (count.get(nums[left]) == 0) k++;
+      left++;
+    }
+    res += right - left + 1;
+  }
+  return res;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 6: DYNAMIC MONOTONIC DEQUE WINDOW -->
+<div class="page">
+<div class="ph">
+  <div><h1>SLIDING WINDOW</h1><div class="sub">Advanced Monotonic Deque Window</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 6 OF 10</div><div class="ptag">MONOTONIC DEQUE · SLIDING WINDOW MAXIMUM</div></div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 7</div>
+    <div class="ptitle">MONOTONIC DEQUE SLIDING WINDOW (Sliding Window Maximum)</div>
+    <div class="psub">e.g. Sliding Window Maximum (LC 239)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Monotonic Deque Intuition</div>
+      <div style="font-size:0.78rem">
+        Maintain a Deque storing indices in <strong>decreasing order of values</strong>.<br>
+        1. Remove elements from tail smaller than `nums[right]`.<br>
+        2. Remove head if it fell outside current window (`q.peek() < right - K + 1`).<br>
+        3. Head `q.peek()` is ALWAYS max element of window!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 239</div>
+<pre>public int[] maxSlidingWindow(int[] nums, int k) {
+  if (nums == null || k <= 0) return new int[0];
+  int n = nums.length;
+  int[] res = new int[n - k + 1];
+  Deque&lt;Integer&gt; q = new ArrayDeque&lt;&gt;(); // stores indices
+  for (int i = 0; i < n; i++) {
+    // 1. Remove indices out of window bounds
+    while (!q.isEmpty() && q.peek() < i - k + 1) q.poll();
+    // 2. Remove smaller values from tail
+    while (!q.isEmpty() && nums[q.peekLast()] < nums[i]) q.pollLast();
+    // 3. Offer current index
+    q.offer(i);
+    // 4. Record result once window reaches size K
+    if (i >= k - 1) res[i - k + 1] = nums[q.peek()];
+  }
+  return res;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 7: DECISION TREE & TRIGGER WORDS -->
+<div class="page">
+<div class="ph">
+  <div><h1>SLIDING WINDOW</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 7 OF 10</div><div class="ptag">DECISION TREE · TRIGGER WORDS · TRADE-OFFS</div></div>
+</div>
+
+<div class="g2">
+  <div class="box">
+    <div class="bh">SLIDING WINDOW — WHICH VARIANT TO USE?</div>
+    <div class="bc dt-wrap">
+      <div class="dt-root">Start: What is the window constraint?</div>
+      <div class="dt-grid">
+        <div class="dt-row">
+          <div class="dt-q">📏 Fixed Window Size K</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Fixed Window<br><span style="font-weight:400;font-size:0.7rem">Slide by adding right, removing left</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">📈 Find Longest Subarray</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Dynamic Longest<br><span style="font-weight:400;font-size:0.7rem">Shrink `left` ONLY when invalid</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">📉 Find Shortest Subarray</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Dynamic Shortest<br><span style="font-weight:400;font-size:0.7rem">Shrink `left` aggressively while valid</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🎯 Subarrays with Exactly K</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">At Most K Transformation<br><span style="font-weight:400;font-size:0.7rem">`atMost(K) - atMost(K-1)`</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">⚡ Max / Min in Sliding Window</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Monotonic Deque<br><span style="font-weight:400;font-size:0.7rem">Decreasing index deque</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div class="box pur">
+      <div class="bh">🎯 TRIGGER WORDS DIRECTORY</div>
+      <div class="bc">
+        <table>
+          <tr><th>Trigger Word</th><th>Variant</th><th>Action</th></tr>
+          <tr><td>"Subarray size K"</td><td>Fixed Window</td><td>`nums[i] - nums[i-k]`</td></tr>
+          <tr><td>"Longest substring without repeating"</td><td>Dynamic Longest</td><td>Shrink when `count > 1`</td></tr>
+          <tr><td>"Minimum window substring"</td><td>Dynamic Shortest</td><td>Shrink while `matched == target`</td></tr>
+          <tr><td>"Exactly K distinct elements"</td><td>At Most K Difference</td><td>`atMost(K) - atMost(K-1)`</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="box amb">
+      <div class="bh">💼 INTERVIEW TRADE-OFFS &amp; FOLLOW-UPS</div>
+      <div class="bc">
+        <table>
+          <tr><th>Interviewer Asks</th><th>Your Answer</th></tr>
+          <tr><td>Why use `int[128]` over `HashMap`?</td><td>Array index access is O(1) without hashing or object allocation overhead!</td></tr>
+          <tr><td>Why `atMost(K) - atMost(K-1)`?</td><td>Counting "Exactly K" directly requires tracking complex left pointer states. Difference of two "At Most" runs is clean O(N)!</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 8: PROBLEM LADDER PART 1 (5 PROBLEMS) -->
+<div class="page">
+<div class="ph">
+  <div><h1>SLIDING WINDOW</h1><div class="sub">Problem Ladder — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 8 OF 10</div><div class="ptag">PROBLEM LADDER — EASY · MEDIUM</div></div>
+</div>
+
+<div class="g2" style="gap:10px">
+<div>
+  <div style="background:var(--grn);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟢 EASY &amp; MEDIUM — Fixed &amp; Unique Substrings</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 643 · Max Average Subarray</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Fixed Window K</div>
+        <div><strong>Key Insight:</strong> Sum first K, then add right, sub left.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public double findMaxAverage(int[] nums, int k) {
+  double sum = 0;
+  for (int i = 0; i < k; i++) sum += nums[i];
+  double max = sum;
+  for (int i = k; i < nums.length; i++) {
+    sum += nums[i] - nums[i - k];
+    max = Math.max(max, sum);
+  }
+  return max / k;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 3 · Longest Substring Without Repeating</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Dynamic Longest</div>
+        <div><strong>Key Insight:</strong> Shrink left when `freq[c] > 1`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public int lengthOfLongestSubstring(String s) {
+  int[] map = new int[128];
+  int left = 0, maxLen = 0;
+  for (int right = 0; right < s.length(); right++) {
+    char c = s.charAt(right); map[c]++;
+    while (map[c] > 1) map[s.charAt(left++)]--;
+    maxLen = Math.max(maxLen, right - left + 1);
+  }
+  return maxLen;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 424 · Character Replacement</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Dynamic Longest</div>
+        <div><strong>Key Insight:</strong> `(len - maxCount) > K`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public int characterReplacement(String s, int k) {
+  int[] count = new int[26];
+  int l = 0, maxC = 0, maxLen = 0;
+  for (int r = 0; r < s.length(); r++) {
+    maxC = Math.max(maxC, ++count[s.charAt(r) - 'A']);
+    if (r - l + 1 - maxC > k) count[s.charAt(l++) - 'A']--;
+    maxLen = Math.max(maxLen, r - l + 1);
+  }
+  return maxLen;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — Frequency Anagrams &amp; Fruit Baskets</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 567 · Permutation in String</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Fixed Frequency Match</div>
+        <div><strong>Key Insight:</strong> Fixed window size = `s1.length()`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public boolean checkInclusion(String s1, String s2) {
+  if (s1.length() > s2.length()) return false;
+  int[] c1 = new int[26], c2 = new int[26];
+  for (int i = 0; i < s1.length(); i++) {
+    c1[s1.charAt(i) - 'a']++; c2[s2.charAt(i) - 'a']++;
+  }
+  if (Arrays.equals(c1, c2)) return true;
+  for (int i = s1.length(); i < s2.length(); i++) {
+    c2[s2.charAt(i) - 'a']++; c2[s2.charAt(i - s1.length()) - 'a']--;
+    if (Arrays.equals(c1, c2)) return true;
+  }
+  return false;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 904 · Fruit Into Baskets</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Dynamic Window (At Most 2)</div>
+        <div><strong>Key Insight:</strong> Max length with at most 2 distinct elements.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public int totalFruit(int[] fruits) {
+  Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+  int l = 0, max = 0;
+  for (int r = 0; r < fruits.length; r++) {
+    map.put(fruits[r], map.getOrDefault(fruits[r], 0) + 1);
+    while (map.size() > 2) {
+      map.put(fruits[l], map.get(fruits[l]) - 1);
+      if (map.get(fruits[l]) == 0) map.remove(fruits[l]);
+      l++;
+    }
+    max = Math.max(max, r - l + 1);
+  }
+  return max;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: PROBLEM LADDER PART 2 (5 PROBLEMS + SUMMARY TABLE) -->
+<div class="page">
+<div class="ph">
+  <div><h1>SLIDING WINDOW</h1><div class="sub">Problem Ladder — Part 2 &amp; Summary</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 9 OF 10</div><div class="ptag">PROBLEM LADDER — MEDIUM · HARD · SUMMARY</div></div>
+</div>
+
+<div class="g2" style="gap:10px;margin-bottom:10px">
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM &amp; HARD — Minimum Window &amp; Exactly K</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 438 · Find All Anagrams</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Fixed Frequency Window</div>
+        <div><strong>Key Insight:</strong> Compare `c1` &amp; `c2` arrays.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.60rem">public List&lt;Integer&gt; findAnagrams(String s, String p) {
+  List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+  if (s.length() < p.length()) return res;
+  int[] c1 = new int[26], c2 = new int[26];
+  for (int i = 0; i < p.length(); i++) {
+    c1[p.charAt(i)-'a']++; c2[s.charAt(i)-'a']++;
+  }
+  if (Arrays.equals(c1, c2)) res.add(0);
+  for (int i = p.length(); i < s.length(); i++) {
+    c2[s.charAt(i)-'a']++; c2[s.charAt(i-p.length())-'a']--;
+    if (Arrays.equals(c1, c2)) res.add(i - p.length() + 1);
+  }
+  return res;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fee2e2">
+      <span class="ptitle" style="color:var(--red)">LC 76 · Minimum Window Substring</span>
+      <span class="diff-h">HARD</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Dynamic Shortest</div>
+        <div><strong>Key Insight:</strong> Shrink left while `matched == t.length()`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.60rem">public String minWindow(String s, String t) {
+  int[] cnt = new int[128]; for (char c : t.toCharArray()) cnt[c]++;
+  int l = 0, minL = Integer.MAX_VALUE, start = 0, m = t.length();
+  for (int r = 0; r < s.length(); r++) {
+    if (cnt[s.charAt(r)]-- > 0) m--;
+    while (m == 0) {
+      if (r - l + 1 < minL) { minL = r - l + 1; start = l; }
+      if (++cnt[s.charAt(l++)] > 0) m++;
+    }
+  }
+  return minL == Integer.MAX_VALUE ? "" : s.substring(start, start + minL);
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--red);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🔴 HARD — Monotonic Deque &amp; Subarray Count</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fee2e2">
+      <span class="ptitle" style="color:var(--red)">LC 992 · Subarrays with K Distinct</span>
+      <span class="diff-h">HARD</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> At Most K Difference</div>
+        <div><strong>Key Insight:</strong> `atMost(K) - atMost(K-1)`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.60rem">public int subarraysWithKDistinct(int[] nums, int k) {
+  return atMost(nums, k) - atMost(nums, k - 1);
+}
+private int atMost(int[] nums, int k) {
+  Map&lt;Integer, Integer&gt; cnt = new HashMap&lt;&gt;();
+  int l = 0, res = 0;
+  for (int r = 0; r < nums.length; r++) {
+    if (cnt.getOrDefault(nums[r], 0) == 0) k--;
+    cnt.put(nums[r], cnt.getOrDefault(nums[r], 0) + 1);
+    while (k < 0) {
+      cnt.put(nums[l], cnt.get(nums[l]) - 1);
+      if (cnt.get(nums[l]) == 0) k++;
+      l++;
+    }
+    res += r - l + 1;
+  }
+  return res;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fee2e2">
+      <span class="ptitle" style="color:var(--red)">LC 239 · Sliding Window Maximum</span>
+      <span class="diff-h">HARD</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Monotonic Deque</div>
+        <div><strong>Key Insight:</strong> Decreasing deque of indices.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.60rem">public int[] maxSlidingWindow(int[] nums, int k) {
+  int n = nums.length; int[] res = new int[n - k + 1];
+  Deque&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+  for (int i = 0; i < n; i++) {
+    while (!q.isEmpty() && q.peek() < i - k + 1) q.poll();
+    while (!q.isEmpty() && nums[q.peekLast()] < nums[i]) q.pollLast();
+    q.offer(i);
+    if (i >= k - 1) res[i - k + 1] = nums[q.peek()];
+  }
+  return res;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Master Summary Table -->
+<div class="box">
+  <div class="bh" style="padding:3px 6px;font-size:0.76rem">📊 COMPLETE SLIDING WINDOW PROBLEM LADDER SUMMARY</div>
+  <div class="bc" style="padding:4px 6px">
+    <table>
+      <tr><th>LC #</th><th>Problem</th><th>Pattern</th><th>Time</th><th>Space</th><th>Diff</th></tr>
+      <tr><td>643</td><td>Max Average Subarray</td><td>Fixed Window K</td><td>O(N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>3</td><td>Longest Substring Without Repeating</td><td>Dynamic Longest</td><td>O(N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>424</td><td>Character Replacement</td><td>Dynamic Longest</td><td>O(N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>567</td><td>Permutation in String</td><td>Fixed Frequency Match</td><td>O(N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>904</td><td>Fruit Into Baskets</td><td>Dynamic Window (At Most 2)</td><td>O(N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>438</td><td>Find All Anagrams</td><td>Fixed Frequency Match</td><td>O(N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>76</td><td>Minimum Window Substring</td><td>Dynamic Shortest</td><td>O(N)</td><td>O(1)</td><td><span class="diff-h">H</span></td></tr>
+      <tr><td>992</td><td>Subarrays with K Distinct</td><td>At Most K Difference</td><td>O(N)</td><td>O(K)</td><td><span class="diff-h">H</span></td></tr>
+      <tr><td>239</td><td>Sliding Window Maximum</td><td>Monotonic Deque Window</td><td>O(N)</td><td>O(K)</td><td><span class="diff-h">H</span></td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 10: DRY RUN, MATH PROOFS & CHEAT SHEET -->
+<div class="page">
+<div class="ph">
+  <div><h1>SLIDING WINDOW</h1><div class="sub">Dry Run, Math Proofs &amp; Cheat Sheet</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 10 OF 10</div><div class="ptag">DRY RUN · PROOFS · CHEAT SHEET</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:10px">
+  <div class="box">
+    <div class="bh">🔍 DRY RUN — LC 3 Longest Substring ("abcabcbb")</div>
+    <div class="bc">
+      <table style="font-size:0.70rem">
+        <tr><th>Right</th><th>Char</th><th>Map State</th><th>Left</th><th>Window Len</th><th>Max Len</th></tr>
+        <tr><td>0</td><td>'a'</td><td>a:1</td><td>0</td><td>"a" (len 1)</td><td>1</td></tr>
+        <tr><td>1</td><td>'b'</td><td>a:1, b:1</td><td>0</td><td>"ab" (len 2)</td><td>2</td></tr>
+        <tr><td>2</td><td>'c'</td><td>a:1, b:1, c:1</td><td>0</td><td>"abc" (len 3)</td><td>3</td></tr>
+        <tr><td>3</td><td>'a'</td><td>a:2, b:1, c:1 \rightarrow shrink left!</td><td>1</td><td>"bca" (len 3)</td><td>3</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh">📐 MATHEMATICAL PROOF — O(N) SLIDING WINDOW</div>
+    <div class="bc">
+      <div style="font-size:0.76rem">
+        <p style="margin-bottom:4px"><strong>Claim:</strong> The two-pointer inner `while` loop does not make the overall time complexity O(N^2).</p>
+        <p style="margin-bottom:4px"><strong>Proof:</strong> The `right` pointer increments N times. The `left` pointer ALSO increments at most N times across the ENTIRE algorithm execution. Total pointer operations $= N + N = 2N \rightarrow$ <strong>Strictly O(N) Time!</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+    <div class="bc">
+      <div class="g2" style="gap:6px">
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Write Fixed Window Size K in 3m</li>
+          <li>☐ Code LC 3 (Longest Substring) from memory</li>
+          <li>☐ Use `int[128]` for O(1) ASCII freq lookup</li>
+          <li>☐ Code Character Replacement (LC 424)</li>
+        </ul>
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Code Minimum Window Substring (LC 76)</li>
+          <li>☐ Write `atMost(K) - atMost(K-1)` trick</li>
+          <li>☐ Implement Monotonic Deque (LC 239)</li>
+          <li>☐ Prove why Sliding Window is O(N)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+    <div class="bc">
+      <div class="aha" style="margin-bottom:4px;padding:5px">
+        <div class="aha-t">Rule 1 — Expand Right, Shrink Left</div>
+        Always expand `right` to include next element first. Shrink `left` ONLY when window condition breaks (longest) or while window remains valid (shortest).
+      </div>
+      <div class="aha" style="padding:5px">
+        <div class="aha-t">Rule 2 — Monotonic Deque Stores Indices</div>
+        In Sliding Window Maximum, store ARRAY INDICES in the Deque, NOT values! Indices allow easy window boundary checks (`q.peek() < i - k + 1`).
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 09: Heap &amp; Priority Queue Masterclass (Visual FAANG Edition)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#ffffff',
+            primaryTextColor: '#0f172a',
+            primaryBorderColor: '#2563eb',
+            lineColor: '#64748b',
+            fontFamily: 'Inter'
+        }
+    });
+</script>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+    }
+
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 15px;
+        font-size: 11.5px;
+        line-height: 1.4;
+    }
+
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 8px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand { font-weight: 900; font-size: 1rem; color: #38bdf8; }
+    .top-nav .nav-controls { display: flex; gap: 4px; flex-wrap: wrap; }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+
+    /* Expandable / Shrinkable Sidebar Layout */
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 3px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.73rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+    .main-content { min-width: 0; }
+
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 18px 22px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+    }
+    [data-theme="dark"] .page { background: #1e293b; color: #f8fafc; }
+
+    .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 6px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top { background: #0f172a; border-color: #38bdf8; border-left-color: #38bdf8; }
+    .header-title-group { display: flex; align-items: center; gap: 8px; }
+    .header-top h1 { margin: 0; font-size: 1.15rem; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+    .header-top .page-num { background: #1e3a8a; color: white; padding: 2px 8px; border-radius: 14px; font-weight: 800; font-size: 0.72rem; }
+
+    .section-box { border-radius: 6px; overflow: hidden; margin-bottom: 8px; background: white; border: 2px solid #3b82f6; width: 100%; }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+    .section-header { padding: 5px 8px; font-weight: 800; font-size: 0.8rem; color: white; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+    .section-header .num { background: white; color: #0f172a; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 900; }
+    .section-content { padding: 6px 8px; font-size: 0.76rem; }
+
+    .box-blue { border-color: #2563eb !important; } .box-blue .section-header { background: #2563eb !important; }
+    .box-green { border-color: #22c55e !important; } .box-green .section-header { background: #22c55e !important; }
+    .box-purple { border-color: #8b5cf6 !important; } .box-purple .section-header { background: #8b5cf6 !important; }
+    .box-red { border-color: #ef4444 !important; } .box-red .section-header { background: #ef4444 !important; }
+    .box-orange { border-color: #f97316 !important; } .box-orange .section-header { background: #f97316 !important; }
+    .box-teal { border-color: #0d9488 !important; } .box-teal .section-header { background: #0d9488 !important; }
+    .box-indigo { border-color: #6366f1 !important; } .box-indigo .section-header { background: #6366f1 !important; }
+    .box-amber { border-color: #d97706 !important; } .box-amber .section-header { background: #d97706 !important; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .problem-split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+
+    .meta-card { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 3px 6px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 0.7rem; }
+    [data-theme="dark"] .meta-card { background: #0f172a; border-color: #334155; }
+    .badge-easy { background: #10b981; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-medium { background: #f59e0b; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-hard { background: #ef4444; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .company-tag { background: #1e3a8a; color: white; padding: 1px 4px; border-radius: 3px; font-size: 0.65rem; }
+
+    pre { background: #f8fafc; color: #0f172a; padding: 5px 7px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.71rem; line-height: 1.32; margin: 0; white-space: pre-wrap !important; word-break: break-word; border: 1px solid #cbd5e1; }
+    [data-theme="dark"] pre { background: #0f172a; color: #f8fafc; border-color: #334155; }
+    code { font-family: 'Fira Code', monospace; background: #f1f5f9; color: #0f172a; padding: 1px 3px; border-radius: 3px; font-size: 0.74rem; border: 1px solid #cbd5e1; }
+
+    .aha-box { background: #fefce8; border: 1px solid #eab308; border-left: 4px solid #ca8a04; color: #713f12; padding: 4px 7px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin: 3px 0; }
+    .rule-box { padding: 4px 6px; border-radius: 4px; font-weight: 600; margin: 3px 0; font-size: 0.73rem; }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    .rule-purple { background: #faf5ff; border: 1px solid #a855f7; border-left: 4px solid #a855f7; color: #6b21a8; }
+    .rule-red { background: #fff1f2; border: 1px solid #ef4444; border-left: 4px solid #ef4444; color: #b91c1c; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.71rem; }
+    table th, table td { border: 1px solid var(--border-color); padding: 3px 5px; text-align: left; }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+
+    /* 5-Column Pattern Row Layout (v17 Reference) */
+    .pattern-row { display: flex; border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; margin-bottom: 8px; background: white; }
+    [data-theme="dark"] .pattern-row { background: #1e293b; border-color: #334155; }
+    .p-col { padding: 6px 8px; border-right: 1px dashed #cbd5e1; }
+    [data-theme="dark"] .p-col { border-right-color: #334155; }
+    .p-col:last-child { border-right: none; }
+    .p-title { font-weight: 800; font-size: 0.72rem; color: #1e3a8a; text-align: center; margin-bottom: 4px; text-transform: uppercase; }
+    [data-theme="dark"] .p-title { color: #38bdf8; }
+
+    @page { size: A4 portrait; margin: 4mm; }
+    @media print {
+        body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .top-nav, .toc-sidebar { display: none !important; }
+        .app-layout { display: block !important; }
+        .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.72; }
+    }
+</style>
+</head>
+<body>
+
+<div class="top-nav">
+    <div class="brand">⚡ FAANG DSA HANDBOOK — TOPIC 09: HEAP (PRIORITY QUEUE)</div>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn" style="background:#059669; border-color:#10b981; font-weight:800;">🏠 Index</a>
+        <button class="nav-btn" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="nav-btn" onclick="toggleSidebar()">↕️ Expand/Shrink TOC</button>
+        <a href="#page1" class="nav-btn">P1</a>
+        <a href="#page2" class="nav-btn">P2</a>
+        <a href="#page3" class="nav-btn">P3</a>
+        <a href="#page4" class="nav-btn">P4</a>
+        <a href="#page5" class="nav-btn">P5</a>
+        <a href="#page6" class="nav-btn">P6</a>
+        <a href="#page7" class="nav-btn">P7</a>
+        <a href="#page8" class="nav-btn">P8</a>
+        <a href="#page9" class="nav-btn">P9</a>
+        <a href="#page10" class="nav-btn">P10</a>
+        <button class="nav-btn" onclick="window.print()" style="background: #2563eb;">🖨️ PDF</button>
+    </div>
+</div>
+
+<div class="container">
+<div class="app-layout" id="appLayout">
+
+    <!-- Expandable / Shrinkable Table of Contents Sidebar -->
+    <div class="toc-sidebar" id="tocSidebar">
+        <div class="toc-header-bar">
+            <span class="toc-title">📋 SECTIONS</span>
+            <button class="shrink-btn" onclick="toggleSidebar()"><span class="toc-text">➖ Shrink</span></button>
+        </div>
+        <ul class="toc-list">
+            <li><a href="#page1" class="toc-link">1. Heap Foundation &amp; Index Math</a></li>
+            <li><a href="#page2" class="toc-link">2. Heapify Operations &amp; Java API</a></li>
+            <li><a href="#page3" class="toc-link">3. 4 Core Heap Patterns (v17 Grid)</a></li>
+            <li><a href="#page4" class="toc-link">4. FAANG Triggers &amp; Decision Guide</a></li>
+            <li><a href="#page5" class="toc-link">5. Easy NeetCode Suite (1046, 703)</a></li>
+            <li><a href="#page6" class="toc-link">6. Medium Top-K Suite (973, 347, 215)</a></li>
+            <li><a href="#page7" class="toc-link">7. Streaming &amp; Scheduler (621, 295)</a></li>
+            <li><a href="#page8" class="toc-link">8. Merge K Streams Suite (23, 373)</a></li>
+            <li><a href="#page9" class="toc-link">9. Advanced Greedy Heap (502, 632)</a></li>
+            <li><a href="#page10" class="toc-link">10. Revision &amp; Master Summary Sheet</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Pages -->
+    <div class="main-content">
+
+    <!-- PAGE 1: HEAP FOUNDATION & DUAL ARRAY MAPPING -->
+    <div class="page" id="page1">
+        <div class="header-top">
+            <div class="header-title-group">
+                <span style="font-size: 1.1rem;">⛰️</span>
+                <h1>TOPIC 09.0: HEAP FOUNDATION &amp; DUAL ARRAY MAPPING</h1>
+            </div>
+            <span class="page-num">PAGE 1 OF 10</span>
+        </div>
+
+        <div class="aha-box">
+            💡 <strong>AHA MOMENT #1: THE DUAL REPRESENTATION (TREE ↔ ARRAY)</strong><br/>
+            A Heap is conceptually a **Complete Binary Tree**, but physically stored as a flat 1D array with zero pointers! Node addresses are computed via $O(1)$ arithmetic: `parent(i) = (i - 1) / 2`, `left(i) = 2 * i + 1`, `right(i) = 2 * i + 2`.
+        </div>
+
+        <!-- Dedicated Utilities Box -->
+        <div class="section-box box-teal">
+            <div class="section-header">🧰 REUSABLE HEAP (PRIORITYQUEUE) UTILITIES &amp; CONVERSIONS</div>
+            <div class="section-content">
+                <div class="grid-2">
+                    <div>
+                        <p style="font-weight:700;margin:0 0 3px">1. Declarations &amp; Comparators:</p>
+<pre>
+// Min-Heap (Default)
+PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+
+// Max-Heap (Collections.reverseOrder)
+PriorityQueue&lt;Integer&gt; maxHeap = new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+
+// Pair Comparator: (a, b) -> Integer.compare(a[1], b[1])
+PriorityQueue&lt;int[]&gt; pairPq = new PriorityQueue&lt;&gt;((a, b) -&gt; Integer.compare(a[1], b[1]));</pre>
+                    </div>
+                    <div>
+                        <p style="font-weight:700;margin:0 0 3px">2. Top-K Window Insertion Template:</p>
+<pre>
+// Maintain Top K Largest items in O(N log K) time
+PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+for (int num : nums) {
+    pq.offer(num);
+    if (pq.size() &gt; k) pq.poll(); // Evict smallest root!
+}
+// pq contains exactly top K largest elements!</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <!-- 1. What is a Heap? -->
+            <div class="section-box box-blue">
+                <div class="section-header"><span class="num">1</span> WHAT IS A HEAP?</div>
+                <div class="section-content">
+                    <div>• <strong>Complete Binary Tree:</strong> All levels filled left-to-right.<br/>
+                    • <strong>Weak Ordering:</strong> Parent vs Child property only (Root is absolute min or max).<br/>
+                    • <strong>Priority Access:</strong> Instant $O(1)$ access to root, $O(\log N)$ insert &amp; remove.<br/>
+                    • <strong>Heap vs BST:</strong> BST is fully sorted ($O(\log N)$ search). Heap is weakly ordered, eliminating tree balancing overhead!</div>
+                </div>
+            </div>
+
+            <!-- 2. Min Heap vs Max Heap -->
+            <div class="section-box box-purple">
+                <div class="section-header"><span class="num">2</span> MIN-HEAP VS MAX-HEAP PROPERTY</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div style="background:#f0fdf4;padding:6px;border-radius:4px;border:1px solid #22c55e">
+                            <strong style="color:#15803d">MIN HEAP</strong><br/>
+                            Parent $\le$ Children<br/>
+                            Root = Global Minimum
+                        </div>
+                        <div style="background:#fff1f2;padding:6px;border-radius:4px;border:1px solid #ef4444">
+                            <strong style="color:#b91c1c">MAX HEAP</strong><br/>
+                            Parent $\ge$ Children<br/>
+                            Root = Global Maximum
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Array Index Mapping Table -->
+        <div class="section-box box-amber">
+            <div class="section-header"><span class="num">3</span> 0-INDEXED ARRAY MAPPING &amp; TIME COMPLEXITIES</div>
+            <div class="section-content">
+                <table>
+                    <thead>
+                        <tr><th>Operation</th><th>Formula / Method</th><th>Time Complexity</th><th>Why?</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Parent Index</td><td><code>(i - 1) / 2</code></td><td><code>O(1)</code></td><td>Bitwise / integer division</td></tr>
+                        <tr><td>Left Child Index</td><td><code>2 * i + 1</code></td><td><code>O(1)</code></td><td>Left child offset</td></tr>
+                        <tr><td>Right Child Index</td><td><code>2 * i + 2</code></td><td><code>O(1)</code></td><td>Right child offset</td></tr>
+                        <tr><td>Peek Root</td><td><code>peek()</code></td><td><code>O(1)</code></td><td>Read element at index 0</td></tr>
+                        <tr><td>Insert Element</td><td><code>offer(x)</code></td><td><code>O(log N)</code></td><td>Append at end &amp; Heapify Up</td></tr>
+                        <tr><td>Poll Root</td><td><code>poll()</code></td><td><code>O(log N)</code></td><td>Swap root with last &amp; Heapify Down</td></tr>
+                        <tr><td>Build Heap</td><td><code>new PriorityQueue(list)</code></td><td><code>O(N)</code></td><td>Floyd's bottom-up heapify algorithm</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="rule-box rule-green" style="margin:0">📌 <strong>GOLDEN RULE:</strong> Heaps are all about PRIORITY, not sorting! Ask: <em>"What element should come out first?"</em></div>
+    </div>
+
+    <!-- PAGE 2: HEAPIFY OPERATIONS & JAVA PRIORITYQUEUE TOOLKIT -->
+    <div class="page" id="page2">
+        <div class="header-top">
+            <div class="header-title-group">
+                <span style="font-size: 1.1rem;">⚙️</span>
+                <h1>TOPIC 09.1 &amp; 09.2: HEAPIFY MECHANICS &amp; JAVA TOOLKIT</h1>
+            </div>
+            <span class="page-num">PAGE 2 OF 10</span>
+        </div>
+
+        <div class="aha-box">
+            💡 <strong>AHA MOMENT #2: HEAPIFY UP VS SINK DOWN &amp; FLOYD'S O(N) BUILD</strong><br/>
+            • <strong>Heapify Up (Bubble Up):</strong> Swaps newly inserted leaf with parent until `parent <= child` ($O(\log N)$).<br/>
+            • <strong>Heapify Down (Sink Down):</strong> Swaps root with smaller child after polling ($O(\log N)$).<br/>
+            • <strong>Floyd's $O(N)$ Build Heap:</strong> Calling heapify down starting from the last non-leaf node `(n/2 - 1)` down to 0 builds a heap in $O(N)$ linear time!
+        </div>
+
+        <div class="grid-2">
+            <!-- Java 3 Comparator Ways -->
+            <div class="section-box box-blue">
+                <div class="section-header"><span class="num">1</span> JAVA PRIORITYQUEUE: 3 COMPARATOR PATTERNS</div>
+                <div class="section-content">
+<pre>
+// 1. Min Heap (Default)
+PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+
+// 2. Max Heap (Collections.reverseOrder)
+PriorityQueue&lt;Integer&gt; maxHeap = 
+    new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+
+// 3. Max Heap (Safe Integer.compare)
+PriorityQueue&lt;Integer&gt; maxHeap = 
+    new PriorityQueue&lt;&gt;((a, b) -&gt; Integer.compare(b, a));</pre>
+                </div>
+            </div>
+
+            <!-- Common Mistakes -->
+            <div class="section-box box-red">
+                <div class="section-header"><span class="num">2</span> ⚠️ COMMON INTERVIEW TRAPS &amp; MISTAKES</div>
+                <div class="section-content">
+                    <div>❌ <strong>Subtraction Overflow:</strong> <code>(a,b)->a-b</code> overflows when subtracting negative numbers! Always use <code>Integer.compare(a, b)</code>.</div>
+                    <div>❌ <strong>Linear Removal Trap:</strong> <code>pq.remove(obj)</code> takes $O(N)$ time because it scans the underlying array!</div>
+                    <div>❌ <strong>Assuming Sorted Output:</strong> Iterating over a `PriorityQueue` via `for-each` loop DOES NOT give sorted order! You must call `poll()` sequentially.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Common Mistakes & Rules -->
+        <div class="section-box box-indigo">
+            <div class="section-header"><span class="num">3</span> PRIORITYQUEUE SAFE API CHEAT SHEET</div>
+            <div class="section-content">
+                <table>
+                    <thead>
+                        <tr><th>Method</th><th>Description</th><th>Time Complexity</th><th>Empty Heap Behavior</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>offer(x)</code></td><td>Inserts element `x` into heap</td><td>$O(\log N)$</td><td>Returns `false` if restricted capacity fails</td></tr>
+                        <tr><td><code>poll()</code></td><td>Removes &amp; returns root (min/max)</td><td>$O(\log N)$</td><td>Returns `null` if empty</td></tr>
+                        <tr><td><code>peek()</code></td><td>Returns root without removing</td><td>$O(1)$</td><td>Returns `null` if empty</td></tr>
+                        <tr><td><code>size()</code></td><td>Returns total elements in heap</td><td>$O(1)$</td><td>Returns `0`</td></tr>
+                        <tr><td><code>isEmpty()</code></td><td>Checks if heap has zero elements</td><td>$O(1)$</td><td>Returns `true`</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 3: 4 CORE HEAP PATTERNS (v17 GRID LAYOUT) -->
+    <div class="page" id="page3">
+        <div class="header-top">
+            <div class="header-title-group">
+                <span style="font-size: 1.1rem;">💎</span>
+                <h1>TOPIC 09.3: THE 4 CANONICAL HEAP PATTERNS</h1>
+            </div>
+            <span class="page-num">PAGE 3 OF 10</span>
+        </div>
+
+        <div class="aha-box">
+            💡 Every Heap problem in FAANG interviews reduces to one of these 4 core design patterns!
+        </div>
+
+        <!-- Pattern 1 Row -->
+        <div class="pattern-row">
+            <div class="p-col" style="flex:1.2">
+                <div class="p-title" style="color:#2563eb">PATTERN 1: REPEATED MAX/MIN</div>
+                <div>• Repeatedly extract extreme element.<br/>• Process element &amp; re-insert.<br/>• Max-Heap for largest (e.g. LC 1046 Last Stone Weight).</div>
+            </div>
+            <div class="p-col" style="flex:1.8">
+<pre style="margin:0;">
+PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+for (int s : stones) pq.offer(s);
+while (pq.size() &gt; 1) {
+    int a = pq.poll(), b = pq.poll();
+    if (a != b) pq.offer(a - b);
+}</pre>
+            </div>
+            <div class="p-col" style="flex:1">
+                <div><strong>Time:</strong> $O(N \log N)$<br/><strong>Space:</strong> $O(N)$<br/><strong>Target:</strong> LC 1046</div>
+            </div>
+        </div>
+
+        <!-- Pattern 2 Row -->
+        <div class="pattern-row">
+            <div class="p-col" style="flex:1.2">
+                <div class="p-title" style="color:#059669">PATTERN 2: TOP-K ELEMENTS</div>
+                <div>• Need K largest/smallest elements.<br/>• Top K Largest ➔ <strong>Min-Heap of size K</strong>.<br/>• Top K Smallest ➔ <strong>Max-Heap of size K</strong>.</div>
+            </div>
+            <div class="p-col" style="flex:1.8">
+<pre style="margin:0;">
+PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+for (int num : nums) {
+    pq.offer(num);
+    if (pq.size() &gt; k) pq.poll();
+}
+// pq contains K largest items</pre>
+            </div>
+            <div class="p-col" style="flex:1">
+                <div><strong>Time:</strong> $O(N \log K)$<br/><strong>Space:</strong> $O(K)$<br/><strong>Target:</strong> LC 215, 347, 973</div>
+            </div>
+        </div>
+
+        <!-- Pattern 3 Row -->
+        <div class="pattern-row">
+            <div class="p-col" style="flex:1.2">
+                <div class="p-title" style="color:#7c3aed">PATTERN 3: MERGE K SORTED STREAMS</div>
+                <div>• $K$ sorted arrays/lists.<br/>• Offer 1st node of each stream into Min-Heap.<br/>• Poll min, offer `next` node.</div>
+            </div>
+            <div class="p-col" style="flex:1.8">
+<pre style="margin:0;">
+PriorityQueue&lt;ListNode&gt; pq = new PriorityQueue&lt;&gt;((a,b)-&gt;Integer.compare(a.val,b.val));
+for (ListNode h : lists) if (h != null) pq.offer(h);
+while (!pq.isEmpty()) {
+    ListNode curr = pq.poll();
+    tail.next = curr; tail = tail.next;
+    if (curr.next != null) pq.offer(curr.next);
+}</pre>
+            </div>
+            <div class="p-col" style="flex:1">
+                <div><strong>Time:</strong> $O(N \log K)$<br/><strong>Space:</strong> $O(K)$<br/><strong>Target:</strong> LC 23, 373</div>
+            </div>
+        </div>
+
+        <!-- Pattern 4 Row -->
+        <div class="pattern-row">
+            <div class="p-col" style="flex:1.2">
+                <div class="p-title" style="color:#ea580c">PATTERN 4: TWO HEAPS (MEDIAN)</div>
+                <div>• Continuous data stream.<br/>• `maxHeap` (lower half) + `minHeap` (higher half).<br/>• Rebalance to keep size diff $\le 1$.</div>
+            </div>
+            <div class="p-col" style="flex:1.8">
+<pre style="margin:0;">
+if (maxHeap.isEmpty() || num &lt;= maxHeap.peek()) maxHeap.offer(num);
+else minHeap.offer(num);
+if (maxHeap.size() &gt; minHeap.size() + 1) minHeap.offer(maxHeap.poll());
+else if (minHeap.size() &lt; maxHeap.size()) maxHeap.offer(minHeap.poll());</pre>
+            </div>
+            <div class="p-col" style="flex:1">
+                <div><strong>Insert:</strong> $O(\log N)$<br/><strong>Median:</strong> $O(1)$<br/><strong>Target:</strong> LC 295</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 4: FAANG HIDDEN TRIGGERS & DECISION GUIDE -->
+    <div class="page" id="page4">
+        <div class="header-top">
+            <div class="header-title-group">
+                <span style="font-size: 1.1rem;">🎯</span>
+                <h1>TOPIC 09.4: FAANG UNSEEN QUESTION TRIGGER DIRECTORY</h1>
+            </div>
+            <span class="page-num">PAGE 4 OF 10</span>
+        </div>
+
+        <div class="grid-2">
+            <div class="section-box box-amber">
+                <div class="section-header">🔍 QUESTION SIGNAL ➔ HEAP PATTERN MAP</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Question Keyword / Phrase</th><th>Heap Pattern to Choose</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>"Find Top K / Kth Largest"</td><td>Min-Heap of size K</td></tr>
+                            <tr><td>"K Closest Points to Origin"</td><td>Max-Heap of size K</td></tr>
+                            <tr><td>"Merge K sorted lists"</td><td>Min-Heap of size K streams</td></tr>
+                            <tr><td>"Continuous data stream median"</td><td>Two Heaps (Max + Min)</td></tr>
+                            <tr><td>"Task Scheduler / CPU Cooldown"</td><td>Max-Heap Frequency + Cooldown Queue</td></tr>
+                            <tr><td>"Maximize Capital / IPO"</td><td>Min-Heap (Capital) + Max-Heap (Profit)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section-box box-purple">
+                <div class="section-header">🌳 HEAP DECISION TREE (MERMAID)</div>
+                <div class="section-content">
+                    <div class="mermaid">
+                        graph TD
+                            A[Goal?] --> B[Top K Elements?]
+                            A --> C[Merge K Streams?]
+                            A --> D[Running Median?]
+                            B --> B1[Min-Heap Size K]
+                            C --> C1[Min-Heap Size K]
+                            D --> D1[Two Heaps Max+Min]
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 5: EASY NEETCODE SUITE (1046, 703) -->
+    <div class="page" id="page5">
+        <div class="header-top">
+            <div class="header-title-group">
+                <span style="font-size: 1.1rem;">🧩</span>
+                <h1>EASY NEETCODE: LAST STONE WEIGHT &amp; KTH LARGEST STREAM</h1>
+            </div>
+            <span class="page-num">PAGE 5 OF 10</span>
+        </div>
+
+        <!-- Problem 1: LC 1046 -->
+        <div class="section-box box-blue">
+            <div class="section-header">1. LEETCODE 1046 — LAST STONE WEIGHT</div>
+            <div class="section-content">
+                <div class="problem-split">
+                    <div class="problem-info">
+                        <div class="meta-card">
+                            <span class="badge-easy">🟢 Easy ★★★★★</span>
+                            <span>Max-Heap Simulation</span>
+                            <span class="company-tag">Amazon</span>
+                        </div>
+                        <strong>Problem:</strong> Smash two heaviest stones together until at most 1 stone remains.
+                    </div>
+                    <div class="problem-code">
+<pre>
+public int lastStoneWeight(int[] stones) {
+    PriorityQueue&lt;Integer&gt; maxHeap = new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+    for (int s : stones) maxHeap.offer(s);
+    while (maxHeap.size() &gt; 1) {
+        int y = maxHeap.poll(), x = maxHeap.poll();
+        if (y != x) maxHeap.offer(y - x);
+    }
+    return maxHeap.isEmpty() ? 0 : maxHeap.peek();
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Problem 2: LC 703 -->
+        <div class="section-box box-green">
+            <div class="section-header">2. LEETCODE 703 — KTH LARGEST ELEMENT IN A STREAM</div>
+            <div class="section-content">
+                <div class="problem-split">
+                    <div class="problem-info">
+                        <div class="meta-card">
+                            <span class="badge-easy">🟢 Easy ★★★★★</span>
+                            <span>Min-Heap Size K</span>
+                            <span class="company-tag">Amazon</span>
+                        </div>
+                        <strong>Problem:</strong> Design class to find $K^{\text{th}}$ largest element in a stream.
+                    </div>
+                    <div class="problem-code">
+<pre>
+class KthLargest {
+    private PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+    private int k;
+    public KthLargest(int k, int[] nums) {
+        this.k = k;
+        for (int num : nums) add(num);
+    }
+    public int add(int val) {
+        minHeap.offer(val);
+        if (minHeap.size() &gt; k) minHeap.poll();
+        return minHeap.peek(); // Root is Kth largest!
+    }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 6: MEDIUM TOP-K SUITE (973, 347, 215) -->
+    <div class="page" id="page6">
+        <div class="header-top">
+            <div class="header-title-group">
+                <span style="font-size: 1.1rem;">🎯</span>
+                <h1>MEDIUM NEETCODE: K CLOSEST POINTS, TOP K FREQ &amp; KTH LARGEST</h1>
+            </div>
+            <span class="page-num">PAGE 6 OF 10</span>
+        </div>
+
+        <!-- Problem 3: LC 973 -->
+        <div class="section-box box-blue">
+            <div class="section-header">3. LEETCODE 973 — K CLOSEST POINTS TO ORIGIN</div>
+            <div class="section-content">
+                <div class="problem-split">
+                    <div class="problem-info">
+                        <div class="meta-card">
+                            <span class="badge-medium">🟡 Medium ★★★★★</span>
+                            <span>Max-Heap Size K</span>
+                            <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                        </div>
+                        <strong>Problem:</strong> Find $K$ points closest to $(0,0)$ using Euclidean distance.
+                    </div>
+                    <div class="problem-code">
+<pre>
+public int[][] kClosest(int[][] points, int k) {
+    PriorityQueue&lt;int[]&gt; maxHeap = new PriorityQueue&lt;&gt;(
+        (a, b) -&gt; Integer.compare((b[0]*b[0] + b[1]*b[1]), (a[0]*a[0] + a[1]*a[1]))
+    );
+    for (int[] p : points) {
+        maxHeap.offer(p);
+        if (maxHeap.size() &gt; k) maxHeap.poll();
+    }
+    int[][] res = new int[k][2];
+    for (int i = 0; i &lt; k; i++) res[i] = maxHeap.poll();
+    return res;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Problem 4: LC 347 -->
+        <div class="section-box box-green">
+            <div class="section-header">4. LEETCODE 347 — TOP K FREQUENT ELEMENTS</div>
+            <div class="section-content">
+                <div class="problem-split">
+                    <div class="problem-info">
+                        <div class="meta-card">
+                            <span class="badge-medium">🟡 Medium ★★★★★</span>
+                            <span>HashMap + Min-Heap</span>
+                            <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                        </div>
+                        <strong>Problem:</strong> Return $K$ most frequent elements in array.
+                    </div>
+                    <div class="problem-code">
+<pre>
+public int[] topKFrequent(int[] nums, int k) {
+    Map&lt;Integer, Integer&gt; count = new HashMap&lt;&gt;();
+    for (int num : nums) count.put(num, count.getOrDefault(num, 0) + 1);
+    PriorityQueue&lt;Map.Entry&lt;Integer, Integer&gt;&gt; minHeap = 
+        new PriorityQueue&lt;&gt;((a, b) -&gt; Integer.compare(a.getValue(), b.getValue()));
+    for (Map.Entry&lt;Integer, Integer&gt; entry : count.entrySet()) {
+        minHeap.offer(entry);
+        if (minHeap.size() &gt; k) minHeap.poll();
+    }
+    int[] res = new int[k];
+    for (int i = 0; i &lt; k; i++) res[i] = minHeap.poll().getKey();
+    return res;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 7: STREAMING & SCHEDULER (621, 295) -->
+    <div class="page" id="page7">
+        <div class="header-top">
+            <div class="header-title-group">
+                <span style="font-size: 1.1rem;">⚖️</span>
+                <h1>MEDIUM/HARD: TASK SCHEDULER &amp; FIND MEDIAN FROM STREAM</h1>
+            </div>
+            <span class="page-num">PAGE 7 OF 10</span>
+        </div>
+
+        <!-- Problem 5: LC 621 -->
+        <div class="section-box box-orange">
+            <div class="section-header">5. LEETCODE 621 — TASK SCHEDULER</div>
+            <div class="section-content">
+                <div class="problem-split">
+                    <div class="problem-info">
+                        <div class="meta-card">
+                            <span class="badge-medium">🟡 Medium ★★★★★</span>
+                            <span>Max-Heap + Cooldown Queue</span>
+                            <span class="company-tag">Meta</span>
+                        </div>
+                        <strong>Problem:</strong> Minimum CPU cycles to finish tasks with $N$ cooldown constraint.
+                    </div>
+                    <div class="problem-code">
+<pre>
+public int leastInterval(char[] tasks, int n) {
+    int[] freq = new int[26];
+    for (char c : tasks) freq[c - 'A']++;
+    PriorityQueue&lt;Integer&gt; maxHeap = new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+    for (int f : freq) if (f &gt; 0) maxHeap.offer(f);
+    Queue&lt;int[]&gt; cooldown = new ArrayDeque&lt;&gt;(); // [freq, availTime]
+    int time = 0;
+    while (!maxHeap.isEmpty() || !cooldown.isEmpty()) {
+        time++;
+        if (!maxHeap.isEmpty()) {
+            int cnt = maxHeap.poll() - 1;
+            if (cnt &gt; 0) cooldown.offer(new int[]{cnt, time + n});
+        }
+        if (!cooldown.isEmpty() &amp;&amp; cooldown.peek()[1] == time) {
+            maxHeap.offer(cooldown.poll()[0]);
+        }
+    }
+    return time;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Problem 6: LC 295 -->
+        <div class="section-box box-purple">
+            <div class="section-header">6. LEETCODE 295 — FIND MEDIAN FROM DATA STREAM</div>
+            <div class="section-content">
+                <div class="problem-split">
+                    <div class="problem-info">
+                        <div class="meta-card">
+                            <span class="badge-hard">🔴 Hard ★★★★★</span>
+                            <span>Two Heaps (Max + Min)</span>
+                            <span class="company-tag">Google</span><span class="company-tag">Amazon</span>
+                        </div>
+                        <strong>Problem:</strong> Maintain running median of a stream in $O(\log N)$ insert &amp; $O(1)$ find.
+                    </div>
+                    <div class="problem-code">
+<pre>
+class MedianFinder {
+    private PriorityQueue&lt;Integer&gt; maxHeap = new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+    private PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+    public void addNum(int num) {
+        if (maxHeap.isEmpty() || num &lt;= maxHeap.peek()) maxHeap.offer(num);
+        else minHeap.offer(num);
+        if (maxHeap.size() &gt; minHeap.size() + 1) minHeap.offer(maxHeap.poll());
+        else if (minHeap.size() &lt; maxHeap.size()) maxHeap.offer(minHeap.poll());
+    }
+    public double findMedian() {
+        if (maxHeap.size() == minHeap.size()) return (maxHeap.peek() + minHeap.peek()) / 2.0;
+        return maxHeap.peek();
+    }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 8: MERGE K SORTED STREAMS (23, 373) -->
+    <div class="page" id="page8">
+        <div class="header-top">
+            <div class="header-title-group">
+                <span style="font-size: 1.1rem;">🔗</span>
+                <h1>HARD NEETCODE: MERGE K SORTED LISTS &amp; K PAIRS SMALLEST SUMS</h1>
+            </div>
+            <span class="page-num">PAGE 8 OF 10</span>
+        </div>
+
+        <div class="aha-box">
+            💡 <strong>AHA MOMENT: CANDIDATE TRACKING ACROSS K SORTED STREAMS</strong><br/>
+            When merging $K$ sorted inputs (lists, arrays, or matrix rows), you only ever need to hold **1 active candidate from each of the K sources** inside a Min-Heap of size $K$!
+        </div>
+
+        <!-- Problem 7: LC 23 -->
+        <div class="section-box box-blue">
+            <div class="section-header">7. LEETCODE 23 — MERGE K SORTED LISTS</div>
+            <div class="section-content">
+                <div class="problem-split">
+                    <div class="problem-info">
+                        <div class="meta-card">
+                            <span class="badge-hard">🔴 Hard ★★★★★</span>
+                            <span>Min-Heap Size K</span>
+                            <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                        </div>
+                        <strong>Problem:</strong> Merge $K$ sorted linked lists into one single sorted list.
+                        <p style="margin:4px 0"><strong>Key Strategy:</strong> Insert the head of each non-null list into a Min-Heap of size $K$. Continuously poll the minimum node, append it to the result list, and if that node has a `next` pointer, offer `next` into the heap!</p>
+                    </div>
+                    <div class="problem-code">
+<pre>
+public ListNode mergeKLists(ListNode[] lists) {
+    if (lists == null || lists.length == 0) return null;
+    PriorityQueue&lt;ListNode&gt; pq = new PriorityQueue&lt;&gt;((a,b) -&gt; Integer.compare(a.val, b.val));
+    for (ListNode node : lists) if (node != null) pq.offer(node);
+    ListNode dummy = new ListNode(0), tail = dummy;
+    while (!pq.isEmpty()) {
+        ListNode curr = pq.poll();
+        tail.next = curr; tail = tail.next;
+        if (curr.next != null) pq.offer(curr.next);
+    }
+    return dummy.next;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Problem 7b: LC 373 -->
+        <div class="section-box box-purple">
+            <div class="section-header">7b. LEETCODE 373 — FIND K PAIRS WITH SMALLEST SUMS</div>
+            <div class="section-content">
+                <div class="problem-split">
+                    <div class="problem-info">
+                        <div class="meta-card">
+                            <span class="badge-medium">🟡 Medium ★★★★★</span>
+                            <span>Min-Heap Index Tracking</span>
+                            <span class="company-tag">Google</span>
+                        </div>
+                        <strong>Problem:</strong> Given two sorted arrays `u` and `v`, find $K$ pairs $(u[i], v[j])$ with smallest sums.
+                    </div>
+                    <div class="problem-code">
+<pre>
+public List&lt;List&lt;Integer&gt;&gt; kSmallestPairs(int[] nums1, int[] nums2, int k) {
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;(
+        (a, b) -&gt; Integer.compare(a[0] + a[1], b[0] + b[1])
+    );
+    for (int i = 0; i &lt; Math.min(nums1.length, k); i++) {
+        pq.offer(new int[]{nums1[i], nums2[0], 0}); // [u, v, idxInNums2]
+    }
+    while (k-- &gt; 0 &amp;&amp; !pq.isEmpty()) {
+        int[] curr = pq.poll();
+        res.add(List.of(curr[0], curr[1]));
+        int idx2 = curr[2];
+        if (idx2 + 1 &lt; nums2.length) {
+            pq.offer(new int[]{curr[0], nums2[idx2 + 1], idx2 + 1});
+        }
+    }
+    return res;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 9: ADVANCED GREEDY HEAP (502, 632) -->
+    <div class="page" id="page9">
+        <div class="header-top">
+            <div class="header-title-group">
+                <span style="font-size: 1.1rem;">💰</span>
+                <h1>HARD NEETCODE: IPO &amp; SMALLEST RANGE IN K LISTS</h1>
+            </div>
+            <span class="page-num">PAGE 9 OF 10</span>
+        </div>
+
+        <div class="aha-box">
+            💡 <strong>AHA MOMENT: DUAL HEAP / SLIDING WINDOW HEAP DYNAMICS</strong><br/>
+            Advanced Heap problems combine a Min-Heap (to track the current minimum element across streams) with dynamic tracking of the current maximum element to evaluate ranges or maximize capital!
+        </div>
+
+        <!-- Problem 8: LC 502 -->
+        <div class="section-box box-green">
+            <div class="section-header">8. LEETCODE 502 — IPO (MAXIMIZE CAPITAL)</div>
+            <div class="section-content">
+                <div class="problem-split">
+                    <div class="problem-info">
+                        <div class="meta-card">
+                            <span class="badge-hard">🔴 Hard ★★★★★</span>
+                            <span>Dual Heap Greedy</span>
+                            <span class="company-tag">Google</span>
+                        </div>
+                        <strong>Problem:</strong> Pick at most $K$ projects to maximize initial capital $W$.
+                    </div>
+                    <div class="problem-code">
+<pre>
+public int findMaximizedCapital(int k, int w, int[] profits, int[] capital) {
+    int n = profits.length;
+    int[][] projects = new int[n][2];
+    for (int i = 0; i &lt; n; i++) projects[i] = new int[]{capital[i], profits[i]};
+    Arrays.sort(projects, (a,b) -&gt; Integer.compare(a[0], b[0]));
+    PriorityQueue&lt;Integer&gt; maxProfit = new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+    int ptr = 0;
+    for (int i = 0; i &lt; k; i++) {
+        while (ptr &lt; n &amp;&amp; projects[ptr][0] &lt;= w) {
+            maxProfit.offer(projects[ptr++][1]);
+        }
+        if (maxProfit.isEmpty()) break;
+        w += maxProfit.poll();
+    }
+    return w;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Problem 9: LC 632 -->
+        <div class="section-box box-purple">
+            <div class="section-header">9. LEETCODE 632 — SMALLEST RANGE COVERING ELEMENTS FROM K LISTS</div>
+            <div class="section-content">
+                <div class="problem-split">
+                    <div class="problem-info">
+                        <div class="meta-card">
+                            <span class="badge-hard">🔴 Hard ★★★★★</span>
+                            <span>Min-Heap + Max Tracker</span>
+                            <span class="company-tag">Google</span><span class="company-tag">Amazon</span>
+                        </div>
+                        <strong>Problem:</strong> Find smallest range $[a, b]$ that includes at least one number from each of the $K$ sorted lists.
+                    </div>
+                    <div class="problem-code">
+<pre>
+public int[] smallestRange(List&lt;List&lt;Integer&gt;&gt; nums) {
+    PriorityQueue&lt;int[]&gt; minHeap = new PriorityQueue&lt;&gt;(
+        (a, b) -&gt; Integer.compare(a[0], b[0])
+    );
+    int maxVal = Integer.MIN_VALUE;
+    for (int i = 0; i &lt; nums.size(); i++) {
+        int val = nums.get(i).get(0);
+        minHeap.offer(new int[]{val, i, 0}); // [val, listIdx, elemIdx]
+        maxVal = Math.max(maxVal, val);
+    }
+    int rangeStart = 0, rangeEnd = Integer.MAX_VALUE;
+    while (minHeap.size() == nums.size()) {
+        int[] curr = minHeap.poll();
+        int minVal = curr[0], listIdx = curr[1], elemIdx = curr[2];
+        if (maxVal - minVal &lt; rangeEnd - rangeStart) {
+            rangeStart = minVal; rangeEnd = maxVal;
+        }
+        if (elemIdx + 1 &lt; nums.get(listIdx).size()) {
+            int nextVal = nums.get(listIdx).get(elemIdx + 1);
+            minHeap.offer(new int[]{nextVal, listIdx, elemIdx + 1});
+            maxVal = Math.max(maxVal, nextVal);
+        }
+    }
+    return new int[]{rangeStart, rangeEnd};
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 10: REVISION & MASTER SUMMARY SHEET -->
+    <div class="page" id="page10">
+        <div class="header-top">
+            <div class="header-title-group">
+                <span style="font-size: 1.1rem;">📜</span>
+                <h1>TOPIC 09.10: REVISION &amp; MASTER SUMMARY SHEET</h1>
+            </div>
+            <span class="page-num">PAGE 10 OF 10</span>
+        </div>
+
+        <div class="section-box box-green">
+            <div class="section-header">📜 REVISION CHECKLIST</div>
+            <div class="section-content">
+                <p>✅ <strong>Dual Representation:</strong> Conceptual Complete Binary Tree ↔ Flat 1D Array (`parent(i) = (i-1)/2`).</p>
+                <p>✅ <strong>Top-K Min-Heap Rule:</strong> K Largest ➔ Min-Heap of size K ($O(N \log K)$ time, $O(K)$ space).</p>
+                <p>✅ <strong>Merge K Streams:</strong> Min-Heap of size K holding current head node of each stream.</p>
+                <p>✅ <strong>Two-Heap Median:</strong> `maxHeap` (lower half) + `minHeap` (higher half) kept balanced within 1 element.</p>
+                <p>✅ <strong>Comparator Safety:</strong> Always use `Integer.compare(a, b)` instead of `a - b` to prevent overflow!</p>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin-top:10px">🚀 Next Step: Move to <strong>Topic 10: Trees &amp; BST Masterclass</strong>.</div>
+    </div>
+
+    </div>
+</div>
+</div>
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout');
+        const btn = document.querySelector('.shrink-btn span');
+        layout.classList.toggle('shrunk');
+        if (layout.classList.contains('shrunk')) {
+            if (btn) btn.innerText = '➕ Expand';
+        } else {
+            if (btn) btn.innerText = '➖ Shrink';
+        }
+    }
+</script>
+</body>
+</html>

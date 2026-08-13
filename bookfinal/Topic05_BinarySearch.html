@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 05: Binary Search Masterclass (10-Page Ultra-Dense Edition)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#ffffff',
+            primaryTextColor: '#0f172a',
+            primaryBorderColor: '#2563eb',
+            lineColor: '#64748b',
+            fontFamily: 'Inter'
+        }
+    });
+</script>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+    }
+
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 11.8px;
+        line-height: 1.4;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 8px 16px;
+        display: flex;
+        
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand {
+        font-weight: 900;
+        font-size: 1rem;
+        color: #38bdf8;
+    }
+    .top-nav .nav-controls {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+    }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 20px 24px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+        
+        display: flex;
+        flex-direction: column;
+        
+    }
+    [data-theme="dark"] .page { background: #1e293b; color: #f8fafc; }
+
+    /* Header Top */
+    .header-top {
+        display: flex;
+        
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 6px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top { background: #0f172a; border-color: #38bdf8; border-left-color: #38bdf8; }
+    .header-title-group { display: flex; align-items: center; gap: 8px; }
+    .header-top h1 { margin: 0; font-size: 1.15rem; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+    .header-top .page-num { background: #1e3a8a; color: white; padding: 2px 8px; border-radius: 14px; font-weight: 800; font-size: 0.72rem; }
+
+    /* Section Box */
+    .section-box {
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        background: white;
+        border: 2px solid #3b82f6;
+        width: 100%;
+    }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+    .section-header { padding: 4px 8px; font-weight: 800; font-size: 0.8rem; color: white; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+    .section-header .num { background: white; color: #0f172a; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 900; }
+    .section-content { padding: 6px 8px; font-size: 0.76rem; }
+
+    /* Color Themes */
+    .box-blue { border-color: #2563eb !important; } .box-blue .section-header { background: #2563eb !important; }
+    .box-green { border-color: #22c55e !important; } .box-green .section-header { background: #22c55e !important; }
+    .box-purple { border-color: #8b5cf6 !important; } .box-purple .section-header { background: #8b5cf6 !important; }
+    .box-red { border-color: #ef4444 !important; } .box-red .section-header { background: #ef4444 !important; }
+    .box-orange { border-color: #f97316 !important; } .box-orange .section-header { background: #f97316 !important; }
+    .box-teal { border-color: #0d9488 !important; } .box-teal .section-header { background: #0d9488 !important; }
+    .box-indigo { border-color: #6366f1 !important; } .box-indigo .section-header { background: #6366f1 !important; }
+    .box-amber { border-color: #d97706 !important; } .box-amber .section-header { background: #d97706 !important; }
+
+    /* Problem Split Grid */
+    .problem-split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+    .problem-info { display: flex; flex-direction: column; gap: 3px; }
+    .problem-code { display: flex; flex-direction: column; }
+
+    .meta-card { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 3px 6px; border-radius: 4px; display: flex;  align-items: center; font-weight: 700; font-size: 0.7rem; }
+    [data-theme="dark"] .meta-card { background: #0f172a; border-color: #334155; }
+    .badge-easy { background: #10b981; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-medium { background: #f59e0b; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-hard { background: #ef4444; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .company-tag { background: #1e3a8a; color: white; padding: 1px 4px; border-radius: 3px; font-size: 0.65rem; }
+
+    .flowchart-box { background: #eff6ff; border: 1px solid #93c5fd; border-left: 3px solid #2563eb; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: 700; color: #1e40af; }
+    .dialogue-box { background: #f8fafc; border: 1px solid #3b82f6; border-left: 3px solid #2563eb; padding: 3px 6px; border-radius: 3px; font-size: 0.72rem; }
+    .dialogue-speaker { font-weight: 800; color: #1e3a8a; }
+    .whynot-box { background: #fff7ed; border: 1px solid #fdba74; border-left: 3px solid #f97316; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; color: #9a3412; }
+
+    .array-viz-table { border-collapse: collapse; text-align: center; font-family: 'Fira Code', monospace; font-size: 0.7rem; }
+    .array-viz-table td { border: 1px solid #cbd5e1; padding: 2px 5px; font-weight: 700; }
+    .cell-mid { background: #fef08a; color: #854d0e; }
+    .cell-found { background: #bbf7d0; color: #166534; }
+    .cell-idx { font-size: 0.62rem; color: #64748b; border: none !important; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    pre { background: #f8fafc; color: #0f172a; padding: 6px 8px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.71rem; line-height: 1.32; margin: 0; white-space: pre-wrap !important; word-break: break-word; border: 1px solid #cbd5e1; }
+    [data-theme="dark"] pre { background: #0f172a; color: #f8fafc; border-color: #334155; }
+    code { font-family: 'Fira Code', monospace; background: #f1f5f9; color: #0f172a; padding: 1px 3px; border-radius: 3px; font-size: 0.74rem; border: 1px solid #cbd5e1; }
+
+    .aha-box { background: #fefce8; border: 1px solid #eab308; border-left: 4px solid #ca8a04; color: #713f12; padding: 5px 8px; border-radius: 4px; font-size: 0.76rem; font-weight: 600; margin: 4px 0; }
+    .rule-box { padding: 4px 6px; border-radius: 4px; font-weight: 600; margin: 4px 0; font-size: 0.74rem; }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    .rule-purple { background: #faf5ff; border: 1px solid #a855f7; border-left: 4px solid #a855f7; color: #6b21a8; }
+    .rule-red { background: #fff1f2; border: 1px solid #ef4444; border-left: 4px solid #ef4444; color: #b91c1c; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+    table th, table td { border: 1px solid var(--border-color); padding: 3px 5px; text-align: left; }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+    .mermaid { display: flex; justify-content: center; margin: 2px 0; }
+    .back-to-top { position: fixed; bottom: 20px; right: 20px; background: #2563eb; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; border: none; z-index: 999; }
+
+    @page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 6px 10px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.78; }
+  .page:last-child { page-break-after: avoid !important; break-after: avoid !important; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+
+    /* Sticky Sidebar Layout */
+    .app-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+
+    .toc-title { font-weight: 900; font-size: 0.85rem; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+
+    .main-content { min-width: 0; }
+
+
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+
+.ph { display:flex; justify-content:space-between; align-items:center; border-bottom: 3px solid var(--primary); padding-bottom: 6px; margin-bottom: 10px; }
+.ph h1 { font-size: 1.5rem; font-weight: 900; color: var(--primary); letter-spacing: 0.5px; margin:0; }
+.ph .sub { font-size: 0.82rem; font-weight: 600; color: #475569; margin-top: 2px; }
+.ph .pn { background: var(--primary); color: white; padding: 3px 12px; border-radius: 16px; font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.72rem; color: #475569; font-weight: 600; margin-top: 3px; }
+
+</style>
+
+<!-- PAGE 1 -->
+<div class="page"><div class="ph"><div><h1>TOPIC 05.0: BINARY SEARCH FOUNDATION &amp; EVOLUTION</h1><div class="sub">Foundation &amp; Templates</div></div><div style="text-align:right"><div class="pn">PAGE 1 OF 6</div></div></div><div><div>>
+            </div>
+
+            <div class="section-box box-teal" style="margin-top:4px">
+                <div class="section-header">🧰 REUSABLE BINARY SEARCH UTILITIES (SIDE-BY-SIDE TEMPLATES)</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">Lower Bound (First Index where arr[i] &gt;= target):</p>
+<pre>
+// Lower Bound: First index where arr[i] &gt;= target
+int lowerBound(int[] arr, int target) {
+    int lo = 0, hi = arr.length;
+    while (lo &lt; hi) {
+        int mid = lo + (hi - lo) / 2; // Safe Mid
+        if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid;
+    }
+    return lo;
+}</pre>
+                        </div>
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">Upper Bound (First Index where arr[i] &gt; target):</p>
+<pre>
+// Upper Bound: First index where arr[i] &gt; target
+int upperBound(int[] arr, int target) {
+    int lo = 0, hi = arr.length;
+    while (lo &lt; hi) {
+        int mid = lo + (hi - lo) / 2; // Safe Mid
+        if (arr[mid] &lt;= target) lo = mid + 1;
+        else hi = mid;
+    }
+    return lo;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AHA Box #1 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #1: SEARCH SPACE REDUCTION &amp; BOUNDARY TRANSITION</strong><br/>
+                Binary Search is NOT just an array search! It is a general <strong>search-space reduction paradigm</strong>. We evaluate the middle element `mid` against a monotonic property (e.g. <code>F F F F T T T T</code>) to discard half (N/2) of the search space in O(1) time, shrinking N elements to 1 in exactly $log₂(N)$ steps!
+            </div>
+
+            <!-- Pattern Evolution Box -->
+            <div class="section-box box-purple">
+                <div class="section-header">🧬 PATTERN EVOLUTION: HOW ALGORITHMS EVOLVE</div>
+                <div class="section-content">
+                    <div style="background:#f8fafc; border:1px solid #cbd5e1; padding:4px 8px; border-radius:4px; font-family:'Fira Code', monospace; font-size:0.72rem;">
+                        Linear Scan O(N) ➔ Binary Search O(log N) ➔ Binary Search on Answer O(N log M)
+                    </div>
+                    <div style="margin-top:4px;">
+                        • <strong>Linear Scan:</strong> Inspects elements sequentially from 0 to N-1 (O(N) time).<br/>
+                        • <strong>Binary Search:</strong> Halves search space interval at each step on monotonic inputs (O(\log N) time).<br/>
+                        • <strong>Binary Search on Answer:</strong> Binary searches integer solution space $[L, R]$ using feasibility checks in O(N \log M)!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transition Visual Box -->
+            <div class="section-box box-green">
+                <div class="section-header">🎨 MONOTONIC TRANSITION BOUNDARY (F ➔ T)</div>
+                <div class="section-content">
+                    <table class="array-viz-table" style="width:100%;">
+                        <tr>
+                            <td style="background:#fee2e2; color:#991b1b;">F</td>
+                            <td style="background:#fee2e2; color:#991b1b;">F</td>
+                            <td style="background:#fee2e2; color:#991b1b;">F</td>
+                            <td style="background:#fee2e2; color:#991b1b;">F</td>
+                            <td style="background:#bbf7d0; color:#166534; border:2px solid #22c55e;">T ★</td>
+                            <td style="background:#dcfce7; color:#15803d;">T</td>
+                            <td style="background:#dcfce7; color:#15803d;">T</td>
+                        </tr>
+                    </table>
+                    <div style="text-align:center; font-weight:700; color:#166534; margin-top:2px;">
+                        ↑ Binary search pinpoints the FIRST TRUE transition boundary index in O(\log N)!
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2" style="margin-top:4px">
+                <div style="background:#eff6ff; border:1px solid #bfdbfe; padding:4px 6px; border-radius:4px; font-size:0.72rem;">
+                    <strong>1. Overflow-Safe Mid Formula:</strong> <code>int mid = left + (right - left) / 2;</code> avoids integer overflow.
+                </div>
+                <div style="background:#fffbeb; border:1px solid #fde68a; padding:4px 6px; border-radius:4px; font-size:0.72rem;">
+                    <strong>2. Closed Interval Rule:</strong> With <code>left = 0, right = N - 1</code>, loop condition MUST be <code>while (left &lt;= right)</code>.
+                </div>
+            <div class="rule-box rule-green" style="margin-top:4px;">
+                📌 <strong>KEY TAKEAWAY:</strong> For $N = 1,000,000$, Linear Scan takes 1,000,000 steps whereas Binary Search takes only ~20 steps!
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <div style="margin-top:4px"></div><div><div>>
+            </div>
+
+            <div class="grid-2" style="margin-bottom:4px">
+                <!-- Iterative Classic Template -->
+                <div class="section-box box-blue" style="margin:0">
+                    <div class="section-header"><span class="num">1</span> CLASSIC BINARY SEARCH TEMPLATE</div>
+                    <div class="section-content" style="padding:4px 6px">
+<pre style="font-size:0.65rem; padding:3px 5px">
+public int binarySearch(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    while (left &lt;= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target) return mid;
+        else if (nums[mid] &lt; target) left = mid + 1;
+        else right = mid - 1;
+    }
+    return -1;
+}</pre>
+                    </div>
+                </div>
+
+                <!-- First Occurrence Lower Bound -->
+                <div class="section-box box-green" style="margin:0">
+                    <div class="section-header"><span class="num">2</span> FIRST OCCURRENCE (LOWER BOUND)</div>
+                    <div class="section-content" style="padding:4px 6px">
+<pre style="font-size:0.65rem; padding:3px 5px">
+public int firstOccurrence(int[] nums, int target) {
+    int left = 0, right = nums.length - 1, ans = -1;
+    while (left &lt;= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target) {
+            ans = mid; right = mid - 1; // Record &amp; search left!
+        } else if (nums[mid] &lt; target) left = mid + 1;
+        else right = mid - 1;
+    }
+    return ans;
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trace Visuals -->
+            <div class="section-box box-purple" style="margin-bottom:4px">
+                <div class="section-header">🎨 VISUAL TRACE: FIRST OCCURRENCE OF TARGET = 4</div>
+                <div class="section-content" style="padding:4px 6px">
+                    <div style="font-weight:700; margin-bottom:2px; font-size:0.72rem;">Input: <code>nums = [1, 2, 4, 4, 4, 5, 6]</code>, Target = <code>4</code></div>
+                    
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:2px;">
+                        <span class="badge-medium">Step 1</span>
+                        <table class="array-viz-table" style="font-size:0.68rem">
+                            <tr><td>1</td><td>2</td><td>4</td><td class="cell-mid">4 (mid=3)</td><td>4</td><td>5</td><td>6</td></tr>
+                            <tr><td class="cell-idx">0 (L)</td><td class="cell-idx">1</td><td class="cell-idx">2</td><td class="cell-idx">3</td><td class="cell-idx">4</td><td class="cell-idx">5</td><td class="cell-idx">6 (R)</td></tr>
+                        </table>
+                        <span style="font-size:0.68rem;">Match! Record `ans=3`, `R = mid - 1 = 2`</span>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <span class="badge-easy">Step 2</span>
+                        <table class="array-viz-table" style="font-size:0.68rem">
+                            <tr><td>1</td><td class="cell-mid">2 (mid=1)</td><td class="cell-found">4 (idx 2)</td><td>4</td><td>4</td><td>5</td><td>6</td></tr>
+                            <tr><td class="cell-idx">0 (L)</td><td class="cell-idx">1</td><td class="cell-idx">2 (R)</td><td class="cell-idx">3</td><td class="cell-idx">4</td><td class="cell-idx">5</td><td class="cell-idx">6</td></tr>
+                        </table>
+                        <span style="font-size:0.68rem;">2 &lt; 4 ➔ Move `L = mid + 1 = 2`. Final `ans = 2`!</span>
+                    </div>
+                </div>
+            </div>
+            <div class="rule-box rule-amber" style="margin-top:2px;">
+            💡 <strong>AHA MOMENT:</strong> Boundary search finds duplicate range boundaries in O(\log N) without linear scanning across duplicates!
+        </div>
+        </div>
+
+
+    <!-- ========================================================= -->
+    </div>
+<!-- PAGE 2 -->
+<div class="page"><div class="ph"><div><h1>TOPIC 05.0: BINARY SEARCH FOUNDATION &amp; EVOLUTION</h1><div class="sub">Core Patterns — Part 1 &amp; Part 2</div></div><div style="text-align:right"><div class="pn">PAGE 2 OF 6</div></div></div><div><div>>
+            </div>
+
+            <!-- AHA Box -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #4: SEARCHING SOLUTION RANGE $[L, R]$ &amp; 2D MATRIX FLATTENING</strong><br/>
+                • <strong>BS on Answer:</strong> Binary search integer solution range $[L, R]$ using boolean <code>isValid(mid)</code> helper.<br/>
+                • <strong>1D Matrix Mapping:</strong> Convert 1D `mid` to 2D coordinates in O(1): <code>row = mid / cols</code> and <code>col = mid % cols</code>!
+            </div>
+
+            <div class="grid-2">
+                <!-- BS on Answer Template -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> BS ON ANSWER JAVA TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+public int bsOnAnswerTemplate(int[] nums, int limit) {
+    int left = 1, right = getMax(nums), ans = right;
+    while (left &lt;= right) {
+        int mid = left + (right - left) / 2;
+        if (isValid(nums, mid, limit)) {
+            ans = mid; right = mid - 1; // Try smaller!
+        } else left = mid + 1;
+    }
+    return ans;
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Matrix Flattening Template -->
+                <div class="section-box box-teal">
+                    <div class="section-header"><span class="num">2</span> 1D MATRIX FLATTENING (LC 74)</div>
+                    <div class="section-content">
+<pre>
+public boolean searchMatrix(int[][] matrix, int target) {
+    int rows = matrix.length, cols = matrix[0].length;
+    int left = 0, right = rows * cols - 1;
+    while (left &lt;= right) {
+        int mid = left + (right - left) / 2;
+        int val = matrix[mid / cols][mid % cols];
+        if (val == target) return true;
+        else if (val &lt; target) left = mid + 1;
+        else right = mid - 1;
+    }
+    return false;
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matrix Complexity Table -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📊 MATRIX SEARCH COMPLEXITY COMPARISON</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Matrix Structure</th><th>Algorithm Technique</th><th>Time Complexity</th><th>Space Complexity</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Fully Sorted (Row i end &lt; Row i+1 start)</td><td>1D Flattening Binary Search</td><td><code>O(log(R * C))</code></td><td><code>O(1)</code></td></tr>
+                            <tr><td>Rows &amp; Cols Independently Sorted</td><td>Top-Right Staircase Walk</td><td><code>O(R + C)</code></td><td><code>O(1)</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> BS on Answer converts hard optimization problems into feasibility checks in O(N \log M) time!
+        </div>
+        </div>
+
+
+    <!-- ========================================================= -->
+    <div style="margin-top:4px"></div><div><div>>
+            </div>
+
+            <!-- Mermaid Decision Tree -->
+            <div class="section-box box-purple">
+                <div class="section-header">🌳 BINARY SEARCH INTERVIEW DECISION TREE</div>
+                <div class="section-content">
+                    <div class="mermaid">
+                        graph TD
+                            A[Is input sorted or monotonic?]
+                            A -- YES --> B[Looking for exact element?]
+                            A -- NO --> C[Check if Rotated or Solution Space!]
+                            B -- YES --> D[Classic Binary Search]
+                            B -- NO --> E[First or Last occurrence?]
+                            E -- YES --> F[Boundary Search Lower/Upper]
+                            E -- NO --> G[Binary Search on Answer Range]
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <!-- Java Built-ins -->
+                <div class="section-box box-indigo">
+                    <div class="section-header"><span class="num">1</span> BUILT-IN JAVA APIS</div>
+                    <div class="section-content">
+                        <div>• <code>Arrays.binarySearch(arr, key)</code> returns index >= 0 if found, or <code>-(insertion_point) - 1</code> if missing!</div>
+                        <div>• <code>Collections.binarySearch(list, key, comparator)</code> supports custom Object comparators.</div>
+                    </div>
+                </div>
+
+                <!-- Top Bugs -->
+                <div class="section-box box-red">
+                    <div class="section-header"><span class="num">2</span> TOP 5 BINARY SEARCH BUGS</div>
+                    <div class="section-content">
+                        <div>1. Overflow in <code>(left + right)/2</code>.<br/>2. Infinite stuck loop via <code>left = mid</code>.<br/>3. Search on unsorted inputs.<br/>4. Loop bound mismatches.<br/>5. Missing empty input checks.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="rule-box rule-green" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> `Arrays.binarySearch()` returning `-insertionPoint - 1` lets you find insert index in 1 line!
+        </div>
+        </div>
+
+
+    <!-- ========================================================= -->
+    </div>
+<!-- PAGE 3 -->
+<div class="page"><div class="ph"><div><h1>TOPIC 05.0: BINARY SEARCH FOUNDATION &amp; EVOLUTION</h1><div class="sub">Core Patterns — Part 3 &amp; Part 4</div></div><div style="text-align:right"><div class="pn">PAGE 3 OF 6</div></div></div><div><div>>
+            </div>
+
+            <!-- Problem 1: LC 704 -->
+            <div class="section-box box-blue">
+                <div class="section-header">1. LEETCODE 704 — BINARY SEARCH</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★☆☆</span>
+                                <span>Classic BS</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Given a sorted array <code>nums</code> and <code>target</code>, return index or -1.<br/>
+                            <em>Example:</em> <code>nums = [-1,0,3,5,9,12], target = 9</code> → Output: <code>4</code>.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int search(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    while (left &lt;= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target) return mid;
+        else if (nums[mid] &lt; target) left = mid + 1;
+        else right = mid - 1;
+    }
+    return -1;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 2: LC 35 -->
+            <div class="section-box box-purple">
+                <div class="section-header">2. LEETCODE 35 — SEARCH INSERT POSITION</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★☆</span>
+                                <span>Lower Bound</span>
+                                <span class="company-tag">Google</span><span class="company-tag">Apple</span>
+                            </div>
+                            <strong>Problem:</strong> Return index if target found. If not, return index where it would be inserted in order.<br/>
+                            <em>Example:</em> <code>nums = [1,3,5,6], target = 5</code> → <code>2</code>. <code>target = 2</code> → <code>1</code>.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int searchInsert(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    while (left &lt;= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target) return mid;
+        else if (nums[mid] &lt; target) left = mid + 1;
+        else right = mid - 1;
+    }
+    return left; // left holds insertion index!
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 3: LC 374 -->
+            <div class="section-box box-teal">
+                <div class="section-header">3. LEETCODE 374 — GUESS NUMBER HIGHER OR LOWER</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★☆☆</span>
+                                <span>API Evaluation</span>
+                                <span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Guess number between 1 and n using pre-defined <code>guess(int num)</code> API.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int guessNumber(int n) {
+    int left = 1, right = n;
+    while (left &lt;= right) {
+        int mid = left + (right - left) / 2;
+        int res = guess(mid);
+        if (res == 0) return mid;
+        else if (res &lt; 0) right = mid - 1;
+        else left = mid + 1;
+    }
+    return -1;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 35):</strong> On loop finish, `left` pointer ALWAYS points to the exact insertion index!
+        </div>
+        </div>
+
+
+    <!-- ========================================================= -->
+    <div style="margin-top:4px"></div><div><div>>
+            </div>
+
+            <!-- Problem 4: LC 74 -->
+            <div class="section-box box-orange">
+                <div class="section-header">4. LEETCODE 74 — SEARCH A 2D MATRIX</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>1D Flattening</span>
+                                <span class="company-tag">Meta</span><span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Search target in M × N integer matrix sorted left-to-right &amp; top-to-bottom.<br/>
+                            <em>Example:</em> <code>matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3</code> → <code>true</code>.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean searchMatrix(int[][] matrix, int target) {
+    int rows = matrix.length, cols = matrix[0].length;
+    int left = 0, right = rows * cols - 1;
+    while (left &lt;= right) {
+        int mid = left + (right - left) / 2;
+        int val = matrix[mid / cols][mid % cols];
+        if (val == target) return true;
+        else if (val &lt; target) left = mid + 1;
+        else right = mid - 1;
+    }
+    return false;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 5: LC 33 -->
+            <div class="section-box box-blue">
+                <div class="section-header">5. LEETCODE 33 — SEARCH IN ROTATED SORTED ARRAY</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Rotated Search</span>
+                                <span class="company-tag">Meta</span><span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Search target in rotated sorted array of unique values.<br/>
+                            <em>Example:</em> <code>nums = [4,5,6,7,0,1,2], target = 0</code> → <code>4</code>.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int search(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    while (left &lt;= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target) return mid;
+        if (nums[left] &lt;= nums[mid]) { // Left half sorted
+            if (nums[left] &lt;= target &amp;&amp; target &lt; nums[mid]) right = mid - 1;
+            else left = mid + 1;
+        } else { // Right half sorted
+            if (nums[mid] &lt; target &amp;&amp; target &lt;= nums[right]) left = mid + 1;
+            else right = mid - 1;
+        }
+    }
+    return -1;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 33):</strong> At least ONE half (left or right) of a rotated sorted array is ALWAYS strictly sorted!
+        </div>
+        </div>
+
+
+    <!-- ========================================================= -->
+    </div>
+<!-- PAGE 4 -->
+<div class="page"><div class="ph"><div><h1>TOPIC 05.0: BINARY SEARCH FOUNDATION &amp; EVOLUTION</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div><div style="text-align:right"><div class="pn">PAGE 4 OF 6</div></div></div><div><div>>
+            </div>
+
+            <!-- Problem 6: LC 153 -->
+            <div class="section-box box-purple">
+                <div class="section-header">6. LEETCODE 153 — FIND MINIMUM IN ROTATED SORTED ARRAY</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Pivot Search</span>
+                                <span class="company-tag">Meta</span><span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Given a rotated sorted array <code>nums</code> of unique elements, return minimum element.<br/>
+                            <em>Example:</em> <code>nums = [3,4,5,1,2]</code> → <code>1</code>.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int findMin(int[] nums) {
+    int left = 0, right = nums.length - 1;
+    while (left &lt; right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] &gt; nums[right]) left = mid + 1;
+        else right = mid;
+    }
+    return nums[left];
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 7: LC 875 -->
+            <div class="section-box box-green">
+                <div class="section-header">7. LEETCODE 875 — KOKO EATING BANANAS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>BS on Answer</span>
+                                <span class="company-tag">Google</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Min eating speed <code>k</code> to eat all banana piles within <code>h</code> hours.<br/>
+                            <em>Example:</em> <code>piles = [3,6,7,11], h = 8</code> → <code>4</code>.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int minEatingSpeed(int[] piles, int h) {
+    int left = 1, right = 0;
+    for (int p : piles) right = Math.max(right, p);
+    int res = right;
+    while (left &lt;= right) {
+        int k = left + (right - left) / 2;
+        long hours = 0;
+        for (int p : piles) hours += (p + k - 1) / k;
+        if (hours &lt;= h) {
+            res = k; right = k - 1; // Try slower
+        } else left = k + 1;
+    }
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 875):</strong> Integer ceiling division formula: <code>(p + k - 1) / k</code> avoids floating point calculations!
+        </div>
+        </div>
+
+
+    <!-- ========================================================= -->
+    </div>
+<!-- PAGE 5 -->
+<div class="page"><div class="ph"><div><h1>TOPIC 05.0: BINARY SEARCH FOUNDATION &amp; EVOLUTION</h1><div class="sub">FAANG Problem Ladder (All 10 Problems)</div></div><div style="text-align:right"><div class="pn">PAGE 5 OF 6</div></div></div><div><div>>
+            </div>
+
+            <!-- Problem 8: LC 162 -->
+            <div class="section-box box-rose">
+                <div class="section-header">8. LEETCODE 162 — FIND PEAK ELEMENT</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★☆</span>
+                                <span>Slope Search</span>
+                                <span class="company-tag">Meta</span><span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Find index of any peak element strictly greater than its neighbors.<br/>
+                            <em>Example:</em> <code>nums = [1,2,3,1]</code> → <code>2</code>.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int findPeakElement(int[] nums) {
+    int left = 0, right = nums.length - 1;
+    while (left &lt; right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] &lt; nums[mid + 1]) left = mid + 1;
+        else right = mid;
+    }
+    return left;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 9: LC 981 -->
+            <div class="section-box box-blue">
+                <div class="section-header">9. LEETCODE 981 — TIME BASED KEY-VALUE STORE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>List BS Search</span>
+                                <span class="company-tag">Google</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Store key-value pairs with timestamps and retrieve value with <code>timestamp_prev &le; timestamp</code>.
+                        </div>
+                        <div class="problem-code">
+<pre>
+class TimeMap {
+    private Map&lt;String, List&lt;Pair&gt;&gt; map = new HashMap&lt;&gt;();
+    public void set(String key, String value, int timestamp) {
+        map.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(new Pair(timestamp, value));
+    }
+    public String get(String key, int timestamp) {
+        if (!map.containsKey(key)) return "";
+        List&lt;Pair&gt; list = map.get(key);
+        int left = 0, right = list.size() - 1; String res = "";
+        while (left &lt;= right) {
+            int mid = left + (right - left) / 2;
+            if (list.get(mid).time &lt;= timestamp) {
+                res = list.get(mid).val; left = mid + 1;
+            } else right = mid - 1;
+        }
+        return res;
+    }
+    private static class Pair { int time; String val; Pair(int t, String v){time=t;val=v;}}
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Peak element search moves towards ascending slope (`nums[mid] < nums[mid+1]`) because a peak MUST exist in that direction!
+        </div>
+        </div>
+
+
+    <!-- ========================================================= -->
+    <div style="margin-top:4px"></div><div><div>>
+            </div>
+
+            <!-- Problem 10: LC 410 -->
+            <div class="section-box box-indigo">
+                <div class="section-header">10. LEETCODE 410 — SPLIT ARRAY LARGEST SUM</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>BS on Answer</span>
+                                <span class="company-tag">Google</span><span class="company-tag">Amazon</span>
+                            </div>
+                            <strong>Problem:</strong> Split array into <code>k</code> non-empty contiguous subarrays minimizing largest sum.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int splitArray(int[] nums, int k) {
+    int left = 0, right = 0;
+    for (int n : nums) { left = Math.max(left, n); right += n; }
+    int res = right;
+    while (left &lt;= right) {
+        int mid = left + (right - left) / 2;
+        if (canSplit(nums, k, mid)) { res = mid; right = mid - 1; }
+        else left = mid + 1;
+    }
+    return res;
+}
+private boolean canSplit(int[] nums, int k, int maxSum) {
+    int count = 1, currentSum = 0;
+    for (int n : nums) {
+        if (currentSum + n &gt; maxSum) { count++; currentSum = n; }
+        else currentSum += n;
+    }
+    return count &lt;= k;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 11: LC 4 -->
+            <div class="section-box box-red">
+                <div class="section-header">11. LEETCODE 4 — MEDIAN OF TWO SORTED ARRAYS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Partition BS</span>
+                                <span class="company-tag">Google</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Return median of two sorted arrays in O(\log(M+N)) time!
+                        </div>
+                        <div class="problem-code">
+<pre>
+public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+    if (nums1.length &gt; nums2.length) return findMedianSortedArrays(nums2, nums1);
+    int m = nums1.length, n = nums2.length, half = (m + n + 1) / 2;
+    int left = 0, right = m;
+    while (left &lt;= right) {
+        int i = left + (right - left) / 2, j = half - i;
+        int maxL1 = (i == 0) ? Integer.MIN_VALUE : nums1[i - 1];
+        int minR1 = (i == m) ? Integer.MAX_VALUE : nums1[i];
+        int maxL2 = (j == 0) ? Integer.MIN_VALUE : nums2[j - 1];
+        int minR2 = (j == n) ? Integer.MAX_VALUE : nums2[j];
+        if (maxL1 &lt;= minR2 &amp;&amp; maxL2 &lt;= minR1) {
+            if ((m + n) % 2 == 1) return Math.max(maxL1, maxL2);
+            return (Math.max(maxL1, maxL2) + Math.min(minR1, minR2)) / 2.0;
+        } else if (maxL1 &gt; minR2) right = i - 1;
+        else left = i + 1;
+    }
+    return 0.0;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="rule-box rule-purple" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> For Median of Two Sorted Arrays, binary search on the SMALLER array to guarantee O(\log(\min(M,N))) complexity!
+        </div>
+        </div>
+
+
+    <!-- ========================================================= -->
+    </div>
+<!-- PAGE 6 -->
+<div class="page"><div class="ph"><div><h1>TOPIC 05.0: BINARY SEARCH FOUNDATION &amp; EVOLUTION</h1><div class="sub">Dry Run, Proofs &amp; Cheat Sheet</div></div><div style="text-align:right"><div class="pn">PAGE 6 OF 6</div></div></div><div><div><div><div><div>>
+            </div>
+
+            <!-- Golden Laws -->
+            <div class="section-box box-green">
+                <div class="section-header">⭐ THE 4 GOLDEN LAWS OF BINARY SEARCH</div>
+                <div class="section-content">
+                    <div style="font-size:0.78rem; line-height:1.45;">
+                        1. <strong>Overflow-Safe Mid:</strong> Always calculate <code>int mid = left + (right - left) / 2;</code>.<br/>
+                        2. <strong>Inclusive Bounds Rule:</strong> With <code>left = 0, right = N - 1</code>, loop MUST be <code>while (left &lt;= right)</code> and update <code>left = mid + 1</code>, <code>right = mid - 1</code>.<br/>
+                        3. <strong>Boundary Record Trick:</strong> For first/last occurrence, record <code>ans = mid</code> when matched and continue searching leftward/rightward.<br/>
+                        4. <strong>Binary Search on Answer:</strong> Search integer solution range $[L, R]$ with boolean <code>isValid(mid)</code> helper!
+                    </div>
+                </div>
+            </div>
+
+            <!-- When BS Fails -->
+            <div class="section-box box-amber">
+                <div class="section-header">⛔ WHEN BINARY SEARCH FAILS (DO NOT USE!)</div>
+                <div class="section-content">
+                    <div>• <strong>Unsorted Input Array:</strong> Input is unsorted and index order must be preserved ➔ Use <strong>HashMap</strong>!</div>
+                    <div>• <strong>Non-Monotonic Predicate:</strong> `isValid(x)` fluctuates unpredictably ➔ Use <strong>Dynamic Programming</strong>!</div>
+                </div>
+            </div>
+
+            <!-- NeetCode & Blind 75 Tracker -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📊 NEETCODE &amp; BLIND 75 CONFIDENCE TRACKER</div>
+                <div class="section-content">
+                    <div class="grid-3">
+                        <div><span class="badge-easy">🟢 Easy</span> LC 704 Binary Search</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 35 Search Insert</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 374 Guess Number</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 74 Search 2D Matrix</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 33 Search Rotated</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 153 Find Min Rotated</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 875 Koko Bananas</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 162 Find Peak</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 981 Time Key Value</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 410 Split Array Max</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 4 Median Two Sorted</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forward Cross Link -->
+            <a href="index.html" class="cross-link" style="background:#dcfce7; color:#15803d; border-color:#86efac; font-size:0.78rem;">👉 Next Master Topic: Topic 06 → Stack &amp; Queues Masterclass</a>
+            <div class="rule-box rule-green" style="margin: 0;">
+            🎉 <strong>TOPIC 05 BINARY SEARCH COMPLETE!</strong> Turn the page to <strong>Topic 06: Stack &amp; Queues Masterclass</strong>!
+        </div>
+        </div>
+
+</div>
+
+    </div> <!-- end .main-content -->
+</div> <!-- end .app-layout -->
+
+<!-- Floating Back to Top Button -->
+<button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆</button>
+
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout') || document.querySelector('.app-layout');
+        const btn = document.querySelector('.shrink-btn span');
+        if (layout) {
+            layout.classList.toggle('shrunk');
+            if (btn) {
+                btn.innerText = layout.classList.contains('shrunk') ? '➕ Expand' : '➖ Shrink';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,592 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline; gap: 15px;">
+            <h1>GRAPH PATTERN GUIDE</h1>
+            <div class="subtitle">PAGE 7 &mdash; GRAPH BFS PROBLEM GUIDE (APPLY TEMPLATES)<br><small style="color:#64748b;font-weight:normal;">"Same BFS. Different problems. Only the changing parts."</small></div>
+        </div>
+        <div style="text-align: right;">
+            <div class="page-number" style="background-color: #1e3a8a; color: white; padding: 5px 15px; font-weight: bold; font-size: 1.2rem;">PAGE 7</div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 20px; margin-bottom: 15px;">
+        <div class="section-box" style="flex: 1; border: 2px solid #312e81;">
+            <div class="section-header" style="background-color: #312e81; color: white; padding: 5px; text-align: center; font-weight: bold; text-transform: uppercase;">HOW TO USE THIS PAGE</div>
+            <div class="section-content" style="padding: 10px; font-size: 0.85rem; line-height: 1.4;">
+                <ol style="margin: 0; padding-left: 20px;">
+                    <li>Find the problem.</li>
+                    <li>Identify the Base Template (from Page 6).</li>
+                    <li>Read the <strong>CHANGED LINES</strong>.</li>
+                    <li>Understand the AHA.</li>
+                    <li>Review the complexity &amp; interview tip.</li>
+                    <li>Practice writing from memory.</li>
+                </ol>
+            </div>
+        </div>
+        <div class="section-box" style="flex: 2; border: 2px solid #1e3a8a;">
+            <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 5px; text-align: center; font-weight: bold; text-transform: uppercase;">TEMPLATE LEGEND (From Page 6)</div>
+            <div class="section-content" style="padding: 15px 10px; display: flex; justify-content: space-around; align-items: center; font-size: 0.85rem; font-weight: bold;">
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="background-color: #1e40af; color: white; padding: 2px 6px; border-radius: 4px;">Gb</span> Graph BFS (Adj List)</div>
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="background-color: #166534; color: white; padding: 2px 6px; border-radius: 4px;">Gr</span> Grid BFS</div>
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="background-color: #ea580c; color: white; padding: 2px 6px; border-radius: 4px;">Ms</span> Multi-Source BFS</div>
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="background-color: #6b21a8; color: white; padding: 2px 6px; border-radius: 4px;">Lv</span> Level Order BFS</div>
+                <div style="display: flex; align-items: center; gap: 5px;"><span style="background-color: #dc2626; color: white; padding: 2px 6px; border-radius: 4px;">Ds</span> Distance BFS</div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 15px;">
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 15px;">
+            <div class="section-box">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #1e3a8a; padding-bottom: 5px;">
+                    <div style="font-weight: bold; color: #1e3a8a; display: flex; align-items: center; gap: 5px;"><span class="num" style="background-color: #1e3a8a; color: white; padding: 2px 8px; border-radius: 4px;">1</span> ROTTING ORANGES</div>
+                    <span style="background-color: #ea580c; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 0.8rem;">Ms</span>
+                </div>
+                <div class="section-content" style="padding-top: 10px; font-size: 0.75rem;">
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 5px;">Base Template: Multi-Source BFS (Page 6)</div>
+                    <div style="font-weight: bold;">Problem</div>
+                    <div style="margin-bottom: 5px;">Return minutes until all oranges rot. Return -1 if impossible.</div>
+                    <div style="font-weight: bold; margin-bottom: 5px;">Changed Lines (from Template)</div>
+<pre style="background-color: #f8fafc; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 0.7rem; border: 1px solid #e2e8f0;"><code>// 1. Push all rotten oranges (sources)
+for (int i = 0; i &lt; n; i++) {
+    for (int j = 0; j &lt; m; j++) {
+        if (grid[i][j] == 2) {
+            q.offer(new int[]{i, j});
+        }
+    }
+}
+// 2. Count fresh oranges
+fresh = count all 1's in grid;
+// 3. While loop level++ gives time (minutes)
+int minutes = 0;
+while (!q.isEmpty() &amp;&amp; fresh &gt; 0) {
+    int size = q.size();
+    minutes++;
+    // process level
+}
+return fresh == 0 ? minutes : -1;</code></pre>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.7rem; text-align: center;">
+                        <tr style="border-bottom: 1px solid #cbd5e1;">
+                            <th style="padding: 4px;">Caller</th>
+                            <th style="padding: 4px;">Return</th>
+                            <th style="padding: 4px;">Visited</th>
+                            <th style="padding: 4px;">Key Idea</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px;">multiSourceBfs()<br>(all rotten)</td>
+                            <td style="padding: 4px;">int (minutes)</td>
+                            <td style="padding: 4px;">boolean[][]</td>
+                            <td style="padding: 4px;">Spread level by level</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 10px; display: flex; gap: 5px;">
+                        <div>💡</div>
+                        <div><strong>AHA:</strong> Multiple starting rotten oranges spread at the same time.</div>
+                    </div>
+                    <div style="display: flex; margin-top: 10px; gap: 10px;">
+                        <div style="flex: 1;">
+                            <strong>Complexity</strong><br>
+                            Time: O(n * m)<br>
+                            Space: O(n * m)
+                        </div>
+                        <div style="flex: 1;">
+                            <strong>Interview Tip</strong><br>
+                            Don't forget to count fresh oranges before BFS.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #1e3a8a; padding-bottom: 5px;">
+                    <div style="font-weight: bold; color: #1e3a8a; display: flex; align-items: center; gap: 5px;"><span class="num" style="background-color: #1e3a8a; color: white; padding: 2px 8px; border-radius: 4px;">4</span> WORD LADDER (LENGTH)</div>
+                    <span style="background-color: #1e40af; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 0.8rem;">Gb</span>
+                </div>
+                <div class="section-content" style="padding-top: 10px; font-size: 0.75rem;">
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 5px;">Base Template: Graph BFS (Adj List) (Distance BFS)</div>
+                    <div style="font-weight: bold;">Problem</div>
+                    <div style="margin-bottom: 5px;">Return length of shortest transformation sequence.</div>
+                    <div style="font-weight: bold; margin-bottom: 5px;">Changed Lines (from Template)</div>
+<pre style="background-color: #f8fafc; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 0.7rem; border: 1px solid #e2e8f0;"><code>// 1. Build graph: word -&gt; all one-letter transformations
+Map&lt;String, List&lt;String&gt;&gt; graph = buildGraph(wordList);
+// 2. BFS from beginWord
+Queue&lt;String&gt; q = new LinkedList&lt;&gt;();
+q.offer(beginWord);
+visited.add(beginWord);
+int steps = 1;
+while (!q.isEmpty()) {
+    int size = q.size();
+    for (int i = 0; i &lt; size; i++) {
+        String cur = q.poll();
+        if (cur.equals(endWord)) return steps;
+        for (String nei : graph.get(cur)) {
+            if (!visited.contains(nei)) {
+                visited.add(nei);
+                q.offer(nei);
+            }
+        }
+    }
+    steps++;
+}
+return 0;</code></pre>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.7rem; text-align: center;">
+                        <tr style="border-bottom: 1px solid #cbd5e1;">
+                            <th style="padding: 4px;">Caller</th>
+                            <th style="padding: 4px;">Return</th>
+                            <th style="padding: 4px;">Visited</th>
+                            <th style="padding: 4px;">Key Idea</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px;">bfs(beginWord)</td>
+                            <td style="padding: 4px;">int (length)</td>
+                            <td style="padding: 4px;">HashSet&lt;String&gt;</td>
+                            <td style="padding: 4px;">Level = sequence length</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 10px; display: flex; gap: 5px;">
+                        <div>💡</div>
+                        <div><strong>AHA:</strong> BFS guarantees first time we reach endWord is shortest.</div>
+                    </div>
+                    <div style="display: flex; margin-top: 10px; gap: 10px;">
+                        <div style="flex: 1;">
+                            <strong>Complexity</strong><br>
+                            Time: O(N * L^2)<br>
+                            Space: O(N * L^2)
+                        </div>
+                        <div style="flex: 1;">
+                            <strong>Interview Tip</strong><br>
+                            Precompute neighbors to save time.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 15px;">
+            <div class="section-box">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #166534; padding-bottom: 5px;">
+                    <div style="font-weight: bold; color: #166534; display: flex; align-items: center; gap: 5px;"><span class="num" style="background-color: #166534; color: white; padding: 2px 8px; border-radius: 4px;">2</span> WALLS AND GATES</div>
+                    <span style="background-color: #ea580c; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 0.8rem;">Ms</span>
+                </div>
+                <div class="section-content" style="padding-top: 10px; font-size: 0.75rem;">
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 5px;">Base Template: Multi-Source BFS</div>
+                    <div style="font-weight: bold;">Problem</div>
+                    <div style="margin-bottom: 5px;">Fill each empty room with distance to nearest gate.</div>
+                    <div style="font-weight: bold; margin-bottom: 5px;">Changed Lines (from Template)</div>
+<pre style="background-color: #f8fafc; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 0.7rem; border: 1px solid #e2e8f0;"><code>// 1. Push all gates (0) into queue
+for (int i = 0; i &lt; n; i++) {
+    for (int j = 0; j &lt; m; j++) {
+        if (rooms[i][j] == 0) {
+            q.offer(new int[]{i, j});
+        }
+    }
+}
+// 2. When visiting empty room, update distance
+while (!q.isEmpty()) {
+    int[] cur = q.poll();
+    for (int[] d : dirs) {
+        int nr = cur[0] + d[0], nc = cur[1] + d[1];
+        if (inBounds(nr, nc) &amp;&amp; rooms[nr][nc] == INF) {
+            rooms[nr][nc] = rooms[cur[0]][cur[1]] + 1;
+            q.offer(new int[]{nr, nc});
+        }
+    }
+}</code></pre>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.7rem; text-align: center;">
+                        <tr style="border-bottom: 1px solid #cbd5e1;">
+                            <th style="padding: 4px;">Caller</th>
+                            <th style="padding: 4px;">Return</th>
+                            <th style="padding: 4px;">Visited</th>
+                            <th style="padding: 4px;">Key Idea</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px;">multiSourceBfs()<br>(all gates)</td>
+                            <td style="padding: 4px;">void (in-place)</td>
+                            <td style="padding: 4px;">rooms[][]</td>
+                            <td style="padding: 4px;">Distance from nearest gate</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 10px; display: flex; gap: 5px;">
+                        <div>💡</div>
+                        <div><strong>AHA:</strong> Gates are sources. Distances expand outward.</div>
+                    </div>
+                    <div style="display: flex; margin-top: 10px; gap: 10px;">
+                        <div style="flex: 1;">
+                            <strong>Complexity</strong><br>
+                            Time: O(n * m)<br>
+                            Space: O(n * m)
+                        </div>
+                        <div style="flex: 1;">
+                            <strong>Interview Tip</strong><br>
+                            Use original rooms[][] as visited (INF = unvisited).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #166534; padding-bottom: 5px;">
+                    <div style="font-weight: bold; color: #166534; display: flex; align-items: center; gap: 5px;"><span class="num" style="background-color: #166534; color: white; padding: 2px 8px; border-radius: 4px;">5</span> NEAREST EXIT FROM ENTRANCE IN MAZE</div>
+                    <span style="background-color: #166534; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 0.8rem;">Gr</span>
+                </div>
+                <div class="section-content" style="padding-top: 10px; font-size: 0.75rem;">
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 5px;">Base Template: Grid BFS (Distance BFS)</div>
+                    <div style="font-weight: bold;">Problem</div>
+                    <div style="margin-bottom: 5px;">Find minimum steps to nearest exit from entrance.</div>
+                    <div style="font-weight: bold; margin-bottom: 5px;">Changed Lines (from Template)</div>
+<pre style="background-color: #f8fafc; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 0.7rem; border: 1px solid #e2e8f0;"><code>// 1. Start from entrance only
+q.offer(new int[]{entrance[0], entrance[1]});
+visited[entrance[0]][entrance[1]] = true;
+int steps = 0;
+// 2. Exit = boundary cell (not entrance)
+while (!q.isEmpty()) {
+    int size = q.size();
+    for (int k = 0; k &lt; size; k++) {
+        int[] cur = q.poll();
+        if (isBoundary(r, c) &amp;&amp; (r != entrance[0] || c != entrance[1]))
+            return steps;
+        for (int[] d : dirs4) {
+            int nr = r + d[0], nc = c + d[1];
+            if (inBounds(nr, nc) &amp;&amp; maze[nr][nc] == '.' &amp;&amp; !visited[nr][nc]) {
+                visited[nr][nc] = true;
+                q.offer(new int[]{nr, nc});
+            }
+        }
+    }
+    steps++;
+}
+return -1;</code></pre>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.7rem; text-align: center;">
+                        <tr style="border-bottom: 1px solid #cbd5e1;">
+                            <th style="padding: 4px;">Caller</th>
+                            <th style="padding: 4px;">Return</th>
+                            <th style="padding: 4px;">Visited</th>
+                            <th style="padding: 4px;">Key Idea</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px;">bfs(entrance)</td>
+                            <td style="padding: 4px;">int (steps)</td>
+                            <td style="padding: 4px;">boolean[][]</td>
+                            <td style="padding: 4px;">First boundary cell found</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 10px; display: flex; gap: 5px;">
+                        <div>💡</div>
+                        <div><strong>AHA:</strong> BFS expands in layers. First exit found is minimum steps.</div>
+                    </div>
+                    <div style="display: flex; margin-top: 10px; gap: 10px;">
+                        <div style="flex: 1;">
+                            <strong>Complexity</strong><br>
+                            Time: O(n * m)<br>
+                            Space: O(n * m)
+                        </div>
+                        <div style="flex: 1;">
+                            <strong>Interview Tip</strong><br>
+                            Don't treat entrance itself as exit.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 15px;">
+            <div class="section-box">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #166534; padding-bottom: 5px;">
+                    <div style="font-weight: bold; color: #166534; display: flex; align-items: center; gap: 5px;"><span class="num" style="background-color: #166534; color: white; padding: 2px 8px; border-radius: 4px;">3</span> SHORTEST PATH IN BINARY MATRIX</div>
+                    <span style="background-color: #dc2626; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 0.8rem;">Ds</span>
+                </div>
+                <div class="section-content" style="padding-top: 10px; font-size: 0.75rem;">
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 5px;">Base Template: Grid BFS (Distance BFS)</div>
+                    <div style="font-weight: bold;">Problem</div>
+                    <div style="margin-bottom: 5px;">Find shortest path from top-left to bottom-right in binary matrix.</div>
+                    <div style="font-weight: bold; margin-bottom: 5px;">Changed Lines (from Template)</div>
+<pre style="background-color: #f8fafc; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 0.7rem; border: 1px solid #e2e8f0;"><code>// 1. If start or end is blocked
+if (grid[0][0] == 1 || grid[n-1][n-1] == 1) return -1;
+// 2. Start from (0,0)
+q.offer(new int[]{0, 0});
+visited[0][0] = true;
+int steps = 1;
+// 3. Level = path length
+while (!q.isEmpty()) {
+    int size = q.size();
+    for (int k = 0; k &lt; size; k++) {
+        int[] cur = q.poll();
+        if (cur[0] == n-1 &amp;&amp; cur[1] == n-1) return steps;
+        for (int[] d : dirs8) { // 8 directions
+            int nr = cur[0] + d[0], nc = cur[1] + d[1];
+            if (inBounds(nr, nc) &amp;&amp; grid[nr][nc] == 0 &amp;&amp; !visited[nr][nc]) {
+                visited[nr][nc] = true;
+                q.offer(new int[]{nr, nc});
+            }
+        }
+    }
+    steps++;
+}
+return -1;</code></pre>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.7rem; text-align: center;">
+                        <tr style="border-bottom: 1px solid #cbd5e1;">
+                            <th style="padding: 4px;">Caller</th>
+                            <th style="padding: 4px;">Return</th>
+                            <th style="padding: 4px;">Visited</th>
+                            <th style="padding: 4px;">Key Idea</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px;">bfs(0,0)</td>
+                            <td style="padding: 4px;">int (steps)</td>
+                            <td style="padding: 4px;">boolean[][]</td>
+                            <td style="padding: 4px;">Level = path length</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 10px; display: flex; gap: 5px;">
+                        <div>💡</div>
+                        <div><strong>AHA:</strong> First time we reach destination = shortest path.</div>
+                    </div>
+                    <div style="display: flex; margin-top: 10px; gap: 10px;">
+                        <div style="flex: 1;">
+                            <strong>Complexity</strong><br>
+                            Time: O(n * m)<br>
+                            Space: O(n * m)
+                        </div>
+                        <div style="flex: 1;">
+                            <strong>Interview Tip</strong><br>
+                            Don't forget 8 directions.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #991b1b; padding-bottom: 5px;">
+                    <div style="font-weight: bold; color: #991b1b; display: flex; align-items: center; gap: 5px;"><span class="num" style="background-color: #991b1b; color: white; padding: 2px 8px; border-radius: 4px;">6</span> 01 MATRIX (UPDATE MATRIX)</div>
+                    <span style="background-color: #ea580c; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 0.8rem;">Ms</span>
+                </div>
+                <div class="section-content" style="padding-top: 10px; font-size: 0.75rem;">
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 5px;">Base Template: Multi-Source BFS</div>
+                    <div style="font-weight: bold;">Problem</div>
+                    <div style="margin-bottom: 5px;">For each cell, distance to nearest 0.</div>
+                    <div style="font-weight: bold; margin-bottom: 5px;">Changed Lines (from Template)</div>
+<pre style="background-color: #f8fafc; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 0.7rem; border: 1px solid #e2e8f0;"><code>// 1. Push all cells with 0
+for (int i = 0; i &lt; n; i++) {
+    for (int j = 0; j &lt; m; j++) {
+        if (mat[i][j] == 0) q.offer(new int[]{i, j});
+    }
+}
+// 2. Process and update 1's with distance
+while (!q.isEmpty()) {
+    int[] cur = q.poll();
+    for (int[] d : dirs4) {
+        int nr = cur[0] + d[0], nc = cur[1] + d[1];
+        if (inBounds(nr, nc) &amp;&amp; mat[nr][nc] == 1) {
+            mat[nr][nc] = mat[cur[0]][cur[1]] + 1;
+            q.offer(new int[]{nr, nc});
+        }
+    }
+}</code></pre>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.7rem; text-align: center;">
+                        <tr style="border-bottom: 1px solid #cbd5e1;">
+                            <th style="padding: 4px;">Caller</th>
+                            <th style="padding: 4px;">Return</th>
+                            <th style="padding: 4px;">Visited</th>
+                            <th style="padding: 4px;">Key Idea</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px;">multiSourceBfs()<br>(all 0 cells)</td>
+                            <td style="padding: 4px;">int[][] (in-place)</td>
+                            <td style="padding: 4px;">mat[][]</td>
+                            <td style="padding: 4px;">Distance from nearest 0</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 10px; display: flex; gap: 5px;">
+                        <div>💡</div>
+                        <div><strong>AHA:</strong> All zeros start together, distances fill the matrix.</div>
+                    </div>
+                    <div style="display: flex; margin-top: 10px; gap: 10px;">
+                        <div style="flex: 1;">
+                            <strong>Complexity</strong><br>
+                            Time: O(n * m)<br>
+                            Space: O(n * m)
+                        </div>
+                        <div style="flex: 1;">
+                            <strong>Interview Tip</strong><br>
+                            Use matrix itself to store distances.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="display: flex; gap: 15px; margin-top: 15px;">
+        <div class="section-box" style="flex: 1.5; border: 2px solid #312e81;">
+            <div class="section-header" style="background-color: #312e81; color: white; padding: 5px; text-align: center; font-weight: bold; text-transform: uppercase;">7 CHANGED LINES SUMMARY (QUICK REFERENCE)</div>
+            <div class="section-content" style="padding: 10px; font-size: 0.7rem;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <tr style="border-bottom: 1px solid #cbd5e1;">
+                        <th style="padding: 4px;">#</th>
+                        <th style="padding: 4px;">Problem</th>
+                        <th style="padding: 4px;">Base Template</th>
+                        <th style="padding: 4px;">Only What Changes</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;">1</td>
+                        <td style="padding: 4px;">Rotting Oranges</td>
+                        <td style="padding: 4px;">Multi-Source BFS</td>
+                        <td style="padding: 4px;">Push all rotten, count fresh, level = minutes</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;">2</td>
+                        <td style="padding: 4px;">Walls and Gates</td>
+                        <td style="padding: 4px;">Multi-Source BFS</td>
+                        <td style="padding: 4px;">Push all gates, update room[nr][nc]</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;">3</td>
+                        <td style="padding: 4px;">Shortest Path Binary Matrix</td>
+                        <td style="padding: 4px;">Grid BFS (Distance)</td>
+                        <td style="padding: 4px;">Start (0,0), level = steps, 8 directions</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;">4</td>
+                        <td style="padding: 4px;">Word Ladder (Length)</td>
+                        <td style="padding: 4px;">Graph BFS (Distance)</td>
+                        <td style="padding: 4px;">Build graph, return level when end found</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;">5</td>
+                        <td style="padding: 4px;">Nearest Exit in Maze</td>
+                        <td style="padding: 4px;">Grid BFS (Distance)</td>
+                        <td style="padding: 4px;">Exit = boundary cell, not entrance</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;">6</td>
+                        <td style="padding: 4px;">01 Matrix</td>
+                        <td style="padding: 4px;">Multi-Source BFS</td>
+                        <td style="padding: 4px;">Push all 0's, update 1's with distance</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="section-box" style="flex: 1; border: 2px solid #166534;">
+            <div class="section-header" style="background-color: #166534; color: white; padding: 5px; text-align: center; font-weight: bold; text-transform: uppercase;">8 BFS TEMPLATES USED (FROM PAGE 6)</div>
+            <div class="section-content" style="padding: 10px; font-size: 0.75rem;">
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="background-color: #1e40af; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold;">Gb</span> <span style="font-weight: bold; width: 120px;">Graph BFS (Adj List)</span> <span>Traverse graph level by level using queue.</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="background-color: #166534; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold;">Gr</span> <span style="font-weight: bold; width: 120px;">Grid BFS</span> <span>Traverse grid using 4/8 directions.</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="background-color: #ea580c; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold;">Ms</span> <span style="font-weight: bold; width: 120px;">Multi-Source BFS</span> <span>Start BFS from multiple sources at once.</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="background-color: #6b21a8; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold;">Lv</span> <span style="font-weight: bold; width: 120px;">Level Order BFS</span> <span>Process nodes level by level using queue size.</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="background-color: #dc2626; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold;">Ds</span> <span style="font-weight: bold; width: 120px;">Distance BFS</span> <span>Level / steps represent shortest distance.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-box" style="flex: 1; border: 2px solid #dc2626;">
+            <div class="section-header" style="background-color: #dc2626; color: white; padding: 5px; text-align: center; font-weight: bold; text-transform: uppercase;">9 INTERVIEW CHECKLIST</div>
+            <div class="section-content" style="padding: 10px; font-size: 0.8rem;">
+                <div style="display: flex; align-items: flex-start; gap: 5px; margin-bottom: 5px;">
+                    <div>☑️</div> <div>Did I choose the correct BFS template?</div>
+                </div>
+                <div style="display: flex; align-items: flex-start; gap: 5px; margin-bottom: 5px;">
+                    <div>☑️</div> <div>Is my queue initialization correct?</div>
+                </div>
+                <div style="display: flex; align-items: flex-start; gap: 5px; margin-bottom: 5px;">
+                    <div>☑️</div> <div>Am I marking visited at the right time?</div>
+                </div>
+                <div style="display: flex; align-items: flex-start; gap: 5px; margin-bottom: 5px;">
+                    <div>☑️</div> <div>Is level / steps updated in the right place?</div>
+                </div>
+                <div style="display: flex; align-items: flex-start; gap: 5px; margin-bottom: 5px;">
+                    <div>☑️</div> <div>Did I handle all boundary &amp; edge cases?</div>
+                </div>
+                <div style="display: flex; align-items: flex-start; gap: 5px; margin-bottom: 5px;">
+                    <div>☑️</div> <div>Is my return value correct?</div>
+                </div>
+                <div style="display: flex; align-items: flex-start; gap: 5px; margin-bottom: 5px;">
+                    <div>☑️</div> <div>What is the time &amp; space complexity?</div>
+                </div>
+                <div style="display: flex; align-items: flex-start; gap: 5px; margin-bottom: 5px;">
+                    <div>☑️</div> <div>Can I optimize further?</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="margin-top: 20px; text-align: center; font-weight: bold; color: #1e3a8a;">BFS PROBLEM SOLVING FLOW (INTERVIEW APPROACH)</div>
+    <div style="display: flex; justify-content: space-between; align-items: center; border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; margin-top: 10px; font-size: 0.8rem; background-color: #f8fafc;">
+        <div style="text-align: center;">
+            <div style="font-size: 1.5rem; margin-bottom: 5px; color: #1e3a8a;">❓</div>
+            <div>Understand<br>Problem</div>
+        </div>
+        <div style="color: #64748b;">&rarr;</div>
+        <div style="text-align: center;">
+            <div style="display: flex; gap: 5px; justify-content: center; margin-bottom: 5px;">
+                <div style="border: 1px solid #cbd5e1; border-radius: 4px; padding: 2px;">Graph</div>
+                <div style="border: 1px solid #cbd5e1; border-radius: 4px; padding: 2px;">Grid</div>
+            </div>
+            <div>Input<br>Type?</div>
+        </div>
+        <div style="color: #64748b;">&rarr;</div>
+        <div style="text-align: center;">
+            <div style="font-weight: bold;">Need Shortest<br>Path / Steps /<br>Nearest?</div>
+            <div style="font-size: 0.7rem; color: #64748b;">Yes &rarr; BFS<br>No &rarr; DFS</div>
+        </div>
+        <div style="color: #64748b;">&rarr;</div>
+        <div style="text-align: center;">
+            <div style="font-weight: bold;">Single Source<br>or Multiple<br>Sources?</div>
+            <div style="font-size: 1.5rem; color: #1e3a8a;">⚪ ⚪⚪</div>
+        </div>
+        <div style="color: #64748b;">&rarr;</div>
+        <div style="text-align: center;">
+            <div style="font-size: 1.5rem; margin-bottom: 5px; color: #1e3a8a;">📋</div>
+            <div>Choose<br>BFS Template<br>(Use Page 6)</div>
+        </div>
+        <div style="color: #64748b;">&rarr;</div>
+        <div style="text-align: center;">
+            <div style="font-size: 1.5rem; margin-bottom: 5px; color: #1e3a8a;">🔍</div>
+            <div>Identify Only<br>Changed Lines<br>(Use This Page)</div>
+        </div>
+        <div style="color: #64748b;">&rarr;</div>
+        <div style="text-align: center;">
+            <div style="font-size: 1.5rem; margin-bottom: 5px; color: #1e3a8a;">💻</div>
+            <div>Write Code<br>&amp; Test</div>
+        </div>
+        <div style="color: #64748b;">&rarr;</div>
+        <div style="text-align: center;">
+            <div style="font-size: 1.5rem; margin-bottom: 5px; color: #1e3a8a;">📈</div>
+            <div>Analyze<br>Complexity</div>
+        </div>
+        <div style="color: #64748b;">&rarr;</div>
+        <div style="text-align: center;">
+            <div style="font-size: 1.5rem; margin-bottom: 5px; color: #1e3a8a;">🚀</div>
+            <div>Optimize<br>(if needed)</div>
+        </div>
+    </div>
+    
+    <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 15px; font-size: 0.75rem; color: #64748b; font-weight: bold;">
+        <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 1.2rem; color: #1e3a8a;">❓</span> Problem (Understand)</div>
+        <div>&rarr;</div>
+        <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 1.2rem; color: #1e3a8a;">📥</span> Input (What given)</div>
+        <div>&rarr;</div>
+        <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 1.2rem; color: #1e3a8a;">🔢</span> Representation (Graph / Grid)</div>
+        <div>&rarr;</div>
+        <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 1.2rem; color: #1e3a8a;">⚙️</span> Helper Structure (Queue, Visited, etc.)</div>
+        <div>&rarr;</div>
+        <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 1.2rem; color: #1e3a8a;">🧩</span> Pattern (Choose BFS Template)</div>
+        <div>&rarr;</div>
+        <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 1.2rem; color: #1e3a8a;">🔧</span> Tiny Logic Change (Apply Changes)</div>
+        <div>&rarr;</div>
+        <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 1.2rem; color: #1e3a8a;">▶️</span> Dry Run (Example)</div>
+        <div>&rarr;</div>
+        <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 1.2rem; color: #1e3a8a;">⏱️</span> Optimize (Time/Space)</div>
+    </div>
+</div>

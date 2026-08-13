@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DYNAMIC PROGRAMMING MASTERCLASS — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 12px; }
+.ph h1 { font-size: 1.7rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.85rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.74rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.bh  { background: var(--pri); color: white; padding: 5px 10px;
+  font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 16px; height: 16px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.70rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 8px 10px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 5px 10px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.72rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.90rem; }
+.psub   { color: var(--sub); font-size: 0.76rem; }
+.prow-body { display: flex; }
+.pc { padding: 8px 10px; font-size: 0.76rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.70rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.prob-head { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.76rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.68rem; line-height: 1.38; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.74rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.74rem; }
+th, td { border: 1px solid var(--bdr); padding: 4px 6px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 5px 8px; border-radius: 0 4px 4px 0; font-size: 0.76rem; margin-top: 4px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 6px 8px; margin-top: 4px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.80rem; margin-bottom: 2px; }
+
+.dt-wrap { font-size: 0.76rem; }
+.dt-root { background: var(--pri); color: white; padding: 4px 8px; border-radius: 4px; text-align: center; font-weight: 700; margin-bottom: 6px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 4px 6px; font-weight: 600; color: #1e40af; font-size: 0.72rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 4px 6px; color: #065f46; font-weight: 700; font-size: 0.72rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.72rem; padding: 2px 4px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 8px 12px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- PAGE 1: DISCOVERY & ORIENTATION -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">The Universal SB → RBR → MTS Framework</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 1 OF 10</div><div class="ptag">DISCOVERY JOURNEY · FIRST PRINCIPLES</div></div>
+</div>
+<div class="box pur">
+<div class="bh">🧠 THE UNIVERSAL DP PARADIGM: SB → RBR → MTS</div>
+<div class="bc">
+<p style="font-size:0.78rem;margin-bottom:6px">Never jump straight to a DP array! Every single DP problem from Fibonacci &amp; House Robber to Knapsack, LCS, and Tree DP is solved in this exact 3-phase order:</p>
+<div class="g3">
+<div style="background:#eff6ff;border:1.5px solid var(--sec);border-radius:6px;padding:6px;font-size:0.75rem">
+<div style="font-weight:900;color:var(--sec);font-size:0.82rem;margin-bottom:3px">🟦 SB — State &amp; Brainstorm</div>
+<p><strong>S — State:</strong> What minimum variables uniquely identify subproblem `dp[i]` or `dp[i][j]`?</p>
+<p style="margin-top:2px"><strong>B — Brainstorm Choices:</strong> <em>"If I am at this state, what choices do I have?"</em> (Take / Skip, 1 step / 2 steps)</p>
+</div>
+<div style="background:#fefce8;border:1.5px solid var(--amb);border-radius:6px;padding:6px;font-size:0.75rem">
+<div style="font-weight:900;color:var(--amb);font-size:0.82rem;margin-bottom:3px">🟨 RBR — Recurrence, Base, Result</div>
+<p><strong>R — Recurrence:</strong> Convert choices to equation e.g. `dp[i] = max(take, skip)`</p>
+<p style="margin-top:2px"><strong>B — Base Case:</strong> Where does recursion stop? (`dp[0] = 1`)</p>
+<p style="margin-top:2px"><strong>R — Result:</strong> What answer to return? (`dp[N]` or `dp[M][N]`)</p>
+</div>
+<div style="background:#f0fdf4;border:1.5px solid var(--grn);border-radius:6px;padding:6px;font-size:0.75rem">
+<div style="font-weight:900;color:var(--grn);font-size:0.82rem;margin-bottom:3px">🟩 MTS — Memo, Tab, Space</div>
+<p><strong>M — Memoization:</strong> Cache recursive calls Top-Down</p>
+<p style="margin-top:2px"><strong>T — Tabulation:</strong> Convert recursion to loops Bottom-Up</p>
+<p style="margin-top:2px"><strong>S — Space Optimization:</strong> Compress array `dp[i]` to `prev1, prev2` variables!</p>
+</div>
+</div>
+</div>
+</div><div class="g2">
+<div class="box grn">
+<div class="bh">💡 GOLDEN RULE: THE COMPLETE SOLUTION FLOW</div>
+<div class="bc">
+<div style="font-size:0.76rem;line-height:1.4">
+<pre style="margin:0;font-size:0.72rem">Brute Force Decision Tree
+  ↓
+Recursive Function
+  ↓
+SB (Define State &amp; Choices)
+  ↓
+RBR (Recurrence + Base Case + Result)
+  ↓
+MTS (Memoization → Tabulation → Space Optimization O(1))</pre>
+</div>
+<div class="rule" style="margin-top:6px">
+<strong>Aha Moment:</strong> DP is simply <em>Optimized Recursion</em>! Tabulation is Memoization turned upside-down!
+      </div>
+</div>
+</div>
+<div class="box sky">
+<div class="bh">⚡ CLUES THAT SCREAM DYNAMIC PROGRAMMING</div>
+<div class="bc">
+<p style="font-size:0.78rem">1. <em>"Find max/min cost or total number of ways to reach X"</em> \rightarrow 1D Linear DP</p>
+<p style="font-size:0.78rem">2. <em>"Target sum with reusable vs 1-time items"</em> \rightarrow Unbounded vs 0/1 Knapsack DP</p>
+<p style="font-size:0.78rem">3. <em>"Longest common subsequence / Edit distance of 2 strings"</em> \rightarrow 2D String DP</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 2: API & TOOLKIT -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">Java Master Toolkit &amp; Utility Classes</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 2 OF 10</div><div class="ptag">JAVA UTILITIES · REUSABLE TEMPLATES</div></div>
+</div>
+<div class="box pur">
+<div class="bh">🎬 STEP-BY-STEP EVOLUTION OF CLIMBING STAIRS (LC 70)</div>
+<div class="bc">
+<div class="g2">
+<div>
+<div style="font-weight:700;color:var(--pri);margin-bottom:3px">Phase 1: SB — State &amp; Brainstorm</div>
+<ul style="padding-left:14px;font-size:0.76rem">
+<li><strong>State:</strong> `dp[i]` = total ways to reach step `i`.</li>
+<li><strong>Choices at step `i`:</strong> Arrive from step `i-1` (climb 1 step) OR step `i-2` (climb 2 steps).</li>
+</ul>
+<div style="font-weight:700;color:var(--pri);margin-top:6px;margin-bottom:3px">Phase 2: RBR — Recurrence, Base, Result</div>
+<ul style="padding-left:14px;font-size:0.76rem">
+<li><strong>Recurrence:</strong> `dp[i] = dp[i-1] + dp[i-2]`</li>
+<li><strong>Base Case:</strong> `dp[1] = 1`, `dp[2] = 2`</li>
+<li><strong>Result:</strong> `return dp[n]`</li>
+</ul>
+</div>
+<div>
+<div style="font-weight:700;color:var(--grn);margin-bottom:3px">Phase 3: MTS — Memoization ➔ Tabulation ➔ Space Opt</div>
+<p style="font-size:0.75rem">We transform naive recursion O(2^N) into memoization O(N), then tabulation O(N), and finally compressed O(1) space!</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 3: CORE PATTERN 1 -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">Core Patterns — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 3 OF 10</div><div class="ptag">PATTERN 1</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 1</div>
+<div class="ptitle">HOUSE ROBBER (1D Include / Exclude Choice)</div>
+<div class="psub">e.g. House Robber (LC 198)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">SB → RBR Breakdown</div>
+<div style="font-size:0.78rem">
+<strong>State:</strong> `dp[i]` = max money robbed up to house `i`.<br/>
+<strong>Brainstorm Choices:</strong> Rob house `i` (`nums[i] + dp[i-2]`) OR Skip house `i` (`dp[i-1]`).<br/>
+<strong>Recurrence:</strong> `dp[i] = max(nums[i] + dp[i-2], dp[i-1])`.<br/>
+<strong>Base:</strong> `dp[0] = nums[0]`, `dp[1] = max(nums[0], nums[1])`.
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — LC 198 (Space Optimized O(1))</div>
+<pre>public int rob(int[] nums) {
+  if (nums == null || nums.length == 0) return 0;
+  int prev2 = 0, prev1 = 0;
+  for (int num : nums) {
+    int tmp = prev1;
+    prev1 = Math.max(prev2 + num, prev1); // Rob or Skip!
+    prev2 = tmp;
+  }
+  return prev1;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 4: CORE PATTERN 2 -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">Core Patterns — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 4 OF 10</div><div class="ptag">PATTERN 2</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 2</div>
+<div class="ptitle">COIN CHANGE (Unbounded Knapsack Minimum Coins)</div>
+<div class="psub">e.g. Coin Change (LC 322)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">SB → RBR Breakdown</div>
+<div style="font-size:0.78rem">
+<strong>State:</strong> `dp[a]` = min coins to make target amount `a`.<br/>
+<strong>Brainstorm Choices:</strong> Try every coin `c` where `c &lt;= a`.<br/>
+<strong>Recurrence:</strong> `dp[a] = min(dp[a], 1 + dp[a - c])`.<br/>
+<strong>Base:</strong> `dp[0] = 0`. Initialize all other entries to `amount + 1`.
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — LC 322</div>
+<pre>public int coinChange(int[] coins, int amount) {
+  int[] dp = new int[amount + 1];
+  Arrays.fill(dp, amount + 1); // Fill with infinity sentinel!
+  dp[0] = 0; // Base case: 0 amount needs 0 coins
+  for (int a = 1; a &lt;= amount; a++) {
+    for (int c : coins) {
+      if (a - c &gt;= 0) {
+        dp[a] = Math.min(dp[a], 1 + dp[a - c]);
+      }
+    }
+  }
+  return dp[amount] &gt; amount ? -1 : dp[amount];
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 5: CORE PATTERN 3 -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">Core Patterns — Part 3</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 5 OF 10</div><div class="ptag">PATTERN 3</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 3</div>
+<div class="ptitle">LONGEST INCREASING SUBSEQUENCE (Patience Sorting Binary Search)</div>
+<div class="psub">e.g. Longest Increasing Subsequence (LC 300)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">Patience Sorting O(N log N)</div>
+<div style="font-size:0.78rem">
+        Maintain array `tails` storing smallest tail element of all increasing subsequences of length `i+1`. Use binary search `lowerBound` to replace or extend tails array!
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — LC 300</div>
+<pre>public int lengthOfLIS(int[] nums) {
+  int[] tails = new int[nums.length];
+  int len = 0;
+  for (int x : nums) {
+    int i = 0, j = len;
+    while (i &lt; j) {
+      int mid = i + (j - i) / 2;
+      if (tails[mid] &lt; x) i = mid + 1;
+      else j = mid;
+    }
+    tails[i] = x;
+    if (i == len) len++;
+  }
+  return len;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 6: CORE PATTERN 4 -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">Core Patterns — Part 4</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 6 OF 10</div><div class="ptag">PATTERN 4</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 4</div>
+<div class="ptitle">UNIQUE PATHS (2D Grid Top-Left to Bottom-Right)</div>
+<div class="psub">e.g. Unique Paths (LC 62)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">SB → RBR Breakdown</div>
+<div style="font-size:0.78rem">
+<strong>State:</strong> `dp[r][c]` = unique paths to cell `(r, c)`.<br/>
+<strong>Brainstorm Choices:</strong> Arrived from top `(r-1, c)` OR left `(r, c-1)`.<br/>
+<strong>Recurrence:</strong> `dp[r][c] = dp[r-1][c] + dp[r][c-1]`.
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — LC 62 (Space Optimized O(N))</div>
+<pre>public int uniquePaths(int m, int n) {
+  int[] row = new int[n];
+  Arrays.fill(row, 1); // Top row base case: 1 path
+  for (int r = 1; r &lt; m; r++) {
+    for (int c = 1; c &lt; n; c++) {
+      row[c] += row[c - 1]; // row[c] = top + left!
+    }
+  }
+  return row[n - 1];
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 7: DECISION TREE & TRIGGER WORDS -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 7 OF 10</div><div class="ptag">DECISION TREE · TRIGGER WORDS · TRADE-OFFS</div></div>
+</div>
+
+</div>
+
+<!-- PAGE 8: PROBLEM LADDER PART 1 -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">Curated Problem Ladder — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 8 OF 10</div><div class="ptag">PROBLEM LADDER · EASY &amp; MEDIUM</div></div>
+</div>
+<div class="g2">
+
+</div>
+</div>
+
+<!-- PAGE 9: PROBLEM LADDER PART 2 -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">Curated Problem Ladder — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 9 OF 10</div><div class="ptag">PROBLEM LADDER · MEDIUM &amp; HARD</div></div>
+</div>
+<div class="g2">
+
+</div>
+</div>
+
+<!-- PAGE 10: DRY RUN, PROOFS & MASTERY CHEAT SHEET -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">Dry Run, Proofs &amp; Mastery Cheat Sheet</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 10 OF 10</div><div class="ptag">DRY RUN · PROOFS · MASTERY CHECKLIST</div></div>
+</div>
+<div class="g2" style="margin-bottom:10px">
+<div class="box">
+<div class="bh">🔍 DRY RUN — Coin Change ([1, 2, 5], amount = 11)</div>
+<div class="bc">
+<table style="font-size:0.70rem">
+<tr><th>Amount (a)</th><th>Coin Try</th><th>dp[a] Recurrence (`1 + dp[a - c]`)</th><th>dp[a] Result</th></tr>
+<tr><td>1</td><td>1</td><td>`1 + dp[0] = 1`</td><td>1</td></tr>
+<tr><td>2</td><td>1, 2</td><td>`min(1+dp[1], 1+dp[0]) = 1`</td><td>1</td></tr>
+<tr><td>5</td><td>5</td><td>`1 + dp[0] = 1`</td><td>1</td></tr>
+<tr><td>11</td><td>5</td><td>`1 + dp[6] = 1 + 2 = 3` (coins 5+5+1)</td><td>3 ✅</td></tr>
+</table>
+</div>
+</div>
+<div class="box grn">
+<div class="bh">📐 MATHEMATICAL PROOF — PRINCIPLE OF OPTIMAL SUBSTRUCTURE</div>
+<div class="bc">
+<div style="font-size:0.76rem">
+<p style="margin-bottom:4px"><strong>Claim:</strong> An optimal solution to a DP problem contains optimal solutions to its subproblems.</p>
+<p style="margin-bottom:4px"><strong>Proof:</strong> If a subproblem solution were non-optimal, we could replace it with a smaller subproblem cost, strictly decreasing the total cost. This contradicts the minimality of the optimal overall solution \rightarrow <strong>Exact Proof of Correctness!</strong></p>
+</div>
+</div>
+</div>
+</div><div class="g2">
+<div class="box grn">
+<div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+<div class="bc">
+<div class="g2" style="gap:6px">
+<ul style="font-size:0.75rem;list-style:none;padding:0">
+<li>☐ Apply the SB → RBR → MTS framework to any DP problem</li>
+<li>☐ Code House Robber in O(1) space</li>
+<li>☐ Code Coin Change unbounded knapsack in O(Amount)</li>
+<li>☐ Write Longest Increasing Subsequence in O(N log N)</li>
+</ul>
+<ul style="font-size:0.75rem;list-style:none;padding:0">
+<li>☐ Code 2D String LCS in O(M · N) time</li>
+<li>☐ Explain why 0/1 Knapsack loops BACKWARDS in 1D array</li>
+<li>☐ Prove the Principle of Optimal Substructure</li>
+<li>☐ Convert Top-Down recursion to Bottom-Up tabulation</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="box pur">
+<div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+<div class="bc">
+<div class="aha" style="margin-bottom:4px;padding:5px">
+<div class="aha-t">Rule 1 — State Definition is Everything</div>
+        Always define your DP state (`dp[i]`) in plain English BEFORE writing any code. If your state definition is clear, the recurrence relation falls into place effortlessly!
+      </div>
+<div class="aha" style="padding:5px">
+<div class="aha-t">Rule 2 — Initialize DP Table with Infinity Sentinels</div>
+        For minimum cost/coin problems, initialize all `dp[]` entries with an infinity sentinel (`amount + 1` or `1e9`), and set base case `dp[0] = 0`!
+      </div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

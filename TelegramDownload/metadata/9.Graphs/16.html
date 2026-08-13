@@ -1,0 +1,517 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1>GRAPH PATTERN GUIDE</h1>
+            <div class="subtitle">MASTER DIJKSTRA (SHORTEST PATH) TEMPLATE GUIDE<br><small style="color:#64748b;font-weight:normal;">"Optimized for non-negative weights."</small></div>
+        </div>
+        <div style="text-align: right;">
+            <div class="page-number">PAGE 12</div>
+        </div>
+    </div>
+
+    <div class="grid-container">
+        <div class="col-left">
+            <div class="section-box">
+                <div class="section-header"><span class="num">1</span> MASTER IDEA</div>
+                <div class="section-content">
+                    <p style="margin-bottom: 10px;">Dijkstra finds the shortest path from a source to all other nodes in a weighted graph with <strong>non-negative weights</strong>.</p>
+                    <hr style="margin: 10px 0; border: 0; border-top: 1px solid #e2e8f0;">
+                    <p style="margin-bottom: 10px;">Always pick the node with the <strong>smallest known distance</strong>.</p>
+                    <hr style="margin: 10px 0; border: 0; border-top: 1px solid #e2e8f0;">
+                    <p>Once picked, its distance is <strong>final</strong>.</p>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header"><span class="num">2</span> CORE COMPONENTS</div>
+                <div class="section-content">
+                    <table style="width: 100%; font-size: 0.9em; text-align: left; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid #cbd5e1;">
+                                <th style="padding: 5px;">Component</th>
+                                <th style="padding: 5px;">Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 5px; font-weight: bold;">dist[]</td>
+                                <td style="padding: 5px;">Shortest known distance from source to each node</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 5px; font-weight: bold;">Priority Queue</td>
+                                <td style="padding: 5px;">Pick node with minimum distance (Min Heap)</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 5px; font-weight: bold;">visited[] / inPQ[]</td>
+                                <td style="padding: 5px;">Avoid processing a node multiple times</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 5px; font-weight: bold;">Relaxation</td>
+                                <td style="padding: 5px;">If better path found, update distance</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; font-weight: bold;">Parent[] <span style="font-weight: normal; font-size: 0.8em;">(opt.)</span></td>
+                                <td style="padding: 5px;">To reconstruct shortest path</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="background-color: #e0e7ff; padding: 10px; border-radius: 5px; margin-top: 10px; font-size: 0.9em;">
+                        <strong style="color: #4338ca;">TIP:</strong> Dijkstra does NOT work with negative edge weights.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header"><span class="num">4</span> DIJKSTRA TEMPLATE (ADJACENCY MATRIX) <span style="color:#fbbf24;">★★★★</span></div>
+                <div class="section-content">
+                    <div style="background-color:#1e3a8a; color:white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; display: inline-block; margin-bottom: 5px;">Java Template</div>
+                    <pre><code>public static int[] dijkstraMatrix(int[][] mat, int n, int src) {
+    int[] dist = new int[n];
+    boolean[] visited = new boolean[n];
+    Arrays.fill(dist, Integer.MAX_VALUE);
+    dist[src] = 0;
+    
+    for (int count = 0; count < n - 1; count++) {
+        // Pick min dist unvisited node
+        int u = -1, min = Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++)
+            if (!visited[i] && dist[i] < min) { min = dist[i]; u = i; }
+            
+        visited[u] = true;
+        
+        // Relax all neighbors of u
+        for (int v = 0; v < n; v++) {
+            if (mat[u][v] > 0 && !visited[v] && dist[u] != Integer.MAX_VALUE 
+                && dist[u] + mat[u][v] < dist[v]) {
+                dist[v] = dist[u] + mat[u][v];
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header"><span class="num">7</span> WHEN TO USE DIJKSTRA?</div>
+                <div class="section-content" style="font-size: 0.9em;">
+                    <div style="font-weight: bold; margin-bottom: 5px; color: #16a34a;">Use When...</div>
+                    <ul style="list-style-type: none; padding-left: 0; margin-top: 0; margin-bottom: 15px;">
+                        <li>✅ All edge weights are non-negative.</li>
+                        <li>✅ Need shortest path from one source to all nodes.</li>
+                        <li>✅ Graph can be directed or undirected.</li>
+                        <li>✅ Need fastest reliable algorithm.</li>
+                    </ul>
+
+                    <div style="font-weight: bold; margin-bottom: 5px; color: #dc2626;">Do NOT Use When...</div>
+                    <ul style="list-style-type: none; padding-left: 0; margin-top: 0; margin-bottom: 15px;">
+                        <li>❌ Graph has negative weight edges (Use Bellman-Ford).</li>
+                        <li>❌ Need shortest path between all pairs (Use Floyd-Warshall).</li>
+                        <li>❌ Graph is unweighted (Use BFS).</li>
+                    </ul>
+                    
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 10px;">Decision Flow</div>
+                    <div class="mermaid">
+                    graph TD
+                        A[Edge Weights?]
+                        A -- All Non-Negative --> B[Single Source<br>Shortest Path]
+                        B --> C[Use Dijkstra]
+                        A -- Any Negative? --> D[Use Bellman-Ford<br>(or Johnson's)]
+                        
+                        style C fill:#dcfce7,stroke:#16a34a
+                        style D fill:#fee2e2,stroke:#dc2626
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header"><span class="num">10</span> MINI EXAMPLE (ADJ LIST)</div>
+                <div class="section-content" style="font-size: 0.85em;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div style="flex: 1;">
+                            <strong>Graph (Undirected)</strong>
+                            <div class="mermaid">
+                            graph LR
+                                0((0)) -- 4 --- 1((1))
+                                0 -- 1 --- 2((2))
+                                1 -- 2 --- 2
+                                1 -- 1 --- 3((3))
+                                2 -- 5 --- 3
+                                2 -- 8 --- 4((4))
+                                3 -- 3 --- 4
+                            </div>
+                        </div>
+                        <div style="flex: 1.5; padding-left: 10px;">
+                            <strong>Source = 0</strong><br>
+                            <strong>Dijkstra Steps:</strong>
+                            <ol style="padding-left: 15px; margin-top: 5px; margin-bottom: 5px;">
+                                <li>dist = [0, ∞, ∞, ∞, ∞]<br>PQ = [(0,0)]</li>
+                                <li>Pop <strong>0</strong> → relax 1(4), 2(1)<br>dist = [0, 4, 1, ∞, ∞]</li>
+                                <li>Pop <strong>2</strong> → relax 1(3), 3(6), 4(9)<br>dist = [0, 3, 1, 6, 9]</li>
+                                <li>Pop <strong>1</strong> → relax 3(4) (better)<br>dist = [0, 3, 1, 4, 9]</li>
+                                <li>Pop <strong>3</strong> → relax 4(7) (better)<br>dist = [0, 3, 1, 4, 7]</li>
+                                <li>Pop <strong>4</strong> → done.</li>
+                            </ol>
+                            <strong>Final dist[] = [0, 3, 1, 4, 7]</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-right">
+            <div style="display: flex; gap: 20px;">
+                <div style="flex: 2;">
+                    <div class="section-box">
+                        <div class="section-header"><span class="num">3</span> DIJKSTRA TEMPLATE (ADJACENCY LIST) <span style="color:#fbbf24;">★★★★★</span></div>
+                        <div class="section-content">
+                            <div style="background-color:#1e3a8a; color:white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; display: inline-block; margin-bottom: 5px;">Java Template</div>
+                            <pre><code>class Dijkstra {
+    static class Pair {
+        int node, dist;
+        Pair(int n, int d) { node = n; dist = d; }
+    }
+
+    public static int[] dijkstra(List&lt;List&lt;Pair&gt;&gt; graph, int n, int src) {
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[src] = 0;
+        
+        PriorityQueue&lt;Pair&gt; pq = new PriorityQueue&lt;&gt;((a, b) -&gt; a.dist - b.dist);
+        pq.offer(new Pair(src, 0));
+        
+        boolean[] visited = new boolean[n];
+        while (!pq.isEmpty()) {
+            Pair cur = pq.poll();
+            int u = cur.node, d = cur.dist;
+            if (visited[u]) continue;    // already finalized
+            visited[u] = true;
+            
+            for (Pair nei : graph.get(u)) {
+                int v = nei.node, w = nei.dist;
+                if (d + w &lt; dist[v]) {    // relax
+                    dist[v] = d + w;
+                    pq.offer(new Pair(v, dist[v]));
+                }
+            }
+        }
+        return dist; // dist[i] = shortest distance from src to i
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div style="flex: 1;">
+                    <div class="section-box" style="background-color: #f1f5f9; border-top: 4px solid #4338ca;">
+                        <div style="font-weight: bold; text-align: center; color: #4338ca; margin-bottom: 10px; font-size: 1.1em;">AHA MOMENTS</div>
+                        <ul style="list-style-type: none; padding-left: 0; font-size: 0.9em; margin: 0;">
+                            <li style="margin-bottom: 10px;">💡 We always expand the closest unprocessed node.</li>
+                            <li style="margin-bottom: 10px;">💡 First time a node is popped from PQ, its distance is final.</li>
+                            <li style="margin-bottom: 10px;">💡 Relaxation improves neighbors only.</li>
+                            <li style="margin-bottom: 10px;">💡 Work only for non-negative weights.</li>
+                            <li>💡 Same idea used in GPS navigation!</li>
+                        </ul>
+                    </div>
+                    <div class="section-box" style="background-color: #fef2f2; border-top: 4px solid #dc2626; margin-top: 20px;">
+                        <div style="font-weight: bold; text-align: center; color: #dc2626; margin-bottom: 10px; font-size: 1.1em;">COMMON MISTAKES</div>
+                        <ul style="list-style-type: none; padding-left: 0; font-size: 0.9em; margin: 0;">
+                            <li style="margin-bottom: 10px;">❌ Using Dijkstra with negative edges.</li>
+                            <li style="margin-bottom: 10px;">❌ Forgetting to check if node already visited.</li>
+                            <li style="margin-bottom: 10px;">❌ Not using long when dist can overflow (use long for large sums).</li>
+                            <li style="margin-bottom: 10px;">❌ Relaxing from outdated distance.</li>
+                            <li>❌ Pushing same node many times without visited check.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 20px;">
+                <div style="flex: 1;">
+                    <div class="section-box">
+                        <div class="section-header"><span class="num">5</span> WHAT CHANGES? <span style="color:#fbbf24;">★★★★</span></div>
+                        <div class="section-content">
+                            <table style="width: 100%; font-size: 0.85em; text-align: left; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="border-bottom: 1px solid #cbd5e1;">
+                                        <th style="padding: 5px;">Scenario</th>
+                                        <th style="padding: 5px;">Change</th>
+                                        <th style="padding: 5px;">Only This Part Changes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 5px;">Different Source</td>
+                                        <td style="padding: 5px;">Change src</td>
+                                        <td style="padding: 5px;">Initialization<br>dist[src] = 0</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 5px;">Get Path</td>
+                                        <td style="padding: 5px;">Add parent[]</td>
+                                        <td style="padding: 5px;">When relaxing,<br>set parent[v] = u</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 5px;">Count Paths</td>
+                                        <td style="padding: 5px;">Add count[]</td>
+                                        <td style="padding: 5px;">If equal dist found,<br>count[v] += count[u]</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 5px;">Min Cost with Stops Limit</td>
+                                        <td style="padding: 5px;">Use (node, dist, stops) in PQ</td>
+                                        <td style="padding: 5px;">Push with stops+1,<br>check limit</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 5px;">Multiple Queries</td>
+                                        <td style="padding: 5px;">Run Dijkstra multiple times</td>
+                                        <td style="padding: 5px;">Reuse graph</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 5px;">Undirected Graph</td>
+                                        <td style="padding: 5px;">Add both directions in adjacency</td>
+                                        <td style="padding: 5px;">Graph build step</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div style="flex: 1;">
+                    <div class="section-box">
+                        <div class="section-header"><span class="num">6</span> RETURN TYPE GUIDE <span style="color:#fbbf24;">★★★★</span></div>
+                        <div class="section-content">
+                            <table style="width: 100%; font-size: 0.85em; text-align: left; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="border-bottom: 1px solid #cbd5e1;">
+                                        <th style="padding: 5px;">Return Type</th>
+                                        <th style="padding: 5px;">Use When</th>
+                                        <th style="padding: 5px;">Example Problems</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 5px; font-weight: bold; color: #059669;">int[] dist</td>
+                                        <td style="padding: 5px;">Need shortest distance from src to all nodes</td>
+                                        <td style="padding: 5px;">Network Delay Time, Dijkstra, Path With Minimum Effort (variant)</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 5px; font-weight: bold; color: #059669;">long[] dist</td>
+                                        <td style="padding: 5px;">Distances can be large (sum > 2^31-1)</td>
+                                        <td style="padding: 5px;">Large graphs with big weights</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 5px; font-weight: bold; color: #059669;">Pair (dist, path)</td>
+                                        <td style="padding: 5px;">Need actual path reconstruction</td>
+                                        <td style="padding: 5px;">Shortest Path in Weighted Graph</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 5px; font-weight: bold; color: #059669;">boolean (reachable)</td>
+                                        <td style="padding: 5px;">Only check if target is reachable</td>
+                                        <td style="padding: 5px;">Is Path Exists with Min Cost ≤ K</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 5px; font-weight: bold; color: #059669;">Custom Object</td>
+                                        <td style="padding: 5px;">Need dist + other info (stops, ways, etc.)</td>
+                                        <td style="padding: 5px;">Number of Ways to Arrive at Destination</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div style="background-color: #dcfce7; padding: 10px; border-radius: 5px; margin-top: 10px; font-size: 0.9em; text-align: center;">
+                                <strong style="color: #16a34a;">TIP:</strong> For large values use <strong>long</strong>, not <strong>int</strong>.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 20px;">
+                <div style="flex: 1;">
+                    <div class="section-box">
+                        <div class="section-header"><span class="num">8</span> COMPLEXITY <span style="color:#fbbf24;">★★★★</span></div>
+                        <div class="section-content">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9em;">
+                                <div style="flex: 1;">
+                                    <strong>Adjacency List + PQ</strong><br>
+                                    (Best Implementation)<br><br>
+                                    Time: <strong>O((V + E) log V)</strong><br>
+                                    Space: <strong>O(V + E)</strong>
+                                </div>
+                                <div style="flex: 1;">
+                                    <strong>Adjacency Matrix</strong><br>
+                                    (Simple Implementation)<br><br>
+                                    Time: <strong>O(V^2)</strong><br>
+                                    Space: <strong>O(V^2)</strong>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; margin-top: 15px; align-items: center;">
+                                <div style="flex: 1;">
+                                    <div class="mermaid">
+                                    graph LR
+                                        0((0)) -- 4 --- 1((1))
+                                        0 -- 2 --- 2((2))
+                                        1 -- 0 --- 2
+                                        1 -- 3 --- 3((3))
+                                        2 -- 3 --- 3
+                                    </div>
+                                </div>
+                                <div style="flex: 1;">
+                                    <table style="border: 1px solid #ccc; text-align: center; font-family: monospace; font-size: 1.1em; width: 100%;">
+                                        <tr><td></td><td>0</td><td>1</td><td>2</td><td>3</td></tr>
+                                        <tr><td>0</td><td>0</td><td>4</td><td>2</td><td>0</td></tr>
+                                        <tr><td>1</td><td>4</td><td>0</td><td>0</td><td>3</td></tr>
+                                        <tr><td>2</td><td>2</td><td>0</td><td>0</td><td>3</td></tr>
+                                        <tr><td>3</td><td>0</td><td>3</td><td>3</td><td>0</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div style="font-size: 0.9em; margin-top: 10px;">
+                                <strong>Where:</strong><br>
+                                V = number of vertices<br>
+                                E = number of edges
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="flex: 1;">
+                    <div class="section-box">
+                        <div class="section-header"><span class="num">9</span> DIJKSTRA SUMMARY</div>
+                        <div class="section-content">
+                            <table style="width: 100%; font-size: 0.9em; text-align: left; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="border-bottom: 1px solid #cbd5e1;">
+                                        <th style="padding: 5px;">#</th>
+                                        <th style="padding: 5px;">Step</th>
+                                        <th style="padding: 5px;">What Happens</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 5px;">1</td>
+                                        <td style="padding: 5px; font-weight: bold;">Initialize</td>
+                                        <td style="padding: 5px;">dist[src] = 0, others = INF<br>Push (src, 0) in PQ</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 5px;">2</td>
+                                        <td style="padding: 5px; font-weight: bold;">Extract Min</td>
+                                        <td style="padding: 5px;">Pop node u with smallest dist</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 5px;">3</td>
+                                        <td style="padding: 5px; font-weight: bold;">Skip if Visited</td>
+                                        <td style="padding: 5px;">If already visited, continue</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 5px;">4</td>
+                                        <td style="padding: 5px; font-weight: bold;">Relax Neighbors</td>
+                                        <td style="padding: 5px;">For each neighbor v of u, update dist[v] if better path</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 5px;">5</td>
+                                        <td style="padding: 5px; font-weight: bold;">Repeat</td>
+                                        <td style="padding: 5px;">Continue until PQ is empty</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 5px;">6</td>
+                                        <td style="padding: 5px; font-weight: bold;">Done</td>
+                                        <td style="padding: 5px;">dist[] has shortest paths</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 20px;">
+                <div style="flex: 1;">
+                    <div class="section-box">
+                        <div class="section-header"><span class="num">11</span> INTERVIEW CHECKLIST</div>
+                        <div class="section-content" style="font-size: 0.9em; display: flex; gap: 15px;">
+                            <div style="flex: 2;">
+                                <ul style="list-style-type: none; padding-left: 0; margin: 0; line-height: 1.6;">
+                                    <li>☑️ Did I build the graph correctly?</li>
+                                    <li>☑️ Did I initialize dist[] correctly?</li>
+                                    <li>☑️ Did I use Min Priority Queue?</li>
+                                    <li>☑️ Did I check visited[] before relaxing?</li>
+                                    <li>☑️ Did I relax all neighbors?</li>
+                                    <li>☑️ Did I update and push to PQ only when better?</li>
+                                    <li>☑️ Did I handle large values (use long if needed)?</li>
+                                    <li>☑️ Did I think about path reconstruction if asked?</li>
+                                    <li>☑️ Did I return correct type and values?</li>
+                                    <li>☑️ Can I dry run on a small example?</li>
+                                </ul>
+                            </div>
+                            <div style="flex: 1; border: 1px solid #cbd5e1; padding: 10px; border-radius: 5px; text-align: center; background-color: #f8fafc;">
+                                <div style="font-weight: bold; margin-bottom: 10px; color: #1e293b;">⭐ Interview Tip</div>
+                                <div style="font-size: 0.85em; text-align: left;">
+                                    Always communicate:<br>
+                                    • What the algo does<br>
+                                    • Why it works<br>
+                                    • Complexity<br>
+                                    • How you handle edge cases
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="flex: 1;">
+                    <div class="section-box" style="background-color: #e0e7ff; border: 1px solid #a5b4fc;">
+                        <div class="section-header" style="background-color: transparent; color: #3730a3; border-bottom: none;"><span class="num" style="background-color: #3730a3;">12</span> PAGE 13 PREVIEW</div>
+                        <div class="section-content" style="text-align: center;">
+                            <p style="font-weight: bold; color: #3730a3;">Next page contains DIJKSTRA PROBLEM GUIDE.</p>
+                            <p style="font-size: 0.9em; margin-bottom: 15px;">For each problem, you will see:</p>
+                            <div style="display: flex; justify-content: space-around; align-items: center; font-size: 0.8em; font-weight: bold; color: #4338ca;">
+                                <div><span style="font-size: 2em; display: block;">📄</span>Base Template</div>
+                                <div>➔</div>
+                                <div><span style="font-size: 2em; display: block;">✏️</span>Changed Lines</div>
+                                <div>➔</div>
+                                <div><span style="font-size: 2em; display: block;">💡</span>AHA Moment</div>
+                                <div>➔</div>
+                                <div><span style="font-size: 2em; display: block;">⏱️</span>Complexity</div>
+                                <div>➔</div>
+                                <div><span style="font-size: 2em; display: block;">⭐</span>Interview Tip</div>
+                            </div>
+                            <p style="margin-top: 15px; font-weight: bold; font-size: 0.9em;">Apply these templates with tiny changes and solve any Dijkstra problem with confidence!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-box" style="margin-top: 20px;">
+        <div class="section-header"><span class="num">13</span> INTERVIEW THINKING FLOW</div>
+        <div class="section-content" style="text-align: center;">
+            <div class="mermaid">
+            graph LR
+                A[❓<br>Problem<br>(Understand)] --> B[⚖️<br>Weights?]
+                B -- Unweighted --> C[Use BFS]
+                B -- Any Negative<br>Edges? --> D[Yes<br>↓<br>Bellman-Ford]
+                B -- Single Source<br>Shortest Path? --> E[Yes<br>↓<br>Use Dijkstra]
+                E --> F[Need Path<br>Reconstruction?<br>Yes<br>↓<br>Store Parent[]]
+                F --> G[💻<br>Write Code<br>(Template)]
+                G --> H[▶️<br>Dry Run<br>(Example)]
+                H --> I[⚙️<br>Test & Optimize<br>Edge Cases]
+                
+                style C fill:#f1f5f9
+                style D fill:#fee2e2
+                style E fill:#dcfce7
+                style F fill:#e0e7ff
+            </div>
+            
+            <div style="margin-top: 20px; border-top: 2px dashed #cbd5e1; padding-top: 20px;">
+                <div style="font-weight: bold; margin-bottom: 15px; color: #334155;">CHEAT PIPELINE (INTERVIEW SUCCESS FORMULA)</div>
+                <div class="mermaid">
+                graph LR
+                    P[❓<br>Problem<br>(Understand)] --> I[📥<br>Input<br>(What given)]
+                    I --> R[🔲<br>Representation<br>(Graph + Weights)]
+                    R --> H[🛠️<br>Helper Structure<br>(dist[], PQ, visited[])]
+                    H --> T[🧩<br>Pattern<br>(Dijkstra)]
+                    T --> L[✏️<br>Tiny Logic Changes<br>(Apply Changes)]
+                    L --> D[▶️<br>Dry Run<br>(Example)]
+                    D --> O[🚀<br>Optimize<br>(Time/Space)]
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
