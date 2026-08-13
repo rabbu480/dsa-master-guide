@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 00: FAANG DSA Master Orientation &amp; System Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#ffffff', primaryTextColor: '#0f172a', primaryBorderColor: '#2563eb', lineColor: '#64748b', fontFamily: 'Inter' } });
+</script>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+    }
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+    }
+    * { box-sizing: border-box; }
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 12px;
+        line-height: 1.45;
+    }
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 8px 16px;
+        display: flex;
+        
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand { font-weight: 900; font-size: 1rem; color: #38bdf8; }
+    .top-nav .nav-controls { display: flex; gap: 5px; flex-wrap: wrap; }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+    .app-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-title { font-weight: 900; font-size: 0.85rem; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+    .main-content { min-width: 0; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 22px 26px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+    }
+    [data-theme="dark"] .page { background: #1e293b; color: #f8fafc; }
+    .header-top {
+        display: flex;
+        
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 8px 14px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top { background: #0f172a; border-color: #38bdf8; border-left-color: #38bdf8; }
+    .header-top h1 { margin: 0; font-size: 1.2rem; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+    .header-top .page-num { background: #1e3a8a; color: white; padding: 3px 10px; border-radius: 16px; font-weight: 800; font-size: 0.75rem; }
+    .section-box { border-radius: 6px; overflow: hidden; margin-bottom: 12px; background: white; border: 2px solid #3b82f6; width: 100%; }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+    .section-header { padding: 6px 10px; font-weight: 800; font-size: 0.85rem; color: white; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+    .section-content { padding: 10px 12px; font-size: 0.8rem; }
+    .box-blue { border-color: #2563eb !important; } .box-blue .section-header { background: #2563eb !important; }
+    .box-green { border-color: #22c55e !important; } .box-green .section-header { background: #22c55e !important; }
+    .box-purple { border-color: #8b5cf6 !important; } .box-purple .section-header { background: #8b5cf6 !important; }
+    .box-orange { border-color: #f97316 !important; } .box-orange .section-header { background: #f97316 !important; }
+    .box-teal { border-color: #0d9488 !important; } .box-teal .section-header { background: #0d9488 !important; }
+    .box-amber { border-color: #d97706 !important; } .box-amber .section-header { background: #d97706 !important; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.74rem; }
+    table th, table td { border: 1px solid var(--border-color); padding: 4px 6px; text-align: left; }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+    .aha-box { background: #fefce8; border: 1px solid #eab308; border-left: 5px solid #ca8a04; color: #713f12; padding: 6px 9px; border-radius: 5px; font-size: 0.78rem; font-weight: 600; margin: 5px 0; }
+    .rule-box { padding: 5px 8px; border-radius: 5px; font-weight: 600; margin: 5px 0; font-size: 0.76rem; }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    .flow-arrow { text-align: center; color: #64748b; font-weight: 700; font-size: 0.85rem; padding: 2px 0; }
+    .flow-step { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 8px; text-align: center; font-weight: 700; font-size: 0.74rem; margin: 2px 0; }
+    pre { background: #f8fafc; color: #0f172a; padding: 6px 9px; border-radius: 5px; font-family: 'Fira Code', monospace; font-size: 0.73rem; line-height: 1.36; margin: 3px 0; white-space: pre-wrap !important; word-break: break-word; border: 1px solid #cbd5e1; }
+    @page { size: A4 portrait; margin: 4mm; }
+    @media print {
+        body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .top-nav, .toc-sidebar { display: none !important; }
+        .app-layout { display: block !important; }
+        .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.72; }
+    }
+
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+</style>
+</head>
+<body>
+
+<div class="top-nav">
+    <div class="brand">⚡ FAANG DSA HANDBOOK — TOPIC 00: ORIENTATION &amp; ROADMAP</div>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn" style="background:#059669; border-color:#10b981; font-weight:800;">🏠 Index</a>
+        <button class="nav-btn" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="nav-btn" onclick="toggleSidebar()">↕️ Expand/Shrink TOC</button>
+        <a href="#page1" class="nav-btn">P1</a>
+        <a href="#page2" class="nav-btn">P2</a>
+        <a href="#page3" class="nav-btn">P3</a>
+        <a href="#page4" class="nav-btn">P4</a>
+        <button class="nav-btn" onclick="window.print()" style="background: #2563eb;">🖨️ PDF</button>
+    </div>
+</div>
+
+<div class="container">
+<div class="app-layout" id="appLayout">
+
+    <div class="toc-sidebar">
+        <div class="toc-header-bar"><span class="toc-title">📋 SECTIONS</span><button class="shrink-btn" onclick="toggleSidebar()"><span class="toc-text">➖ Shrink</span></button></div>
+        <ul class="toc-list">
+            <li><a href="#page1" class="toc-link">00.1 Philosophy &amp; Workflow</a></li>
+            <li><a href="#page2" class="toc-link">00.2 13-Phase Framework</a></li>
+            <li><a href="#page3" class="toc-link">00.3 Utilities &amp; Conversions</a></li>
+            <li><a href="#page4" class="toc-link">00.4 Master Study Roadmap</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+
+    <!-- PAGE 1: PHILOSOPHY & SIGNATURE WORKFLOW -->
+    <div class="page" id="page1">
+        <div class="header-top">
+            <h1>TOPIC 00.1: WELCOME &amp; SIGNATURE WORKFLOW</h1>
+            <span class="page-num">PAGE 1 OF 4</span>
+        </div>
+
+        <div class="aha-box">
+            💡 <strong>OUR COACHING PHILOSOPHY: HOW TO LEARN, NOT WHAT TO MEMORIZE</strong><br/>
+            Most DSA books teach solutions to individual problems. Our system teaches <strong>pattern recognition and algorithm derivation</strong>. You will learn to recognize clues in the question, pick the right pattern, recall the generic template, and write clean, production-grade Java code.
+        </div>
+
+        <div class="grid-2">
+            <div class="section-box box-blue">
+                <div class="section-header">🎯 OUR SIGNATURE 10-STEP WORKFLOW</div>
+                <div class="section-content">
+                    <div style="display:flex;flex-direction:column;gap:2px">
+                        <div class="flow-step" style="background:#dbeafe;border-color:#2563eb;color:#1e40af">1. Read Problem Carefully</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">2. Find Clues &amp; Keywords in Statement</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">3. Recognize Algorithmic Pattern</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step" style="background:#fef9c3;border-color:#ca8a04">4. Recall Generic Code Template</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">5. Customize Template for Problem</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">6. Dry Run with Concrete Example</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step" style="background:#dbeafe;border-color:#2563eb">7. Write Production Java Code</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">8. Analyze Time &amp; Space Complexity</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">9. Verify Edge Cases (null, 0, 1, max N)</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step" style="background:#dcfce7;border-color:#22c55e;color:#15803d">10. Proactively Handle Interviewer Follow-ups</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box box-purple">
+                <div class="section-header">🧠 SENIOR ENGINEER MENTOR STYLE</div>
+                <div class="section-content">
+                    <div class="rule-box rule-green">✅ <strong>Derive First:</strong> Always build brute force first, then optimize step-by-step.</div>
+                    <div class="rule-box rule-green">✅ <strong>Draw Before Coding:</strong> Visualize pointers, nodes, matrices, and state transitions.</div>
+                    <div class="rule-box rule-green">✅ <strong>Aha Moment 💡:</strong> Every topic unlocks ONE core mental shift.</div>
+                    <div class="rule-box rule-amber">⚠️ <strong>No Black Boxes:</strong> Understand standard Java collections (HashMap treeification, PriorityQueue binary heap, ArrayDeque circular array).</div>
+                    <div class="rule-box rule-green">✅ <strong>Defensive Guards:</strong> Always handle `null`, empty arrays, and single-element inputs at the very top.</div>
+                </div>
+            </div>
+        </div>
+        <div class="rule-box rule-green" style="margin-top:6px">📌 <strong>GOLDEN RULE:</strong> Master the pattern, master any problem. Memorizing 300 problems leads to failure on unseen interview questions; mastering 20 core templates guarantees success.</div>
+    </div>
+
+    <!-- PAGE 2: 13-PHASE LEARNING FRAMEWORK -->
+    <div class="page" id="page2">
+        <div class="header-top">
+            <h1>TOPIC 00.2: THE 13-PHASE FAANG LEARNING FRAMEWORK</h1>
+            <span class="page-num">PAGE 2 OF 4</span>
+        </div>
+
+        <div class="section-box box-green">
+            <div class="section-header">🧠 THE 13-PHASE LEARNING PIPELINE (Applied to Every Topic)</div>
+            <div class="section-content">
+                <table>
+                    <thead>
+                        <tr><th>Phase</th><th>Name</th><th>Goal</th><th>Activity</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Phase 0</strong></td><td>🎯 Mindset</td><td>WHY does this topic exist?</td><td>Real-world uses, FAANG frequency, motivation</td></tr>
+                        <tr><td><strong>Phase 1</strong></td><td>💡 Intuition First</td><td>Feel the pattern</td><td>Analogies, stories, visualizations, scratch building</td></tr>
+                        <tr><td><strong>Phase 2</strong></td><td>📖 Core Understanding</td><td>Definitions &amp; Rules</td><td>Properties, invariants, edge cases, common traps</td></tr>
+                        <tr><td><strong>Phase 3</strong></td><td>🎯 Pattern Recognition</td><td>Spot the clues</td><td>Keyword mapping, signal detection, when NOT to use</td></tr>
+                        <tr><td><strong>Phase 4</strong></td><td>🔨 Build Algorithm</td><td>Derive together</td><td>Brute force ➔ Bottleneck ➔ Stepwise optimization</td></tr>
+                        <tr><td><strong>Phase 5</strong></td><td>⚙️ Template Building</td><td>Reusable code</td><td>Generic algorithm ➔ Java template skeleton</td></tr>
+                        <tr><td><strong>Phase 6</strong></td><td>▶️ Dry Run</td><td>Variable movement</td><td>Small &amp; medium traces, state transition tables</td></tr>
+                        <tr><td><strong>Phase 7</strong></td><td>💻 Coding Together</td><td>Line-by-line Java</td><td>Explain every variable, loop condition, and guard</td></tr>
+                        <tr><td><strong>Phase 8</strong></td><td>📊 Complexity Thinking</td><td>Time &amp; Space O()</td><td>Asymptotic analysis, memory/speed trade-offs</td></tr>
+                        <tr><td><strong>Phase 9</strong></td><td>🐛 Debugging Mindset</td><td>Catch bugs early</td><td>Off-by-one errors, null checks, dry-run mistakes</td></tr>
+                        <tr><td><strong>Phase 10</strong></td><td>🔄 Reverse Thinking</td><td>Handle twists</td><td>Interviewer constraint changes &amp; follow-ups</td></tr>
+                        <tr><td><strong>Phase 11</strong></td><td>📈 Pattern Expansion</td><td>Progressive practice</td><td>Easy ➔ Medium ➔ Hard ➔ Combined patterns</td></tr>
+                        <tr><td><strong>Phase 12</strong></td><td>✅ Mastery Test</td><td>Teach it back</td><td>Explain without notes, write template from memory</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="aha-box">💡 Every topic in Book 1 follows this exact 13-phase structure so your learning is consistent, structured, and deep!</div>
+    </div>
+
+    <!-- PAGE 3: UTILITIES & CONVERSIONS -->
+    <div class="page" id="page3">
+        <div class="header-top">
+            <h1>TOPIC 00.3: REUSABLE UTILITIES &amp; DATA CONVERSIONS</h1>
+            <span class="page-num">PAGE 3 OF 4</span>
+        </div>
+
+        <div class="section-box box-orange">
+            <div class="section-header">🔄 UNIVERSAL DATA CONVERSIONS CHEAT SHEET</div>
+            <div class="section-content">
+                <div class="grid-2">
+                    <div>
+                        <p style="font-weight:700;margin:2px 0">1. Arrays &amp; Collections Conversions</p>
+<pre>
+// int[] ➔ List&lt;Integer&gt;
+List&lt;Integer&gt; list = Arrays.stream(arr).boxed().collect(Collectors.toList());
+
+// List&lt;Integer&gt; ➔ int[]
+int[] arr = list.stream().mapToInt(i -&gt; i).toArray();
+
+// Set ➔ int[]
+int[] arr = set.stream().mapToInt(Number::intValue).toArray();</pre>
+                    </div>
+                    <div>
+                        <p style="font-weight:700;margin:2px 0">2. String &amp; Character Conversions</p>
+<pre>
+// String ➔ char[]
+char[] chars = str.toCharArray();
+
+// char[] ➔ String
+String s = new String(chars);
+
+// Character frequency array (a-z)
+int[] freq = new int[26];
+freq[ch - 'a']++;</pre>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="margin-top:8px">
+                    <div>
+                        <p style="font-weight:700;margin:2px 0">3. Graph &amp; Grid Utilities</p>
+<pre>
+// Grid Direction Vectors (4-way &amp; 8-way)
+int[][] DIR4 = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+int[][] DIR8 = {{-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1}};
+
+// Grid Boundary Check
+boolean isValid(int r, int c, int R, int C) {
+    return r &gt;= 0 &amp;&amp; r &lt; R &amp;&amp; c &gt;= 0 &amp;&amp; c &lt; C;
+}</pre>
+                    </div>
+                    <div>
+                        <p style="font-weight:700;margin:2px 0">4. Edge List ➔ Adjacency List</p>
+<pre>
+List&lt;List&lt;Integer&gt;&gt; buildGraph(int n, int[][] edges) {
+    List&lt;List&lt;Integer&gt;&gt; g = new ArrayList&lt;&gt;();
+    for (int i = 0; i &lt; n; i++) g.add(new ArrayList&lt;&gt;());
+    for (int[] e : edges) {
+        g.get(e[0]).add(e[1]);
+        g.get(e[1]).add(e[0]); // remove for directed
+    }
+    return g;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="aha-box">💡 <strong>AHA:</strong> Master these conversions first so you never waste interview minutes wrestling with syntax!</div>
+    </div>
+
+    <!-- PAGE 4: MASTER STUDY ROADMAP -->
+    <div class="page" id="page4">
+        <div class="header-top">
+            <h1>TOPIC 00.4: MASTER DEPENDENCY ROADMAP &amp; STUDY PLANS</h1>
+            <span class="page-num">PAGE 4 OF 4</span>
+        </div>
+
+        <div class="section-box box-teal">
+            <div class="section-header">🗺️ 20-TOPIC DEPENDENCY ROADMAP</div>
+            <div class="section-content">
+                <table>
+                    <thead>
+                        <tr><th>Part</th><th>Topics</th><th>Focus Area</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Part 1</strong></td><td>Topic 01 – 05</td><td>Foundations, Arrays, Two Pointers, Sliding Window, Binary Search</td></tr>
+                        <tr><td><strong>Part 2</strong></td><td>Topic 06 – 09</td><td>Linked Lists, Stack, Queue &amp; Deque, Heap / Priority Queue</td></tr>
+                        <tr><td><strong>Part 3</strong></td><td>Topic 10 – 12</td><td>Trees &amp; BST, Trie (Prefix Tree), Graphs Masterclass</td></tr>
+                        <tr><td><strong>Part 4</strong></td><td>Topic 13 – 16</td><td>Backtracking, Dynamic Programming, Greedy Algorithms, Intervals</td></tr>
+                        <tr><td><strong>Part 5</strong></td><td>Topic 17 – 19</td><td>Bit Manipulation, Mathematics, Advanced Data Structures</td></tr>
+                        <tr><td><strong>Book 2</strong></td><td>Topic 20 – 30</td><td>FAANG Interview Mastery Playbook &amp; Mock Interviews</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="grid-2" style="margin-top:8px">
+            <div class="section-box box-purple">
+                <div class="section-header">📅 4-WEEK INTENSIVE STUDY SCHEDULE</div>
+                <div class="section-content">
+                    <p style="margin:2px 0"><strong>Week 1:</strong> Foundations, Arrays, Two Pointers, Sliding Window, Binary Search</p>
+                    <p style="margin:2px 0"><strong>Week 2:</strong> Linked Lists, Stacks, Queues, Heaps, Trees &amp; BST</p>
+                    <p style="margin:2px 0"><strong>Week 3:</strong> Tries, Graphs, Backtracking, Dynamic Programming</p>
+                    <p style="margin:2px 0"><strong>Week 4:</strong> Greedy, Intervals, Bitmask, Math, Advanced DS &amp; Book 2 Mocks</p>
+                </div>
+            </div>
+            <div class="section-box box-amber">
+                <div class="section-header">🏆 SUCCESS CRITERIA</div>
+                <div class="section-content">
+                    <p style="margin:2px 0">✅ Solve any Medium in &lt; 20 min</p>
+                    <p style="margin:2px 0">✅ Solve any Hard in &lt; 35 min</p>
+                    <p style="margin:2px 0">✅ Write bug-free Java code with guards</p>
+                    <p style="margin:2px 0">✅ Narrate thinking out loud continuously</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin-top:8px">🚀 You are now ready to begin! Head to <strong>Topic 01: Foundations &amp; Big-O Masterclass</strong>.</div>
+    </div>
+
+    </div>
+</div>
+</div>
+
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout') || document.querySelector('.app-layout');
+        const btn = document.querySelector('.shrink-btn span');
+        if (layout) {
+            layout.classList.toggle('shrunk');
+            if (btn) {
+                btn.innerText = layout.classList.contains('shrunk') ? '➕ Expand' : '➖ Shrink';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Topic 14: Dynamic Programming Masterclass — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.34; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 12px 16px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 6px; margin-bottom: 10px; }
+.ph h1 { font-size: 1.65rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.82rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.72rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.bh  { background: var(--pri); color: white; padding: 4px 8px;
+  font-weight: 700; font-size: 0.82rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 16px; height: 16px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.70rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 6px 8px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 5px 10px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.72rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.90rem; }
+.psub   { color: var(--sub); font-size: 0.76rem; }
+.prow-body { display: flex; }
+.pc { padding: 6px 8px; font-size: 0.76rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.70rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 6px; }
+.prob-head { padding: 4px 8px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 1px 6px; border-radius: 8px; font-size: 0.66rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 1px 6px; border-radius: 8px; font-size: 0.66rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 8px; font-size: 0.66rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 5px 7px; border-right: 1px solid var(--bdr); font-size: 0.74rem; }
+.prob-code { padding: 5px 7px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 4px 6px; font-size: 0.66rem; line-height: 1.35; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.72rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+th, td { border: 1px solid var(--bdr); padding: 3px 5px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 4px 6px; border-radius: 0 4px 4px 0; font-size: 0.74rem; margin-top: 3px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 5px 7px; margin-top: 3px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.78rem; margin-bottom: 2px; }
+
+.dt-wrap { font-size: 0.74rem; }
+.dt-root { background: var(--pri); color: white; padding: 3px 6px; border-radius: 4px; text-align: center; font-weight: 700; margin-bottom: 5px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 3px 5px; font-weight: 600; color: #1e40af; font-size: 0.70rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 3px 5px; color: #065f46; font-weight: 700; font-size: 0.70rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.70rem; padding: 2px 3px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 6px 10px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- PAGE 1: FOUNDATION & SB -> RBR -> MTS FRAMEWORK -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">FAANG DP Framework — SB ➔ RBR ➔ MTS Paradigm</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 1 OF 10</div><div class="ptag">DP FRAMEWORK · SB ➔ RBR ➔ MTS · FIRST PRINCIPLES</div></div>
+</div>
+
+<div class="box pur" style="margin-bottom:8px">
+  <div class="bh">🚀 THE UNIVERSAL FAANG DP THINKING PARADIGM — SB ➔ RBR ➔ MTS</div>
+  <div class="bc">
+    <div class="g3">
+      <div>
+        <div style="font-weight:800;color:var(--pri);margin-bottom:2px">🟦 SB — State &amp; Brainstorm</div>
+        <p style="font-size:0.73rem"><strong>S (State):</strong> What variables uniquely identify `dp[i]` or `dp[i][j]`?<br>
+        <strong>B (Brainstorm):</strong> <em>"If I'm at this state, what choices do I have?"</em> (Take/Skip, Climb 1/2 steps, Rob/Skip).</p>
+      </div>
+      <div>
+        <div style="font-weight:800;color:var(--amb);margin-bottom:2px">🟨 RBR — Recurrence, Base, Result</div>
+        <p style="font-size:0.73rem"><strong>R (Recurrence):</strong> `dp[i] = max(take, skip)`.<br>
+        <strong>B (Base Case):</strong> Recursion stop point (`dp[0] = 0`).<br>
+        <strong>R (Result):</strong> Target location (`dp[N]`, `dp[M][N]`).</p>
+      </div>
+      <div>
+        <div style="font-weight:800;color:var(--grn);margin-bottom:2px">🟩 MTS — Memo, Tabulate, Space</div>
+        <p style="font-size:0.73rem"><strong>M (Memoization):</strong> Top-down recursion cache.<br>
+        <strong>T (Tabulation):</strong> Bottom-up iterative table.<br>
+        <strong>S (Space Opt):</strong> Compress 1D/2D table into `prev1, prev2` variables!</p>
+      </div>
+    </div>
+    <div class="rule">
+      <strong>Golden Rule:</strong> Brute Force \rightarrow Recursion \rightarrow SB \rightarrow RBR \rightarrow Memoization \rightarrow Tabulation \rightarrow Space Optimization O(1).
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">📚 THE 2 MANDATORY DP CONDITIONS</div>
+    <div class="bc">
+      <p style="font-size:0.74rem;margin-bottom:3px">1. <strong>Overlapping Subproblems:</strong> Exact same state `fib(3)` computed multiple times in recursion tree.</p>
+      <p style="font-size:0.74rem">2. <strong>Optimal Substructure:</strong> Optimal solution of size N built from optimal solutions of smaller subproblems!</p>
+    </div>
+  </div>
+
+  <div class="box amb">
+    <div class="bh">⚡ CLUES THAT SCREAM DYNAMIC PROGRAMMING</div>
+    <div class="bc">
+      <p style="font-size:0.73rem">1. <em>"Max / Min ways to reach target"</em> \rightarrow 1D / Knapsack DP</p>
+      <p style="font-size:0.73rem">2. <em>"Longest common subsequence / Edit distance"</em> \rightarrow 2D String DP</p>
+      <p style="font-size:0.73rem">3. <em>"Can partition array into 2 equal sum subsets"</em> \rightarrow 0/1 Knapsack DP</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 2: API & TOOLKIT (MEMOIZATION, TABULATION & SPACE COMPRESSION) -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">Java Master DP Templates &amp; Toolkit</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 2 OF 10</div><div class="ptag">MEMOIZATION TEMPLATE · TABULATION · SPACE OPTIMIZATION</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:8px">
+  <div class="box">
+    <div class="bh"><span class="n">1</span> TOP-DOWN MEMOIZATION TEMPLATE</div>
+    <div class="bc">
+<pre>public int solveTopDown(int n) {
+  Integer[] memo = new Integer[n + 1];
+  return helper(n, memo);
+}
+private int helper(int n, Integer[] memo) {
+  if (n <= 1) return n;
+  if (memo[n] != null) return memo[n]; // Memoization Cache Hit!
+  memo[n] = helper(n - 1, memo) + helper(n - 2, memo);
+  return memo[n];
+}</pre>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh"><span class="n">2</span> BOTTOM-UP O(1) SPACE COMPRESSION</div>
+    <div class="bc">
+<pre>// Fibonacci / House Robber O(1) Space Compression:
+public int rob(int[] nums) {
+  int prev2 = 0, prev1 = 0;
+  for (int num : nums) {
+    int curr = Math.max(prev1, prev2 + num);
+    prev2 = prev1;
+    prev1 = curr;
+  }
+  return prev1;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 3: 1D DP (CLIMBING STAIRS & HOUSE ROBBER I) -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">1D DP Patterns — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 3 OF 10</div><div class="ptag">CLIMBING STAIRS · HOUSE ROBBER I</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:8px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 1</div>
+    <div class="ptitle">CLIMBING STAIRS (1D Fibonacci Transition)</div>
+    <div class="psub">e.g. Climbing Stairs (LC 70), Min Cost Climbing Stairs (LC 746)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Recurrence Formula</div>
+      <div style="font-size:0.76rem">`dp[i] = dp[i-1] + dp[i-2]`. Space compressed to O(1) variables `prev1` and `prev2`.</div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 70</div>
+<pre>public int climbStairs(int n) {
+  if (n <= 2) return n;
+  int prev2 = 1, prev1 = 2;
+  for (int i = 3; i <= n; i++) {
+    int curr = prev1 + prev2;
+    prev2 = prev1;
+    prev1 = curr;
+  }
+  return prev1;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 2</div>
+    <div class="ptitle">HOUSE ROBBER I (Non-Adjacent Element Selection)</div>
+    <div class="psub">e.g. House Robber I (LC 198)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Choice Equation</div>
+      <div style="font-size:0.76rem">
+        `dp[i] = Math.max(dp[i-1], dp[i-2] + nums[i])`. Space compressed to O(1) variables.
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 198</div>
+<pre>public int rob(int[] nums) {
+  int prev2 = 0, prev1 = 0;
+  for (int num : nums) {
+    int curr = Math.max(prev1, prev2 + num);
+    prev2 = prev1;
+    prev1 = curr;
+  }
+  return prev1;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 4: 1D DP (HOUSE ROBBER II & PALINDROME SUBSTRINGS) -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">1D DP Patterns — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 4 OF 10</div><div class="ptag">CIRCULAR HOUSE ROBBER II · PALINDROME EXPANSION</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:8px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 3</div>
+    <div class="ptitle">HOUSE ROBBER II (Circular Array Split)</div>
+    <div class="psub">e.g. House Robber II (LC 213)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Circular Robber Trick</div>
+      <div style="font-size:0.76rem">
+        For circular houses, max robbery $= \max(\text{rob}(0..N-2), \text{rob}(1..N-1))$!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 213</div>
+<pre>public int rob(int[] nums) {
+  if (nums.length == 1) return nums[0];
+  return Math.max(robRange(nums, 0, nums.length - 2), robRange(nums, 1, nums.length - 1));
+}
+private int robRange(int[] nums, int start, int end) {
+  int prev2 = 0, prev1 = 0;
+  for (int i = start; i <= end; i++) {
+    int curr = Math.max(prev1, prev2 + nums[i]);
+    prev2 = prev1; prev1 = curr;
+  }
+  return prev1;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 4</div>
+    <div class="ptitle">LONGEST PALINDROMIC SUBSTRING (Expand Around Center)</div>
+    <div class="psub">e.g. Longest Palindromic Substring (LC 5)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Center Expansion Strategy</div>
+      <div style="font-size:0.76rem">
+        Expand around 2N-1 centers (odd center `i, i` and even center `i, i+1`) in O(N^2) time and O(1) space!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 5</div>
+<pre>public String longestPalindrome(String s) {
+  int start = 0, maxLen = 0;
+  for (int i = 0; i < s.length(); i++) {
+    int len1 = expand(s, i, i);     // Odd center
+    int len2 = expand(s, i, i + 1); // Even center
+    int len = Math.max(len1, len2);
+    if (len > maxLen) { maxLen = len; start = i - (len - 1) / 2; }
+  }
+  return s.substring(start, start + maxLen);
+}
+private int expand(String s, int l, int r) {
+  while (l>=0 &amp;&amp; r<s.length() &amp;&amp; s.charAt(l) == s.charAt(r)) { l--; r++; }
+  return r - l - 1;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 5: UNBOUNDED KNAPSACK (COIN CHANGE I & II) -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">Unbounded Knapsack Patterns</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 5 OF 10</div><div class="ptag">UNBOUNDED KNAPSACK · COIN CHANGE I &amp; II</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:8px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 5</div>
+    <div class="ptitle">COIN CHANGE I (Fewest Coins to Make Amount)</div>
+    <div class="psub">e.g. Coin Change (LC 322)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Unbounded Forward Loop</div>
+      <div style="font-size:0.76rem">
+        Infinite reuse of coins! Loop `a = coin..amount` forward: `dp[a] = Math.min(dp[a], 1 + dp[a - coin])`.
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 322</div>
+<pre>public int coinChange(int[] coins, int amount) {
+  int[] dp = new int[amount + 1];
+  Arrays.fill(dp, amount + 1);
+  dp[0] = 0;
+  for (int a = 1; a <= amount; a++) {
+    for (int coin : coins) {
+      if (a >= coin) dp[a] = Math.min(dp[a], 1 + dp[a - coin]);
+    }
+  }
+  return dp[amount] > amount ? -1 : dp[amount];
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 6</div>
+    <div class="ptitle">COIN CHANGE II (Total Combination Ways)</div>
+    <div class="psub">e.g. Coin Change II (LC 518)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Outer Loop = Coins (Prevents Duplicates)</div>
+      <div style="font-size:0.76rem">
+        Outer loop over `coins`, inner loop over `amount` ensures combinations (not permutations) are counted!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 518</div>
+<pre>public int change(int amount, int[] coins) {
+  int[] dp = new int[amount + 1];
+  dp[0] = 1;
+  for (int coin : coins) {
+    for (int a = coin; a <= amount; a++) {
+      dp[a] += dp[a - coin];
+    }
+  }
+  return dp[amount];
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 6: 0/1 KNAPSACK & SUBSET SUM -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">0/1 Knapsack Pattern</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 6 OF 10</div><div class="ptag">0/1 KNAPSACK · PARTITION EQUAL SUBSET SUM</div></div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 7</div>
+    <div class="ptitle">PARTITION EQUAL SUBSET SUM (0/1 Knapsack Reverse Loop)</div>
+    <div class="psub">e.g. Partition Equal Subset Sum (LC 416)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Reverse Loop Single Use Trick</div>
+      <div style="font-size:0.76rem">
+        For single-use elements, inner loop MUST run backwards from `target` down to `num` to prevent using same element twice in 1D array!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 416</div>
+<pre>public boolean canPartition(int[] nums) {
+  int sum = 0; for (int n : nums) sum += n;
+  if (sum % 2 != 0) return false;
+  int target = sum / 2;
+  boolean[] dp = new boolean[target + 1];
+  dp[0] = true;
+  for (int num : nums) {
+    for (int j = target; j >= num; j--) { // Reverse loop for 0/1!
+      dp[j] = dp[j] || dp[j - num];
+    }
+  }
+  return dp[target];
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 7: LONGEST INCREASING SUBSEQUENCE (LIS) -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">Subsequence Patterns</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 7 OF 10</div><div class="ptag">LIS · O(N LOG N) PATIENCE SORTING</div></div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 8</div>
+    <div class="ptitle">LONGEST INCREASING SUBSEQUENCE (Binary Search Tails Array)</div>
+    <div class="psub">e.g. Longest Increasing Subsequence (LC 300)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Patience Sorting O(N log N)</div>
+      <div style="font-size:0.76rem">
+        Maintain array `tails[]` of smallest tail of all increasing subsequences of length i+1. Use binary search (`Arrays.binarySearch`) to replace or append!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 300</div>
+<pre>public int lengthOfLIS(int[] nums) {
+  int[] tails = new int[nums.length];
+  int len = 0;
+  for (int num : nums) {
+    int i = Arrays.binarySearch(tails, 0, len, num);
+    if (i < 0) i = -(i + 1);
+    tails[i] = num;
+    if (i == len) len++;
+  }
+  return len;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 8: 2D STRING DP (LCS & EDIT DISTANCE) -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">2D String DP</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 8 OF 10</div><div class="ptag">LCS · EDIT DISTANCE · 2D MATRIX</div></div>
+</div>
+
+<div class="prow" style="margin-bottom:8px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 9</div>
+    <div class="ptitle">LONGEST COMMON SUBSEQUENCE (2D Matrix Match)</div>
+    <div class="psub">e.g. Longest Common Subsequence (LC 1143)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Matching vs Non-Matching Transition</div>
+      <div style="font-size:0.76rem">
+        If `text1[i-1] == text2[j-1]`: `dp[i][j] = 1 + dp[i-1][j-1]`. Else `dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1])`.
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 1143</div>
+<pre>public int longestCommonSubsequence(String text1, String text2) {
+  int m = text1.length(), n = text2.length();
+  int[][] dp = new int[m + 1][n + 1];
+  for (int i = 1; i <= m; i++) {
+    for (int j = 1; j <= n; j++) {
+      if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+        dp[i][j] = 1 + dp[i - 1][j - 1];
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
+    }
+  }
+  return dp[m][n];
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 10</div>
+    <div class="ptitle">EDIT DISTANCE (Insert, Delete, Replace Operations)</div>
+    <div class="psub">e.g. Edit Distance (LC 72)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">3 Edit Transitions</div>
+      <div style="font-size:0.76rem">
+        `dp[i][j] = 1 + Min(Insert dp[i][j-1], Delete dp[i-1][j], Replace dp[i-1][j-1])`.
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 72</div>
+<pre>public int minDistance(String word1, String word2) {
+  int m = word1.length(), n = word2.length();
+  int[][] dp = new int[m + 1][n + 1];
+  for (int i = 0; i <= m; i++) dp[i][0] = i;
+  for (int j = 0; j <= n; j++) dp[0][j] = j;
+  for (int i = 1; i <= m; i++) {
+    for (int j = 1; j <= n; j++) {
+      if (word1.charAt(i - 1) == word2.charAt(j - 1)) dp[i][j] = dp[i - 1][j - 1];
+      else dp[i][j] = 1 + Math.min(dp[i - 1][j - 1], Math.min(dp[i - 1][j], dp[i][j - 1]));
+    }
+  }
+  return dp[m][n];
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 9: DECISION TREE & TRIGGER WORDS -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 9 OF 10</div><div class="ptag">DECISION TREE · TRIGGER WORDS · TRADE-OFFS</div></div>
+</div>
+
+<div class="g2">
+  <div class="box">
+    <div class="bh">DYNAMIC PROGRAMMING — WHICH PATTERN TO USE?</div>
+    <div class="bc dt-wrap">
+      <div class="dt-root">Start: What is the DP problem type?</div>
+      <div class="dt-grid">
+        <div class="dt-row">
+          <div class="dt-q">🧗 1D Steps / Non-adjacent items</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">1D DP / O(1) Space<br><span style="font-weight:400;font-size:0.68rem">`prev1` and `prev2`</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🪙 Unbounded item reuse (Coin Change)</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Unbounded Knapsack<br><span style="font-weight:400;font-size:0.68rem">Forward loop `a = coin..amount`</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🎒 Single-use items (Subset Sum)</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">0/1 Knapsack<br><span style="font-weight:400;font-size:0.68rem">Reverse loop `j = target..num`</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">📈 Subsequence ordering (LIS)</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Patience Sorting LIS<br><span style="font-weight:400;font-size:0.68rem">Binary search `tails[]` array</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🔤 2-String matching (LCS / Edit)</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">2D String DP<br><span style="font-weight:400;font-size:0.68rem">`dp[m+1][n+1]` grid</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div class="box pur">
+      <div class="bh">🎯 TRIGGER WORDS DIRECTORY</div>
+      <div class="bc">
+        <table>
+          <tr><th>Trigger Word</th><th>Variant</th><th>Action</th></tr>
+          <tr><td>"Fewest coins to amount"</td><td>Unbounded Knapsack</td><td>Forward loop `1 + dp[a - coin]`</td></tr>
+          <tr><td>"Partition equal sum"</td><td>0/1 Knapsack</td><td>Reverse loop `dp[j] || dp[j - num]`</td></tr>
+          <tr><td>"Longest increasing subsequence"</td><td>LIS Patience Sort</td><td>Binary search replacement in `tails`</td></tr>
+          <tr><td>"Edit distance", "Min operations"</td><td>2D String DP</td><td>`1 + Min(Insert, Delete, Replace)`</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="box amb">
+      <div class="bh">💼 INTERVIEW TRADE-OFFS &amp; FOLLOW-UPS</div>
+      <div class="bc">
+        <table>
+          <tr><th>Interviewer Asks</th><th>Your Answer</th></tr>
+          <tr><td>Why reverse loop in 0/1 Knapsack?</td><td>A forward loop re-uses the SAME item multiple times (unbounded). A reverse loop ensures each item is used AT MOST ONCE!</td></tr>
+          <tr><td>Why outer loop over coins in Coin Change II?</td><td>Outer coin loop counts UNIQUE COMBINATIONS. Outer amount loop counts PERMUTATIONS!</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 10: DRY RUN, MATH PROOFS & CHEAT SHEET -->
+<div class="page">
+<div class="ph">
+  <div><h1>DYNAMIC PROGRAMMING MASTERCLASS</h1><div class="sub">Dry Run, Math Proofs &amp; Cheat Sheet</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 10 OF 10</div><div class="ptag">DRY RUN · PROOFS · CHEAT SHEET</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:8px">
+  <div class="box">
+    <div class="bh">🔍 DRY RUN — Coin Change ([1, 2, 5], Amount=11)</div>
+    <div class="bc">
+      <table style="font-size:0.68rem">
+        <tr><th>Amount</th><th>dp[a] Calculation</th><th>Best Coin Used</th><th>dp[a] Value</th></tr>
+        <tr><td>0</td><td>Base case</td><td>-</td><td>0</td></tr>
+        <tr><td>1</td><td>$1 + dp[0] = 1$</td><td>Coin 1</td><td>1</td></tr>
+        <tr><td>2</td><td>$\min(1+dp[1], 1+dp[0]) = 1$</td><td>Coin 2</td><td>1</td></tr>
+        <tr><td>5</td><td>$\min(1+dp[4], 1+dp[0]) = 1$</td><td>Coin 5</td><td>1</td></tr>
+        <tr><td>11</td><td>$1 + dp[6] = 1 + 2 = 3$ (Coins 5+5+1)</td><td>Coin 5</td><td>3 ✅</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh">📐 MATHEMATICAL PROOF — O(N LOG N) LIS PATIENCE SORT</div>
+    <div class="bc">
+      <div style="font-size:0.74rem">
+        <p style="margin-bottom:3px"><strong>Claim:</strong> `tails[i]` stores the smallest tail of all increasing subsequences of length i+1.</p>
+        <p style="margin-bottom:3px"><strong>Proof:</strong> `tails[]` is strictly increasing! For each number `x`, binary search finds the first element `tails[i] >= x`. Replacing `tails[i]` with `x` maintains the invariant with a smaller tail, creating more capacity for future elements \rightarrow <strong>O(N \log N) Time!</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+    <div class="bc">
+      <div class="g2" style="gap:4px">
+        <ul style="font-size:0.73rem;list-style:none;padding:0">
+          <li>☐ Write 1D Climbing Stairs in O(1) space</li>
+          <li>☐ Code House Robber II circular range split</li>
+          <li>☐ Implement Coin Change I unbounded loop</li>
+          <li>☐ Code Coin Change II combination loop</li>
+        </ul>
+        <ul style="font-size:0.73rem;list-style:none;padding:0">
+          <li>☐ Write 0/1 Knapsack reverse loop</li>
+          <li>☐ Code LIS in O(N \log N) with binary search</li>
+          <li>☐ Write Longest Common Subsequence (LC 1143)</li>
+          <li>☐ Code Edit Distance (LC 72) in 2D grid</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+    <div class="bc">
+      <div class="aha" style="margin-bottom:3px;padding:4px">
+        <div class="aha-t">Rule 1 — Fill Array with Safe Infinity</div>
+        In min-cost DP (e.g. Coin Change), initialize `dp[]` with `amount + 1` (NOT `Integer.MAX_VALUE` to avoid overflow during `1 + dp[a - coin]`)!
+      </div>
+      <div class="aha" style="padding:4px">
+        <div class="aha-t">Rule 2 — Reverse Inner Loop for 0/1 Knapsack</div>
+        When elements can only be used ONCE, inner loop MUST run backwards (`for (int j = target; j >= num; j--)`)!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

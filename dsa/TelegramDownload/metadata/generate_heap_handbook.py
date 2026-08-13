@@ -1,0 +1,478 @@
+import os
+
+# We will generate a bespoke HTML file for 10.Heaps that perfectly mimics the PDF layout.
+
+output_html = r"C:\Users\rabba\Downloads\TelegramDownload\metadata\10.Heaps.html"
+
+html_content = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEAP Priority Queue (FAANG Cheat Sheet)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Fira+Code&display=swap" rel="stylesheet">
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ 
+          startOnLoad: true, 
+          theme: 'base',
+          themeVariables: {
+              primaryColor: '#ffffff',
+              primaryTextColor: '#000000',
+              primaryBorderColor: '#3b82f6',
+              lineColor: '#cbd5e1',
+              fontFamily: 'Inter'
+          }
+      });
+    </script>
+    <style>
+        :root {
+            --primary: #1e3a8a; /* Dark Blue headers */
+            --secondary: #3b82f6; /* Lighter blue */
+            --green: #10b981;
+            --red: #ef4444;
+            --text-dark: #1e293b;
+            --bg-light: #f8fafc;
+            --border-color: #cbd5e1;
+            --warning-bg: #fffbeb;
+            --warning-border: #f59e0b;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e2e8f0;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            font-size: 14px;
+        }
+        .page {
+            background: white;
+            max-width: 1100px;
+            margin: 0 auto 40px auto;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            page-break-after: always;
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .header-top h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: var(--primary);
+            font-weight: 900;
+        }
+        .header-top .subtitle {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-left: 20px;
+        }
+        .header-top .page-number {
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .section-box {
+            border: 1px solid var(--primary);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background: white;
+        }
+        .section-header {
+            background: var(--primary);
+            color: white;
+            padding: 8px 15px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        .section-header span.num {
+            background: white;
+            color: var(--primary);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 0.9rem;
+        }
+        .section-content {
+            padding: 15px;
+        }
+        ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        
+        /* Specific Layouts */
+        .flex-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .flex-col {
+            flex: 1;
+            text-align: center;
+        }
+        .flex-col h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+        .bg-green { background: var(--green); color: white; padding: 5px; border-radius: 4px; font-weight: bold; }
+        .bg-red { background: var(--red); color: white; padding: 5px; border-radius: 4px; font-weight: bold; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        table th, table td {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            text-align: left;
+        }
+        table th {
+            background: #f1f5f9;
+        }
+        pre {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            margin: 10px 0;
+        }
+        code {
+            color: var(--primary);
+            font-family: 'Fira Code', monospace;
+        }
+        .rule-box {
+            background: var(--warning-bg);
+            border: 1px solid var(--warning-border);
+            border-left: 5px solid var(--warning-border);
+            padding: 10px 15px;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        .text-center { text-align: center; }
+        .full-width { grid-column: span 2; }
+    </style>
+</head>
+<body>
+    <!-- PAGE 1 -->
+    <div class="page">
+        <div class="header-top">
+            <div style="display: flex; align-items: baseline;">
+                <h1>HEAP</h1>
+                <div class="subtitle">Priority Queue<br><small style="color:#64748b;font-weight:normal;">(FAANG Cheat Sheet)</small></div>
+            </div>
+            <div style="text-align: right;">
+                <div class="page-number">PAGE 1</div>
+                <div style="margin-top: 5px; color: var(--primary); font-weight: 600; font-size: 0.9rem;">Fundamentals & Java Basics</div>
+            </div>
+        </div>
+
+        <div class="grid-container">
+            <!-- Left Column -->
+            <div class="col-left">
+                <!-- 1. WHAT IS A HEAP? -->
+                <div class="section-box">
+                    <div class="section-header"><span class="num">1</span> WHAT IS A HEAP?</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>A Heap is a <strong>Complete Binary Tree</strong>.</li>
+                            <li>It satisfies the <strong>Heap Property</strong>.</li>
+                            <li>It is <strong style="color:red;">NOT</strong> a sorted data structure.</li>
+                            <li>Only the root element is guaranteed to be the minimum (Min Heap) or maximum (Max Heap).</li>
+                            <li>Heaps are used to implement <strong>Priority Queue</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 2. MIN HEAP VS MAX HEAP -->
+                <div class="section-box">
+                    <div class="section-header"><span class="num">2</span> MIN HEAP VS MAX HEAP</div>
+                    <div class="section-content flex-row">
+                        <div class="flex-col">
+                            <div class="bg-green">MIN HEAP</div>
+                            <div style="font-size:0.8rem; margin:10px 0;">Parent &le; Children</div>
+                            <div class="mermaid">
+                            graph TD
+                                classDef greenNode fill:#fff,stroke:#10b981,stroke-width:2px,color:#10b981,font-weight:bold;
+                                A((2)):::greenNode --> B((3)):::greenNode
+                                A --> C((5)):::greenNode
+                                B --> D((4)):::greenNode
+                                B --> E((7)):::greenNode
+                                C --> F((6)):::greenNode
+                                C --> G((8)):::greenNode
+                            </div>
+                            <div style="font-size:0.8rem; color:#64748b;">Smallest element<br>is at the root.</div>
+                        </div>
+                        <div class="flex-col">
+                            <div class="bg-red">MAX HEAP</div>
+                            <div style="font-size:0.8rem; margin:10px 0;">Parent &ge; Children</div>
+                            <div class="mermaid">
+                            graph TD
+                                classDef redNode fill:#fff,stroke:#ef4444,stroke-width:2px,color:#ef4444,font-weight:bold;
+                                A((10)):::redNode --> B((9)):::redNode
+                                A --> C((7)):::redNode
+                                B --> D((3)):::redNode
+                                B --> E((5)):::redNode
+                                C --> F((1)):::redNode
+                                C --> G((2)):::redNode
+                            </div>
+                            <div style="font-size:0.8rem; color:#64748b;">Largest element<br>is at the root.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. COMPLETE BINARY TREE -->
+                <div class="section-box">
+                    <div class="section-header"><span class="num">3</span> COMPLETE BINARY TREE</div>
+                    <div class="section-content">
+                        <p style="margin-top:0; font-size:0.9rem;">All levels are completely filled except possibly the last level, and all nodes in the last level are as far left as possible.</p>
+                        <div class="flex-row">
+                            <div class="flex-col">
+                                <div style="color:#10b981;font-weight:bold;">&#x2705;</div>
+                                <div class="mermaid">
+                                graph TD
+                                    classDef default fill:#e2e8f0,stroke:#94a3b8,stroke-width:2px,color:transparent;
+                                    A(( )) --> B(( ))
+                                    A --> C(( ))
+                                    B --> D(( ))
+                                    B --> E(( ))
+                                    C --> F(( ))
+                                </div>
+                            </div>
+                            <div class="flex-col">
+                                <div style="color:#ef4444;font-weight:bold;">&#x274C;</div>
+                                <div class="mermaid">
+                                graph TD
+                                    classDef default fill:#e2e8f0,stroke:#94a3b8,stroke-width:2px,color:transparent;
+                                    A(( )) --> B(( ))
+                                    A --> C(( ))
+                                    B --> D(( ))
+                                    C --> E(( ))
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. ARRAY REPRESENTATION -->
+                <div class="section-box">
+                    <div class="section-header"><span class="num">4</span> ARRAY REPRESENTATION (0-INDEXED)</div>
+                    <div class="section-content flex-row" style="align-items:center;">
+                        <div class="flex-col" style="flex:1;">
+                            <strong style="font-size:0.8rem;">Example Tree</strong>
+                            <div class="mermaid">
+                            graph TD
+                                classDef blueNode fill:#fff,stroke:#3b82f6,stroke-width:2px,color:#3b82f6,font-weight:bold;
+                                A((1)):::blueNode --> B((2)):::blueNode
+                                A --> C((3)):::blueNode
+                                B --> D((4)):::blueNode
+                                B --> E((5)):::blueNode
+                                C --> F((6)):::blueNode
+                                C --> G((7)):::blueNode
+                            </div>
+                        </div>
+                        <div class="flex-col" style="flex:1.2; text-align:left; background:#f8fafc; padding:10px; border:1px solid #cbd5e1; border-radius:4px; font-size:0.85rem;">
+                            <strong style="color:var(--primary);">Index Relationships</strong><br><br>
+                            Parent(i) = (i - 1) / 2<br>
+                            Left(i) = 2 * i + 1<br>
+                            Right(i) = 2 * i + 2
+                        </div>
+                    </div>
+                    <div class="section-content" style="padding-top:0;">
+                        <strong style="font-size:0.8rem;">Array Representation</strong>
+                        <table>
+                            <tr>
+                                <th>Index</th>
+                                <td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td>
+                            </tr>
+                            <tr>
+                                <th>Value</th>
+                                <td style="color:var(--primary); font-weight:bold;">1</td>
+                                <td style="color:var(--primary); font-weight:bold;">2</td>
+                                <td style="color:var(--primary); font-weight:bold;">3</td>
+                                <td style="color:var(--primary); font-weight:bold;">4</td>
+                                <td style="color:var(--primary); font-weight:bold;">5</td>
+                                <td style="color:var(--primary); font-weight:bold;">6</td>
+                                <td style="color:var(--primary); font-weight:bold;">7</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 5. TIME COMPLEXITIES -->
+                <div class="section-box">
+                    <div class="section-header"><span class="num">5</span> TIME COMPLEXITIES</div>
+                    <div class="section-content">
+                        <table>
+                            <tr>
+                                <th>Operation</th>
+                                <th>Min Heap</th>
+                                <th>Max Heap</th>
+                                <th>Why?</th>
+                            </tr>
+                            <tr>
+                                <td><strong>offer(x)</strong></td><td>O(log n)</td><td>O(log n)</td><td>Heapify Up</td>
+                            </tr>
+                            <tr>
+                                <td><strong>poll()</strong></td><td>O(log n)</td><td>O(log n)</td><td>Heapify Down</td>
+                            </tr>
+                            <tr>
+                                <td><strong>peek()</strong></td><td>O(1)</td><td>O(1)</td><td>Root access</td>
+                            </tr>
+                            <tr>
+                                <td><strong>size()</strong></td><td>O(1)</td><td>O(1)</td><td>Just length</td>
+                            </tr>
+                            <tr>
+                                <td><strong>isEmpty()</strong></td><td>O(1)</td><td>O(1)</td><td>Just length</td>
+                            </tr>
+                            <tr>
+                                <td><strong style="color:var(--primary);">Build Heap</strong><br><small>(n elements)</small></td>
+                                <td>O(n)</td><td>O(n)</td><td>Bottom-up heapify</td>
+                            </tr>
+                        </table>
+                        <div class="rule-box" style="margin-top:10px; font-size:0.85rem; font-weight:normal;">
+                            <span style="color:#f59e0b;font-size:1.2rem;">&#x2B50;</span> <strong>Build Heap</strong> (Bottom-Up) is O(n) which is better than inserting n elements one by one (O(n log n)).
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End Left Column -->
+
+            <!-- Right Column -->
+            <div class="col-right">
+                <!-- 6. JAVA PRIORITYQUEUE -->
+                <div class="section-box">
+                    <div class="section-header"><span class="num">6</span> JAVA PRIORITYQUEUE</div>
+                    <div class="section-content">
+                        <strong>a) Min Heap (Default)</strong>
+                        <pre><code>PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+<span style="color:#94a3b8;">// Smallest element at peek()</span></code></pre>
+                        
+                        <strong>b) Max Heap (3 Ways)</strong>
+                        <div style="font-size:0.85rem; margin-top:10px;">1. Using Collections.reverseOrder() <strong style="color:var(--green);">(Recommended)</strong></div>
+                        <pre><code>PriorityQueue&lt;Integer&gt; maxHeap =
+    new PriorityQueue&lt;&gt;(Collections.reverseOrder());</code></pre>
+    
+                        <div style="font-size:0.85rem; margin-top:10px;">2. Using Comparator (Integer.compare)</div>
+                        <pre><code>PriorityQueue&lt;Integer&gt; maxHeap =
+    new PriorityQueue&lt;&gt;((a, b) -> Integer.compare(b, a));</code></pre>
+                        
+                        <div style="font-size:0.85rem; margin-top:10px;">3. Using subtraction <strong style="color:var(--red);">(Not recommended - overflow risk)</strong></div>
+                        <pre><code>PriorityQueue&lt;Integer&gt; maxHeap =
+    new PriorityQueue&lt;&gt;((a, b) -> b - a);</code></pre>
+
+                        <strong>c) Common Operations</strong>
+                        <table style="margin-top:10px;">
+                            <tr>
+                                <th>Method</th>
+                                <th>Description</th>
+                            </tr>
+                            <tr>
+                                <td><strong>offer(x)</strong></td><td>Inserts element x into heap.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>poll()</strong></td><td>Removes and returns root element (min or max).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>peek()</strong></td><td>Returns root element without removing.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>size()</strong></td><td>Returns number of elements.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>isEmpty()</strong></td><td>Checks if heap is empty.</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 7. IMPORTANT TERMINOLOGY -->
+                <div class="section-box">
+                    <div class="section-header"><span class="num">7</span> IMPORTANT TERMINOLOGY</div>
+                    <div class="section-content">
+                        <table style="border:none; width:100%;">
+                            <tr style="border:none;"><td style="border:none; width:100px;"><strong>Root</strong></td><td style="border:none;">: Topmost element.</td></tr>
+                            <tr style="border:none;"><td style="border:none;"><strong>Parent(i)</strong></td><td style="border:none;">: (i - 1) / 2</td></tr>
+                            <tr style="border:none;"><td style="border:none;"><strong>Left Child(i)</strong></td><td style="border:none;">: 2 * i + 1</td></tr>
+                            <tr style="border:none;"><td style="border:none;"><strong>Right Child(i)</strong></td><td style="border:none;">: 2 * i + 2</td></tr>
+                            <tr style="border:none;"><td style="border:none;"><strong>Height</strong></td><td style="border:none;">: Longest path from root to leaf.</td></tr>
+                            <tr style="border:none;"><td style="border:none;"><strong>Leaf Node</strong></td><td style="border:none;">: Node with no children.</td></tr>
+                            <tr style="border:none;"><td style="border:none;"><strong>Heapify</strong></td><td style="border:none;">: Process of restoring heap property (Bubble Up or Bubble Down).</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 8. KEY POINTS TO REMEMBER -->
+                <div class="section-box" style="border-color:var(--green);">
+                    <div class="section-header" style="background:var(--green);"><span class="num" style="color:var(--green);">8</span> KEY POINTS TO REMEMBER</div>
+                    <div class="section-content">
+                        <ul style="list-style:none; padding-left:0;">
+                            <li><span style="color:var(--green); font-weight:bold;">&#10004;</span> Heap is a Complete Binary Tree.</li>
+                            <li><span style="color:var(--green); font-weight:bold;">&#10004;</span> Heap &ne; Sorted Array.</li>
+                            <li><span style="color:var(--green); font-weight:bold;">&#10004;</span> Heaps are used for <strong>Priority</strong>, not order.</li>
+                            <li><span style="color:var(--green); font-weight:bold;">&#10004;</span> Choose <strong>Min Heap</strong> or <strong>Max Heap</strong> based on the problem goal.</li>
+                            <li><span style="color:var(--green); font-weight:bold;">&#10004;</span> Heap operations are logarithmic time (O(log n)).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 9. COMMON MISTAKES -->
+                <div class="section-box" style="border-color:var(--red);">
+                    <div class="section-header" style="background:var(--red);"><span class="num" style="color:var(--red);">9</span> COMMON MISTAKES</div>
+                    <div class="section-content">
+                        <ul style="list-style:none; padding-left:0; color:#b91c1c;">
+                            <li>&#10060; Confusing Min Heap with Max Heap.</li>
+                            <li>&#10060; Using wrong comparator.</li>
+                            <li>&#10060; Forgetting that default PriorityQueue in Java is Min Heap.</li>
+                            <li>&#10060; Not handling empty heap before poll/peek.</li>
+                            <li>&#10060; Assuming heap gives sorted order.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div> <!-- End Right Column -->
+            
+            <!-- Bottom Full Width Rule -->
+            <div class="full-width rule-box" style="display:flex; justify-content:space-between; align-items:center;">
+                <div><span style="color:#f59e0b;font-size:1.2rem;">&#x1F4A1;</span> <strong>Golden Rule: Heaps are all about PRIORITY. Ask: "What element should come out first?"</strong></div>
+                <div style="color:var(--primary); font-size:0.85rem; font-weight:bold;">&#x27A1; Next Page: Heap Patterns Overview</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+"""
+
+with open(output_html, "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print("Heap PDF Page 1 layout successfully generated.")

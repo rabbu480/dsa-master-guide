@@ -1,0 +1,510 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1>GRAPH PATTERN GUIDE</h1>
+            <div class="subtitle">ADVANCED GRAPH PATTERNS GUIDE (APPLY TEMPLATES)<br><small style="color:#64748b;font-weight:normal;">(FAANG Cheat Sheet)</small></div>
+        </div>
+        <div style="text-align: right;">
+            <div class="page-number">PAGE 14</div>
+        </div>
+    </div>
+
+    <div style="text-align: center; font-style: italic; color: #1e3a8a; font-weight: bold; margin-bottom: 15px; font-size: 0.9em;">
+        "Advanced patterns = smart modeling + right algorithm + clean implementation."
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <div style="flex: 1; border: 1px solid #ddd; border-radius: 4px; overflow: hidden;">
+            <div style="background-color: #2e1d70; color: white; padding: 5px; text-align: center; font-weight: bold; font-size: 0.85em;">
+                HOW TO USE THIS PAGE
+            </div>
+            <div style="padding: 10px; font-size: 0.75em; display: flex; align-items: center; gap: 10px;">
+                <ul style="margin: 0; padding: 0; list-style-type: none; line-height: 1.4;">
+                    <li><span style="display: inline-block; width: 14px; height: 14px; background-color: white; border: 1px solid #2e1d70; border-radius: 50%; text-align: center; line-height: 12px; font-size: 9px; margin-right: 5px; color: #2e1d70;">1</span> Find the problem.</li>
+                    <li><span style="display: inline-block; width: 14px; height: 14px; background-color: white; border: 1px solid #2e1d70; border-radius: 50%; text-align: center; line-height: 12px; font-size: 9px; margin-right: 5px; color: #2e1d70;">2</span> Identify the base template (from Page 13).</li>
+                    <li><span style="display: inline-block; width: 14px; height: 14px; background-color: white; border: 1px solid #2e1d70; border-radius: 50%; text-align: center; line-height: 12px; font-size: 9px; margin-right: 5px; color: #2e1d70;">3</span> Read the <strong>CHANGED LINES</strong>.</li>
+                    <li><span style="display: inline-block; width: 14px; height: 14px; background-color: white; border: 1px solid #2e1d70; border-radius: 50%; text-align: center; line-height: 12px; font-size: 9px; margin-right: 5px; color: #2e1d70;">4</span> Understand the <strong>AHA</strong>.</li>
+                    <li><span style="display: inline-block; width: 14px; height: 14px; background-color: white; border: 1px solid #2e1d70; border-radius: 50%; text-align: center; line-height: 12px; font-size: 9px; margin-right: 5px; color: #2e1d70;">5</span> Review complexity & interview tip.</li>
+                    <li><span style="display: inline-block; width: 14px; height: 14px; background-color: white; border: 1px solid #2e1d70; border-radius: 50%; text-align: center; line-height: 12px; font-size: 9px; margin-right: 5px; color: #2e1d70;">6</span> Practice writing from memory.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="flex: 2; border: 1px solid #ddd; border-radius: 4px; overflow: hidden;">
+            <div style="background-color: #2e1d70; color: white; padding: 5px; text-align: center; font-weight: bold; font-size: 0.85em;">
+                TEMPLATE LEGEND (From Page 13)
+            </div>
+            <div style="padding: 10px; font-size: 0.8em; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <div style="background-color: #1e3a8a; color: white; padding: 2px 6px; font-weight: bold; border-radius: 2px;">A</div>
+                    <div>Network Delay Time</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <div style="background-color: #166534; color: white; padding: 2px 6px; font-weight: bold; border-radius: 2px;">B</div>
+                    <div>Dijkstra with Path</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <div style="background-color: #6b21a8; color: white; padding: 2px 6px; font-weight: bold; border-radius: 2px;">C</div>
+                    <div>Minimum Effort Path</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <div style="background-color: #eab308; color: white; padding: 2px 6px; font-weight: bold; border-radius: 2px;">D</div>
+                    <div>Cheapest Flights (K Stops)</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <div style="background-color: #be123c; color: white; padding: 2px 6px; font-weight: bold; border-radius: 2px;">E</div>
+                    <div>Path with Minimum Effort</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <div style="background-color: #0f766e; color: white; padding: 2px 6px; font-weight: bold; border-radius: 2px;">F</div>
+                    <div>Shortest Path in Undirected Graph</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The 3 columns layout -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+        
+        <!-- Box 1 -->
+        <div class="section-box" style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="background-color: #2e1d70; color: white; padding: 5px; font-weight: bold; font-size: 0.85em; display: flex; justify-content: space-between;">
+                <div><span style="background-color: white; color: #2e1d70; padding: 0 4px; border-radius: 2px; margin-right: 5px;">1</span> SWIM IN RISING WATER</div>
+                <div style="background-color: #6b21a8; padding: 0 5px; border-radius: 2px;">C</div>
+            </div>
+            <div style="padding: 8px; font-size: 0.7em; flex: 1;">
+                <div style="text-align: center; color: #2e1d70; font-weight: bold; margin-bottom: 5px;">Base Template: Dijkstra (Minimize Max Edge)</div>
+                <div><strong>Problem</strong><br>Find minimum time to reach bottom-right cell.<br>Water level must be &ge; max height on the path.</div>
+                <div style="margin-top: 5px;"><strong>Changed Lines (from Template)</strong></div>
+                <pre style="margin: 5px 0; background-color: #f8f9fa; padding: 5px; border: 1px solid #eee; overflow-x: auto;"><code style="color: #0f172a;">int n = heights.length;
+int[][] dirs = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;(
+    (a,b) -&gt; a[0] - b[0]); // effort, r, c
+pq.offer(new int[]{heights[0][0], 0, 0});
+int[][] effort = new int[n][n];
+for (int[] row : effort) Arrays.fill(row, Integer.MAX_VALUE);
+effort[0][0] = heights[0][0];
+
+// When relaxing neighbor (nr, nc)
+int newEff = Math.max(curEff, heights[nr][nc]);
+if (newEff &lt; effort[nr][nc]) {
+    effort[nr][nc] = newEff;
+    pq.offer(new int[]{newEff, nr, nc});
+}
+return effort[n-1][n-1];</code></pre>
+                
+                <table style="width: 100%; border-collapse: collapse; margin-top: 5px; text-align: center;">
+                    <tr><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Caller</td><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Return</td><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Key Idea</td></tr>
+                    <tr><td style="border: 1px solid #ddd; padding: 2px;">swimInWater(grid)</td><td style="border: 1px solid #ddd; padding: 2px;">int</td><td style="border: 1px solid #ddd; padding: 2px;">Minimize maximum edge on path</td></tr>
+                </table>
+                <div style="margin-top: 5px;"><strong>💡 AHA:</strong> Path cost = max(height) on the path.</div>
+                <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                    <div><strong>Complexity</strong><br>Time: O(N&sup2; log N)<br>Space: O(N&sup2;)</div>
+                    <div><strong>Interview Tip</strong><br>Use Dijkstra with max() relaxation.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Box 2 -->
+        <div class="section-box" style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="background-color: #2e1d70; color: white; padding: 5px; font-weight: bold; font-size: 0.85em; display: flex; justify-content: space-between;">
+                <div><span style="background-color: white; color: #2e1d70; padding: 0 4px; border-radius: 2px; margin-right: 5px;">2</span> PATH WITH MAX PROBABILITY</div>
+                <div style="background-color: #166534; padding: 0 5px; border-radius: 2px;">B</div>
+            </div>
+            <div style="padding: 8px; font-size: 0.7em; flex: 1;">
+                <div style="text-align: center; color: #2e1d70; font-weight: bold; margin-bottom: 5px;">Base Template: Dijkstra + Parent[]</div>
+                <div><strong>Problem</strong><br>Given success probability on edges, find path from start to end with maximum probability.</div>
+                <div style="margin-top: 5px;"><strong>Changed Lines (from Template)</strong></div>
+                <pre style="margin: 5px 0; background-color: #f8f9fa; padding: 5px; border: 1px solid #eee; overflow-x: auto;"><code style="color: #0f172a;">double[] prob = new double[n];
+Arrays.fill(prob, 0.0);
+prob[start] = 1.0;
+PriorityQueue&lt;double[]&gt; pq = new PriorityQueue&lt;&gt;(
+    (a,b) -&gt; Double.compare(b[0], a[0])); // max-heap
+pq.offer(new double[]{1.0, start});
+
+// When relaxing
+double newProb = prob[node] * edgeProb;
+if (newProb &gt; prob[next]) {
+    prob[next] = newProb;
+    parent[next] = node;
+    pq.offer(new double[]{newProb, next});
+}
+return prob[end];</code></pre>
+                
+                <table style="width: 100%; border-collapse: collapse; margin-top: 5px; text-align: center;">
+                    <tr><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Caller</td><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Return</td><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Key Idea</td></tr>
+                    <tr><td style="border: 1px solid #ddd; padding: 2px;">maxProbability(n, edges, succProb, start, end)</td><td style="border: 1px solid #ddd; padding: 2px;">double</td><td style="border: 1px solid #ddd; padding: 2px;">Maximize product of probabilities</td></tr>
+                </table>
+                <div style="margin-top: 5px;"><strong>💡 AHA:</strong> Use max-heap. Multiply, don't add.</div>
+                <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                    <div><strong>Complexity</strong><br>Time: O((V+E) log V)<br>Space: O(V + E)</div>
+                    <div><strong>Interview Tip</strong><br>Initialize prob[start] = 1.0<br>All others = 0.0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Box 3 -->
+        <div class="section-box" style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="background-color: #2e1d70; color: white; padding: 5px; font-weight: bold; font-size: 0.85em; display: flex; justify-content: space-between;">
+                <div><span style="background-color: white; color: #2e1d70; padding: 0 4px; border-radius: 2px; margin-right: 5px;">3</span> MINIMUM MULTIPLICATION TO REACH END</div>
+                <div style="background-color: #1e3a8a; padding: 0 5px; border-radius: 2px;">A</div>
+            </div>
+            <div style="padding: 8px; font-size: 0.7em; flex: 1;">
+                <div style="text-align: center; color: #2e1d70; font-weight: bold; margin-bottom: 5px;">Base Template: Dijkstra (Single Source)</div>
+                <div><strong>Problem</strong><br>Given multipliers and modulo, find min multiplications to reach end.</div>
+                <div style="margin-top: 5px;"><strong>Changed Lines (from Template)</strong></div>
+                <pre style="margin: 5px 0; background-color: #f8f9fa; padding: 5px; border: 1px solid #eee; overflow-x: auto;"><code style="color: #0f172a;">PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;((a,b) -&gt; a[0]-b[0]);
+int[] dist = new int[100000];
+Arrays.fill(dist, Integer.MAX_VALUE);
+dist[start] = 0;
+pq.offer(new int[]{0, start});
+while (!pq.isEmpty()) {
+    int[] cur = pq.poll();
+    int steps = cur[0], node = cur[1];
+    if (node == end) return steps;
+    for (int x : arr) {
+        int next = (node * x) % 100000;
+        if (steps + 1 &lt; dist[next]) {
+            dist[next] = steps + 1;
+            pq.offer(new int[]{steps+1, next});
+        }
+    }
+}
+return -1;</code></pre>
+                
+                <table style="width: 100%; border-collapse: collapse; margin-top: 5px; text-align: center;">
+                    <tr><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Caller</td><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Return</td><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Key Idea</td></tr>
+                    <tr><td style="border: 1px solid #ddd; padding: 2px;">minimumMultiplications(arr, start, end)</td><td style="border: 1px solid #ddd; padding: 2px;">int</td><td style="border: 1px solid #ddd; padding: 2px;">Dijkstra on mod space graph</td></tr>
+                </table>
+                <div style="margin-top: 5px;"><strong>💡 AHA:</strong> Nodes are numbers [0 ... mod-1].</div>
+                <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                    <div><strong>Complexity</strong><br>Time: O(mod * K log mod)<br>Space: O(mod)</div>
+                    <div><strong>Interview Tip</strong><br>Use mod graph. Avoid revisiting with larger steps.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Box 4 -->
+        <div class="section-box" style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="background-color: #2e1d70; color: white; padding: 5px; font-weight: bold; font-size: 0.85em; display: flex; justify-content: space-between;">
+                <div><span style="background-color: white; color: #2e1d70; padding: 0 4px; border-radius: 2px; margin-right: 5px;">4</span> MOST STONES REMOVED WITH SAME ROW/COL</div>
+                <div style="background-color: #0f766e; padding: 0 5px; border-radius: 2px;">F</div>
+            </div>
+            <div style="padding: 8px; font-size: 0.7em; flex: 1;">
+                <div style="text-align: center; color: #2e1d70; font-weight: bold; margin-bottom: 5px;">Base Template: Connected Components (DSU)</div>
+                <div><strong>Problem</strong><br>Stones are connected if they share row or column.<br>Return max stones removable.</div>
+                <div style="margin-top: 5px;"><strong>Changed Lines (from Template)</strong></div>
+                <pre style="margin: 5px 0; background-color: #f8f9fa; padding: 5px; border: 1px solid #eee; overflow-x: auto;"><code style="color: #0f172a;">// Map rows and columns to DSU nodes
+int base = 10001; // shift for columns
+DSU dsu = new DSU(base * 2);
+for (int[] s : stones) {
+    int r = s[0];
+    int c = s[1] + base;
+    dsu.union(r, c);
+    rowSet.add(r);
+    colSet.add(c);
+}
+int components = 0;
+for (int r : rowSet) if (dsu.find(r) == r) components++;
+for (int c : colSet) if (dsu.find(c) == c) components++;
+return stones.length - components;</code></pre>
+                
+                <table style="width: 100%; border-collapse: collapse; margin-top: 5px; text-align: center;">
+                    <tr><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Caller</td><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Return</td><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Key Idea</td></tr>
+                    <tr><td style="border: 1px solid #ddd; padding: 2px;">removeStones(stones)</td><td style="border: 1px solid #ddd; padding: 2px;">int</td><td style="border: 1px solid #ddd; padding: 2px;">Answer = stones - number of components</td></tr>
+                </table>
+                <div style="margin-top: 5px;"><strong>💡 AHA:</strong> Make virtual nodes for rows and columns.</div>
+                <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                    <div><strong>Complexity</strong><br>Time: O(N &alpha;(N))<br>Space: O(N)</div>
+                    <div><strong>Interview Tip</strong><br>DSU beats DFS/BFS for large N.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Box 5 -->
+        <div class="section-box" style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="background-color: #2e1d70; color: white; padding: 5px; font-weight: bold; font-size: 0.85em; display: flex; justify-content: space-between;">
+                <div><span style="background-color: white; color: #2e1d70; padding: 0 4px; border-radius: 2px; margin-right: 5px;">5</span> COURSE SCHEDULE II (FIND ORDER)</div>
+                <div style="background-color: #0f766e; padding: 0 5px; border-radius: 2px;">F</div>
+            </div>
+            <div style="padding: 8px; font-size: 0.7em; flex: 1;">
+                <div style="text-align: center; color: #2e1d70; font-weight: bold; margin-bottom: 5px;">Base Template: Topological Sort (Kahn's BFS)</div>
+                <div><strong>Problem</strong><br>Return any valid order to finish all courses. If impossible, return [].</div>
+                <div style="margin-top: 5px;"><strong>Changed Lines (from Template)</strong></div>
+                <pre style="margin: 5px 0; background-color: #f8f9fa; padding: 5px; border: 1px solid #eee; overflow-x: auto;"><code style="color: #0f172a;">Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();
+for (int i = 0; i &lt; n; i++)
+    if (indegree[i] == 0) q.offer(i);
+
+List&lt;Integer&gt; order = new ArrayList&lt;&gt;();
+while (!q.isEmpty()) {
+    int node = q.poll();
+    order.add(node);
+    for (int nei : graph.get(node)) {
+        if (--indegree[nei] == 0) q.offer(nei);
+    }
+}
+return order.size() == n ? order : new int[0];</code></pre>
+                
+                <table style="width: 100%; border-collapse: collapse; margin-top: 5px; text-align: center;">
+                    <tr><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Caller</td><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Return</td><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Key Idea</td></tr>
+                    <tr><td style="border: 1px solid #ddd; padding: 2px;">findOrder(numCourses, prerequisites)</td><td style="border: 1px solid #ddd; padding: 2px;">int[]</td><td style="border: 1px solid #ddd; padding: 2px;">Topological order using BFS</td></tr>
+                </table>
+                <div style="margin-top: 5px;"><strong>💡 AHA:</strong> If order size &lt; n, cycle exists.</div>
+                <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                    <div><strong>Complexity</strong><br>Time: O(V + E)<br>Space: O(V + E)</div>
+                    <div><strong>Interview Tip</strong><br>Kahn's BFS is iterative and safe.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Box 6 -->
+        <div class="section-box" style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="background-color: #2e1d70; color: white; padding: 5px; font-weight: bold; font-size: 0.85em; display: flex; justify-content: space-between;">
+                <div><span style="background-color: white; color: #2e1d70; padding: 0 4px; border-radius: 2px; margin-right: 5px;">6</span> EVENTUAL SAFE STATES</div>
+                <div style="background-color: #0f766e; padding: 0 5px; border-radius: 2px;">F</div>
+            </div>
+            <div style="padding: 8px; font-size: 0.7em; flex: 1;">
+                <div style="text-align: center; color: #2e1d70; font-weight: bold; margin-bottom: 5px;">Base Template: Topological Sort (Reverse Graph)</div>
+                <div><strong>Problem</strong><br>Return all nodes that are NOT part of any cycle.</div>
+                <div style="margin-top: 5px;"><strong>Changed Lines (from Template)</strong></div>
+                <pre style="margin: 5px 0; background-color: #f8f9fa; padding: 5px; border: 1px solid #eee; overflow-x: auto;"><code style="color: #0f172a;">// Build reverse graph
+for (int u = 0; u &lt; n; u++)
+    for (int v : graph[u]) {
+        revGraph.get(v).add(u);
+        outdegree[u]++;
+    }
+// Start BFS with terminal nodes (outdegree 0)
+for (int i = 0; i &lt; n; i++)
+    if (outdegree[i] == 0) q.offer(i);
+List&lt;Integer&gt; safe = new ArrayList&lt;&gt;();
+while (!q.isEmpty()) {
+    int node = q.poll();
+    safe.add(node);
+    for (int pre : revGraph.get(node)) {
+        if (--outdegree[pre] == 0) q.offer(pre);
+    }
+}
+Collections.sort(safe);
+return safe;</code></pre>
+                
+                <table style="width: 100%; border-collapse: collapse; margin-top: 5px; text-align: center;">
+                    <tr><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Caller</td><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Return</td><td style="border: 1px solid #ddd; padding: 2px; font-weight: bold;">Key Idea</td></tr>
+                    <tr><td style="border: 1px solid #ddd; padding: 2px;">eventualSafeNodes(graph)</td><td style="border: 1px solid #ddd; padding: 2px;">List&lt;Integer&gt;</td><td style="border: 1px solid #ddd; padding: 2px;">Reverse BFS from terminal nodes</td></tr>
+                </table>
+                <div style="margin-top: 5px;"><strong>💡 AHA:</strong> Nodes not in any cycle become safe.</div>
+                <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                    <div><strong>Complexity</strong><br>Time: O(V + E)<br>Space: O(V + E)</div>
+                    <div><strong>Interview Tip</strong><br>Reverse graph trick is key.</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom tables grid -->
+    <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr 1.2fr; gap: 10px; margin-top: 15px;">
+        
+        <!-- 7 Changed Lines Summary -->
+        <div style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden;">
+            <div style="background-color: #2e1d70; color: white; padding: 5px; text-align: center; font-weight: bold; font-size: 0.75em;">
+                7 CHANGED LINES SUMMARY
+            </div>
+            <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 0.65em;">
+                <tr style="background-color: #f8f9fa;">
+                    <th style="border: 1px solid #ddd; padding: 4px;">#</th>
+                    <th style="border: 1px solid #ddd; padding: 4px;">Problem</th>
+                    <th style="border: 1px solid #ddd; padding: 4px;">Base Template</th>
+                    <th style="border: 1px solid #ddd; padding: 4px;">Main Changes</th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 4px;">1</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Swim in Rising Water</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">C</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Use max() in relax; grid as graph</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 4px;">2</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Path with Max Probability</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">B</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Max-heap; multiply probabilities</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 4px;">3</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Min Multiplications</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">A</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Nodes = [0..mod-1]; steps + 1</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 4px;">4</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Most Stones Removed</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">F (DSU)</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Map rows/cols; components count</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 4px;">5</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Course Schedule II</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">F (Topo)</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Store order while BFS</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 4px;">6</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Eventual Safe States</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">F (Topo Rev)</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Reverse graph, start from terminals</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 8 Complexity Quick Guide -->
+        <div style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden;">
+            <div style="background-color: #2e1d70; color: white; padding: 5px; text-align: center; font-weight: bold; font-size: 0.75em;">
+                8 COMPLEXITY QUICK GUIDE
+            </div>
+            <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 0.65em;">
+                <tr style="background-color: #f8f9fa;">
+                    <th style="border: 1px solid #ddd; padding: 4px;">Pattern</th>
+                    <th style="border: 1px solid #ddd; padding: 4px;">Time Complexity</th>
+                    <th style="border: 1px solid #ddd; padding: 4px;">Space Complexity</th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Dijkstra (Min/Max)</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">O((V+E) log V)</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">O(V + E)</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Dijkstra (Adj List)</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">O((V+E) log V)</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">O(V + E)</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 4px;">DSU (Union Find)</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">O(N &alpha;(N))</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">O(N)</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Topological Sort (BFS)</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">O(V + E)</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">O(V + E)</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 4px;">BFS / DFS</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">O(V + E)</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">O(V)</td>
+                </tr>
+            </table>
+            <div style="font-size: 0.55em; text-align: center; padding: 2px;">V = vertices, E = edges, &alpha;(N) is inverse Ackermann (~constant).</div>
+        </div>
+
+        <!-- 9 Return Type Guide -->
+        <div style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden;">
+            <div style="background-color: #2e1d70; color: white; padding: 5px; text-align: center; font-weight: bold; font-size: 0.75em;">
+                9 RETURN TYPE GUIDE
+            </div>
+            <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 0.65em;">
+                <tr style="background-color: #f8f9fa;">
+                    <th style="border: 1px solid #ddd; padding: 4px;">Pattern</th>
+                    <th style="border: 1px solid #ddd; padding: 4px;">Return Type</th>
+                    <th style="border: 1px solid #ddd; padding: 4px;">Use When</th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Shortest Distance</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">int / long</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Min cost / steps</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Path / Order</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">int[] / List&lt;Integer&gt;</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Need sequence</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Probability</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">double</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Max probability path</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Exist / Possible</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">boolean</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Cycle / schedule</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 4px;">List of Nodes</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">List&lt;Integer&gt;</td>
+                    <td style="border: 1px solid #ddd; padding: 4px;">Safe nodes, result set</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 10 Interview Checklist -->
+        <div style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="background-color: #2e1d70; color: white; padding: 5px; text-align: center; font-weight: bold; font-size: 0.75em;">
+                10 INTERVIEW CHECKLIST
+            </div>
+            <div style="padding: 10px; font-size: 0.7em; flex: 1;">
+                <ul style="margin: 0; padding: 0; list-style-type: none; line-height: 1.6;">
+                    <li><input type="checkbox" checked style="margin-right: 5px;"> Did I model the graph correctly?</li>
+                    <li><input type="checkbox" checked style="margin-right: 5px;"> Did I pick the right base template?</li>
+                    <li><input type="checkbox" checked style="margin-right: 5px;"> Did I initialize data structures correctly?</li>
+                    <li><input type="checkbox" checked style="margin-right: 5px;"> Did I handle edge cases (n=1, empty)?</li>
+                    <li><input type="checkbox" checked style="margin-right: 5px;"> Did I avoid overflow (long / mod)?</li>
+                    <li><input type="checkbox" checked style="margin-right: 5px;"> Is my complexity optimal?</li>
+                    <li><input type="checkbox" checked style="margin-right: 5px;"> Can I explain my approach clearly?</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Section -->
+    <div style="display: flex; gap: 10px; margin-top: 15px;">
+        <div style="flex: 1; border: 1px solid #ddd; border-radius: 4px; padding: 10px; font-size: 0.8em;">
+            <div style="font-weight: bold; color: #2e1d70; margin-bottom: 10px; text-align: center;"><span style="background-color: #2e1d70; color: white; padding: 1px 5px; border-radius: 2px;">11</span> INTERVIEW THINKING FLOW</div>
+            <div style="text-align: center;">
+                <!-- Placeholder for the diagram using a mermaid graph if appropriate, or a sequence of divs -->
+                <div class="mermaid">
+                graph LR
+                    A((?)) --> B[Model Graph]
+                    B --> C[Identify Pattern]
+                    C --> D[Pick Template]
+                    D --> E[Apply & Write Code]
+                    E --> F[Test & Verify Edge Cases]
+                    F --> G((Optimize & Explain))
+                </div>
+            </div>
+            <div style="margin-top: 10px; background-color: #f1f5f9; padding: 5px; border-radius: 4px; border-left: 3px solid #10b981; font-size: 0.9em;">
+                <strong>TIP:</strong> Always start with small example. Dry run on paper. Then code.
+            </div>
+        </div>
+
+        <div style="flex: 1; border: 1px solid #ddd; border-radius: 4px; padding: 10px; font-size: 0.8em; background-color: #f8fafc;">
+            <div style="font-weight: bold; color: #2e1d70; margin-bottom: 5px;"><span style="background-color: #2e1d70; color: white; padding: 1px 5px; border-radius: 2px;">12</span> PAGE 15 PREVIEW</div>
+            <div style="color: #1e40af; font-weight: bold; margin-bottom: 5px;">Next page contains SPECIAL GRAPH PROBLEMS GUIDE.</div>
+            <div>For each problem, you will see:</div>
+            <div style="display: flex; justify-content: space-around; margin-top: 10px; text-align: center; font-size: 0.85em;">
+                <div>💡<br>Problem<br>Idea</div>
+                <div>🔍<br>Key<br>Observations</div>
+                <div>📄<br>Template<br>Used</div>
+                <div>✨<br>Trick / Twist</div>
+                <div>⏱️<br>Complexity</div>
+                <div>⭐<br>Interview<br>Tip</div>
+            </div>
+            <div style="margin-top: 15px; font-weight: bold; color: #2e1d70; text-align: center;">
+                Master special problems. Solve any graph question in the interview!
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Banner -->
+    <div style="margin-top: 15px; border: 1px solid #ddd; border-radius: 4px; padding: 10px; font-size: 0.7em; display: flex; align-items: center; justify-content: space-between; background-color: #f8f9fa;">
+        <div style="font-weight: bold; color: #2e1d70; font-size: 1.1em;">CHEAT PIPELINE (INTERVIEW SUCCESS FORMULA)</div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <div>Problem<br>(Understand)</div> <span>&rarr;</span>
+            <div>Input<br>(What given)</div> <span>&rarr;</span>
+            <div>Representation<br>(Graph + Weights)</div> <span>&rarr;</span>
+            <div>Helper Structure<br>(PQ / DSU / Queue)</div> <span>&rarr;</span>
+            <div>Pattern<br>(Choose Right One)</div> <span>&rarr;</span>
+            <div>Tiny Logic Change<br>(Apply to Problem)</div> <span>&rarr;</span>
+            <div>Dry Run<br>(Example)</div> <span>&rarr;</span>
+            <div>Optimize<br>(Time/Space)</div>
+        </div>
+    </div>
+</div>

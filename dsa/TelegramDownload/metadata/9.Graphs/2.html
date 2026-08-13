@@ -1,0 +1,316 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1>GRAPH PATTERN GUIDE</h1>
+            <div class="subtitle">PAGE 3 &mdash; GRAPH HELPER STRUCTURES &amp; INTERVIEW TOOLKIT<br><small style="color:#64748b;font-weight:normal;">"Before choosing an algorithm, choose the helper structures that power it."</small></div>
+        </div>
+        <div style="text-align: right;">
+            <div class="page-number">PAGE 3</div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+        <div style="flex: 1;">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">1</span> PLAIN ENGLISH</div>
+                <div class="section-content">
+                    <ul style="list-style-type: none; padding-left: 0;">
+                        <li style="margin-bottom: 15px;"><strong>Almost every graph problem uses helper structures.</strong></li>
+                        <li style="margin-bottom: 15px;"><strong>Choosing the right helper structure is often more important than choosing the algorithm.</strong></li>
+                        <li><strong>Build first. Choose helper structures. Then solve.</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="flex: 4;">
+            <div class="section-box">
+                <div class="section-header"><span class="num">2</span> THE GRAPH TOOLBOX (Helper Structures You'll Use in Almost Every Problem)</div>
+                <div class="section-content" style="padding: 0;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85em;">
+                        <thead>
+                            <tr style="background-color: #f1f5f9; text-align: left;">
+                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1;">Structure</th>
+                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1;">Purpose (One-line)</th>
+                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1;">Used In (Typical Problems)</th>
+                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1;">Java Type</th>
+                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1;">Initialization (Example)</th>
+                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1;">Validation / What to Check</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">&#9733; visited[]</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Track visited nodes</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">DFS, BFS, Cycle Detect, Components</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>boolean[]</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>boolean[] visited = new boolean[n];</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Print visited nodes (true indices)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">&#9733; dist[]</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Store shortest distance from source</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Shortest Path, Dijkstra, Multi-Source BFS</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>int[]</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>int[] dist = new int[n]; Arrays.fill(dist, INF);</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Print distances (Arrays.toString)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">parent[]</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Store parent / predecessor of each node</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Path Reconstruction, Union Find, Trees</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>int[]</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>int[] parent = new int[n]; for (int i=0;i&lt;n;i++) parent[i] = i;</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Print parent array</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">rank[]</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Rank / size for Union Find (Optimized Merge)</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Union Find (Disjoint Set)</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>int[]</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>int[] rank = new int[n]; (default 0)</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Print rank array</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">indegree[]</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Count incoming edges</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Topological Sort (Kahn's Algo)</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>int[]</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>int[] indegree = new int[n];</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Print indegree array</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">dirs[][]</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Directions for grid movement</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Grid DFS/BFS, Islands, Flood Fill</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>int[][]</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Print dirs to verify movement</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">&#9733; Queue</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Process nodes in FIFO order</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">BFS, Level Order, Kahn's Algo</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>Queue&lt;Integer&gt;</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Print queue content</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">&#9733; PriorityQueue</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Process best candidate first</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Dijkstra, Prim's, Minimum Effort</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>PriorityQueue&lt;int[]&gt;</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;();</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Print pq content</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">HashMap</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Mapping / Lookup (Visited, Clone, etc.)</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Clone Graph, Store Mappings, Count</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>HashMap&lt;K,V&gt;</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>HashMap&lt;K,V&gt; map = new HashMap&lt;&gt;();</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Print map entries</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">&#9733; List&lt;List&lt;Integer&gt;&gt;</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Adjacency List for Unweighted Graph</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Most Graph Problems (95%)</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>List&lt;List&lt;Integer&gt;&gt;</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>List&lt;List&lt;Integer&gt;&gt; g = new ArrayList&lt;&gt;();</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Print neighbors for each node</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">List&lt;List&lt;int[]&gt;&gt;</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Adjacency List for Weighted Graph</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Weighted Graphs, Dijkstra, MST</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>List&lt;List&lt;int[]&gt;&gt;</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>List&lt;List&lt;int[]&gt;&gt; g = new ArrayList&lt;&gt;();</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">Print (neighbor,weight) for each node</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="background-color: #f8fafc; padding: 10px; text-align: center; border-top: 1px solid #e2e8f0; font-weight: bold;">
+                        <span style="color: #ca8a04;">&#9733; Most Frequently Used in Interviews</span> &nbsp;&nbsp;|&nbsp;&nbsp; Adjacency List + visited[] + Queue + PriorityQueue = Your Core Toolkit
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+        <div style="flex: 1;">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">3</span> WHEN DO I NEED WHAT?</div>
+                <div class="section-content">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
+                        <tbody>
+                            <tr><td style="padding: 6px 0;">Need to avoid revisiting nodes?</td><td style="text-align: right;">&rarr; <strong><code style="color: #1e40af;">visited[]</code></strong></td></tr>
+                            <tr><td style="padding: 6px 0;">Need shortest distance?</td><td style="text-align: right;">&rarr; <strong><code style="color: #1e40af;">dist[]</code></strong></td></tr>
+                            <tr><td style="padding: 6px 0;">Need smallest distance first?</td><td style="text-align: right;">&rarr; <strong><code style="color: #1e40af;">PriorityQueue</code></strong></td></tr>
+                            <tr><td style="padding: 6px 0;">Need BFS (level by level)?</td><td style="text-align: right;">&rarr; <strong><code style="color: #1e40af;">Queue</code></strong></td></tr>
+                            <tr><td style="padding: 6px 0;">Need to merge / union groups?</td><td style="text-align: right;">&rarr; <strong><code style="color: #1e40af;">parent[], rank[]</code></strong></td></tr>
+                            <tr><td style="padding: 6px 0;">Need dependency count?</td><td style="text-align: right;">&rarr; <strong><code style="color: #1e40af;">indegree[]</code></strong></td></tr>
+                            <tr><td style="padding: 6px 0;">Need grid movement?</td><td style="text-align: right;">&rarr; <strong><code style="color: #1e40af;">dirs[][]</code></strong></td></tr>
+                            <tr><td style="padding: 6px 0;">Need clone / mapping / lookup?</td><td style="text-align: right;">&rarr; <strong><code style="color: #1e40af;">HashMap</code></strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div style="flex: 1.5;">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">4</span> INITIALIZATION CHEAT SHEET</div>
+                <div class="section-content" style="padding: 0;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85em;">
+                        <thead>
+                            <tr style="background-color: #f1f5f9; text-align: left;">
+                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1;">Structure</th>
+                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1;">Java Initialization</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">visited[]</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>boolean[] visited = new boolean[n];</code></td></tr>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">dist[]</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>int[] dist = new int[n]; Arrays.fill(dist, INF);</code></td></tr>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">parent[]</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>int[] parent = new int[n]; for(int i=0;i&lt;n;i++) parent[i]=i;</code></td></tr>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">rank[]</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>int[] rank = new int[n]; // default 0</code></td></tr>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">indegree[]</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>int[] indegree = new int[n];</code></td></tr>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">Queue</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();</code></td></tr>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">PriorityQueue</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;();</code></td></tr>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">HashMap</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>HashMap&lt;K, V&gt; map = new HashMap&lt;&gt;();</code></td></tr>
+                            <tr><td style="padding: 8px; font-weight: bold; color: #1e40af;">dirs[][]</td><td style="padding: 8px;"><code>int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div style="flex: 1.5;">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">5</span> PRINT &amp; VALIDATE <span style="font-size: 0.8em; font-weight: normal;">(Always Do This!)</span></div>
+                <div class="section-content" style="padding: 0;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85em;">
+                        <thead>
+                            <tr style="background-color: #f1f5f9; text-align: left;">
+                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1;">Structure</th>
+                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1;">How to Print</th>
+                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1;">Expected Output</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">visited[]</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>Arrays.toString(visited)</code></td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">[true, false, true, ...]</td></tr>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">dist[]</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>Arrays.toString(dist)</code></td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">[0, 2, 5, INF, ...]</td></tr>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">parent[]</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>Arrays.toString(parent)</code></td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">[0, 0, 1, 2, ...]</td></tr>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">rank[]</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>Arrays.toString(rank)</code></td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">[0, 1, 0, 1, ...]</td></tr>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">indegree[]</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>Arrays.toString(indegree)</code></td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">[0, 1, 2, 0, ...]</td></tr>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">Adjacency List</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>for(i) print i -&gt; neighbors</code></td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">0 -&gt; [1,2]<br>1 -&gt; [0,2,3]</td></tr>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">Weighted Graph</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>for(i) print i -&gt; (nbr,w)</code></td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">0 -&gt; (1,4) (2,7)<br>1 -&gt; (0,4) ...</td></tr>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">PriorityQueue</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>System.out.println(pq)</code></td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">[(2,5), (1,8), ...]</td></tr>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">Queue</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>System.out.println(q)</code></td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">[1, 2, 3, ...]</td></tr>
+                            <tr><td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e40af;">HashMap</td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><code>System.out.println(map)</code></td><td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">{key1=val1, ...}</td></tr>
+                        </tbody>
+                    </table>
+                    <div style="background-color: #fef9c3; padding: 10px; text-align: center; border-top: 1px solid #e2e8f0; font-weight: bold; color: #854d0e;">
+                        &#9888; Never debug DFS/BFS until helper structures look correct.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+        <div style="flex: 2;">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">6</span> VISUAL MEMORY MAP <span style="font-size: 0.8em; font-weight: normal;">(How Everything Connects)</span></div>
+                <div class="section-content">
+                    <div class="mermaid">
+                    graph LR
+                        A(Problem) --> B[Input]
+                        B --> C{Representation}
+                        C --> H[Helper Structure]
+                        H -.-> V[visited]
+                        H -.-> D[dist]
+                        H -.-> P[parent]
+                        H -.-> R[rank]
+                        H -.-> I[indegree]
+                        H -.-> Q[Queue]
+                        H -.-> PQ[PriorityQueue]
+                        H -.-> DIRS[dirs]
+                        H -.-> M[HashMap]
+                        H --> PAT[Pattern DFS/BFS/etc.]
+                        PAT --> TLC[Tiny Logic Change]
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="flex: 1;">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">7</span> AHA MOMENTS</div>
+                <div class="section-content">
+                    <ul style="list-style-type: none; padding-left: 0; font-size: 0.9em; margin: 0;">
+                        <li style="margin-bottom: 10px; display: flex; align-items: start;"><span style="color:#eab308; margin-right: 8px;">&#128161;</span> <span>Algorithms usually share helper structures.</span></li>
+                        <li style="margin-bottom: 10px; display: flex; align-items: start;"><span style="color:#eab308; margin-right: 8px;">&#128161;</span> <span>Most DFS problems differ only by return type.</span></li>
+                        <li style="margin-bottom: 10px; display: flex; align-items: start;"><span style="color:#eab308; margin-right: 8px;">&#128161;</span> <span>Most BFS problems differ only by queue logic.</span></li>
+                        <li style="margin-bottom: 10px; display: flex; align-items: start;"><span style="color:#eab308; margin-right: 8px;">&#128161;</span> <span>Grid problems always reuse dirs[].</span></li>
+                        <li style="margin-bottom: 10px; display: flex; align-items: start;"><span style="color:#eab308; margin-right: 8px;">&#128161;</span> <span>Weighted graphs almost always need dist[].</span></li>
+                        <li style="margin-bottom: 10px; display: flex; align-items: start;"><span style="color:#eab308; margin-right: 8px;">&#128161;</span> <span>PriorityQueue usually means "best candidate first".</span></li>
+                        <li style="margin-bottom: 10px; display: flex; align-items: start;"><span style="color:#eab308; margin-right: 8px;">&#128161;</span> <span>Union Find is impossible without parent[].</span></li>
+                        <li style="margin-bottom: 10px; display: flex; align-items: start;"><span style="color:#eab308; margin-right: 8px;">&#128161;</span> <span>Topological Sort begins with indegree[].</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 15px;">
+        <div style="flex: 1;">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">8</span> COMMON INTERVIEW MISTAKES</div>
+                <div class="section-content">
+                    <ul style="list-style-type: none; padding-left: 0; font-size: 0.85em; margin: 0; color: #b91c1c;">
+                        <li style="margin-bottom: 8px;">&#10007; Forgot visited[].</li>
+                        <li style="margin-bottom: 8px;">&#10007; Forgot Arrays.fill(dist, INF).</li>
+                        <li style="margin-bottom: 8px;">&#10007; Mixed node and distance in structures.</li>
+                        <li style="margin-bottom: 8px;">&#10007; Forgot parent[i] = i.</li>
+                        <li style="margin-bottom: 8px;">&#10007; Forgot reverse edge in undirected graph.</li>
+                        <li style="margin-bottom: 8px;">&#10007; Used Queue instead of PriorityQueue.</li>
+                        <li style="margin-bottom: 8px;">&#10007; Forgot dirs[].</li>
+                        <li style="margin-bottom: 8px;">&#10007; Didn't print structures while debugging.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="flex: 2;">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">9</span> INTERVIEW THINKING FLOW <span style="font-size: 0.8em; font-weight: normal;">(Before Coding)</span></div>
+                <div class="section-content" style="text-align: center;">
+                    <div class="mermaid">
+                    graph TD
+                        P(Problem) --> I[Input]
+                        I --> R{Representation}
+                        R --> H[Which helper structures do I need?]
+                        H --> PAT(Pattern DFS/BFS/Topo/Dijkstra/UF/etc.)
+                        PAT --> SOL[Tiny Logic Change]
+                        SOL --> DR[Dry Run]
+                        DR --> OPT[Optimize]
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="flex: 1;">
+            <div class="section-box" style="height: 100%;">
+                <div class="section-header"><span class="num">10</span> SUMMARY</div>
+                <div class="section-content">
+                    <h4 style="text-align: center; margin-top: 0; margin-bottom: 10px;">REMEMBER</h4>
+                    <ul style="list-style-type: none; padding-left: 0; font-size: 0.85em; margin: 0; color: #166534;">
+                        <li style="margin-bottom: 10px; display: flex; align-items: start;"><span style="color:#16a34a; margin-right: 8px;">&#10004;</span> <span>Graph interviews are not won by memorizing algorithms.</span></li>
+                        <li style="margin-bottom: 10px; display: flex; align-items: start;"><span style="color:#16a34a; margin-right: 8px;">&#10004;</span> <span>They are won by choosing the correct helper structures before coding.</span></li>
+                        <li style="margin-bottom: 10px; display: flex; align-items: start;"><span style="color:#16a34a; margin-right: 8px;">&#10004;</span> <span>Build &rarr; Helper Structures &rarr; Pattern &rarr; Tiny Change &rarr; Solve.</span></li>
+                        <li style="margin-bottom: 10px; display: flex; align-items: start;"><span style="color:#16a34a; margin-right: 8px;">&#10004;</span> <span>Helper structures are your superpower.</span></li>
+                    </ul>
+                    <div style="text-align: center; margin-top: 15px; font-weight: bold;">
+                        Your Toolkit.<br>Use it Every Time.<br>
+                        <span style="color: #eab308; font-size: 1.2em;">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

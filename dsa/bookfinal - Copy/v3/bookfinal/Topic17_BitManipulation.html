@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BIT MANIPULATION — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 12px; }
+.ph h1 { font-size: 1.7rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.85rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.74rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.bh  { background: var(--pri); color: white; padding: 5px 10px;
+  font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 16px; height: 16px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.70rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 8px 10px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 5px 10px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.72rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.90rem; }
+.psub   { color: var(--sub); font-size: 0.76rem; }
+.prow-body { display: flex; }
+.pc { padding: 8px 10px; font-size: 0.76rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.70rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.prob-head { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.76rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.68rem; line-height: 1.38; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.74rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.74rem; }
+th, td { border: 1px solid var(--bdr); padding: 4px 6px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 5px 8px; border-radius: 0 4px 4px 0; font-size: 0.76rem; margin-top: 4px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 6px 8px; margin-top: 4px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.80rem; margin-bottom: 2px; }
+
+.dt-wrap { font-size: 0.76rem; }
+.dt-root { background: var(--pri); color: white; padding: 4px 8px; border-radius: 4px; text-align: center; font-weight: 700; margin-bottom: 6px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 4px 6px; font-weight: 600; color: #1e40af; font-size: 0.72rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 4px 6px; color: #065f46; font-weight: 700; font-size: 0.72rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.72rem; padding: 2px 4px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 8px 12px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- PAGE 1: DISCOVERY & ORIENTATION -->
+<div class="page">
+<div class="ph">
+  <div><h1>BIT MANIPULATION</h1><div class="sub">FAANG Master Guide — Java Edition</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 1 OF 10</div><div class="ptag">DISCOVERY JOURNEY · FIRST PRINCIPLES</div></div>
+</div>
+<div class="g3" style="margin-bottom:12px">
+<div class="box pur">
+<div class="bh">💡 WHY BIT MANIPULATION?</div>
+<div class="bc">
+<p style="margin-bottom:6px">Bitwise operations manipulate individual bits directly inside CPU registers in **O(1) time with 0 extra memory**! They power low-level systems, cryptographic algorithms, and optimal interview solutions.</p>
+<div class="aha">
+<div class="aha-t">💡 THE KERNIGHAN'S TRICK AHA</div>
+        **`n &amp; (n - 1)`** clears the lowest set bit (`1`) of `n` in exact O(1) time! Use this to count set bits in O(\text{set bits}) instead of 32 loop iterations!
+      </div>
+</div>
+</div>
+<div class="box">
+<div class="bh"><span class="n">1</span> 6 ESSENTIAL BIT OPERATORS</div>
+<div class="bc">
+<ul style="margin-bottom:8px;padding-left:16px;font-size:0.78rem">
+<li><strong>AND (`&amp;`):</strong> Both bits 1 -&gt; 1. Masking.</li>
+<li><strong>OR (`|`):</strong> Either bit 1 -&gt; 1. Setting bits.</li>
+<li><strong>XOR (`^`):</strong> Different bits -&gt; 1. $x \oplus x = 0$, $x \oplus 0 = x$!</li>
+<li><strong>NOT (`~`):</strong> Bitwise inversion.</li>
+<li><strong>Left Shift (`&lt;&lt;`):</strong> Multiply by 2^k.</li>
+<li><strong>Unsigned Right Shift (`&gt;&gt;&gt;`):</strong> Fills 0 on left.</li>
+</ul>
+</div>
+</div>
+<div class="box sky">
+<div class="bh"><span class="n">2</span> VISUALIZING KERNIGHAN'S TRICK</div>
+<div class="bc">
+<div style="font-weight:700;color:var(--pri);margin-bottom:4px">Clearing lowest set bit of 12 (`1100`):</div>
+<pre>n     = 12 -&gt; 1100 (binary)
+n - 1 = 11 -&gt; 1011 (binary)
+n &amp; (n - 1) = 1000 (binary) -&gt; 8!
+Lowest set bit at position 2 is CLEARED!</pre>
+</div>
+</div>
+</div><div class="g2">
+<div class="box grn">
+<div class="bh">📚 PREREQUISITES &amp; COMPLEXITY REASONING</div>
+<div class="bc">
+<table style="font-size:0.76rem">
+<tr><th>Operation / Problem</th><th>Time Complexity</th><th>Auxiliary Space</th></tr>
+<tr><td>Single Number (XOR Accumulation)</td><td><strong>O(N) single pass</strong></td><td><strong>O(1) space</strong></td></tr>
+<tr><td>Hamming Weight (n &amp; (n-1))</td><td><strong>O(set bits) &lt;= 32</strong></td><td><strong>O(1) space</strong></td></tr>
+<tr><td>Counting Bits (DP + Bitshift)</td><td><strong>O(N) single pass</strong></td><td><strong>O(N) result array</strong></td></tr>
+<tr><td>Sum of 2 Integers (XOR + AND Carry)</td><td><strong>O(32) = O(1)</strong></td><td><strong>O(1) space</strong></td></tr>
+</table>
+</div>
+</div>
+<div class="box amb">
+<div class="bh">⚡ CLUES THAT SCREAM BIT MANIPULATION</div>
+<div class="bc">
+<p style="font-size:0.8rem">1. <em>"Every element appears twice except one"</em> -&gt; Accumulative XOR (`a ^= num`)</p>
+<p style="font-size:0.8rem">2. <em>"Count total 1 bits in 32-bit integer"</em> -&gt; Kernighan's `n = n &amp; (n - 1)`</p>
+<p style="font-size:0.8rem">3. <em>"Add two numbers without + or -"</em> -&gt; Bitwise XOR (`a ^ b`) + Carry (`(a &amp; b) &lt;&lt; 1`)</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 2: API & TOOLKIT -->
+<div class="page">
+<div class="ph">
+  <div><h1>BIT MANIPULATION</h1><div class="sub">Java Master Toolkit &amp; Utility Classes</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 2 OF 10</div><div class="ptag">JAVA UTILITIES · REUSABLE TEMPLATES</div></div>
+</div>
+
+</div>
+
+<!-- PAGE 3: CORE PATTERN 1 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BIT MANIPULATION</h1><div class="sub">Core Patterns — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 3 OF 10</div><div class="ptag">PATTERN 1</div></div>
+</div>
+<div class="prow" style="margin-bottom:12px">
+<div class="prow-head">
+<div class="ptag2">PATTERN 1</div>
+<div class="ptitle">SINGLE NUMBER (XOR Self-Cancellation)</div>
+<div class="psub">e.g. Single Number (LC 136)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">XOR Cancellation Math</div>
+<div style="font-size:0.78rem">
+        $x \oplus x = 0 and x \oplus 0 = x$. Since all duplicate pairs cancel to 0, XORing all array numbers leaves ONLY the unique single number!
+      </div>
+</div>
+<div class="pc" style="flex:1.5">
+<div class="pc-head">Template — LC 136</div>
+<pre>public int singleNumber(int[] nums) {
+  int res = 0;
+  for (int num : nums) {
+    res ^= num; // Pair cancellation!
+  }
+  return res;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 4: CORE PATTERN 2 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BIT MANIPULATION</h1><div class="sub">Core Patterns — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 4 OF 10</div><div class="ptag">PATTERN 2</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 2</div>
+<div class="ptitle">MISSING NUMBER (Index XOR Array Accumulation)</div>
+<div class="psub">e.g. Missing Number (LC 268)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">Index Matching Strategy</div>
+<div style="font-size:0.78rem">
+        XOR all indices $0..N$ with all array values `nums[i]`. Every present number cancels its matching index, leaving ONLY the missing number!
+      </div>
+</div>
+<div class="pc" style="flex:1.5">
+<div class="pc-head">Template — LC 268</div>
+<pre>public int missingNumber(int[] nums) {
+  int res = nums.length;
+  for (int i = 0; i &lt; nums.length; i++) {
+    res ^= i ^ nums[i];
+  }
+  return res;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 5: CORE PATTERN 3 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BIT MANIPULATION</h1><div class="sub">Core Patterns — Part 3</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 5 OF 10</div><div class="ptag">PATTERN 3</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 5</div>
+<div class="ptitle">SUM OF TWO INTEGERS (XOR Sum + AND Carry)</div>
+<div class="psub">e.g. Sum of Two Integers (LC 371)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">Half-Adder Hardware Logic</div>
+<div style="font-size:0.78rem">
+        `a ^ b` computes addition WITHOUT carry.<br/>
+        `(a &amp; b) &lt;&lt; 1` computes carry.<br/>
+        Repeat until carry `b == 0`!
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — LC 371</div>
+<pre>public int getSum(int a, int b) {
+  while (b != 0) {
+    int carry = (a &amp; b) &lt;&lt; 1;
+    a = a ^ b;
+    b = carry;
+  }
+  return a;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 6: CORE PATTERN 4 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BIT MANIPULATION</h1><div class="sub">Core Patterns — Part 4</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 6 OF 10</div><div class="ptag">PATTERN 4</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 6</div>
+<div class="ptitle">REVERSE INTEGER (32-Bit Overflow Guard)</div>
+<div class="psub">e.g. Reverse Integer (LC 7)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">Overflow Guard Formula</div>
+<div style="font-size:0.78rem">
+        Check `res &gt; Integer.MAX_VALUE / 10` or `res &lt; Integer.MIN_VALUE / 10` before multiplying by 10!
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — LC 7</div>
+<pre>public int reverse(int x) {
+  int res = 0;
+  while (x != 0) {
+    int pop = x % 10; x /= 10;
+    if (res &gt; Integer.MAX_VALUE / 10 || (res == Integer.MAX_VALUE / 10 &amp;&amp; pop &gt; 7)) return 0;
+    if (res &lt; Integer.MIN_VALUE / 10 || (res == Integer.MIN_VALUE / 10 &amp;&amp; pop &lt; -8)) return 0;
+    res = res * 10 + pop;
+  }
+  return res;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 7: DECISION TREE & TRIGGER WORDS -->
+<div class="page">
+<div class="ph">
+  <div><h1>BIT MANIPULATION</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 7 OF 10</div><div class="ptag">DECISION TREE · TRIGGER WORDS · TRADE-OFFS</div></div>
+</div>
+<div class="box">
+<div class="bh" style="padding:3px 6px;font-size:0.76rem">📊 COMPLETE BIT MANIPULATION PROBLEM LADDER SUMMARY</div>
+<div class="bc" style="padding:4px 6px">
+<table>
+<tr><th>LC #</th><th>Problem</th><th>Pattern</th><th>Time</th><th>Space</th><th>Diff</th></tr>
+<tr><td>136</td><td>Single Number</td><td>XOR Self-Cancellation</td><td>O(N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+<tr><td>191</td><td>Number of 1 Bits</td><td>Kernighan's Trick</td><td>O(set bits)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+<tr><td>268</td><td>Missing Number</td><td>Index XOR Match</td><td>O(N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+<tr><td>338</td><td>Counting Bits</td><td>DP Bitshift Recurrence</td><td>O(N)</td><td>O(N)</td><td><span class="diff-e">E</span></td></tr>
+<tr><td>190</td><td>Reverse Bits</td><td>32-Bit Unsigned Shift</td><td>O(32)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+<tr><td>371</td><td>Sum of Two Integers</td><td>XOR + AND Carry</td><td>O(32)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>7</td><td>Reverse Integer</td><td>Overflow Protection</td><td>O(log10 X)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<!-- PAGE 8: PROBLEM LADDER PART 1 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BIT MANIPULATION</h1><div class="sub">Curated Problem Ladder — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 8 OF 10</div><div class="ptag">PROBLEM LADDER · EASY &amp; MEDIUM</div></div>
+</div>
+<div class="g2">
+<div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#f0fdf4">
+<span class="ptitle" style="color:var(--grn)">LC 136 · Single Number</span>
+<span class="diff-e">EASY</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> XOR Self-Cancel</div>
+<div><strong>Key Insight:</strong> `res ^= num`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.62rem">public int singleNumber(int[] nums) {
+  int res = 0;
+  for (int n : nums) res ^= n;
+  return res;
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#f0fdf4">
+<span class="ptitle" style="color:var(--grn)">LC 191 · Number of 1 Bits</span>
+<span class="diff-e">EASY</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Kernighan's Trick</div>
+<div><strong>Key Insight:</strong> `n = n &amp; (n - 1)`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.62rem">public int hammingWeight(int n) {
+  int c = 0;
+  while (n != 0) { n &amp;= (n - 1); c++; }
+  return c;
+}</pre>
+</div>
+</div>
+</div><div class="prob">
+<div class="prob-head" style="background:#f0fdf4">
+<span class="ptitle" style="color:var(--grn)">LC 268 · Missing Number</span>
+<span class="diff-e">EASY</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Index XOR Match</div>
+<div><strong>Key Insight:</strong> `res ^= i ^ nums[i]`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.62rem">public int missingNumber(int[] nums) {
+  int res = nums.length;
+  for (int i = 0; i &lt; nums.length; i++) res ^= i ^ nums[i];
+  return res;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: PROBLEM LADDER PART 2 -->
+<div class="page">
+<div class="ph">
+  <div><h1>BIT MANIPULATION</h1><div class="sub">Curated Problem Ladder — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 9 OF 10</div><div class="ptag">PROBLEM LADDER · MEDIUM &amp; HARD</div></div>
+</div>
+<div class="g2">
+<div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#f0fdf4">
+<span class="ptitle" style="color:var(--grn)">LC 338 · Counting Bits</span>
+<span class="diff-e">EASY</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> DP Bitshift</div>
+<div><strong>Key Insight:</strong> `dp[i] = dp[i &gt;&gt; 1] + (i &amp; 1)`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.60rem">public int[] countBits(int n) {
+  int[] res = new int[n + 1];
+  for (int i = 1; i &lt;= n; i++) res[i] = res[i &gt;&gt; 1] + (i &amp; 1);
+  return res;
+}</pre>
+</div>
+</div>
+</div><div class="prob">
+<div class="prob-head" style="background:#f0fdf4">
+<span class="ptitle" style="color:var(--grn)">LC 190 · Reverse Bits</span>
+<span class="diff-e">EASY</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> 32-Bit Unsigned Shift</div>
+<div><strong>Key Insight:</strong> `res = (res &lt;&lt; 1) | (n &amp; 1)`, `n &gt;&gt;&gt;= 1`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.60rem">public int reverseBits(int n) {
+  int res = 0;
+  for (int i = 0; i &lt; 32; i++) {
+    res = (res &lt;&lt; 1) | (n &amp; 1); n &gt;&gt;&gt;= 1;
+  }
+  return res;
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 371 · Sum of Two Integers</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> XOR + AND Carry</div>
+<div><strong>Key Insight:</strong> `a = a ^ b`, `b = (a &amp; b) &lt;&lt; 1`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.58rem">public int getSum(int a, int b) {
+  while (b != 0) {
+    int carry = (a &amp; b) &lt;&lt; 1;
+    a = a ^ b; b = carry;
+  }
+  return a;
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 7 · Reverse Integer</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Overflow Protection</div>
+<div><strong>Key Insight:</strong> Guard `res &gt; MAX / 10` before multiplying.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.58rem">public int reverse(int x) {
+  int res = 0;
+  while (x != 0) {
+    int pop = x % 10; x /= 10;
+    if (res &gt; Integer.MAX_VALUE / 10 || res &lt; Integer.MIN_VALUE / 10) return 0;
+    res = res * 10 + pop;
+  }
+  return res;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 10: DRY RUN, PROOFS & MASTERY CHEAT SHEET -->
+<div class="page">
+<div class="ph">
+  <div><h1>BIT MANIPULATION</h1><div class="sub">Dry Run, Proofs &amp; Mastery Cheat Sheet</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 10 OF 10</div><div class="ptag">DRY RUN · PROOFS · MASTERY CHECKLIST</div></div>
+</div>
+<div class="g2" style="margin-bottom:10px">
+<div class="box">
+<div class="bh">🔍 DRY RUN — Single Number ([4, 1, 2, 1, 2])</div>
+<div class="bc">
+<table style="font-size:0.70rem">
+<tr><th>Step</th><th>num</th><th>XOR Operation (`res ^= num`)</th><th>res Value</th></tr>
+<tr><td>1</td><td>4</td><td>`0 ^ 4`</td><td>4</td></tr>
+<tr><td>2</td><td>1</td><td>`4 ^ 1`</td><td>5</td></tr>
+<tr><td>3</td><td>2</td><td>`5 ^ 2`</td><td>7</td></tr>
+<tr><td>4</td><td>1</td><td>`7 ^ 1` (cancels previous 1)</td><td>6</td></tr>
+<tr><td>5</td><td>2</td><td>`6 ^ 2` (cancels previous 2)</td><td>4 ✅</td></tr>
+</table>
+</div>
+</div>
+<div class="box grn">
+<div class="bh">📐 MATHEMATICAL PROOF — KERNIGHAN'S CLEAR BIT FORMULA</div>
+<div class="bc">
+<div style="font-size:0.76rem">
+<p style="margin-bottom:4px"><strong>Claim:</strong> `n &amp; (n - 1)` clears the lowest set bit of `n`.</p>
+<p style="margin-bottom:4px"><strong>Proof:</strong> Subtracting 1 flips the rightmost `1` to `0` and all lower trailing `0`s to `1`s. Performing `n &amp; (n - 1)` keeps all higher bits unchanged while forcing the rightmost `1` to `0` -&gt; <strong>Exact 1 bit cleared!</strong></p>
+</div>
+</div>
+</div>
+</div><div class="g2">
+<div class="box grn">
+<div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+<div class="bc">
+<div class="g2" style="gap:6px">
+<ul style="font-size:0.75rem;list-style:none;padding:0">
+<li>☐ Code Single Number in 1m with XOR</li>
+<li>☐ Write Kernighan's `n &amp; (n - 1)` bit counter</li>
+<li>☐ Code Missing Number with index XOR</li>
+<li>☐ Write Counting Bits with DP bitshift</li>
+</ul>
+<ul style="font-size:0.75rem;list-style:none;padding:0">
+<li>☐ Code Reverse Bits using `&gt;&gt;&gt;` shift</li>
+<li>☐ Write Sum of Two Integers (XOR + Carry)</li>
+<li>☐ Write Reverse Integer with overflow guard</li>
+<li>☐ Prove why `n &amp; (n - 1) == 0` tests power of 2</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="box pur">
+<div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+<div class="bc">
+<div class="aha" style="margin-bottom:4px;padding:5px">
+<div class="aha-t">Rule 1 — Operator Precedence Warning</div>
+        Bitwise operators (`&amp;`, `|`, `^`) have LOWER precedence than comparison operators (`==`, `&lt;`)! ALWAYS wrap bitwise expressions in parentheses: `((n &amp; 1) == 0)`!
+      </div>
+<div class="aha" style="padding:5px">
+<div class="aha-t">Rule 2 — Always Use Unsigned Right Shift for Reversal</div>
+        In 32-bit bit manipulation, use `&gt;&gt;&gt;` instead of `&gt;&gt;` so negative numbers do not fill leading 1s!
+      </div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

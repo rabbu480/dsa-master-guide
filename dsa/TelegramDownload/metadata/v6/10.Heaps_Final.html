@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>10 Heaps (FAANG Cheat Sheet)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code&amp;display=swap" rel="stylesheet"/>
+
+
+
+<style id="faang-v6">
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap');
+
+:root {
+    --primary: #1e3a8a; 
+    --secondary: #2563eb; 
+    --green: #10b981;
+    --green-dark: #15803d;
+    --red: #ef4444;
+    --red-dark: #b91c1c;
+    --yellow: #f59e0b;
+    --yellow-dark: #b45309;
+    --purple: #8b5cf6;
+    --purple-dark: #5b21b6;
+    --orange: #f97316;
+    --orange-dark: #c2410c;
+    
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --bg-light: #f8fafc;
+    --border-color: #cbd5e1;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #e2e8f0;
+    color: var(--text-dark);
+    margin: 0;
+    padding: 20px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* FLEX UTILITIES FOR SIDE-BY-SIDE CONTENT (LIKE HEAPS DIAGRAM) */
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: flex-start;
+    justify-content: space-around;
+    width: 100%;
+}
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0; /* Prevent flex overflow */
+}
+.bg-green { background-color: var(--green); color: white; padding: 4px 10px; border-radius: 4px; font-weight: bold; margin-bottom: 5px; text-align: center; }
+.bg-red { background-color: var(--red); color: white; padding: 4px 10px; border-radius: 4px; font-weight: bold; margin-bottom: 5px; text-align: center; }
+
+/* HORIZONTAL INTERVIEW FLOW */
+.horizontal-flow {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+.flow-step {
+    background: #f1f5f9;
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    padding: 8px;
+    width: 130px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    flex-grow: 1;
+    min-width: 120px;
+}
+.flow-step-num {
+    background: var(--primary);
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.75rem;
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.flow-step-title {
+    font-weight: 800;
+    color: var(--primary);
+    margin-top: 5px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+.flow-step-desc {
+    font-size: 0.75rem;
+    color: var(--text-dark);
+    line-height: 1.2;
+    margin-top: 4px;
+}
+.flow-arrow {
+    color: var(--primary);
+    font-size: 1.5rem;
+    font-weight: bold;
+    align-self: center;
+}
+
+.page {
+    background: white;
+    max-width: 1100px; 
+    margin: 0 auto 40px auto;
+    padding: 40px 50px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    page-break-after: always;
+    border-top: 6px solid var(--primary);
+    position: relative;
+    overflow: hidden;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid var(--primary);
+    padding-bottom: 12px;
+    margin-bottom: 25px;
+}
+.header-title-box { display: flex; align-items: baseline; gap: 15px; }
+.header-title-box h1 {
+    margin: 0; font-size: 2.4rem; color: var(--primary);
+    font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase;
+}
+.header-title-box .subtitle {
+    background-color: var(--secondary); color: white;
+    padding: 5px 14px; border-radius: 20px; font-weight: 800; font-size: 0.85rem;
+    box-shadow: 0 2px 4px rgba(37,99,235,0.2);
+}
+
+.toc-box {
+    background-color: #f8fafc;
+    border-radius: 10px;
+    padding: 20px 25px;
+    margin-bottom: 30px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+.toc-header {
+    color: var(--primary);
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 15px;
+}
+.toc-masonry {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 25px;
+}
+.toc-page-col {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    background: white;
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+.toc-page-title {
+    font-weight: 900;
+    color: white;
+    background-color: var(--secondary);
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    display: inline-block;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.toc-item {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+.toc-num {
+    background-color: var(--primary);
+    color: white;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    min-width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* CSS GRID FOR PERFECT SIDE-BY-SIDE READING ORDER */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    align-items: start;
+    width: 100%;
+}
+
+.span-all {
+    grid-column: 1 / -1 !important;
+}
+
+.section-box {
+    border: 1px solid var(--primary);
+    border-radius: 8px; 
+    overflow: hidden; 
+    background: white;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+.section-header {
+    background: var(--primary); color: white;
+    padding: 10px 14px; font-weight: 800; font-size: 0.95rem;
+    display: flex; align-items: center; text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.section-box.color-green { border-color: var(--green-dark); }
+.section-box.color-green .section-header { background: var(--green-dark); }
+.section-box.color-green .section-header span.num { color: var(--green-dark); }
+.section-box.color-purple { border-color: var(--purple-dark); }
+.section-box.color-purple .section-header { background: var(--purple-dark); }
+.section-box.color-purple .section-header span.num { color: var(--purple-dark); }
+.section-box.color-orange { border-color: var(--orange-dark); }
+.section-box.color-orange .section-header { background: var(--orange-dark); }
+.section-box.color-orange .section-header span.num { color: var(--orange-dark); }
+.section-box.color-red { border-color: var(--red-dark); }
+.section-box.color-red .section-header { background: var(--red-dark); }
+.section-box.color-red .section-header span.num { color: var(--red-dark); }
+
+.section-header span.num {
+    background: white; color: var(--primary);
+    border-radius: 50%; width: 24px; height: 24px;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-right: 12px; font-size: 0.85rem; font-weight: 900;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.section-content { padding: 15px; }
+
+/* FIX INVISIBLE TEXT: Force defaults */
+.section-content p, .section-content li, .section-content div:not([class]) {
+    color: var(--text-dark);
+}
+
+.box-aha { background-color: #f0fdf4; border: 2px solid #22c55e; border-radius: 8px; padding: 20px 15px 15px; position: relative; box-shadow: 0 2px 5px rgba(34,197,94,0.1); break-inside: avoid; page-break-inside: avoid; }
+.box-aha-title { background-color: #22c55e; color: white; padding: 4px 14px; border-radius: 20px; font-weight: bold; position: absolute; top: -14px; left: 15px; font-size: 0.85rem; letter-spacing: 0.5px; }
+.box-tip { background-color: #fffbeb; border: 2px solid #f59e0b; border-radius: 8px; padding: 20px 15px 15px; position: relative; box-shadow: 0 2px 5px rgba(245,158,11,0.1); break-inside: avoid; page-break-inside: avoid; }
+.box-tip-title { background-color: #f59e0b; color: white; padding: 4px 14px; border-radius: 20px; font-weight: bold; position: absolute; top: -14px; left: 15px; font-size: 0.85rem; letter-spacing: 0.5px; }
+.box-mistake { background-color: #fef2f2; border: 2px solid #ef4444; border-radius: 8px; padding: 20px 15px 15px; position: relative; box-shadow: 0 2px 5px rgba(239,68,68,0.1); break-inside: avoid; page-break-inside: avoid; }
+.box-mistake-title { background-color: #ef4444; color: white; padding: 4px 14px; border-radius: 20px; font-weight: bold; position: absolute; top: -14px; left: 15px; font-size: 0.85rem; letter-spacing: 0.5px; }
+
+pre {
+    background: #f8fafc !important; color: #0f172a !important;
+    border: 1px solid var(--border-color) !important; border-left: 4px solid var(--secondary) !important;
+    padding: 12px 15px !important; border-radius: 6px !important;
+    font-family: 'Fira Code', monospace !important; font-size: 0.85rem !important;
+    margin: 10px 0 !important; overflow-x: auto; white-space: pre-wrap; line-height: 1.5; 
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.01) !important;
+}
+code { background: #f1f5f9; color: var(--secondary); padding: 2px 6px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.9em; font-weight: 700; }
+pre code { background: transparent !important; color: inherit !important; padding: 0 !important; font-weight: 500; }
+
+table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.85rem; margin: 10px 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+table th { background: var(--primary) !important; color: white !important; padding: 8px 12px; text-align: left; font-weight: 700; white-space: nowrap; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; border-bottom: 2px solid rgba(0,0,0,0.1); }
+table td { border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); padding: 8px 12px; line-height: 1.4; }
+table tr td:last-child { border-right: none; }
+table tr:last-child td { border-bottom: none; }
+table tr:nth-child(even) td { background: #f8fafc; }
+table tr:hover td { background: #f1f5f9; }
+
+ul, ol { margin: 0; padding-left: 20px; } li { margin-bottom: 6px; line-height: 1.5; }
+
+/* FIX MERMAID SIZING SO IT DOESN'T BECOME ENORMOUS */
+.mermaid svg {
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 220px !important;
+    display: block;
+    margin: 0 auto;
+}
+
+[style*="background-color: #1e1e1e"],[style*="background-color:#1e1e1e"],[style*="background: #1e1e2e"] { background: transparent !important; }
+[style*="color: #d4d4d4"],[style*="color:#d4d4d4"],[style*="color: #e2e8f0"] { color: #0f172a !important; }
+[style*="color: #569cd6"] { color: #2563eb !important; font-weight: 700; } 
+[style*="color: #c586c0"] { color: #7e22ce !important; font-weight: 700; } 
+[style*="color: #b5cea8"] { color: #b91c1c !important; font-weight: 600; } 
+[style*="color: #6a9955"] { color: #64748b !important; font-style: italic; } 
+
+@media print {
+    body { background: white !important; padding: 0 !important; }
+    .page { box-shadow: none !important; margin: 0 !important; padding: 20px 0 !important; border: none !important; border-top: 4px solid var(--primary) !important; border-radius: 0 !important; }
+    .section-box, .box-aha, .box-tip, .box-mistake, .toc-box, .toc-page-col { 
+        page-break-inside: avoid !important;
+        break-inside: avoid !important; 
+    }
+}
+</style>
+</head>
+<body>
+<!-- PAGE 1 -->
+<div class="page">
+<div class="header-top">
+<div style="display: flex; align-items: baseline;">
+<h1>HEAP</h1>
+<div class="subtitle">Priority Queue<br/><small style="color:#64748b;font-weight:normal;">(FAANG Cheat Sheet)</small></div>
+</div>
+<div style="text-align: right;">
+<div class="page-number">PAGE 1</div>
+<div style="margin-top: 5px; color: var(--primary); font-weight: 600; font-size: 0.9rem;">Fundamentals &amp; Java Basics</div>
+</div>
+</div>
+
+<div class="content-grid"><div class="section-box">
+<div class="section-header"><span class="num">1</span> WHAT IS A HEAP?</div>
+<div class="section-content">
+<ul>
+<li>A Heap is a <strong>Complete Binary Tree</strong>.</li>
+<li>It satisfies the <strong>Heap Property</strong>.</li>
+<li>It is <strong style="color:red;">NOT</strong> a sorted data structure.</li>
+<li>Only the root element is guaranteed to be the minimum (Min Heap) or maximum (Max Heap).</li>
+<li>Heaps are used to implement <strong>Priority Queue</strong>.</li>
+</ul>
+</div>
+</div><div class="section-box">
+<div class="section-header"><span class="num">2</span> MIN HEAP VS MAX HEAP</div>
+<div class="section-content flex-row">
+<div class="flex-col">
+<div class="bg-green">MIN HEAP</div>
+<div>Parent ≤ Children</div>
+<div class="mermaid">
+                            graph TD
+                                classDef greenNode fill:#fff,stroke:#10b981,stroke-width:2px,color:#10b981,font-weight:bold;
+                                A((2)):::greenNode --&gt; B((3)):::greenNode
+                                A --&gt; C((5)):::greenNode
+                                B --&gt; D((4)):::greenNode
+                                B --&gt; E((7)):::greenNode
+                                C --&gt; F((6)):::greenNode
+                                C --&gt; G((8)):::greenNode
+                            </div>
+<div style="font-size:0.8rem; color:#64748b;">Smallest element<br/>is at the root.</div>
+</div>
+<div class="flex-col">
+<div class="bg-red">MAX HEAP</div>
+<div>Parent ≥ Children</div>
+<div class="mermaid">
+                            graph TD
+                                classDef redNode fill:#fff,stroke:#ef4444,stroke-width:2px,color:#ef4444,font-weight:bold;
+                                A((10)):::redNode --&gt; B((9)):::redNode
+                                A --&gt; C((7)):::redNode
+                                B --&gt; D((3)):::redNode
+                                B --&gt; E((5)):::redNode
+                                C --&gt; F((1)):::redNode
+                                C --&gt; G((2)):::redNode
+                            </div>
+<div style="font-size:0.8rem; color:#64748b;">Largest element<br/>is at the root.</div>
+</div>
+</div>
+</div><div class="section-box">
+<div class="section-header"><span class="num">3</span> COMPLETE BINARY TREE</div>
+<div class="section-content">
+<p>All levels are completely filled except possibly the last level, and all nodes in the last level are as far left as possible.</p>
+<div class="flex-row">
+<div class="flex-col">
+<div style="color:#10b981;font-weight:bold;">✅</div>
+<div class="mermaid">
+                                graph TD
+                                    classDef default fill:#e2e8f0,stroke:#94a3b8,stroke-width:2px,color:transparent;
+                                    A(( )) --&gt; B(( ))
+                                    A --&gt; C(( ))
+                                    B --&gt; D(( ))
+                                    B --&gt; E(( ))
+                                    C --&gt; F(( ))
+                                </div>
+</div>
+<div class="flex-col">
+<div style="color:#ef4444;font-weight:bold;">❌</div>
+<div class="mermaid">
+                                graph TD
+                                    classDef default fill:#e2e8f0,stroke:#94a3b8,stroke-width:2px,color:transparent;
+                                    A(( )) --&gt; B(( ))
+                                    A --&gt; C(( ))
+                                    B --&gt; D(( ))
+                                    C --&gt; E(( ))
+                                </div>
+</div>
+</div>
+</div>
+</div><div class="section-box">
+<div class="section-header"><span class="num">4</span> ARRAY REPRESENTATION (0-INDEXED)</div>
+<div class="section-content flex-row">
+<div class="flex-col" style="flex:1;">
+<strong>Example Tree</strong>
+<div class="mermaid">
+                            graph TD
+                                classDef blueNode fill:#fff,stroke:#3b82f6,stroke-width:2px,color:#3b82f6,font-weight:bold;
+                                A((1)):::blueNode --&gt; B((2)):::blueNode
+                                A --&gt; C((3)):::blueNode
+                                B --&gt; D((4)):::blueNode
+                                B --&gt; E((5)):::blueNode
+                                C --&gt; F((6)):::blueNode
+                                C --&gt; G((7)):::blueNode
+                            </div>
+</div>
+<div class="flex-col" style="flex:1.2; text-align:left; background:#f8fafc; padding:10px; border:1px solid #cbd5e1; border-radius:4px; font-size:0.85rem;">
+<strong style="color:var(--primary);">Index Relationships</strong><br/><br/>
+                            Parent(i) = (i - 1) / 2<br/>
+                            Left(i) = 2 * i + 1<br/>
+                            Right(i) = 2 * i + 2
+                        </div>
+</div>
+<div class="section-content" style="padding-top:0;">
+<strong>Array Representation</strong>
+<table>
+<tr>
+<th>Index</th>
+<td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td>
+</tr>
+<tr>
+<th>Value</th>
+<td style="color:var(--primary); font-weight:bold;">1</td>
+<td style="color:var(--primary); font-weight:bold;">2</td>
+<td style="color:var(--primary); font-weight:bold;">3</td>
+<td style="color:var(--primary); font-weight:bold;">4</td>
+<td style="color:var(--primary); font-weight:bold;">5</td>
+<td style="color:var(--primary); font-weight:bold;">6</td>
+<td style="color:var(--primary); font-weight:bold;">7</td>
+</tr>
+</table>
+</div>
+</div><div class="section-box">
+<div class="section-header"><span class="num">5</span> TIME COMPLEXITIES</div>
+<div class="section-content">
+<table>
+<tr>
+<th>Operation</th>
+<th>Min Heap</th>
+<th>Max Heap</th>
+<th>Why?</th>
+</tr>
+<tr>
+<td><strong>offer(x)</strong></td><td>O(log n)</td><td>O(log n)</td><td>Heapify Up</td>
+</tr>
+<tr>
+<td><strong>poll()</strong></td><td>O(log n)</td><td>O(log n)</td><td>Heapify Down</td>
+</tr>
+<tr>
+<td><strong>peek()</strong></td><td>O(1)</td><td>O(1)</td><td>Root access</td>
+</tr>
+<tr>
+<td><strong>size()</strong></td><td>O(1)</td><td>O(1)</td><td>Just length</td>
+</tr>
+<tr>
+<td><strong>isEmpty()</strong></td><td>O(1)</td><td>O(1)</td><td>Just length</td>
+</tr>
+<tr>
+<td><strong style="color:var(--primary);">Build Heap</strong><br/><small>(n elements)</small></td>
+<td>O(n)</td><td>O(n)</td><td>Bottom-up heapify</td>
+</tr>
+</table>
+<div class="rule-box">
+<span style="color:#f59e0b;font-size:1.2rem;">⭐</span> <strong>Build Heap</strong> (Bottom-Up) is O(n) which is better than inserting n elements one by one (O(n log n)).
+                        </div>
+</div>
+</div><div class="section-box">
+<div class="section-header"><span class="num">6</span> JAVA PRIORITYQUEUE</div>
+<div class="section-content">
+<strong>a) Min Heap (Default)</strong>
+<pre><code>PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+<span style="color:#94a3b8;">// Smallest element at peek()</span></code></pre>
+<strong>b) Max Heap (3 Ways)</strong>
+<div>1. Using Collections.reverseOrder() <strong style="color:var(--green);">(Recommended)</strong></div>
+<pre><code>PriorityQueue&lt;Integer&gt; maxHeap =
+    new PriorityQueue&lt;&gt;(Collections.reverseOrder());</code></pre>
+<div>2. Using Comparator (Integer.compare)</div>
+<pre><code>PriorityQueue&lt;Integer&gt; maxHeap =
+    new PriorityQueue&lt;&gt;((a, b) -&gt; Integer.compare(b, a));</code></pre>
+<div>3. Using subtraction <strong style="color:var(--red);">(Not recommended - overflow risk)</strong></div>
+<pre><code>PriorityQueue&lt;Integer&gt; maxHeap =
+    new PriorityQueue&lt;&gt;((a, b) -&gt; b - a);</code></pre>
+<strong>c) Common Operations</strong>
+<table>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><strong>offer(x)</strong></td><td>Inserts element x into heap.</td>
+</tr>
+<tr>
+<td><strong>poll()</strong></td><td>Removes and returns root element (min or max).</td>
+</tr>
+<tr>
+<td><strong>peek()</strong></td><td>Returns root element without removing.</td>
+</tr>
+<tr>
+<td><strong>size()</strong></td><td>Returns number of elements.</td>
+</tr>
+<tr>
+<td><strong>isEmpty()</strong></td><td>Checks if heap is empty.</td>
+</tr>
+</table>
+</div>
+</div><div class="section-box">
+<div class="section-header"><span class="num">7</span> IMPORTANT TERMINOLOGY</div>
+<div class="section-content">
+<table style="border:none; width:100%;">
+<tr><td style="border:none; width:100px;"><strong>Root</strong></td><td>: Topmost element.</td></tr>
+<tr><td><strong>Parent(i)</strong></td><td>: (i - 1) / 2</td></tr>
+<tr><td><strong>Left Child(i)</strong></td><td>: 2 * i + 1</td></tr>
+<tr><td><strong>Right Child(i)</strong></td><td>: 2 * i + 2</td></tr>
+<tr><td><strong>Height</strong></td><td>: Longest path from root to leaf.</td></tr>
+<tr><td><strong>Leaf Node</strong></td><td>: Node with no children.</td></tr>
+<tr><td><strong>Heapify</strong></td><td>: Process of restoring heap property (Bubble Up or Bubble Down).</td></tr>
+</table>
+<div style="margin-top: 15px; border-top: 1px dashed #cbd5e1; padding-top: 10px;"><strong style="color: var(--green); display: block; margin-bottom: 5px;">Key Points to Remember</strong>
+
+</div><div style="margin-top: 15px; border-top: 1px dashed #cbd5e1; padding-top: 10px;"><strong style="color: var(--red); display: block; margin-bottom: 5px;">Common Mistakes</strong>
+
+</div></div>
+</div><div class="section-box" style="border-color:var(--red);">
+<div class="section-header" style="background:var(--red);"><span class="num">8</span> COMMON MISTAKES</div>
+<div class="section-content">
+<ul style="list-style:none; padding-left:0; color:#b91c1c;">
+<li>❌ Confusing Min Heap with Max Heap.</li>
+<li>❌ Using wrong comparator.</li>
+<li>❌ Forgetting that default PriorityQueue in Java is Min Heap.</li>
+<li>❌ Not handling empty heap before poll/peek.</li>
+<li>❌ Assuming heap gives sorted order.</li>
+</ul>
+</div>
+</div></div></div><div class="page"><div class="header-top"><div><h1 style="color: var(--primary); font-size: 2.5rem; margin: 0; font-weight: 800; letter-spacing: 2px;">WHAT'S INSIDE THIS CHEAT SHEET</h1></div><div class="page-number" style="background-color: var(--primary); color: white; font-weight: bold; padding: 8px 16px; border-radius: 20px; font-size: 1.2rem;">PAGE 2</div></div><div class="toc-box"><div class="toc-masonry"><div class="toc-page-col"><div class="toc-page-title">PAGE 1</div><div class="toc-item"><div class="toc-num">1</div>WHAT IS A HEAP?</div><div class="toc-item"><div class="toc-num">2</div>MIN HEAP VS MAX HEAP</div><div class="toc-item"><div class="toc-num">3</div>COMPLETE BINARY TREE</div><div class="toc-item"><div class="toc-num">4</div>ARRAY REPRESENTATION (0-INDEXED)</div><div class="toc-item"><div class="toc-num">5</div>TIME COMPLEXITIES</div><div class="toc-item"><div class="toc-num">6</div>JAVA PRIORITYQUEUE</div><div class="toc-item"><div class="toc-num">7</div>IMPORTANT TERMINOLOGY</div><div class="toc-item"><div class="toc-num">8</div>COMMON MISTAKES</div></div><div class="toc-page-col"><div class="toc-page-title">PAGE 3</div><div class="toc-item"><div class="toc-num">9</div>PATTERN 1REPEATED MAX / MIN RETRIEVAL(e.g., Last Stone Weight)</div><div class="toc-item"><div class="toc-num">10</div>PATTERN 2TOP-K ELEMENTS(e.g., Kth Largest, Top K Frequent)</div><div class="toc-item"><div class="toc-num">11</div>PATTERN 3MERGE K SORTED LISTS / ARRAYS(e.g., Merge K Sorted Lists)</div><div class="toc-item"><div class="toc-num">12</div>PATTERN 4TWO HEAPS (MEDIAN FROM DATA STREAM)(e.g., Find Median from Data Stream)</div></div><div class="toc-page-col"><div class="toc-page-title">PAGE 4</div><div class="toc-item"><div class="toc-num">13</div>HEAP DECISION TREE</div><div class="toc-item"><div class="toc-num">14</div>COMPLEXITY TABLE</div><div class="toc-item"><div class="toc-num">15</div>KEY INVARIANTS</div><div class="toc-item"><div class="toc-num">16</div>JAVA TEMPLATES (QUICK)</div><div class="toc-item"><div class="toc-num">17</div>COMMON INTERVIEW CHECKLIST</div></div><div class="toc-page-col"><div class="toc-page-title">PAGE 5</div><div class="toc-item"><div class="toc-num">18</div>WHEN TO THINK HEAP ? (UNSEEN QUESTION CLUES)</div><div class="toc-item"><div class="toc-num">19</div>HEAP VS OTHER DS (CHOOSE RIGHT TOOL)</div><div class="toc-item"><div class="toc-num">20</div>RECOGNITION SHORTCUT (3 QUESTIONS)</div><div class="toc-item"><div class="toc-num">21</div>FAANG FAVORITE HEAP PROBLEM THEMES</div><div class="toc-item"><div class="toc-num">22</div>INTERVIEWER TRICKS TO WATCH OUT</div><div class="toc-item"><div class="toc-num">23</div>AHA MOMENTS (DON'T FORGET)</div></div><div class="toc-page-col"><div class="toc-page-title">PAGE 6</div><div class="toc-item"><div class="toc-num">24</div>TOP-K ELEMENTS PATTERN</div><div class="toc-item"><div class="toc-num">25</div>COMPARATOR GUIDE (FAANG Trap)</div></div></div></div></div>
+<div class="page">
+<!-- Header -->
+<div class="header-top" style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 3px solid #1e3a8a; margin-bottom: 10px;">
+<div>
+<h1 style="color: #1e3a8a; font-size: 2.5rem; margin: 0; font-weight: 800; letter-spacing: 2px;">HEAP - PATTERNS</h1>
+<div class="subtitle" style="color: #334155; font-size: 1.1rem; margin-top: 5px; font-weight: 500;">Top Interview Patterns with Heaps (Priority Queue)</div>
+</div>
+<div>
+<div class="page-number" style="background-color: #1e3a8a;  font-weight: bold; padding: 8px 16px; border-radius: 20px; font-size: 1.2rem;">PAGE 3</div>
+</div>
+</div>
+<!-- Banner -->
+<div style="border: 1px solid #94a3b8; border-radius: 8px; padding: 12px; display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; font-weight: bold; font-size: 1.1rem; color: #334155;">
+<div><span style="color: #dc2626;">Max Heap</span> → largest element on top</div>
+<div><span style="color: #16a34a;">Min Heap</span> → <span>smallest element</span> on top</div>
+<div>PQ → PriorityQueue</div>
+</div>
+<!-- PATTERN 1 -->
+
+<!-- PATTERN 2 -->
+
+<!-- PATTERN 3 -->
+
+<!-- PATTERN 4 -->
+
+<!-- AHA SUMMARY / PATTERN RECOGNITION TRIGGERS -->
+<div style="display: flex; gap: 20px;">
+<div style="flex: 1; border: 1px solid #cbd5e1; border-radius: 8px; padding: 15px; display: flex; align-items: flex-start; gap: 15px;">
+<div style="color: #eab308; font-size: 1.5rem;">⭐</div>
+<div>
+<div style="color: #1e3a8a; font-weight: bold; margin-bottom: 8px;">AHA SUMMARY</div>
+<ul style="list-style-type: none; padding: 0; margin: 0; font-size: 0.95rem; line-height: 1.5;">
+<li>✅ What do I care about most right now? Put it on top!</li>
+<li>✅ Use heap to discard what I don't need.</li>
+<li>✅ Heap ≠ Sorting. Heap gives priority, not full order.</li>
+</ul>
+</div>
+</div>
+<div style="flex: 1; border: 1px solid #cbd5e1; border-radius: 8px; padding: 15px; display: flex; align-items: flex-start; gap: 15px;">
+<div style="color: #ef4444; font-size: 1.5rem;">🔴</div>
+<div>
+<div style="color: #1e3a8a; font-weight: bold; margin-bottom: 8px;">PATTERN RECOGNITION TRIGGERS</div>
+<div style="font-size: 0.95rem; line-height: 1.5; color: #334155;">
+                    • Top K / Kth / Most Frequent / Closest / Smallest / Largest / Merge K / Running Median / Priority / Stream / Scheduler
+                </div>
+</div>
+</div>
+</div>
+<div class="content-grid"><div class="section-box">
+<div class="section-header" style="background-color: #f1f5f9; padding: 10px 15px; border-bottom: 1px solid #cbd5e1; display: flex; align-items: center; gap: 15px;"><span class="num">9</span>
+<div style="background-color: #1e3a8a;  font-weight: bold; padding: 4px 12px; border-radius: 4px;">PATTERN 1</div>
+<div style="color: #1e3a8a; font-weight: bold; font-size: 1.2rem;">REPEATED MAX / MIN RETRIEVAL</div>
+<div style="color: #64748b; font-size: 1rem;">(e.g., Last Stone Weight)</div>
+</div>
+<div style="display: flex;">
+<!-- When to use -->
+<div style="flex: 1.2; padding: 15px; border-right: 1px dashed #cbd5e1;">
+<div style="color: #16a34a; font-weight: bold; text-align: center; margin-bottom: 10px;">WHEN TO USE?</div>
+<ul style="margin: 0; padding-left: 20px; font-size: 0.95rem; line-height: 1.4;">
+<li>We always take the largest (or smallest) element.</li>
+<li>Do something with it.</li>
+<li>Put the result back.</li>
+<li>Repeat until 1 (or none) left.</li>
+</ul>
+</div>
+<!-- Heap to use -->
+<div style="flex: 1.2; padding: 15px; border-right: 1px dashed #cbd5e1; text-align: center;">
+<div style="color: #dc2626; font-weight: bold; margin-bottom: 10px;">HEAP TO USE</div>
+<div><span style="color: #dc2626;">Max Heap</span> → largest</div>
+<div class="mermaid">
+                graph TD
+                    A((7)) --&gt; B((5))
+                    A --&gt; C((6))
+                    B --&gt; D((2))
+                    B --&gt; E((4))
+                    C --&gt; F((1))
+                    C --&gt; G((3))
+                </div>
+</div>
+<!-- Idea / Aha -->
+<div style="flex: 1; padding: 15px; border-right: 1px dashed #cbd5e1; text-align: center;">
+<div style="color: #7e22ce; font-weight: bold; margin-bottom: 10px;">IDEA / AHA</div>
+<div>💡</div>
+<div style="border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; padding: 10px; font-size: 0.9rem;">
+                    We always care about the current largest element.<br/><br/>
+                    Heap gives it in O(1).
+                </div>
+</div>
+<!-- Template -->
+<div style="flex: 1.8; padding: 15px; border-right: 1px dashed #cbd5e1;">
+<div style="color: #3b82f6; font-weight: bold; text-align: center; margin-bottom: 10px;">TEMPLATE (JAVA)</div>
+<pre style="margin: 0; font-size: 0.75rem; font-family: monospace; background: none; padding: 0;"><code>PriorityQueue&lt;Integer&gt; pq = 
+    new PriorityQueue&lt;&gt;(Collections.
+    reverseOrder());  <span style="color: #16a34a;">// Max Heap</span>
+
+<span style="color: #16a34a;">// Build heap</span>
+for (int x : arr) pq.offer(x);
+
+while (pq.size() &gt; 1) {
+    int a = pq.poll();  <span style="color: #16a34a;">// largest</span>
+    int b = pq.poll();  <span style="color: #16a34a;">// 2nd largest</span>
+    if (a != b) pq.offer(a - b);
+}
+return pq.isEmpty() ? 0 : pq.peek();</code></pre>
+</div>
+<!-- Complexity -->
+<div style="flex: 1; padding: 15px;">
+<div style="color: #16a34a; font-weight: bold; text-align: center; margin-bottom: 10px;">COMPLEXITY</div>
+<div>
+                    • <strong>Time:</strong> O(n log n)<br/>
+<span style="color: #64748b; font-size: 0.8rem; margin-left: 10px;">(n insertions +<br/><span>up to n polls)</span></span><br/>
+                    • <strong>Space:</strong> O(n)
+                </div>
+<div style="border: 1px solid #86efac; background: #f0fdf4; border-radius: 6px; padding: 8px;">
+<div style="color: #16a34a; font-weight: bold; text-align: center; font-size: 0.85rem; margin-bottom: 5px;">EXAMPLES</div>
+<ul style="margin: 0; padding-left: 15px; font-size: 0.8rem;">
+<li>LeetCode 1046<br/>Last Stone Weight</li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background-color: #f1f5f9; padding: 10px 15px; border-bottom: 1px solid #cbd5e1; display: flex; align-items: center; gap: 15px;"><span class="num">10</span>
+<div style="background-color: #1e3a8a;  font-weight: bold; padding: 4px 12px; border-radius: 4px;">PATTERN 2</div>
+<div style="color: #1e3a8a; font-weight: bold; font-size: 1.2rem;">TOP-K ELEMENTS</div>
+<div style="color: #64748b; font-size: 1rem;">(e.g., Kth Largest, Top K Frequent)</div>
+</div>
+<div style="display: flex;">
+<!-- When to use -->
+<div style="flex: 1.2; padding: 15px; border-right: 1px dashed #cbd5e1;">
+<div style="color: #16a34a; font-weight: bold; text-align: center; margin-bottom: 10px;">WHEN TO USE?</div>
+<ul style="margin: 0; padding-left: 20px; font-size: 0.95rem; line-height: 1.4;">
+<li>Need the K largest/smallest elements.</li>
+<li>Or K most frequent, top K, K closest, etc.</li>
+<li>We discard the rest.</li>
+</ul>
+</div>
+<!-- Heap to use -->
+<div style="flex: 1.2; padding: 15px; border-right: 1px dashed #cbd5e1; text-align: center;">
+<div style="color: #dc2626; font-weight: bold; margin-bottom: 10px;">HEAP TO USE</div>
+<div>Top K Largest → <span style="color: #16a34a;">Min Heap</span> (size K)</div>
+<div class="mermaid">
+                graph TD
+                    A((1)) --&gt; B((2))
+                    A --&gt; C((3))
+                </div>
+<div style="font-size: 0.8rem; color: #475569; margin-bottom: 10px;">(Keep K=3 largest seen so far)</div>
+<div>Top K Smallest → <span style="color: #dc2626;">Max Heap</span> (size K)</div>
+<div class="mermaid">
+                graph TD
+                    D((9)) --&gt; E((8))
+                    D --&gt; F((7))
+                </div>
+<div style="font-size: 0.8rem; color: #475569;">(Keep K=3 smallest seen so far)</div>
+</div>
+<!-- Idea / Aha -->
+<div style="flex: 1; padding: 15px; border-right: 1px dashed #cbd5e1; text-align: center;">
+<div style="color: #7e22ce; font-weight: bold; margin-bottom: 10px;">IDEA / AHA</div>
+<div style="border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; padding: 8px; font-size: 0.85rem; margin-bottom: 10px;">
+                    Keep only K best candidates in heap.
+                </div>
+<div style="border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; padding: 8px; font-size: 0.85rem;">
+                    If better element comes, replace root (worst among K).
+                </div>
+</div>
+<!-- Template -->
+<div style="flex: 1.8; padding: 15px; border-right: 1px dashed #cbd5e1;">
+<div style="color: #3b82f6; font-weight: bold; text-align: center; margin-bottom: 10px;">TEMPLATE (JAVA)</div>
+<div>→ Top K Largest (Min Heap)</div>
+<pre style="margin: 0 0 10px 0; font-size: 0.7rem; font-family: monospace; background: none; padding: 0;"><code>PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+for (int x : nums) {
+    pq.offer(x);
+    if (pq.size() &gt; k) pq.poll(); <span style="color: #16a34a;">// remove smallest</span>
+}
+<span style="color: #16a34a;">// pq contains top K largest</span>
+List&lt;Integer&gt; res = new ArrayList&lt;&gt;(pq);</code></pre>
+<div>→ Top K Smallest (Max Heap)</div>
+<pre style="margin: 0; font-size: 0.7rem; font-family: monospace; background: none; padding: 0;"><code>PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;(
+    Collections.reverseOrder());
+for (int x : nums) {
+    pq.offer(x);
+    if (pq.size() &gt; k) pq.poll(); <span style="color: #16a34a;">// remove largest</span>
+}
+<span style="color: #16a34a;">// pq contains top K smallest</span></code></pre>
+</div>
+<!-- Complexity -->
+<div style="flex: 1; padding: 15px;">
+<div>
+                    • <strong>Time:</strong> O(n log k)<br/>
+                    • <strong>Space:</strong> O(k)
+                </div>
+<div style="border: 1px solid #86efac; background: #f0fdf4; border-radius: 6px; padding: 8px;">
+<div style="color: #16a34a; font-weight: bold; text-align: center; font-size: 0.85rem; margin-bottom: 5px;">EXAMPLES</div>
+<ul style="margin: 0; padding-left: 15px; font-size: 0.75rem; line-height: 1.3;">
+<li>LC 215 Kth Largest Element in Array</li>
+<li>LC 347 Top K Frequent Elements</li>
+<li>LC 973 K Closest Points to Origin</li>
+<li>LC 692 Top K Frequent Words</li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background-color: #f1f5f9; padding: 10px 15px; border-bottom: 1px solid #cbd5e1; display: flex; align-items: center; gap: 15px;"><span class="num">11</span>
+<div style="background-color: #1e3a8a;  font-weight: bold; padding: 4px 12px; border-radius: 4px;">PATTERN 3</div>
+<div style="color: #1e3a8a; font-weight: bold; font-size: 1.2rem;">MERGE K SORTED LISTS / ARRAYS</div>
+<div style="color: #64748b; font-size: 1rem;">(e.g., Merge K Sorted Lists)</div>
+</div>
+<div style="display: flex;">
+<!-- When to use -->
+<div style="flex: 1.2; padding: 15px; border-right: 1px dashed #cbd5e1;">
+<div style="color: #16a34a; font-weight: bold; text-align: center; margin-bottom: 10px;">WHEN TO USE?</div>
+<ul style="margin: 0; padding-left: 20px; font-size: 0.95rem; line-height: 1.4;">
+<li>We have K sorted lists/arrays.</li>
+<li>Need to merge into one sorted output.</li>
+<li>Always pick the smallest current candidate.</li>
+</ul>
+</div>
+<!-- Heap to use -->
+<div style="flex: 1.2; padding: 15px; border-right: 1px dashed #cbd5e1; text-align: center;">
+<div style="color: #dc2626; font-weight: bold; margin-bottom: 10px;">HEAP TO USE</div>
+<div style="color: #dc2626; font-weight: bold; font-size: 1rem; margin-bottom: 5px;">Min Heap</div>
+<div class="mermaid">
+                graph LR
+                    A((1)) --&gt; B((4)) --&gt; C((7))
+                    D((2)) --&gt; E((5)) --&gt; F((8))
+                    G((3)) --&gt; H((6)) --&gt; I((9))
+                    A -.-&gt; J[Min Heap]
+                    D -.-&gt; J
+                    G -.-&gt; J
+                </div>
+<div style="border: 1px solid #94a3b8; display: inline-block; padding: 5px; margin-top: 10px; font-family: monospace;">1 2 3 4 5 6 7 8 9</div>
+</div>
+<!-- Idea / Aha -->
+<div style="flex: 1; padding: 15px; border-right: 1px dashed #cbd5e1; text-align: center;">
+<div style="color: #7e22ce; font-weight: bold; margin-bottom: 10px;">IDEA / AHA</div>
+<div style="border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; padding: 10px; font-size: 0.85rem; margin-bottom: 10px;">
+                    Put the first element of each list into heap.
+                </div>
+<div style="border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; padding: 10px; font-size: 0.85rem;">
+                    Pop smallest node, add its next node (if exists).
+                </div>
+</div>
+<!-- Template -->
+<div style="flex: 1.8; padding: 15px; border-right: 1px dashed #cbd5e1;">
+<div style="color: #3b82f6; font-weight: bold; text-align: center; margin-bottom: 10px;">TEMPLATE (JAVA)</div>
+<pre style="margin: 0; font-size: 0.7rem; font-family: monospace; background: none; padding: 0;"><code>class Node { int val; Node next; }
+
+PriorityQueue&lt;Node&gt; pq = new PriorityQueue&lt;&gt;(
+    (a, b) -&gt; a.val - b.val); <span style="color: #16a34a;">// Min Heap</span>
+
+<span style="color: #16a34a;">// 1. Add head of each list</span>
+for (Node head : lists)
+    if (head != null) pq.offer(head);
+
+Node dummy = new Node(0), tail = dummy;
+
+while (!pq.isEmpty()) {
+    Node cur = pq.poll();
+    tail.next = cur; tail = tail.next;
+    if (cur.next != null) pq.offer(cur.next);
+}
+return dummy.next;</code></pre>
+</div>
+<!-- Complexity -->
+<div style="flex: 1; padding: 15px;">
+<div>
+                    • <strong>Time:</strong> O(N log k)<br/>
+<span style="color: #64748b; font-size: 0.75rem; margin-left: 10px;">(N = total nodes,<br/><span>k = number of lists)</span></span><br/>
+                    • <strong>Space:</strong> O(k)
+                </div>
+<div style="border: 1px solid #86efac; background: #f0fdf4; border-radius: 6px; padding: 8px;">
+<div style="color: #16a34a; font-weight: bold; text-align: center; font-size: 0.85rem; margin-bottom: 5px;">EXAMPLES</div>
+<ul style="margin: 0; padding-left: 15px; font-size: 0.75rem; line-height: 1.3;">
+<li>LeetCode 23<br/>Merge K Sorted Lists</li>
+<li>LeetCode 373<br/>Find K Pairs with<br/>Smallest Sums</li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background-color: #f1f5f9; padding: 10px 15px; border-bottom: 1px solid #cbd5e1; display: flex; align-items: center; gap: 15px;"><span class="num">12</span>
+<div style="background-color: #1e3a8a;  font-weight: bold; padding: 4px 12px; border-radius: 4px;">PATTERN 4</div>
+<div style="color: #1e3a8a; font-weight: bold; font-size: 1.2rem;">TWO HEAPS (MEDIAN FROM DATA STREAM)</div>
+<div style="color: #64748b; font-size: 1rem;">(e.g., Find Median from Data Stream)</div>
+</div>
+<div style="display: flex;">
+<!-- When to use -->
+<div style="flex: 1.2; padding: 15px; border-right: 1px dashed #cbd5e1;">
+<div style="color: #16a34a; font-weight: bold; text-align: center; margin-bottom: 10px;">WHEN TO USE?</div>
+<ul style="margin: 0; padding-left: 20px; font-size: 0.95rem; line-height: 1.4;">
+<li>Need median at any point in a stream of numbers.</li>
+<li>Insertions happen one by one.</li>
+<li>Need O(log n) insert and O(1) median.</li>
+</ul>
+</div>
+<!-- Heap to use -->
+<div style="flex: 1.2; padding: 15px; border-right: 1px dashed #cbd5e1; text-align: center;">
+<div style="color: #dc2626; font-weight: bold; margin-bottom: 10px;">HEAP TO USE</div>
+<div style="display: flex; justify-content: center; gap: 20px;">
+<div>
+<div>Max Heap<br/><span style="font-weight: normal; color: #475569;">(Smaller Half)</span></div>
+<div class="mermaid">
+                        graph TD
+                            A((5)) --&gt; B((2))
+                            A --&gt; C((3))
+                            B --&gt; D((1))
+                            B --&gt; E((4))
+                        </div>
+</div>
+<div>
+<div>Min Heap<br/><span style="font-weight: normal; color: #475569;">(Larger Half)</span></div>
+<div class="mermaid">
+                        graph TD
+                            F((8)) --&gt; G((9))
+                            F --&gt; H((10))
+                        </div>
+</div>
+</div>
+</div>
+<!-- Idea / Aha -->
+<div style="flex: 1; padding: 15px; border-right: 1px dashed #cbd5e1; text-align: center;">
+<div style="color: #7e22ce; font-weight: bold; margin-bottom: 10px;">IDEA / AHA</div>
+<div>💡</div>
+<div style="border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; padding: 8px; font-size: 0.85rem; text-align: left;">
+                    Maintain two halves.<br/><br/>
+                    1) maxHeap.peek() ≤ minHeap.peek()<br/>
+                    2) Size difference ≤ 1<br/><br/>
+                    Median is either top of one heap or avg of both.
+                </div>
+</div>
+<!-- Template -->
+<div style="flex: 1.8; padding: 15px; border-right: 1px dashed #cbd5e1;">
+<div style="color: #3b82f6; font-weight: bold; text-align: center; margin-bottom: 5px;">TEMPLATE (JAVA) - (Add Number)</div>
+<pre style="margin: 0; font-size: 0.65rem; font-family: monospace; background: none; padding: 0;"><code><span style="color: #16a34a;">// maxHeap: left half (max heap)
+// minHeap: right half (min heap)</span>
+PriorityQueue&lt;Integer&gt; maxHeap = 
+    new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+
+void addNum(int num) {
+    if (maxHeap.isEmpty() || num &lt;= maxHeap.peek())
+        maxHeap.offer(num);
+    else
+        minHeap.offer(num);
+        
+    <span style="color: #16a34a;">// Rebalance</span>
+    if (maxHeap.size() &gt; minHeap.size() + 1)
+        minHeap.offer(maxHeap.poll());
+    else if (minHeap.size() &gt; maxHeap.size())
+        maxHeap.offer(minHeap.poll());
+}
+
+double findMedian() {
+    if (maxHeap.size() == minHeap.size())
+        return (maxHeap.peek() + minHeap.peek()) / 2.0;
+    return maxHeap.peek();
+}</code></pre>
+</div>
+<!-- Complexity -->
+<div style="flex: 1; padding: 15px;">
+<div>
+                    • <strong>addNum:</strong> O(log n)<br/>
+                    • <strong>findMedian:</strong> O(1)<br/>
+                    • <strong>Space:</strong> O(n)
+                </div>
+<div style="border: 1px solid #86efac; background: #f0fdf4; border-radius: 6px; padding: 8px;">
+<div style="color: #16a34a; font-weight: bold; text-align: center; font-size: 0.85rem; margin-bottom: 5px;">EXAMPLES</div>
+<ul style="margin: 0; padding-left: 15px; font-size: 0.75rem; line-height: 1.3;">
+<li>LeetCode 295<br/>Find Median from<br/>Data Stream</li>
+</ul>
+</div>
+</div>
+</div>
+</div></div></div>
+<div class="page">
+<div class="header-top">
+<div style="display: flex; align-items: baseline;">
+<h1>HEAP - CHEAT SHEET &amp; DECISION GUIDE</h1>
+<div class="subtitle">Quick Reference for Interviews<br/><small style="color:#64748b;font-weight:normal;"></small></div>
+</div>
+<div style="text-align: right;">
+<div class="page-number" style="background:#1e3a8a;  padding:5px 15px; border-radius:5px; font-weight:bold;">PAGE 4</div>
+</div>
+</div>
+
+<div style="display: flex; gap: 20px; margin-top: 10px;">
+<div style="flex: 1;">
+<h3 style="color: #0f172a; margin-top: 0; display: flex; align-items: center; font-size: 1.1em;"><span>💡</span> 7. AHA MOMENTS</h3>
+<ul style="list-style-type: none; padding-left: 0; margin: 0; line-height: 1.6; font-size: 0.95em; color: #0f172a; font-weight: 500;">
+<li><span style="color:#f59e0b; margin-right: 5px;">⭐</span> Heap gives you the best element in O(1).</li>
+<li><span style="color:#f59e0b; margin-right: 5px;">⭐</span> It is about PRIORITY, not sorting.</li>
+<li><span style="color:#f59e0b; margin-right: 5px;">⭐</span> Think: "What should I discard?" for Top-K problems.</li>
+<li><span style="color:#f59e0b; margin-right: 5px;">⭐</span> Merge K = One candidate per source.</li>
+<li><span style="color:#f59e0b; margin-right: 5px;">⭐</span> Median = Balance two halves.</li>
+</ul>
+</div>
+<div style="flex: 1.2; border: 2px solid #94a3b8; padding: 15px; border-radius: 8px; background: #f1f5f9;">
+<h3 style="color: #1e3a8a; margin-top: 0; display: flex; align-items: center; font-size: 1.1em; margin-bottom: 10px;"><span style="font-size: 1.5em; margin-right: 8px; color: #dc2626;">🎯</span> PATTERN RECOGNITION TRIGGERS</h3>
+<div style="display: flex; flex-wrap: wrap; font-size: 0.9em; color: #0f172a; font-weight: bold;">
+<div style="width: 50%; margin-bottom: 8px;"><span style="color:#1e3a8a; margin-right:5px;">➡️</span> Top K / Kth Largest / Kth Smallest</div>
+<div style="width: 50%; margin-bottom: 8px;"><span style="color:#1e3a8a; margin-right:5px;">➡️</span> Find Median / Running Median</div>
+<div style="width: 50%; margin-bottom: 8px;"><span style="color:#1e3a8a; margin-right:5px;">➡️</span> Most Frequent / Least Frequent</div>
+<div style="width: 50%; margin-bottom: 8px;"><span style="color:#1e3a8a; margin-right:5px;">➡️</span> Task Scheduler / CPU Scheduling</div>
+<div style="width: 50%; margin-bottom: 8px;"><span style="color:#1e3a8a; margin-right:5px;">➡️</span> Merge K Sorted / K Sorted Lists</div>
+<div style="width: 50%; margin-bottom: 8px;"><span style="color:#1e3a8a; margin-right:5px;">➡️</span> Closest K / Smallest Range / Meeting Rooms</div>
+</div>
+</div>
+</div>
+<div style="background: #fffbeb; border: 1px solid #fde68a; padding: 15px; text-align: center; border-radius: 8px; margin-top: 20px; font-weight: bold; color: #0f172a;">
+<span style="color:#f59e0b; font-size: 1.2em; margin-right: 5px;">⭐</span> Remember: Every Heap problem belongs to one of the <span style="color: #dc2626; text-decoration: underline;">4 patterns on Page 2</span>.
+    </div>
+<div class="content-grid"><div class="section-box">
+<div class="section-header" style="background: #1e3a8a;  padding: 5px 10px; border-radius: 5px; display: inline-block; font-weight: bold; margin-bottom: 15px;"><span class="num">13</span> HEAP DECISION TREE</div>
+<div class="section-content">
+<div class="mermaid">
+                    graph TD
+                        Goal[What is the Goal?]
+                        Goal --&gt; L[Need largest element repeatedly?]
+                        Goal --&gt; S[Need smallest element repeatedly?]
+                        Goal --&gt; TopK[Need Top-K elements?]
+                        Goal --&gt; MergeK[Merge K sorted sources?]
+                        Goal --&gt; Median[Find Median from data stream?]
+                        
+                        L --&gt; UMax[Use Max Heap(largest on top)]
+                        S --&gt; UMin[Use Min Heap(smallest on top)]
+                        
+                        TopK --&gt; Discard[What should we discard?]
+                        Discard --&gt; DSmall[Discard smallest]
+                        Discard --&gt; DLarge[Discard largest]
+                        DSmall --&gt; UMinK[Use Min Heap(size K)]
+                        DLarge --&gt; UMaxK[Use Max Heap(size K)]
+                        
+                        MergeK --&gt; UMinMerge[Use Min Heap(one candidatefrom each source)]
+                        Median --&gt; UTwo[Use Two Heaps(Min + Max)]
+                        
+                        classDef default fill:#f8fafc,stroke:#cbd5e1,stroke-width:1px;
+                        classDef yellow fill:#fef3c7,stroke:#fcd34d,stroke-width:1px;
+                        classDef green fill:#ecfdf5,stroke:#6ee7b7,stroke-width:1px;
+                        classDef red fill:#fef2f2,stroke:#fca5a5,stroke-width:1px;
+                        
+                        class Goal yellow;
+                        class Discard yellow;
+                        class DSmall yellow;
+                        class DLarge yellow;
+                        class L green;
+                        class S green;
+                        class TopK green;
+                        class MergeK green;
+                        class Median green;
+                        class UMax red;
+                        class UMin red;
+                        class UMinK red;
+                        class UMaxK red;
+                        class UMinMerge red;
+                        class UTwo red;
+                    </div>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background: #1e3a8a;  padding: 5px 10px; border-radius: 5px; display: inline-block; font-weight: bold; margin-bottom: 10px;"><span class="num">14</span> COMPLEXITY TABLE</div>
+<div class="section-content">
+<table style="width: 100%; border-collapse: collapse; text-align: center; border: 1px solid #ccc;">
+<tr style="background: #f1f5f9;">
+<th style="border: 1px solid #ccc; padding: 8px;">Operation</th>
+<th style="border: 1px solid #ccc; padding: 8px;">Min Heap</th>
+<th style="border: 1px solid #ccc; padding: 8px;">Max Heap</th>
+<th style="border: 1px solid #ccc; padding: 8px;">Notes</th>
+</tr>
+<tr>
+<td style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Insert (offer)</td>
+<td style="border: 1px solid #ccc; padding: 8px;">O(log n)</td>
+<td style="border: 1px solid #ccc; padding: 8px;">O(log n)</td>
+<td style="border: 1px solid #ccc; padding: 8px;">Heapify Up</td>
+</tr>
+<tr style="background: #f8fafc;">
+<td style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Remove (poll)</td>
+<td style="border: 1px solid #ccc; padding: 8px;">O(log n)</td>
+<td style="border: 1px solid #ccc; padding: 8px;">O(log n)</td>
+<td style="border: 1px solid #ccc; padding: 8px;">Heapify Down</td>
+</tr>
+<tr>
+<td style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Peek</td>
+<td style="border: 1px solid #ccc; padding: 8px;">O(1)</td>
+<td style="border: 1px solid #ccc; padding: 8px;">O(1)</td>
+<td style="border: 1px solid #ccc; padding: 8px;">Root access</td>
+</tr>
+<tr style="background: #f8fafc;">
+<td style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Size</td>
+<td style="border: 1px solid #ccc; padding: 8px;">O(1)</td>
+<td style="border: 1px solid #ccc; padding: 8px;">O(1)</td>
+<td style="border: 1px solid #ccc; padding: 8px;">Just length</td>
+</tr>
+<tr>
+<td style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">isEmpty</td>
+<td style="border: 1px solid #ccc; padding: 8px;">O(1)</td>
+<td style="border: 1px solid #ccc; padding: 8px;">O(1)</td>
+<td style="border: 1px solid #ccc; padding: 8px;">Just length</td>
+</tr>
+<tr style="background: #f8fafc;">
+<td style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Build Heap<br/><small>(from n elements)</small></td>
+<td style="border: 1px solid #ccc; padding: 8px;">O(n)</td>
+<td style="border: 1px solid #ccc; padding: 8px;">O(n)</td>
+<td style="border: 1px solid #ccc; padding: 8px;">Bottom-up<br/>heapify</td>
+</tr>
+</table>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background: #1e3a8a;  padding: 5px 10px; border-radius: 5px; display: inline-block; font-weight: bold; margin-bottom: 15px;"><span class="num">15</span> KEY INVARIANTS</div>
+<div class="section-content">
+<div style="display: flex; gap: 15px;">
+<div style="flex: 1; border: 1px solid #cbd5e1; padding: 10px; text-align: center; border-radius: 8px;">
+<h3 style="color: #0284c7; margin-top: 0; margin-bottom: 5px;">Min Heap</h3>
+<p><strong>For every node i:</strong><br/>parent(i) &lt;= child(i)<br/><strong>Root = smallest element</strong></p>
+<div class="mermaid">
+                            graph TD
+                                A((2)) --&gt; B((3))
+                                A --&gt; C((5))
+                                B --&gt; D((4))
+                                B --&gt; E((7))
+                                C --&gt; F((6))
+                                C --&gt; G((8))
+                                classDef node fill:white,stroke:#000,stroke-width:1px;
+                            </div>
+<div style="background: #ecfdf5; color: #047857; padding: 5px; border-radius: 5px; font-weight: bold; margin-top: 10px; font-size: 0.9em; border: 1px solid #a7f3d0;">Always true for all nodes</div>
+</div>
+<div style="flex: 1; border: 1px solid #cbd5e1; padding: 10px; text-align: center; border-radius: 8px;">
+<h3 style="color: #dc2626; margin-top: 0; margin-bottom: 5px;">Max Heap</h3>
+<p><strong>For every node i:</strong><br/>parent(i) &gt;= child(i)<br/><strong>Root = largest element</strong></p>
+<div class="mermaid">
+                            graph TD
+                                A((10)) --&gt; B((9))
+                                A --&gt; C((7))
+                                B --&gt; D((3))
+                                B --&gt; E((5))
+                                C --&gt; F((1))
+                                C --&gt; G((2))
+                                classDef node fill:white,stroke:#dc2626,stroke-width:1px,color:#dc2626;
+                            </div>
+<div style="background: #fef2f2; color: #dc2626; padding: 5px; border-radius: 5px; font-weight: bold; margin-top: 10px; font-size: 0.9em; border: 1px solid #fecaca;">Always true for all nodes</div>
+</div>
+</div>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background: #1e3a8a;  padding: 5px 10px; border-radius: 5px; display: inline-block; font-weight: bold; margin-bottom: 15px;"><span class="num">16</span> JAVA TEMPLATES (QUICK)</div>
+<div class="section-content" style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 15px; background: #f8fafc;">
+<p style="margin-top: 0; margin-bottom: 5px; font-weight: bold; color: #0f172a;">Min Heap (Default)</p>
+<pre style="margin: 0 0 15px 0; background: white; padding: 10px; border-radius: 5px; border: 1px solid #e2e8f0; font-size: 0.9em;"><code><span style="color:#1e40af;">PriorityQueue</span>&lt;<span style="color:#047857;">Integer</span>&gt; <span style="color:#c026d3;">minHeap</span> = 
+    <span style="color:#2563eb; font-weight:bold;">new</span> PriorityQueue&lt;&gt;();
+<span style="color:#059669;">// smallest element at peek()</span></code></pre>
+<p style="margin-top: 0; margin-bottom: 5px; font-weight: bold; color: #0f172a;">Max Heap (Using reverseOrder)</p>
+<pre style="margin: 0 0 15px 0; background: white; padding: 10px; border-radius: 5px; border: 1px solid #e2e8f0; font-size: 0.9em;"><code><span style="color:#1e40af;">PriorityQueue</span>&lt;<span style="color:#047857;">Integer</span>&gt; <span style="color:#c026d3;">maxHeap</span> = 
+    <span style="color:#2563eb; font-weight:bold;">new</span> PriorityQueue&lt;&gt;(<span style="color:#0f172a;">Collections.reverseOrder()</span>);
+<span style="color:#059669;">// largest element at peek()</span></code></pre>
+<p style="margin-top: 0; margin-bottom: 5px; font-weight: bold; color: #0f172a;">Max Heap (Using Comparator)</p>
+<pre style="margin: 0 0 15px 0; background: white; padding: 10px; border-radius: 5px; border: 1px solid #e2e8f0; font-size: 0.9em;"><code><span style="color:#1e40af;">PriorityQueue</span>&lt;<span style="color:#047857;">Integer</span>&gt; <span style="color:#c026d3;">maxHeap</span> = 
+    <span style="color:#2563eb; font-weight:bold;">new</span> PriorityQueue&lt;&gt;((a, b) -&gt; Integer.compare(b, a));
+<span style="color:#059669;">// largest element at peek()</span></code></pre>
+<p style="margin-top: 0; margin-bottom: 5px; font-weight: bold; color: #0f172a;">Top-K Largest (Min Heap of size K)</p>
+<pre style="margin: 0 0 15px 0; background: white; padding: 10px; border-radius: 5px; border: 1px solid #e2e8f0; font-size: 0.9em;"><code><span style="color:#1e40af;">PriorityQueue</span>&lt;<span style="color:#047857;">Integer</span>&gt; pq = <span style="color:#2563eb; font-weight:bold;">new</span> PriorityQueue&lt;&gt;();
+<span style="color:#2563eb; font-weight:bold;">for</span> (<span style="color:#2563eb; font-weight:bold;">int</span> x : nums) {
+    pq.offer(x);
+    <span style="color:#2563eb; font-weight:bold;">if</span> (pq.size() &gt; k) pq.poll(); <span style="color:#059669;">// remove smallest</span>
+}
+<span style="color:#059669;">// pq contains k largest</span></code></pre>
+<p style="margin-top: 0; margin-bottom: 5px; font-weight: bold; color: #0f172a;">Top-K Smallest (Max Heap of size K)</p>
+<pre style="margin: 0; background: white; padding: 10px; border-radius: 5px; border: 1px solid #e2e8f0; font-size: 0.9em;"><code><span style="color:#1e40af;">PriorityQueue</span>&lt;<span style="color:#047857;">Integer</span>&gt; pq = 
+    <span style="color:#2563eb; font-weight:bold;">new</span> PriorityQueue&lt;&gt;((a, b) -&gt; Integer.compare(b, a));
+<span style="color:#2563eb; font-weight:bold;">for</span> (<span style="color:#2563eb; font-weight:bold;">int</span> x : nums) {
+    pq.offer(x);
+    <span style="color:#2563eb; font-weight:bold;">if</span> (pq.size() &gt; k) pq.poll(); <span style="color:#059669;">// remove largest</span>
+}
+<span style="color:#059669;">// pq contains k smallest</span></code></pre>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background: #1e3a8a;  padding: 5px 10px; border-radius: 5px; display: inline-block; font-weight: bold; margin-bottom: 10px;"><span class="num">17</span> COMMON INTERVIEW CHECKLIST</div>
+<div class="section-content" style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 15px; background: #f8fafc;">
+<ul style="list-style-type: none; padding-left: 0; margin: 0; line-height: 1.6; font-size: 0.95em; color: #0f172a; font-weight: 500;">
+<li><span style="color:#16a34a; margin-right: 5px;">✅</span> Understand the goal clearly.</li>
+<li><span style="color:#16a34a; margin-right: 5px;">✅</span> Ask: What should I keep? What should I discard?</li>
+<li><span style="color:#16a34a; margin-right: 5px;">✅</span> Choose the right Heap (Min / Max).</li>
+<li><span style="color:#16a34a; margin-right: 5px;">✅</span> Decide the size (K or all elements).</li>
+<li><span style="color:#16a34a; margin-right: 5px;">✅</span> Maintain Heap invariant after every insertion/removal.</li>
+<li><span style="color:#16a34a; margin-right: 5px;">✅</span> Think about edge cases (empty, k = 0, k &gt; n, duplicates).</li>
+<li><span style="color:#16a34a; margin-right: 5px;">✅</span> Analyze Time and Space Complexity.</li>
+</ul>
+</div>
+</div></div></div>
+<div class="page">
+<div class="header-top">
+<div style="display: flex; align-items: baseline;">
+<h1>HEAP - FAANG HIDDEN TRIGGERS</h1>
+<div class="subtitle" style="color:#d32f2f; font-weight: bold; margin-left: 20px;">How Interviewers Hide Heap Problems (Recognition Guide)</div>
+</div>
+<div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end;">
+<div class="page-number">PAGE 5</div>
+<div style="background-color: #f3e8ff; border: 1px solid #c084fc; border-radius: 8px; padding: 8px; margin-top: 10px; text-align: center;">
+<div style="color: #1e3a8a; font-weight: bold; font-size: 0.9em;">They won't say "Use Heap"</div>
+<div style="color: #6b21a8; font-weight: bold; font-size: 0.9em;">You must recognize it !</div>
+</div>
+</div>
+</div>
+
+<div style="margin-top: 20px; display: flex; align-items: stretch;">
+<div style="border: 2px solid #bfdbfe; border-radius: 8px; padding: 15px; display: flex; align-items: center; justify-content: center; background-color: #eff6ff; margin-right: 15px;">
+<div style="color: #1e3a8a; font-weight: bold; font-size: 1.2em;"><span style="color: #fbbf24; font-size: 24px; margin-right: 10px;">⭐</span> GOLDEN RULE</div>
+</div>
+<div style="border: 2px solid #e5e7eb; border-radius: 8px; padding: 15px; flex: 1; display: flex; align-items: center; background-">
+<div>The best way to solve Heap problems is to <strong style="color: #dc2626;">RECOGNIZE</strong> them fast, choose the <strong style="color: #dc2626;">RIGHT HEAP</strong>, and <strong style="color: #dc2626;">MAINTAIN the INVARIANT</strong>.</div>
+</div>
+<div style="border: 2px solid #e9d5ff; border-radius: 8px; padding: 15px; margin-left: 15px; background-color: #faf5ff; display: flex; flex-direction: column; justify-content: center; text-align: center;">
+<div style="color: #6b21a8; font-weight: bold;">Master Recognition,</div>
+<div style="color: #6b21a8; font-weight: bold;">Not Just Implementation !</div>
+</div>
+</div>
+<div class="content-grid"><div class="section-box">
+<div class="section-header"><span class="num">18</span> WHEN TO THINK HEAP ? (UNSEEN QUESTION CLUES)</div>
+<div class="section-content">
+<table>
+<tr>
+<th>Question Says...</th>
+<th>Think Heap Because...</th>
+</tr>
+<tr>
+<td><strong>Top K / K largest / K smallest</strong></td>
+<td>We only care about best K elements.</td>
+</tr>
+<tr>
+<td><strong>K closest / K farthest</strong></td>
+<td>Keep best K based on distance / value.</td>
+</tr>
+<tr>
+<td><strong>Kth largest / Kth smallest</strong></td>
+<td>Heap gives Kth in optimal time.</td>
+</tr>
+<tr>
+<td><strong>Most frequent / Top frequent</strong></td>
+<td>Use heap on frequency map.</td>
+</tr>
+<tr>
+<td><strong>Continuously receive data ("data stream")</strong></td>
+<td>Need to maintain running result.</td>
+</tr>
+<tr>
+<td><strong>Running median / Median at any time</strong></td>
+<td>Two Heaps maintain middle efficiently.</td>
+</tr>
+<tr>
+<td><strong>Merge K sorted lists / arrays / streams</strong></td>
+<td>Pick smallest current from K sources.</td>
+</tr>
+<tr>
+<td><strong>Always need smallest / largest repeatedly</strong></td>
+<td>Heap gives min/max in O(log n) each time.</td>
+</tr>
+<tr>
+<td><strong>Scheduling / Highest priority task</strong></td>
+<td>Always process highest (or lowest) priority first.</td>
+</tr>
+<tr>
+<td><strong>Resource allocation</strong></td>
+<td>Allocate best resource (min waste / min cost).</td>
+</tr>
+<tr>
+<td><strong>Find N smallest among millions</strong></td>
+<td>Min Heap of size N.</td>
+</tr>
+<tr>
+<td><strong>Live leaderboard / Top scores</strong></td>
+<td>Maintain top K scores dynamically.</td>
+</tr>
+<tr>
+<td><strong>Sliding window maximum/minimum</strong></td>
+<td>(Usually Deque) but if K is large and needs frequent removal by value → Heap (advanced).</td>
+</tr>
+</table>
+</div>
+</div><div class="section-box">
+<div class="section-header"><span class="num">19</span> HEAP VS OTHER DS (CHOOSE RIGHT TOOL)</div>
+<div class="section-content">
+<table>
+<tr>
+<th>Problem Type / Goal</th>
+<th>Best Tool</th>
+<th>Why?</th>
+</tr>
+<tr>
+<td><strong>Get min / max repeatedly</strong></td>
+<td><strong style="color: #16a34a;">Heap</strong></td>
+<td>O(log n) per operation</td>
+</tr>
+<tr>
+<td><strong>Top K elements</strong></td>
+<td><strong style="color: #16a34a;">Heap</strong></td>
+<td>O(n log k) better than sorting</td>
+</tr>
+<tr>
+<td><strong>Kth largest / smallest</strong></td>
+<td><strong>Heap / Quickselect</strong></td>
+<td>Heap: O(n log k), Quickselect: O(n) avg</td>
+</tr>
+<tr>
+<td><strong>Merge K sorted things</strong></td>
+<td><strong style="color: #16a34a;">Heap</strong></td>
+<td>One candidate per source</td>
+</tr>
+<tr>
+<td><strong>FIFO order</strong></td>
+<td>Queue</td>
+<td>Heap not for order</td>
+</tr>
+<tr>
+<td><strong>LIFO order</strong></td>
+<td>Stack</td>
+<td>Heap not for order</td>
+</tr>
+<tr>
+<td><strong>Need sorted output</strong></td>
+<td>Sort</td>
+<td>Full order required</td>
+</tr>
+<tr>
+<td><strong>Range queries</strong></td>
+<td>Segment Tree / BIT</td>
+<td>Heap not for range aggregation</td>
+</tr>
+<tr>
+<td><strong>Dynamic min with delete by value</strong></td>
+<td>TreeMap / Balanced BST</td>
+<td>Heap can't delete arbitrary element efficiently</td>
+</tr>
+</table>
+</div>
+</div><div class="section-box">
+<div class="section-header"><span class="num">20</span> RECOGNITION SHORTCUT (3 QUESTIONS)</div>
+<div class="section-content" style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+<div style="flex: 2;">
+<ol style="list-style-type: none; padding-left: 0; counter-reset: custom-counter; margin: 0;">
+<li style="margin-bottom: 10px; display: flex; align-items: center;"><span style="background-color: #4f46e5;  border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold;">1</span> <strong>What am I optimizing? (min/max/priority)</strong></li>
+<li style="margin-bottom: 10px; display: flex; align-items: center;"><span style="background-color: #4f46e5;  border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold;">2</span> <strong>Do I need only top/bottom K or keep discarding irrelevant elements?</strong></li>
+<li style="display: flex; align-items: center;"><span style="background-color: #4f46e5;  border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold;">3</span> <strong>Is the data coming continuously or from multiple sorted sources?</strong></li>
+</ol>
+</div>
+<div style="flex: 1; text-align: center; font-size: 24px;">→</div>
+<div style="flex: 1; border: 2px solid #a7f3d0; background-color: #ecfdf5; padding: 10px; border-radius: 8px; text-align: center;">
+<div>If <strong>YES</strong> to any</div>
+<div>→ Think HEAP ✓</div>
+</div>
+</div>
+</div><div class="section-box">
+<div class="section-header"><span class="num">21</span> FAANG FAVORITE HEAP PROBLEM THEMES</div>
+<div class="section-content">
+<table>
+<tr>
+<td style="border: none; padding: 8px 0; width: 30px;"><div>⚙️</div></td>
+<td style="border: none; padding: 8px 10px;">
+<div style="color: #1d4ed8; font-weight: bold;">System Design Like Problems</div>
+<div>Design Twitter Feed, Task Scheduler, Rate Limiter, Job Scheduler</div>
+</td>
+<td style="border: none; padding: 8px 0; color: #7e22ce; font-weight: bold; text-align: right;">Heap (Max)</td>
+</tr>
+<tr>
+<td style="border: none; padding: 8px 0; width: 30px;"><div>📈</div></td>
+<td style="border: none; padding: 8px 10px;">
+<div style="color: #1d4ed8; font-weight: bold;">Streaming / Real Time Data</div>
+<div>Running Median, Data Stream as Disjoint Intervals</div>
+</td>
+<td style="border: none; padding: 8px 0; color: #7e22ce; font-weight: bold; text-align: right;">Two Heaps</td>
+</tr>
+<tr>
+<td style="border: none; padding: 8px 0; width: 30px;"><div>🥇</div></td>
+<td style="border: none; padding: 8px 10px;">
+<div style="color: #1d4ed8; font-weight: bold;">Top K / Ranking</div>
+<div>Top K Frequent, Top K Elements, K Closest Points</div>
+</td>
+<td style="border: none; padding: 8px 0; color: #7e22ce; font-weight: bold; text-align: right;">Min Heap<br/><small>(size K)</small></td>
+</tr>
+<tr>
+<td style="border: none; padding: 8px 0; width: 30px;"><div>🔗</div></td>
+<td style="border: none; padding: 8px 10px;">
+<div style="color: #1d4ed8; font-weight: bold;">Merge / K Sorted Sources</div>
+<div>Merge K Sorted Lists, Smallest Range in K Lists</div>
+</td>
+<td style="border: none; padding: 8px 0; color: #7e22ce; font-weight: bold; text-align: right;">Min Heap</td>
+</tr>
+<tr>
+<td style="border: none; padding: 8px 0; width: 30px;"><div>⚡</div></td>
+<td style="border: none; padding: 8px 10px;">
+<div style="color: #1d4ed8; font-weight: bold;">Greedy + Priority</div>
+<div>IPO, Find K Pairs with Smallest Sums, Maximize Capital</div>
+</td>
+<td style="border: none; padding: 8px 0; color: #7e22ce; font-weight: bold; text-align: right;">Max Heap</td>
+</tr>
+<tr>
+<td style="border: none; padding: 8px 0; width: 30px;"><div>🕒</div></td>
+<td style="border: none; padding: 8px 10px;">
+<div style="color: #1d4ed8; font-weight: bold;">Intervals / Meetings</div>
+<div>Meeting Rooms (III), Employee Free Time, Conference Room Scheduler</div>
+</td>
+<td style="border: none; padding: 8px 0; color: #7e22ce; font-weight: bold; text-align: right;">Min Heap</td>
+</tr>
+<tr>
+<td style="border: none; padding: 8px 0; width: 30px;"><div>🔺</div></td>
+<td style="border: none; padding: 8px 10px;">
+<div style="color: #1d4ed8; font-weight: bold;">Graphs / Advanced</div>
+<div>Dijkstra's Algorithm, Prim's MST, Network Delay Time</div>
+</td>
+<td style="border: none; padding: 8px 0; color: #7e22ce; font-weight: bold; text-align: right;">Min Heap</td>
+</tr>
+</table>
+<div style="background-color: #fefce8; border: 1px solid #fef08a; border-radius: 8px; padding: 15px; margin-top: 15px;">
+<div style="font-weight: bold; display: flex; align-items: center;"><span>💡</span> Pro Tip</div>
+<div>Translate the problem into:</div>
+<div style="color: #b91c1c; font-weight: bold;">"Which element should come out first?"</div>
+<div>→ That is your heap priority.</div>
+</div>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background-color: #1e3a8a; "><span class="num">22</span> INTERVIEWER TRICKS TO WATCH OUT</div>
+<div class="section-content">
+<ul style="list-style-type: none; padding-left: 0;">
+<li><strong style="color: #dc2626;">✘</strong> They never say "Use Heap" explicitly.</li>
+<li><strong style="color: #dc2626;">✘</strong> They mix multiple concepts (e.g., Heap + HashMap).</li>
+<li><strong style="color: #dc2626;">✘</strong> They change the goal (e.g., maximize instead of minimize).</li>
+<li><strong style="color: #dc2626;">✘</strong> They give huge constraints to hint suboptimal solutions will TLE.</li>
+<li><strong style="color: #dc2626;">✘</strong> They ask for real time / online processing → think Heap.</li>
+<li><strong style="color: #dc2626;">✘</strong> They change K during the process (dynamic K).</li>
+<li><strong style="color: #dc2626;">✘</strong> They ask for both min and max → think Two Heaps.</li>
+</ul>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background-color: #1e3a8a; "><span class="num">23</span> AHA MOMENTS (DON'T FORGET)</div>
+<div class="section-content" style="display: flex;">
+<div style="flex: 1;">
+<ul style="list-style-type: none; padding-left: 0;">
+<li><strong style="color: #16a34a; background-color: #dcfce7; padding: 2px 4px; border-radius: 4px;">✓</strong> Heap = Priority, NOT Sorting.</li>
+<li><strong style="color: #16a34a; background-color: #dcfce7; padding: 2px 4px; border-radius: 4px;">✓</strong> Heap guarantees the BEST element only.</li>
+<li><strong style="color: #16a34a; background-color: #dcfce7; padding: 2px 4px; border-radius: 4px;">✓</strong> Ask yourself: "What should I discard?"</li>
+<li><strong style="color: #16a34a; background-color: #dcfce7; padding: 2px 4px; border-radius: 4px;">✓</strong> Heap size K keeps only what I care about.</li>
+<li><strong style="color: #16a34a; background-color: #dcfce7; padding: 2px 4px; border-radius: 4px;">✓</strong> Comparator decides priority (not the data structure).</li>
+<li><strong style="color: #16a34a; background-color: #dcfce7; padding: 2px 4px; border-radius: 4px;">✓</strong> <span style="color: #b91c1c; font-weight: bold;">Every Heap problem fits into one of the 4 patterns on Page 2.</span></li>
+</ul>
+</div>
+<div style="width: 80px; display: flex; align-items: center; justify-content: center; font-size: 50px;">
+                        💡
+                    </div>
+</div>
+</div></div></div>
+<div class="page">
+<div class="header-top">
+<div style="display: flex; align-items: baseline;">
+<h1>HEAP - PATTERNS</h1>
+<div class="subtitle">Top Interview Patterns with Heaps<br/><small style="color:#64748b;font-weight:normal;">(FAANG Cheat Sheet)</small></div>
+</div>
+<div style="text-align: right;">
+<div class="page-number">PAGE 6</div>
+</div>
+</div>
+<div style="border: 1px solid #94a3b8; border-radius: 4px; padding: 10px; margin-bottom: 15px; text-align: center; font-weight: bold;">
+<strong style="color: #dc2626;">Max Heap</strong> → largest element on top 
+        <span></span>
+<strong style="color: #16a34a;">Min Heap</strong> → smallest element on top 
+        <span></span>
+        PQ → PriorityQueue
+    </div>
+<!-- PATTERN 1 -->
+
+<!-- PATTERN 2 -->
+
+<!-- PATTERN 3 -->
+
+<!-- PATTERN 4 -->
+
+<!-- FOOTER -->
+<div style="display: flex; justify-content: space-between; align-items: stretch; margin-top: 20px; gap: 15px;">
+<div style="flex: 1; border: 1px solid #e2e8f0; border-radius: 4px; padding: 10px;">
+<div style="color: #dc2626; font-weight: bold; font-size: 0.9em; margin-bottom: 10px; display: flex; align-items: center;">
+<span>🎯</span> 
+                RECOGNITION TRIGGERS (If you see these in a question, think HEAP!)
+            </div>
+<div style="display: flex; justify-content: space-between; font-size: 0.8em; text-align: center; color: #334155;">
+<div>Top K / Kth<br/>Largest / Smallest</div>
+<div></div>
+<div>Most Frequent /<br/>Top Frequent</div>
+<div></div>
+<div>Merge K<br/>Sorted</div>
+<div></div>
+<div>Running Median /<br/>Median at any time</div>
+<div></div>
+<div>Continuously pick<br/>Max / Min</div>
+</div>
+</div>
+<div style="flex: 0 0 250px; background-color: #fef9c3; border: 1px solid #fde047; border-radius: 4px; padding: 10px; font-size: 0.85em;">
+<div style="font-weight: bold; margin-bottom: 5px; color: #854d0e;">GOLDEN RULE:</div>
+            Heaps are all about <strong>PRIORITY, not sorting.</strong> Choose the right heap and maintain the invariant!
+        </div>
+</div>
+<div class="content-grid"><div class="section-box color-purple"><div class="section-header"><span class="num">24</span>TOP-K ELEMENTS PATTERN</div><div class="section-content"><p><strong>Rule:</strong> K Largest → Min Heap of size K. K Smallest → Max Heap of size K.</p><pre>PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+for (int num : nums) {
+    minHeap.offer(num);
+    if (minHeap.size() &gt; k) minHeap.poll();
+}</pre></div></div><div class="section-box color-orange"><div class="section-header"><span class="num">25</span>COMPARATOR GUIDE (FAANG Trap)</div><div class="section-content"><table><tr><th>Goal</th><th>Comparator</th></tr><tr><td>Min Heap</td><td><code>new PriorityQueue&lt;&gt;()</code></td></tr><tr><td>Max Heap</td><td><code>Collections.reverseOrder()</code></td></tr><tr><td>Safe</td><td><code>(a,b) -&gt; Integer.compare(a, b)</code></td></tr></table></div></div></div></div>
+
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#f8fafc',
+            primaryTextColor: '#0f172a',
+            primaryBorderColor: '#3b82f6',
+            lineColor: '#94a3b8',
+            fontFamily: 'Inter',
+            fontSize: '14px',
+            nodeBorder: '#3b82f6'
+        }
+    });
+</script>
+</body>
+</html>

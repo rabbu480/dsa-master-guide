@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trie Masterclass v2 — FAANG Handbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #eef2f6;
+      color: #0b1a33;
+      font-size: 11px;
+      line-height: 1.4;
+      padding: 16px;
+    }
+    .page {
+      max-width: 1100px;
+      margin: 0 auto 24px auto;
+      background: white;
+      border-radius: 12px;
+      padding: 14px 18px 18px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+      page-break-after: always;
+      break-inside: avoid;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 3px solid #0b1a33;
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+    }
+    .header h1 {
+      font-size: 1.9rem;
+      font-weight: 900;
+      color: #0b1a33;
+      letter-spacing: -0.5px;
+    }
+    .header .sub {
+      font-weight: 600;
+      color: #2c3e66;
+      font-size: 0.85rem;
+      margin-top: 2px;
+    }
+    .header .page-num {
+      background: #0b1a33;
+      color: white;
+      padding: 2px 14px;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      text-align: right;
+    }
+    .badge {
+      display: inline-block;
+      padding: 1px 10px;
+      border-radius: 20px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .badge-green { background: #dcfce7; color: #166534; }
+    .badge-yellow { background: #fef9c3; color: #854d0e; }
+    .badge-red { background: #fee2e2; color: #991b1b; }
+    .badge-blue { background: #dbeafe; color: #1e40af; }
+    .badge-purple { background: #ede9fe; color: #5b21b6; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .flex { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .card {
+      border: 1.5px solid #d1d9e6;
+      border-radius: 8px;
+      overflow: hidden;
+      background: white;
+    }
+    .card-head {
+      background: #0b1a33;
+      color: white;
+      padding: 5px 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-head .num {
+      background: white;
+      color: #0b1a33;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .card-body { padding: 8px 12px 10px; }
+
+    .card-green { border-color: #059669; }
+    .card-green .card-head { background: #059669; }
+    .card-amber { border-color: #d97706; }
+    .card-amber .card-head { background: #d97706; }
+    .card-red { border-color: #dc2626; }
+    .card-red .card-head { background: #dc2626; }
+    .card-purple { border-color: #7c3aed; }
+    .card-purple .card-head { background: #7c3aed; }
+    .card-sky { border-color: #0284c7; }
+    .card-sky .card-head { background: #0284c7; }
+    .card-indigo { border-color: #4f46e5; }
+    .card-indigo .card-head { background: #4f46e5; }
+
+    .aha-box {
+      background: linear-gradient(145deg, #f0f9ff, #e6f0fa);
+      border-left: 5px solid #0b1a33;
+      padding: 6px 10px;
+      border-radius: 0 6px 6px 0;
+      margin: 6px 0;
+    }
+    .aha-box strong { color: #0b1a33; }
+
+    pre, code {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.68rem;
+      line-height: 1.4;
+    }
+    pre {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 5px 8px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .inline-code { background: #f1f5f9; padding: 0 6px; border-radius: 4px; font-family: monospace; font-size: 0.75rem; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.72rem;
+    }
+    th, td {
+      border: 1px solid #d1d9e6;
+      padding: 4px 7px;
+      text-align: left;
+    }
+    th { background: #f1f5f9; font-weight: 700; }
+
+    .dt-row {
+      display: flex;
+      border: 1.5px solid #d1d9e6;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
+    .dt-q { background: #eff6ff; padding: 4px 8px; font-weight: 600; flex: 1; }
+    .dt-arrow { background: white; padding: 4px 6px; color: #64748b; }
+    .dt-a { background: #f0fdf4; padding: 4px 8px; font-weight: 600; flex: 1.4; }
+
+    .flow { 
+      display: flex; 
+      align-items: center; 
+      gap: 4px; 
+      flex-wrap: wrap;
+      font-weight: 600;
+      font-size: 0.78rem;
+    }
+    .flow .node {
+      background: #0b1a33;
+      color: white;
+      padding: 2px 10px;
+      border-radius: 20px;
+    }
+    .flow .arrow { color: #64748b; font-size: 1.2rem; }
+
+    .tree {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      background: #f8fafc;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      line-height: 1.5;
+      white-space: pre;
+    }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .page { box-shadow: none; border: 1px solid #ddd; page-break-after: always; break-inside: avoid; }
+    }
+  
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 10.5px; line-height: 1.34; padding: 15px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 20px auto;
+  padding: 10px 14px; border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  page-break-after: always; break-after: page; page-break-inside: avoid; break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 2.5px solid var(--pri); padding-bottom: 4px; margin-bottom: 8px; }
+.ph h1 { font-size: 1.45rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.8rem; font-weight: 600; color: var(--sub); margin-top: 1px; }
+.ph .pn { background: var(--pri); color: white; padding: 2px 10px; border-radius: 12px;
+  font-weight: 800; font-size: 0.78rem; text-align: right; }
+.ph .ptag { font-size: 0.7rem; color: var(--sub); font-weight: 600; margin-top: 2px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; margin-bottom: 8px; background: white; }
+.box.pur { border-color: var(--pur); }
+.box.grn { border-color: var(--grn); }
+.box.amb { border-color: var(--amb); }
+.box.red { border-color: var(--red); }
+.box.sky { border-color: var(--sky); }
+
+.bh { background: var(--pri); color: white; padding: 4px 8px; font-weight: 800; font-size: 0.82rem; display: flex; justify-content: space-between; align-items: center; }
+.box.pur .bh { background: var(--pur); }
+.box.grn .bh { background: var(--grn); }
+.box.amb .bh { background: var(--amb); }
+.box.red .bh { background: var(--red); }
+.box.sky .bh { background: var(--sky); }
+
+.bc { padding: 6px 8px; font-size: 0.78rem; color: var(--txt); }
+
+.prob-card { border: 1.5px solid var(--pri); border-radius: 6px; margin-bottom: 10px; background: white; overflow: hidden; }
+.prob-header { background: #f1f5f9; padding: 6px 10px; border-bottom: 1.5px solid var(--bdr); display: flex; justify-content: space-between; align-items: center; }
+.prob-title { font-weight: 800; font-size: 0.88rem; color: var(--pri); }
+.prob-badge { background: var(--sec); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+
+.prob-body { padding: 8px 10px; }
+.io-box { background: #f8fafc; border: 1px solid var(--bdr); border-left: 3.5px solid var(--sec); padding: 5px 8px; margin: 4px 0; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.74rem; }
+.dry-box { background: #fefce8; border: 1px solid #fef08a; border-left: 3.5px solid var(--amb); padding: 5px 8px; margin: 4px 0; border-radius: 4px; font-size: 0.76rem; }
+
+pre { font-family: 'Fira Code', monospace; font-size: 0.72rem; line-height: 1.25; background: #0f172a; color: #f8fafc; padding: 6px 8px; border-radius: 4px; margin: 4px 0; overflow-x: auto; }
+table { font-size: 0.74rem; border-collapse: collapse; width: 100%; margin: 4px 0; }
+th, td { padding: 4px 6px; border: 1px solid var(--bdr); text-align: left; }
+th { background: #f1f5f9; font-weight: 700; color: var(--pri); }
+
+@page { size: A4 portrait; margin: 3mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; break-after: page !important; page-break-inside: avoid !important; break-inside: avoid !important; zoom: 0.85; }
+  .page:last-child { page-break-after: avoid !important; break-after: avoid !important; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: FOUNDATION & WHY -->
+<div class="page">
+  <div class="header">
+    <div>
+      <h1>🗺️ TRIE · PREFIX TREE</h1>
+      <div class="sub">FAANG Masterclass v2 — Java Edition</div>
+    </div>
+    <div style="text-align:right">
+      <div class="page-num">PAGE 1 OF 14</div>
+      <div style="font-size:0.7rem;color:#2c3e66;font-weight:600;margin-top:2px;">FOUNDATION · WHY TRIE · SHARED PREFIX</div>
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:12px;">
+    <div class="card card-purple">
+      <div class="card-head">💡 WHAT IS A TRIE?</div>
+      <div class="card-body">
+        <p style="margin-bottom:4px;">A <strong>prefix tree</strong> (digital tree) stores characters as nodes. Each path from root to node represents a prefix.</p>
+        <div class="aha-box"><strong>🔑 AHA:</strong> Strings that share a prefix (e.g. "cat", "cater", "cats") reuse the same branch <span class="inline-code">c → a → t</span>. Saves space &amp; enables instant prefix search!</div>
+      </div>
+    </div>
+    <div class="card card-sky">
+      <div class="card-head">📊 COMPLEXITY</div>
+      <div class="card-body">
+        <table>
+          <tr><th>Operation</th><th>Time</th><th>Space</th></tr>
+          <tr><td>Insert (L)</td><td><strong>O(L)</strong></td><td>O(L·N)</td></tr>
+          <tr><td>Search (L)</td><td><strong>O(L)</strong></td><td>O(1)</td></tr>
+          <tr><td>StartsWith (L)</td><td><strong>O(L)</strong></td><td>O(1)</td></tr>
+        </table>
+        <div style="margin-top:4px;font-size:0.7rem;">✅ <strong>Why O(L)?</strong> Array indexing <span class="inline-code">children[c-'a']</span> is O(1), so we just walk L characters.</div>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-head">⚡ TRIE vs HASHMAP</div>
+      <div class="card-body">
+        <p><span class="inline-code">HashMap</span> is O(1) for <strong>exact</strong> lookups, but CANNOT search by prefix. Trie gives <strong>O(L) prefix search</strong> independent of dictionary size N.</p>
+        <div class="aha-box"><strong>🧠 AHA:</strong> "autocomplete", "search suggestions", "prefix match" → <strong>Trie</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="num">1</span> TRIE NODE STRUCTURE</div>
+    <div class="card-body">
+      <pre>public class TrieNode {
+    TrieNode[] children = new TrieNode[26];  // lowercase English
+    boolean isWord = false;
+    // optional: String word;  // for Word Search II
+    // optional: int sum;      // for MapSum
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: API & DRY RUN -->
+<div class="page">
+  <div class="header">
+    <div><h1>🗺️ TRIE · API &amp; DRY RUN</h1><div class="sub">Insert · Search · StartsWith</div></div>
+    <div style="text-align:right"><div class="page-num">PAGE 2 OF 14</div><div style="font-size:0.7rem;color:#2c3e66;font-weight:600;margin-top:2px;">IMPLEMENT TRIE · LC 208</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card" style="margin-bottom:10px;">
+        <div class="card-head">🔧 STANDARD TRIE — LC 208</div>
+        <div class="card-body">
+          <pre>class Trie {
+    private final TrieNode root = new TrieNode();
+
+    public void insert(String word) {
+        TrieNode curr = root;
+        for (char c : word.toCharArray()) {
+            int idx = c - 'a';
+            if (curr.children[idx] == null)
+                curr.children[idx] = new TrieNode();
+            curr = curr.children[idx];
+        }
+        curr.isWord = true;
+    }
+
+    public boolean search(String word) {
+        TrieNode node = find(word);
+        return node != null && node.isWord;
+    }
+
+    public boolean startsWith(String prefix) {
+        return find(prefix) != null;
+    }
+
+    private TrieNode find(String s) {
+        TrieNode curr = root;
+        for (char c : s.toCharArray()) {
+            int idx = c - 'a';
+            if (curr.children[idx] == null) return null;
+            curr = curr.children[idx];
+        }
+        return curr;
+    }
+}</pre>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card card-green">
+        <div class="card-head">🔍 DRY RUN — INSERT "app"</div>
+        <div class="card-body">
+          <table>
+            <tr><th>Char</th><th>Idx</th><th>Child exists?</th><th>Action</th></tr>
+            <tr><td>'a'</td><td>0</td><td>❌</td><td>create → move</td></tr>
+            <tr><td>'p'</td><td>15</td><td>❌</td><td>create → move</td></tr>
+            <tr><td>'p'</td><td>15</td><td>❌</td><td>create → move</td></tr>
+            <tr><td>END</td><td>—</td><td>—</td><td><code>curr.isWord = true</code> ✅</td></tr>
+          </table>
+          <div style="margin-top:4px;font-size:0.72rem;">
+            <strong>Search "app"</strong> → root → a → p → p → <code>isWord == true</code> ✅<br>
+            <strong>Search "appl"</strong> → root → a → p → p → l → <code>null</code> ❌
+          </div>
+          <div class="aha-box" style="margin-top:6px;"><strong>🧠 AHA:</strong> Search and StartsWith share the same <span class="inline-code">find()</span> method; only difference is checking <code>isWord</code>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3: DECISION TREE -->
+<div class="page">
+  <div class="header">
+    <div><h1>🗺️ TRIE · DECISION TREE</h1><div class="sub">When to use Trie? Which variant?</div></div>
+    <div style="text-align:right"><div class="page-num">PAGE 3 OF 14</div><div style="font-size:0.7rem;color:#2c3e66;font-weight:600;margin-top:2px;">PATTERN SELECTION</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:12px;">
+    <div class="card-head">🌳 DECISION TREE — PREFIX PROBLEMS</div>
+    <div class="card-body">
+      <div class="flow">
+        <span class="node">Need prefix?</span>
+        <span class="arrow">→</span>
+        <span class="node" style="background:#7c3aed;">Trie</span>
+        <span class="arrow">→</span>
+        <span class="node" style="background:#059669;">Exact word?</span>
+        <span class="arrow">→</span>
+        <span class="node" style="background:#0b1a33;">search()</span>
+        <span class="arrow">↕</span>
+        <span class="node" style="background:#d97706;">Prefix?</span>
+        <span class="arrow">→</span>
+        <span class="node" style="background:#0b1a33;">startsWith()</span>
+      </div>
+      <hr style="margin:6px 0;border-color:#e2e8f0;">
+      <div class="grid-2" style="margin-top:4px;">
+        <div>
+          <div class="dt-row"><div class="dt-q">🔤 Wildcard '.' search</div><div class="dt-arrow">→</div><div class="dt-a">Trie + DFS (LC 211)</div></div>
+          <div class="dt-row"><div class="dt-q">📝 Replace with shortest root</div><div class="dt-arrow">→</div><div class="dt-a">Prefix Match (LC 648)</div></div>
+          <div class="dt-row"><div class="dt-q">🔮 Autocomplete top 3</div><div class="dt-arrow">→</div><div class="dt-a">Store lists at nodes (LC 1268)</div></div>
+        </div>
+        <div>
+          <div class="dt-row"><div class="dt-q">🗺️ Multi-word grid search</div><div class="dt-arrow">→</div><div class="dt-a">Trie + DFS + Backtracking (LC 212)</div></div>
+          <div class="dt-row"><div class="dt-q">🧮 Prefix sum (MapSum)</div><div class="dt-arrow">→</div><div class="dt-a">Trie + DFS subtree sum</div></div>
+          <div class="dt-row"><div class="dt-q">🔁 Suffix encoding</div><div class="dt-arrow">→</div><div class="dt-a">Reverse Trie (LC 820)</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-purple">
+    <div class="card-head">🎯 TRIGGER WORDS → VARIANT</div>
+    <div class="card-body">
+      <table>
+        <tr><th>Trigger</th><th>Variant</th><th>Key Insight</th></tr>
+        <tr><td>"autocomplete", "suggestions"</td><td>Standard / Top-K</td><td>Store lists at nodes</td></tr>
+        <tr><td>"wildcard dot"</td><td>Trie + DFS</td><td>On '.' loop all 26 children</td></tr>
+        <tr><td>"word boggle", "grid words"</td><td>Trie + Grid DFS</td><td>Prune invalid paths</td></tr>
+        <tr><td>"max XOR"</td><td>Bit Trie (2 children)</td><td>Greedy opposite bit</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 4: LC 211 WILDCARD -->
+<div class="page">
+  <div class="header">
+    <div><h1>🗺️ TRIE · WILDCARD SEARCH</h1><div class="sub">LC 211 — Add &amp; Search Words</div></div>
+    <div style="text-align:right"><div class="page-num">PAGE 4 OF 14</div><div style="font-size:0.7rem;color:#2c3e66;font-weight:600;margin-top:2px;">WILDCARD '.' · DFS BACKTRACKING</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card card-amber">
+        <div class="card-head">🔍 PROBLEM</div>
+        <div class="card-body">
+          <p><strong>Design a data structure</strong> that supports adding words and searching words with <span class="inline-code">.</span> wildcard.</p>
+          <p><span class="inline-code">.</span> matches <strong>any</strong> single character.</p>
+          <div class="aha-box"><strong>🧠 AHA:</strong> When we see <span class="inline-code">.</span>, we must <strong>DFS over all 26 children</strong>. If <strong>any</strong> branch returns true → true.</div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:6px;">
+        <div class="card-head">🌳 RECURSION TREE</div>
+        <div class="card-body" style="font-size:0.7rem;">
+          <pre>search("a.p")
+   root
+    └─ 'a'
+        └─ '.' → try all 26 children
+            ├─ 'b' → 'p' → isWord? false
+            ├─ 'c' → 'p' → isWord? false
+            └─ 't' → 'p' → isWord? true ✅</pre>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card card-red">
+        <div class="card-head">💻 CODE — LC 211</div>
+        <div class="card-body">
+          <pre>public boolean search(String word) {
+    return searchInNode(word, 0, root);
+}
+
+private boolean searchInNode(String word, int idx, TrieNode node) {
+    if (node == null) return false;
+    if (idx == word.length()) return node.isWord;
+
+    char c = word.charAt(idx);
+    if (c == '.') {
+        for (TrieNode child : node.children) {
+            if (child != null && searchInNode(word, idx + 1, child))
+                return true;
+        }
+        return false;
+    } else {
+        return searchInNode(word, idx + 1, node.children[c - 'a']);
+    }
+}</pre>
+          <div class="aha-box"><strong>⚡ COMPLEXITY:</strong> O(26^L) worst-case for wildcard, but Trie prunes branches.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 5: LC 648 REPLACE WORDS -->
+<div class="page">
+  <div class="header">
+    <div><h1>🗺️ TRIE · SHORTEST PREFIX</h1><div class="sub">LC 648 — Replace Words</div></div>
+    <div style="text-align:right"><div class="page-num">PAGE 5 OF 14</div><div style="font-size:0.7rem;color:#2c3e66;font-weight:600;margin-top:2px;">SHORTEST ROOT · STOP EARLY</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card card-green">
+        <div class="card-head">💡 IDEA</div>
+        <div class="card-body">
+          <p>Given a dictionary of roots, replace each word in a sentence with the <strong>shortest</strong> matching root.</p>
+          <div class="aha-box"><strong>🧠 AHA:</strong> As we traverse the Trie character by character, <strong>stop immediately</strong> when we hit <span class="inline-code">curr.isWord == true</span> — that's the shortest root! Don't go deeper.</div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:6px;">
+        <div class="card-head">🔍 DRY RUN</div>
+        <div class="card-body" style="font-size:0.72rem;">
+          <p><strong>roots:</strong> ["cat", "cater"]<br>
+          <strong>word:</strong> "caterpillar"</p>
+          <pre>root → c → a → t → isWord? true ✅ → return "cat"</pre>
+          <p style="margin-top:4px;">✅ We stop at "cat" — we don't continue to "cater".</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card card-amber">
+        <div class="card-head">💻 CODE — LC 648</div>
+        <div class="card-body">
+          <pre>public String replaceWords(List&lt;String&gt; dict, String sentence) {
+    Trie trie = new Trie();
+    for (String root : dict) trie.insert(root);
+
+    String[] words = sentence.split(" ");
+    StringBuilder sb = new StringBuilder();
+    for (String w : words) {
+        if (sb.length() > 0) sb.append(" ");
+        sb.append(trie.findRoot(w));
+    }
+    return sb.toString();
+}
+
+// Inside Trie class:
+public String findRoot(String word) {
+    TrieNode curr = root;
+    StringBuilder prefix = new StringBuilder();
+    for (char c : word.toCharArray()) {
+        int idx = c - 'a';
+        if (curr.children[idx] == null || curr.isWord) break;
+        prefix.append(c);
+        curr = curr.children[idx];
+    }
+    return curr.isWord ? prefix.toString() : word;
+}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 6: LC 212 WORD SEARCH II -->
+<div class="page">
+  <div class="header">
+    <div><h1>🗺️ TRIE · GRID DFS PRUNING</h1><div class="sub">LC 212 — Word Search II</div></div>
+    <div style="text-align:right"><div class="page-num">PAGE 6 OF 14</div><div style="font-size:0.7rem;color:#2c3e66;font-weight:600;margin-top:2px;">TRIE + DFS · BACKTRACKING</div></div>
+  </div>
+
+  <div class="card card-red" style="margin-bottom:10px;">
+    <div class="card-head">🔴 WHY TRIE BEATS PLAIN DFS</div>
+    <div class="card-body">
+      <p>Searching <strong>M words</strong> with plain DFS → run grid DFS <strong>M times</strong> → O(M · 4^L) → TLE.</p>
+      <p>Insert all words into a <strong>single Trie</strong>. Then one grid DFS searches <strong>all words simultaneously</strong>, pruning invalid branches instantly.</p>
+      <div class="aha-box"><strong>🧠 AHA:</strong> Store the full <span class="inline-code">word</span> at the leaf node. When we find it, add to result and set <span class="inline-code">node.word = null</span> to avoid duplicates!</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card">
+        <div class="card-head">🌊 DFS + BACKTRACKING</div>
+        <div class="card-body" style="font-size:0.72rem;">
+          <pre>private void dfs(char[][] board, int r, int c,
+                 TrieNode node, List&lt;String&gt; res) {
+    char ch = board[r][c];
+    if (ch == '#' || node.children[ch - 'a'] == null) return;
+
+    node = node.children[ch - 'a'];
+    if (node.word != null) {
+        res.add(node.word);
+        node.word = null; // 👈 prevent duplicates
+    }
+
+    board[r][c] = '#'; // mark visited
+
+    for (int[] d : DIRS) {
+        int nr = r + d[0], nc = c + d[1];
+        if (nr >= 0 && nr < board.length &&
+            nc >= 0 && nc < board[0].length) {
+            dfs(board, nr, nc, node, res);
+        }
+    }
+
+    board[r][c] = ch; // 🔄 restore
+}</pre>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card card-purple">
+        <div class="card-head">🧠 STACK FRAME INSIGHT</div>
+        <div class="card-body">
+          <p><strong>Why <span class="inline-code">board[r][c] = ch</span>?</strong></p>
+          <p>After exploring all directions from this cell, we <strong>restore</strong> the original character so other paths can use it. This is standard <strong>backtracking</strong>.</p>
+          <div class="aha-box"><strong>⚡ KEY:</strong> Without restoring, the grid would stay <span class="inline-code">'#'</span> and other words couldn't reuse that cell.</div>
+        </div>
+      </div>
+      <div class="card card-amber" style="margin-top:6px;">
+        <div class="card-head">📊 COMPLEXITY</div>
+        <div class="card-body">
+          <p><strong>Time:</strong> O(R · C · 4^L) — but Trie prunes heavily in practice.<br>
+          <strong>Space:</strong> O(L · N) for Trie.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 7: LC 677 MAP SUM -->
+<div class="page">
+  <div class="header">
+    <div><h1>🗺️ TRIE · PREFIX SUM</h1><div class="sub">LC 677 — Map Sum Pairs</div></div>
+    <div style="text-align:right"><div class="page-num">PAGE 7 OF 14</div><div style="font-size:0.7rem;color:#2c3e66;font-weight:600;margin-top:2px;">DFS SUBTREE · DELTA OPTIMIZATION</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card card-amber">
+        <div class="card-head">🔍 NORMAL TRIE + DFS SUM</div>
+        <div class="card-body">
+          <p><strong>Problem:</strong> Insert (key, value). Sum all values for keys with given prefix.</p>
+          <div class="aha-box"><strong>🧠 AHA:</strong> Reach the prefix node, then <strong>DFS the entire subtree</strong> and sum all <span class="inline-code">isWord</span> values.</div>
+          <pre style="font-size:0.6rem;">public int sum(String prefix) {
+    TrieNode node = find(prefix);
+    if (node == null) return 0;
+    return dfsSum(node);
+}
+
+private int dfsSum(TrieNode node) {
+    int total = node.isWord ? node.val : 0;
+    for (TrieNode child : node.children) {
+        if (child != null) total += dfsSum(child);
+    }
+    return total;
+}</pre>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card card-green">
+        <div class="card-head">⚡ OPTIMIZED — DELTA</div>
+        <div class="card-body">
+          <p><strong>Optimization:</strong> Store <span class="inline-code">node.sum</span> = sum of all values in subtree.</p>
+          <p>When updating a key, compute <strong>delta</strong> = newVal - oldVal, and add delta to <strong>every node</strong> along the path.</p>
+          <div class="aha-box"><strong>🧠 AHA:</strong> Instead of DFS each time, update path nodes with delta → O(L) per insert!</div>
+          <pre style="font-size:0.6rem;">// insert("apple", 3) → nodes: a,p,p,l,e each += 3
+// insert("apple", 6) → delta = 3 → add 3 to path
+// sum("app") → just return node.sum at "app"</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 8: LC 720 LONGEST WORD -->
+<div class="page">
+  <div class="header">
+    <div><h1>🗺️ TRIE · LONGEST WORD</h1><div class="sub">LC 720 — Longest Word in Dictionary</div></div>
+    <div style="text-align:right"><div class="page-num">PAGE 8 OF 14</div><div style="font-size:0.7rem;color:#2c3e66;font-weight:600;margin-top:2px;">DFS · isWord VALIDATION</div></div>
+  </div>
+
+  <div class="card card-purple" style="margin-bottom:10px;">
+    <div class="card-head">💡 THE INSIGHT</div>
+    <div class="card-body">
+      <p><strong>Problem:</strong> Find the longest word that can be built one character at a time, with every prefix present in the dictionary.</p>
+      <div class="aha-box"><strong>🧠 AHA:</strong> We need to traverse the Trie, but only move to a child <strong>if <span class="inline-code">child.isWord == true</span></strong>. Because every prefix must be a valid word.</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card card-red">
+        <div class="card-head">💻 DFS(root) — NOT DFS(root, "banana")</div>
+        <div class="card-body">
+          <pre>public String longestWord(String[] words) {
+    Trie trie = new Trie();
+    for (String w : words) trie.insert(w);
+
+    String[] best = {""};
+    dfs(trie.root, new StringBuilder(), best);
+    return best[0];
+}
+
+private void dfs(TrieNode node, StringBuilder sb, String[] best) {
+    for (int i = 0; i < 26; i++) {
+        TrieNode child = node.children[i];
+        if (child != null && child.isWord) {
+            sb.append((char)('a' + i));
+            if (sb.length() > best[0].length()) {
+                best[0] = sb.toString();
+            }
+            dfs(child, sb, best);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+    }
+}</pre>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card card-amber">
+        <div class="card-head">🔍 DRY RUN</div>
+        <div class="card-body" style="font-size:0.72rem;">
+          <p><strong>words:</strong> ["a", "banana", "app", "appl", "ap", "apply", "apple"]</p>
+          <pre>root
+ └─ a (isWord=true) ✅
+     └─ p (isWord=true) ✅
+         └─ p (isWord=true) ✅
+             └─ l (isWord=true) ✅
+                 └─ e (isWord=true) ✅ → "apple"</pre>
+          <p><strong>❌ "banana":</strong> root → b → a → n → ... but "b" is not a word → cannot start.</p>
+          <div class="aha-box"><strong>🧠 AHA:</strong> We don't need to check if the current node itself is a word — we only move to children that are <span class="inline-code">isWord</span>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 9: LC 820 REVERSE TRIE -->
+<div class="page">
+  <div class="header">
+    <div><h1>🗺️ REVERSE TRIE · SUFFIX</h1><div class="sub">LC 820 — Short Encoding of Words</div></div>
+    <div style="text-align:right"><div class="page-num">PAGE 9 OF 14</div><div style="font-size:0.7rem;color:#2c3e66;font-weight:600;margin-top:2px;">REVERSE · SUFFIX → PREFIX · LEAF NODES</div></div>
+  </div>
+
+  <div class="card card-amber" style="margin-bottom:10px;">
+    <div class="card-head">💡 THE AHA — SUFFIX → PREFIX</div>
+    <div class="card-body">
+      <p><strong>Problem:</strong> Given words, encode them as a string with <span class="inline-code">#</span> separators. Minimize the length by sharing suffixes.</p>
+      <div class="aha-box"><strong>🧠 AHA:</strong> If word B is a <strong>suffix</strong> of word A, we don't need to add B separately. We can <strong>reverse</strong> each word → suffix becomes <strong>prefix</strong> → use a standard Trie!</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card card-green">
+        <div class="card-head">🔍 EXAMPLE</div>
+        <div class="card-body" style="font-size:0.72rem;">
+          <p><strong>words:</strong> ["time", "me", "emit"]</p>
+          <p><strong>Reverse:</strong> "emit" ← "time", "em" ← "me", "time" ← "emit"</p>
+          <pre>root
+ └─ e
+     └─ m
+         ├─ i
+         │   └─ t  (isWord=true) → "time" (reverse: "emit")
+         └─ (isWord=true) → "me" (reverse: "em")</pre>
+          <p><strong>❌ "me" is NOT leaf</strong> → it's part of "time" → no extra encoding.</p>
+          <div class="aha-box"><strong>🧠 AHA:</strong> Only <strong>leaf nodes</strong> represent words that are not suffixes of any other word. We count only leafs!</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card card-red">
+        <div class="card-head">💻 CODE — REVERSE TRIE</div>
+        <div class="card-body">
+          <pre>public int minimumLengthEncoding(String[] words) {
+    TrieNode root = new TrieNode();
+    // Insert reversed words
+    for (String w : words) {
+        TrieNode curr = root;
+        for (int i = w.length() - 1; i >= 0; i--) {
+            char c = w.charAt(i);
+            int idx = c - 'a';
+            if (curr.children[idx] == null)
+                curr.children[idx] = new TrieNode();
+            curr = curr.children[idx];
+        }
+        curr.isWord = true;
+    }
+    // DFS to sum lengths of leaf nodes
+    return dfs(root, 0);
+}
+
+private int dfs(TrieNode node, int depth) {
+    boolean isLeaf = true;
+    int sum = 0;
+    for (TrieNode child : node.children) {
+        if (child != null) {
+            isLeaf = false;
+            sum += dfs(child, depth + 1);
+        }
+    }
+    if (isLeaf) return depth + 1; // +1 for '#'
+    return sum;
+}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 10: BIT TRIE (CONCEPTUAL) -->
+<div class="page">
+  <div class="header">
+    <div><h1>🗺️ BITWISE TRIE</h1><div class="sub">Maximum XOR · 2 children</div></div>
+    <div style="text-align:right"><div class="page-num">PAGE 10 OF 14</div><div style="font-size:0.7rem;color:#2c3e66;font-weight:600;margin-top:2px;">31-BIT BINARY · OPPOSITE BIT</div></div>
+  </div>
+
+  <div class="card card-purple" style="margin-bottom:10px;">
+    <div class="card-head">💡 BIT TRIE — 2 CHILDREN</div>
+    <div class="card-body">
+      <p><strong>Standard Trie:</strong> 26 children for lowercase letters.</p>
+      <p><strong>Bit Trie:</strong> <strong>2 children</strong> — bit 0 and bit 1. We insert numbers bit by bit from MSB (31) to LSB (0).</p>
+      <div class="aha-box"><strong>🧠 AHA:</strong> To maximize XOR, at each bit <strong>greedily try the OPPOSITE bit</strong> (<span class="inline-code">1 ^ bit</span>). If it exists, take it; otherwise take the same bit.</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card card-amber">
+        <div class="card-head">🔍 INSERT</div>
+        <div class="card-body">
+          <pre>class BitNode {
+    BitNode[] child = new BitNode[2];
+}
+
+void insert(int num) {
+    BitNode curr = root;
+    for (int i = 30; i >= 0; i--) {
+        int bit = (num >> i) & 1;
+        if (curr.child[bit] == null)
+            curr.child[bit] = new BitNode();
+        curr = curr.child[bit];
+    }
+}</pre>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card card-green">
+        <div class="card-head">🔍 SEARCH MAX XOR</div>
+        <div class="card-body">
+          <pre>int maxXor = 0;
+for (int num : nums) {
+    BitNode curr = root;
+    int xor = 0;
+    for (int i = 30; i >= 0; i--) {
+        int bit = (num >> i) & 1;
+        int opp = 1 ^ bit;
+        if (curr.child[opp] != null) {
+            xor |= (1 << i);
+            curr = curr.child[opp];
+        } else {
+            curr = curr.child[bit];
+        }
+    }
+    maxXor = Math.max(maxXor, xor);
+}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 11: MASTER DECISION TREE -->
+<div class="page">
+  <div class="header">
+    <div><h1>🗺️ MASTER DECISION TREE</h1><div class="sub">All Trie Variants in one view</div></div>
+    <div style="text-align:right"><div class="page-num">PAGE 11 OF 14</div><div style="font-size:0.7rem;color:#2c3e66;font-weight:600;margin-top:2px;">PATTERN → SOLUTION</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:10px;">
+    <div class="card-head">🌳 CHOOSE YOUR TRIE</div>
+    <div class="card-body">
+      <div class="grid-2">
+        <div>
+          <div class="dt-row"><div class="dt-q">🔤 Exact prefix / autocomplete</div><div class="dt-arrow">→</div><div class="dt-a">Standard Trie (children[26])</div></div>
+          <div class="dt-row"><div class="dt-q">❓ Wildcard '.' search</div><div class="dt-arrow">→</div><div class="dt-a">Trie + DFS (LC 211)</div></div>
+          <div class="dt-row"><div class="dt-q">🗺️ Multi-word grid search</div><div class="dt-arrow">→</div><div class="dt-a">Trie + Grid DFS (LC 212)</div></div>
+          <div class="dt-row"><div class="dt-q">📝 Shortest root replacement</div><div class="dt-arrow">→</div><div class="dt-a">Prefix Match (LC 648)</div></div>
+        </div>
+        <div>
+          <div class="dt-row"><div class="dt-q">🧮 Prefix sum (MapSum)</div><div class="dt-arrow">→</div><div class="dt-a">Trie + DFS subtree / Delta</div></div>
+          <div class="dt-row"><div class="dt-q">🔤 Longest word (all prefixes)</div><div class="dt-arrow">→</div><div class="dt-a">DFS with child.isWord (LC 720)</div></div>
+          <div class="dt-row"><div class="dt-q">🔁 Suffix encoding</div><div class="dt-arrow">→</div><div class="dt-a">Reverse Trie (LC 820)</div></div>
+          <div class="dt-row"><div class="dt-q">⚡ Maximum XOR</div><div class="dt-arrow">→</div><div class="dt-a">Bit Trie (2 children) (LC 421)</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-purple">
+    <div class="card-head">🎯 INTERVIEWER FOLLOW-UPS</div>
+    <div class="card-body">
+      <table>
+        <tr><th>Question</th><th>Your Answer</th></tr>
+        <tr><td>Trie vs HashMap?</td><td>HashMap O(1) exact, but no prefix search. Trie O(L) prefix.</td></tr>
+        <tr><td>Array vs HashMap children?</td><td>Array faster for 26 chars. HashMap better for Unicode.</td></tr>
+        <tr><td>How to handle duplicates in Word Search II?</td><td>Set <code>node.word = null</code> after adding.</td></tr>
+        <tr><td>Why reverse for suffix encoding?</td><td>Suffix becomes prefix → standard Trie!</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 12: AHA MOMENTS -->
+<div class="page">
+  <div class="header">
+    <div><h1>🧠 AHA MOMENTS · TRIE</h1><div class="sub">One-liner insights for every pattern</div></div>
+    <div style="text-align:right"><div class="page-num">PAGE 12 OF 14</div><div style="font-size:0.7rem;color:#2c3e66;font-weight:600;margin-top:2px;">QUICK REVISION</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card card-green" style="margin-bottom:8px;">
+        <div class="card-head">LC 208 — Standard Trie</div>
+        <div class="card-body">📌 <strong>Trie stores prefixes</strong> — search and startsWith share the same find() logic.</div>
+      </div>
+      <div class="card card-amber" style="margin-bottom:8px;">
+        <div class="card-head">LC 211 — Wildcard</div>
+        <div class="card-body">📌 <strong>'.' means search all children</strong> — DFS over 26 branches.</div>
+      </div>
+      <div class="card card-purple" style="margin-bottom:8px;">
+        <div class="card-head">LC 648 — Replace Words</div>
+        <div class="card-body">📌 <strong>Stop at shortest prefix</strong> — break when <code>curr.isWord == true</code>.</div>
+      </div>
+      <div class="card card-red" style="margin-bottom:8px;">
+        <div class="card-head">LC 212 — Word Search II</div>
+        <div class="card-body">📌 <strong>Trie prunes DFS</strong> — store word at leaf, set <code>node.word = null</code> to deduplicate.</div>
+      </div>
+    </div>
+    <div>
+      <div class="card card-amber" style="margin-bottom:8px;">
+        <div class="card-head">LC 677 — Map Sum</div>
+        <div class="card-body">📌 <strong>Reach prefix node → DFS subtree</strong> — or optimize with delta on path.</div>
+      </div>
+      <div class="card card-sky" style="margin-bottom:8px;">
+        <div class="card-head">LC 720 — Longest Word</div>
+        <div class="card-body">📌 <strong>Only move to child.isWord</strong> — every prefix must be a valid word.</div>
+      </div>
+      <div class="card card-indigo" style="margin-bottom:8px;">
+        <div class="card-head">LC 820 — Short Encoding</div>
+        <div class="card-body">📌 <strong>Reverse suffix → prefix</strong> — only leaf nodes count (non-suffixes).</div>
+      </div>
+      <div class="card card-purple">
+        <div class="card-head">LC 421 — Maximum XOR</div>
+        <div class="card-body">📌 <strong>Opposite bit maximizes XOR</strong> — greedy pick <code>1 ^ bit</code>.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 13: TEMPLATES -->
+<div class="page">
+  <div class="header">
+    <div><h1>📋 TRIE TEMPLATES</h1><div class="sub">Copy-paste ready for interviews</div></div>
+    <div style="text-align:right"><div class="page-num">PAGE 13 OF 14</div><div style="font-size:0.7rem;color:#2c3e66;font-weight:600;margin-top:2px;">ALL VARIANTS</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card card-green">
+        <div class="card-head">✅ STANDARD TRIE</div>
+        <div class="card-body"><pre style="font-size:0.6rem;">class TrieNode {
+    TrieNode[] children = new TrieNode[26];
+    boolean isWord = false;
+}
+// insert, search, startsWith</pre></div>
+      </div>
+      <div class="card card-amber">
+        <div class="card-head">❓ WILDCARD DFS</div>
+        <div class="card-body"><pre style="font-size:0.6rem;">boolean search(String w, int i, TrieNode n) {
+    if (n == null) return false;
+    if (i == w.length()) return n.isWord;
+    char c = w.charAt(i);
+    if (c == '.') {
+        for (TrieNode child : n.children)
+            if (child != null && search(w, i+1, child)) return true;
+        return false;
+    }
+    return search(w, i+1, n.children[c-'a']);
+}</pre></div>
+      </div>
+      <div class="card card-red">
+        <div class="card-head">🗺️ GRID DFS</div>
+        <div class="card-body"><pre style="font-size:0.6rem;">void dfs(board, r, c, node, res) {
+    char ch = board[r][c];
+    if (ch == '#' || node.children[ch-'a'] == null) return;
+    node = node.children[ch-'a'];
+    if (node.word != null) { res.add(node.word); node.word = null; }
+    board[r][c] = '#';
+    for (d : dirs) dfs(...);
+    board[r][c] = ch;
+}</pre></div>
+      </div>
+    </div>
+    <div>
+      <div class="card card-amber">
+        <div class="card-head">🧮 MAP SUM (DFS)</div>
+        <div class="card-body"><pre style="font-size:0.6rem;">int dfsSum(TrieNode node) {
+    int total = node.isWord ? node.val : 0;
+    for (TrieNode child : node.children)
+        if (child != null) total += dfsSum(child);
+    return total;
+}</pre></div>
+      </div>
+      <div class="card card-indigo">
+        <div class="card-head">🔁 REVERSE TRIE</div>
+        <div class="card-body"><pre style="font-size:0.6rem;">// insert reversed
+for (int i = w.length()-1; i >= 0; i--) {
+    char c = w.charAt(i);
+    // ... standard insert
+}
+// count only leaf nodes
+int dfs(node, depth) {
+    boolean leaf = true;
+    int sum = 0;
+    for (child : node.children) if (child != null) { leaf=false; sum+=dfs(child, depth+1); }
+    return leaf ? depth + 1 : sum;
+}</pre></div>
+      </div>
+      <div class="card card-purple">
+        <div class="card-head">⚡ BIT TRIE</div>
+        <div class="card-body"><pre style="font-size:0.6rem;">class BitNode { BitNode[] child = new BitNode[2]; }
+// insert: bit = (num >> i) & 1
+// max XOR: if (curr.child[1^bit] != null) take it</pre></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 14: CHEAT SHEET & FINAL -->
+<div class="page">
+  <div class="header">
+    <div><h1>📌 TRIE CHEAT SHEET</h1><div class="sub">Quick reference — 30 seconds before interview</div></div>
+    <div style="text-align:right"><div class="page-num">PAGE 14 OF 14</div><div style="font-size:0.7rem;color:#2c3e66;font-weight:600;margin-top:2px;">FINAL REVIEW</div></div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:10px;">
+    <div>
+      <div class="card card-green">
+        <div class="card-head">✅ MASTERY CHECKLIST</div>
+        <div class="card-body" style="font-size:0.72rem;">
+          <ul style="list-style:none;padding-left:0;">
+            <li>☐ Implement Trie from scratch (3 min)</li>
+            <li>☐ Wildcard '.' search with DFS</li>
+            <li>☐ Shortest prefix replacement</li>
+            <li>☐ Search Suggestions (Top 3)</li>
+            <li>☐ Word Search II (Trie + Grid DFS)</li>
+            <li>☐ MapSum (DFS or delta)</li>
+            <li>☐ Longest Word (child.isWord check)</li>
+            <li>☐ Reverse Trie (suffix encoding)</li>
+            <li>☐ Bit Trie (Max XOR)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card card-red">
+        <div class="card-head">🚨 COMMON MISTAKES</div>
+        <div class="card-body" style="font-size:0.72rem;">
+          <ul style="list-style:none;padding-left:0;">
+            <li>❌ Forgetting to set <code>isWord = true</code></li>
+            <li>❌ Not handling <code>null</code> children in wildcard</li>
+            <li>❌ Not restoring <code>board[r][c]</code> in Word Search II</li>
+            <li>❌ Not deduplicating with <code>node.word = null</code></li>
+            <li>❌ Using reverse Trie but not counting only leaf nodes</li>
+            <li>❌ In Bit Trie, forgetting to OR <code>(1 << i)</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-purple">
+    <div class="card-head">💡 GOLDEN RULES</div>
+    <div class="card-body">
+      <div class="grid-2">
+        <div>
+          <div class="aha-box"><strong>Rule 1:</strong> <span class="inline-code">'.'</span> means loop all 26 children → DFS</div>
+          <div class="aha-box"><strong>Rule 2:</strong> Stop at <code>isWord</code> for shortest prefix</div>
+          <div class="aha-box"><strong>Rule 3:</strong> Store <code>word</code> at leaf for Word Search II</div>
+        </div>
+        <div>
+          <div class="aha-box"><strong>Rule 4:</strong> Reverse suffix → prefix → standard Trie</div>
+          <div class="aha-box"><strong>Rule 5:</strong> Bit Trie: 2 children, greedy opposite bit</div>
+          <div class="aha-box"><strong>Rule 6:</strong> Longest Word: only move to <code>child.isWord</code></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:8px;font-size:0.7rem;color:#64748b;border-top:1px solid #e2e8f0;padding-top:6px;">
+    🏆 Trie Masterclass v2 — Built from FAANG interviews &amp; real problem-solving patterns
+  </div>
+</div>
+
+</body>
+</html>

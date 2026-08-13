@@ -1,0 +1,458 @@
+<div class="page">
+    <div class="header-top" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <div class="page-number" style="background-color: #0b1a5e; color: white; padding: 10px 20px; font-size: 1.5em; font-weight: bold; border-radius: 4px;">PAGE 17</div>
+        <div style="text-align: center; flex-grow: 1;">
+            <h1 style="color: #0b1a5e; font-size: 28px; margin: 0;">GRAPH PATTERN GUIDE</h1>
+            <div class="subtitle" style="color: #0b1a5e; font-size: 14px; font-weight: bold;">COMPLETE GRAPH ALGORITHMS CHEAT SHEET (DSA ONLY)</div>
+            <div style="font-size: 12px; color: #555;">Core Patterns. Process + Code + Use + Pitfalls. Revise before your interview!</div>
+        </div>
+        <div style="border: 2px solid #0b1a5e; border-radius: 4px; padding: 5px 10px; font-size: 10px; font-weight: bold; color: #0b1a5e; text-align: center;">
+            PRINTABLE<br>A4 FORMAT<br>DSA ONLY
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 3fr; gap: 10px; margin-bottom: 10px;">
+        <div class="section-box" style="border: 1px solid #0b1a5e; border-radius: 4px; overflow: hidden; margin: 0;">
+            <div class="section-header" style="background-color: #0b1a5e; color: white; padding: 5px; text-align: center; font-size: 12px; font-weight: bold;">
+                HOW TO USE THIS PAGE
+            </div>
+            <div class="section-content" style="padding: 10px; font-size: 11px; line-height: 1.4;">
+                <ol style="margin: 0; padding-left: 20px; color: #0b1a5e; font-weight: bold;">
+                    <li><span style="color: black; font-weight: normal;">Identify the pattern from the problem.</span></li>
+                    <li><span style="color: black; font-weight: normal;">Pick the right algorithm.</span></li>
+                    <li><span style="color: black; font-weight: normal;">Follow the process (steps).</span></li>
+                    <li><span style="color: black; font-weight: normal;">Use the template code.</span></li>
+                    <li><span style="color: black; font-weight: normal;">Watch out for common mistakes.</span></li>
+                    <li><span style="color: black; font-weight: normal;">Optimize & handle edge cases.</span></li>
+                </ol>
+                <div style="text-align: center; margin-top: 10px; font-weight: bold;">
+                    Think &rarr; Choose &rarr; Code &rarr;<br>Test &rarr; Optimize
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-box" style="border: 1px solid #0b1a5e; border-radius: 4px; overflow: hidden; margin: 0;">
+            <div class="section-header" style="background-color: #0b1a5e; color: white; padding: 5px; text-align: center; font-size: 12px; font-weight: bold;">
+                GRAPH PROBLEM SOLVING ROADMAP (HOW TO THINK)
+            </div>
+            <div class="section-content" style="padding: 10px;">
+                <div class="mermaid">
+                graph LR
+                    A[Start Problem] --> B{Is it Graph?}
+                    B -- NO --> C[Not a Graph, Use other DS]
+                    B -- YES --> D{Weighted Edges?}
+                    C -- YES --> E[Shortest Path Min Cost - Dijkstra]
+                    D -- YES --> E
+                    D -- NO --> F[Unweighted Shortest Path - BFS]
+                    E --> G[Need Ordering Dependencies - Topological Sort BFS/DFS]
+                    F --> G
+                    G --> H[Need Connectivity / Merge Components - Union Find / Connected Components]
+                </div>
+                <div style="text-align: center; font-size: 11px; font-weight: bold; margin-top: 5px;">
+                    ★ Tip: Master these patterns and 90% of graph problems are solved!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px;">
+        <!-- DFS -->
+        <div class="section-box" style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden; margin: 0;">
+            <div class="section-header" style="background-color: #f8f9fa; border-bottom: 1px solid #ddd; padding: 5px 10px; font-size: 13px; font-weight: bold;">
+                <span class="num" style="background-color: #0b1a5e; color: white; padding: 2px 6px; border-radius: 2px; margin-right: 5px;">1</span> DFS (Depth First Search)
+                <div style="font-size: 10px; color: #555; margin-top: 2px; font-weight: normal;">Explore as deep as possible, then backtrack.</div>
+            </div>
+            <div class="section-content" style="padding: 10px; font-size: 10px;">
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <div style="flex: 1;">
+                        <div style="color: #d97706; font-weight: bold; margin-bottom: 5px;">PROCESS (STEPS) A</div>
+                        <ol style="margin: 0; padding-left: 15px; color: #0b1a5e; font-weight: bold;">
+                            <li><span style="color: black; font-weight: normal;">Mark current node as visited.</span></li>
+                            <li><span style="color: black; font-weight: normal;">Process the node (add to result etc.).</span></li>
+                            <li><span style="color: black; font-weight: normal;">Recur for all unvisited neighbors.</span></li>
+                            <li><span style="color: black; font-weight: normal;">Backtrack when no unvisited neighbors.</span></li>
+                        </ol>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="color: #d97706; font-weight: bold; margin-bottom: 5px;">CODE TEMPLATE (Java)</div>
+                        <pre style="margin: 0; font-size: 9px; color: #0b1a5e;"><code>void dfs(int node, List&lt;List&lt;Integer&gt;&gt; g, boolean[] vis) {
+    vis[node] = true;
+    // process node
+    for (int nei : g.get(node)) {
+        if (!vis[nei]) dfs(nei, g, vis);
+    }
+}</code></pre>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 5px; font-size: 9px; background: #f8f9fa; padding: 5px; border-radius: 4px;">
+                    <div style="flex: 1;"><strong>💡 AHA:</strong> Go deep first, then backtrack.</div>
+                    <div style="flex: 1;"><strong>☑️ Use When:</strong> Explore all nodes, components, cycle detection, topo sort.</div>
+                    <div style="flex: 1;"><strong>⚠️ Watch Out:</strong> Mark visited before recursion to avoid cycles.</div>
+                </div>
+                <div style="text-align: center; font-weight: bold; margin-top: 5px; font-size: 10px;">Time: O(V + E) | Space: O(V)</div>
+            </div>
+        </div>
+
+        <!-- BFS -->
+        <div class="section-box" style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden; margin: 0;">
+            <div class="section-header" style="background-color: #f8f9fa; border-bottom: 1px solid #ddd; padding: 5px 10px; font-size: 13px; font-weight: bold;">
+                <span class="num" style="background-color: #16a34a; color: white; padding: 2px 6px; border-radius: 2px; margin-right: 5px;">2</span> BFS (Breadth First Search)
+                <div style="font-size: 10px; color: #555; margin-top: 2px; font-weight: normal;">Visit level by level using a queue.</div>
+            </div>
+            <div class="section-content" style="padding: 10px; font-size: 10px;">
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <div style="flex: 1;">
+                        <div style="color: #16a34a; font-weight: bold; margin-bottom: 5px;">PROCESS (STEPS) A</div>
+                        <ol style="margin: 0; padding-left: 15px; color: #16a34a; font-weight: bold;">
+                            <li><span style="color: black; font-weight: normal;">Push start node in queue.</span></li>
+                            <li><span style="color: black; font-weight: normal;">Mark visited.</span></li>
+                            <li><span style="color: black; font-weight: normal;">While queue not empty:
+                                <br>- Pop front
+                                <br>- Process
+                                <br>- Push unvisited neighbors
+                            </span></li>
+                        </ol>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="color: #16a34a; font-weight: bold; margin-bottom: 5px;">CODE TEMPLATE (Java)</div>
+                        <pre style="margin: 0; font-size: 9px; color: #0b1a5e;"><code>void bfs(int src, List&lt;List&lt;Integer&gt;&gt; g) {
+    boolean[] vis = new boolean[g.size()];
+    Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();
+    q.offer(src); vis[src] = true;
+    while (!q.isEmpty()) {
+        int node = q.poll();
+        for (int nei : g.get(node)) {
+            if (!vis[nei]) {
+                vis[nei] = true;
+                q.offer(nei);
+            }
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 5px; font-size: 9px; background: #f8f9fa; padding: 5px; border-radius: 4px;">
+                    <div style="flex: 1;"><strong>💡 AHA:</strong> First visit = shortest path (unweighted).</div>
+                    <div style="flex: 1;"><strong>☑️ Use When:</strong> Minimum steps, nearest node, level order.</div>
+                    <div style="flex: 1;"><strong>⚠️ Watch Out:</strong> Mark visited when enqueuing, not dequeuing.</div>
+                </div>
+                <div style="text-align: center; font-weight: bold; margin-top: 5px; font-size: 10px;">Time: O(V + E) | Space: O(V)</div>
+            </div>
+        </div>
+
+        <!-- Topological Sort -->
+        <div class="section-box" style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden; margin: 0;">
+            <div class="section-header" style="background-color: #f8f9fa; border-bottom: 1px solid #ddd; padding: 5px 10px; font-size: 13px; font-weight: bold;">
+                <span class="num" style="background-color: #ea580c; color: white; padding: 2px 6px; border-radius: 2px; margin-right: 5px;">3</span> Topological Sort (BFS - Kahn's)
+                <div style="font-size: 10px; color: #ea580c; margin-top: 2px; font-weight: normal;">Linear ordering of DAG based on dependencies.</div>
+            </div>
+            <div class="section-content" style="padding: 10px; font-size: 10px;">
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <div style="flex: 1;">
+                        <div style="color: #ea580c; font-weight: bold; margin-bottom: 5px;">PROCESS (STEPS) A</div>
+                        <ol style="margin: 0; padding-left: 15px; color: #ea580c; font-weight: bold;">
+                            <li><span style="color: black; font-weight: normal;">Compute indegree of all nodes.</span></li>
+                            <li><span style="color: black; font-weight: normal;">Push all nodes with indegree 0.</span></li>
+                            <li><span style="color: black; font-weight: normal;">Pop node, add to result.</span></li>
+                            <li><span style="color: black; font-weight: normal;">Reduce indegree of neighbors.</span></li>
+                            <li><span style="color: black; font-weight: normal;">If indegree becomes 0, push to queue.</span></li>
+                            <li><span style="color: black; font-weight: normal;">If result size < V -> Cycle exists.</span></li>
+                        </ol>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="color: #ea580c; font-weight: bold; margin-bottom: 5px;">CODE TEMPLATE (Java)</div>
+                        <pre style="margin: 0; font-size: 9px; color: #0b1a5e;"><code>List&lt;Integer&gt; topoSort(int n, List&lt;List&lt;Integer&gt;&gt; g) {
+    int[] indeg = new int[n];
+    for (int u = 0; u &lt; n; u++)
+        for (int v : g.get(u)) indeg[v]++;
+    Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();
+    for (int i = 0; i &lt; n; i++)
+        if (indeg[i] == 0) q.offer(i);
+    List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+    while (!q.isEmpty()) {
+        int u = q.poll(); res.add(u);
+        for (int v : g.get(u))
+            if (--indeg[v] == 0) q.offer(v);
+    }
+    return res.size() == n ? res : new ArrayList&lt;&gt;();
+}</code></pre>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 5px; font-size: 9px; background: #f8f9fa; padding: 5px; border-radius: 4px;">
+                    <div style="flex: 1;"><strong>💡 AHA:</strong> Process node only after all prerequisites are satisfied.</div>
+                    <div style="flex: 1;"><strong>☑️ Use When:</strong> DAG, dependencies, course schedule, build order.</div>
+                    <div style="flex: 1;"><strong>⚠️ Watch Out:</strong> If processed nodes < n -> cycle exists.</div>
+                </div>
+                <div style="text-align: center; font-weight: bold; margin-top: 5px; font-size: 10px;">Time: O(V + E) | Space: O(V)</div>
+            </div>
+        </div>
+
+        <!-- Dijkstra -->
+        <div class="section-box" style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden; margin: 0;">
+            <div class="section-header" style="background-color: #f8f9fa; border-bottom: 1px solid #ddd; padding: 5px 10px; font-size: 13px; font-weight: bold;">
+                <span class="num" style="background-color: #7c3aed; color: white; padding: 2px 6px; border-radius: 2px; margin-right: 5px;">4</span> Dijkstra (Min Heap)
+                <div style="font-size: 10px; color: #7c3aed; margin-top: 2px; font-weight: normal;">Shortest path from single source (positive weights).</div>
+            </div>
+            <div class="section-content" style="padding: 10px; font-size: 10px;">
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <div style="flex: 1;">
+                        <div style="color: #7c3aed; font-weight: bold; margin-bottom: 5px;">PROCESS (STEPS) A</div>
+                        <ol style="margin: 0; padding-left: 15px; color: #7c3aed; font-weight: bold;">
+                            <li><span style="color: black; font-weight: normal;">Init dist[] = INF, dist[src] = 0.</span></li>
+                            <li><span style="color: black; font-weight: normal;">Push (0, src) to min-heap.</span></li>
+                            <li><span style="color: black; font-weight: normal;">Pop min (d, node). If d > dist[node], skip.</span></li>
+                            <li><span style="color: black; font-weight: normal;">Relax all edges of node.</span></li>
+                            <li><span style="color: black; font-weight: normal;">Update dist & push to heap.</span></li>
+                        </ol>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="color: #7c3aed; font-weight: bold; margin-bottom: 5px;">CODE TEMPLATE (Java)</div>
+                        <pre style="margin: 0; font-size: 9px; color: #0b1a5e;"><code>int[] dijkstra(int n, List&lt;List&lt;int[]&gt;&gt; g, int src) {
+    int INF = (int)1e9;
+    int[] dist = new int[n];
+    Arrays.fill(dist, INF); dist[src] = 0;
+    PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;((a, b) -&gt; a[0] - b[0]);
+    pq.offer(new int[]{0, src});
+    while (!pq.isEmpty()) {
+        int[] cur = pq.poll();
+        int d = cur[0], u = cur[1];
+        if (d &gt; dist[u]) continue;
+        for (int[] e : g.get(u)) {
+            int v = e[0], w = e[1];
+            if (dist[u] + w &lt; dist[v]) {
+                dist[v] = dist[u] + w;
+                pq.offer(new int[]{dist[v], v});
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 5px; font-size: 9px; background: #f8f9fa; padding: 5px; border-radius: 4px;">
+                    <div style="flex: 1;"><strong>💡 AHA:</strong> Relax edges. First time you pop a node, its shortest distance is finalized.</div>
+                    <div style="flex: 1;"><strong>☑️ Use When:</strong> Positive weighted shortest path, network delay, min cost.</div>
+                    <div style="flex: 1;"><strong>⚠️ Watch Out:</strong> Ignore outdated entries: if d > dist[node] skip.</div>
+                </div>
+                <div style="text-align: center; font-weight: bold; margin-top: 5px; font-size: 10px;">Time: O((V + E) log V) | Space: O(V)</div>
+            </div>
+        </div>
+
+        <!-- Union Find -->
+        <div class="section-box" style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden; margin: 0;">
+            <div class="section-header" style="background-color: #f8f9fa; border-bottom: 1px solid #ddd; padding: 5px 10px; font-size: 13px; font-weight: bold;">
+                <span class="num" style="background-color: #16a34a; color: white; padding: 2px 6px; border-radius: 2px; margin-right: 5px;">5</span> Union Find (Disjoint Set Union)
+                <div style="font-size: 10px; color: #16a34a; margin-top: 2px; font-weight: normal;">Maintain groups and merge components.</div>
+            </div>
+            <div class="section-content" style="padding: 10px; font-size: 10px;">
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <div style="flex: 1;">
+                        <div style="color: #16a34a; font-weight: bold; margin-bottom: 5px;">PROCESS (STEPS) A</div>
+                        <ol style="margin: 0; padding-left: 15px; color: #16a34a; font-weight: bold;">
+                            <li><span style="color: black; font-weight: normal;">Make each node its own parent.</span></li>
+                            <li><span style="color: black; font-weight: normal;">Find: return root with path compression.</span></li>
+                            <li><span style="color: black; font-weight: normal;">Union: merge by rank/size.</span></li>
+                        </ol>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="color: #16a34a; font-weight: bold; margin-bottom: 5px;">CODE TEMPLATE (Java)</div>
+                        <pre style="margin: 0; font-size: 9px; color: #0b1a5e;"><code>class DSU {
+    int[] parent, rank;
+    DSU(int n) {
+        parent = new int[n]; rank = new int[n];
+        for (int i = 0; i &lt; n; i++) parent[i] = i;
+    }
+    int find(int x) {
+        if (parent[x] != x) parent[x] = find(parent[x]);
+        return parent[x];
+    }
+    boolean union(int x, int y) {
+        int px = find(x), py = find(y);
+        if (px == py) return false;
+        if (rank[px] &lt; rank[py]) parent[px] = py;
+        else if (rank[px] &gt; rank[py]) parent[py] = px;
+        else { parent[py] = px; rank[px]++; }
+        return true;
+    }
+}</code></pre>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 5px; font-size: 9px; background: #f8f9fa; padding: 5px; border-radius: 4px;">
+                    <div style="flex: 1;"><strong>💡 AHA:</strong> Build groups instead of traversing them.</div>
+                    <div style="flex: 1;"><strong>☑️ Use When:</strong> Connectivity, merge components, cycle in undirected graph.</div>
+                    <div style="flex: 1;"><strong>⚠️ Watch Out:</strong> Always use path compression + union by rank.</div>
+                </div>
+                <div style="text-align: center; font-weight: bold; margin-top: 5px; font-size: 10px;">Time: O(α(V)) per op | Space: O(V)</div>
+            </div>
+        </div>
+
+        <!-- Grid DFS / BFS -->
+        <div class="section-box" style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden; margin: 0;">
+            <div class="section-header" style="background-color: #f8f9fa; border-bottom: 1px solid #ddd; padding: 5px 10px; font-size: 13px; font-weight: bold;">
+                <span class="num" style="background-color: #2563eb; color: white; padding: 2px 6px; border-radius: 2px; margin-right: 5px;">6</span> Grid DFS / BFS
+                <div style="font-size: 10px; color: #2563eb; margin-top: 2px; font-weight: normal;">For grid based problems (islands, regions, flow).</div>
+            </div>
+            <div class="section-content" style="padding: 10px; font-size: 10px;">
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <div style="flex: 1;">
+                        <div style="color: #2563eb; font-weight: bold; margin-bottom: 5px;">PROCESS (STEPS) A</div>
+                        <ol style="margin: 0; padding-left: 15px; color: #2563eb; font-weight: bold;">
+                            <li><span style="color: black; font-weight: normal;">Check bounds & valid cell.</span></li>
+                            <li><span style="color: black; font-weight: normal;">Mark visited.</span></li>
+                            <li><span style="color: black; font-weight: normal;">Traverse 4 or 8 directions.</span></li>
+                            <li><span style="color: black; font-weight: normal;">Count / collect / compare.</span></li>
+                        </ol>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="color: #2563eb; font-weight: bold; margin-bottom: 5px;">CODE TEMPLATE (Java)</div>
+                        <pre style="margin: 0; font-size: 9px; color: #0b1a5e;"><code>// 4 Directions
+int[][] dir4 = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+
+// 8 Directions
+int[][] dir8 = {{1,0}, {-1,0}, {0,1}, {0,-1}, 
+                {1,1}, {1,-1}, {-1,1}, {-1,-1}};
+
+boolean isValid(int r, int c, int n, int m, boolean[][] vis) {
+    return r&gt;=0 && r&lt;n && c&gt;=0 && c&lt;m && !vis[r][c];
+}</code></pre>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 5px; font-size: 9px; background: #f8f9fa; padding: 5px; border-radius: 4px;">
+                    <div style="flex: 1;"><strong>💡 AHA:</strong> Grid problems = graph problems with constraints.</div>
+                    <div style="flex: 1;"><strong>☑️ Use When:</strong> Islands, surrounded regions, flood fill, matrix distance.</div>
+                    <div style="flex: 1;"><strong>⚠️ Watch Out:</strong> Boundary check & mark visited immediately.</div>
+                </div>
+                <div style="text-align: center; font-weight: bold; margin-top: 5px; font-size: 10px;">Time: O(M * N) | Space: O(M * N)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRAPH REPRESENTATIONS & DIRECTIONS & EDGE TYPES -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px;">
+        <div class="section-box" style="border: 1px solid #0b1a5e; border-radius: 4px; overflow: hidden; margin: 0;">
+            <div class="section-header" style="background-color: #0b1a5e; color: white; padding: 5px; text-align: center; font-size: 12px; font-weight: bold;">GRAPH REPRESENTATIONS</div>
+            <div class="section-content" style="padding: 10px; font-size: 10px;">
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex: 1;">
+                        <strong style="color: #0b1a5e;">Adjacency List (Preferred)</strong>
+                        <ul style="margin: 0; padding-left: 15px; margin-bottom: 5px;">
+                            <li>Best for sparse graphs</li>
+                            <li>Space: O(V + E)</li>
+                            <li>Iterate neighbors fast</li>
+                        </ul>
+                        <div class="mermaid">
+                        graph LR
+                            0((0)) --> 1[1, 2]
+                            1((1)) --> 2[0, 3]
+                            2((2)) --> 3[0, 3]
+                            3((3)) --> 4[1, 2]
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <strong style="color: #0b1a5e;">Adjacency Matrix</strong>
+                        <ul style="margin: 0; padding-left: 15px; margin-bottom: 5px;">
+                            <li>Best for dense graphs</li>
+                            <li>Space: O(V^2)</li>
+                            <li>Check edge exists fast</li>
+                        </ul>
+                        <table style="width: 100%; text-align: center; border-collapse: collapse;">
+                            <tr><th></th><th>0</th><th>1</th><th>2</th><th>3</th></tr>
+                            <tr><th>0</th><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+                            <tr><th>1</th><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+                            <tr><th>2</th><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+                            <tr><th>3</th><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-box" style="border: 1px solid #0b1a5e; border-radius: 4px; overflow: hidden; margin: 0;">
+            <div class="section-header" style="background-color: #0b1a5e; color: white; padding: 5px; text-align: center; font-size: 12px; font-weight: bold;">DIRECTIONS (Grid Problems)</div>
+            <div class="section-content" style="padding: 10px; font-size: 10px;">
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex: 1; text-align: center;">
+                        <strong style="color: #0b1a5e;">4 Directions<br>(Up, Down, Left, Right)</strong>
+                        <div class="mermaid">
+                        graph TD
+                            A --> B
+                            C --> A
+                            A --> D
+                            E --> A
+                        </div>
+                        <div style="font-family: monospace;">int[][] dir4 = {{1,0},{-1,0},{0,1},{0,-1}};</div>
+                    </div>
+                    <div style="flex: 1; text-align: center;">
+                        <strong style="color: #0b1a5e;">8 Directions<br>(All)</strong>
+                        <div class="mermaid">
+                        graph TD
+                            A --> B
+                            A --> C
+                        </div>
+                        <div style="font-family: monospace;">int[][] dir8 = {{1,0},{-1,0},{0,1},{0,-1},{1,1},{1,-1},{-1,1},{-1,-1}};</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-box" style="border: 1px solid #0b1a5e; border-radius: 4px; overflow: hidden; margin: 0;">
+            <div class="section-header" style="background-color: #0b1a5e; color: white; padding: 5px; text-align: center; font-size: 12px; font-weight: bold;">EDGE TYPES</div>
+            <div class="section-content" style="padding: 10px; font-size: 11px;">
+                <ul style="margin: 0; padding-left: 20px; line-height: 1.8;">
+                    <li><strong>Directed / Undirected</strong></li>
+                    <li><strong>Weighted / Unweighted</strong></li>
+                    <li><strong>Cyclic / Acyclic (DAG)</strong></li>
+                    <li><strong>Connected / Disconnected</strong></li>
+                    <li><strong>Sparse / Dense</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPLEXITY QUICK REFERENCE -->
+    <div class="section-box" style="border: 1px solid #0b1a5e; border-radius: 4px; overflow: hidden; margin: 0; margin-bottom: 10px;">
+        <div class="section-header" style="background-color: #0b1a5e; color: white; padding: 5px; text-align: center; font-size: 12px; font-weight: bold;">COMPLEXITY QUICK REFERENCE</div>
+        <div class="section-content" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; padding: 10px; font-size: 10px; text-align: center;">
+            <div><strong>DFS / BFS</strong><br>Time: O(V + E)<br>Space: O(V)</div>
+            <div><strong>Connected Components</strong><br>Time: O(V + E)<br>Space: O(V)</div>
+            <div><strong>Topological Sort (BFS)</strong><br>Time: O(V + E)<br>Space: O(V)</div>
+            <div><strong>Dijkstra (Min Heap)</strong><br>Time: O((V + E) log V)<br>Space: O(V)</div>
+            <div><strong>Union Find (DSU)</strong><br>Time: O(α(V)) per op<br>Space: O(V)</div>
+            <div><strong>Grid DFS / BFS</strong><br>Time: O(M * N)<br>Space: O(M * N)</div>
+            <div style="border-left: 1px solid #ddd; padding-left: 5px;"><strong>WHERE α(V) = </strong><br>Inverse Ackermann (almost constant)</div>
+        </div>
+    </div>
+
+    <!-- FINAL INTERVIEW CHECKLIST -->
+    <div style="border: 2px dashed #0b1a5e; border-radius: 4px; padding: 10px; display: flex; align-items: center; justify-content: space-between; font-size: 11px;">
+        <div style="flex-grow: 1;">
+            <div style="text-align: center; color: #ef4444; font-weight: bold; font-size: 14px; margin-bottom: 5px;">FINAL INTERVIEW CHECKLIST</div>
+            <div style="display: flex; justify-content: space-around;">
+                <div>
+                    <div>☑️ Understand the problem clearly.</div>
+                    <div>☑️ Pick the correct graph pattern.</div>
+                    <div>☑️ Choose representation (List / Matrix).</div>
+                </div>
+                <div>
+                    <div>☑️ Dry run on small example.</div>
+                    <div>☑️ Handle edge cases.</div>
+                    <div>☑️ Write clean code using template.</div>
+                </div>
+                <div>
+                    <div>☑️ Check complexity.</div>
+                    <div>☑️ Optimize if needed.</div>
+                    <div>☑️ Test & confirm output.</div>
+                </div>
+            </div>
+        </div>
+        <div style="border-left: 1px solid #ddd; padding-left: 10px; text-align: center;">
+            <div style="font-size: 24px;">🏆</div>
+            <div style="color: #d97706; font-weight: bold;">GOLDEN RULE</div>
+            <div>Master patterns, write clean code, crack FAANG!</div>
+        </div>
+    </div>
+
+    <div style="text-align: center; font-size: 10px; font-weight: bold; margin-top: 10px; color: #0b1a5e;">
+        PRACTICE PATTERNS DAILY • BUILD RECOGNITION • WRITE CLEAN CODE • CRACK FAANG INTERVIEWS 🚀
+    </div>
+</div>

@@ -1,0 +1,1690 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 04: Sliding Window Masterclass (10/10 Perfect FAANG Reference Handbook)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+    }
+
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 12.5px;
+        line-height: 1.45;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 10px 20px;
+        display: flex;
+        
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand {
+        font-weight: 900;
+        font-size: 1.05rem;
+        color: #38bdf8;
+    }
+    .top-nav .nav-controls {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 4px 10px;
+        border-radius: 5px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+
+    /* Page Container */
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 24px 28px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+        
+        display: flex;
+        flex-direction: column;
+        
+    }
+    [data-theme="dark"] .page {
+        background: #1e293b;
+        color: #f8fafc;
+    }
+
+    /* Perfect Aligned Header Top */
+    .header-top {
+        display: flex;
+        
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 8px 14px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top {
+        background: #0f172a;
+        border-color: #38bdf8;
+        border-left-color: #38bdf8;
+    }
+    .header-title-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .header-top h1 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 900;
+        color: #1e3a8a;
+        text-transform: uppercase;
+        letter-spacing: -0.3px;
+        line-height: 1.2;
+    }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+
+    .header-top .page-num {
+        background: #1e3a8a;
+        color: white;
+        padding: 3px 10px;
+        border-radius: 16px;
+        font-weight: 800;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    /* Cross Link Badges */
+    .cross-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #e0e7ff;
+        color: #3730a3;
+        border: 1px solid #c7d2fe;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.72rem;
+        font-weight: 800;
+        text-decoration: none;
+        margin-bottom: 4px;
+    }
+    [data-theme="dark"] .cross-link { background: #312e81; color: #e0e7ff; border-color: #4338ca; }
+
+    /* Multi-Color Section Boxes */
+    .section-box {
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 12px;
+        background: white;
+        border: 2px solid #3b82f6;
+        width: 100%;
+    }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+
+    .section-header {
+        padding: 6px 10px;
+        font-weight: 800;
+        font-size: 0.85rem;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .section-header .num {
+        background: white;
+        color: #0f172a;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.72rem;
+        font-weight: 900;
+    }
+    .section-content {
+        padding: 10px 12px;
+        font-size: 0.82rem;
+    }
+
+    /* Color Themes */
+    .box-blue { border-color: #2563eb !important; }
+    .box-blue .section-header { background: #2563eb !important; }
+
+    .box-green { border-color: #22c55e !important; }
+    .box-green .section-header { background: #22c55e !important; }
+
+    .box-purple { border-color: #8b5cf6 !important; }
+    .box-purple .section-header { background: #8b5cf6 !important; }
+
+    .box-red { border-color: #ef4444 !important; }
+    .box-red .section-header { background: #ef4444 !important; }
+
+    .box-skyblue { border-color: #0284c7 !important; }
+    .box-skyblue .section-header { background: #0284c7 !important; }
+
+    .box-orange { border-color: #f97316 !important; }
+    .box-orange .section-header { background: #f97316 !important; }
+
+    .box-teal { border-color: #0d9488 !important; }
+    .box-teal .section-header { background: #0d9488 !important; }
+
+    .box-indigo { border-color: #6366f1 !important; }
+    .box-indigo .section-header { background: #6366f1 !important; }
+
+    .box-rose { border-color: #e11d48 !important; }
+    .box-rose .section-header { background: #e11d48 !important; }
+
+    .box-amber { border-color: #d97706 !important; }
+    .box-amber .section-header { background: #d97706 !important; }
+
+    .box-slate { border-color: #0f172a !important; }
+    .box-slate .section-header { background: #0f172a !important; }
+
+    /* Problem Metadata Card inside Left Column */
+    .meta-card {
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-bottom: 4px;
+        display: flex;
+        
+        align-items: center;
+        font-weight: 700;
+        font-size: 0.72rem;
+    }
+    [data-theme="dark"] .meta-card { background: #0f172a; border-color: #334155; }
+
+    /* Badges */
+    .badge-easy { background: #10b981; color: white; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
+    .badge-medium { background: #f59e0b; color: white; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
+    .badge-hard { background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
+    .company-tag { background: #1e3a8a; color: white; padding: 1px 5px; border-radius: 3px; font-size: 0.68rem; }
+
+    /* Strict 2-Column Problem Grid: Left = Metadata + Flowchart + Problem + Evolution + Why Not, Right = ONLY Java Code */
+    .problem-split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        align-items: start;
+    }
+
+    .problem-info {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .problem-code {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Recognition Flowchart Box */
+    .flowchart-box {
+        background: #eff6ff;
+        border: 1px solid #93c5fd;
+        border-left: 4px solid #2563eb;
+        padding: 5px 8px;
+        border-radius: 4px;
+        margin: 2px 0;
+        font-size: 0.73rem;
+        font-weight: 700;
+        color: #1e40af;
+    }
+
+    /* Dialogue Callout Box */
+    .dialogue-box {
+        background: #f8fafc;
+        border: 1px solid #3b82f6;
+        border-left: 4px solid #2563eb;
+        padding: 5px 8px;
+        border-radius: 4px;
+        margin: 3px 0;
+        font-size: 0.76rem;
+    }
+    .dialogue-speaker { font-weight: 800; color: #1e3a8a; }
+    [data-theme="dark"] .dialogue-speaker { color: #38bdf8; }
+
+    /* Why Not Box */
+    .whynot-box {
+        background: #fff7ed;
+        border: 1px solid #fdba74;
+        border-left: 4px solid #f97316;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin: 3px 0;
+        font-size: 0.73rem;
+        color: #9a3412;
+    }
+
+    /* Window Evolution Visual Box */
+    .window-viz {
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 5px;
+        padding: 5px 8px;
+        margin: 3px 0;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.73rem;
+        line-height: 1.38;
+    }
+    .window-title {
+        font-weight: 800;
+        color: #0284c7;
+        margin-bottom: 2px;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    /* Clean Printable Light Code Blocks (NO BLACK BACKGROUNDS) */
+    pre {
+        background: #f8fafc;
+        color: #0f172a;
+        padding: 8px 10px;
+        border-radius: 5px;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.74rem;
+        line-height: 1.38;
+        margin: 0;
+        white-space: pre-wrap !important;
+        word-break: break-word;
+        border: 1px solid #cbd5e1;
+    }
+    [data-theme="dark"] pre {
+        background: #0f172a;
+        color: #f8fafc;
+        border-color: #334155;
+    }
+    code {
+        font-family: 'Fira Code', monospace;
+        background: #f1f5f9;
+        color: #0f172a;
+        padding: 1px 4px;
+        border-radius: 3px;
+        font-size: 0.78rem;
+        border: 1px solid #cbd5e1;
+    }
+
+    /* AHA Callout Box */
+    .aha-box {
+        background: #fefce8;
+        border: 1px solid #eab308;
+        border-left: 5px solid #ca8a04;
+        color: #713f12;
+        padding: 7px 10px;
+        border-radius: 5px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin: 6px 0;
+    }
+    [data-theme="dark"] .aha-box { background: #713f12; color: #fef9c3; border-color: #fde047; }
+
+    .rule-box {
+        padding: 6px 10px;
+        border-radius: 5px;
+        font-weight: 600;
+        margin: 6px 0;
+        font-size: 0.78rem;
+    }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    .rule-purple { background: #faf5ff; border: 1px solid #a855f7; border-left: 4px solid #a855f7; color: #6b21a8; }
+    .rule-red { background: #fff1f2; border: 1px solid #ef4444; border-left: 4px solid #ef4444; color: #b91c1c; }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.76rem;
+    }
+    table th, table td {
+        border: 1px solid var(--border-color);
+        padding: 5px 7px;
+        text-align: left;
+    }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+
+    .back-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #2563eb;
+        color: white;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        border: none;
+        z-index: 999;
+    }
+
+    /* HARDCORE PRINT SCALING FIT FOR EXACT 12 PAGES */
+    @page {
+        size: A4 portrait;
+        margin: 4mm;
+    }
+
+    @media print {
+        body {
+            background: white !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            color: black !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .top-nav, .back-to-top, .toc-sidebar { display: none !important; }
+        .app-layout { display: block !important; }
+        .container { max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+        .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.72; }
+        .header-top {
+            border: 2px solid #1e3a8a !important;
+            border-left: 6px solid #1e3a8a !important;
+            background: #f8fafc !important;
+            padding: 5px 8px !important;
+            margin-bottom: 5px !important;
+        }
+        .section-box, .rule-box, table, pre, .aha-box, .dialogue-box, .window-viz, .whynot-box, .flowchart-box {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+        pre {
+            background-color: #f8fafc !important;
+            color: #0f172a !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+    }
+
+    /* Sticky Sidebar Layout */
+    .app-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+
+    .toc-title { font-weight: 900; font-size: 0.85rem; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+
+    .main-content { min-width: 0; }
+
+
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+</style>
+</head>
+<body>
+
+<!-- Sticky Top Nav -->
+<div class="top-nav">
+    <div class="brand">⚡ FAANG DSA HANDBOOK — TOPIC 04: SLIDING WINDOW</div>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn" style="background:#059669; border-color:#10b981; font-weight:800;">🏠 Index</a>
+        <button class="nav-btn" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="nav-btn" onclick="toggleSidebar()">↕️ Expand/Shrink TOC</button>
+        <a href="#page1" class="nav-btn">P1</a>
+        <a href="#page2" class="nav-btn">P2</a>
+        <a href="#page3" class="nav-btn">P3</a>
+        <a href="#page4" class="nav-btn">P4</a>
+        <a href="#page5" class="nav-btn">P5</a>
+        <a href="#page6" class="nav-btn">P6</a>
+        <a href="#page7" class="nav-btn">P7</a>
+        <a href="#page8" class="nav-btn">P8</a>
+        <a href="#page9" class="nav-btn">P9</a>
+        <a href="#page10" class="nav-btn">P10</a>
+        <a href="#page11" class="nav-btn">P11</a>
+        <a href="#page12" class="nav-btn">P12</a>
+        <button class="nav-btn" onclick="window.print()" style="background: #2563eb;">🖨️ PDF</button>
+    </div>
+</div>
+
+<div class="container">
+<div class="app-layout" id="appLayout">
+    <!-- Sticky Table of Contents Sidebar -->
+    <div class="toc-sidebar">
+        <div class="toc-header-bar"><span class="toc-title">📋 SECTIONS</span><button class="shrink-btn" onclick="toggleSidebar()"><span class="toc-text">➖ Shrink</span></button></div>
+        <ul class="toc-list">
+            <li><a href="#page1" class="toc-link">04.0 Sliding Window Found</a></li>
+            <li><a href="#page2" class="toc-link">04.1 Fixed Size Window</a></li>
+            <li><a href="#page3" class="toc-link">04.2 Variable Size Window</a></li>
+            <li><a href="#page4" class="toc-link">04.3 Frequency Array Win</a></li>
+            <li><a href="#page5" class="toc-link">04.4 Recognition Matrix</a></li>
+            <li><a href="#page6" class="toc-link">04.5 Buy/Sell Stock & Subarray</a></li>
+            <li><a href="#page7" class="toc-link">04.5 Longest Substring & Rep</a></li>
+            <li><a href="#page8" class="toc-link">04.5 Permutation & Anagrams</a></li>
+            <li><a href="#page9" class="toc-link">04.5 Fruit Baskets & Subarray</a></li>
+            <li><a href="#page10" class="toc-link">04.5 Min Window Substring</a></li>
+            <li><a href="#page11" class="toc-link">04.5 Subarrays K Distinct</a></li>
+            <li><a href="#page12" class="toc-link">04.6 Master Revision Sheet</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Pages -->
+    <div class="main-content">
+
+    <!-- ========================================================= -->
+    <!-- PAGE 1: 04.0 INTRODUCTION & PATTERN EVOLUTION -->
+    <!-- ========================================================= -->
+    <div class="page" id="page1">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">🪟</span>
+                    <h1>TOPIC 04.0: SLIDING WINDOW FOUNDATION &amp; EVOLUTION</h1>
+                </div>
+                <span class="page-num">PAGE 1 OF 12</span>
+            </div>
+
+            <!-- Cross-Link Badge -->
+            <a href="Topic03_TwoPointers.html" class="cross-link">🔗 See Topic 03 → Same Direction Two Pointers Foundation</a>
+
+            <!-- AHA Box -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #1: SLIDING WINDOW AS A TWO-POINTER EXTENSION</strong><br/>
+                Sliding Window is essentially an extension of <strong>Same Direction Two Pointers</strong>! Instead of recomputing sum/counts from scratch for every subarray (taking $O(N \cdot K)$ or $O(N^2)$), we maintain a contiguous "window" state, adding `right` element on expansion and subtracting `left` element on contraction in $O(1)$ amortized per element!
+            </div>
+
+            <!-- Pattern Evolution Box -->
+            <div class="section-box box-purple">
+                <div class="section-header">🧬 PATTERN EVOLUTION: HOW ALGORITHMS EVOLVE</div>
+                <div class="section-content">
+                    <div style="background:#f8fafc; border:1px solid #cbd5e1; padding:8px; border-radius:5px; font-family:'Fira Code', monospace; font-size:0.76rem; line-height:1.4;">
+                        Nested Loops O(N²) ➔ Two Pointers O(N) ➔ Sliding Window O(N) ➔ Prefix Sum O(1) Query
+                    </div>
+                    <div style="margin-top:6px;">
+                        • <strong>Nested Loops:</strong> Recomputes every contiguous subarray sum from scratch.<br/>
+                        • <strong>Two Pointers:</strong> Prunes outer pair bounds using sorted arrays or inward criteria.<br/>
+                        • <strong>Sliding Window:</strong> Maintains dynamic contiguous bounds, updating edge state incrementally in $O(1)$!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decision Matrix Card -->
+            <div class="section-box box-blue">
+                <div class="section-header">📊 PATTERN COMPARISON &amp; TRIGGER MATRIX</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Problem Phrase</th>
+                                <th>Chosen Pattern</th>
+                                <th>Pointer Movement</th>
+                                <th>Target Complexity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>"Sorted Pair Target Sum"</td>
+                                <td>Opposite Two Pointers</td>
+                                <td><code>L = 0, R = N - 1</code></td>
+                                <td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td>
+                            </tr>
+                            <tr>
+                                <td>"In-Place Remove Element"</td>
+                                <td>Same Direction Pointers</td>
+                                <td><code>writer = 0, reader = 0</code></td>
+                                <td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td>
+                            </tr>
+                            <tr>
+                                <td>"Contiguous Subarray Size K"</td>
+                                <td>Fixed Sliding Window</td>
+                                <td>Maintain size K, slide L &amp; R together</td>
+                                <td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td>
+                            </tr>
+                            <tr>
+                                <td>"Longest Substring / Min Window"</td>
+                                <td>Variable Sliding Window</td>
+                                <td>Expand R, shrink L on condition</td>
+                                <td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Sliding Window eliminates redundant inner loops by updating window state incrementally at array edges!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 2: 04.1 FIXED SIZE WINDOW PATTERN & TEMPLATE -->
+    <!-- ========================================================= -->
+    <div class="page" id="page2">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">📏</span>
+                    <h1>TOPIC 04.1: FIXED SIZE WINDOW PATTERN &amp; TEMPLATE</h1>
+                </div>
+                <span class="page-num">PAGE 2 OF 12</span>
+            </div>
+
+            <!-- AHA Box -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #2: ROLLING SUM FORMULA</strong><br/>
+                For a fixed window of size $K$, when moving from window $[i, i+K-1]$ to $[i+1, i+K]$, the new sum is simply:<br/>
+                <code>newSum = oldSum + nums[i + K] - nums[i]</code> (Add incoming right element, subtract outgoing left element)!
+            </div>
+
+            <div class="grid-2">
+                <!-- Concept -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> FIXED WINDOW CORE CONCEPT</div>
+                    <div class="section-content">
+                        <div>First initialize the sum/state of the first $K$ elements. Then loop `right` from index $K$ to $N-1$, adding `nums[right]` and subtracting `nums[right - K]` in $O(1)$ time per step.</div>
+                    </div>
+                </div>
+
+                <!-- Template Code -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">2</span> FIXED WINDOW JAVA TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+public int fixedWindowTemplate(int[] nums, int k) {
+    int windowSum = 0;
+    // Step 1: Build first window of size K
+    for (int i = 0; i &lt; k; i++) windowSum += nums[i];
+    int maxSum = windowSum;
+
+    // Step 2: Slide window from K to N-1
+    for (int right = k; right &lt; nums.length; right++) {
+        windowSum += nums[right] - nums[right - k]; // Rolling sum
+        maxSum = Math.max(maxSum, windowSum);
+    }
+    return maxSum;
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step-by-Step Window Evolution -->
+            <div class="section-box box-purple">
+                <div class="section-header">🎨 STEP-BY-STEP WINDOW EVOLUTION VISUALIZATION</div>
+                <div class="section-content">
+                    <div style="font-weight:700; margin-bottom:4px;">Input: <code>nums = [2, 1, 5, 1, 3, 2]</code>, K = <code>3</code></div>
+                    
+                    <div class="window-viz">
+                        <div class="window-title">INITIAL WINDOW (i=0 to 2): [2, 1, 5]</div>
+                        <div>Sum = 2 + 1 + 5 = 8 │ MaxSum = 8</div>
+                    </div>
+
+                    <div class="window-viz">
+                        <div class="window-title">SLIDE 1 (right=3, outgoing=nums[0]=2, incoming=nums[3]=1): [1, 5, 1]</div>
+                        <div>Sum = 8 + 1 - 2 = 7 │ MaxSum = 8</div>
+                    </div>
+
+                    <div class="window-viz">
+                        <div class="window-title">SLIDE 2 (right=4, outgoing=nums[1]=1, incoming=nums[4]=3): [5, 1, 3]</div>
+                        <div>Sum = 7 + 3 - 1 = 9 │ MaxSum = 9 (NEW MAX!)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            ⚠️ <strong>COMMON BUG:</strong> Off-by-one error when subtracting outgoing element! Outgoing index is `right - K`, not `right - K + 1`.
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 3: 04.2 VARIABLE SIZE WINDOW PATTERN & TEMPLATE -->
+    <!-- ========================================================= -->
+    <div class="page" id="page3">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">↔️</span>
+                    <h1>TOPIC 04.2: VARIABLE SIZE WINDOW PATTERN &amp; TEMPLATE</h1>
+                </div>
+                <span class="page-num">PAGE 3 OF 12</span>
+            </div>
+
+            <!-- AHA Box -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #3: EXPAND UNTIL INVALID, SHRINK UNTIL VALID</strong><br/>
+                In Variable Windows, outer `right` pointer EXPANDS the window to include new elements. When a constraint is violated, inner `while` loop advances `left` pointer to SHRINK the window until validity is restored!
+            </div>
+
+            <div class="grid-2">
+                <!-- Concept -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> VARIABLE WINDOW MECHANICS</div>
+                    <div class="section-content">
+                        <div>Both `left` and `right` start at 0. Outer `for` loop moves `right` forward. If window condition becomes invalid, inner `while` loop increments `left` and removes `nums[left]` from state.</div>
+                    </div>
+                </div>
+
+                <!-- Template Code -->
+                <div class="section-box box-green">
+                    <div class="section-header"><span class="num">2</span> VARIABLE WINDOW JAVA TEMPLATE</div>
+                    <div class="section-content">
+<pre>
+public int variableWindowTemplate(int[] nums, int target) {
+    int left = 0, currentSum = 0, maxLen = 0;
+    for (int right = 0; right &lt; nums.length; right++) {
+        currentSum += nums[right]; // Step 1: Expand window
+        // Step 2: Shrink while window condition is invalid
+        while (currentSum &gt; target) {
+            currentSum -= nums[left];
+            left++;
+        }
+        // Step 3: Record valid window max length
+        maxLen = Math.max(maxLen, right - left + 1);
+    }
+    return maxLen;
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Window Evolution Visualization -->
+            <div class="section-box box-orange">
+                <div class="section-header">🎨 WINDOW EVOLUTION: LONGEST SUBARRAY SUM &le; 7</div>
+                <div class="section-content">
+                    <div style="font-weight:700; margin-bottom:4px;">Input: <code>nums = [2, 3, 1, 2, 4, 3]</code>, Target = <code>7</code></div>
+                    
+                    <div class="window-viz">
+                        <div class="window-title">EXPAND 1 (right=0..2): Window [2, 3, 1]</div>
+                        <div>Sum = 6 &le; 7 (Valid) │ Length = 3 - 0 = 3</div>
+                    </div>
+
+                    <div class="window-viz">
+                        <div class="window-title">EXPAND 2 (right=3): Window [2, 3, 1, 2]</div>
+                        <div>Sum = 8 &gt; 7 (INVALID!) ➔ Shrink left=0 (sub 2): Window [3, 1, 2], Sum = 6 &le; 7 (Valid!) │ Length = 3</div>
+                    </div>
+
+                    <div class="window-viz">
+                        <div class="window-title">EXPAND 3 (right=4): Window [3, 1, 2, 4]</div>
+                        <div>Sum = 10 &gt; 7 (INVALID!) ➔ Shrink left=1 (sub 3): Window [1, 2, 4], Sum = 7 &le; 7 (Valid!) │ Length = 3</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Variable Window processes $N$ elements in $O(N)$ total time because `left` and `right` move forward at most $N$ times!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 4: 04.3 CHARACTER FREQUENCY WINDOW & 04.4 OPTIMIZATIONS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page4">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">🔤</span>
+                    <h1>FREQUENCY WINDOWS &amp; OPTIMIZATION PATTERNS</h1>
+                </div>
+                <span class="page-num">PAGE 4 OF 12</span>
+            </div>
+
+            <!-- Frequency Windows -->
+            <div class="section-box box-teal">
+                <div class="section-header"><span class="num">1</span> CHARACTER FREQUENCY ARRAY VS HASHMAP</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <strong>Primitive int[128] Array Optimization:</strong>
+                            <div>When dealing with ASCII characters, use <code>int[128] freq</code> instead of <code>HashMap&lt;Character, Integer&gt;</code>! It eliminates object boxing overhead and runs 10x faster in FAANG benchmarks!</div>
+                        </div>
+                        <div>
+<pre>
+// Fast ASCII Frequency Tracking
+int[] freq = new int[128];
+freq[s.charAt(right)]++; // Expand char
+// Shrink char:
+freq[s.charAt(left)]--; left++;</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- At Most K to Exactly K Conversion -->
+            <div class="section-box box-amber">
+                <div class="section-header"><span class="num">2</span> AHA MOMENT: "EXACTLY K" TO "AT MOST K" TRICK</div>
+                <div class="section-content">
+                    <div class="aha-box" style="margin:0 0 6px 0;">
+                        💡 <strong>THE EXACTLY K FORMULA:</strong><br/>
+                        Directly counting subarrays with <em>Exactly K</em> distinct elements is complex because sliding windows naturally bound range ceilings. Use the universal mathematical identity:<br/>
+                        <code>Exactly(K) = AtMost(K) - AtMost(K - 1)</code>!
+                    </div>
+                    <div>This simple subtraction converts hard "Exactly K" problems (like LC 992) into two standard "At Most K" variable window passes!</div>
+                </div>
+            </div>
+
+            <!-- Java Toolkit Hacks -->
+            <div class="section-box box-indigo">
+                <div class="section-header">🛠️ JAVA SLIDING WINDOW TOOLKIT &amp; HACKS</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <strong>Valid Match Counter Trick:</strong>
+<pre style="margin:0;">
+// Track matching unique character counts
+int matches = 0;
+if (map.get(c) == targetMap.get(c)) matches++;</pre>
+                        </div>
+                        <div>
+                            <strong>Window Length Calculation:</strong>
+<pre style="margin:0;">
+// Current window length between left &amp; right inclusive
+int windowLen = right - left + 1;</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> `int[128]` array frequency lookup is $O(1)$ constant time with zero garbage collection pause!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 5: 04.5 PATTERN RECOGNITION & DECISION TREE -->
+    <!-- ========================================================= -->
+    <div class="page" id="page5">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">🎯</span>
+                    <h1>TOPIC 04.5: PATTERN RECOGNITION &amp; DECISION TREE</h1>
+                </div>
+                <span class="page-num">PAGE 5 OF 12</span>
+            </div>
+
+            <!-- Recognition Matrix -->
+            <div class="section-box box-amber">
+                <div class="section-header">🎯 RECOGNITION SIGNALS: KEYWORD TO WINDOW CHOICE</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Problem Trigger Keyword</th>
+                                <th>Sliding Window Pattern Choice</th>
+                                <th>Window Condition Rule</th>
+                                <th>Target Complexity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>"Contiguous subarray of size K"</td>
+                                <td>Fixed Window (Size K)</td>
+                                <td>Maintain fixed window size $K$, slide `left` &amp; `right` together.</td>
+                                <td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td>
+                            </tr>
+                            <tr>
+                                <td>"Longest substring without repeating"</td>
+                                <td>Variable Window (Longest)</td>
+                                <td>Expand `right`. Shrink `left` while `freq[char] &gt; 1`.</td>
+                                <td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td>
+                            </tr>
+                            <tr>
+                                <td>"Minimum window substring containing T"</td>
+                                <td>Variable Window (Shortest)</td>
+                                <td>Expand `right` until valid. Shrink `left` aggressively while valid.</td>
+                                <td>Time: <code>O(N)</code>, Space: <code>O(1)</code></td>
+                            </tr>
+                            <tr>
+                                <td>"Subarrays with exactly K distinct"</td>
+                                <td>At Most K Math Formula</td>
+                                <td>Return <code>AtMost(K) - AtMost(K - 1)</code>.</td>
+                                <td>Time: <code>O(N)</code>, Space: <code>O(K)</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Architectural Decision Cards -->
+            <div class="section-box box-purple">
+                <div class="section-header">🌳 SLIDING WINDOW ARCHITECTURAL DECISION CARDS</div>
+                <div class="section-content">
+                    <div class="grid-3">
+                        <div style="background:#eff6ff; padding:8px; border-radius:5px; border:1px solid #bfdbfe;">
+                            <strong style="color:#1e40af;">Fixed Window</strong>
+                            <p style="margin:4px 0 0 0;">Window size $K$ given explicitly in prompt. Single loop pass with rolling sum/count.</p>
+                        </div>
+                        <div style="background:#f0fdf4; padding:8px; border-radius:5px; border:1px solid #bbf7d0;">
+                            <strong style="color:#15803d;">Variable (Longest)</strong>
+                            <p style="margin:4px 0 0 0;">Find max window length. Expand `right`, shrink `left` when condition is violated.</p>
+                        </div>
+                        <div style="background:#faf5ff; padding:8px; border-radius:5px; border:1px solid #e9d5ff;">
+                            <strong style="color:#6b21a8;">Variable (Shortest)</strong>
+                            <p style="margin:4px 0 0 0;">Find min window length. Expand `right` until valid, shrink `left` aggressively.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🗣️ <strong>FAANG INTERVIEW TIP:</strong> State whether the problem requires a Fixed or Variable window before writing code!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 6: EASY NEETCODE DRILLS (BUY/SELL STOCK & MAX AVG) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page6">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">🧩</span>
+                    <h1>EASY NEETCODE: BUY/SELL STOCK &amp; MAX AVG SUBARRAY</h1>
+                </div>
+                <span class="page-num">PAGE 6 OF 12</span>
+            </div>
+
+            <!-- Problem 1: LC 121 -->
+            <div class="section-box box-blue">
+                <div class="section-header">1. LEETCODE 121 — BEST TIME TO BUY &amp; SELL STOCK</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★☆☆</span>
+                                <span>Dynamic Window</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: Read Prompt ➔ Single Buy/Sell Pair ➔ Track Min Buying Price ➔ Window Profit O(N)
+                            </div>
+
+                            <strong>Problem:</strong> Find max profit from buying on day `i` and selling on day `j &gt; i`.<br/><em>Example:</em> <code>prices = [7,1,5,3,6,4]</code> → <code>5</code>.
+
+                            <!-- Why Not Box -->
+                            <div class="whynot-box">
+                                ❓ <strong>Why Not DP O(N²)?</strong> Nested loops checking all buy/sell pairs TLE. Tracking `minPrice` dynamically achieves O(N) time &amp; O(1) space!
+                            </div>
+
+                            <!-- Dialogue Box -->
+                            <div class="dialogue-box">
+                                <span class="dialogue-speaker">Interviewer:</span> Can you do this in one pass?<br/>
+                                <span class="dialogue-speaker">Candidate:</span> Yes! Maintain `minPrice` seen so far and calculate profit at each day in O(N).
+                            </div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int maxProfit(int[] prices) {
+    int minPrice = Integer.MAX_VALUE, maxProfit = 0;
+    for (int price : prices) {
+        if (price &lt; minPrice) minPrice = price; // Step 1: Update min buying price
+        else maxProfit = Math.max(maxProfit, price - minPrice); // Step 2: Calculate max profit
+    }
+    return maxProfit;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 2: LC 643 -->
+            <div class="section-box box-purple">
+                <div class="section-header">2. LEETCODE 643 — MAXIMUM AVERAGE SUBARRAY I</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★☆</span>
+                                <span>Fixed Window K</span>
+                                <span class="company-tag">Google</span><span class="company-tag">MS</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: Read Prompt ➔ Subarray Size K Given ➔ Fixed Window Rolling Sum O(N)
+                            </div>
+
+                            <strong>Problem:</strong> Max average of contiguous subarray of length <code>k</code>.<br/><em>Example:</em> <code>nums = [1,12,-5,-6,50,3], k = 4</code> → <code>12.75</code>.
+
+                            <!-- Why Not Box -->
+                            <div class="whynot-box">
+                                ❓ <strong>Why Not Recompute Sum O(N·K)?</strong> Sliding window adds `nums[i]` and subtracts `nums[i-k]` in O(1) per step!
+                            </div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public double findMaxAverage(int[] nums, int k) {
+    double sum = 0;
+    for (int i = 0; i &lt; k; i++) sum += nums[i]; // Step 1: Build first window
+    double maxSum = sum;
+    for (int i = k; i &lt; nums.length; i++) {
+        sum += nums[i] - nums[i - k]; // Step 2: Rolling sum update
+        maxSum = Math.max(maxSum, sum);
+    }
+    return maxSum / k;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT:</strong> Fixed Window eliminates redundant element additions by using `sum += incoming - outgoing`!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 7: MEDIUM NEETCODE (LONGEST SUBSTRING & CHAR REPLACEMENT) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page7">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">✂️</span>
+                    <h1>MEDIUM NEETCODE: LONGEST SUBSTRING &amp; CHAR REPLACEMENT</h1>
+                </div>
+                <span class="page-num">PAGE 7 OF 12</span>
+            </div>
+
+            <!-- Problem 3: LC 3 -->
+            <div class="section-box box-green">
+                <div class="section-header">3. LEETCODE 3 — LONGEST SUBSTRING WITHOUT REPEATING CHARS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Variable Window</span>
+                                <span class="company-tag">Meta</span><span class="company-tag">Google</span><span class="company-tag">Amazon</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: Prompt "No Repeats" ➔ Track Last Seen Index ➔ Jump Left Pointer O(N)
+                            </div>
+
+                            <strong>Problem:</strong> Length of longest substring without repeating chars.<br/><em>Example:</em> <code>s = "abcabcbb"</code> → <code>3</code> ("abc").
+
+                            <!-- Why Not Box -->
+                            <div class="whynot-box">
+                                ❓ <strong>Why Not HashSet O(N) Shrink?</strong> `int[128] lastSeen` array lets `left` JUMP directly past duplicates in O(1)!
+                            </div>
+
+                            <!-- Dialogue Box -->
+                            <div class="dialogue-box">
+                                <span class="dialogue-speaker">Interviewer:</span> How to avoid slow character-by-character left pointer shrinking?<br/>
+                                <span class="dialogue-speaker">Candidate:</span> Store last seen index of each character to jump `left` instantly!
+                            </div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int lengthOfLongestSubstring(String s) {
+    int[] lastSeen = new int[128];
+    Arrays.fill(lastSeen, -1);
+    int left = 0, maxLen = 0;
+    for (int right = 0; right &lt; s.length(); right++) {
+        char c = s.charAt(right);
+        if (lastSeen[c] &gt;= left) left = lastSeen[c] + 1; // Step 1: Jump left
+        lastSeen[c] = right; // Step 2: Update last seen position
+        maxLen = Math.max(maxLen, right - left + 1); // Step 3: Track max len
+    }
+    return maxLen;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 4: LC 424 -->
+            <div class="section-box box-purple">
+                <div class="section-header">4. LEETCODE 424 — LONGEST REPEATING CHARACTER REPLACEMENT</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Variable Frequency</span>
+                                <span class="company-tag">Google</span><span class="company-tag">Uber</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: Prompt "K Replacements" ➔ Track maxFreq ➔ Valid if (len - maxFreq &le; k)
+                            </div>
+
+                            <strong>Problem:</strong> Longest substring of same char after replacing at most <code>k</code> chars.<br/><em>Example:</em> <code>s = "AABABBA", k = 1</code> → <code>4</code>.
+
+                            <!-- Why Not Box -->
+                            <div class="whynot-box">
+                                ❓ <strong>Why Not Recalculate maxFreq on Shrink?</strong> `maxFreq` only needs to track global max because window length only increases when `maxFreq` grows!
+                            </div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int characterReplacement(String s, int k) {
+    int[] counts = new int[26];
+    int left = 0, maxFreq = 0, maxLen = 0;
+    for (int right = 0; right &lt; s.length(); right++) {
+        maxFreq = Math.max(maxFreq, ++counts[s.charAt(right) - 'A']);
+        if ((right - left + 1) - maxFreq &gt; k) { // Step 1: Shrink if invalid
+            counts[s.charAt(left) - 'A']--;
+            left++;
+        }
+        maxLen = Math.max(maxLen, right - left + 1); // Step 2: Record max len
+    }
+    return maxLen;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 3):</strong> Using `int[128] lastSeen` array allows `left` pointer to JUMP directly past the last duplicate position!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 8: MEDIUM NEETCODE (PERMUTATION & FIND ANAGRAMS) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page8">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">⚡</span>
+                    <h1>MEDIUM NEETCODE: PERMUTATION IN STRING &amp; ANAGRAMS</h1>
+                </div>
+                <span class="page-num">PAGE 8 OF 12</span>
+            </div>
+
+            <!-- Problem 5: LC 567 -->
+            <div class="section-box box-blue">
+                <div class="section-header">5. LEETCODE 567 — PERMUTATION IN STRING</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Fixed Window s1.length()</span>
+                                <span class="company-tag">Meta</span><span class="company-tag">Datadog</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: Prompt "Permutation Match" ➔ Fixed Window size s1.length() ➔ Compare int[26] Arrays
+                            </div>
+
+                            <strong>Problem:</strong> Return <code>true</code> if <code>s2</code> contains a permutation of <code>s1</code>.<br/><em>Example:</em> <code>s1 = "ab", s2 = "eidbaooo"</code> → <code>true</code> ("ba").
+
+                            <!-- Why Not Box -->
+                            <div class="whynot-box">
+                                ❓ <strong>Why Not Sort Substrings O(N·K log K)?</strong> Sliding fixed frequency map compares in O(26) = O(1) time per window!
+                            </div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public boolean checkInclusion(String s1, String s2) {
+    if (s1.length() &gt; s2.length()) return false;
+    int[] s1Map = new int[26], s2Map = new int[26];
+    for (int i = 0; i &lt; s1.length(); i++) {
+        s1Map[s1.charAt(i) - 'a']++; s2Map[s2.charAt(i) - 'a']++;
+    }
+    if (Arrays.equals(s1Map, s2Map)) return true;
+    for (int i = s1.length(); i &lt; s2.length(); i++) {
+        s2Map[s2.charAt(i) - 'a']++; // Step 1: Add right
+        s2Map[s2.charAt(i - s1.length()) - 'a']--; // Step 2: Sub left
+        if (Arrays.equals(s1Map, s2Map)) return true;
+    }
+    return false;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 6: LC 438 -->
+            <div class="section-box box-teal">
+                <div class="section-header">6. LEETCODE 438 — FIND ALL ANAGRAMS IN A STRING</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★★</span>
+                                <span>Fixed Window p.length()</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Apple</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: Prompt "All Anagram Indices" ➔ Fixed Window size p.length() ➔ Record match indices
+                            </div>
+
+                            <strong>Problem:</strong> Return all start indices of <code>p</code>'s anagrams in <code>s</code>.<br/><em>Example:</em> <code>s = "cbaebabacd", p = "abc"</code> → <code>[0, 6]</code>.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public List&lt;Integer&gt; findAnagrams(String s, String p) {
+    List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+    if (s.length() &lt; p.length()) return res;
+    int[] pCount = new int[26], sCount = new int[26];
+    for (int i = 0; i &lt; p.length(); i++) {
+        pCount[p.charAt(i) - 'a']++; sCount[s.charAt(i) - 'a']++;
+    }
+    if (Arrays.equals(pCount, sCount)) res.add(0);
+    for (int i = p.length(); i &lt; s.length(); i++) {
+        sCount[s.charAt(i) - 'a']++;
+        sCount[s.charAt(i - p.length()) - 'a']--;
+        if (Arrays.equals(pCount, sCount)) res.add(i - p.length() + 1);
+    }
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT:</strong> Permutation in String &amp; Find All Anagrams use identical fixed sliding window mechanisms of size `p.length()`!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 9: MEDIUM NEETCODE (FRUIT INTO BASKETS & MAX ERASURE) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page9">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">🍉</span>
+                    <h1>MEDIUM NEETCODE: FRUIT BASKETS &amp; MAX ERASURE VALUE</h1>
+                </div>
+                <span class="page-num">PAGE 9 OF 12</span>
+            </div>
+
+            <!-- Problem 7: LC 904 -->
+            <div class="section-box box-orange">
+                <div class="section-header">7. LEETCODE 904 — FRUIT INTO BASKETS (AT MOST 2 TYPES)</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★☆</span>
+                                <span>At Most 2 Distinct</span>
+                                <span class="company-tag">Google</span><span class="company-tag">Uber</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: Prompt "2 Baskets" ➔ Map size &le; 2 ➔ Shrink left when map.size() &gt; 2
+                            </div>
+
+                            <strong>Problem:</strong> Max total fruits collected into at most 2 baskets (2 distinct types).<br/><em>Example:</em> <code>fruits = [1,2,3,2,2]</code> → <code>4</code> ([2,3,2,2]).
+
+                            <!-- Why Not Box -->
+                            <div class="whynot-box">
+                                ❓ <strong>Why Not DP?</strong> Window validity depends strictly on distinct map keys, solvable in O(N) linear space/time!
+                            </div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int totalFruit(int[] fruits) {
+    Map&lt;Integer, Integer&gt; count = new HashMap&lt;&gt;();
+    int left = 0, maxFruit = 0;
+    for (int right = 0; right &lt; fruits.length; right++) {
+        count.put(fruits[right], count.getOrDefault(fruits[right], 0) + 1);
+        while (count.size() &gt; 2) {
+            count.put(fruits[left], count.get(fruits[left]) - 1);
+            if (count.get(fruits[left]) == 0) count.remove(fruits[left]);
+            left++;
+        }
+        maxFruit = Math.max(maxFruit, right - left + 1);
+    }
+    return maxFruit;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 8: LC 1695 -->
+            <div class="section-box box-rose">
+                <div class="section-header">8. LEETCODE 1695 — MAXIMUM ERASURE VALUE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★☆</span>
+                                <span>Unique Subarray Sum</span>
+                                <span class="company-tag">Meta</span><span class="company-tag">Amazon</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: Prompt "Unique Subarray Max Sum" ➔ HashSet Unique Check ➔ Shrink left on duplicate
+                            </div>
+
+                            <strong>Problem:</strong> Max score from erasing a contiguous subarray containing unique elements.<br/><em>Example:</em> <code>nums = [4,2,4,5,6]</code> → <code>17</code> ([2,4,5,6]).
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int maximumUniqueSubarray(int[] nums) {
+    Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+    int left = 0, currentSum = 0, maxSum = 0;
+    for (int right = 0; right &lt; nums.length; right++) {
+        while (set.contains(nums[right])) {
+            set.remove(nums[left]);
+            currentSum -= nums[left];
+            left++;
+        }
+        set.add(nums[right]);
+        currentSum += nums[right];
+        maxSum = Math.max(maxSum, currentSum);
+    }
+    return maxSum;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT:</strong> Fruit Into Baskets is simply "Longest Subarray with At Most 2 Distinct Elements"!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 10: HARD NEETCODE (MIN WINDOW SUBSTRING & SUBARRAYS K) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page10">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">🔥</span>
+                    <h1>HARD NEETCODE: MIN WINDOW SUBSTRING &amp; SUBARRAYS K</h1>
+                </div>
+                <span class="page-num">PAGE 10 OF 12</span>
+            </div>
+
+            <!-- Problem 9: LC 76 -->
+            <div class="section-box box-red">
+                <div class="section-header">9. LEETCODE 76 — MINIMUM WINDOW SUBSTRING</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Shortest Window</span>
+                                <span class="company-tag">Meta</span><span class="company-tag">Google</span><span class="company-tag">Amazon</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: Prompt "Min Substring T" ➔ Expand until valid ➔ Shrink left aggressively while valid!
+                            </div>
+
+                            <strong>Problem:</strong> Minimum window substring in <code>s</code> containing all characters of <code>t</code>.<br/><em>Example:</em> <code>s = "ADOBECODEBANC", t = "ABC"</code> → <code>"BANC"</code>.
+
+                            <!-- Dialogue Box -->
+                            <div class="dialogue-box">
+                                <span class="dialogue-speaker">Interviewer:</span> Why expand right first, then shrink left inside a inner loop?<br/>
+                                <span class="dialogue-speaker">Candidate:</span> Outer loop finds a valid candidate window; inner loop minimizes window size while maintaining validity!
+                            </div>
+                        </div>
+                        <div class="problem-code">
+<pre>
+public String minWindow(String s, String t) {
+    if (s.length() &lt; t.length()) return "";
+    int[] targetMap = new int[128];
+    for (char c : t.toCharArray()) targetMap[c]++;
+    int left = 0, minLen = Integer.MAX_VALUE, start = 0, required = t.length();
+    for (int right = 0; right &lt; s.length(); right++) {
+        if (targetMap[s.charAt(right)]-- &gt; 0) required--;
+        while (required == 0) { // Step 1: Valid window!
+            if (right - left + 1 &lt; minLen) {
+                minLen = right - left + 1; start = left; // Step 2: Record min
+            }
+            if (++targetMap[s.charAt(left)] &gt; 0) required++;
+            left++; // Step 3: Shrink left
+        }
+    }
+    return minLen == Integer.MAX_VALUE ? "" : s.substring(start, start + minLen);
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 10: LC 992 -->
+            <div class="section-box box-indigo">
+                <div class="section-header">10. LEETCODE 992 — SUBARRAYS WITH K DIFFERENT INTEGERS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>At Most K Subtraction</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: Prompt "Exactly K Distinct" ➔ Exactly(K) = AtMost(K) - AtMost(K-1)
+                            </div>
+
+                            <strong>Problem:</strong> Number of good subarrays with exactly <code>k</code> different integers.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int subarraysWithKDistinct(int[] nums, int k) {
+    return atMostK(nums, k) - atMostK(nums, k - 1);
+}
+private int atMostK(int[] nums, int k) {
+    Map&lt;Integer, Integer&gt; count = new HashMap&lt;&gt;();
+    int left = 0, res = 0;
+    for (int right = 0; right &lt; nums.length; right++) {
+        count.put(nums[right], count.getOrDefault(nums[right], 0) + 1);
+        while (count.size() &gt; k) {
+            count.put(nums[left], count.get(nums[left]) - 1);
+            if (count.get(nums[left]) == 0) count.remove(nums[left]);
+            left++;
+        }
+        res += right - left + 1; // Step 1: Count all valid ending at right
+    }
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🧠 <strong>MEMORY BOX:</strong> `atMost(K)` counts all valid subarrays ending at `right` with `right - left + 1` in $O(N)$ time!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 11: COMMON FAILURE CASES & UNSEEN PRACTICE DRILLS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page11">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">⛔</span>
+                    <h1>WHEN SLIDING WINDOW FAILS &amp; INTERVIEW DRILLS</h1>
+                </div>
+                <span class="page-num">PAGE 11 OF 12</span>
+            </div>
+
+            <!-- Common Failure Cases -->
+            <div class="section-box box-red">
+                <div class="section-header">⛔ WHEN SLIDING WINDOW FAILS (DO NOT USE!)</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <strong>1. Negative Numbers in Array (LC 560):</strong>
+                            <div>Sliding window relies on <strong>monotonicity</strong> (adding positive numbers increases sum, shrinking left decreases sum). If array has negative numbers, moving `left` may INCREASE sum! Use <strong>Prefix Sum + HashMap</strong> instead!</div>
+                        </div>
+                        <div>
+                            <strong>2. Non-Contiguous Subsequence Choices (LC 300):</strong>
+                            <div>Sliding Window REQUIRES contiguous subarrays/substrings. If prompt asks for subsequences or combinations, use <strong>Dynamic Programming / Backtracking</strong>!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unseen Practice Challenges -->
+            <div class="section-box box-amber">
+                <div class="section-header">🎯 UNSEEN INTERVIEW CHALLENGES (IDENTIFY PATTERN BEFORE LOOKING!)</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Challenge Prompt</th>
+                                <th>Pattern Recognition Answer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>"Find max sum of non-overlapping 3 subarrays of size K"</td>
+                                <td><strong>Fixed Window + DP Prefix Arrays</strong> (Slide 3 fixed size K windows)</td>
+                            </tr>
+                            <tr>
+                                <td>"Longest substring with at most K distinct characters"</td>
+                                <td><strong>Variable Window (Longest)</strong> (Shrink left while `map.size() > K`)</td>
+                            </tr>
+                            <tr>
+                                <td>"Count subarrays with sum equal to K (with negatives)"</td>
+                                <td><strong>WRONG FOR WINDOW!</strong> Use Prefix Sum + HashMap!</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Checking whether negative numbers exist BEFORE choosing Sliding Window is a senior engineer signal!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 12: IF YOU REMEMBER ONLY ONE PAGE... MASTER SUMMARY SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page12">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">💎</span>
+                    <h1>IF YOU REMEMBER ONLY ONE PAGE... MASTER REVISION SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 12 OF 12</span>
+            </div>
+
+            <!-- Master Golden Rules -->
+            <div class="section-box box-green">
+                <div class="section-header">⭐ THE 4 GOLDEN LAWS OF SLIDING WINDOW</div>
+                <div class="section-content">
+                    <div style="font-size:0.82rem; line-height:1.5;">
+                        1. <strong>Fixed Window Size K:</strong> Slide `left` &amp; `right` together! <code>sum += incoming - outgoing</code>.<br/>
+                        2. <strong>Variable Window Longest:</strong> Expand `right`. Shrink `left` while condition is INVALID. Update max length.<br/>
+                        3. <strong>Variable Window Shortest:</strong> Expand `right` until valid. Shrink `left` aggressively while VALID. Update min length.<br/>
+                        4. <strong>Exactly K Formula:</strong> <code>Exactly(K) = AtMost(K) - AtMost(K - 1)</code>!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Code Cheat Sheet -->
+            <div class="section-box box-indigo">
+                <div class="section-header">⚡ 1-MINUTE REVISION CODE TEMPLATE</div>
+                <div class="section-content">
+<pre style="margin:0;">
+// Universal Variable Window Template
+int left = 0, result = 0;
+for (int right = 0; right &lt; n; right++) {
+    // 1. Expand right
+    updateState(nums[right]);
+    // 2. Shrink left if invalid
+    while (isInvalid()) {
+        removeState(nums[left]);
+        left++;
+    }
+    // 3. Update answer
+    result = Math.max(result, right - left + 1);
+}</pre>
+                </div>
+            </div>
+
+            <!-- Forward Cross Link -->
+            <a href="index.html" class="cross-link" style="background:#dcfce7; color:#15803d; border-color:#86efac; font-size:0.8rem;">👉 Next Master Topic: Topic 05 → Binary Search Masterclass</a>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🎉 <strong>TOPIC 04 SLIDING WINDOW 10/10 COMPLETE!</strong> Ready for <strong>Topic 05: Binary Search Masterclass</strong>!
+        </div>
+    </div>
+
+</div>
+
+    </div> <!-- end .main-content -->
+</div> <!-- end .app-layout -->
+
+<!-- Floating Back to Top Button -->
+<button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆</button>
+
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout') || document.querySelector('.app-layout');
+        const btn = document.querySelector('.shrink-btn span');
+        if (layout) {
+            layout.classList.toggle('shrunk');
+            if (btn) {
+                btn.innerText = layout.classList.contains('shrunk') ? '➕ Expand' : '➖ Shrink';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+

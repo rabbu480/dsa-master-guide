@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Topic 05: Binary Search — FAANG Book 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+  min-height: 850px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 14px;
+  flex-shrink: 0; }
+.ph h1 { font-size: 1.8rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.88rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.bh  { background: var(--pri); color: white; padding: 6px 12px;
+  font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 18px; height: 18px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 10px 12px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 8px 10px; font-size: 0.68rem; line-height: 1.45; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-word; }
+code { font-size: 0.76rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+th, td { border: 1px solid var(--bdr); padding: 5px 7px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur);
+  border-radius: 6px; padding: 8px 10px; margin-top: 6px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.82rem; margin-bottom: 3px; }
+
+.mt-auto { margin-top: auto; }
+
+.dt-row { display: flex; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; margin-bottom: 4px; }
+.dt-q { background: #eff6ff; padding: 4px 7px; font-weight: 600; flex: 1; font-size: 0.72rem; display: flex; align-items: center; }
+.dt-arrow { background: white; padding: 4px 3px; color: #64748b; font-size: 0.75rem; display: flex; align-items: center; }
+.dt-a { background: #f0fdf4; padding: 4px 7px; font-weight: 700; flex: 1.2; font-size: 0.72rem; display: flex; align-items: center; }
+
+.pattern-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+.pattern-cell { background: #f8fafc; border: 1px solid var(--bdr); border-radius: 3px; padding: 3px 6px; font-size: 0.7rem; display: flex; justify-content: space-between; align-items: center; }
+.pattern-cell .trigger { font-weight: 600; color: var(--pri); }
+.pattern-cell .think { color: var(--grn); font-weight: 700; }
+
+.io-box {
+  background: #f8fafc; border: 1px solid var(--bdr); border-left: 3px solid var(--sec);
+  padding: 4px 8px; margin: 3px 0; border-radius: 3px; font-family: 'Fira Code', monospace;
+  font-size: 0.7rem;
+}
+
+.prob-card {
+  border: 1.5px solid var(--bdr);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.prob-head {
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--bdr);
+}
+.prob-head .ptitle { font-size: 0.82rem; font-weight: 700; color: var(--pri); }
+.diff-e { background: #dcfce7; color: #166534; padding: 1px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 1px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 1px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.72rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 6px 10px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; min-height: 95vh !important; height: 98vh !important; overflow: hidden !important; zoom: 0.85; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+  pre {
+    background: #f8fafc !important;
+    color: #0f172a !important;
+    border: 1.5px solid #cbd5e1 !important;
+    font-family: 'Fira Code', monospace !important;
+    font-size: 0.7rem !important;
+    line-height: 1.3 !important;
+    padding: 6px 8px !important;
+    white-space: pre-wrap !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- ============================================================ -->
+<!-- PAGE 1: FOUNDATION -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>BINARY SEARCH</h1><div class="sub">FAANG Book 4 — The Foundation</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 1 OF 8</div></div>
+  </div>
+
+  <!-- 3-Column -->
+  <div class="g3" style="margin-bottom:12px">
+    <div class="box pur">
+      <div class="bh">💡 WHY BINARY SEARCH?</div>
+      <div class="bc">
+        <p style="margin-bottom:6px">Imagine guessing a number between 1 and 1,000,000. Linear search takes 1,000,000 guesses. Binary search takes only <strong>20 guesses</strong> by halving the search space each time!</p>
+        <div class="aha">
+          <div class="aha-t">💡 THE BINARY SEARCH AHA</div>
+          Binary Search is NOT just array search! It's a general <strong>search-space reduction paradigm</strong>. Evaluate the middle element against a monotonic property to discard half the search space in O(1) time!
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="bh">🤔 WHY NOT LINEAR SEARCH?</div>
+      <div class="bc">
+        <ul style="padding-left:16px;font-size:0.76rem">
+          <li><strong>Linear Search O(N):</strong> For N = 10⁹, takes 10⁹ operations → 10 seconds!</li>
+          <li><strong>Binary Search O(log N):</strong> For N = 10⁹, takes only 30 operations → microseconds!</li>
+          <li><strong>Requires:</strong> Sorted data or a monotonic predicate.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box sky">
+      <div class="bh"><span class="n">2</span> VISUALIZING SEARCH SPACE</div>
+      <div class="bc">
+        <div style="font-weight:700;color:var(--pri);margin-bottom:4px;font-size:0.78rem;">Monotonic Transition F ➔ T:</div>
+<pre>F F F F T T T T
+        ↑
+First True (Lower Bound)
+
+N = 8 → After 3 steps: 8 → 4 → 2 → 1
+log₂(8) = 3 steps!</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Complexity Table -->
+  <div class="g2" style="margin-bottom:8px">
+    <div class="box grn">
+      <div class="bh">📚 COMPLEXITY REASONING</div>
+      <div class="bc">
+        <table>
+          <tr><th>Operation / Algorithm</th><th>Time</th><th>Space</th></tr>
+          <tr><td>Classic Binary Search</td><td><strong>O(log N)</strong></td><td><strong>O(1)</strong></td></tr>
+          <tr><td>First/Last Occurrence</td><td><strong>O(log N)</strong></td><td><strong>O(1)</strong></td></tr>
+          <tr><td>Rotated Array Search</td><td><strong>O(log N)</strong></td><td><strong>O(1)</strong></td></tr>
+          <tr><td>Binary Search on Answer</td><td><strong>O(N log M)</strong></td><td><strong>O(1)</strong></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="box amb">
+      <div class="bh">⚡ CLUES THAT SCREAM BINARY SEARCH</div>
+      <div class="bc">
+        <p style="font-size:0.76rem;margin-bottom:3px">1. <em>"Sorted array / Sorted matrix"</em> → Classic Binary Search</p>
+        <p style="font-size:0.76rem;margin-bottom:3px">2. <em>"Find first / last occurrence"</em> → Boundary Search</p>
+        <p style="font-size:0.76rem;margin-bottom:3px">3. <em>"Rotated sorted array"</em> → Rotated Binary Search</p>
+        <p style="font-size:0.76rem">4. <em>"Minimize maximum / maximize minimum"</em> → BS on Answer</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Safe Mid Formula -->
+  <div class="g2" style="margin-bottom:8px">
+    <div class="box">
+      <div class="bh">🔧 SAFE MID FORMULA</div>
+      <div class="bc">
+<pre>// ❌ WRONG — Overflows for large left + right
+int mid = (left + right) / 2;
+
+// ✅ CORRECT — Overflow-safe
+int mid = left + (right - left) / 2;
+
+// ✅ CORRECT — Using unsigned shift (Java)
+int mid = (left + right) >>> 1;</pre>
+        <div style="font-size:0.65rem;color:var(--sub);margin-top:4px;">💡 Always use the safe formula. Integer overflow is a common interview trap!</div>
+      </div>
+    </div>
+
+    <div class="box pur">
+      <div class="bh">🔧 LOWER BOUND &amp; UPPER BOUND</div>
+      <div class="bc">
+<pre>// Lower Bound: First index where arr[i] >= target
+int lowerBound(int[] arr, int target) {
+    int lo = 0, hi = arr.length;
+    while (lo < hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] < target) lo = mid + 1;
+        else hi = mid;
+    }
+    return lo;
+}
+
+// Upper Bound: First index where arr[i] > target
+int upperBound(int[] arr, int target) {
+    int lo = 0, hi = arr.length;
+    while (lo < hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] <= target) lo = mid + 1;
+        else hi = mid;
+    }
+    return lo;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interview Recognition -->
+  <div class="box red" style="margin-bottom:8px;">
+    <div class="bh">🎯 INTERVIEW RECOGNITION</div>
+    <div class="bc">
+      <div class="pattern-grid">
+        <div class="pattern-cell"><span class="trigger">"Sorted array"</span> → <span class="think">Classic Binary Search</span></div>
+        <div class="pattern-cell"><span class="trigger">"First / Last occurrence"</span> → <span class="think">Boundary Search</span></div>
+        <div class="pattern-cell"><span class="trigger">"Rotated sorted"</span> → <span class="think">Rotated Binary Search</span></div>
+        <div class="pattern-cell"><span class="trigger">"Minimize maximum"</span> → <span class="think">BS on Answer</span></div>
+        <div class="pattern-cell"><span class="trigger">"Kth smallest"</span> → <span class="think">BS on Answer</span></div>
+        <div class="pattern-cell"><span class="trigger">"Matrix sorted"</span> → <span class="think">1D Flattening BS</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5-Step Framework -->
+  <div class="box" style="flex:1;">
+    <div class="bh">⚡ 5-STEP BINARY SEARCH THINKING FRAMEWORK</div>
+    <div class="bc">
+      <ol style="padding-left:16px;font-size:0.76rem">
+        <li><strong>Is the data sorted or monotonic?</strong> If not, BS doesn't work.</li>
+        <li><strong>What are we searching for?</strong> Exact value? First occurrence? Feasibility?</li>
+        <li><strong>What's the search space?</strong> Array indices? Value range [lo, hi]?</li>
+        <li><strong>What's the mid condition?</strong> `arr[mid] == target`? `arr[mid] < target`? `isValid(mid)`?</li>
+        <li><strong>How to update bounds?</strong> `lo = mid + 1`, `hi = mid - 1`, or `hi = mid`?</li>
+      </ol>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.7rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:8px;text-align:center;">🏆 Book 4 · Binary Search · FAANG Mental Model</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 2: PATTERNS 1-3 -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>BINARY SEARCH</h1><div class="sub">Core Patterns — Part 1</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 2 OF 8</div></div>
+  </div>
+
+  <!-- Pattern 1: Classic Binary Search -->
+  <div class="prob-card" style="border-color:var(--grn);">
+    <div class="prob-head" style="background:#f0fdf4;">
+      <span class="ptitle" style="color:var(--grn);">PATTERN 1 — CLASSIC BINARY SEARCH</span>
+      <span class="diff-e">LC 704 · EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>When to Use:</strong> Find exact element in sorted array.</div>
+        <div class="io-box"><strong>Input:</strong> [-1,0,3,5,9,12], target=9</div>
+        <div class="io-box"><strong>Output:</strong> 4</div>
+        <div class="aha" style="margin-top:6px;padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          Classic template: `while (left <= right)`. If `mid == target` return. If `mid < target`, search right. Else search left.
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public int search(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if (nums[mid] == target) {
+            return mid;
+        } else if (nums[mid] < target) {
+            left = mid + 1; // Search right half
+        } else {
+            right = mid - 1; // Search left half
+        }
+    }
+    return -1; // Not found
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pattern 2: Search Insert Position -->
+  <div class="prob-card" style="border-color:var(--sky);">
+    <div class="prob-head" style="background:#eff6ff;">
+      <span class="ptitle" style="color:var(--sky);">PATTERN 2 — SEARCH INSERT POSITION</span>
+      <span class="diff-e">LC 35 · EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>When to Use:</strong> Return index if found, or insertion position if not.</div>
+        <div class="io-box"><strong>Input:</strong> [1,3,5,6], target=5</div>
+        <div class="io-box"><strong>Output:</strong> 2</div>
+        <div class="aha" style="margin-top:6px;padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          On loop finish, `left` pointer ALWAYS points to the exact insertion index!
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public int searchInsert(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if (nums[mid] == target) {
+            return mid;
+        } else if (nums[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    return left; // Insertion position
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pattern 3: Guess Number Higher or Lower -->
+  <div class="prob-card" style="border-color:var(--amb);">
+    <div class="prob-head" style="background:#fefce8;">
+      <span class="ptitle" style="color:var(--amb);">PATTERN 3 — API EVALUATION</span>
+      <span class="diff-e">LC 374 · EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>When to Use:</strong> Search using an API call instead of array indexing.</div>
+        <div class="io-box"><strong>Input:</strong> n=10, pick=6</div>
+        <div class="io-box"><strong>Output:</strong> 6</div>
+        <div class="aha" style="margin-top:6px;padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          Binary search works with ANY monotonic evaluation function, not just array indexing!
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public int guessNumber(int n) {
+    int left = 1, right = n;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        int result = guess(mid); // API call
+
+        if (result == 0) {
+            return mid;
+        } else if (result < 0) {
+            right = mid - 1; // Guess is too high
+        } else {
+            left = mid + 1; // Guess is too low
+        }
+    }
+    return -1;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.7rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:8px;text-align:center;">🏆 Book 4 · Binary Search · FAANG Mental Model</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 3: PATTERNS 4-6 -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>BINARY SEARCH</h1><div class="sub">Core Patterns — Part 2</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 3 OF 8</div></div>
+  </div>
+
+  <!-- Pattern 4: Search 2D Matrix -->
+  <div class="prob-card" style="border-color:var(--pur);">
+    <div class="prob-head" style="background:#faf5ff;">
+      <span class="ptitle" style="color:var(--pur);">PATTERN 4 — 1D MATRIX FLATTENING</span>
+      <span class="diff-m">LC 74 · MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>When to Use:</strong> Search in fully sorted matrix (row i end < row i+1 start).</div>
+        <div class="io-box"><strong>Input:</strong> matrix=[[1,3,5,7],[10,11,16,20],[23,30,34,60]], target=3</div>
+        <div class="io-box"><strong>Output:</strong> true</div>
+        <div class="aha" style="margin-top:6px;padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          Convert 1D index to 2D: `row = mid / cols`, `col = mid % cols`. This is O(1) mapping!
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public boolean searchMatrix(int[][] matrix, int target) {
+    int rows = matrix.length, cols = matrix[0].length;
+    int left = 0, right = rows * cols - 1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        int val = matrix[mid / cols][mid % cols]; // 1D → 2D mapping
+
+        if (val == target) return true;
+        else if (val < target) left = mid + 1;
+        else right = mid - 1;
+    }
+    return false;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pattern 5: Search in Rotated Sorted Array -->
+  <div class="prob-card" style="border-color:var(--org);">
+    <div class="prob-head" style="background:#fff7ed;">
+      <span class="ptitle" style="color:var(--org);">PATTERN 5 — ROTATED SORTED ARRAY</span>
+      <span class="diff-m">LC 33 · MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>When to Use:</strong> Search in rotated sorted array with unique values.</div>
+        <div class="io-box"><strong>Input:</strong> [4,5,6,7,0,1,2], target=0</div>
+        <div class="io-box"><strong>Output:</strong> 4</div>
+        <div class="aha" style="margin-top:6px;padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          At least ONE half (left or right) is ALWAYS sorted! Check which half, then search within it.
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public int search(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if (nums[mid] == target) return mid;
+
+        // Left half is sorted
+        if (nums[left] <= nums[mid]) {
+            if (nums[left] <= target && target < nums[mid]) {
+                right = mid - 1; // Target in left half
+            } else {
+                left = mid + 1; // Target in right half
+            }
+        }
+        // Right half is sorted
+        else {
+            if (nums[mid] < target && target <= nums[right]) {
+                left = mid + 1; // Target in right half
+            } else {
+                right = mid - 1; // Target in left half
+            }
+        }
+    }
+    return -1;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pattern 6: Find Minimum in Rotated Sorted Array -->
+  <div class="prob-card" style="border-color:var(--amb);">
+    <div class="prob-head" style="background:#fefce8;">
+      <span class="ptitle" style="color:var(--amb);">PATTERN 6 — FIND MIN IN ROTATED</span>
+      <span class="diff-m">LC 153 · MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>When to Use:</strong> Find minimum element in rotated sorted array.</div>
+        <div class="io-box"><strong>Input:</strong> [3,4,5,1,2]</div>
+        <div class="io-box"><strong>Output:</strong> 1</div>
+        <div class="aha" style="margin-top:6px;padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          If `nums[mid] > nums[right]`, min is in right half. Else, min is in left half (including mid).
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public int findMin(int[] nums) {
+    int left = 0, right = nums.length - 1;
+
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+
+        if (nums[mid] > nums[right]) {
+            left = mid + 1; // Min is in right half
+        } else {
+            right = mid; // Min is in left half (including mid)
+        }
+    }
+    return nums[left];
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.7rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:8px;text-align:center;">🏆 Book 4 · Binary Search · FAANG Mental Model</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 4: PATTERNS 7-8 + DECISION TREE -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>BINARY SEARCH</h1><div class="sub">Core Patterns — Part 3 &amp; Decision Tree</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 4 OF 8</div></div>
+  </div>
+
+  <!-- Pattern 7: Koko Eating Bananas -->
+  <div class="prob-card" style="border-color:var(--pur);">
+    <div class="prob-head" style="background:#faf5ff;">
+      <span class="ptitle" style="color:var(--pur);">PATTERN 7 — BS ON ANSWER</span>
+      <span class="diff-m">LC 875 · MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>When to Use:</strong> Find minimum value that satisfies a condition.</div>
+        <div class="io-box"><strong>Input:</strong> piles=[3,6,7,11], h=8</div>
+        <div class="io-box"><strong>Output:</strong> 4</div>
+        <div class="aha" style="margin-top:6px;padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          Binary search the answer space [1, max(piles)]. Check feasibility with `isValid(mid)`!
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public int minEatingSpeed(int[] piles, int h) {
+    int left = 1, right = 0;
+    for (int p : piles) right = Math.max(right, p);
+
+    int res = right;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        long hours = 0;
+
+        // Check if speed = mid is feasible
+        for (int p : piles) {
+            hours += (p + mid - 1) / mid; // Ceiling division
+        }
+
+        if (hours <= h) {
+            res = mid;
+            right = mid - 1; // Try slower speed
+        } else {
+            left = mid + 1; // Need faster speed
+        }
+    }
+    return res;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pattern 8: Find Peak Element -->
+  <div class="prob-card" style="border-color:var(--sky);">
+    <div class="prob-head" style="background:#eff6ff;">
+      <span class="ptitle" style="color:var(--sky);">PATTERN 8 — SLOPE SEARCH</span>
+      <span class="diff-m">LC 162 · MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>When to Use:</strong> Find any peak element (greater than neighbors).</div>
+        <div class="io-box"><strong>Input:</strong> [1,2,3,1]</div>
+        <div class="io-box"><strong>Output:</strong> 2</div>
+        <div class="aha" style="margin-top:6px;padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          If `nums[mid] < nums[mid+1]`, a peak exists on the right. Otherwise, a peak exists on the left. Move towards the ascending slope!
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public int findPeakElement(int[] nums) {
+    int left = 0, right = nums.length - 1;
+
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+
+        // Ascending slope → peak is on the right
+        if (nums[mid] < nums[mid + 1]) {
+            left = mid + 1;
+        } else {
+            right = mid; // Peak is on the left (including mid)
+        }
+    }
+    return left;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decision Tree -->
+  <div class="g2">
+    <div class="box">
+      <div class="bh">🌳 DECISION TREE — WHICH PATTERN TO USE?</div>
+      <div class="bc" style="font-size:0.7rem;">
+        <div style="font-weight:700;margin-bottom:4px;">Start: What is the problem asking?</div>
+        <div class="dt-row">
+          <div class="dt-q">🔍 Exact value in sorted array</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Classic BS</div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">📌 First / Last occurrence</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Boundary Search</div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🔄 Rotated sorted array</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Rotated BS</div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">✅ Feasibility check</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">BS on Answer</div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">⛰️ Peak element</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Slope Search</div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">📊 Sorted matrix</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">1D Flattening</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div class="box pur">
+        <div class="bh">🎯 TRIGGER WORDS DIRECTORY</div>
+        <div class="bc">
+          <table>
+            <tr><th>Trigger Word</th><th>Pattern</th><th>Action</th></tr>
+            <tr><td>"Sorted array"</td><td>Classic BS</td><td>`while (left <= right)`</td></tr>
+            <tr><td>"First / Last"</td><td>Boundary</td><td>Record ans, continue search</td></tr>
+            <tr><td>"Rotated"</td><td>Rotated BS</td><td>Find sorted half</td></tr>
+            <tr><td>"Minimum maximum"</td><td>BS on Answer</td><td>`isValid(mid)` check</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="box amb">
+        <div class="bh">💼 INTERVIEW TRADE-OFFS</div>
+        <div class="bc">
+          <table>
+            <tr><th>Interviewer Asks</th><th>Your Answer</th></tr>
+            <tr><td>`while (left <= right)` vs `while (left < right)`?</td><td>`<=` when searching exact value. `<` when narrowing to a boundary.</td></tr>
+            <tr><td>BS on Answer complexity?</td><td>O(N log M) where M is the value range. N is the validation cost.</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.7rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:8px;text-align:center;">🏆 Book 4 · Binary Search · FAANG Mental Model</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 5: INTERVIEW TABLE + BOUNDARY RULES -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>BINARY SEARCH</h1><div class="sub">Interview Table &amp; Boundary Rules</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 5 OF 8</div></div>
+  </div>
+
+  <!-- Interview Table -->
+  <div class="box pur" style="margin-bottom:12px;">
+    <div class="bh">🎤 INTERVIEW TABLE — WHAT THE INTERVIEWER SAYS</div>
+    <div class="bc">
+      <table>
+        <tr><th>Interviewer Says</th><th>Think</th><th>Action</th></tr>
+        <tr><td>"Sorted array"</td><td>Binary Search</td><td>`while (left <= right)`</td></tr>
+        <tr><td>"First occurrence"</td><td>Lower Bound</td><td>Record ans, `right = mid - 1`</td></tr>
+        <tr><td>"Last occurrence"</td><td>Upper Bound</td><td>Record ans, `left = mid + 1`</td></tr>
+        <tr><td>"Rotated"</td><td>Rotated BS</td><td>Find sorted half</td></tr>
+        <tr><td>"Minimize maximum"</td><td>BS on Answer</td><td>`isValid(mid)`</td></tr>
+        <tr><td>"Kth smallest"</td><td>BS on Answer</td><td>Count <= mid</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Boundary Movement Rules -->
+  <div class="box" style="margin-bottom:12px;">
+    <div class="bh">🧠 BOUNDARY MOVEMENT RULES — CHEAT SHEET</div>
+    <div class="bc">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:8px;">
+          <div style="font-weight:800;color:var(--pri);font-size:0.78rem;">🔍 Exact Search</div>
+          <div style="font-size:0.7rem;">`while (left <= right)`</div>
+          <div style="font-size:0.7rem;font-weight:700;color:var(--grn);">→ if (mid == target) return mid</div>
+          <div style="font-size:0.7rem;">else if (mid < target) left = mid + 1</div>
+          <div style="font-size:0.7rem;">else right = mid - 1</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:8px;">
+          <div style="font-weight:800;color:var(--pri);font-size:0.78rem;">📌 Lower Bound</div>
+          <div style="font-size:0.7rem;">`while (left < right)`</div>
+          <div style="font-size:0.7rem;font-weight:700;color:var(--amb);">→ if (arr[mid] < target) left = mid + 1</div>
+          <div style="font-size:0.7rem;">else right = mid</div>
+          <div style="font-size:0.65rem;color:var(--sub);">Returns first index where arr[i] >= target</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:8px;">
+          <div style="font-weight:800;color:var(--pri);font-size:0.78rem;">📌 Upper Bound</div>
+          <div style="font-size:0.7rem;">`while (left < right)`</div>
+          <div style="font-size:0.7rem;font-weight:700;color:var(--red);">→ if (arr[mid] <= target) left = mid + 1</div>
+          <div style="font-size:0.7rem;">else right = mid</div>
+          <div style="font-size:0.65rem;color:var(--sub);">Returns first index where arr[i] > target</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:8px;">
+          <div style="font-weight:800;color:var(--pri);font-size:0.78rem;">🔄 Rotated Array</div>
+          <div style="font-size:0.7rem;">`while (left <= right)`</div>
+          <div style="font-size:0.7rem;font-weight:700;color:var(--pur);">→ Find which half is sorted</div>
+          <div style="font-size:0.7rem;">Search in sorted half if target in range</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:8px;">
+          <div style="font-weight:800;color:var(--pri);font-size:0.78rem;">✅ BS on Answer</div>
+          <div style="font-size:0.7rem;">`while (left <= right)`</div>
+          <div style="font-size:0.7rem;font-weight:700;color:var(--sky);">→ if (isValid(mid)) { ans = mid; right = mid - 1 }</div>
+          <div style="font-size:0.7rem;">else left = mid + 1</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:8px;">
+          <div style="font-weight:800;color:var(--pri);font-size:0.78rem;">⛰️ Peak Element</div>
+          <div style="font-size:0.7rem;">`while (left < right)`</div>
+          <div style="font-size:0.7rem;font-weight:700;color:var(--org);">→ if (arr[mid] < arr[mid+1]) left = mid+1</div>
+          <div style="font-size:0.7rem;">else right = mid</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mental Models Summary -->
+  <div class="box sky" style="flex:1;">
+    <div class="bh">🧠 4 MENTAL MODELS — QUICK REFERENCE</div>
+    <div class="bc">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;text-align:center;font-size:0.7rem;">
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:6px;">
+          <span style="font-weight:700;color:var(--pri);">Classic Search</span><br>
+          <span style="font-size:0.65rem;color:var(--sub);">while (left <= right)</span>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:6px;">
+          <span style="font-weight:700;color:var(--pri);">Boundary Search</span><br>
+          <span style="font-size:0.65rem;color:var(--sub);">while (left < right)</span>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:6px;">
+          <span style="font-weight:700;color:var(--pri);">Rotated Array</span><br>
+          <span style="font-size:0.65rem;color:var(--sub);">Find sorted half</span>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:6px;">
+          <span style="font-weight:700;color:var(--pri);">BS on Answer</span><br>
+          <span style="font-size:0.65rem;color:var(--sub);">isValid(mid) check</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.7rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:8px;text-align:center;">🏆 Book 4 · Binary Search · FAANG Mental Model</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 6: PROBLEM LADDER (Core Problems) -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>BINARY SEARCH</h1><div class="sub">FAANG Problem Ladder — Core Problems</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 6 OF 8</div></div>
+  </div>
+
+  <div class="g2" style="gap:8px;margin-bottom:8px;">
+    <!-- LEFT COLUMN -->
+    <div>
+      <div style="background:var(--grn);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px;font-size:0.8rem;">🟢 EASY — Core Operations</div>
+
+      <!-- LC 704 -->
+      <div class="prob-card">
+        <div class="prob-head">
+          <span class="ptitle">LC 704 · Binary Search</span>
+          <span class="diff-e">EASY</span>
+        </div>
+        <div class="prob-body">
+          <div class="prob-info">
+            <div class="io-box"><strong>Input:</strong> [-1,0,3,5,9,12], target=9</div>
+            <div class="io-box"><strong>Output:</strong> 4</div>
+            <div><strong>Pattern:</strong> Classic BS</div>
+          </div>
+          <div class="prob-code">
+<pre style="font-size:0.6rem;padding:4px;">public int search(int[] nums, int target) {
+    int l=0, r=nums.length-1;
+    while (l <= r) {
+        int m = l + (r-l)/2;
+        if (nums[m] == target) return m;
+        else if (nums[m] < target) l = m+1;
+        else r = m-1;
+    }
+    return -1;
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- LC 35 -->
+      <div class="prob-card">
+        <div class="prob-head">
+          <span class="ptitle">LC 35 · Search Insert</span>
+          <span class="diff-e">EASY</span>
+        </div>
+        <div class="prob-body">
+          <div class="prob-info">
+            <div class="io-box"><strong>Input:</strong> [1,3,5,6], target=5</div>
+            <div class="io-box"><strong>Output:</strong> 2</div>
+            <div><strong>Pattern:</strong> Insert Position</div>
+          </div>
+          <div class="prob-code">
+<pre style="font-size:0.6rem;padding:4px;">public int searchInsert(int[] nums, int target) {
+    int l=0, r=nums.length-1;
+    while (l <= r) {
+        int m = l + (r-l)/2;
+        if (nums[m] == target) return m;
+        else if (nums[m] < target) l = m+1;
+        else r = m-1;
+    }
+    return l;
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- LC 374 -->
+      <div class="prob-card">
+        <div class="prob-head">
+          <span class="ptitle">LC 374 · Guess Number</span>
+          <span class="diff-e">EASY</span>
+        </div>
+        <div class="prob-body">
+          <div class="prob-info">
+            <div class="io-box"><strong>Input:</strong> n=10, pick=6</div>
+            <div class="io-box"><strong>Output:</strong> 6</div>
+            <div><strong>Pattern:</strong> API Evaluation</div>
+          </div>
+          <div class="prob-code">
+<pre style="font-size:0.6rem;padding:4px;">public int guessNumber(int n) {
+    int l=1, r=n;
+    while (l <= r) {
+        int m = l + (r-l)/2;
+        int g = guess(m);
+        if (g == 0) return m;
+        else if (g < 0) r = m-1;
+        else l = m+1;
+    }
+    return -1;
+}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div>
+      <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px;font-size:0.8rem;">🟡 MEDIUM — Advanced Patterns</div>
+
+      <!-- LC 74 -->
+      <div class="prob-card">
+        <div class="prob-head">
+          <span class="ptitle">LC 74 · Search 2D Matrix</span>
+          <span class="diff-m">MEDIUM</span>
+        </div>
+        <div class="prob-body">
+          <div class="prob-info">
+            <div class="io-box"><strong>Input:</strong> matrix=[[1,3,5,7],[10,11,16,20]], target=3</div>
+            <div class="io-box"><strong>Output:</strong> true</div>
+            <div><strong>Pattern:</strong> 1D Flattening</div>
+          </div>
+          <div class="prob-code">
+<pre style="font-size:0.6rem;padding:4px;">public boolean searchMatrix(int[][] m, int t) {
+    int rows=m.length, cols=m[0].length;
+    int l=0, r=rows*cols-1;
+    while (l <= r) {
+        int mid = l + (r-l)/2;
+        int val = m[mid/cols][mid%cols];
+        if (val == t) return true;
+        else if (val < t) l = mid+1;
+        else r = mid-1;
+    }
+    return false;
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- LC 33 -->
+      <div class="prob-card">
+        <div class="prob-head">
+          <span class="ptitle">LC 33 · Search Rotated</span>
+          <span class="diff-m">MEDIUM</span>
+        </div>
+        <div class="prob-body">
+          <div class="prob-info">
+            <div class="io-box"><strong>Input:</strong> [4,5,6,7,0,1,2], target=0</div>
+            <div class="io-box"><strong>Output:</strong> 4</div>
+            <div><strong>Pattern:</strong> Rotated BS</div>
+          </div>
+          <div class="prob-code">
+<pre style="font-size:0.6rem;padding:4px;">public int search(int[] nums, int target) {
+    int l=0, r=nums.length-1;
+    while (l <= r) {
+        int m = l + (r-l)/2;
+        if (nums[m] == target) return m;
+        if (nums[l] <= nums[m]) {
+            if (nums[l] <= target && target < nums[m]) r = m-1;
+            else l = m+1;
+        } else {
+            if (nums[m] < target && target <= nums[r]) l = m+1;
+            else r = m-1;
+        }
+    }
+    return -1;
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- LC 153 -->
+      <div class="prob-card">
+        <div class="prob-head">
+          <span class="ptitle">LC 153 · Find Min Rotated</span>
+          <span class="diff-m">MEDIUM</span>
+        </div>
+        <div class="prob-body">
+          <div class="prob-info">
+            <div class="io-box"><strong>Input:</strong> [3,4,5,1,2]</div>
+            <div class="io-box"><strong>Output:</strong> 1</div>
+            <div><strong>Pattern:</strong> Min in Rotated</div>
+          </div>
+          <div class="prob-code">
+<pre style="font-size:0.6rem;padding:4px;">public int findMin(int[] nums) {
+    int l=0, r=nums.length-1;
+    while (l < r) {
+        int m = l + (r-l)/2;
+        if (nums[m] > nums[r]) l = m+1;
+        else r = m;
+    }
+    return nums[l];
+}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.7rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:8px;text-align:center;">🏆 Book 4 · Binary Search · FAANG Mental Model</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 7: MISSING PROBLEMS (LC 34, 69, 981, 162, 875, 410, 4) -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>BINARY SEARCH</h1><div class="sub">Missing FAANG Problems</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 7 OF 8</div></div>
+  </div>
+
+  <!-- LC 34 -->
+  <div class="prob-card" style="border-color:var(--sky);">
+    <div class="prob-head" style="background:#eff6ff;">
+      <span class="ptitle">⭐ LC 34 · First & Last Position</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> [5,7,7,8,8,10], target=8</div>
+        <div class="io-box"><strong>Output:</strong> [3,4]</div>
+        <div><strong>Pattern:</strong> Boundary Search</div>
+        <div class="aha" style="margin-top:6px;padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          Two passes: one for first occurrence (move left), one for last occurrence (move right).
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public int[] searchRange(int[] nums, int target) {
+    int first = firstOccurrence(nums, target);
+    int last = lastOccurrence(nums, target);
+    return new int[]{first, last};
+}
+
+private int firstOccurrence(int[] nums, int target) {
+    int l=0, r=nums.length-1, ans=-1;
+    while (l <= r) {
+        int m = l + (r-l)/2;
+        if (nums[m] == target) { ans = m; r = m-1; }
+        else if (nums[m] < target) l = m+1;
+        else r = m-1;
+    }
+    return ans;
+}
+
+private int lastOccurrence(int[] nums, int target) {
+    int l=0, r=nums.length-1, ans=-1;
+    while (l <= r) {
+        int m = l + (r-l)/2;
+        if (nums[m] == target) { ans = m; l = m+1; }
+        else if (nums[m] < target) l = m+1;
+        else r = m-1;
+    }
+    return ans;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 69 -->
+  <div class="prob-card" style="border-color:var(--grn);">
+    <div class="prob-head" style="background:#f0fdf4;">
+      <span class="ptitle">⭐ LC 69 · Sqrt(x)</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> x=8</div>
+        <div class="io-box"><strong>Output:</strong> 2</div>
+        <div><strong>Pattern:</strong> BS on Answer</div>
+      </div>
+      <div class="prob-code">
+<pre>public int mySqrt(int x) {
+    long l=1, r=x, ans=0;
+    while (l <= r) {
+        long m = l + (r-l)/2;
+        if (m * m <= x) {
+            ans = (int)m;
+            l = m + 1;
+        } else {
+            r = m - 1;
+        }
+    }
+    return (int)ans;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 981 -->
+  <div class="prob-card" style="border-color:var(--pur);">
+    <div class="prob-head" style="background:#faf5ff;">
+      <span class="ptitle">⭐ LC 981 · Time Based Key-Value</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> set("foo","bar",1), get("foo",1)</div>
+        <div class="io-box"><strong>Output:</strong> "bar"</div>
+        <div><strong>Pattern:</strong> List + BS</div>
+      </div>
+      <div class="prob-code">
+<pre>class TimeMap {
+    Map&lt;String, List&lt;Pair&gt;&gt; map = new HashMap&lt;&gt;();
+
+    public void set(String key, String val, int time) {
+        map.computeIfAbsent(key, k -> new ArrayList&lt;&gt;()).add(new Pair(time, val));
+    }
+
+    public String get(String key, int time) {
+        if (!map.containsKey(key)) return "";
+        List&lt;Pair&gt; list = map.get(key);
+        int l=0, r=list.size()-1;
+        String res = "";
+        while (l <= r) {
+            int m = l + (r-l)/2;
+            if (list.get(m).time <= time) {
+                res = list.get(m).val;
+                l = m + 1;
+            } else {
+                r = m - 1;
+            }
+        }
+        return res;
+    }
+
+    private static class Pair { int time; String val; Pair(int t, String v){time=t;val=v;} }
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 875 -->
+  <div class="prob-card" style="border-color:var(--amb);">
+    <div class="prob-head" style="background:#fefce8;">
+      <span class="ptitle">⭐ LC 875 · Koko Bananas</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> piles=[3,6,7,11], h=8</div>
+        <div class="io-box"><strong>Output:</strong> 4</div>
+        <div><strong>Pattern:</strong> BS on Answer</div>
+      </div>
+      <div class="prob-code">
+<pre>public int minEatingSpeed(int[] piles, int h) {
+    int l=1, r=0;
+    for (int p : piles) r = Math.max(r, p);
+    int ans = r;
+    while (l <= r) {
+        int m = l + (r-l)/2;
+        long hours = 0;
+        for (int p : piles) hours += (p + m - 1) / m;
+        if (hours <= h) { ans = m; r = m-1; }
+        else l = m+1;
+    }
+    return ans;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 162 -->
+  <div class="prob-card" style="border-color:var(--sky);">
+    <div class="prob-head" style="background:#eff6ff;">
+      <span class="ptitle">⭐ LC 162 · Find Peak Element</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> [1,2,3,1]</div>
+        <div class="io-box"><strong>Output:</strong> 2</div>
+        <div><strong>Pattern:</strong> Slope Search</div>
+      </div>
+      <div class="prob-code">
+<pre>public int findPeakElement(int[] nums) {
+    int l=0, r=nums.length-1;
+    while (l < r) {
+        int m = l + (r-l)/2;
+        if (nums[m] < nums[m+1]) l = m+1;
+        else r = m;
+    }
+    return l;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 410 -->
+  <div class="prob-card" style="border-color:var(--red);">
+    <div class="prob-head" style="background:#fff1f2;">
+      <span class="ptitle">⭐ LC 410 · Split Array Largest Sum</span>
+      <span class="diff-h">HARD</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> nums=[7,2,5,10,8], k=2</div>
+        <div class="io-box"><strong>Output:</strong> 18</div>
+        <div><strong>Pattern:</strong> BS on Answer</div>
+      </div>
+      <div class="prob-code">
+<pre>public int splitArray(int[] nums, int k) {
+    int l=0, r=0;
+    for (int n : nums) { l = Math.max(l, n); r += n; }
+    int ans = r;
+    while (l <= r) {
+        int m = l + (r-l)/2;
+        if (canSplit(nums, k, m)) { ans = m; r = m-1; }
+        else l = m+1;
+    }
+    return ans;
+}
+
+private boolean canSplit(int[] nums, int k, int maxSum) {
+    int count = 1, sum = 0;
+    for (int n : nums) {
+        if (sum + n > maxSum) { count++; sum = n; }
+        else sum += n;
+    }
+    return count <= k;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.7rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:8px;text-align:center;">🏆 Book 4 · Binary Search · FAANG Mental Model</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 8: CHEAT SHEET & MASTERY -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>BINARY SEARCH</h1><div class="sub">Cheat Sheet &amp; Mastery Checklist</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 8 OF 8</div></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;flex:1;">
+    <!-- Golden Rules -->
+    <div class="box pur">
+      <div class="bh">💼 GOLDEN RULES</div>
+      <div class="bc">
+        <div class="aha" style="margin-bottom:8px;padding:6px;">
+          <div class="aha-t">Rule 1 — Use Safe Mid Formula</div>
+          Always use `mid = left + (right - left) / 2` to prevent integer overflow!
+        </div>
+        <div class="aha" style="margin-bottom:8px;padding:6px;">
+          <div class="aha-t">Rule 2 — Know Your Loop Bound</div>
+          `while (left <= right)` for exact search. `while (left < right)` for boundary search.
+        </div>
+        <div class="aha" style="padding:6px;">
+          <div class="aha-t">Rule 3 — BS on Answer = Feasibility</div>
+          If you need to find a value that satisfies a condition, binary search the answer space with `isValid(mid)`.
+        </div>
+      </div>
+    </div>
+
+    <!-- Mastery Checklist -->
+    <div class="box grn">
+      <div class="bh">✅ MASTERY CHECKLIST</div>
+      <div class="bc">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+          <ul style="font-size:0.72rem;list-style:none;padding:0;">
+            <li>☐ Classic Binary Search (LC 704)</li>
+            <li>☐ Search Insert Position (LC 35)</li>
+            <li>☐ First & Last Position (LC 34)</li>
+            <li>☐ Sqrt(x) (LC 69)</li>
+            <li>☐ Search 2D Matrix (LC 74)</li>
+          </ul>
+          <ul style="font-size:0.72rem;list-style:none;padding:0;">
+            <li>☐ Search Rotated (LC 33)</li>
+            <li>☐ Find Min Rotated (LC 153)</li>
+            <li>☐ Find Peak Element (LC 162)</li>
+            <li>☐ Koko Bananas (LC 875)</li>
+            <li>☐ Split Array Largest Sum (LC 410)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Common Mistakes -->
+  <div class="box red" style="margin-bottom:8px;">
+    <div class="bh">🚨 COMMON MISTAKES — AVOID THESE</div>
+    <div class="bc">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:0.72rem;">
+        <div>❌ `mid = (left + right) / 2` overflows</div>
+        <div>✅ `mid = left + (right-left) / 2`</div>
+        <div>❌ `while (left < right)` for exact search</div>
+        <div>✅ `while (left <= right)` for exact</div>
+        <div>❌ Not checking empty array</div>
+        <div>✅ Always handle `nums == null || nums.length == 0`</div>
+        <div>❌ Forgetting `Arrays.sort()` for unsorted</div>
+        <div>✅ BS requires sorted/monotonic data</div>
+        <div>❌ BS on Answer without `isValid(mid)`</div>
+        <div>✅ Always define the feasibility function</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div style="margin-top:auto;font-size:0.7rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:8px;text-align:center;">
+    🏆 Book 4: Binary Search · Built from FAANG interviews<br>
+    <span style="font-size:0.65rem;">11 Problems · 4 Mental Models · Use this before every interview</span>
+  </div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

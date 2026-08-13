@@ -1,0 +1,383 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1>GRAPH PATTERN GUIDE</h1>
+            <div class="subtitle">DIJKSTRA PROBLEM GUIDE (APPLY TEMPLATES)<br><small style="color:#64748b;font-weight:normal;">Same algorithm. Different problems. Only the changing parts.</small></div>
+        </div>
+        <div style="text-align: right;">
+            <div class="page-number">PAGE 13</div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+        <div class="section-box" style="flex: 1;">
+            <div class="section-header" style="background: #1e1b4b; color: white; padding: 5px 10px; text-align: center;">HOW TO USE THIS PAGE</div>
+            <div class="section-content">
+                <ol style="margin-left: 20px;">
+                    <li>Find the problem.</li>
+                    <li>Identify the base template (from Page 12).</li>
+                    <li><strong>Read the CHANGED LINES.</strong></li>
+                    <li>Understand the AHA.</li>
+                    <li>Review complexity & interview tip.</li>
+                    <li>Practice writing from memory.</li>
+                </ol>
+            </div>
+        </div>
+        <div class="section-box" style="flex: 2;">
+            <div class="section-header" style="background: #1e1b4b; color: white; padding: 5px 10px; text-align: center;">TEMPLATE LEGEND (From Page 12)</div>
+            <div class="section-content" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                <div><strong style="color: #1e3a8a;">A</strong> Network Delay Time<br>(Single Source)</div>
+                <div><strong style="color: #166534;">B</strong> Dijkstra with<br>Path (Parent[])</div>
+                <div><strong style="color: #4c1d95;">C</strong> Minimum Effort Path<br>(Minimize Max Edge)</div>
+                <div><strong style="color: #d97706;">D</strong> Cheapest Flights<br>(K Stops)</div>
+                <div><strong style="color: #9f1239;">E</strong> Path With<br>Minimum Effort</div>
+                <div><strong style="color: #0f766e;">F</strong> Find Shortest Path<br>(Undirected Weighted)</div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+        <!-- 1 -->
+        <div class="section-box">
+            <div class="section-header" style="display: flex; justify-content: space-between;"><span style="background: #1e1b4b; padding: 2px 6px;">1</span> NETWORK DELAY TIME <strong style="color: #1e3a8a;">A</strong></div>
+            <div class="section-content" style="font-size: 0.9em;">
+                <div style="text-align: center; color: #64748b; font-size: 0.85em;">Base Template: Dijkstra (Single Source Shortest Path)</div>
+                <strong>Problem</strong>
+                <p>Given a directed weighted graph, find time for all nodes to receive signal from node k. Return -1 if impossible.</p>
+                <strong>Changed Lines (from Template)</strong>
+                <pre><code>// Build graph from times[u, v, w]
+for (int[] t : times) {
+    graph.get(t[0]).add(new int[]{t[1], t[2]});
+}
+// Answer = max distance among all nodes
+int ans = 0;
+for (int i = 1; i <= n; i++) {
+    if (dist[i] == INF) return -1;
+    ans = Math.max(ans, dist[i]);
+}
+return ans;</code></pre>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8em; margin-top: 10px;">
+                    <div><strong>Caller:</strong> networkDelayTime(times, n, k)</div>
+                    <div><strong>Return:</strong> int (time or -1)</div>
+                    <div><strong>Key Idea:</strong> All nodes receive signal?</div>
+                </div>
+                <div style="margin-top: 10px;"><strong>💡 AHA:</strong> The last node to get the signal = max shortest distance.</div>
+                <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.8em;">
+                    <div><strong>Complexity</strong><br>Time: O((V+E) log V)<br>Space: O(V+E)</div>
+                    <div><strong>Interview Tip</strong><br>Don't forget to check unreachable nodes.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="section-box">
+            <div class="section-header" style="display: flex; justify-content: space-between;"><span style="background: #1e1b4b; padding: 2px 6px;">2</span> DIJKSTRA WITH PATH <strong style="color: #166534;">B</strong></div>
+            <div class="section-content" style="font-size: 0.9em;">
+                <div style="text-align: center; color: #64748b; font-size: 0.85em;">Base Template: Dijkstra + Parent[]</div>
+                <strong>Problem</strong>
+                <p>Return shortest distance and the actual path from src to dest.</p>
+                <strong>Changed Lines (from Template)</strong>
+                <pre><code>int[] parent = new int[n];
+Arrays.fill(parent, -1);
+// When relaxing
+if (dist[v] > dist[u] + w) {
+    dist[v] = dist[u] + w;
+    parent[v] = u; // track parent
+    pq.offer(new int[]{v, dist[v]});
+}
+// Reconstruct Path
+List&lt;Integer&gt; path = new ArrayList&lt;&gt;();
+for (int at = dest; at != -1; at = parent[at])
+    path.add(at);
+Collections.reverse(path);</code></pre>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8em; margin-top: 10px;">
+                    <div><strong>Caller:</strong> shortestPath(n, edges, src, dest)</div>
+                    <div><strong>Return:</strong> List&lt;Integer&gt; path</div>
+                    <div><strong>Key Idea:</strong> Track parent & reconstruct</div>
+                </div>
+                <div style="margin-top: 10px;"><strong>💡 AHA:</strong> Parent[] builds the path while Dijkstra builds distances.</div>
+                <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.8em;">
+                    <div><strong>Complexity</strong><br>Time: O((V+E) log V)<br>Space: O(V+E)</div>
+                    <div><strong>Interview Tip</strong><br>Check if dest is reachable (dist[dest] == INF).</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="section-box">
+            <div class="section-header" style="display: flex; justify-content: space-between;"><span style="background: #1e1b4b; padding: 2px 6px;">3</span> MINIMUM EFFORT PATH <strong style="color: #4c1d95;">C</strong></div>
+            <div class="section-content" style="font-size: 0.9em;">
+                <div style="text-align: center; color: #64748b; font-size: 0.85em;">Base Template: Dijkstra (Minimize Max Edge)</div>
+                <strong>Problem</strong>
+                <p>In a grid, effort of path = max absolute diff between adjacent cells. Find minimum effort from top-left to bottom-right.</p>
+                <strong>Changed Lines (from Template)</strong>
+                <pre><code>// weight = max effort along the path
+int w = Math.max(effort[u], Math.abs(heights[x][y] - heights[nx][ny]));
+
+if (w < effort[nx][ny]) {
+    effort[nx][ny] = w;
+    pq.offer(new int[]{nx, ny, w});
+}</code></pre>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8em; margin-top: 10px;">
+                    <div><strong>Caller:</strong> minimumEffortPath(heights)</div>
+                    <div><strong>Return:</strong> int (min effort)</div>
+                    <div><strong>Key Idea:</strong> Minimize max edge on path</div>
+                </div>
+                <div style="margin-top: 10px;"><strong>💡 AHA:</strong> Instead of sum, we minimize the maximum edge.</div>
+                <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.8em;">
+                    <div><strong>Complexity</strong><br>Time: O(m*n log(m*n))<br>Space: O(m*n)</div>
+                    <div><strong>Interview Tip</strong><br>This is Dijkstra with custom relaxation.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="section-box">
+            <div class="section-header" style="display: flex; justify-content: space-between;"><span style="background: #1e1b4b; padding: 2px 6px;">4</span> CHEAPEST FLIGHTS WITHIN K STOPS <strong style="color: #d97706;">D</strong></div>
+            <div class="section-content" style="font-size: 0.9em;">
+                <div style="text-align: center; color: #64748b; font-size: 0.85em;">Base Template: Dijkstra with Stops Limit</div>
+                <strong>Problem</strong>
+                <p>Find cheapest price from src to dst with at most k stops.</p>
+                <strong>Changed Lines (from Template)</strong>
+                <pre><code>PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;(Comparator.comparingInt(a -> a[0]));
+pq.offer(new int[]{0, src, 0}); // cost, node, stops
+while (!pq.isEmpty()) {
+    int[] cur = pq.poll();
+    int cost = cur[0], u = cur[1], stops = cur[2];
+    if (u == dst) return cost;
+    if (stops > k) continue;
+    for (int[] nei : graph.get(u)) {
+        int v = nei[0], w = nei[1];
+        pq.offer(new int[]{cost + w, v, stops + 1});
+    }
+}
+return -1;</code></pre>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8em; margin-top: 10px;">
+                    <div><strong>Caller:</strong> findCheapestPrice(n, flights, src, dst, k)</div>
+                    <div><strong>Return:</strong> int (min cost or -1)</div>
+                    <div><strong>Key Idea:</strong> State includes stops</div>
+                </div>
+                <div style="margin-top: 10px;"><strong>💡 AHA:</strong> We need (cost, node, stops) state.</div>
+                <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.8em;">
+                    <div><strong>Complexity</strong><br>Time: O(K*E log E)<br>Space: O(K*V)</div>
+                    <div><strong>Interview Tip</strong><br>Do NOT use plain dist[]; stops make it different.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="section-box">
+            <div class="section-header" style="display: flex; justify-content: space-between;"><span style="background: #1e1b4b; padding: 2px 6px;">5</span> PATH WITH MINIMUM EFFORT <strong style="color: #9f1239;">E</strong></div>
+            <div class="section-content" style="font-size: 0.9em;">
+                <div style="text-align: center; color: #64748b; font-size: 0.85em;">Base Template: Dijkstra (Minimize Max Edge)</div>
+                <strong>Problem</strong>
+                <p>Same as #3 but emphasize general approach on any grid/graph where path cost = max edge cost.</p>
+                <strong>Changed Lines (from Template)</strong>
+                <pre><code>// Generic for any graph
+int newEffort = Math.max(curEffort, edgeWeight);
+if (newEffort < effort[v]) {
+    effort[v] = newEffort;
+    pq.offer(new int[]{v, newEffort});
+}</code></pre>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8em; margin-top: 10px;">
+                    <div><strong>Caller:</strong> minEffortPath(graph, src, dst)</div>
+                    <div><strong>Return:</strong> int (min effort)</div>
+                    <div><strong>Key Idea:</strong> Minimize the maximum edge</div>
+                </div>
+                <div style="margin-top: 10px;"><strong>💡 AHA:</strong> Works on grids, graphs, elevations, resistances.</div>
+                <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.8em;">
+                    <div><strong>Complexity</strong><br>Time: O((V+E) log V)<br>Space: O(V+E)</div>
+                    <div><strong>Interview Tip</strong><br>Use when path cost is NOT sum but maximum.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="section-box">
+            <div class="section-header" style="display: flex; justify-content: space-between;"><span style="background: #1e1b4b; padding: 2px 6px;">6</span> SHORTEST PATH IN UNDIRECTED WEIGHTED GRAPH <strong style="color: #0f766e;">F</strong></div>
+            <div class="section-content" style="font-size: 0.9em;">
+                <div style="text-align: center; color: #64748b; font-size: 0.85em;">Base Template: Dijkstra (Undirected)</div>
+                <strong>Problem</strong>
+                <p>Given an undirected weighted graph, return shortest distance from src to all nodes.</p>
+                <strong>Changed Lines (from Template)</strong>
+                <pre><code>// Build undirected graph
+graph.get(u).add(new int[]{v, w});
+graph.get(v).add(new int[]{u, w});
+
+// Rest same as base template</code></pre>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8em; margin-top: 10px;">
+                    <div><strong>Caller:</strong> shortestPath(n, edges, src)</div>
+                    <div><strong>Return:</strong> int[] dist</div>
+                    <div><strong>Key Idea:</strong> Undirected edges both ways</div>
+                </div>
+                <div style="margin-top: 10px;"><strong>💡 AHA:</strong> Only graph construction changes.</div>
+                <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.8em;">
+                    <div><strong>Complexity</strong><br>Time: O((V+E) log V)<br>Space: O(V+E)</div>
+                    <div><strong>Interview Tip</strong><br>Don't add duplicate edges.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Sections -->
+    <div style="display: flex; gap: 15px; margin-top: 15px;">
+        <div class="section-box" style="flex: 2;">
+            <div class="section-header" style="background: #1e1b4b; color: white; padding: 5px 10px; display: flex; justify-content: space-between;">
+                <span><span style="background: white; color: #1e1b4b; padding: 2px 6px; border-radius: 3px;">7</span> CHANGED LINES SUMMARY</span>
+            </div>
+            <div class="section-content" style="font-size: 0.85em; padding: 5px;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <tr style="border-bottom: 1px solid #cbd5e1;">
+                        <th style="padding: 5px;">#</th><th style="padding: 5px;">Problem</th><th style="padding: 5px; text-align: center;">Template</th><th style="padding: 5px;">Main Changes</th>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 5px;">1</td><td style="padding: 5px;">Network Delay Time</td><td style="padding: 5px; text-align: center; color: #1e3a8a; font-weight: bold;">A</td><td style="padding: 5px;">Answer = max(dist[]), check unreachable</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 5px;">2</td><td style="padding: 5px;">Dijkstra with Path</td><td style="padding: 5px; text-align: center; color: #166534; font-weight: bold;">B</td><td style="padding: 5px;">parent[] track + reconstruct path</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 5px;">3</td><td style="padding: 5px;">Minimum Effort Path</td><td style="padding: 5px; text-align: center; color: #4c1d95; font-weight: bold;">C</td><td style="padding: 5px;">Relax using max(edge, curEffort)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 5px;">4</td><td style="padding: 5px;">Cheapest Flights (K Stops)</td><td style="padding: 5px; text-align: center; color: #d97706; font-weight: bold;">D</td><td style="padding: 5px;">State = (cost, node, stops)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 5px;">5</td><td style="padding: 5px;">Path with Minimum Effort</td><td style="padding: 5px; text-align: center; color: #9f1239; font-weight: bold;">E</td><td style="padding: 5px;">Minimize maximum edge on path</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px;">6</td><td style="padding: 5px;">Undirected Weighted Graph</td><td style="padding: 5px; text-align: center; color: #0f766e; font-weight: bold;">F</td><td style="padding: 5px;">Add edges both directions</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="section-box" style="flex: 2;">
+            <div class="section-header" style="background: #1e1b4b; color: white; padding: 5px 10px;">
+                <span style="background: white; color: #1e1b4b; padding: 2px 6px; border-radius: 3px;">8</span> Dijkstra Template Recap (From Page 12)
+            </div>
+            <div class="section-content" style="font-size: 0.85em; background: #f8fafc; padding: 10px;">
+                <strong>Core Code (Adjacency List)</strong>
+                <ol style="margin-left: 20px; margin-top: 5px;">
+                    <li>Initialize dist[] = INF, src = 0</li>
+                    <li>PQ = (dist, node), push (0, src)</li>
+                    <li>While pq not empty:
+                        <ol type="a" style="margin-left: 15px;">
+                            <li>Pop (d, u)</li>
+                            <li>If visited[u] continue</li>
+                            <li>For each neighbor (v, w):<br>&nbsp;&nbsp;&nbsp;&nbsp;if dist[v] > d + w -> update & push</li>
+                        </ol>
+                    </li>
+                    <li>Return dist[]</li>
+                </ol>
+                <div style="margin-top: 10px; color: #047857; font-weight: bold;">Works for all above problems with small changes.</div>
+            </div>
+        </div>
+
+        <div class="section-box" style="flex: 2;">
+            <div class="section-header" style="background: #1e1b4b; color: white; padding: 5px 10px;">
+                <span style="background: white; color: #1e1b4b; padding: 2px 6px; border-radius: 3px;">9</span> RETURN TYPE GUIDE
+            </div>
+            <div class="section-content" style="font-size: 0.85em; padding: 5px;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <tr style="border-bottom: 1px solid #cbd5e1;">
+                        <th style="padding: 5px;">Return Type</th><th style="padding: 5px;">Use When</th><th style="padding: 5px; text-align: center;">Example Problems</th>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 5px; color: #15803d;">int[] dist</td><td style="padding: 5px;">All-pairs from single source</td><td style="padding: 5px; text-align: center;">1, 6</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 5px; color: #15803d;">int</td><td style="padding: 5px;">Need final value (max / min effort)</td><td style="padding: 5px; text-align: center;">1, 3, 5</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 5px; color: #15803d;">List&lt;Integer&gt; path</td><td style="padding: 5px;">Need actual shortest path</td><td style="padding: 5px; text-align: center;">2</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 5px; color: #15803d;">int (cost)</td><td style="padding: 5px;">Cheapest with constraints (K stops)</td><td style="padding: 5px; text-align: center;">4</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px; color: #15803d;">Custom (dist + path)</td><td style="padding: 5px;">Need both distance & path</td><td style="padding: 5px; text-align: center;">2</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 15px; margin-top: 15px;">
+        <div class="section-box" style="flex: 1;">
+            <div class="section-header" style="background: #1e1b4b; color: white; padding: 5px 10px;">
+                <span style="background: white; color: #1e1b4b; padding: 2px 6px; border-radius: 3px;">10</span> INTERVIEW CHECKLIST
+            </div>
+            <div class="section-content" style="font-size: 0.85em; display: flex; gap: 10px;">
+                <div style="flex: 2;">
+                    <ul style="list-style-type: none; padding-left: 0;">
+                        <li>✅ Did I initialize dist[src] = 0 correctly?</li>
+                        <li>✅ Did I use PriorityQueue (min-heap) correctly?</li>
+                        <li>✅ Did I skip if visited node is already processed?</li>
+                        <li>✅ Did I relax correctly (dist[v] > dist[u] + w)?</li>
+                        <li>✅ Did I handle unreachable nodes?</li>
+                        <li>✅ Did I handle special constraint (stops / max edge)?</li>
+                        <li>✅ Is my time complexity O((V+E) log V)?</li>
+                    </ul>
+                </div>
+                <div style="flex: 1; background: #f0fdf4; padding: 10px; border: 1px dashed #22c55e;">
+                    <strong style="color: #15803d;">⭐ Interview Tip</strong><br><br>
+                    Relaxation is the heart.<br><br>
+                    PQ always gives the next closest node.<br><br>
+                    Small changes solve different problems!
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-box" style="flex: 1;">
+            <div class="section-header" style="background: #1e1b4b; color: white; padding: 5px 10px;">
+                <span style="background: white; color: #1e1b4b; padding: 2px 6px; border-radius: 3px;">11</span> INTERVIEW THINKING FLOW
+            </div>
+            <div class="section-content" style="font-size: 0.8em; text-align: center;">
+                <div class="mermaid">
+                graph TD
+                    A[Do all edges have<br>non-negative weights?] -- YES --> B[Need exact<br>shortest distance?]
+                    B -- NO --> C[Use Dijkstra<br>Template]
+                    B -- YES --> D[Any limit on<br>stops/edges?]
+                    D -- NO --> C
+                    D -- YES --> E[Use Dijkstra<br>with Constraint<br>e.g. K Stops]
+                    A -- NO --> F[Use Bellman-Ford<br>Allow negative]
+                    C --> G[Re-evaluate<br>Problem]
+                    E --> G
+                </div>
+            </div>
+        </div>
+
+        <div class="section-box" style="flex: 1;">
+            <div class="section-header" style="background: #1e1b4b; color: white; padding: 5px 10px;">
+                <span style="background: white; color: #1e1b4b; padding: 2px 6px; border-radius: 3px;">12</span> PAGE 14 PREVIEW
+            </div>
+            <div class="section-content" style="font-size: 0.85em;">
+                <p><strong>Next page contains ADVANCED GRAPH PATTERNS GUIDE.</strong></p>
+                <p>For each pattern, you will see:</p>
+                <div style="display: flex; justify-content: space-around; margin-top: 10px;">
+                    <div style="text-align: center;">⚙️<br><small>Pattern<br>Idea</small></div>
+                    <div style="text-align: center;">📋<br><small>Template<br>Snapshot</small></div>
+                    <div style="text-align: center;">🧩<br><small>Common<br>Problems</small></div>
+                    <div style="text-align: center;">🔑<br><small>Key<br>Variations</small></div>
+                    <div style="text-align: center;">💡<br><small>Interview<br>Tips</small></div>
+                </div>
+                <div style="margin-top: 15px; color: #1d4ed8; font-weight: bold; text-align: center;">
+                    Master patterns. Solve any graph problem in the interview!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Flow -->
+    <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8em; font-weight: bold; padding: 10px; border-top: 1px solid #cbd5e1;">
+        <div style="display: flex; align-items: center;"><span style="font-size: 1.5em; margin-right: 5px;">❓</span> Problem<br><span style="font-weight: normal;">(Understand)</span></div> <span>→</span>
+        <div style="display: flex; align-items: center;"><span style="font-size: 1.5em; margin-right: 5px;">📥</span> Input<br><span style="font-weight: normal;">(What given)</span></div> <span>→</span>
+        <div style="display: flex; align-items: center;"><span style="font-size: 1.5em; margin-right: 5px;">🕸️</span> Representation<br><span style="font-weight: normal;">(Graph + Weights)</span></div> <span>→</span>
+        <div style="display: flex; align-items: center;"><span style="font-size: 1.5em; margin-right: 5px;">🎯</span> Choose Pattern<br><span style="font-weight: normal;">(Dijkstra Variant)</span></div> <span>→</span>
+        <div style="display: flex; align-items: center;"><span style="font-size: 1.5em; margin-right: 5px;">🛠️</span> Helper Structure<br><span style="font-weight: normal;">(PQ + dist[] + others)</span></div> <span>→</span>
+        <div style="display: flex; align-items: center;"><span style="font-size: 1.5em; margin-right: 5px;">✏️</span> Apply Changes<br><span style="font-weight: normal;">(Per Problem)</span></div> <span>→</span>
+        <div style="display: flex; align-items: center;"><span style="font-size: 1.5em; margin-right: 5px;">▶️</span> Dry Run<br><span style="font-weight: normal;">(Example)</span></div> <span>→</span>
+        <div style="display: flex; align-items: center;"><span style="font-size: 1.5em; margin-right: 5px;">⏱️</span> Optimize<br><span style="font-weight: normal;">(Time/Space)</span></div>
+    </div>
+</div>

@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 2 - Section 2: Pattern DNA Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --emerald: #059669;
+        --violet: #7c3aed;
+        --amber: #d97706;
+        --rose: #e11d48;
+        --text-dark: #0f172a;
+        --bg-light: #f8fafc;
+        --border-color: #cbd5e1;
+    }
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #cbd5e1;
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+    .page {
+        background: white;
+        max-width: 1100px;
+        margin: 0 auto 30px auto;
+        padding: 35px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        page-break-after: always;
+    }
+    .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 3px solid var(--primary);
+        padding-bottom: 12px;
+        margin-bottom: 25px;
+        background: #f1f5f9;
+        padding: 15px 20px;
+        border-radius: 6px;
+    }
+    .header-top h1 {
+        margin: 0;
+        font-size: 1.8rem;
+        color: var(--primary);
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+    .badge {
+        background: var(--emerald);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.85rem;
+    }
+    .dna-card {
+        border: 2px solid var(--primary);
+        border-radius: 8px;
+        margin-bottom: 25px;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        page-break-inside: avoid;
+    }
+    .dna-card-header {
+        background: var(--primary);
+        color: white;
+        padding: 10px 18px;
+        font-size: 1.15rem;
+        font-weight: 900;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        letter-spacing: 0.5px;
+    }
+    .dna-card-num {
+        background: white;
+        color: var(--primary);
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 900;
+    }
+    .dna-body {
+        padding: 18px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    .dna-field {
+        background: #f8fafc;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 10px 14px;
+    }
+    .dna-field.full-width {
+        grid-column: span 2;
+    }
+    .dna-label {
+        font-size: 0.75rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: #475569;
+        margin-bottom: 4px;
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .dna-val {
+        font-weight: 600;
+        color: var(--text-dark);
+        font-size: 0.9rem;
+    }
+    .dna-val ul {
+        margin: 4px 0 0 0;
+        padding-left: 18px;
+    }
+    .dna-val li {
+        margin-bottom: 3px;
+    }
+    .failure-box {
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+        border-left: 4px solid var(--amber);
+        padding: 10px 14px;
+        border-radius: 6px;
+        grid-column: span 2;
+    }
+    .failure-box .dna-label {
+        color: #b45309;
+    }
+    .followup-box {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-left: 4px solid var(--emerald);
+        padding: 10px 14px;
+        border-radius: 6px;
+        grid-column: span 2;
+    }
+    .followup-box .dna-label {
+        color: #15803d;
+    }
+    @media print {
+        body { background: white; padding: 0; }
+        .page { box-shadow: none; border: none; margin: 0; padding: 15px 0; max-width: 100%; }
+        .dna-card { page-break-inside: avoid !important; break-inside: avoid !important; }
+    }
+</style>
+</head>
+<body>
+
+<div class="page">
+    <div class="header-top">
+        <div>
+            <h1>Book 2 — Section 2: Pattern DNA Library</h1>
+            <div style="font-size: 0.95rem; color: #475569; font-weight: 600;">29 Master Cards · Lineage, Recognition, State & Failure Analysis</div>
+        </div>
+        <span class="badge">Book 2 Section 2</span>
+    </div>
+
+    <!-- FAMILY 2.1: DFS FAMILY (Cards 1-7) -->
+
+    <!-- Card 1 -->
+    <div class="dna-card" id="DNA.1">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: DFS (Recursive & Iterative)</span>
+            <span class="dna-card-num">DNA #1</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Tree / Graph Traversal</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Tree DFS, Grid DFS, Graph DFS, Trie DFS, Backtracking, Memoized DFS</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">"Explore as far as possible along each branch before backtracking", LIFO state stack processing</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Tree, Graph (Adjacency List/Matrix), 2D Grid, Node</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"all paths", "connected components", "explore deeply", "valid path exists"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If finding all possibilities/paths or deep traversal → Use <strong>DFS</strong><br/>Else if finding shortest path in unweighted graph → Use <strong>BFS</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>visited[]</code> boolean array or HashSet, <code>stack[]</code> (explicit Deque or implicit call stack)</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Forgetting to mark <code>visited[u] = true</code> before recursive calls, causing infinite loops in cyclic graphs.</li><li>StackOverflowError due to deep recursion limits (failing to switch to iterative stack).</li><li>Incorrect base case placement (e.g. checking bounds after array index access).</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"How do you convert this to an iterative version?" → Use an explicit <code>ArrayDeque</code> stack, push start node, and pop/process in loop.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="dna-card" id="DNA.2">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Tree DFS</span>
+            <span class="dna-card-num">DNA #2</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">DFS (Recursive & Iterative)</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Tree DP, LCA, Pre/In/Post Order Traversals, Tree Construction</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Bottom-up subproblem aggregation (post-order), Top-down path state passing (pre-order)</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Binary Tree, N-ary Tree (TreeNode)</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"maximum depth", "diameter of tree", "path sum", "invert tree", "same tree"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If child returns are needed to compute parent value → Use <strong>Post-Order DFS</strong><br/>Else if passing path context downwards → Use <strong>Pre-Order DFS</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val">Implicit recursion stack, global maximum variable for cross-path max tracking</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Null root base case missing: forgetting <code>if (root == null) return 0;</code></li><li>Assuming path must pass through root (e.g. Diameter / Max Path Sum can be strictly in a sub-branch).</li><li>Not updating global max before returning single-path contribution up the call stack.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"What if the tree is skewed and stack overflows?" → Use Morris Traversal O(1) space or iterative stack.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="dna-card" id="DNA.3">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Grid DFS</span>
+            <span class="dna-card-num">DNA #3</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">DFS (Recursive & Iterative)</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Island Counting, Flood Fill, Word Search (Trie + Grid DFS)</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">In-place matrix mutation for visited tracking, 4-directional delta array navigation</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">2D Matrix / Grid (<code>char[][]</code> or <code>int[][]</code>)</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"number of islands", "max area of island", "flood fill", "surrounded regions"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If counting/modifying connected component regions → Use <strong>Grid DFS</strong><br/>Else if shortest path step count on grid → Use <strong>Grid BFS</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>DIRS = {{0,1},{1,0},{0,-1},{-1,0}}</code>, matrix in-place sink <code>grid[r][c] = '0'</code></div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Checking bounds <code>grid[r][c]</code> before validating <code>0 &lt;= r &lt; R &amp;&amp; 0 &lt;= c &lt; C</code> causing ArrayIndexOutOfBoundsException.</li><li>Forgetting to sink/mark cell visited, leading to infinite 4-way recursion loop.</li><li>Modifying input matrix when problem requires pristine original matrix (use visited boolean grid instead).</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"Can you do this without modifying the grid?" → Pass a <code>boolean[][] visited</code> grid or use Union-Find.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="dna-card" id="DNA.4">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Graph DFS</span>
+            <span class="dna-card-num">DNA #4</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">DFS (Recursive & Iterative)</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Cycle Detection (3-Color DFS), Topological Sort (DFS), Tarjan Bridges</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Explicit Adjacency List construction, 3-state coloring (White/Gray/Black) for cycle detection</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Adjacency List <code>List&lt;List&lt;Integer&gt;&gt;</code>, Edge Array <code>int[][]</code></div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"detect cycle in graph", "connected components", "course schedule DFS", "reconstruct itinerary"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If graph has potential cycles or requires path backtracking → Use <strong>Graph DFS</strong><br/>Else if unweighted shortest path → Use <strong>Graph BFS</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>state[]</code> (0=Unvisited, 1=Visiting, 2=Visited), <code>parent[]</code> array for undirected cycle tracking</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Using 2-state boolean visited for directed cycle detection instead of 3-state (Gray/Visiting state is required).</li><li>Not running DFS for ALL components (failing on disconnected graphs).</li><li>Confusing directed cycle detection (back-edge to Gray node) with undirected cycle detection (edge to non-parent visited node).</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"How to find critical connections / bridges?" → Tarjan's low-link discovery time DFS.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="dna-card" id="DNA.5">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Trie DFS</span>
+            <span class="dna-card-num">DNA #5</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">DFS Family + Trie Structure</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Word Search II, Boggle Solver, Wildcard Search</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Simultaneous grid DFS and Trie pointer traversal, prefix pruning of search tree</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Grid + Dictionary of Words</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"find all dictionary words in grid", "boggle", "word search II"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If searching multiple dictionary words on 2D grid → Use <strong>Trie + Grid DFS</strong><br/>Else if single word search on grid → Use <strong>Standard Grid DFS</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>TrieNode curr</code>, grid <code>visited</code> mark, <code>List&lt;String&gt; result</code></div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Not pruning Trie leaf nodes after finding a word, causing duplicate work.</li><li>Adding duplicate words to result list (clear <code>node.word = null</code> after adding).</li><li>Forgetting to unmark visited character on backtracking step.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"How to optimize memory during DFS search?" → Prune matched children nodes from Trie dynamically.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="dna-card" id="DNA.6">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Backtracking DFS</span>
+            <span class="dna-card-num">DNA #6</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">DFS Family</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Subsets, Permutations, Combination Sum, N-Queens, Sudoku</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Choose → Explore → Unchoose pattern, decision tree space exploration</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Array, String, Set of Choices</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"generate all combinations", "subsets", "permutations", "solve puzzle"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If problem demands generating EVERY valid state configuration → Use <strong>Backtracking</strong><br/>Else if problem asks for min/max/count of states → Use <strong>Dynamic Programming</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>path / currentChoice</code> list, <code>start</code> index, <code>used[]</code> boolean array for permutations</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Forgetting to copy <code>res.add(new ArrayList&lt;&gt;(path))</code>, resulting in empty path lists in result.</li><li>Forgetting the "Unchoose" backtrack step (<code>path.remove(path.size() - 1)</code>).</li><li>Not sorting array prior to duplicate skipping (<code>if (i &gt; start &amp;&amp; nums[i] == nums[i-1]) continue;</code>).</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"How do you optimize redundant state exploration?" → Prune branches early or use Memoization DP if state repeats.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 7 -->
+    <div class="dna-card" id="DNA.7">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Memoized DFS (Top-Down DP)</span>
+            <span class="dna-card-num">DNA #7</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">DFS Family + Dynamic Programming</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">1D/2D Top-Down DP, Memoized Game Theory, Target Sum</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Caching DFS recursive evaluation state in <code>memo[][]</code> array or HashMap</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Array, Target Value, Grid, Game State</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"number of ways", "can achieve target", "max score with overlapping choices"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If search tree has duplicate overlapping sub-problems → Use <strong>Memoized DFS</strong><br/>Else if state transitions are simple and sequential → Use <strong>Bottom-Up Tabulation</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>memo[index][state]</code> table initialized to sentinel value (e.g. <code>-1</code> or <code>null</code>)</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Initializing memo cache with <code>0</code> when <code>0</code> is a valid return value (causes cache miss re-computations).</li><li>Incomplete state representation in memo key (omitting a variable that changes recursion outcome).</li><li>Stack overflow on deep recursion inputs (convert to bottom-up DP).</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"Convert this to Bottom-Up DP" → Reverse recursion tree order into iterative nested loops.</div></div>
+        </div>
+    </div>
+
+    <!-- FAMILY 2.2: BFS FAMILY (Cards 8-10) -->
+
+    <!-- Card 8 -->
+    <div class="dna-card" id="DNA.8">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: BFS (Standard & Level-Order)</span>
+            <span class="dna-card-num">DNA #8</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Graph Traversal</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Multi-Source BFS, Topological Sort (Kahn's), Level Order Tree</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Level-by-level queue expansion guarantees shortest path in unweighted graphs</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Graph, Tree, Grid</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"shortest path in unweighted graph", "minimum steps", "level order"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If finding shortest path in unweighted graph or processing levels → Use <strong>BFS</strong><br/>Else if graph has edge weights → Use <strong>Dijkstra / Bellman-Ford</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;()</code>, <code>visited[]</code> boolean array</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Marking node visited when POLLING from queue instead of OFFERING (causes duplicate node queue pushes).</li><li>Forgetting <code>int size = q.size()</code> snapshot at start of level loop when tracking steps.</li><li>Memory limit exceeded from pushing unvisited duplicate nodes.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"What if edges have weight 0 or 1?" → Use 0-1 BFS with <code>ArrayDeque</code> (push front for 0, push back for 1).</div></div>
+        </div>
+    </div>
+
+    <!-- Card 9 -->
+    <div class="dna-card" id="DNA.9">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Multi-Source BFS</span>
+            <span class="dna-card-num">DNA #9</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">BFS Family</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Rotting Oranges, 01 Matrix, Pacific Atlantic Flow, Fire Spreading</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Pre-filling queue with ALL initial starting sources at distance 0 for simultaneous expansion</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">2D Grid / Graph with multiple starting points</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"distance to nearest X", "spreading fire/infection", "multiple start points"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If finding distance from any of N targets simultaneously → Use <strong>Multi-Source BFS</strong><br/>Else if single start point → Use <strong>Standard BFS</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>Queue</code> pre-populated with all source coordinates, <code>dist[][]</code> or <code>visited[][]</code> matrix</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Running separate single-source BFS for each start point O(K × R × C) instead of combined Multi-Source O(R × C).</li><li>Forgetting to mark initial sources visited during pre-population.</li><li>Incorrectly counting total time steps (incrementing step counter when queue has no valid expansion).</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"What if sources start at different initial timestamps?" → Use PriorityQueue Dijkstra ordered by start time.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 10 -->
+    <div class="dna-card" id="DNA.10">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Topological Sort (BFS / Kahn's)</span>
+            <span class="dna-card-num">DNA #10</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">BFS Family + Graph DAG</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Course Schedule I & II, Alien Dictionary, Parallel Courses</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Indegree array tracking, queue processing zero-indegree nodes to build linear dependency order</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Directed Graph (Adjacency List + Prerequisites Pairs)</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"prerequisites", "dependency order", "compilation order", "can finish all tasks"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If processing DAG elements according to prerequisite ordering → Use <strong>Kahn's Topo Sort</strong><br/>Else if undirected cycle detection → Use <strong>Union-Find</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>indegree[]</code> array, <code>adjList</code>, <code>Queue&lt;Integer&gt;</code> zero-indegree queue</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Building edge directions backwards (e.g. <code>u -&gt; v</code> when problem states <code>v</code> depends on <code>u</code>).</li><li>Forgetting cycle check: failing to check <code>processedCount == totalNodes</code> at completion.</li><li>Not adding all initial 0-indegree nodes to queue before loop starts.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"How to find min semester/time to complete all courses?" → Track level/depth during Kahn's BFS queue steps.</div></div>
+        </div>
+    </div>
+
+    <!-- FAMILY 2.3: SEARCH FAMILY (Cards 11-12) -->
+
+    <!-- Card 11 -->
+    <div class="dna-card" id="DNA.11">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Binary Search (Exact / Lower / Upper Bound)</span>
+            <span class="dna-card-num">DNA #11</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Divide and Conquer</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Binary Search on Answer, Rotated Sorted Array Search, Matrix BS</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Halving search space O(log N) on sorted monotonic inputs using lo/hi pointers</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Sorted Array, Monotonic Function</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"sorted array", "find first/last position", "O(log n) time complexity required"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If searching value in sorted array → Use <strong>Standard Binary Search</strong><br/>Else if searching answer space range → Use <strong>Binary Search on Answer</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>lo = 0</code>, <code>hi = n - 1</code> (or <code>n</code> for lower bound), <code>mid = lo + (hi - lo) / 2</code></div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Integer overflow using <code>(lo + hi) / 2</code> instead of <code>lo + (hi - lo) / 2</code>.</li><li>Infinite loops caused by incorrect pointer updating (e.g. <code>lo = mid</code> without upper bias mid).</li><li>Off-by-one errors on boundary index handling.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"What if elements are duplicated?" → Lower bound contract <code>hi = mid</code> on match; Upper bound <code>lo = mid + 1</code>.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 12 -->
+    <div class="dna-card" id="DNA.12">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Binary Search on Answer</span>
+            <span class="dna-card-num">DNA #12</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Search Family</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Koko Bananas, Capacity To Ship, Split Array Largest Sum, Aggressive Cows</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Binary searching on monotonic answer range <code>[minPossible, maxPossible]</code> with <code>isValid(mid)</code> checker</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Array of constraints, Range of integers</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"minimum capacity to...", "maximum min distance", "smallest velocity to finish in H hours"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If optimizing min/max answer and <code>isValid(x)</code> is monotonic → Use <strong>BS on Answer</strong><br/>Else if answer space non-monotonic → Use <strong>Greedy / DP</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>lo = minVal</code>, <code>hi = maxVal</code>, <code>ans</code> variable, <code>isValid(mid)</code> helper function</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Defining wrong initial search space <code>[lo, hi]</code> (e.g. <code>lo = 0</code> when min speed must be 1).</li><li>Non-monotonic predicate function: <code>isValid(x)</code> does not produce continuous T...TFF...F pattern.</li><li>O(N) checker function optimization failure causing TLE.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"How to handle float/decimal answer ranges?" → Use fixed iteration loop (e.g. 100 steps) or <code>hi - lo &gt; 1e-6</code>.</div></div>
+        </div>
+    </div>
+
+    <!-- FAMILY 2.4: TWO-POINTER FAMILY (Cards 13-14) -->
+
+    <!-- Card 13 -->
+    <div class="dna-card" id="DNA.13">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Two Pointers</span>
+            <span class="dna-card-num">DNA #13</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Array / String Traversal</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">3Sum, Container With Most Water, Trapping Rain Water, Dutch National Flag</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Shrinking search space from both ends O(N) by leveraging sorting or greedy invariants</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Sorted Array, String, 1D Sequence</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"pair in sorted array", "palindrome check", "container water", "triplets summing to zero"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If array is sorted and searching for pairs/triplets → Use <strong>Two Pointers</strong><br/>Else if contiguous subarray window optimization → Use <strong>Sliding Window</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>left = 0</code>, <code>right = n - 1</code></div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Applying opposite-end two pointers on UN SORTED arrays expecting monotonic convergence.</li><li>Not skipping duplicate elements in 3Sum (causing duplicate triplet results).</li><li>Pointer collision bounds check missing (e.g. <code>left &lt; right</code> inside inner loops).</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"How to generalize 3Sum to K-Sum?" → Use recursion reducing K-Sum to (K-1)-Sum down to 2Sum base case.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 14 -->
+    <div class="dna-card" id="DNA.14">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Sliding Window</span>
+            <span class="dna-card-num">DNA #14</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Two Pointers Family</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Monotonic Deque Window, Variable Window + Freq Map, Fixed Size Window</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Maintain contiguous subarray window state; expand right, shrink left when invalid</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Array, String</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"contiguous subarray", "longest substring without repeating", "at most K distinct"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If problem asks for contiguous range optimizing a condition → Use <strong>Sliding Window</strong><br/>Else if non-contiguous subsequences → Use <strong>DP / Backtracking</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>left</code>, <code>right</code>, frequency array <code>int[26]</code> or HashMap, <code>validCount</code></div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Wrong shrink condition in <code>while</code> loop (shrinking when valid instead of invalid, or vice versa).</li><li>Updating result variable inside shrink loop at wrong moment.</li><li>Off-by-one errors calculating window size <code>(right - left + 1)</code>.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"How to handle sliding window max in O(1) space per step?" → Use Monotonic Deque (Card #18).</div></div>
+        </div>
+    </div>
+
+    <!-- FAMILY 2.5: ARRAY-STATE FAMILY (Cards 15-18) -->
+
+    <!-- Card 15 -->
+    <div class="dna-card" id="DNA.15">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Prefix Sum</span>
+            <span class="dna-card-num">DNA #15</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Array State Precomputation</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Prefix Sum + HashMap (Subarray Sum = K), 2D Prefix Sum, Product Except Self</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Range sum <code>[L..R] = prefix[R+1] - prefix[L]</code> computed in O(1) after O(N) precomputation</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">1D Array, 2D Grid</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"range sum queries", "subarray sum equals K", "continuous subarray sum divisible by K"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If querying multiple range sums or finding subarray sum = K with negatives → Use <strong>Prefix Sum</strong><br/>Else if non-negative array contiguous window → Use <strong>Sliding Window</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>prefix[]</code> array of size N+1, or running <code>sum</code> + <code>HashMap&lt;Sum, Count&gt;</code></div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Forgetting to seed HashMap with <code>map.put(0, 1)</code> for prefix sum = K starting at index 0.</li><li>Off-by-one error: using size N prefix array instead of N+1.</li><li>Using sliding window on arrays containing negative numbers (fails because window is non-monotonic).</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"How to answer 2D subgrid sum queries in O(1)?" → Build 2D Prefix Sum matrix with inclusion-exclusion formula.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 16 -->
+    <div class="dna-card" id="DNA.16">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Difference Array</span>
+            <span class="dna-card-num">DNA #16</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Array State Precomputation</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Corporate Flight Bookings, Car Pooling, Range Addition</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">O(1) range updates <code>[L..R] + val</code> via <code>diff[L] += val</code> and <code>diff[R+1] -= val</code></div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Array + Multiple Range Update Queries <code>[start, end, val]</code></div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"apply multiple range additions", "car pooling capacity check", "booking updates"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If offline range updates followed by final array reconstruction → Use <strong>Difference Array</strong><br/>Else if dynamic online point updates interleaved with range queries → Use <strong>Segment Tree</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>diff[]</code> array of size N+1, prefix sum pass at end to reconstruct original array</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Forgetting boundary check on <code>diff[R+1] -= val</code> when <code>R + 1 == N</code>.</li><li>Applying updates dynamically while trying to read values before final prefix sum pass.</li><li>Confusing 0-based vs 1-based index query inputs.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"What if range queries are interleaved with updates?" → Switch to Segment Tree or Fenwick Tree.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 17 -->
+    <div class="dna-card" id="DNA.17">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Monotonic Stack</span>
+            <span class="dna-card-num">DNA #17</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Array-State Family + Stack</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Next Greater Element, Daily Temperatures, Largest Rectangle in Histogram, Trapping Rain Water</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Maintain sorted order in stack to find nearest smaller/larger boundary in O(N) amortized</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">1D Array of numbers / heights</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"next greater element", "previous smaller element", "histogram maximum rectangle area"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If finding nearest greater/smaller element for every position → Use <strong>Monotonic Stack</strong><br/>Else if finding window maximum/minimum → Use <strong>Monotonic Queue</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>Deque&lt;Integer&gt; stack</code> storing INDEXES (not raw values)</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Storing values instead of INDEXES in stack (prevents calculating width/distance).</li><li>Incorrect pop condition (using <code>&lt;</code> instead of <code>&lt;=</code> for duplicate elements).</li><li>Forgetting to process remaining elements left in stack after main array loop finishes.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"How to solve Maximal Rectangle in 2D binary matrix?" → Apply Histogram Monotonic Stack to each row.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 18 -->
+    <div class="dna-card" id="DNA.18">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Monotonic Queue</span>
+            <span class="dna-card-num">DNA #18</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Array-State Family + Deque</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Sliding Window Maximum, Shortest Subarray with Sum at Least K, Constrained Subset Sum</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Double-ended queue maintaining monotonic elements to give O(1) window max/min</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">1D Array + Window Size K or Constraint K</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"maximum of each sliding window", "shortest subarray sum &gt;= K with negative numbers"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If tracking min/max element over dynamic sliding window → Use <strong>Monotonic Queue</strong><br/>Else if static window average/sum → Use <strong>Simple Sliding Window</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>Deque&lt;Integer&gt; deque</code> storing indices; front is window max, back maintains sorted order</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Not evicting out-of-window indices from front of deque (<code>deque.peekFirst() &lt; i - k + 1</code>).</li><li>Evicting smaller elements from front instead of back (must pop from <code>pollLast()</code>).</li><li>Mixing up increasing vs decreasing deque order for max vs min window queries.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"Can we use PriorityQueue instead?" → Yes, but time complexity increases from O(N) to O(N log K).</div></div>
+        </div>
+    </div>
+
+    <!-- FAMILY 2.6: HEAP FAMILY (Cards 19-20) -->
+
+    <!-- Card 19 -->
+    <div class="dna-card" id="DNA.19">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Heap / Top-K</span>
+            <span class="dna-card-num">DNA #19</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">PriorityQueue Data Structure</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Kth Largest Element, Top K Frequent, K Closest Points, Median from Data Stream</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Min-heap of size K keeps top K largest elements in O(N log K) time and O(K) space</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Array, Stream of Data, Collection</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"kth largest", "top K frequent elements", "k closest points to origin"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If finding top K elements in streaming or unsorted data → Use <strong>Heap (Size K)</strong><br/>Else if full array available and strict O(N) time required → Use <strong>QuickSelect</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>PriorityQueue&lt;Element&gt; minHeap</code> with custom comparator</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Using Max-Heap of size N O(N log N) instead of Min-Heap of size K O(N log K).</li><li>Java Comparator integer overflow error: using <code>(a, b) -&gt; a - b</code> when numbers can be negative/large (use <code>Integer.compare(a, b)</code>).</li><li>Forgetting default Java PriorityQueue is a MIN-HEAP.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"Can you do it in O(N) average time?" → Use QuickSelect partitioning algorithm.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 20 -->
+    <div class="dna-card" id="DNA.20">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: K-Way Merge</span>
+            <span class="dna-card-num">DNA #20</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Heap Family</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Merge K Sorted Lists, Kth Smallest in Sorted Matrix, Smallest Range K Lists</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Heap of size K initialized with head of each list; poll min, push next element from same list</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">K Sorted Arrays / Lists / Matrix</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"merge K sorted lists", "find kth smallest element in K sorted arrays"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If merging or finding element across K sorted input streams → Use <strong>K-Way Merge Heap</strong><br/>Else if merging 2 sorted lists → Use <strong>Two Pointers</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>PriorityQueue&lt;ElementNode&gt;</code> containing <code>(val, listIndex, elementIndex)</code></div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Forgetting to check if next element exists before offering to heap (NullPointerException).</li><li>Not storing origin list tracker in heap node, losing track of which list to advance.</li><li>Higher complexity divide &amp; conquer merge implementation bugs.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"What if K is huge and doesn't fit in memory?" → External Merge Sort reading chunked buffers.</div></div>
+        </div>
+    </div>
+
+    <!-- FAMILY 2.7: GRAPH-ALGORITHM FAMILY (Cards 21-24) -->
+
+    <!-- Card 21 -->
+    <div class="dna-card" id="DNA.21">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Union-Find (Disjoint Set)</span>
+            <span class="dna-card-num">DNA #21</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Graph-Algorithm Family</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Kruskal MST, Redundant Connection, Accounts Merge, Dynamic Islands</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Partition elements into dynamic disjoint sets; path compression + rank union yields O(α(N)) ≈ O(1)</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Graph Edges, Disjoint Groups, Matrix Grid</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"dynamic connectivity", "redundant edge cycle detection", "merge groups"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If dynamically merging connected components or detecting undirected cycles → Use <strong>Union-Find</strong><br/>Else if static graph reachability traversal → Use <strong>DFS / BFS</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>parent[]</code>, <code>rank[]</code> arrays, component <code>count</code></div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Omitting path compression <code>parent[i] = find(parent[i])</code> causing tree degneration to O(N).</li><li>Unioning raw nodes directly instead of unioning their ROOT parents <code>find(u)</code> and <code>find(v)</code>.</li><li>Incorrectly updating component count during failed union.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"Can Union-Find work on directed graph cycles?" → No, use Kahn's Topo Sort or 3-Color DFS for directed graphs.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 22 -->
+    <div class="dna-card" id="DNA.22">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Dijkstra's Algorithm</span>
+            <span class="dna-card-num">DNA #22</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Graph-Algorithm Family + Greedy</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Network Delay Time, Path With Minimum Effort, Swim in Rising Water</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Greedily process lowest distance unvisited node using PriorityQueue O((V+E) log V)</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Weighted Graph / Grid (Non-Negative Weights)</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"shortest path weighted graph", "minimum time/cost to reach node", "min effort path"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If finding shortest path in non-negative weighted graph → Use <strong>Dijkstra</strong><br/>Else if unweighted graph → Use <strong>BFS</strong><br/>Else if negative weights present → Use <strong>Bellman-Ford</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>dist[]</code> array initialized to INF, <code>PriorityQueue&lt;int[]&gt; pq</code> storing <code>(node, dist)</code></div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Applying Dijkstra to graphs containing negative edge weights (loops endlessly or returns wrong result).</li><li>Forgetting stale node check <code>if (d &gt; dist[u]) continue;</code> causing TLE on dense graphs.</li><li>Not initializing <code>dist[start] = 0</code>.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"What if graph has negative edges but no negative cycles?" → Use Bellman-Ford (Card #23).</div></div>
+        </div>
+    </div>
+
+    <!-- Card 23 -->
+    <div class="dna-card" id="DNA.23">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Bellman-Ford Algorithm</span>
+            <span class="dna-card-num">DNA #23</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Graph-Algorithm Family + DP</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Cheapest Flights Within K Stops, Negative Cycle Detection</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Relax all E edges V-1 times; N-th relaxation step detects negative weight cycles</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Weighted Graph (Can contain negative edges)</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"negative edge weights", "detect negative cycle", "shortest path with at most K stops"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If graph has negative edges or step-count constrained shortest path → Use <strong>Bellman-Ford</strong><br/>Else if non-negative weights → Use <strong>Dijkstra</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>dist[]</code> array, copy array <code>cloneDist[]</code> for K-stop constrained variants</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>For K-stops constraint: not using previous iteration's distance array copy (causes multi-step relaxation in single iteration).</li><li>Relaxing edges from unreachable nodes (must check <code>dist[u] != INF</code> first).</li><li>Higher time complexity O(V × E) compared to Dijkstra.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"How to find all-pairs shortest paths?" → Use Floyd-Warshall O(V³) algorithm.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 24 -->
+    <div class="dna-card" id="DNA.24">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Minimum Spanning Tree (Prim / Kruskal)</span>
+            <span class="dna-card-num">DNA #24</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Graph-Algorithm Family + Greedy</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Min Cost to Connect All Points, Optimize Water Distribution</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Connect all V vertices with V-1 edges minimizing total edge weight (Kruskal: sort edges + UnionFind; Prim: PQ vertex expansion)</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Undirected Weighted Graph, Point Coordinates</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"connect all points with min cost", "minimum spanning tree", "network wiring"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If sparse graph edge list available → Use <strong>Kruskal's (Union-Find)</strong><br/>Else if dense graph or matrix coordinates → Use <strong>Prim's (PriorityQueue)</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val">Union-Find object (Kruskal) OR <code>inMST[]</code> boolean array + <code>PriorityQueue</code> (Prim)</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Conflating MST with Shortest Path Tree (MST minimizes total edge sum, not path distance from source).</li><li>Not stopping early when V-1 edges have been added to MST.</li><li>Kruskal: forgetting to sort edges by weight before iterating.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"What if some nodes can build wells (virtual source)?" → Add virtual node 0 connected to all nodes with well costs.</div></div>
+        </div>
+    </div>
+
+    <!-- FAMILY 2.8: STRUCTURE FAMILY (Cards 25-26) -->
+
+    <!-- Card 25 -->
+    <div class="dna-card" id="DNA.25">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Segment Tree / Fenwick Tree (BIT)</span>
+            <span class="dna-card-num">DNA #25</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Advanced Data Structures</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Range Sum Query Mutable, Count of Smaller Numbers After Self</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">O(log N) dynamic point updates and range queries (Sum/Min/Max) via tree hierarchy</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Dynamic Array with Interleaved Updates &amp; Range Queries</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"range sum with updates", "count smaller elements after self", "dynamic range min query"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If range sum queries with point updates → Use <strong>Fenwick Tree (BIT)</strong><br/>Else if range min/max queries or range updates → Use <strong>Segment Tree</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>tree[]</code> array of size 4N (Segment Tree) or N+1 (Fenwick Tree using <code>i &amp; (-i)</code>)</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Segment Tree tree array undersized (must allocate <code>4 * N</code> size array).</li><li>Fenwick Tree 1-based indexing error (BIT fails on 0-index, offset indices by +1).</li><li>Overcomplicating simple static range queries (use Prefix Sum if no updates occur).</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"How to handle range updates [L..R] + V?" → Use Segment Tree with Lazy Propagation.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 26 -->
+    <div class="dna-card" id="DNA.26">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Trie (Prefix Tree Core)</span>
+            <span class="dna-card-num">DNA #26</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Tree / String Data Structure</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Autocomplete, Word Dictionary, Bitwise Max XOR Trie</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Tree where edges represent characters; character sharing compresses string storage &amp; prefix matching</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Set of Strings, 32-bit Integers</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"prefix search", "insert and search words", "typeahead suggestion"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If checking prefix existence across dictionary of words → Use <strong>Trie</strong><br/>Else if exact word lookup only → Use <strong>HashSet</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>TrieNode { TrieNode[] children = new TrieNode[26]; boolean isWord; }</code></div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Confusing <code>startsWith</code> (valid node path) with <code>search</code> (must check <code>node.isWord == true</code>).</li><li>High memory usage creating arrays of size 26 for sparse trees (use HashMap for children in large alphabets).</li><li>Not clearing node references during word deletion.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"How to find max XOR of two numbers in array?" → Build Bitwise Trie of 32-bit binary representation.</div></div>
+        </div>
+    </div>
+
+    <!-- FAMILY 2.9: DP FAMILY (Card 27) -->
+
+    <!-- Card 27 -->
+    <div class="dna-card" id="DNA.27">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Dynamic Programming (SC→RBR→MTS Umbrella)</span>
+            <span class="dna-card-num">DNA #27</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Optimization / Recursion with Overlap</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">1D DP, 2D Grid DP, 0/1 Knapsack, LCS, LIS, Interval DP, Bitmask DP, State Machine DP</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Optimal Substructure + Overlapping Subproblems; SC→RBR→MTS (Subproblem Choice → Recurrence Relation → State Memoization/Tabulation/Space)</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Array, String, Grid, Numerical Target</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"maximum profit", "minimum cost", "number of ways to reach", "longest common subsequence"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If optimal choice depends on overlapping subproblem results → Use <strong>DP</strong><br/>Else if greedy local choice provably leads to global optimum → Use <strong>Greedy</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val"><code>dp[]</code> or <code>dp[][]</code> table representing minimum independent state variables</div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Failing to define explicit state definition before attempting recurrence equation.</li><li>Incorrect base case initialization (e.g. <code>dp[0]</code> incorrect leading to cascade errors).</li><li>Iterating DP table in wrong loop direction (causes using updated state values prematurely).</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"Can you optimize space complexity?" → Reduce 2D DP array to 1D rolling array if state only depends on <code>dp[i-1]</code>.</div></div>
+        </div>
+    </div>
+
+    <!-- FAMILY 2.10: GREEDY & BITS FAMILY (Cards 28-29) -->
+
+    <!-- Card 28 -->
+    <div class="dna-card" id="DNA.28">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Greedy (Exchange Argument)</span>
+            <span class="dna-card-num">DNA #28</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Optimization Family</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Activity Selection, Interval Scheduling, Jump Game, Gas Station</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">Make immediate locally optimal choice without backtracking; proven via Exchange Argument</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Array, Intervals, Resource Costs</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"max non-overlapping intervals", "minimum gas stations", "jump game reach"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If sorting reveals a choice that never needs re-evaluation → Use <strong>Greedy</strong><br/>Else if choice depends on future subproblem outcomes → Use <strong>DP</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val">Sorted array, running <code>maxReach</code>, <code>currentEnd</code></div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Applying greedy assumption without proof on problems requiring DP (e.g. 0/1 Knapsack fails greedy).</li><li>Sorting intervals by start time instead of end time for Activity Selection / Max non-overlapping intervals.</li><li>Off-by-one boundary comparison on interval overlaps.</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"How do you prove greedy choice is correct?" → Use Exchange Argument: show swapping greedy choice with any other choice yields equal or worse result.</div></div>
+        </div>
+    </div>
+
+    <!-- Card 29 -->
+    <div class="dna-card" id="DNA.29">
+        <div class="dna-card-header">
+            <span>PATTERN DNA: Bit Manipulation / Bitmask</span>
+            <span class="dna-card-num">DNA #29</span>
+        </div>
+        <div class="dna-body">
+            <div class="dna-field"><div class="dna-label">Parent Pattern</div><div class="dna-val">Bitwise Operations</div></div>
+            <div class="dna-field"><div class="dna-label">Children Patterns</div><div class="dna-val">Single Number, Subsets Bitmask, Bitmask DP, Reverse Bits</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable Ideas</div><div class="dna-val">XOR properties (<code>x ^ x = 0</code>, <code>x ^ 0 = x</code>), Bitmask state representation for N &lt;= 32</div></div>
+            <div class="dna-field"><div class="dna-label">Input Shape</div><div class="dna-val">Integers, Set of Small Choices (N &lt;= 20)</div></div>
+            <div class="dna-field"><div class="dna-label">Recognition Signals</div><div class="dna-val">"single number without extra memory", "count set bits", "power of two", "subset representation"</div></div>
+            <div class="dna-field full-width"><div class="dna-label">Decision Tree</div><div class="dna-val">If finding odd occurrence or storing subset of size N &lt;= 30 → Use <strong>Bit Manipulation</strong><br/>Else if N &gt; 32 → Use <strong>HashSet / boolean[]</strong></div></div>
+            <div class="dna-field full-width"><div class="dna-label">Reusable State</div><div class="dna-val">Bitmask integer, Bitwise operators: <code>AND (&amp;)</code>, <code>OR (|)</code>, <code>XOR (^)</code>, <code>NOT (~)</code>, <code>SHIFTS (&lt;&lt;, &gt;&gt;)</code></div></div>
+            <div class="failure-box"><div class="dna-label">Top 3 Failure Modes</div><div class="dna-val"><ul><li>Operator precedence error: bitwise operators have LOWER precedence than comparison (always use parentheses: <code>if ((val &amp; (1 &lt;&lt; i)) != 0)</code>).</li><li>Using signed right shift <code>&gt;&gt;</code> instead of unsigned <code>&gt;&gt;&gt;</code> when dealing with negative integers.</li><li>Bit overflow for N &gt;= 32 (use <code>1L &lt;&lt; i</code> for 64-bit long masks).</li></ul></div></div>
+            <div class="followup-box"><div class="dna-label">Interview Follow-Up</div><div class="dna-val">"How to clear lowest set bit in O(1)?" → Expression <code>n &amp;= (n - 1)</code> clears lowest 1 bit (Kernighan's Algorithm).</div></div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

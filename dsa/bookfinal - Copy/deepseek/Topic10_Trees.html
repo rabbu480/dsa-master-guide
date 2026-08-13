@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Topic 10: Trees &amp; BST — FAANG Book 9 🔒</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 13px; line-height: 1.5; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 18px 24px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+  min-height: 850px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 10px; margin-bottom: 16px;
+  flex-shrink: 0; }
+.ph h1 { font-size: 2.1rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 1rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 4px 16px; border-radius: 20px;
+  font-weight: 800; font-size: 0.95rem; text-align: right; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; margin-bottom: 12px; }
+.bh  { background: var(--pri); color: white; padding: 8px 16px;
+  font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 22px; height: 22px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.8rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 14px 16px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 12px 14px; font-size: 0.82rem; line-height: 1.55; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-word; }
+code { font-size: 0.85rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th, td { border: 1px solid var(--bdr); padding: 8px 10px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur);
+  border-radius: 6px; padding: 12px 14px; margin-top: 8px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.9rem; margin-bottom: 4px; }
+
+.mt-auto { margin-top: auto; }
+
+.dt-row { display: flex; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; margin-bottom: 6px; }
+.dt-q { background: #eff6ff; padding: 6px 10px; font-weight: 600; flex: 1; font-size: 0.8rem; display: flex; align-items: center; }
+.dt-arrow { background: white; padding: 6px 6px; color: #64748b; font-size: 0.85rem; display: flex; align-items: center; }
+.dt-a { background: #f0fdf4; padding: 6px 10px; font-weight: 700; flex: 1.2; font-size: 0.8rem; display: flex; align-items: center; }
+
+.pattern-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.pattern-cell { background: #f8fafc; border: 1px solid var(--bdr); border-radius: 4px; padding: 5px 10px; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center; }
+.pattern-cell .trigger { font-weight: 600; color: var(--pri); }
+.pattern-cell .think { color: var(--grn); font-weight: 700; }
+
+.io-box {
+  background: #f8fafc; border: 1px solid var(--bdr); border-left: 3px solid var(--sec);
+  padding: 6px 12px; margin: 4px 0; border-radius: 4px; font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
+}
+
+.prob-card {
+  border: 1.5px solid var(--bdr);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.prob-head {
+  padding: 8px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--bdr);
+}
+.prob-head .ptitle { font-size: 0.9rem; font-weight: 700; color: var(--pri); }
+.diff-e { background: #dcfce7; color: #166534; padding: 2px 12px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 2px 12px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 2px 12px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 10px 12px; border-right: 1px solid var(--bdr); font-size: 0.8rem; }
+.prob-code { padding: 10px 12px; background: #fafbfc; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 8px 12px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; min-height: 95vh !important; height: 98vh !important; overflow: hidden !important; zoom: 0.95; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+  pre {
+    background: #f8fafc !important;
+    color: #0f172a !important;
+    border: 1.5px solid #cbd5e1 !important;
+    font-family: 'Fira Code', monospace !important;
+    font-size: 0.85rem !important;
+    line-height: 1.4 !important;
+    padding: 10px 12px !important;
+    white-space: pre-wrap !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- ============================================================ -->
+<!-- PAGE 1: FOUNDATION -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>TREES &amp; BST</h1><div class="sub">FAANG Book 9 🔒 — The Foundation</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 1 OF 10</div></div>
+  </div>
+
+  <div class="g3" style="margin-bottom:14px">
+    <div class="box pur">
+      <div class="bh">💡 WHY TREES?</div>
+      <div class="bc">
+        <p style="margin-bottom:8px;font-size:0.95rem;">Trees store data in a non-linear hierarchy. Binary Search Trees (BST) enable <strong>O(log N) lookup, insertion, and deletion</strong>!</p>
+        <div class="aha">
+          <div class="aha-t">💡 THE BST INORDER AHA</div>
+          An <strong>Inorder Traversal</strong> of a BST ALWAYS produces elements in <strong>sorted ascending order</strong>!
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="bh"><span class="n">1</span> CORE NODE STRUCTURE</div>
+      <div class="bc">
+<pre>public class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int val) { this.val = val; }
+}</pre>
+      </div>
+    </div>
+
+    <div class="box sky">
+      <div class="bh"><span class="n">2</span> 3 DFS TRAVERSALS</div>
+      <div class="bc">
+        <div style="font-weight:700;color:var(--pri);margin-bottom:6px;font-size:0.9rem;">Tree: [2] with left [1], right [3]:</div>
+<pre>Preorder  :  2 -> 1 -> 3  (Copy/Serialize)
+Inorder   :  1 -> 2 -> 3  (Sorted BST!)
+Postorder :  1 -> 3 -> 2  (Delete/Bottom-Up)</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Traversal Master Template -->
+  <div class="box" style="margin-bottom:12px;">
+    <div class="bh">🌳 TRAVERSAL MASTER TEMPLATE</div>
+    <div class="bc">
+      <table>
+        <tr><th>Traversal</th><th>Order</th><th>Use When</th></tr>
+        <tr><td><strong>Preorder DFS</strong></td><td>Root → Left → Right</td><td>Copy, Serialize, Invert</td></tr>
+        <tr><td><strong>Inorder DFS</strong></td><td>Left → Root → Right</td><td>Validate BST, Kth Smallest</td></tr>
+        <tr><td><strong>Postorder DFS</strong></td><td>Left → Right → Root</td><td>Height, Diameter, Balanced, Max Path Sum, LCA</td></tr>
+        <tr><td><strong>BFS</strong></td><td>Level by Level</td><td>Level Order, Right View, Zigzag</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Complexity + Clues -->
+  <div class="g2" style="margin-bottom:12px">
+    <div class="box grn">
+      <div class="bh">📚 COMPLEXITY</div>
+      <div class="bc">
+        <table>
+          <tr><th>Operation</th><th>Time</th><th>Space</th></tr>
+          <tr><td>Balanced BST Lookup</td><td><strong>O(log N)</strong></td><td><strong>O(log N)</strong></td></tr>
+          <tr><td>Tree DFS</td><td><strong>O(N)</strong></td><td><strong>O(H)</strong></td></tr>
+          <tr><td>Tree BFS</td><td><strong>O(N)</strong></td><td><strong>O(W)</strong></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="box amb">
+      <div class="bh">⚡ CLUES THAT SCREAM TREE</div>
+      <div class="bc">
+        <p style="font-size:0.9rem;margin-bottom:4px;">1. "Max depth" → Postorder</p>
+        <p style="font-size:0.9rem;margin-bottom:4px;">2. "Level order" → BFS Queue</p>
+        <p style="font-size:0.9rem;margin-bottom:4px;">3. "LCA" → Postorder return non-null</p>
+        <p style="font-size:0.9rem;">4. "Validate BST" → Inorder</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5-Step Framework -->
+  <div class="box" style="flex:1;">
+    <div class="bh">⚡ 5-STEP TREE THINKING FRAMEWORK</div>
+    <div class="bc">
+      <ol style="padding-left:20px;font-size:0.9rem;">
+        <li><strong>BST?</strong> Use BST properties.</li>
+        <li><strong>DFS or BFS?</strong> Depth or level order?</li>
+        <li><strong>Which traversal?</strong> Preorder, Inorder, or Postorder?</li>
+        <li><strong>Base case?</strong> `if (root == null) return`.</li>
+        <li><strong>Answer?</strong> Value? Count? Path?</li>
+      </ol>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px;text-align:center;">🏆 Book 9 · Trees &amp; BST · FAANG Mental Model</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 2: TEMPLATES + 16-STEP FLOW -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>TREES &amp; BST</h1><div class="sub">Templates &amp; Problem-Solving Flow</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 2 OF 10</div></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:14px">
+    <div class="box">
+      <div class="bh">🌳 DFS TEMPLATES</div>
+      <div class="bc">
+<pre>// PREORDER
+void preorder(TreeNode root, List&lt;Integer&gt; res) {
+    if (root == null) return;
+    res.add(root.val);
+    preorder(root.left, res);
+    preorder(root.right, res);
+}
+
+// INORDER
+void inorder(TreeNode root, List&lt;Integer&gt; res) {
+    if (root == null) return;
+    inorder(root.left, res);
+    res.add(root.val);
+    inorder(root.right, res);
+}
+
+// POSTORDER
+void postorder(TreeNode root, List&lt;Integer&gt; res) {
+    if (root == null) return;
+    postorder(root.left, res);
+    postorder(root.right, res);
+    res.add(root.val);
+}</pre>
+      </div>
+    </div>
+
+    <div class="box pur">
+      <div class="bh">🌳 BFS TEMPLATE</div>
+      <div class="bc">
+<pre>void levelOrder(TreeNode root) {
+    if (root == null) return;
+    Queue&lt;TreeNode&gt; q = new ArrayDeque&lt;&gt;();
+    q.offer(root);
+
+    while (!q.isEmpty()) {
+        int size = q.size(); // ⭐ Freeze!
+
+        for (int i = 0; i < size; i++) {
+            TreeNode node = q.poll();
+            // Process node
+            if (node.left != null) q.offer(node.left);
+            if (node.right != null) q.offer(node.right);
+        }
+    }
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- 16-Step Flow -->
+  <div class="box" style="margin-bottom:12px;">
+    <div class="bh">🧠 16-STEP PROBLEM-SOLVING FLOW</div>
+    <div class="bc">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;font-size:0.78rem;">
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:5px 10px;text-align:center;">1. Read</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:5px 10px;text-align:center;">2. I/O</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:5px 10px;text-align:center;">3. Brute</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:5px 10px;text-align:center;">4. Fails</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:5px 10px;text-align:center;">5. Observe</div>
+        <div style="background:#f0fdf4;border:1px solid var(--grn);border-radius:4px;padding:5px 10px;text-align:center;font-weight:700;">💡 AHA</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:5px 10px;text-align:center;">7. Pattern</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:5px 10px;text-align:center;">8. Traversal</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:5px 10px;text-align:center;">9. Comment</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:5px 10px;text-align:center;">10. Pseudo</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:5px 10px;text-align:center;">11. Code</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:5px 10px;text-align:center;">12. Dry</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:5px 10px;text-align:center;">13. Complexity</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:5px 10px;text-align:center;">14. Edge</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:5px 10px;text-align:center;">15. Explain</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:5px 10px;text-align:center;">16. Related</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interview Communication -->
+  <div class="box pur" style="flex:1;">
+    <div class="bh">🎤 INTERVIEW COMMUNICATION</div>
+    <div class="bc">
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:0.85rem;">
+        <span style="font-weight:700;color:var(--grn);">DFS</span>
+        <span>"I'll use recursion to explore each branch depth-first."</span>
+        <span style="font-weight:700;color:var(--amb);">BFS</span>
+        <span>"I'll use a queue to process nodes level by level."</span>
+        <span style="font-weight:700;color:var(--red);">Postorder</span>
+        <span>"I chose Postorder because the parent depends on information from its children."</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px;text-align:center;">🏆 Book 9 · Trees &amp; BST · FAANG Mental Model</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 3: ITERATIVE DFS + BFS VARIATIONS (FIXED) -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>TREES &amp; BST</h1><div class="sub">Iterative DFS &amp; BFS Variations</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 3 OF 10</div></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:14px;">
+    <div class="box">
+      <div class="bh">🔄 ITERATIVE DFS</div>
+      <div class="bc">
+        <div style="font-size:0.85rem;margin-bottom:8px;"><strong>No recursion?</strong> Use explicit stack.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:0.75rem;">
+          <div style="border:1px solid var(--bdr);border-radius:4px;padding:8px;">
+            <div style="font-weight:700;color:var(--grn);margin-bottom:4px;">Preorder</div>
+<pre style="font-size:0.65rem;padding:6px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:4px;white-space:pre-wrap;">stack.push(root)
+while !stack.isEmpty():
+    node = stack.pop()
+    res.add(node.val)
+    if node.right: stack.push(node.right)
+    if node.left: stack.push(node.left)</pre>
+          </div>
+          <div style="border:1px solid var(--bdr);border-radius:4px;padding:8px;">
+            <div style="font-weight:700;color:var(--sky);margin-bottom:4px;">Inorder</div>
+<pre style="font-size:0.65rem;padding:6px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:4px;white-space:pre-wrap;">curr = root
+while curr != null || !stack.isEmpty():
+    while curr != null:
+        stack.push(curr); curr = curr.left
+    curr = stack.pop()
+    res.add(curr.val)
+    curr = curr.right</pre>
+          </div>
+          <div style="border:1px solid var(--bdr);border-radius:4px;padding:8px;">
+            <div style="font-weight:700;color:var(--red);margin-bottom:4px;">Postorder</div>
+<pre style="font-size:0.65rem;padding:6px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:4px;white-space:pre-wrap;">stack.push(root)
+while !stack.isEmpty():
+    node = stack.pop()
+    res.add(0, node.val)
+    if node.left: stack.push(node.left)
+    if node.right: stack.push(node.right)</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="bh">📊 BFS VARIATIONS</div>
+      <div class="bc">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:0.8rem;">
+          <div style="border:1px solid var(--bdr);border-radius:4px;padding:8px;text-align:center;">
+            <div style="font-weight:700;color:var(--grn);">Level Order</div>
+            <pre style="font-size:0.6rem;background:none;border:none;padding:4px;">res.add(level)</pre>
+          </div>
+          <div style="border:1px solid var(--bdr);border-radius:4px;padding:8px;text-align:center;">
+            <div style="font-weight:700;color:var(--sky);">Zigzag</div>
+            <pre style="font-size:0.6rem;background:none;border:none;padding:4px;">if (level % 2 == 1)
+    reverse(level)</pre>
+          </div>
+          <div style="border:1px solid var(--bdr);border-radius:4px;padding:8px;text-align:center;">
+            <div style="font-weight:700;color:var(--amb);">Bottom-Up</div>
+            <pre style="font-size:0.6rem;background:none;border:none;padding:4px;">res.add(0, level)</pre>
+          </div>
+        </div>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;text-align:center;">💡 Same BFS template! Only output changes.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 16-Step Flow Example -->
+  <div class="box" style="flex:1;">
+    <div class="bh">🎯 EXAMPLE: Max Depth</div>
+    <div class="bc">
+      <div style="font-size:0.88rem;">
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;">
+          <span style="font-weight:700;color:var(--pur);">💡 AHA:</span>
+          <span>A parent cannot know its height until both children tell their heights.</span>
+          <span style="font-weight:700;color:var(--pri);">Traversal:</span>
+          <span style="color:var(--red);">Postorder</span>
+          <span style="font-weight:700;color:var(--pri);">Pseudo:</span>
+          <span>left → right → return max(left,right)+1</span>
+          <span style="font-weight:700;color:var(--pri);">Explain:</span>
+          <span>"I chose Postorder because the parent depends on information from its children."</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px;text-align:center;">🏆 Book 9 · Trees &amp; BST · FAANG Mental Model</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 4: PATTERNS 1-4 -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>TREES &amp; BST</h1><div class="sub">Core Patterns — Part 1</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 4 OF 10</div></div>
+  </div>
+
+  <!-- Pattern 1: Invert -->
+  <div class="prob-card" style="border-color:var(--grn);">
+    <div class="prob-head" style="background:#f0fdf4;">
+      <span class="ptitle" style="color:var(--grn);">PATTERN 1 — PREORDER (INVERT)</span>
+      <span class="diff-e">LC 226 · EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> [4,2,7,1,3,6,9]</div>
+        <div class="io-box"><strong>Output:</strong> [4,7,2,9,6,3,1]</div>
+        <div class="aha" style="margin-top:6px;padding:6px;">
+          <div class="aha-t">💡 AHA</div>
+          Swap children, then recurse. Classic Preorder DFS!
+        </div>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;">
+          <strong>Time:</strong> O(N) | <strong>Space:</strong> O(H)
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public TreeNode invertTree(TreeNode root) {
+    if (root == null) return null;
+    TreeNode temp = root.left;
+    root.left = root.right;
+    root.right = temp;
+    invertTree(root.left);
+    invertTree(root.right);
+    return root;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pattern 2: Max Depth -->
+  <div class="prob-card" style="border-color:var(--sky);">
+    <div class="prob-head" style="background:#eff6ff;">
+      <span class="ptitle" style="color:var(--sky);">PATTERN 2 — POSTORDER (HEIGHT)</span>
+      <span class="diff-e">LC 104 · EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> [3,9,20,null,null,15,7]</div>
+        <div class="io-box"><strong>Output:</strong> 3</div>
+        <div class="aha" style="margin-top:6px;padding:6px;">
+          <div class="aha-t">💡 AHA</div>
+          height = 1 + max(left, right). Pure bottom-up!
+        </div>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;">
+          <strong>Time:</strong> O(N) | <strong>Space:</strong> O(H)
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public int maxDepth(TreeNode root) {
+    if (root == null) return 0;
+    return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pattern 3: Same Tree -->
+  <div class="prob-card" style="border-color:var(--amb);">
+    <div class="prob-head" style="background:#fefce8;">
+      <span class="ptitle" style="color:var(--amb);">PATTERN 3 — DUAL DFS</span>
+      <span class="diff-e">LC 100 · EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> p=[1,2,3], q=[1,2,3]</div>
+        <div class="io-box"><strong>Output:</strong> true</div>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;">
+          <strong>Time:</strong> O(N) | <strong>Space:</strong> O(H)
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public boolean isSameTree(TreeNode p, TreeNode q) {
+    if (p == null && q == null) return true;
+    if (p == null || q == null) return false;
+    if (p.val != q.val) return false;
+    return isSameTree(p.left, q.left) &&
+           isSameTree(p.right, q.right);
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pattern 4: Subtree -->
+  <div class="prob-card" style="border-color:var(--pur);">
+    <div class="prob-head" style="background:#faf5ff;">
+      <span class="ptitle" style="color:var(--pur);">PATTERN 4 — SUBTREE MATCH</span>
+      <span class="diff-e">LC 572 · EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> root=[3,4,5,1,2], subRoot=[4,1,2]</div>
+        <div class="io-box"><strong>Output:</strong> true</div>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;">
+          <strong>Time:</strong> O(N × M) | <strong>Space:</strong> O(H)
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+    if (root == null) return false;
+    if (isSameTree(root, subRoot)) return true;
+    return isSubtree(root.left, subRoot) ||
+           isSubtree(root.right, subRoot);
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px;text-align:center;">🏆 Book 9 · Trees &amp; BST · FAANG Mental Model</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 5: PATTERNS 5-8 -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>TREES &amp; BST</h1><div class="sub">Core Patterns — Part 2</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 5 OF 10</div></div>
+  </div>
+
+  <!-- Pattern 5: Level Order -->
+  <div class="prob-card" style="border-color:var(--org);">
+    <div class="prob-head" style="background:#fff7ed;">
+      <span class="ptitle" style="color:var(--org);">PATTERN 5 — BFS QUEUE</span>
+      <span class="diff-m">LC 102 · MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> [3,9,20,null,null,15,7]</div>
+        <div class="io-box"><strong>Output:</strong> [[3],[9,20],[15,7]]</div>
+        <div class="aha" style="margin-top:6px;padding:6px;">
+          <div class="aha-t">💡 AHA</div>
+          Freeze `size = q.size()` before each level!
+        </div>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;">
+          <strong>Time:</strong> O(N) | <strong>Space:</strong> O(W)
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    if (root == null) return res;
+    Queue&lt;TreeNode&gt; q = new ArrayDeque&lt;&gt;();
+    q.offer(root);
+    while (!q.isEmpty()) {
+        int size = q.size();
+        List&lt;Integer&gt; level = new ArrayList&lt;&gt;();
+        for (int i = 0; i < size; i++) {
+            TreeNode node = q.poll();
+            level.add(node.val);
+            if (node.left != null) q.offer(node.left);
+            if (node.right != null) q.offer(node.right);
+        }
+        res.add(level);
+    }
+    return res;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pattern 6: Validate BST -->
+  <div class="prob-card" style="border-color:var(--sky);">
+    <div class="prob-head" style="background:#eff6ff;">
+      <span class="ptitle" style="color:var(--sky);">PATTERN 6 — MIN/MAX BOUNDS</span>
+      <span class="diff-m">LC 98 · MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> [2,1,3]</div>
+        <div class="io-box"><strong>Output:</strong> true</div>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;">
+          <strong>Time:</strong> O(N) | <strong>Space:</strong> O(H)
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public boolean isValidBST(TreeNode root) {
+    return validate(root, null, null);
+}
+private boolean validate(TreeNode node, Integer min, Integer max) {
+    if (node == null) return true;
+    if ((min != null && node.val <= min) ||
+        (max != null && node.val >= max)) return false;
+    return validate(node.left, min, node.val) &&
+           validate(node.right, node.val, max);
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pattern 7: Kth Smallest -->
+  <div class="prob-card" style="border-color:var(--pur);">
+    <div class="prob-head" style="background:#faf5ff;">
+      <span class="ptitle" style="color:var(--pur);">PATTERN 7 — INORDER STACK</span>
+      <span class="diff-m">LC 230 · MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> root=[3,1,4,null,2], k=1</div>
+        <div class="io-box"><strong>Output:</strong> 1</div>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;">
+          <strong>Time:</strong> O(H + K) | <strong>Space:</strong> O(H)
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public int kthSmallest(TreeNode root, int k) {
+    Deque&lt;TreeNode&gt; stack = new ArrayDeque&lt;&gt;();
+    TreeNode curr = root;
+    while (curr != null || !stack.isEmpty()) {
+        while (curr != null) { stack.push(curr); curr = curr.left; }
+        curr = stack.pop();
+        if (--k == 0) return curr.val;
+        curr = curr.right;
+    }
+    return -1;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pattern 8: LCA BST -->
+  <div class="prob-card" style="border-color:var(--amb);">
+    <div class="prob-head" style="background:#fefce8;">
+      <span class="ptitle" style="color:var(--amb);">PATTERN 8 — BST LCA</span>
+      <span class="diff-m">LC 235 · MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> root=[6,2,8,0,4,7,9], p=2, q=8</div>
+        <div class="io-box"><strong>Output:</strong> 6</div>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;">
+          <strong>Time:</strong> O(H) | <strong>Space:</strong> O(H)
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if (p.val < root.val && q.val < root.val)
+        return lowestCommonAncestor(root.left, p, q);
+    if (p.val > root.val && q.val > root.val)
+        return lowestCommonAncestor(root.right, p, q);
+    return root;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px;text-align:center;">🏆 Book 9 · Trees &amp; BST · FAANG Mental Model</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 6: ADVANCED PATTERNS -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>TREES &amp; BST</h1><div class="sub">Advanced Patterns</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 6 OF 10</div></div>
+  </div>
+
+  <!-- Pattern 9: Right Side View -->
+  <div class="prob-card" style="border-color:var(--sky);">
+    <div class="prob-head" style="background:#eff6ff;">
+      <span class="ptitle" style="color:var(--sky);">PATTERN 9 — BFS LAST ELEMENT</span>
+      <span class="diff-m">LC 199 · MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> [1,2,3,null,5,null,4]</div>
+        <div class="io-box"><strong>Output:</strong> [1,3,4]</div>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;">
+          <strong>Time:</strong> O(N) | <strong>Space:</strong> O(W)
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public List&lt;Integer&gt; rightSideView(TreeNode root) {
+    List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+    if (root == null) return res;
+    Queue&lt;TreeNode&gt; q = new ArrayDeque&lt;&gt;();
+    q.offer(root);
+    while (!q.isEmpty()) {
+        int size = q.size();
+        for (int i = 0; i < size; i++) {
+            TreeNode node = q.poll();
+            if (i == size - 1) res.add(node.val);
+            if (node.left != null) q.offer(node.left);
+            if (node.right != null) q.offer(node.right);
+        }
+    }
+    return res;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pattern 10: Max Path Sum -->
+  <div class="prob-card" style="border-color:var(--red);">
+    <div class="prob-head" style="background:#fff1f2;">
+      <span class="ptitle" style="color:var(--red);">PATTERN 10 — POSTORDER STATE</span>
+      <span class="diff-h">LC 124 · HARD</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> [-10,9,20,null,null,15,7]</div>
+        <div class="io-box"><strong>Output:</strong> 42</div>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;">
+          <strong>Time:</strong> O(N) | <strong>Space:</strong> O(H)
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>private int maxPath = Integer.MIN_VALUE;
+public int maxPathSum(TreeNode root) {
+    gain(root); return maxPath;
+}
+private int gain(TreeNode node) {
+    if (node == null) return 0;
+    int left = Math.max(0, gain(node.left));
+    int right = Math.max(0, gain(node.right));
+    maxPath = Math.max(maxPath, node.val + left + right);
+    return node.val + Math.max(left, right);
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pattern 11: Build Tree -->
+  <div class="prob-card" style="border-color:var(--pur);">
+    <div class="prob-head" style="background:#faf5ff;">
+      <span class="ptitle" style="color:var(--pur);">PATTERN 11 — CONSTRUCTION</span>
+      <span class="diff-m">LC 105 · MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> preorder=[3,9,20,15,7], inorder=[9,3,15,20,7]</div>
+        <div class="io-box"><strong>Output:</strong> [3,9,20,null,null,15,7]</div>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;">
+          <strong>Time:</strong> O(N) | <strong>Space:</strong> O(N)
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>Map&lt;Integer,Integer&gt; map = new HashMap&lt;&gt;();
+int idx = 0;
+public TreeNode buildTree(int[] pre, int[] in) {
+    for (int i = 0; i < in.length; i++) map.put(in[i], i);
+    return build(pre, 0, in.length - 1);
+}
+private TreeNode build(int[] pre, int l, int r) {
+    if (l > r) return null;
+    int val = pre[idx++];
+    TreeNode root = new TreeNode(val);
+    int mid = map.get(val);
+    root.left = build(pre, l, mid - 1);
+    root.right = build(pre, mid + 1, r);
+    return root;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px;text-align:center;">🏆 Book 9 · Trees &amp; BST · FAANG Mental Model</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 7: MISSING PROBLEMS -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>TREES &amp; BST</h1><div class="sub">Missing FAANG Problems</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 7 OF 10</div></div>
+  </div>
+
+  <!-- LC 543 -->
+  <div class="prob-card" style="border-color:var(--pur);">
+    <div class="prob-head" style="background:#faf5ff;">
+      <span class="ptitle">⭐ LC 543 · Diameter</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> [1,2,3,4,5]</div>
+        <div class="io-box"><strong>Output:</strong> 3</div>
+        <div class="aha" style="margin-top:6px;padding:6px;">
+          <div class="aha-t">💡 AHA</div>
+          Diameter = max(leftHeight + rightHeight) across all nodes.
+        </div>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;">
+          <strong>Time:</strong> O(N) | <strong>Space:</strong> O(H)
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>int diameter = 0;
+public int diameterOfBinaryTree(TreeNode root) {
+    height(root); return diameter;
+}
+int height(TreeNode node) {
+    if (node == null) return 0;
+    int l = height(node.left);
+    int r = height(node.right);
+    diameter = Math.max(diameter, l + r);
+    return 1 + Math.max(l, r);
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 110 -->
+  <div class="prob-card" style="border-color:var(--sky);">
+    <div class="prob-head" style="background:#eff6ff;">
+      <span class="ptitle">⭐ LC 110 · Balanced</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> [3,9,20,null,null,15,7]</div>
+        <div class="io-box"><strong>Output:</strong> true</div>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;">
+          <strong>Time:</strong> O(N) | <strong>Space:</strong> O(H)
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public boolean isBalanced(TreeNode root) {
+    return height(root) != -1;
+}
+int height(TreeNode node) {
+    if (node == null) return 0;
+    int l = height(node.left);
+    if (l == -1) return -1;
+    int r = height(node.right);
+    if (r == -1) return -1;
+    if (Math.abs(l - r) > 1) return -1;
+    return 1 + Math.max(l, r);
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 236 -->
+  <div class="prob-card" style="border-color:var(--red);">
+    <div class="prob-head" style="background:#fff1f2;">
+      <span class="ptitle">⭐ LC 236 · LCA Binary Tree</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> root=[3,5,1,6,2,0,8,null,null,7,4], p=5, q=1</div>
+        <div class="io-box"><strong>Output:</strong> 3</div>
+        <div class="aha" style="margin-top:6px;padding:6px;">
+          <div class="aha-t">💡 AHA</div>
+          If left and right both return non-null → current is LCA.
+        </div>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;">
+          <strong>Time:</strong> O(N) | <strong>Space:</strong> O(H)
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if (root == null || root == p || root == q) return root;
+    TreeNode left = lowestCommonAncestor(root.left, p, q);
+    TreeNode right = lowestCommonAncestor(root.right, p, q);
+    if (left != null && right != null) return root;
+    return left != null ? left : right;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 297 -->
+  <div class="prob-card" style="border-color:var(--pur);">
+    <div class="prob-head" style="background:#faf5ff;">
+      <span class="ptitle">⭐ LC 297 · Serialize</span>
+      <span class="diff-h">HARD</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>Input:</strong> [1,2,3,null,null,4,5]</div>
+        <div class="io-box"><strong>Output:</strong> [1,2,3,null,null,4,5]</div>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;">
+          <strong>Time:</strong> O(N) | <strong>Space:</strong> O(N)
+        </div>
+      </div>
+      <div class="prob-code">
+<pre>public String serialize(TreeNode root) {
+    StringBuilder sb = new StringBuilder();
+    serialize(root, sb);
+    return sb.toString();
+}
+void serialize(TreeNode node, StringBuilder sb) {
+    if (node == null) { sb.append("#,"); return; }
+    sb.append(node.val).append(",");
+    serialize(node.left, sb);
+    serialize(node.right, sb);
+}</pre>
+        <div style="font-size:0.78rem;color:var(--sub);margin-top:6px;">
+          💡 <strong>Deserialize:</strong> Use the same preorder sequence with a queue/index and reconstruct recursively.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px;text-align:center;">🏆 Book 9 · Trees &amp; BST · FAANG Mental Model</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 8: DECISION TREE -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>TREES &amp; BST</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 8 OF 10</div></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:14px">
+    <div class="box">
+      <div class="bh">🌳 DECISION TREE</div>
+      <div class="bc" style="font-size:0.82rem;">
+        <div style="font-weight:700;margin-bottom:6px;">What is the problem goal?</div>
+        <div class="dt-row">
+          <div class="dt-q">🔄 Invert / Swap</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Preorder DFS</div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">📏 Height / Diameter</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Postorder DFS</div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🔍 Validate BST</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Inorder Traversal</div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">📊 Level Order</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">BFS Queue</div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">👪 LCA</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">LCA Pattern</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="box pur">
+        <div class="bh">🎯 TRIGGER WORDS</div>
+        <div class="bc">
+          <table>
+            <tr><th>Trigger</th><th>Pattern</th></tr>
+            <tr><td>"Sorted order"</td><td>Inorder</td></tr>
+            <tr><td>"Level order"</td><td>BFS</td></tr>
+            <tr><td>"LCA"</td><td>Postorder LCA</td></tr>
+            <tr><td>"Max path sum"</td><td>Postorder</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="box amb">
+        <div class="bh">💼 TRADE-OFFS</div>
+        <div class="bc">
+          <table>
+            <tr><th>Q</th><th>A</th></tr>
+            <tr><td>DFS vs BFS memory?</td><td>DFS O(H), BFS O(W)</td></tr>
+            <tr><td>Why BST Inorder sorts?</td><td>Left < Root < Right</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 16-Step Quick Reference -->
+  <div class="box" style="flex:1;">
+    <div class="bh">🧠 16-STEP FLOW — QUICK CARD</div>
+    <div class="bc">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:3px;font-size:0.72rem;">
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;text-align:center;">1. Read</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;text-align:center;">2. I/O</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;text-align:center;">3. Brute</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;text-align:center;">4. Fails</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;text-align:center;">5. Observe</div>
+        <div style="background:#f0fdf4;border:1px solid var(--grn);border-radius:4px;padding:4px 6px;text-align:center;font-weight:700;">💡 AHA</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;text-align:center;">7. Pattern</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;text-align:center;">8. Traversal</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;text-align:center;">9. Comment</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;text-align:center;">10. Pseudo</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;text-align:center;">11. Code</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;text-align:center;">12. Dry</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;text-align:center;">13. Complexity</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;text-align:center;">14. Edge</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;text-align:center;">15. Explain</div>
+        <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;text-align:center;">16. Related</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px;text-align:center;">🏆 Book 9 · Trees &amp; BST · FAANG Mental Model</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 9: PROBLEM LADDER -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>TREES &amp; BST</h1><div class="sub">FAANG Problem Ladder</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 9 OF 10</div></div>
+  </div>
+
+  <div class="g2" style="gap:10px;margin-bottom:10px;">
+    <div>
+      <div style="background:var(--grn);color:white;padding:4px 10px;border-radius:4px;font-weight:700;margin-bottom:8px;font-size:0.9rem;">🟢 EASY</div>
+
+      <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 226 · Invert</span><span class="diff-e">EASY</span></div><div class="prob-body"><div class="prob-info"><div class="io-box"><strong>In:</strong> [4,2,7,1,3,6,9]</div><div class="io-box"><strong>Out:</strong> [4,7,2,9,6,3,1]</div><div style="font-size:0.7rem;color:var(--sub);margin-top:4px;"><strong>Time:</strong> O(N) | <strong>Space:</strong> O(H)</div></div><div class="prob-code"><pre style="font-size:0.75rem;padding:6px;">public TreeNode invertTree(TreeNode root) {
+    if (root == null) return null;
+    TreeNode tmp = root.left;
+    root.left = invertTree(root.right);
+    root.right = invertTree(tmp);
+    return root;
+}</pre></div></div></div>
+
+      <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 104 · Max Depth</span><span class="diff-e">EASY</span></div><div class="prob-body"><div class="prob-info"><div class="io-box"><strong>In:</strong> [3,9,20,null,null,15,7]</div><div class="io-box"><strong>Out:</strong> 3</div><div style="font-size:0.7rem;color:var(--sub);margin-top:4px;"><strong>Time:</strong> O(N) | <strong>Space:</strong> O(H)</div></div><div class="prob-code"><pre style="font-size:0.75rem;padding:6px;">public int maxDepth(TreeNode root) {
+    if (root == null) return 0;
+    return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+}</pre></div></div></div>
+
+      <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 100 · Same Tree</span><span class="diff-e">EASY</span></div><div class="prob-body"><div class="prob-info"><div class="io-box"><strong>In:</strong> p=[1,2,3], q=[1,2,3]</div><div class="io-box"><strong>Out:</strong> true</div><div style="font-size:0.7rem;color:var(--sub);margin-top:4px;"><strong>Time:</strong> O(N) | <strong>Space:</strong> O(H)</div></div><div class="prob-code"><pre style="font-size:0.75rem;padding:6px;">public boolean isSameTree(TreeNode p, TreeNode q) {
+    if (p==null && q==null) return true;
+    if (p==null || q==null) return false;
+    if (p.val != q.val) return false;
+    return isSameTree(p.left,q.left) && isSameTree(p.right,q.right);
+}</pre></div></div></div>
+
+      <div class="prob-card"><div class="prob-head"><span class="ptitle">⭐ LC 543 · Diameter</span><span class="diff-e">EASY</span></div><div class="prob-body"><div class="prob-info"><div class="io-box"><strong>In:</strong> [1,2,3,4,5]</div><div class="io-box"><strong>Out:</strong> 3</div><div style="font-size:0.7rem;color:var(--sub);margin-top:4px;"><strong>Time:</strong> O(N) | <strong>Space:</strong> O(H)</div></div><div class="prob-code"><pre style="font-size:0.75rem;padding:6px;">int d=0;
+public int diameterOfBinaryTree(TreeNode root) {
+    height(root); return d;
+}
+int height(TreeNode n) {
+    if (n==null) return 0;
+    int l=height(n.left), r=height(n.right);
+    d=Math.max(d, l+r);
+    return 1+Math.max(l,r);
+}</pre></div></div></div>
+
+      <div class="prob-card"><div class="prob-head"><span class="ptitle">⭐ LC 110 · Balanced</span><span class="diff-e">EASY</span></div><div class="prob-body"><div class="prob-info"><div class="io-box"><strong>In:</strong> [3,9,20,null,null,15,7]</div><div class="io-box"><strong>Out:</strong> true</div><div style="font-size:0.7rem;color:var(--sub);margin-top:4px;"><strong>Time:</strong> O(N) | <strong>Space:</strong> O(H)</div></div><div class="prob-code"><pre style="font-size:0.75rem;padding:6px;">public boolean isBalanced(TreeNode root) {
+    return height(root)!=-1;
+}
+int height(TreeNode n) {
+    if (n==null) return 0;
+    int l=height(n.left); if (l==-1) return -1;
+    int r=height(n.right); if (r==-1) return -1;
+    if (Math.abs(l-r)>1) return -1;
+    return 1+Math.max(l,r);
+}</pre></div></div></div>
+    </div>
+
+    <div>
+      <div style="background:var(--amb);color:white;padding:4px 10px;border-radius:4px;font-weight:700;margin-bottom:8px;font-size:0.9rem;">🟡 MEDIUM</div>
+
+      <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 102 · Level Order</span><span class="diff-m">MEDIUM</span></div><div class="prob-body"><div class="prob-info"><div class="io-box"><strong>In:</strong> [3,9,20,null,null,15,7]</div><div class="io-box"><strong>Out:</strong> [[3],[9,20],[15,7]]</div><div style="font-size:0.7rem;color:var(--sub);margin-top:4px;"><strong>Time:</strong> O(N) | <strong>Space:</strong> O(W)</div></div><div class="prob-code"><pre style="font-size:0.75rem;padding:6px;">public List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {
+    List&lt;List&lt;Integer&gt;&gt; res=new ArrayList&lt;&gt;();
+    if (root==null) return res;
+    Queue&lt;TreeNode&gt; q=new ArrayDeque&lt;&gt;();
+    q.offer(root);
+    while (!q.isEmpty()) {
+        int size=q.size();
+        List&lt;Integer&gt; lvl=new ArrayList&lt;&gt;();
+        for (int i=0; i<size; i++) {
+            TreeNode n=q.poll(); lvl.add(n.val);
+            if (n.left!=null) q.offer(n.left);
+            if (n.right!=null) q.offer(n.right);
+        }
+        res.add(lvl);
+    }
+    return res;
+}</pre></div></div></div>
+
+      <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 98 · Validate BST</span><span class="diff-m">MEDIUM</span></div><div class="prob-body"><div class="prob-info"><div class="io-box"><strong>In:</strong> [2,1,3]</div><div class="io-box"><strong>Out:</strong> true</div><div style="font-size:0.7rem;color:var(--sub);margin-top:4px;"><strong>Time:</strong> O(N) | <strong>Space:</strong> O(H)</div></div><div class="prob-code"><pre style="font-size:0.75rem;padding:6px;">public boolean isValidBST(TreeNode root) {
+    return validate(root, null, null);
+}
+private boolean validate(TreeNode n, Integer min, Integer max) {
+    if (n==null) return true;
+    if ((min!=null && n.val<=min) || (max!=null && n.val>=max)) return false;
+    return validate(n.left,min,n.val) && validate(n.right,n.val,max);
+}</pre></div></div></div>
+
+      <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 230 · Kth Smallest</span><span class="diff-m">MEDIUM</span></div><div class="prob-body"><div class="prob-info"><div class="io-box"><strong>In:</strong> root=[3,1,4,null,2], k=1</div><div class="io-box"><strong>Out:</strong> 1</div><div style="font-size:0.7rem;color:var(--sub);margin-top:4px;"><strong>Time:</strong> O(H+K) | <strong>Space:</strong> O(H)</div></div><div class="prob-code"><pre style="font-size:0.75rem;padding:6px;">public int kthSmallest(TreeNode root, int k) {
+    Deque&lt;TreeNode&gt; st=new ArrayDeque&lt;&gt;();
+    TreeNode c=root;
+    while (c!=null || !st.isEmpty()) {
+        while (c!=null) { st.push(c); c=c.left; }
+        c=st.pop();
+        if (--k==0) return c.val;
+        c=c.right;
+    }
+    return -1;
+}</pre></div></div></div>
+
+      <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 235 · LCA BST</span><span class="diff-m">MEDIUM</span></div><div class="prob-body"><div class="prob-info"><div class="io-box"><strong>In:</strong> root=[6,2,8,0,4,7,9], p=2, q=8</div><div class="io-box"><strong>Out:</strong> 6</div><div style="font-size:0.7rem;color:var(--sub);margin-top:4px;"><strong>Time:</strong> O(H) | <strong>Space:</strong> O(H)</div></div><div class="prob-code"><pre style="font-size:0.75rem;padding:6px;">public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if (p.val < root.val && q.val < root.val)
+        return lowestCommonAncestor(root.left, p, q);
+    if (p.val > root.val && q.val > root.val)
+        return lowestCommonAncestor(root.right, p, q);
+    return root;
+}</pre></div></div></div>
+
+      <div class="prob-card"><div class="prob-head"><span class="ptitle">⭐ LC 236 · LCA Binary</span><span class="diff-m">MEDIUM</span></div><div class="prob-body"><div class="prob-info"><div class="io-box"><strong>In:</strong> root=[3,5,1,6,2,0,8], p=5, q=1</div><div class="io-box"><strong>Out:</strong> 3</div><div style="font-size:0.7rem;color:var(--sub);margin-top:4px;"><strong>Time:</strong> O(N) | <strong>Space:</strong> O(H)</div></div><div class="prob-code"><pre style="font-size:0.75rem;padding:6px;">public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if (root==null || root==p || root==q) return root;
+    TreeNode l=lowestCommonAncestor(root.left,p,q);
+    TreeNode r=lowestCommonAncestor(root.right,p,q);
+    if (l!=null && r!=null) return root;
+    return l!=null ? l : r;
+}</pre></div></div></div>
+
+      <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 199 · Right View</span><span class="diff-m">MEDIUM</span></div><div class="prob-body"><div class="prob-info"><div class="io-box"><strong>In:</strong> [1,2,3,null,5,null,4]</div><div class="io-box"><strong>Out:</strong> [1,3,4]</div><div style="font-size:0.7rem;color:var(--sub);margin-top:4px;"><strong>Time:</strong> O(N) | <strong>Space:</strong> O(W)</div></div><div class="prob-code"><pre style="font-size:0.75rem;padding:6px;">public List&lt;Integer&gt; rightSideView(TreeNode root) {
+    List&lt;Integer&gt; res=new ArrayList&lt;&gt;();
+    if (root==null) return res;
+    Queue&lt;TreeNode&gt; q=new ArrayDeque&lt;&gt;();
+    q.offer(root);
+    while (!q.isEmpty()) {
+        int size=q.size();
+        for (int i=0; i<size; i++) {
+            TreeNode n=q.poll();
+            if (i==size-1) res.add(n.val);
+            if (n.left!=null) q.offer(n.left);
+            if (n.right!=null) q.offer(n.right);
+        }
+    }
+    return res;
+}</pre></div></div></div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px;text-align:center;">🏆 Book 9 · Trees &amp; BST · FAANG Mental Model</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 10: CHEAT SHEET & MASTERY -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>TREES &amp; BST</h1><div class="sub">Cheat Sheet &amp; Mastery Checklist</div></div>
+    <div style="text-align:right"><div class="pn">PAGE 10 OF 10</div></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:14px;flex:1;">
+    <div class="box pur">
+      <div class="bh">💼 GOLDEN RULES</div>
+      <div class="bc">
+        <div class="aha" style="margin-bottom:8px;padding:6px;">
+          <div class="aha-t">Rule 1 — Inorder BST = Sorted Array</div>
+          Use this for validation and Kth smallest.
+        </div>
+        <div class="aha" style="margin-bottom:8px;padding:6px;">
+          <div class="aha-t">Rule 2 — Know Your Traversals</div>
+          Preorder: copy. Inorder: sorted. Postorder: bottom-up.
+        </div>
+        <div class="aha" style="padding:6px;">
+          <div class="aha-t">Rule 3 — Follow the 16-Step Flow</div>
+          Don't jump to code. Think first!
+        </div>
+      </div>
+    </div>
+
+    <div class="box grn">
+      <div class="bh">✅ MASTERY CHECKLIST</div>
+      <div class="bc">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+          <ul style="font-size:0.85rem;list-style:none;padding:0;">
+            <li>☐ Invert Tree (LC 226)</li>
+            <li>☐ Max Depth (LC 104)</li>
+            <li>☐ Same Tree (LC 100)</li>
+            <li>☐ Diameter (LC 543)</li>
+            <li>☐ Balanced (LC 110)</li>
+          </ul>
+          <ul style="font-size:0.85rem;list-style:none;padding:0;">
+            <li>☐ Level Order (LC 102)</li>
+            <li>☐ Validate BST (LC 98)</li>
+            <li>☐ Kth Smallest (LC 230)</li>
+            <li>☐ LCA BST (LC 235)</li>
+            <li>☐ LCA Binary (LC 236)</li>
+            <li>☐ Right View (LC 199)</li>
+            <li>☐ Max Path Sum (LC 124)</li>
+            <li>☐ Build Tree (LC 105)</li>
+            <li>☐ Serialize (LC 297)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box red" style="margin-bottom:10px;">
+    <div class="bh">🚨 COMMON MISTAKES</div>
+    <div class="bc">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:0.85rem;">
+        <div>❌ Forgetting null check</div>
+        <div>✅ Always check `if (root == null)`</div>
+        <div>❌ Using `<=` in BST validation</div>
+        <div>✅ BST uses `<` and `>`</div>
+        <div>❌ Not freezing size in BFS</div>
+        <div>✅ `int size = q.size()`</div>
+        <div>❌ Jumping to code</div>
+        <div>✅ Follow 16-step flow</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px;text-align:center;">
+    🏆 Book 9: Trees &amp; BST 🔒 · 15 Problems · 5 Mental Models · 16-Step Flow<br>
+    <span style="font-size:0.75rem;">10/10 Complete · Built from FAANG interviews</span>
+  </div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

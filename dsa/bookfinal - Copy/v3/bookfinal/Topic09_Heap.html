@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HEAP / Priority Queue — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 10px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 12px; }
+.ph h1 { font-size: 1.7rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.85rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.74rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.bh  { background: var(--pri); color: white; padding: 5px 10px;
+  font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 16px; height: 16px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.70rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 8px 10px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 5px 10px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.72rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.90rem; }
+.psub   { color: var(--sub); font-size: 0.76rem; }
+.prow-body { display: flex; }
+.pc { padding: 8px 10px; font-size: 0.76rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.70rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.prob-head { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.76rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.68rem; line-height: 1.38; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.74rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.74rem; }
+th, td { border: 1px solid var(--bdr); padding: 4px 6px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 5px 8px; border-radius: 0 4px 4px 0; font-size: 0.76rem; margin-top: 4px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 6px 8px; margin-top: 4px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.80rem; margin-bottom: 2px; }
+
+.dt-wrap { font-size: 0.76rem; }
+.dt-root { background: var(--pri); color: white; padding: 4px 8px; border-radius: 4px; text-align: center; font-weight: 700; margin-bottom: 6px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 4px 6px; font-weight: 600; color: #1e40af; font-size: 0.72rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 4px 6px; color: #065f46; font-weight: 700; font-size: 0.72rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.72rem; padding: 2px 4px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 8px 12px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- PAGE 1: DISCOVERY & ORIENTATION -->
+<div class="page">
+<div class="ph">
+  <div><h1>HEAP / Priority Queue</h1><div class="sub">FAANG Master Guide — Java Edition</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 1 OF 10</div><div class="ptag">DISCOVERY JOURNEY · FIRST PRINCIPLES</div></div>
+</div>
+<div class="g3" style="margin-bottom:14px">
+<!-- WHY -->
+<div class="box pur">
+<div class="bh">💡 WHY DOES HEAP EXIST?</div>
+<div class="bc">
+<p style="margin-bottom:8px">Imagine you run an <strong>emergency room</strong>. Patients arrive constantly. You don't treat them in arrival order — you treat the <strong>most critical patient first</strong>.</p>
+<p style="margin-bottom:8px">A sorted array would be too slow to re-sort every time a new patient arrives. A Heap lets you always find the "most important" in <strong>O(1)</strong> and insert/remove in <strong>O(log n)</strong>.</p>
+<div class="aha">
+<div class="aha-t">💡 AHA MOMENT</div>
+        When you need the <strong>extreme element</strong> (min or max) repeatedly and efficiently — that's a Heap. Not sorting. Sorting gives you everything ordered. Heap gives you the <em>one thing that matters right now</em>.
+      </div>
+</div>
+</div>
+<!-- WHAT IS A HEAP -->
+<div class="box">
+<div class="bh"><span class="n">1</span> WHAT IS A HEAP?</div>
+<div class="bc">
+<ul style="margin-bottom:10px">
+<li>A <strong>Complete Binary Tree</strong> stored as an <strong>array</strong></li>
+<li>Satisfies the <strong>Heap Property</strong> (parent vs children order)</li>
+<li><strong>NOT</strong> sorted — only root is guaranteed extreme</li>
+<li>Implements a <strong>Priority Queue</strong> ADT</li>
+</ul>
+<div class="g2" style="gap:8px;margin-top:8px">
+<div style="text-align:center">
+<div style="background:#dcfce7;color:#166534;font-weight:700;padding:4px;border-radius:4px;font-size:0.78rem;margin-bottom:5px">MIN HEAP — Parent ≤ Children</div>
+<div class="mermaid" style="font-size:11px">graph TD
+  classDef g fill:#f0fdf4,stroke:#059669,stroke-width:2px,color:#065f46,font-weight:700;
+  A((1)):::g--&gt;B((3)):::g
+  A--&gt;C((2)):::g
+  B--&gt;D((7)):::g
+  B--&gt;E((5)):::g
+  C--&gt;F((4)):::g</div>
+</div>
+<div style="text-align:center">
+<div style="background:#fee2e2;color:#991b1b;font-weight:700;padding:4px;border-radius:4px;font-size:0.78rem;margin-bottom:5px">MAX HEAP — Parent ≥ Children</div>
+<div class="mermaid" style="font-size:11px">graph TD
+  classDef r fill:#fff1f2,stroke:#dc2626,stroke-width:2px,color:#991b1b,font-weight:700;
+  A((9)):::r--&gt;B((7)):::r
+  A--&gt;C((8)):::r
+  B--&gt;D((3)):::r
+  B--&gt;E((5)):::r
+  C--&gt;F((4)):::r</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ARRAY REPRESENTATION + FORMULAS -->
+<div class="box sky">
+<div class="bh"><span class="n">2</span> ARRAY REPRESENTATION (0-indexed)</div>
+<div class="bc">
+<div class="mermaid">graph TD
+  classDef b fill:#eff6ff,stroke:#2563eb,stroke-width:2px,color:#1e40af,font-weight:700;
+  A((1)):::b--&gt;B((3)):::b
+  A--&gt;C((2)):::b
+  B--&gt;D((7)):::b
+  B--&gt;E((5)):::b
+  C--&gt;F((4)):::b
+  C--&gt;G((6)):::b</div>
+<table style="margin-top:6px;font-size:0.78rem">
+<tr><th>Index</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+<tr><th>Value</th><td><strong>1</strong></td><td><strong>3</strong></td><td><strong>2</strong></td><td><strong>7</strong></td><td><strong>5</strong></td><td><strong>4</strong></td><td><strong>6</strong></td></tr>
+</table>
+<div class="rule" style="margin-top:8px">
+<code>parent(i) = (i-1)/2</code><br/>
+<code>left(i)   = 2*i + 1</code><br/>
+<code>right(i)  = 2*i + 2</code>
+</div>
+</div>
+</div>
+</div><div class="g3">
+<div class="box grn">
+<div class="bh">📚 PREREQUISITES TO KNOW FIRST</div>
+<div class="bc">
+<table style="font-size:0.8rem">
+<tr><th>Concept</th><th>Why needed</th></tr>
+<tr><td><strong>Complete Binary Tree</strong></td><td>Heap is implemented as one</td></tr>
+<tr><td><strong>Tree height = O(log n)</strong></td><td>Drives all heap complexities</td></tr>
+<tr><td><strong>Array indexing</strong></td><td>Left/Right/Parent formulas</td></tr>
+<tr><td><strong>Comparator (Java)</strong></td><td>Custom ordering in PQ</td></tr>
+<tr><td><strong>Bubble Up / Sift Down</strong></td><td>Core heap operations</td></tr>
+<tr><td><strong>Priority Queue ADT</strong></td><td>What heap implements</td></tr>
+</table>
+</div>
+</div>
+<div class="box">
+<div class="bh"><span class="n">3</span> TIME COMPLEXITIES</div>
+<div class="bc">
+<table style="font-size:0.8rem">
+<tr><th>Operation</th><th>Time</th><th>Why</th></tr>
+<tr><td><code>offer(x)</code> / insert</td><td><strong>O(log n)</strong></td><td>Bubble Up (height = log n)</td></tr>
+<tr><td><code>poll()</code> / remove root</td><td><strong>O(log n)</strong></td><td>Sift Down (height = log n)</td></tr>
+<tr><td><code>peek()</code></td><td><strong>O(1)</strong></td><td>Root is always index 0</td></tr>
+<tr><td><code>size()</code> / <code>isEmpty()</code></td><td><strong>O(1)</strong></td><td>Counter field</td></tr>
+<tr><td>Build Heap (n items)</td><td><strong>O(n)</strong></td><td>Bottom-up heapify (not n log n!)</td></tr>
+<tr><td>contains(x)</td><td>O(n)</td><td>No index — must scan</td></tr>
+</table>
+<div class="rule" style="margin-top:6px">⭐ <strong>Build Heap = O(n)</strong> — better than n × offer() = O(n log n)</div>
+</div>
+</div>
+<div class="box amb">
+<div class="bh">⚡ HEAPIFY — HOW IT WORKS</div>
+<div class="bc">
+<p style="margin-bottom:8px;font-weight:600">Insert → Bubble Up (Heapify Up)</p>
+<ol style="padding-left:16px;font-size:0.8rem;margin-bottom:10px">
+<li>Add element at last position</li>
+<li>Compare with parent</li>
+<li>If violates heap property → swap</li>
+<li>Repeat until root or satisfied</li>
+</ol>
+<p style="margin-bottom:8px;font-weight:600">Delete Root → Sift Down (Heapify Down)</p>
+<ol style="padding-left:16px;font-size:0.8rem">
+<li>Swap root with last element</li>
+<li>Remove last (was root)</li>
+<li>Compare root with children → swap with smaller (min) or larger (max)</li>
+<li>Repeat until leaf or satisfied</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 2: API & TOOLKIT -->
+<div class="page">
+<div class="ph">
+  <div><h1>HEAP / Priority Queue</h1><div class="sub">Java Master Toolkit &amp; Utility Classes</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 2 OF 10</div><div class="ptag">JAVA UTILITIES · REUSABLE TEMPLATES</div></div>
+</div>
+<div class="box grn">
+<div class="bh">🧰 HEAPUTILS — REUSABLE TOOLKIT (COPY-PASTE READY)</div>
+<div class="bc">
+<div class="g3" style="gap:12px">
+<div>
+<div style="font-weight:700;color:var(--grn);margin-bottom:5px">Build Heap from Array O(n)</div>
+<pre><span class="cm">// Java: pass collection to constructor</span>
+int[] arr = {5, 3, 1, 7, 2};
+PriorityQueue&lt;Integer&gt; pq = 
+  new PriorityQueue&lt;&gt;();
+<span class="kw">for</span> (int x : arr) pq.offer(x);
+
+<span class="cm">// Or from List — O(n) build</span>
+PriorityQueue&lt;Integer&gt; pq2 = 
+  new PriorityQueue&lt;&gt;(Arrays.asList(arr));</pre>
+</div>
+<div>
+<div style="font-weight:700;color:var(--sky);margin-bottom:5px">Heap Sort (ascending)</div>
+<pre><span class="kw">int</span>[] heapSort(<span class="kw">int</span>[] arr) {
+  PriorityQueue&lt;Integer&gt; pq = 
+    new PriorityQueue&lt;&gt;();
+  <span class="kw">for</span> (<span class="kw">int</span> x : arr) pq.offer(x);
+  <span class="kw">int</span>[] res = new <span class="kw">int</span>[arr.length];
+  <span class="kw">for</span> (<span class="kw">int</span> i = 0; !pq.isEmpty(); i++)
+    res[i] = pq.poll();
+  <span class="kw">return</span> res;
+}
+<span class="cm">// Time: O(n log n)  Space: O(n)</span></pre>
+</div>
+<div>
+<div style="font-weight:700;color:var(--org);margin-bottom:5px">Kth Largest Utility</div>
+<pre><span class="kw">int</span> kthLargest(<span class="kw">int</span>[] nums, <span class="kw">int</span> k) {
+  <span class="cm">// Min Heap of size k</span>
+  PriorityQueue&lt;Integer&gt; pq = 
+    new PriorityQueue&lt;&gt;();
+  <span class="kw">for</span> (<span class="kw">int</span> x : nums) {
+    pq.offer(x);
+    <span class="kw">if</span> (pq.size() &gt; k) pq.poll();
+  }
+  <span class="kw">return</span> pq.peek();
+}
+<span class="cm">// Time: O(n log k)  Space: O(k)</span></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 3: CORE PATTERN 1 -->
+<div class="page">
+<div class="ph">
+  <div><h1>HEAP / Priority Queue</h1><div class="sub">Core Patterns — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 3 OF 10</div><div class="ptag">PATTERN 1</div></div>
+</div>
+<div class="prow" style="margin-bottom:14px">
+<div class="prow-head">
+<div class="ptag2">PATTERN 1</div>
+<div class="ptitle">REPEATED MAX / MIN RETRIEVAL</div>
+<div class="psub">e.g. Last Stone Weight, Task Scheduler</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1.2">
+<div class="pc-head">When to Use</div>
+<ul style="font-size:0.8rem">
+<li>Always pick the <strong>largest</strong> (or smallest) element</li>
+<li>Do an operation on it</li>
+<li>Put the result back</li>
+<li>Repeat until 1 or 0 left</li>
+</ul>
+<div class="aha" style="margin-top:8px">
+<div class="aha-t">💡 AHA</div>
+        The heap keeps the "king" at the top automatically after every operation.
+      </div>
+</div>
+<div class="pc" style="flex:0.9;text-align:center">
+<div class="pc-head">Heap to Use</div>
+<div style="font-weight:700;color:var(--red);margin-bottom:4px">Max Heap</div>
+<div class="mermaid">graph TD
+  classDef r fill:#fff1f2,stroke:#dc2626,stroke-width:2px,color:#991b1b,font-weight:700;
+  A((9)):::r--&gt;B((6)):::r
+  A--&gt;C((7)):::r</div>
+<div style="font-size:0.75rem;color:var(--sub)">Largest always at top</div>
+</div>
+<div class="pc" style="flex:2">
+<div class="pc-head">Template (Java)</div>
+<pre><span class="cm">// Last Stone Weight pattern</span>
+PriorityQueue&lt;Integer&gt; pq = 
+  new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+<span class="kw">for</span> (<span class="kw">int</span> s : stones) pq.offer(s);
+
+<span class="kw">while</span> (pq.size() &gt; 1) {
+  <span class="kw">int</span> a = pq.poll();  <span class="cm">// largest</span>
+  <span class="kw">int</span> b = pq.poll();  <span class="cm">// 2nd largest</span>
+  <span class="kw">if</span> (a != b) pq.offer(a - b);
+}
+<span class="kw">return</span> pq.isEmpty() ? 0 : pq.peek();</pre>
+</div>
+<div class="pc" style="flex:0.8">
+<div class="pc-head">Complexity</div>
+<div style="font-size:0.8rem">• <strong>Time:</strong> O(n log n)<br/><span style="color:var(--sub);font-size:0.74rem">(n polls, each O(log n))</span><br/><br/>• <strong>Space:</strong> O(n)</div>
+<div class="tip" style="margin-top:8px;font-size:0.74rem"><strong>LC 1046</strong> Last Stone Weight<br/><strong>LC 621</strong> Task Scheduler</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 4: CORE PATTERN 2 -->
+<div class="page">
+<div class="ph">
+  <div><h1>HEAP / Priority Queue</h1><div class="sub">Core Patterns — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 4 OF 10</div><div class="ptag">PATTERN 2</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 2</div>
+<div class="ptitle">TOP-K ELEMENTS</div>
+<div class="psub">e.g. Kth Largest, Top K Frequent, K Closest Points</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1.2">
+<div class="pc-head">When to Use</div>
+<ul style="font-size:0.8rem">
+<li>Need K <strong>largest</strong> elements → use <strong>Min Heap</strong> size K</li>
+<li>Need K <strong>smallest</strong> elements → use <strong>Max Heap</strong> size K</li>
+<li>Need K most frequent → freq as key</li>
+<li>Key trick: <em>discard the worst, keep the best K</em></li>
+</ul>
+<div class="aha" style="margin-top:8px">
+<div class="aha-t">💡 AHA</div>
+        "Keep the K best" = use a heap of <em>opposite type</em> as a filter.
+        Min Heap removes smallest → keeps K largest.
+      </div>
+</div>
+<div class="pc" style="flex:0.9;text-align:center">
+<div class="pc-head">Counterintuitive Rule</div>
+<div style="font-size:0.8rem">
+<div style="background:#dcfce7;padding:5px;border-radius:4px;margin-bottom:5px"><strong>Top K Largest</strong><br/>→ Min Heap (size K)</div>
+<div style="background:#fee2e2;padding:5px;border-radius:4px"><strong>Top K Smallest</strong><br/>→ Max Heap (size K)</div>
+</div>
+<div style="font-size:0.72rem;color:var(--sub);margin-top:5px">Root = the "weakest survivor"<br/>that gets replaced if better comes</div>
+</div>
+<div class="pc" style="flex:2">
+<div class="pc-head">Template — Top K Largest &amp; Smallest</div>
+<pre><span class="cm">// Top K LARGEST → Min Heap of size K</span>
+PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+<span class="kw">for</span> (<span class="kw">int</span> x : nums) {
+  pq.offer(x);
+  <span class="kw">if</span> (pq.size() &gt; k) pq.poll(); <span class="cm">// evict smallest</span>
+}
+<span class="cm">// pq now has the K largest</span>
+
+<span class="cm">// Top K SMALLEST → Max Heap of size K</span>
+PriorityQueue&lt;Integer&gt; pq2 = 
+  new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+<span class="kw">for</span> (<span class="kw">int</span> x : nums) {
+  pq2.offer(x);
+  <span class="kw">if</span> (pq2.size() &gt; k) pq2.poll(); <span class="cm">// evict largest</span>
+}</pre>
+</div>
+<div class="pc" style="flex:0.8">
+<div class="pc-head">Complexity</div>
+<div style="font-size:0.8rem">• <strong>Time:</strong> O(n log k)<br/><span style="color:var(--sub);font-size:0.74rem">(heap size stays K)</span><br/><br/>• <strong>Space:</strong> O(k)<br/><br/>vs Sorting:<br/>O(n log n) + O(n)</div>
+<div class="tip" style="margin-top:8px;font-size:0.74rem"><strong>LC 215</strong> Kth Largest<br/><strong>LC 347</strong> Top K Frequent<br/><strong>LC 973</strong> K Closest Points</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 5: CORE PATTERN 3 -->
+<div class="page">
+<div class="ph">
+  <div><h1>HEAP / Priority Queue</h1><div class="sub">Core Patterns — Part 3</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 5 OF 10</div><div class="ptag">PATTERN 3</div></div>
+</div>
+<div class="prow" style="margin-bottom:14px">
+<div class="prow-head">
+<div class="ptag2">PATTERN 5</div>
+<div class="ptitle">GREEDY SCHEDULING / COOLDOWN</div>
+<div class="psub">e.g. Task Scheduler, Reorganize String, Process Tasks Using Servers</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1.2">
+<div class="pc-head">When to Use</div>
+<ul style="font-size:0.8rem">
+<li>Tasks have <strong>cooldown</strong> before repeating</li>
+<li>Always process <strong>most frequent</strong> first</li>
+<li>Use Max Heap for frequency</li>
+<li>Use Queue to hold "cooling down" items</li>
+</ul>
+<div class="aha" style="margin-top:8px">
+<div class="aha-t">💡 AHA</div>
+        Greedy: always pick the busiest available worker. Use a queue as a "waiting room" during cooldown.
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — Task Scheduler (LC 621)</div>
+<pre>Map&lt;Character, Integer&gt; freq = new HashMap&lt;&gt;();
+<span class="kw">for</span> (char c : tasks) freq.merge(c, 1, Integer::sum);
+
+PriorityQueue&lt;Integer&gt; maxH = 
+  new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+maxH.addAll(freq.values());
+
+Queue&lt;int[]&gt; q = new LinkedList&lt;&gt;(); <span class="cm">// [count, readyTime]</span>
+<span class="kw">int</span> time = 0;
+
+<span class="kw">while</span> (!maxH.isEmpty() || !q.isEmpty()) {
+  time++;
+  <span class="kw">if</span> (!maxH.isEmpty()) {
+    <span class="kw">int</span> cnt = maxH.poll() - 1;
+    <span class="kw">if</span> (cnt &gt; 0) q.offer(new <span class="kw">int</span>[]{cnt, time + n});
+  }
+  <span class="kw">if</span> (!q.isEmpty() &amp;&amp; q.peek()[1] == time)
+    maxH.offer(q.poll()[0]);
+}
+<span class="kw">return</span> time;</pre>
+</div>
+<div class="pc" style="flex:0.8">
+<div class="pc-head">Complexity</div>
+<div style="font-size:0.8rem">• <strong>Time:</strong> O(n log n)<br/>• <strong>Space:</strong> O(n)</div>
+<div class="tip" style="margin-top:8px;font-size:0.74rem"><strong>LC 621</strong> Task Scheduler<br/><strong>LC 767</strong> Reorganize String<br/><strong>LC 1405</strong> Longest Happy String<br/><strong>LC 1882</strong> Process Tasks Using Servers</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 6: CORE PATTERN 4 -->
+<div class="page">
+<div class="ph">
+  <div><h1>HEAP / Priority Queue</h1><div class="sub">Core Patterns — Part 4</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 6 OF 10</div><div class="ptag">PATTERN 4</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 6</div>
+<div class="ptitle">INTERVAL TRACKING &amp; RESOURCE ALLOCATION</div>
+<div class="psub">e.g. Meeting Rooms II, Single-Threaded CPU, Seat Reservation</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1.2">
+<div class="pc-head">When to Use</div>
+<ul style="font-size:0.8rem">
+<li>Intervals/events processed chronologically</li>
+<li>Track currently <strong>active resources</strong> (rooms, CPU)</li>
+<li>Min Heap holds <strong>end times</strong> of active items</li>
+<li>If smallest end time ≤ next start time → reuse resource</li>
+</ul>
+<div class="aha" style="margin-top:8px">
+<div class="aha-t">💡 AHA</div>
+        Sort intervals by start time. Min Heap tracks end times. The root of the heap represents the earliest resource to become free.
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — Meeting Rooms II (LC 253)</div>
+<pre>int minMeetingRooms(int[][] intervals) {
+  Arrays.sort(intervals, (a, b) -&gt; a[0] - b[0]);
+  <span class="cm">// Min Heap stores end times of active meetings</span>
+  PriorityQueue&lt;Integer&gt; heap = new PriorityQueue&lt;&gt;();
+
+  for (int[] interval : intervals) {
+    <span class="cm">// Free room if earliest ending meeting is done</span>
+    if (!heap.isEmpty() &amp;&amp; heap.peek() &lt;= interval[0]) {
+      heap.poll();
+    }
+    heap.offer(interval[1]); <span class="cm">// allocate room</span>
+  }
+  return heap.size(); <span class="cm">// min rooms needed</span>
+}</pre>
+</div>
+<div class="pc" style="flex:0.8">
+<div class="pc-head">Complexity</div>
+<div style="font-size:0.8rem">• <strong>Time:</strong> O(n log n)<br/>• <strong>Space:</strong> O(n)</div>
+<div class="tip" style="margin-top:8px;font-size:0.74rem"><strong>LC 253</strong> Meeting Rooms II<br/><strong>LC 1834</strong> Single-Threaded CPU<br/><strong>LC 1845</strong> Seat Reservation Manager<br/><strong>LC 2402</strong> Meeting Rooms III</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 7: DECISION TREE & TRIGGER WORDS -->
+<div class="page">
+<div class="ph">
+  <div><h1>HEAP / Priority Queue</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 7 OF 10</div><div class="ptag">DECISION TREE · TRIGGER WORDS · TRADE-OFFS</div></div>
+</div>
+
+</div>
+
+<!-- PAGE 8: PROBLEM LADDER PART 1 -->
+<div class="page">
+<div class="ph">
+  <div><h1>HEAP / Priority Queue</h1><div class="sub">Curated Problem Ladder — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 8 OF 10</div><div class="ptag">PROBLEM LADDER · EASY &amp; MEDIUM</div></div>
+</div>
+<div class="g2">
+<div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#f0fdf4;padding:3px 8px">
+<span class="ptitle" style="color:var(--grn);font-size:0.8rem">LC 703 · Kth Largest Element in Stream</span>
+<span class="diff-e">EASY</span>
+</div>
+<div class="prob-body">
+<div class="prob-info" style="padding:4px 6px;font-size:0.75rem">
+<div><strong>Pattern:</strong> Top-K (Min Heap size K)</div>
+<div><strong>Key Insight:</strong> Min heap size K. Root = Kth largest.</div>
+<div class="tag-row"><span class="badge badge-g">Min Heap</span><span class="badge badge-b">Stream</span></div>
+</div>
+<div class="prob-code" style="padding:3px 5px">
+<pre style="font-size:0.64rem;padding:3px">class KthLargest {
+  PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;(); int k;
+  KthLargest(int k, int[] nums) { this.k = k; for (int x : nums) add(x); }
+  int add(int val) {
+    pq.offer(val); if (pq.size() &gt; k) pq.poll();
+    return pq.peek();
+  }
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#f0fdf4;padding:3px 8px">
+<span class="ptitle" style="color:var(--grn);font-size:0.8rem">LC 1046 · Last Stone Weight</span>
+<span class="diff-e">EASY</span>
+</div>
+<div class="prob-body">
+<div class="prob-info" style="padding:4px 6px;font-size:0.75rem">
+<div><strong>Pattern:</strong> Repeated Max Retrieval</div>
+<div><strong>Key Insight:</strong> Max Heap — smash 2 heaviest stones.</div>
+<div class="tag-row"><span class="badge badge-r">Max Heap</span></div>
+</div>
+<div class="prob-code" style="padding:3px 5px">
+<pre style="font-size:0.64rem;padding:3px">int lastStoneWeight(int[] stones) {
+  PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+  for (int s : stones) pq.offer(s);
+  while (pq.size() &gt; 1) {
+    int a = pq.poll(), b = pq.poll();
+    if (a != b) pq.offer(a - b);
+  }
+  return pq.isEmpty() ? 0 : pq.peek();
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#f0fdf4;padding:3px 8px">
+<span class="ptitle" style="color:var(--grn);font-size:0.8rem">LC 215 · Kth Largest Element in Array</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info" style="padding:4px 6px;font-size:0.75rem">
+<div><strong>Pattern:</strong> Top-K</div>
+<div><strong>Key Insight:</strong> Min Heap of size K. Peek = Kth largest.</div>
+<div class="tag-row"><span class="badge badge-g">Min Heap</span><span class="badge badge-y">QuickSelect</span></div>
+</div>
+<div class="prob-code" style="padding:3px 5px">
+<pre style="font-size:0.64rem;padding:3px">int findKthLargest(int[] nums, int k) {
+  PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+  for (int x : nums) { pq.offer(x); if (pq.size() &gt; k) pq.poll(); }
+  return pq.peek();
+}</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: PROBLEM LADDER PART 2 -->
+<div class="page">
+<div class="ph">
+  <div><h1>HEAP / Priority Queue</h1><div class="sub">Curated Problem Ladder — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 9 OF 10</div><div class="ptag">PROBLEM LADDER · MEDIUM &amp; HARD</div></div>
+</div>
+<div class="g2">
+<div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fefce8;padding:3px 8px">
+<span class="ptitle" style="color:var(--amb);font-size:0.8rem">LC 973 · K Closest Points to Origin</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info" style="padding:4px 6px;font-size:0.75rem">
+<div><strong>Pattern:</strong> Top-K Smallest</div>
+<div><strong>Key Insight:</strong> Max Heap size K by distance.</div>
+<div class="tag-row"><span class="badge badge-r">Max Heap</span></div>
+</div>
+<div class="prob-code" style="padding:3px 5px">
+<pre style="font-size:0.64rem;padding:3px">int[][] kClosest(int[][] pts, int k) {
+  PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;(
+    (a,b)-&gt;(b[0]*b[0]+b[1]*b[1])-(a[0]*a[0]+a[1]*a[1]));
+  for (int[] p : pts) { pq.offer(p); if (pq.size() &gt; k) pq.poll(); }
+  return pq.toArray(new int[k][]);
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fefce8;padding:3px 8px">
+<span class="ptitle" style="color:var(--amb);font-size:0.8rem">LC 347 · Top K Frequent Elements</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info" style="padding:4px 6px;font-size:0.75rem">
+<div><strong>Pattern:</strong> Top-K Frequency</div>
+<div><strong>Key Insight:</strong> HashMap count → Min Heap size K.</div>
+<div class="tag-row"><span class="badge badge-g">Min Heap</span><span class="badge badge-b">Map</span></div>
+</div>
+<div class="prob-code" style="padding:3px 5px">
+<pre style="font-size:0.64rem;padding:3px">int[] topKFrequent(int[] nums, int k) {
+  Map&lt;Integer,Integer&gt; f = new HashMap&lt;&gt;();
+  for (int x : nums) f.merge(x, 1, Integer::sum);
+  PriorityQueue&lt;Map.Entry&lt;Integer,Integer&gt;&gt; pq =
+    new PriorityQueue&lt;&gt;(Comparator.comparingInt(Map.Entry::getValue));
+  for (var e : f.entrySet()) { pq.offer(e); if (pq.size() &gt; k) pq.poll(); }
+  return pq.stream().mapToInt(Map.Entry::getKey).toArray();
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fefce8;padding:3px 8px">
+<span class="ptitle" style="color:var(--amb);font-size:0.8rem">LC 621 · Task Scheduler</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info" style="padding:4px 6px;font-size:0.75rem">
+<div><strong>Pattern:</strong> Cooldown Sched.</div>
+<div><strong>Key Insight:</strong> Max Heap freq. Process busiest task.</div>
+<div class="tag-row"><span class="badge badge-r">Max Heap</span></div>
+</div>
+<div class="prob-code" style="padding:3px 5px">
+<pre style="font-size:0.64rem;padding:3px">int leastInterval(char[] tasks, int n) {
+  int[] freq = new int[26];
+  for (char c : tasks) freq[c-'A']++;
+  int maxF = 0, maxC = 0;
+  for (int f : freq) maxF = Math.max(maxF, f);
+  for (int f : freq) if (f == maxF) maxC++;
+  return Math.max(tasks.length, (maxF-1)*(n+1)+maxC);
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fefce8;padding:3px 8px">
+<span class="ptitle" style="color:var(--amb);font-size:0.8rem">LC 253 · Meeting Rooms II</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info" style="padding:4px 6px;font-size:0.75rem">
+<div><strong>Pattern:</strong> Interval Track</div>
+<div><strong>Key Insight:</strong> Sort start time, Min Heap end times.</div>
+<div class="tag-row"><span class="badge badge-g">Min Heap</span></div>
+</div>
+<div class="prob-code" style="padding:3px 5px">
+<pre style="font-size:0.64rem;padding:3px">int minMeetingRooms(int[][] intervals) {
+  Arrays.sort(intervals, (a, b) -&gt; a[0] - b[0]);
+  PriorityQueue&lt;Integer&gt; heap = new PriorityQueue&lt;&gt;();
+  for (int[] it : intervals) {
+    if (!heap.isEmpty() &amp;&amp; heap.peek() &lt;= it[0]) heap.poll();
+    heap.offer(it[1]);
+  }
+  return heap.size();
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fff1f2;padding:3px 8px">
+<span class="ptitle" style="color:var(--red);font-size:0.8rem">LC 23 · Merge K Sorted Lists</span>
+<span class="diff-h">HARD</span>
+</div>
+<div class="prob-body">
+<div class="prob-info" style="padding:4px 6px;font-size:0.75rem">
+<div><strong>Pattern:</strong> Merge K Sorted</div>
+<div><strong>Key Insight:</strong> Min Heap head nodes. Poll → push next.</div>
+<div class="tag-row"><span class="badge badge-g">Min Heap</span></div>
+</div>
+<div class="prob-code" style="padding:3px 5px">
+<pre style="font-size:0.64rem;padding:3px">ListNode mergeKLists(ListNode[] lists) {
+  PriorityQueue&lt;ListNode&gt; pq = new PriorityQueue&lt;&gt;((a,b) -&gt; a.val - b.val);
+  for (ListNode h : lists) if (h != null) pq.offer(h);
+  ListNode d = new ListNode(0), t = d;
+  while (!pq.isEmpty()) {
+    t.next = pq.poll(); t = t.next;
+    if (t.next != null) pq.offer(t.next);
+  }
+  return d.next;
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fff1f2;padding:3px 8px">
+<span class="ptitle" style="color:var(--red);font-size:0.8rem">LC 295 · Find Median Data Stream</span>
+<span class="diff-h">HARD</span>
+</div>
+<div class="prob-body">
+<div class="prob-info" style="padding:4px 6px;font-size:0.75rem">
+<div><strong>Pattern:</strong> Two Heaps</div>
+<div><strong>Key Insight:</strong> Max Heap (left) + Min Heap (right).</div>
+<div class="tag-row"><span class="badge badge-r">Two Heaps</span></div>
+</div>
+<div class="prob-code" style="padding:3px 5px">
+<pre style="font-size:0.64rem;padding:3px">class MedianFinder {
+  PriorityQueue&lt;Integer&gt; lo = new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+  PriorityQueue&lt;Integer&gt; hi = new PriorityQueue&lt;&gt;();
+  void addNum(int num) {
+    lo.offer(num); hi.offer(lo.poll());
+    if (lo.size() &lt; hi.size()) lo.offer(hi.poll());
+  }
+  double findMedian() {
+    return lo.size() &gt; hi.size() ? lo.peek() : (lo.peek() + hi.peek()) / 2.0;
+  }
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fff1f2;padding:3px 8px">
+<span class="ptitle" style="color:var(--red);font-size:0.8rem">LC 1851 · Min Interval for Each Query</span>
+<span class="diff-h">HARD</span>
+</div>
+<div class="prob-body">
+<div class="prob-info" style="padding:4px 6px;font-size:0.75rem">
+<div><strong>Pattern:</strong> Sweep Line + Min Heap</div>
+<div><strong>Key Insight:</strong> Sort queries &amp; intervals. Push active, pop expired.</div>
+<div class="tag-row"><span class="badge badge-g">Min Heap</span></div>
+</div>
+<div class="prob-code" style="padding:3px 5px">
+<pre style="font-size:0.62rem;padding:3px">int[] minInterval(int[][] ivals, int[] queries) {
+  int n=queries.length; int[] idx=new int[n],res=new int[n];
+  for(int i=0;i&lt;n;i++) idx[i]=i;
+  Arrays.sort(idx,(a,b)-&gt;queries[a]-queries[b]);
+  Arrays.sort(ivals,(a,b)-&gt;a[0]-b[0]);
+  PriorityQueue&lt;int[]&gt; pq=new PriorityQueue&lt;&gt;((a,b)-&gt;a[0]-b[0]);
+  int i=0; Arrays.fill(res,-1);
+  for(int qi:idx){int q=queries[qi];
+    while(i&lt;ivals.length&amp;&amp;ivals[i][0]&lt;=q)
+      {pq.offer(new int[]{ivals[i][1]-ivals[i][0]+1,ivals[i][1]});i++;}
+    while(!pq.isEmpty()&amp;&amp;pq.peek()[1]&lt;q)pq.poll();
+    if(!pq.isEmpty())res[qi]=pq.peek()[0];}return res;
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#faf5ff;padding:3px 8px">
+<span class="ptitle" style="color:var(--pur);font-size:0.8rem">LC 632 · Smallest Range K Lists</span>
+<span class="diff-h">HARD</span>
+</div>
+<div class="prob-body">
+<div class="prob-info" style="padding:4px 6px;font-size:0.75rem">
+<div><strong>Pattern:</strong> Merge K + Min Heap</div>
+<div><strong>Key Insight:</strong> Track global max, shrink range by advancing min.</div>
+<div class="tag-row"><span class="badge badge-g">Min Heap</span></div>
+</div>
+<div class="prob-code" style="padding:3px 5px">
+<pre style="font-size:0.64rem;padding:3px">// Min Heap stores [val, listIdx, elemIdx]
+// Track global max. Range = [heap_min, global_max]
+// Advance pointer of min element list until exhausted</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 10: DRY RUN, PROOFS & MASTERY CHEAT SHEET -->
+<div class="page">
+<div class="ph">
+  <div><h1>HEAP / Priority Queue</h1><div class="sub">Dry Run, Proofs &amp; Mastery Cheat Sheet</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 10 OF 10</div><div class="ptag">DRY RUN · PROOFS · MASTERY CHECKLIST</div></div>
+</div>
+<div class="g4" style="margin-bottom:14px">
+<div style="border:1.5px solid var(--pri);border-radius:6px;overflow:hidden">
+<div style="background:var(--pri);color:white;padding:6px 10px;font-weight:700;font-size:0.82rem">DECLARE</div>
+<div style="padding:8px 10px;font-size:0.76rem">
+<pre style="font-size:0.68rem;background:none;border:none;padding:0">// Min Heap
+PQ&lt;Integer&gt; mn = new PQ&lt;&gt;();
+// Max Heap
+PQ&lt;Integer&gt; mx = new PQ&lt;&gt;(
+  Collections.reverseOrder());
+// Custom
+PQ&lt;int[]&gt; pq = new PQ&lt;&gt;(
+  (a,b)-&gt;a[0]-b[0]);</pre>
+</div>
+</div>
+<div style="border:1.5px solid var(--grn);border-radius:6px;overflow:hidden">
+<div style="background:var(--grn);color:white;padding:6px 10px;font-weight:700;font-size:0.82rem">INSERT/REMOVE</div>
+<div style="padding:8px 10px;font-size:0.76rem">
+<pre style="font-size:0.68rem;background:none;border:none;padding:0">pq.offer(x);   // insert
+pq.poll();     // remove root
+pq.peek();     // view root
+pq.size();     // count
+pq.isEmpty();  // check
+// Add + cap at K:
+pq.offer(x);
+if(pq.size()&gt;k) pq.poll();</pre>
+</div>
+</div>
+<div style="border:1.5px solid var(--pur);border-radius:6px;overflow:hidden">
+<div style="background:var(--pur);color:white;padding:6px 10px;font-weight:700;font-size:0.82rem">PATTERN MAP</div>
+<div style="padding:8px 10px;font-size:0.74rem">
+<div>Max repeating → <span style="color:var(--red);font-weight:700">MaxH</span></div>
+<div>Top K Largest → <span style="color:var(--grn);font-weight:700">MinH(K)</span></div>
+<div>Top K Smallest → <span style="color:var(--red);font-weight:700">MaxH(K)</span></div>
+<div>Merge K sorted → <span style="color:var(--grn);font-weight:700">MinH</span></div>
+<div>Running Median → <span style="color:var(--pur);font-weight:700">2 Heaps</span></div>
+<div>Interval Track → <span style="color:var(--grn);font-weight:700">MinH(end)</span></div>
+</div>
+</div>
+<div style="border:1.5px solid var(--amb);border-radius:6px;overflow:hidden">
+<div style="background:var(--amb);color:white;padding:6px 10px;font-weight:700;font-size:0.82rem">KEY COMPLEXITIES</div>
+<div style="padding:8px 10px;font-size:0.74rem">
+<div>offer / poll → <strong>O(log n)</strong></div>
+<div>peek → <strong>O(1)</strong></div>
+<div>Build Heap → <strong>O(n)</strong></div>
+<div>Top-K → <strong>O(n log k)</strong></div>
+<div>Merge K (N tot) → <strong>O(N log k)</strong></div>
+<div>Sweep+Heap → <strong>O(n log n)</strong></div>
+</div>
+</div>
+</div><div class="box" style="margin-bottom:14px">
+<div class="bh">⚡ COMPLETE PATTERN REFERENCE — KNOW THIS COLD</div>
+<div class="bc">
+<table style="font-size:0.78rem">
+<tr><th>Pattern</th><th>Trigger Keywords</th><th>Heap Type</th><th>Size Constraint</th><th>Key Operation</th><th>Complexity</th></tr>
+<tr><td><strong>Repeated Max/Min</strong></td><td>always pick largest, smash, eliminate</td><td>Max or Min Heap</td><td>Unbounded</td><td>poll → operate → offer(result)</td><td>O(n log n)</td></tr>
+<tr><td><strong>Top K Largest</strong></td><td>Kth largest, top K, K biggest</td><td>Min Heap</td><td>Size = K</td><td>offer + if size&gt;K poll</td><td>O(n log k)</td></tr>
+<tr><td><strong>Top K Smallest</strong></td><td>Kth smallest, K closest, K lightest</td><td>Max Heap</td><td>Size = K</td><td>offer + if size&gt;K poll</td><td>O(n log k)</td></tr>
+<tr><td><strong>Merge K Sorted</strong></td><td>merge K lists, K sorted streams</td><td>Min Heap</td><td>Size = K</td><td>poll node → offer next</td><td>O(N log k)</td></tr>
+<tr><td><strong>Two Heaps</strong></td><td>median, data stream, running median</td><td>Max + Min</td><td>|diff| ≤ 1</td><td>addNum rebalance, findMedian O(1)</td><td>O(n log n)</td></tr>
+<tr><td><strong>Interval Track</strong></td><td>meeting rooms, active intervals, CPU</td><td>Min Heap</td><td>Unbounded</td><td>sort start, min heap end time</td><td>O(n log n)</td></tr>
+<tr><td><strong>Greedy Sched.</strong></td><td>cooldown, task, reorganize, server</td><td>Max Heap + Queue</td><td>Freq based</td><td>always pick busiest available</td><td>O(n log n)</td></tr>
+</table>
+</div>
+</div><div class="g2">
+<div class="box grn">
+<div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+<div class="bc">
+<div class="g2" style="gap:8px">
+<ul style="font-size:0.8rem;list-style:none;padding:0">
+<li>☐ Explain Min vs Max Heap without looking</li>
+<li>☐ Write Min Heap and Max Heap in Java (3 ways)</li>
+<li>☐ Trace insert + sift-up on paper</li>
+<li>☐ Trace poll + sift-down on paper</li>
+<li>☐ Derive O(n) build heap (geometric series)</li>
+<li>☐ Explain why Top-K Largest uses Min Heap</li>
+<li>☐ Code Top-K without looking</li>
+</ul>
+<ul style="font-size:0.8rem;list-style:none;padding:0">
+<li>☐ Code Merge K Sorted Lists from memory</li>
+<li>☐ Code Two Heaps MedianFinder</li>
+<li>☐ Code Meeting Rooms II with Min Heap</li>
+<li>☐ Identify heap pattern from problem keywords</li>
+<li>☐ Write custom comparator for int[], pairs, objects</li>
+<li>☐ Solve LC 215, 347, 23, 295 within 20 min each</li>
+<li>☐ Explain lazy deletion for sliding window median</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="box pur">
+<div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+<div class="bc">
+<div class="aha" style="margin-bottom:8px">
+<div class="aha-t">Rule 1 — The Opposition Rule</div>
+        To keep the K <strong>largest</strong> → use a <strong>Min</strong> Heap (evict the smallest intruder)<br/>
+        To keep the K <strong>smallest</strong> → use a <strong>Max</strong> Heap (evict the largest intruder)
+      </div>
+<div class="aha" style="margin-bottom:8px">
+<div class="aha-t">Rule 2 — The Heap is NOT sorted</div>
+        Heap only guarantees root is min/max. The rest is unordered. Never iterate a heap expecting order.
+      </div>
+<div class="aha" style="margin-bottom:8px">
+<div class="aha-t">Rule 3 — The Overflow Trap</div>
+<code>(a, b) -&gt; b - a</code> can overflow. ALWAYS use <code>Integer.compare(b, a)</code>.
+      </div>
+<div class="aha">
+<div class="aha-t">Rule 4 — Ask This First</div>
+        "What element should come out <strong>next</strong>?" → That element goes on top of your heap.
+      </div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

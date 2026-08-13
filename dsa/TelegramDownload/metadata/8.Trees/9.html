@@ -1,0 +1,332 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1><span class="num" style="background:#3b286c;color:white;padding:5px 15px;margin-right:15px;border-radius:5px;">8</span> TREES - FAANG ONE PAGE REVISION</h1>
+            <div class="subtitle" style="margin-left:auto; font-weight:bold;">Aha Moments • Patterns • When to use what</div>
+        </div>
+    </div>
+
+    <!-- Section 1 & 2 -->
+    <div class="grid-container" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 15px; margin-top: 15px;">
+        <div class="col-left">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #3b286c; color: white; padding: 8px; font-weight: bold;">
+                    <span class="num" style="background: white; color: #3b286c; border-radius: 50%; padding: 2px 8px; margin-right: 8px;">1</span> WHEN TO USE WHICH TRAVERSAL?
+                </div>
+                <div class="section-content" style="border: 1px solid #e2e8f0; border-top: none; padding: 10px;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85em; text-align: left;">
+                        <tr>
+                            <th style="border-bottom: 1px solid #ddd; padding: 8px;">Goal / Need</th>
+                            <th style="border-bottom: 1px solid #ddd; padding: 8px;">Use This</th>
+                            <th style="border-bottom: 1px solid #ddd; padding: 8px;">Why?</th>
+                        </tr>
+                        <tr>
+                            <td style="border-bottom: 1px solid #eee; padding: 8px;">Need parent first<br>(decision at node)</td>
+                            <td style="border-bottom: 1px solid #eee; padding: 8px; font-weight: bold; color: #4f46e5;">Preorder</td>
+                            <td style="border-bottom: 1px solid #eee; padding: 8px;">Process node<br>before children</td>
+                        </tr>
+                        <tr>
+                            <td style="border-bottom: 1px solid #eee; padding: 8px;">Need sorted order<br>(BST problems)</td>
+                            <td style="border-bottom: 1px solid #eee; padding: 8px; font-weight: bold; color: #16a34a;">Inorder</td>
+                            <td style="border-bottom: 1px solid #eee; padding: 8px;">Left &rarr; Node &rarr; Right<br>gives sorted order</td>
+                        </tr>
+                        <tr>
+                            <td style="border-bottom: 1px solid #eee; padding: 8px;">Need children's<br>information first</td>
+                            <td style="border-bottom: 1px solid #eee; padding: 8px; font-weight: bold; color: #d97706;">Postorder</td>
+                            <td style="border-bottom: 1px solid #eee; padding: 8px;">Process children<br>before node</td>
+                        </tr>
+                        <tr>
+                            <td style="border-bottom: 1px solid #eee; padding: 8px;">Need level by level<br>(each level together)</td>
+                            <td style="border-bottom: 1px solid #eee; padding: 8px; font-weight: bold; color: #2563eb;">BFS<br><span style="font-weight:normal;">(Level Order)</span></td>
+                            <td style="border-bottom: 1px solid #eee; padding: 8px;">Visit nodes<br>level by level</td>
+                        </tr>
+                        <tr>
+                            <td style="border-bottom: 1px solid #eee; padding: 8px;">Need all paths<br>(root to leaf)</td>
+                            <td style="border-bottom: 1px solid #eee; padding: 8px; font-weight: bold; color: #0891b2;">DFS<br><span style="font-weight:normal;">(Backtracking)</span></td>
+                            <td style="border-bottom: 1px solid #eee; padding: 8px;">Go deep, explore<br>all paths</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-right">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 8px; font-weight: bold;">
+                    <span class="num" style="background: white; color: #1e3a8a; border-radius: 50%; padding: 2px 8px; margin-right: 8px;">2</span> RECURSION - GOLDEN TEMPLATE (DFS)
+                </div>
+                <div class="section-content" style="display: flex; border: 1px solid #e2e8f0; border-top: none; padding: 10px; font-size: 0.85em;">
+                    <div style="flex: 1; padding-right: 10px; border-right: 1px solid #e2e8f0;">
+                        <ul style="padding-left: 0; margin: 0; font-weight: bold; list-style-type: none;">
+                            <li style="margin-bottom: 8px;"><span style="display:inline-block; width:20px; height:20px; background:#1e3a8a; color:white; border-radius:50%; text-align:center; line-height:20px; margin-right:5px; font-size:12px;">1</span> BASE CASE<br><span style="font-weight:normal; font-size:0.9em; display:block; margin-left: 25px; color:#475569;">Handle null / edge case</span></li>
+                            <li style="margin-bottom: 8px;"><span style="display:inline-block; width:20px; height:20px; background:#1e3a8a; color:white; border-radius:50%; text-align:center; line-height:20px; margin-right:5px; font-size:12px;">2</span> FAITH<br><span style="font-weight:normal; font-size:0.9em; display:block; margin-left: 25px; color:#475569;">Assume left & right<br>give correct answer</span></li>
+                            <li style="margin-bottom: 8px;"><span style="display:inline-block; width:20px; height:20px; background:#16a34a; color:white; border-radius:50%; text-align:center; line-height:20px; margin-right:5px; font-size:12px;">3</span> RECUR LEFT<br><span style="font-weight:normal; font-size:0.9em; display:block; margin-left: 25px; color:#475569;">Recur for left subtree</span></li>
+                            <li style="margin-bottom: 8px;"><span style="display:inline-block; width:20px; height:20px; background:#d97706; color:white; border-radius:50%; text-align:center; line-height:20px; margin-right:5px; font-size:12px;">4</span> RECUR RIGHT<br><span style="font-weight:normal; font-size:0.9em; display:block; margin-left: 25px; color:#475569;">Recur for right subtree</span></li>
+                            <li style="margin-bottom: 8px;"><span style="display:inline-block; width:20px; height:20px; background:#b91c1c; color:white; border-radius:50%; text-align:center; line-height:20px; margin-right:5px; font-size:12px;">5</span> COMBINE<br><span style="font-weight:normal; font-size:0.9em; display:block; margin-left: 25px; color:#475569;">Use left & right results,<br>do required work</span></li>
+                            <li><span style="display:inline-block; width:20px; height:20px; background:#1e3a8a; color:white; border-radius:50%; text-align:center; line-height:20px; margin-right:5px; font-size:12px;">6</span> RETURN<br><span style="font-weight:normal; font-size:0.9em; display:block; margin-left: 25px; color:#475569;">Return the final answer</span></li>
+                        </ul>
+                    </div>
+                    <div style="flex: 1.2; padding-left: 10px;">
+<pre style="margin: 0; font-size: 0.9em; font-family: monospace;"><code>Type solve(Node node) {
+  if (node == null)
+    return ...;      <span style="color:#64748b;">// 1. Base Case</span>
+
+  Type left = solve(node.left);  <span style="color:#64748b;">// 3</span>
+  Type right = solve(node.right); <span style="color:#64748b;">// 4</span>
+
+  <span style="color:#64748b;">// 5. Combine</span>
+  Type ans = ...;
+
+  return ans;        <span style="color:#64748b;">// 6</span>
+}</code></pre>
+                        <div style="margin-top: 15px; padding: 8px; border-radius: 5px; font-size: 0.9em;">
+                            <strong>REMEMBER</strong><br>
+                            Return type decides what you can compute.<br>
+                            Break every problem into left & right subproblems.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3, 4, 5 -->
+    <div class="grid-container" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px;">
+        <div class="col-1">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #047857; color: white; padding: 8px; font-weight: bold; text-align: center;">
+                    <span class="num" style="background: white; color: #047857; border-radius: 50%; padding: 2px 8px; margin-right: 8px;">3</span> DFS PATTERN RECAP
+                </div>
+                <div class="section-content" style="border: 1px solid #e2e8f0; border-top: none; padding: 10px;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85em; text-align: left;">
+                        <tr><th style="border-bottom: 1px solid #ddd; padding: 8px;">Problem</th><th style="border-bottom: 1px solid #ddd; padding: 8px;">Key Idea / Pattern</th></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Max Depth</td><td style="border-bottom: 1px solid #eee; padding: 8px; color: #333;">1 + max(left, right)</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Same Tree</td><td style="border-bottom: 1px solid #eee; padding: 8px; color: #333;">left && right</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Invert Tree</td><td style="border-bottom: 1px solid #eee; padding: 8px; color: #333;">Swap left & right</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Diameter</td><td style="border-bottom: 1px solid #eee; padding: 8px; color: #333;">Through node = left + right</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Balanced Tree</td><td style="border-bottom: 1px solid #eee; padding: 8px; color: #333;">|left - right| &lt;= 1</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #1d4ed8; color: white; padding: 8px; font-weight: bold; text-align: center;">
+                    <span class="num" style="background: white; color: #1d4ed8; border-radius: 50%; padding: 2px 8px; margin-right: 8px;">4</span> BFS PATTERN RECAP
+                </div>
+                <div class="section-content" style="border: 1px solid #e2e8f0; border-top: none; padding: 10px;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85em; text-align: left;">
+                        <tr><th style="border-bottom: 1px solid #ddd; padding: 8px;">Problem</th><th style="border-bottom: 1px solid #ddd; padding: 8px;">Key Idea / Pattern</th></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Level Order</td><td style="border-bottom: 1px solid #eee; padding: 8px; color: #333;">Queue + level size</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Right Side View</td><td style="border-bottom: 1px solid #eee; padding: 8px; color: #333;">Last node of each level</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Zigzag Order</td><td style="border-bottom: 1px solid #eee; padding: 8px; color: #333;">Left to Right /<br>Right to Left toggle</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Average of Levels</td><td style="border-bottom: 1px solid #eee; padding: 8px; color: #333;">Sum / size of level</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Level Order (N-ary)</td><td style="border-bottom: 1px solid #eee; padding: 8px; color: #333;">Same BFS with N children</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #6b21a8; color: white; padding: 8px; font-weight: bold; text-align: center;">
+                    <span class="num" style="background: white; color: #6b21a8; border-radius: 50%; padding: 2px 8px; margin-right: 8px;">5</span> BST QUICK HITS
+                </div>
+                <div class="section-content" style="border: 1px solid #e2e8f0; border-top: none; padding: 10px; font-size: 0.85em;">
+                    <ul style="list-style: none; padding-left: 0; margin: 0; line-height: 1.8;">
+                        <li style="margin-bottom: 8px;">&check; Left Subtree &lt; Node &lt; Right Subtree</li>
+                        <li style="margin-bottom: 8px;">&check; Inorder of BST = Sorted Array</li>
+                        <li style="margin-bottom: 8px;">&check; Search / Insert = Compare & Go</li>
+                        <li style="margin-bottom: 8px;">&check; Delete = 3 cases<br><span style="color:#64748b; margin-left: 20px;">(0 child, 1 child, 2 children)</span></li>
+                        <li style="margin-bottom: 8px;">&check; Validate BST = Check range (min, max)</li>
+                        <li style="margin-bottom: 8px;">&check; Kth Smallest = Inorder (kth element)</li>
+                        <li style="margin-bottom: 8px;">&check; LCA in BST = Use BST property</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 6, 7, 8 -->
+    <div class="grid-container" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px;">
+        <div class="col-1">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #9a3412; color: white; padding: 8px; font-weight: bold; text-align: center;">
+                    <span class="num" style="background: white; color: #9a3412; border-radius: 50%; padding: 2px 8px; margin-right: 8px;">6</span> COMMON TREE PROBLEM PATTERNS
+                </div>
+                <div class="section-content" style="border: 1px solid #e2e8f0; border-top: none; padding: 10px;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85em; text-align: left;">
+                        <tr><th style="border-bottom: 1px solid #ddd; padding: 8px;">Pattern</th><th style="border-bottom: 1px solid #ddd; padding: 8px;">Think</th></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px; font-weight:bold;">Height / Depth</td><td style="border-bottom: 1px solid #eee; padding: 8px;">Add 1 + max(left, right)</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px; font-weight:bold;">Exists / Search</td><td style="border-bottom: 1px solid #eee; padding: 8px;">Return true if found in<br>left or right</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px; font-weight:bold;">Count / Sum</td><td style="border-bottom: 1px solid #eee; padding: 8px;">Count/Sum from left + right<br>+ current</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px; font-weight:bold;">Path Problems</td><td style="border-bottom: 1px solid #eee; padding: 8px;">Carry path / sum while<br>going down</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px; font-weight:bold;">Construct Tree</td><td style="border-bottom: 1px solid #eee; padding: 8px;">Use Inorder + (Pre/Post)order</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px; font-weight:bold;">Validate / Check</td><td style="border-bottom: 1px solid #eee; padding: 8px;">Use constraints / ranges<br>while traversing</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #0369a1; color: white; padding: 8px; font-weight: bold; text-align: center;">
+                    <span class="num" style="background: white; color: #0369a1; border-radius: 50%; padding: 2px 8px; margin-right: 8px;">7</span> MENTAL MODELS (AHA MOMENTS)
+                </div>
+                <div class="section-content" style="border: 1px solid #e2e8f0; border-top: none; padding: 10px; font-size: 0.85em;">
+                    <ul style="list-style: none; padding-left: 0; margin: 0; line-height: 1.8;">
+                        <li style="margin-bottom: 8px;">&starf; <strong>Preorder</strong> &rarr; I do (parent) first</li>
+                        <li style="margin-bottom: 8px;">&starf; <strong>Inorder</strong> &rarr; I am in the middle (sorted for BST)</li>
+                        <li style="margin-bottom: 8px;">&starf; <strong>Postorder</strong> &rarr; I check results of my children first</li>
+                        <li style="margin-bottom: 8px;">&starf; <strong>BFS</strong> &rarr; I explore level by level</li>
+                        <li style="margin-bottom: 8px;">&starf; <strong>DFS</strong> &rarr; I go deep and backtrack</li>
+                        <li style="margin-bottom: 8px;">&starf; Every node can be a center of diameter</li>
+                        <li style="margin-bottom: 8px;">&starf; Tree is a connected acyclic graph</li>
+                        <li style="margin-bottom: 8px;">&starf; Remove null checks with base case</li>
+                        <li style="margin-bottom: 8px;">&starf; For BST &rarr; think in terms of range</li>
+                        <li style="margin-bottom: 8px;">&starf; Break problem &rarr; Solve small &rarr; Combine &rarr; Return</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #4c1d95; color: white; padding: 8px; font-weight: bold; text-align: center;">
+                    <span class="num" style="background: white; color: #4c1d95; border-radius: 50%; padding: 2px 8px; margin-right: 8px;">8</span> COMPLEXITY CHEAT SHEET
+                </div>
+                <div class="section-content" style="border: 1px solid #e2e8f0; border-top: none; padding: 10px;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85em; text-align: left;">
+                        <tr><th style="border-bottom: 1px solid #ddd; padding: 8px;">Operation / Problem</th><th style="border-bottom: 1px solid #ddd; padding: 8px;">Time</th><th style="border-bottom: 1px solid #ddd; padding: 8px;">Space</th></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Traversal (DFS)</td><td style="border-bottom: 1px solid #eee; padding: 8px;">O(n)</td><td style="border-bottom: 1px solid #eee; padding: 8px;">O(h)</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Traversal (BFS)</td><td style="border-bottom: 1px solid #eee; padding: 8px;">O(n)</td><td style="border-bottom: 1px solid #eee; padding: 8px;">O(w)</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Search in BST</td><td style="border-bottom: 1px solid #eee; padding: 8px;">O(h)</td><td style="border-bottom: 1px solid #eee; padding: 8px;">O(1)</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Insert in BST</td><td style="border-bottom: 1px solid #eee; padding: 8px;">O(h)</td><td style="border-bottom: 1px solid #eee; padding: 8px;">O(1)</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Delete in BST</td><td style="border-bottom: 1px solid #eee; padding: 8px;">O(h)</td><td style="border-bottom: 1px solid #eee; padding: 8px;">O(h)</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Height of Tree</td><td style="border-bottom: 1px solid #eee; padding: 8px;">O(n)</td><td style="border-bottom: 1px solid #eee; padding: 8px;">O(h)</td></tr>
+                        <tr><td style="border-bottom: 1px solid #eee; padding: 8px;">Diameter</td><td style="border-bottom: 1px solid #eee; padding: 8px;">O(n)</td><td style="border-bottom: 1px solid #eee; padding: 8px;">O(h)</td></tr>
+                    </table>
+                    <div style="font-size: 0.8em; margin-top: 15px; color: #64748b; text-align: center;">
+                        n = number of nodes, h = height, w = max width
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 9, 10 -->
+    <div class="grid-container" style="display: grid; grid-template-columns: 2.5fr 1fr; gap: 15px; margin-top: 15px;">
+        <div class="col-left">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #312e81; color: white; padding: 8px; font-weight: bold; text-align: center;">
+                    <span class="num" style="background: white; color: #312e81; border-radius: 50%; padding: 2px 8px; margin-right: 8px;">9</span> TRAVERSAL VISUAL SUMMARY
+                </div>
+                <div class="section-content" style="display: flex; justify-content: space-between; text-align: center; font-size: 0.85em; border: 1px solid #e2e8f0; border-top: none; padding: 15px 10px;">
+                    
+                    <div style="flex: 1; padding: 0 5px;">
+                        <strong style="color: #4f46e5;">Preorder</strong><br>
+                        (Root &rarr; Left &rarr; Right)
+                        <div class="mermaid">
+                        graph TD
+                            A((1)):::root --> B((2))
+                            A --> C((3))
+                            B --> D((4))
+                            B --> E((5))
+                            C --> F((6))
+                            C --> G((7))
+                            classDef root fill:#fef08a,stroke:#ca8a04
+                        </div>
+                        <div style="border: 1px solid #4f46e5; padding: 5px; margin-top: 10px; border-radius: 5px; color: #4f46e5; font-weight:bold;">
+                            Order: 1, 2, 4, 5, 3, 6, 7
+                        </div>
+                    </div>
+
+                    <div style="flex: 1; padding: 0 5px;">
+                        <strong style="color: #16a34a;">Inorder</strong><br>
+                        (Left &rarr; Root &rarr; Right)
+                        <div class="mermaid">
+                        graph TD
+                            A((1)):::root --> B((2))
+                            A --> C((3))
+                            B --> D((4))
+                            B --> E((5))
+                            C --> F((6))
+                            C --> G((7))
+                            classDef root fill:#bbf7d0,stroke:#16a34a
+                        </div>
+                        <div style="border: 1px solid #16a34a; padding: 5px; margin-top: 10px; border-radius: 5px; color: #16a34a; font-weight:bold;">
+                            Order: 4, 2, 5, 1, 6, 3, 7
+                        </div>
+                    </div>
+
+                    <div style="flex: 1; padding: 0 5px;">
+                        <strong style="color: #d97706;">Postorder</strong><br>
+                        (Left &rarr; Right &rarr; Root)
+                        <div class="mermaid">
+                        graph TD
+                            A((1)):::root --> B((2))
+                            A --> C((3))
+                            B --> D((4))
+                            B --> E((5))
+                            C --> F((6))
+                            C --> G((7))
+                            classDef root fill:#fde68a,stroke:#d97706
+                        </div>
+                        <div style="border: 1px solid #d97706; padding: 5px; margin-top: 10px; border-radius: 5px; color: #d97706; font-weight:bold;">
+                            Order: 4, 5, 2, 6, 7, 3, 1
+                        </div>
+                    </div>
+
+                    <div style="flex: 1; padding: 0 5px;">
+                        <strong style="color: #2563eb;">Level Order (BFS)</strong><br>
+                        (Level by Level)
+                        <div class="mermaid">
+                        graph TD
+                            A((1)):::root --> B((2))
+                            A --> C((3))
+                            B --> D((4))
+                            B --> E((5))
+                            C --> F((6))
+                            C --> G((7))
+                            classDef root fill:#bfdbfe,stroke:#2563eb
+                        </div>
+                        <div style="border: 1px solid #2563eb; padding: 5px; margin-top: 10px; border-radius: 5px; color: #2563eb; font-weight:bold;">
+                            Order: 1, 2, 3, 4, 5, 6, 7
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-right">
+            <div class="section-box">
+                <div class="section-header" style="background-color: #065f46; color: white; padding: 8px; font-weight: bold; text-align: center;">
+                    <span class="num" style="background: white; color: #065f46; border-radius: 50%; padding: 2px 8px; margin-right: 8px;">10</span> FINAL MANTRA
+                </div>
+                <div class="section-content" style="font-size: 0.9em; padding: 15px 10px; border: 1px solid #e2e8f0; border-top: none;">
+                    <ul style="list-style: none; padding-left: 0; margin: 0; line-height: 2;">
+                        <li style="margin-bottom: 8px;">&check; Understand the Problem</li>
+                        <li style="margin-bottom: 8px;">&check; Choose the Right Pattern</li>
+                        <li style="margin-bottom: 8px;">&check; Draw / Dry Run</li>
+                        <li style="margin-bottom: 8px;">&check; Write Clean Code</li>
+                        <li style="margin-bottom: 8px;">&check; Test All Edge Cases</li>
+                        <li style="margin-bottom: 8px;">&check; Optimize if needed</li>
+                    </ul>
+                    <div style="margin-top: 15px; border-top: 1px solid #e2e8f0; padding-top: 15px; text-align: center; font-weight: bold; font-size: 0.85em; color: #333;">
+                        &starf; PRACTICE &rarr; ANALYZE &rarr;<br>REFLECT &rarr; IMPROVE &rarr; REPEAT
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="display: flex; justify-content: space-between; align-items: center; text-align: center; font-size: 0.85em; color: #1e3a8a; margin-top: 25px; padding-top: 15px;">
+        <div style="font-weight: bold; font-size: 1.1em; display:flex; align-items:center;">
+            <span style="font-size: 1.5em; margin-right: 5px;">&#128161;</span> IMPORTANT<br>REMINDERS
+        </div>
+        <div style="color:#333; font-weight:500;">Draw the tree<br><span style="color:#1e3a8a;">Always helps!</span></div>
+        <div style="color:#333; font-weight:500;">Dry run<br><span style="color:#1e3a8a;">before coding</span></div>
+        <div style="color:#333; font-weight:500;">Handle null<br><span style="color:#1e3a8a;">carefully</span></div>
+        <div style="color:#333; font-weight:500;">Think recursively,<br><span style="color:#1e3a8a;">not iteratively</span></div>
+        <div style="color:#333; font-weight:500;">Keep solving,<br><span style="color:#1e3a8a; font-weight:bold;">keep improving!</span></div>
+    </div>
+</div>

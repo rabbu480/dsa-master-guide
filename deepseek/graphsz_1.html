@@ -1,0 +1,1974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Graphs — FAANG Interview Handbook (A4 Print)</title>
+  <style>
+    /* ===== RESET & BASE ===== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #e2e8f0;
+      padding: 20px;
+      font-size: 12pt;
+      line-height: 1.5;
+      color: #111;
+    }
+
+    /* ===== PAGE CONTAINER – NO EMPTY SPACE ===== */
+    .page {
+      background: white;
+      max-width: 1100px;
+      margin: 0 auto 30px auto;
+      padding: 16px 22px;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      page-break-after: always;
+      break-after: page;
+      min-height: 0 !important;
+      height: auto !important;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1 { font-size: 24pt; font-weight: 900; color: #1e3a8a; }
+    h2 { font-size: 18pt; font-weight: 700; color: #1e3a8a; }
+    h3 { font-size: 14pt; font-weight: 700; color: #1e3a8a; }
+
+    .ph {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #1e3a8a;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+      flex-shrink: 0;
+    }
+    .ph .sub { font-size: 12pt; font-weight: 600; color: #475569; }
+    .ph .pn { background: #1e3a8a; color: white; padding: 2px 16px; border-radius: 20px; font-weight: 700; font-size: 10.5pt; }
+
+    .box {
+      border: 1.5px solid #1e3a8a;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .box .bh {
+      background: #1e3a8a;
+      color: white;
+      padding: 8px 16px;
+      font-weight: 700;
+      font-size: 12pt;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .box .bc { padding: 12px 16px; }
+
+    .box.grn { border-color: #059669; } .box.grn .bh { background: #059669; }
+    .box.red { border-color: #dc2626; } .box.red .bh { background: #dc2626; }
+    .box.pur { border-color: #7c3aed; } .box.pur .bh { background: #7c3aed; }
+    .box.sky { border-color: #0284c7; } .box.sky .bh { background: #0284c7; }
+    .box.amb { border-color: #d97706; } .box.amb .bh { background: #d97706; }
+    .box.org { border-color: #ea580c; } .box.org .bh { background: #ea580c; }
+
+    pre, code {
+      font-family: "Courier New", monospace;
+      font-size: 10pt;
+      line-height: 1.4;
+    }
+    pre {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 10px 14px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-x: auto;
+    }
+
+    table {
+      font-size: 10pt;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 10px;
+      text-align: left;
+    }
+    th { background: #f1f5f9; font-weight: 700; }
+
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+    .aha {
+      background: #ede9fe;
+      border: 1.5px solid #7c3aed;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-top: 6px;
+    }
+    .aha-t { font-weight: 800; color: #7c3aed; font-size: 11pt; }
+
+    .prob-card {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      page-break-inside: avoid;
+    }
+    .prob-head {
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+      border-bottom: 1px solid #cbd5e1;
+      font-size: 10.5pt;
+      font-weight: 700;
+    }
+    .prob-head .ptitle { color: #1e3a8a; }
+    .diff-e, .diff-m, .diff-h {
+      padding: 1px 12px;
+      border-radius: 10px;
+      font-size: 8.5pt;
+      font-weight: 700;
+    }
+    .diff-e { background: #dcfce7; color: #166534; }
+    .diff-m { background: #fef9c3; color: #854d0e; }
+    .diff-h { background: #fee2e2; color: #991b1b; }
+
+    .prob-body {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      border-top: 1px solid #cbd5e1;
+    }
+    .prob-info { padding: 10px 14px; border-right: 1px solid #cbd5e1; font-size: 10.5pt; }
+    .prob-code { padding: 10px 14px; background: #fafbfc; }
+    .prob-code pre { font-size: 9.5pt; padding: 8px 10px; }
+
+    .io-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 3px solid #2563eb;
+      padding: 6px 12px;
+      margin: 4px 0;
+      border-radius: 3px;
+      font-family: "Courier New", monospace;
+      font-size: 9.5pt;
+    }
+
+    .small { font-size: 10pt; }
+    .mt-auto { margin-top: auto; }
+
+    @page {
+      size: A4 portrait;
+      margin: 12mm 14mm;
+    }
+
+    @media print {
+      body {
+        background: white !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        color: black !important;
+        font-size: 12pt !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .page {
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 10mm 12mm !important;
+        width: 100% !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        min-height: 0 !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      pre, code {
+        font-size: 10pt !important;
+        background: #f8fafc !important;
+        border: 1.5px solid #cbd5e1 !important;
+        font-family: "Courier New", monospace !important;
+        line-height: 1.4 !important;
+        padding: 10px 14px !important;
+        white-space: pre-wrap !important;
+      }
+      table { font-size: 10pt !important; }
+      .prob-code pre { font-size: 9.5pt !important; padding: 8px 10px !important; }
+      .io-box { font-size: 9.5pt !important; }
+      .ph .sub { font-size: 12pt !important; }
+      .ph .pn { font-size: 10.5pt !important; }
+      .box .bh { font-size: 12pt !important; }
+      .box .bc { font-size: 12pt !important; }
+      h1 { font-size: 24pt !important; }
+      h2 { font-size: 18pt !important; }
+      h3 { font-size: 14pt !important; }
+      .small { font-size: 10pt !important; }
+      .aha-t { font-size: 11pt !important; }
+      .prob-head { font-size: 10.5pt !important; }
+      .prob-info { font-size: 10.5pt !important; }
+      .diff-e, .diff-m, .diff-h { font-size: 8.5pt !important; }
+      .prob-body {
+        grid-template-columns: 1fr 2fr !important;
+      }
+      .hard-page .prob-body {
+        grid-template-columns: 1fr 2.2fr !important;
+      }
+      .hard-page .prob-code pre {
+        font-size: 10.5pt !important;
+        padding: 12px 16px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="main-content">
+
+<!-- ============================================================ -->
+<!-- PAGE 1: MASTER MAP & DECISION TREE                           -->
+<!-- ============================================================ -->
+<div class="page">
+  <div style="text-align:center; margin: 16px 0 24px 0;">
+    <h1 style="font-size: 28pt;">GRAPHS</h1>
+    <p style="font-size: 16pt; color: #475569; font-weight: 600; margin-top: 4px;">FAANG Interview Handbook</p>
+    <p style="font-size: 12pt; color: #475569;">Java — Master Pattern Recognition</p>
+    <div style="border-top: 2px solid #cbd5e1; width: 50%; margin: 16px auto;"></div>
+    <p style="font-size: 10.5pt; color: #64748b;">Understand → Derive → Template → Problem → Pattern</p>
+  </div>
+
+  <div class="box pur">
+    <div class="bh">📌 GRAPH MASTER MAP</div>
+    <div class="bc" style="font-size:10.5pt; line-height:1.6;">
+      <pre style="background:none; border:none; padding:0; font-size:9.5pt; white-space:pre-wrap;">
+GRAPH
+  │
+  ├── INPUT → CONVERSION (Page 3)
+  │   ├── Edge List → Adj List (DFS/BFS)
+  │   ├── Prerequisites → Indegree (Kahn)
+  │   ├── Weighted → Weighted Adj (Dijkstra)
+  │   └── Grid → DIRS (Grid DFS/BFS)
+  │
+  ├── TRAVERSAL
+  │   ├── DFS (Pages 4-5)
+  │   └── BFS (Pages 6-8)
+  │
+  ├── PATTERNS
+  │   ├── Connected Components (Page 11)
+  │   ├── Grid (Pages 9-10)
+  │   ├── Multi‑source BFS (Page 8)
+  │   ├── Cycle Detection (Page 12)
+  │   ├── DSU (Pages 13-14)
+  │   └── Topological Sort (Pages 15-16)
+  │
+  ├── SHORTEST PATH
+  │   ├── Unweighted → BFS
+  │   ├── 0/1 → 0-1 BFS (Page 20)
+  │   ├── Weighted → Dijkstra (Pages 18-19)
+  │   ├── Negative → Bellman‑Ford (Page 20)
+  │   └── All‑pairs → Floyd‑Warshall (Page 20)
+  │
+  └── MST
+      ├── Kruskal (Page 22)
+      └── Prim (Page 22)</pre>
+      <div class="aha">
+        <div class="aha-t">💡 RECOGNITION RULE</div>
+        <p style="font-size:10.5pt;"><strong>“Is the graph weighted? Unweighted? Directed? Grid? Dependency?”</strong><br>Answer these and the algorithm emerges.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="box" style="flex:1;">
+    <div class="bh">🎯 DECISION TREE – “Which Algorithm?”</div>
+    <div class="bc">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; font-size:10.5pt;">
+        <div><strong>❓ What is the question?</strong></div>
+        <div><strong>→ Algorithm</strong></div>
+        <div>“Explore all connected”</div>
+        <div>→ DFS / BFS</div>
+        <div>“Shortest path in unweighted”</div>
+        <div>→ BFS</div>
+        <div>“Spread / rotting / time”</div>
+        <div>→ Multi‑source BFS</div>
+        <div>“Dependency / order”</div>
+        <div>→ Topological Sort</div>
+        <div>“Cycle in undirected”</div>
+        <div>→ DSU / DFS-parent</div>
+        <div>“Dynamic connectivity”</div>
+        <div>→ DSU</div>
+        <div>“Weighted shortest”</div>
+        <div>→ Dijkstra</div>
+        <div>“Minimum spanning tree”</div>
+        <div>→ Kruskal / Prim</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: GRAPH BASICS -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">1. Foundation — What is a Graph?</div></div>
+    <div class="pn">PAGE 2/34</div>
+  </div>
+  <div class="g2">
+    <div class="box pur">
+      <div class="bh">💡 WHAT IS A GRAPH?</div>
+      <div class="bc">
+        <p><strong>Graph = Nodes (Vertices) + Edges (Connections).</strong></p>
+        <p>Models relationships: social networks, roads, dependencies, grids.</p>
+        <div style="background:#f4f7fa; border-radius:4px; padding:8px; margin:6px 0; font-size:10.5pt;">
+          <strong>Real-world:</strong> You + Friends = Nodes. Friendship = Edge.
+        </div>
+        <div class="aha" style="margin-top:6px;">
+          <div class="aha-t">⚠️ THE VISITED LAW</div>
+          <p>Graphs may have cycles. Always track <code>visited</code> to avoid infinite loops.</p>
+        </div>
+      </div>
+    </div>
+    <div class="box sky">
+      <div class="bh">📌 GRAPH TYPES</div>
+      <div class="bc">
+        <table>
+          <tr><th>Type</th><th>Definition</th></tr>
+          <tr><td>Undirected</td><td>Edges are 2‑way</td></tr>
+          <tr><td>Directed</td><td>Edges are 1‑way</td></tr>
+          <tr><td>Weighted</td><td>Edges have a cost</td></tr>
+          <tr><td>Unweighted</td><td>All edges cost 1</td></tr>
+          <tr><td>Connected</td><td>All nodes reachable</td></tr>
+          <tr><td>Disconnected</td><td>Multiple components</td></tr>
+          <tr><td>DAG</td><td>Directed + no cycles</td></tr>
+          <tr><td>Grid</td><td>2D lattice</td></tr>
+        </table>
+        <div style="margin-top:8px; font-size:10pt;"><strong>🎨 Visual:</strong></div>
+        <pre style="font-size:8.5pt; background:#f1f5f9; padding:6px;">
+Undirected:   A ─── B
+Directed:     A ───> B
+Weighted:     A ─5── B
+Cyclic:       A → B → C → A
+DAG:          A → B → C
+        </pre>
+      </div>
+    </div>
+  </div>
+  <div class="box grn" style="margin-bottom:12px;">
+    <div class="bh">📚 COMPLEXITIES</div>
+    <div class="bc">
+      <table>
+        <tr><th>Algorithm</th><th>Time</th><th>Space</th><th>Why?</th></tr>
+        <tr><td>DFS / BFS</td><td>O(V+E)</td><td>O(V)</td><td>Each node/edge visited once</td></tr>
+        <tr><td>Dijkstra</td><td>O((V+E)logV)</td><td>O(V+E)</td><td>Heap operations per edge</td></tr>
+        <tr><td>DSU</td><td>O(α(N))</td><td>O(N)</td><td>Inverse Ackermann ≈ constant</td></tr>
+        <tr><td>Kruskal</td><td>O(E log E)</td><td>O(V+E)</td><td>Sorting edges dominates</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="box">
+    <div class="bh">🧠 WHAT STAYS THE SAME?</div>
+    <div class="bc">
+      <p>Every graph problem builds on:</p>
+      <ul style="padding-left:20px; font-size:10.5pt;">
+        <li><strong>Nodes + Edges</strong> – the atomic structure</li>
+        <li><strong>Traversal</strong> – DFS or BFS</li>
+        <li><strong>Visited</strong> – avoid infinite loops</li>
+        <li><strong>Conversion</strong> – edge list → adjacency list</li>
+      </ul>
+      <div class="aha" style="margin-top:6px;">
+        <div class="aha-t">💡 AHA</div>
+        <p><strong>Learn the 3 core templates (DFS, BFS, DSU) and the rest are variations.</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3: CONVERSION HUB -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">2. Conversion — Input → Algorithm Ready</div></div>
+    <div class="pn">PAGE 3/34</div>
+  </div>
+  <div class="g2" style="gap:12px;">
+    <div class="box" style="border-color:#059669;">
+      <div class="bh" style="background:#059669;">1️⃣ Edge List (Undirected)</div>
+      <div class="bc">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:9.5pt;">
+          <div>
+            <strong>INPUT</strong>
+            <pre style="font-size:8.5pt;">[[0,1],[0,2],[1,3]]</pre>
+            <strong>VISUAL</strong>
+            <pre style="font-size:8pt;">0 ─ 1
+│   │
+2   3</pre>
+            <strong>RESULT (Adj List)</strong>
+            <pre style="font-size:8pt;">0 → [1,2]
+1 → [0,3]
+2 → [0]
+3 → [1]</pre>
+          </div>
+          <div>
+            <strong>CONVERT LOGIC</strong>
+            <pre style="font-size:8pt;">List&lt;Integer&gt;[] adj = new ArrayList[n];
+for (int i=0; i&lt;n; i++) adj[i]=new ArrayList&lt;&gt;();
+
+for (int[] e : edges) {
+    int u = e[0], v = e[1];
+    adj[u].add(v);
+    adj[v].add(u); // UNDIRECTED
+}</pre>
+            <strong style="color:#059669;">✅ Ready for:</strong> DFS, BFS, Components, DSU
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="box" style="border-color:#0284c7;">
+      <div class="bh" style="background:#0284c7;">2️⃣ Prerequisites (Directed)</div>
+      <div class="bc">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:9.5pt;">
+          <div>
+            <strong>INPUT</strong>
+            <pre style="font-size:8.5pt;">[[1,0],[2,1],[3,2]]</pre>
+            <strong>VISUAL</strong>
+            <pre style="font-size:8pt;">0 → 1 → 2 → 3</pre>
+            <strong>RESULT (Adj + Indegree)</strong>
+            <pre style="font-size:8pt;">adj[0]→[1]
+indegree[1]=1</pre>
+          </div>
+          <div>
+            <strong>CONVERT LOGIC</strong>
+            <pre style="font-size:8pt;">List&lt;Integer&gt;[] adj = new ArrayList[n];
+int[] indegree = new int[n];
+for (int[] p : prereqs) {
+    int course = p[0], prereq = p[1];
+    adj[prereq].add(course);
+    indegree[course]++;
+}</pre>
+            <strong style="color:#0284c7;">✅ Ready for:</strong> Topological Sort (Kahn)
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="box" style="border-color:#d97706;">
+      <div class="bh" style="background:#d97706;">3️⃣ Weighted Edge List</div>
+      <div class="bc">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:9.5pt;">
+          <div>
+            <strong>INPUT</strong>
+            <pre style="font-size:8.5pt;">[[0,1,5],[1,2,3]]</pre>
+            <strong>VISUAL</strong>
+            <pre style="font-size:8pt;">0 ─5─ 1 ─3─ 2</pre>
+            <strong>RESULT (Weighted Adj)</strong>
+            <pre style="font-size:8pt;">0 → [(1,5)]
+1 → [(0,5),(2,3)]
+2 → [(1,3)]</pre>
+          </div>
+          <div>
+            <strong>CONVERT LOGIC</strong>
+            <pre style="font-size:8pt;">List&lt;int[]&gt;[] adj = new ArrayList[n];
+for (int[] e : edges) {
+    int u=e[0], v=e[1], w=e[2];
+    adj[u].add(new int[]{v, w});
+    adj[v].add(new int[]{u, w});
+}</pre>
+            <strong style="color:#d97706;">✅ Ready for:</strong> Dijkstra, MST
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="box" style="border-color:#ea580c;">
+      <div class="bh" style="background:#ea580c;">4️⃣ Grid</div>
+      <div class="bc">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:9.5pt;">
+          <div>
+            <strong>INPUT</strong>
+            <pre style="font-size:8.5pt;">[[1,1,0],[0,1,0],[1,0,1]]</pre>
+            <strong>VISUAL</strong>
+            <pre style="font-size:8pt;">Cells are Nodes</pre>
+            <strong>RESULT (Implicit)</strong>
+            <pre style="font-size:8pt;">DIRS = {right,left,down,up}</pre>
+          </div>
+          <div>
+            <strong>CONVERT LOGIC</strong>
+            <pre style="font-size:8pt;">int[][] DIRS = {
+    {0,1}, {0,-1}, {1,0}, {-1,0}
+};
+// Neighbors are implicit.
+// No adjacency list needed.</pre>
+            <strong style="color:#ea580c;">✅ Ready for:</strong> Grid DFS / BFS
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 4: DFS CONCEPT & GENERIC TEMPLATE -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">3. DFS – Concept &amp; Generic Template</div></div>
+    <div class="pn">PAGE 4/34</div>
+  </div>
+  <div class="g2">
+    <div class="box">
+      <div class="bh">🧠 MENTAL MODEL</div>
+      <div class="bc">
+        <pre style="font-size:9.5pt;">STOP
+  ↓
+MARK
+  ↓
+PROCESS
+  ↓
+EXPLORE
+  ↓
+DFS(neighbor)</pre>
+        <p><strong>Visual:</strong></p>
+        <pre style="font-size:8.5pt;">    0
+   / \
+  1   2
+ /
+3
+
+DFS: 0 → 1 → 3 → back → 2</pre>
+        <div class="aha" style="margin-top:6px;">
+          <div class="aha-t">💡 AHA</div>
+          <p>DFS consumes an <strong>entire connected component</strong> in one go.</p>
+        </div>
+      </div>
+    </div>
+    <div class="box">
+      <div class="bh">☕ FULL JAVA TEMPLATE</div>
+      <div class="bc">
+        <pre style="font-size:9.5pt;">void dfs(int u, List&lt;Integer&gt;[] adj, boolean[] vis) {
+    if (vis[u]) return;
+    vis[u] = true;
+    for (int v : adj[u]) {
+        if (!vis[v]) dfs(v, adj, vis);
+    }
+}</pre>
+        <div style="margin-top:6px; font-size:10pt;">
+          <strong>Time:</strong> O(V+E) &nbsp;|&nbsp; <strong>Space:</strong> O(V)
+        </div>
+        <div style="margin-top:6px; font-size:10pt;">
+          <strong>Iterative DFS:</strong>
+          <pre style="font-size:8.5pt;">Stack&lt;Integer&gt; st = new Stack&lt;&gt;();
+st.push(src);
+while (!st.isEmpty()) {
+    int u = st.pop();
+    if (vis[u]) continue;
+    vis[u] = true;
+    for (int v : adj[u]) if (!vis[v]) st.push(v);
+}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="box red">
+    <div class="bh">🚨 COMMON MISTAKES</div>
+    <div class="bc">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; font-size:10pt;">
+        <div>❌ Forgetting visited</div><div>✅ Always mark at start</div>
+        <div>❌ Marking too late</div><div>✅ Mark BEFORE processing</div>
+        <div>❌ Infinite recursion</div><div>✅ Check visited first</div>
+      </div>
+    </div>
+  </div>
+  <div class="aha" style="margin-top:6px;">
+    <div class="aha-t">🧠 MEMORY BITE</div>
+    <p><strong>DFS = STOP → MARK → PROCESS → EXPLORE</strong></p>
+  </div>
+</div>
+
+<!-- PAGE 5: DFS ADAPTATIONS & PROBLEMS -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">3. DFS – Adaptations &amp; Problems</div></div>
+    <div class="pn">PAGE 5/34</div>
+  </div>
+  <div class="box">
+    <div class="bh">🔧 DFS ADAPTATIONS TO INPUTS (Full Templates)</div>
+    <div class="bc">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:9.5pt;">
+        <div style="border:1px solid #cbd5e1; border-radius:4px; padding:8px;">
+          <strong style="color:#059669;">1. Adjacency List</strong>
+          <pre style="font-size:8.5pt;">void dfs(int u, List&lt;Integer&gt;[] adj, boolean[] vis) {
+    if (vis[u]) return;
+    vis[u] = true;
+    for (int v : adj[u]) if (!vis[v]) dfs(v, adj, vis);
+}</pre>
+        </div>
+        <div style="border:1px solid #cbd5e1; border-radius:4px; padding:8px;">
+          <strong style="color:#0284c7;">2. Grid</strong>
+          <pre style="font-size:8.5pt;">void dfs(int r, int c, int[][] grid, boolean[][] vis) {
+    if (r<0||r>=R||c<0||c>=C||vis[r][c]||grid[r][c]==0) return;
+    vis[r][c] = true;
+    for (int[] d : DIRS) dfs(r+d[0], c+d[1], grid, vis);
+}</pre>
+        </div>
+        <div style="border:1px solid #cbd5e1; border-radius:4px; padding:8px;">
+          <strong style="color:#d97706;">3. Matrix</strong>
+          <pre style="font-size:8.5pt;">void dfs(int u, int[][] matrix, boolean[] vis) {
+    if (vis[u]) return;
+    vis[u] = true;
+    for (int v=0; v&lt;matrix.length; v++)
+        if (matrix[u][v]==1 && !vis[v]) dfs(v, matrix, vis);
+}</pre>
+        </div>
+        <div style="border:1px solid #cbd5e1; border-radius:4px; padding:8px;">
+          <strong style="color:#ea580c;">4. Weighted Adj</strong>
+          <pre style="font-size:8.5pt;">void dfs(int u, List&lt;int[]&gt;[] adj, boolean[] vis) {
+    if (vis[u]) return;
+    vis[u] = true;
+    for (int[] e : adj[u]) { int v = e[0]; if (!vis[v]) dfs(v, adj, vis); }
+}</pre>
+        </div>
+      </div>
+      <div class="aha" style="margin-top:6px;">
+        <div class="aha-t">💡 AHA</div>
+        <p><strong>Only the neighbor retrieval changes. The logic is identical.</strong></p>
+      </div>
+    </div>
+  </div>
+  <!-- LC 1971 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 1971 · Find if Path Exists</span><span class="diff-e">EASY</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> n=3, edges=[[0,1],[1,2]], src=0, dest=2</div>
+        <div class="io-box"><strong>Out:</strong> true</div>
+        <div><strong>Pattern:</strong> DFS Reachability</div>
+      </div>
+      <div class="prob-code">
+        <pre>public boolean validPath(int n, int[][] edges, int src, int dest) {
+    List&lt;Integer&gt;[] adj = new ArrayList[n];
+    for (int i=0; i&lt;n; i++) adj[i]=new ArrayList&lt;&gt;();
+    for (int[] e : edges) { adj[e[0]].add(e[1]); adj[e[1]].add(e[0]); }
+    boolean[] vis = new boolean[n];
+    return dfs(src, dest, adj, vis);
+}
+boolean dfs(int u, int dest, List&lt;Integer&gt;[] adj, boolean[] vis) {
+    if (u == dest) return true;
+    vis[u]=true;
+    for (int v : adj[u]) if (!vis[v] && dfs(v, dest, adj, vis)) return true;
+    return false;
+}</pre>
+      </div>
+    </div>
+  </div>
+  <!-- LC 200 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 200 · Number of Islands</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> grid=[["1","1","0"],["0","1","0"],["1","0","1"]]</div>
+        <div class="io-box"><strong>Out:</strong> 3</div>
+        <div><strong>Pattern:</strong> Grid DFS</div>
+      </div>
+      <div class="prob-code">
+        <pre>int numIslands(char[][] grid) {
+    int count=0, R=grid.length, C=grid[0].length;
+    for(int r=0; r&lt;R; r++) for(int c=0; c&lt;C; c++)
+        if(grid[r][c]=='1'){ dfs(grid,r,c); count++; }
+    return count;
+}
+void dfs(char[][] g, int r, int c) {
+    if(r&lt;0||r&gt;=g.length||c&lt;0||c&gt;=g[0].length||g[r][c]=='0') return;
+    g[r][c]='0';
+    int[][] DIRS = {{0,1},{0,-1},{1,0},{-1,0}};
+    for(int[] d : DIRS) dfs(g, r+d[0], c+d[1]);
+}</pre>
+      </div>
+    </div>
+  </div>
+  <!-- LC 695 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 695 · Max Area of Island</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> grid=[[0,1,1],[0,1,0],[0,0,1]]</div>
+        <div class="io-box"><strong>Out:</strong> 3</div>
+        <div><strong>Pattern:</strong> Grid DFS (Return)</div>
+      </div>
+      <div class="prob-code">
+        <pre>int maxAreaOfIsland(int[][] grid) {
+    int max=0, R=grid.length, C=grid[0].length;
+    for(int r=0; r&lt;R; r++) for(int c=0; c&lt;C; c++)
+        if(grid[r][c]==1) max=Math.max(max, dfsArea(grid,r,c));
+    return max;
+}
+int dfsArea(int[][] g, int r, int c) {
+    if(r&lt;0||r&gt;=g.length||c&lt;0||c&gt;=g[0].length||g[r][c]==0) return 0;
+    g[r][c]=0; int area=1;
+    int[][] DIRS = {{0,1},{0,-1},{1,0},{-1,0}};
+    for(int[] d : DIRS) area += dfsArea(g, r+d[0], c+d[1]);
+    return area;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 6: BFS CONCEPT & GENERIC TEMPLATE -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">4. BFS – Concept &amp; Generic Template</div></div>
+    <div class="pn">PAGE 6/34</div>
+  </div>
+  <div class="g2">
+    <div class="box">
+      <div class="bh">🧠 MENTAL MODEL</div>
+      <div class="bc">
+        <pre style="font-size:9.5pt;">SOURCE
+  ↓
+QUEUE
+  ↓
+POP
+  ↓
+NEIGHBORS
+  ↓
+MARK + ENQUEUE</pre>
+        <p><strong>Visual:</strong></p>
+        <pre style="font-size:8.5pt;">    0
+  / | \
+  1 2 3
+ / \
+4   5
+
+Level 0: 0
+Level 1: 1 2 3
+Level 2: 4 5</pre>
+        <div class="aha" style="margin-top:6px;">
+          <div class="aha-t">💡 AHA</div>
+          <p>BFS guarantees <strong>shortest path</strong> in unweighted graphs.</p>
+        </div>
+      </div>
+    </div>
+    <div class="box">
+      <div class="bh">☕ FULL JAVA TEMPLATE</div>
+      <div class="bc">
+        <pre style="font-size:9.5pt;">void bfs(int src, List&lt;Integer&gt;[] adj, boolean[] vis) {
+    Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    q.offer(src);
+    vis[src] = true;
+    while (!q.isEmpty()) {
+        int u = q.poll();
+        for (int v : adj[u]) {
+            if (!vis[v]) {
+                vis[v] = true;
+                q.offer(v);
+            }
+        }
+    }
+}</pre>
+        <div style="margin-top:6px; font-size:10pt;">
+          <strong>Time:</strong> O(V+E) &nbsp;|&nbsp; <strong>Space:</strong> O(V)
+        </div>
+        <div class="aha" style="margin-top:6px;">
+          <div class="aha-t">💡 WHY MARK ON ENQUEUE?</div>
+          <p>Prevents duplicate enqueue and infinite loops.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="box red">
+    <div class="bh">🚨 COMMON MISTAKES</div>
+    <div class="bc">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; font-size:10pt;">
+        <div>❌ Mark visited after dequeue</div><div>✅ Mark BEFORE enqueue</div>
+        <div>❌ Duplicate enqueue</div><div>✅ Check visited before offer</div>
+        <div>❌ Forget level size</div><div>✅ int size = q.size()</div>
+      </div>
+    </div>
+  </div>
+  <div class="aha" style="margin-top:6px;">
+    <div class="aha-t">🧠 MEMORY BITE</div>
+    <p><strong>BFS = QUEUE → LEVEL → SHORTEST</strong></p>
+  </div>
+</div>
+
+<!-- PAGE 7: BFS ADAPTATIONS & PROBLEMS -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">4. BFS – Adaptations &amp; Problems</div></div>
+    <div class="pn">PAGE 7/34</div>
+  </div>
+  <div class="box">
+    <div class="bh">🔧 BFS ADAPTATIONS TO INPUTS (Full Templates)</div>
+    <div class="bc">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:9.5pt;">
+        <div style="border:1px solid #cbd5e1; border-radius:4px; padding:8px;">
+          <strong style="color:#059669;">1. Adjacency List</strong>
+          <pre style="font-size:8.5pt;">void bfs(int src, List&lt;Integer&gt;[] adj, boolean[] vis) {
+    Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    q.offer(src); vis[src]=true;
+    while (!q.isEmpty()) {
+        int u = q.poll();
+        for (int v : adj[u]) if (!vis[v]) { vis[v]=true; q.offer(v); }
+    }
+}</pre>
+        </div>
+        <div style="border:1px solid #cbd5e1; border-radius:4px; padding:8px;">
+          <strong style="color:#0284c7;">2. Grid</strong>
+          <pre style="font-size:8.5pt;">void bfs(int sr, int sc, int[][] grid, boolean[][] vis) {
+    Queue&lt;int[]&gt; q = new LinkedList&lt;&gt;();
+    q.offer(new int[]{sr,sc}); vis[sr][sc]=true;
+    while (!q.isEmpty()) {
+        int[] cur = q.poll();
+        for (int[] d : DIRS) {
+            int nr=cur[0]+d[0], nc=cur[1]+d[1];
+            if (valid && !vis[nr][nc] && grid[nr][nc]==1) {
+                vis[nr][nc]=true; q.offer(new int[]{nr,nc});
+            }
+        }
+    }
+}</pre>
+        </div>
+        <div style="border:1px solid #cbd5e1; border-radius:4px; padding:8px;">
+          <strong style="color:#d97706;">3. Multi‑source</strong>
+          <pre style="font-size:8.5pt;">void multiBFS(List&lt;int[]&gt; sources, int[][] grid) {
+    Queue&lt;int[]&gt; q = new LinkedList&lt;&gt;();
+    for (int[] s : sources) { q.offer(s); vis[s[0]][s[1]]=true; }
+    while (!q.isEmpty()) {
+        int[] cur = q.poll();
+        // ... same as grid BFS
+    }
+}</pre>
+        </div>
+        <div style="border:1px solid #cbd5e1; border-radius:4px; padding:8px;">
+          <strong style="color:#ea580c;">4. Weighted (Ignored)</strong>
+          <pre style="font-size:8.5pt;">// BFS works on unweighted.
+// For weighted, use Dijkstra (Page 18).</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- LC 1091 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 1091 · Shortest Path in Binary Matrix</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> grid=[[0,1],[1,0]]</div>
+        <div class="io-box"><strong>Out:</strong> 2</div>
+        <div><strong>Pattern:</strong> Grid BFS (8‑Dir)</div>
+      </div>
+      <div class="prob-code">
+        <pre>public int shortestPathBinaryMatrix(int[][] grid) {
+    int n=grid.length;
+    if(grid[0][0]==1||grid[n-1][n-1]==1) return -1;
+    int[][] dirs={{-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1}};
+    Queue&lt;int[]&gt; q=new LinkedList&lt;&gt;();
+    q.offer(new int[]{0,0,1}); grid[0][0]=1;
+    while(!q.isEmpty()){
+        int[] cur=q.poll(); int r=cur[0], c=cur[1], d=cur[2];
+        if(r==n-1 && c==n-1) return d;
+        for(int[] dir: dirs){
+            int nr=r+dir[0], nc=c+dir[1];
+            if(nr>=0&&nr<n&&nc>=0&&nc<n&&grid[nr][nc]==0){
+                grid[nr][nc]=1; q.offer(new int[]{nr,nc,d+1});
+            }
+        }
+    } return -1;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 8: MULTI-SOURCE BFS & ROTTING ORANGES -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">4. Multi‑source BFS</div></div>
+    <div class="pn">PAGE 8/34</div>
+  </div>
+  <div class="box">
+    <div class="bh">🔥 MULTI‑SOURCE BFS</div>
+    <div class="bc">
+      <p><strong>When?</strong> Multiple sources start simultaneously.</p>
+      <pre style="font-size:9.5pt;">Queue&lt;Node&gt; q = new LinkedList&lt;&gt;();
+for (Node src : sources) { q.offer(src); visited[src]=true; }
+int time = 0;
+while (!q.isEmpty()) {
+    int size = q.size();
+    for (int i=0; i&lt;size; i++) {
+        Node cur = q.poll();
+        for (Node nei : cur.neighbors) {
+            if (!visited[nei]) {
+                visited[nei] = true;
+                q.offer(nei);
+            }
+        }
+    }
+    time++;
+}</pre>
+    </div>
+  </div>
+  <!-- LC 994 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 994 · Rotting Oranges</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> [[2,1,1],[1,1,0],[0,1,1]]</div>
+        <div class="io-box"><strong>Out:</strong> 4</div>
+        <div><strong>Pattern:</strong> Multi‑source BFS</div>
+      </div>
+      <div class="prob-code">
+        <pre>int orangesRotting(int[][] grid) {
+    Queue&lt;int[]&gt; q=new LinkedList&lt;&gt;();
+    int fresh=0, R=grid.length, C=grid[0].length;
+    for(int r=0;r&lt;R;r++) for(int c=0;c&lt;C;c++){
+        if(grid[r][c]==2) q.offer(new int[]{r,c});
+        else if(grid[r][c]==1) fresh++;
+    }
+    int time=0; int[][] DIRS={{0,1},{0,-1},{1,0},{-1,0}};
+    while(!q.isEmpty() && fresh>0){
+        int size=q.size();
+        for(int i=0;i&lt;size;i++){
+            int[] cur=q.poll();
+            for(int[] d: DIRS){
+                int nr=cur[0]+d[0], nc=cur[1]+d[1];
+                if(nr>=0&&nr<R&&nc>=0&&nc<C&&grid[nr][nc]==1){
+                    grid[nr][nc]=2; fresh--; q.offer(new int[]{nr,nc});
+                }
+            }
+        } time++;
+    } return fresh==0 ? time : -1;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 9: GRID = GRAPH -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">5. Grid = Graph</div></div>
+    <div class="pn">PAGE 9/34</div>
+  </div>
+  <div class="g2">
+    <div class="box">
+      <div class="bh">🏁 GRID IS A GRAPH</div>
+      <div class="bc">
+        <p>Each cell = node. Neighbouring cells = edges.</p>
+        <pre style="font-size:9.5pt;">int[][] DIRS = { {0,1}, {0,-1}, {1,0}, {-1,0} };</pre>
+        <div class="aha"><div class="aha-t">💡 MEMORY</div><p><strong>GRID → DIRS → DFS / BFS</strong></p></div>
+      </div>
+    </div>
+    <div class="box sky"><div class="bh">Grid DFS Template</div><div class="bc"><pre style="font-size:9.5pt;">void dfs(int r, int c) {
+    if (out of bounds || invalid) return;
+    mark(r,c);
+    for (int[] d : DIRS) dfs(r+d[0], c+d[1]);
+}</pre></div></div>
+    <div class="box amb" style="grid-column: span 2;"><div class="bh">Grid BFS Template</div><div class="bc"><pre style="font-size:9.5pt;">void bfs(int r, int c) {
+    Queue&lt;int[]&gt; q = new ArrayDeque<>();
+    q.offer(new int[]{r,c}); vis[r][c]=true;
+    while (!q.isEmpty()) {
+        int[] cur=q.poll();
+        for (int[] d : DIRS) {
+            int nr=cur[0]+d[0], nc=cur[1]+d[1];
+            if (valid && !vis[nr][nc]) { mark; q.offer; }
+        }
+    }
+}</pre></div></div>
+  </div>
+</div>
+
+<!-- PAGE 10: GRID PROBLEMS (ISLAND CHAIN) -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">5. Grid Problems – Island Chain</div></div>
+    <div class="pn">PAGE 10/34</div>
+  </div>
+  <div class="box">
+    <div class="bh">🏝️ ISLAND PROBLEM EVOLUTION</div>
+    <div class="bc">
+      <div style="display:grid; grid-template-columns:auto 1fr; gap:4px 12px; font-size:10.5pt;">
+        <span><strong>LC 733</strong></span><span>Flood Fill</span>
+        <span style="border-left:2px solid #d97706; padding-left:8px;">↓</span><span><strong>LC 200</strong> Number of Islands</span>
+        <span style="border-left:2px solid #d97706; padding-left:8px;">↓</span><span><strong>LC 695</strong> Max Area</span>
+        <span style="border-left:2px solid #d97706; padding-left:8px;">↓</span><span><strong>LC 130</strong> Surrounded Regions</span>
+        <span style="border-left:2px solid #d97706; padding-left:8px;">↓</span><span><strong>LC 417</strong> Pacific Atlantic</span>
+      </div>
+    </div>
+  </div>
+  <!-- LC 733 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 733 · Flood Fill</span><span class="diff-e">EASY</span></div>
+    <div class="prob-body">
+      <div class="prob-info"><div class="io-box"><strong>In:</strong> image=[[1,1,1],[1,1,0]], sr=1, sc=1, color=2</div><div class="io-box"><strong>Out:</strong> [[2,2,2],[2,2,0]]</div></div>
+      <div class="prob-code"><pre>public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+    int oc = image[sr][sc];
+    if (oc != color) dfs(image,sr,sc,oc,color);
+    return image;
+}
+void dfs(int[][] img,int r,int c,int oc,int nc) {
+    if(r&lt;0||r&gt;=img.length||c&lt;0||c&gt;=img[0].length||img[r][c]!=oc) return;
+    img[r][c]=nc;
+    int[][] DIRS={{0,1},{0,-1},{1,0},{-1,0}};
+    for(int[] d:DIRS) dfs(img, r+d[0], c+d[1], oc, nc);
+}</pre></div>
+    </div>
+  </div>
+  <!-- LC 130 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 130 · Surrounded Regions</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info"><div class="io-box"><strong>In:</strong> board=[["X","X","X"],["X","O","X"],["X","X","X"]]</div><div class="io-box"><strong>Out:</strong> All X</div></div>
+      <div class="prob-code"><pre>void solve(char[][] board) {
+    int R=board.length, C=board[0].length;
+    int[][] DIRS={{0,1},{0,-1},{1,0},{-1,0}};
+    for(int r=0;r<R;r++){ if(board[r][0]=='O') dfs(board,r,0);
+        if(board[r][C-1]=='O') dfs(board,r,C-1); }
+    for(int c=0;c<C;c++){ if(board[0][c]=='O') dfs(board,0,c);
+        if(board[R-1][c]=='O') dfs(board,R-1,c); }
+    for(int r=0;r<R;r++) for(int c=0;c<C;c++){
+        if(board[r][c]=='O') board[r][c]='X';
+        else if(board[r][c]=='#') board[r][c]='O';
+    }
+}
+void dfs(char[][] b,int r,int c) {
+    if(r<0||r>=b.length||c<0||c>=b[0].length||b[r][c]!='O') return;
+    b[r][c]='#';
+    for(int[] d:DIRS) dfs(b, r+d[0], c+d[1]);
+}</pre></div>
+    </div>
+  </div>
+  <!-- LC 417 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 417 · Pacific Atlantic</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info"><div class="io-box"><strong>In:</strong> heights=[[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]</div><div class="io-box"><strong>Out:</strong> [[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]</div></div>
+      <div class="prob-code"><pre>public List&lt;List&lt;Integer&gt;&gt; pacificAtlantic(int[][] heights) {
+    int R=heights.length, C=heights[0].length;
+    boolean[][] pac=new boolean[R][C], atl=new boolean[R][C];
+    for(int c=0;c<C;c++){ dfs(heights,0,c,pac); dfs(heights,R-1,c,atl); }
+    for(int r=0;r<R;r++){ dfs(heights,r,0,pac); dfs(heights,r,C-1,atl); }
+    List&lt;List&lt;Integer&gt;&gt; res=new ArrayList&lt;&gt;();
+    for(int r=0;r<R;r++) for(int c=0;c<C;c++)
+        if(pac[r][c] && atl[r][c]) res.add(Arrays.asList(r,c));
+    return res;
+}
+void dfs(int[][] h, int r, int c, boolean[][] reach) {
+    reach[r][c]=true;
+    for(int[] d:DIRS) {
+        int nr=r+d[0], nc=c+d[1];
+        if(nr>=0 && nr<h.length && nc>=0 && nc<h[0].length
+            && !reach[nr][nc] && h[nr][nc] >= h[r][c])
+            dfs(h, nr, nc, reach);
+    }
+}</pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 11: CONNECTED COMPONENTS -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">6. Connected Components</div></div>
+    <div class="pn">PAGE 11/34</div>
+  </div>
+  <div class="g2">
+    <div class="box"><div class="bh">🧩 WHAT ARE CONNECTED COMPONENTS?</div><div class="bc"><p>A connected component is a maximal set of nodes where every pair is connected by a path.</p><pre style="font-size:9.5pt;">Graph: 0─1  2  3─4
+              │
+              5
+Components: {0,1}, {2,5}, {3,4} → 3</pre><div class="aha"><div class="aha-t">💡 AHA</div><p>Each DFS call discovers <strong>one</strong> component.</p></div></div></div>
+    <div class="box sky"><div class="bh">🔍 COUNT COMPONENTS (DFS)</div><div class="bc"><pre style="font-size:9.5pt;">int countComponents(int n, List&lt;Integer&gt;[] adj) {
+    boolean[] vis = new boolean[n];
+    int count = 0;
+    for (int i=0; i&lt;n; i++) if (!vis[i]) { dfs(i, adj, vis); count++; }
+    return count;
+}</pre></div></div>
+  </div>
+  <!-- LC 547 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 547 · Number of Provinces</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info"><div class="io-box"><strong>In:</strong> isConnected=[[1,1,0],[1,1,0],[0,0,1]]</div><div class="io-box"><strong>Out:</strong> 2</div></div>
+      <div class="prob-code"><pre>public int findCircleNum(int[][] isConnected) {
+    int n = isConnected.length;
+    boolean[] vis = new boolean[n];
+    int count = 0;
+    for (int i=0; i&lt;n; i++) if (!vis[i]) { dfs(i,isConnected,vis); count++; }
+    return count;
+}
+void dfs(int u, int[][] mat, boolean[] vis) {
+    vis[u]=true;
+    for (int v=0; v&lt;mat.length; v++) if(mat[u][v]==1 && !vis[v]) dfs(v, mat, vis);
+}</pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 12: CYCLE DETECTION -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">7. Cycle Detection</div></div>
+    <div class="pn">PAGE 12/34</div>
+  </div>
+  <div class="g2">
+    <div class="box"><div class="bh">🔄 UNDIRECTED</div><div class="bc"><p><strong>visited neighbor ≠ parent → cycle.</strong></p><pre style="font-size:9pt;">0 ── 1
+│    │
+└── 2
+DFS(0): neighbor 1 → DFS(1) → neighbor 2 → DFS(2) → neighbor 1 (visited, != parent) → CYCLE!</pre></div></div>
+    <div class="box sky"><div class="bh">🔄 DIRECTED</div><div class="bc"><p><strong>3‑state DFS:</strong> 0=unvisited, 1=visiting, 2=done</p><pre style="font-size:9pt;">0 → 1 → 2
+↑       ↓
+└───────┘
+DFS(0): state[0]=1 → DFS(1): state[1]=1 → DFS(2): state[2]=1 → neighbor 0 (state=1) → CYCLE!</pre></div></div>
+  </div>
+  <div class="box"><div class="bh">📊 ALGORITHM COMPARISON</div><div class="bc"><table><tr><th>Graph Type</th><th>Algorithm</th></tr><tr><td>Undirected</td><td>DFS + Parent / DSU</td></tr><tr><td>Directed</td><td>3‑state DFS / Kahn</td></tr></table></div></div>
+</div>
+
+<!-- PAGE 13: DSU -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">8. DSU – Why &amp; Template</div></div>
+    <div class="pn">PAGE 13/34</div>
+  </div>
+  <div class="g2">
+    <div class="box"><div class="bh">🧠 WHY DSU?</div><div class="bc"><p>Keep track of GROUPS. <code>union</code> returns false if cycle.</p><div style="margin-top:6px;"><strong>parent[]</strong> = “boss” <br><strong>rank[]</strong> = “height”</div></div></div>
+    <div class="box"><div class="bh">🔗 DSU TEMPLATE</div><div class="bc"><pre style="font-size:9.5pt;">class DSU {
+    int[] parent, rank;
+    DSU(int n) { parent=new int[n]; rank=new int[n]; for(int i=0;i&lt;n;i++) parent[i]=i; }
+    int find(int x) { if(parent[x]!=x) parent[x]=find(parent[x]); return parent[x]; }
+    boolean union(int a, int b) {
+        int ra=find(a), rb=find(b);
+        if(ra==rb) return false;
+        if(rank[ra]&lt;rank[rb]) parent[ra]=rb;
+        else if(rank[ra]>rank[rb]) parent[rb]=ra;
+        else { parent[rb]=ra; rank[ra]++; }
+        return true;
+    }
+}</pre><p><strong>Complexity:</strong> O(α(N)) ≈ O(1)</p></div></div>
+  </div>
+</div>
+
+<!-- PAGE 14: DSU PROBLEMS -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">8. DSU Problems</div></div>
+    <div class="pn">PAGE 14/34</div>
+  </div>
+  <!-- LC 684 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 684 · Redundant Connection</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info"><div class="io-box"><strong>In:</strong> edges=[[1,2],[1,3],[2,3]]</div><div class="io-box"><strong>Out:</strong> [2,3]</div></div>
+      <div class="prob-code"><pre>int[] findRedundantConnection(int[][] edges) {
+    DSU dsu = new DSU(edges.length + 1);
+    for (int[] e : edges) if (!dsu.union(e[0], e[1])) return e;
+    return new int[0];
+}</pre></div>
+    </div>
+  </div>
+  <!-- LC 1319 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 1319 · Number of Operations</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info"><div class="io-box"><strong>In:</strong> n=4, connections=[[0,1],[0,2],[1,2]]</div><div class="io-box"><strong>Out:</strong> 1</div></div>
+      <div class="prob-code"><pre>public int makeConnected(int n, int[][] connections) {
+    if (connections.length < n-1) return -1;
+    DSU dsu = new DSU(n); int extra=0;
+    for (int[] e : connections) if (!dsu.union(e[0], e[1])) extra++;
+    int comps=0; for (int i=0;i&lt;n;i++) if (dsu.find(i)==i) comps++;
+    return (comps-1 <= extra) ? comps-1 : -1;
+}</pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 15: TOPOLOGICAL SORT CONCEPT -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">9. Topological Sort – Concept</div></div>
+    <div class="pn">PAGE 15/34</div>
+  </div>
+  <div class="box"><div class="bh">🎯 WHAT IS TOPOLOGICAL SORT?</div><div class="bc"><p><strong>Linear ordering of nodes in a DAG</strong> such that for every edge u→v, u comes before v.</p><div class="aha"><div class="aha-t">💡 AHA</div><p><strong>Only exists for DAGs.</strong> Cycle → no valid ordering.</p></div></div></div>
+  <div class="g2">
+    <div class="box"><div class="bh">DFS TOPOLOGICAL</div><div class="bc"><pre style="font-size:9.5pt;">void dfs(u) { vis[u]=true; for(v:adj[u]) if(!vis[v]) dfs(v); order.add(u); }
+// Reverse order</pre></div></div>
+    <div class="box sky"><div class="bh">KAHN'S (BFS)</div><div class="bc"><pre style="font-size:9.5pt;">Queue q; for(i) if(indegree[i]==0) q.offer(i);
+while(!q.isEmpty()) { u=q.poll(); order.add(u); for(v:adj[u]) if(--indegree[v]==0) q.offer(v); }
+if(order.size()<n) → cycle!</pre></div></div>
+  </div>
+</div>
+
+<!-- PAGE 16: TOPO PROBLEMS -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">9. Topological Sort – Problems</div></div>
+    <div class="pn">PAGE 16/34</div>
+  </div>
+  <!-- LC 207 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 207 · Course Schedule I</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info"><div class="io-box"><strong>In:</strong> n=2, prereqs=[[1,0]]</div><div class="io-box"><strong>Out:</strong> true</div></div>
+      <div class="prob-code"><pre>public boolean canFinish(int n, int[][] prereqs) {
+    List&lt;Integer&gt;[] adj=new ArrayList[n]; int[] indegree=new int[n];
+    for(int i=0;i<n;i++) adj[i]=new ArrayList<>();
+    for(int[] p:prereqs){ adj[p[1]].add(p[0]); indegree[p[0]]++; }
+    Queue<Integer> q=new LinkedList<>();
+    for(int i=0;i<n;i++) if(indegree[i]==0) q.offer(i);
+    int processed=0;
+    while(!q.isEmpty()){ int u=q.poll(); processed++; for(int v:adj[u]) if(--indegree[v]==0) q.offer(v); }
+    return processed==n;
+}</pre></div>
+    </div>
+  </div>
+  <!-- LC 210 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 210 · Course Schedule II</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info"><div class="io-box"><strong>In:</strong> n=2, prereqs=[[1,0]]</div><div class="io-box"><strong>Out:</strong> [0,1]</div></div>
+      <div class="prob-code"><pre>public int[] findOrder(int n, int[][] prereqs) {
+    List&lt;Integer&gt;[] adj=new ArrayList[n]; int[] indegree=new int[n];
+    for(int i=0;i<n;i++) adj[i]=new ArrayList<>();
+    for(int[] p:prereqs){ adj[p[1]].add(p[0]); indegree[p[0]]++; }
+    Queue<Integer> q=new LinkedList<>();
+    for(int i=0;i<n;i++) if(indegree[i]==0) q.offer(i);
+    int[] order=new int[n]; int idx=0;
+    while(!q.isEmpty()){ int u=q.poll(); order[idx++]=u; for(int v:adj[u]) if(--indegree[v]==0) q.offer(v); }
+    return idx==n ? order : new int[0];
+}</pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 17: SHORTEST PATH DECISION TREE -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">10. Shortest Path – Decision Tree</div></div>
+    <div class="pn">PAGE 17/34</div>
+  </div>
+  <div class="box">
+    <div class="bh">🗺️ SHORTEST PATH ALGORITHM SELECTION</div>
+    <div class="bc">
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; text-align:center; font-size:10pt;">
+        <div style="border:1px solid #cbd5e1; border-radius:4px; padding:8px; background:#f0fdf4;"><strong>Unweighted</strong><div>→ BFS</div><div style="font-size:9pt;">O(V+E)</div></div>
+        <div style="border:1px solid #cbd5e1; border-radius:4px; padding:8px; background:#fefce8;"><strong>0 / 1 weights</strong><div>→ 0-1 BFS</div><div style="font-size:9pt;">O(V+E)</div></div>
+        <div style="border:1px solid #cbd5e1; border-radius:4px; padding:8px; background:#eff6ff;"><strong>Weighted</strong><div>→ Dijkstra</div><div style="font-size:9pt;">O((V+E)logV)</div></div>
+        <div style="border:1px solid #cbd5e1; border-radius:4px; padding:8px; background:#fff1f2;"><strong>Negative edges</strong><div>→ Bellman‑Ford</div><div style="font-size:9pt;">O(VE)</div></div>
+        <div style="border:1px solid #cbd5e1; border-radius:4px; padding:8px; background:#faf5ff;"><strong>All‑pairs</strong><div>→ Floyd‑Warshall</div><div style="font-size:9pt;">O(V³)</div></div>
+        <div style="border:1px solid #cbd5e1; border-radius:4px; padding:8px; background:#f8fafc;"><strong>Two ends</strong><div>→ Bidirectional BFS</div><div style="font-size:9pt;">O(V^d/2)</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 18: DIJKSTRA -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">10. Dijkstra – Concept &amp; Template</div></div>
+    <div class="pn">PAGE 18/34</div>
+  </div>
+  <div class="g2">
+    <div class="box"><div class="bh">⚡ WHY DIJKSTRA?</div><div class="bc"><p>BFS fails on weighted graphs. Dijkstra uses a <strong>PriorityQueue</strong>.</p><p><strong>Requires:</strong> Non‑negative weights.</p></div></div>
+    <div class="box"><div class="bh">☕ DIJKSTRA TEMPLATE</div><div class="bc"><pre style="font-size:9.5pt;">int[] dijkstra(int src, List&lt;int[]&gt;[] adj) {
+    int n=adj.length; int[] dist=new int[n]; Arrays.fill(dist, Integer.MAX_VALUE/2);
+    dist[src]=0; PriorityQueue<int[]> pq=new PriorityQueue<>((a,b)->a[0]-b[0]);
+    pq.offer(new int[]{0,src});
+    while(!pq.isEmpty()){
+        int[] cur=pq.poll(); int d=cur[0], u=cur[1];
+        if(d>dist[u]) continue;
+        for(int[] e: adj[u]) {
+            int v=e[0], w=e[1];
+            if(dist[u]+w < dist[v]) { dist[v]=dist[u]+w; pq.offer(new int[]{dist[v],v}); }
+        }
+    } return dist;
+}</pre></div></div>
+  </div>
+</div>
+
+<!-- PAGE 19: DIJKSTRA PROBLEMS -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">10. Dijkstra – Problems</div></div>
+    <div class="pn">PAGE 19/34</div>
+  </div>
+  <!-- LC 743 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 743 · Network Delay Time</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info"><div class="io-box"><strong>In:</strong> times=[[2,1,1],[2,3,1],[3,4,1]], n=4, k=2</div><div class="io-box"><strong>Out:</strong> 2</div></div>
+      <div class="prob-code"><pre>public int networkDelayTime(int[][] times, int n, int k) {
+    List<int[]>[] adj = new ArrayList[n+1];
+    for(int i=1;i<=n;i++) adj[i]=new ArrayList<>();
+    for(int[] t: times) adj[t[0]].add(new int[]{t[1],t[2]});
+    int[] dist = dijkstra(k, adj);
+    int max=0; for(int i=1;i<=n;i++) { if(dist[i]==Integer.MAX_VALUE/2) return -1; max=Math.max(max, dist[i]); }
+    return max;
+}</pre></div>
+    </div>
+  </div>
+  <!-- LC 1631 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 1631 · Path With Minimum Effort</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info"><div class="io-box"><strong>In:</strong> heights=[[1,2,2],[3,8,2],[5,3,5]]</div><div class="io-box"><strong>Out:</strong> 2</div></div>
+      <div class="prob-code"><pre>public int minimumEffortPath(int[][] heights) {
+    int R=heights.length, C=heights[0].length;
+    int[][] dist=new int[R][C]; for(int[] row:dist) Arrays.fill(row, Integer.MAX_VALUE);
+    dist[0][0]=0; PriorityQueue<int[]> pq=new PriorityQueue<>((a,b)->a[0]-b[0]);
+    pq.offer(new int[]{0,0,0}); int[][] dirs={{0,1},{0,-1},{1,0},{-1,0}};
+    while(!pq.isEmpty()){
+        int[] cur=pq.poll(); int d=cur[0], r=cur[1], c=cur[2];
+        if(d>dist[r][c]) continue;
+        if(r==R-1 && c==C-1) return d;
+        for(int[] dir: dirs){
+            int nr=r+dir[0], nc=c+dir[1];
+            if(nr>=0&&nr<R&&nc>=0&&nc<C){
+                int nd = Math.max(d, Math.abs(heights[r][c]-heights[nr][nc]));
+                if(nd < dist[nr][nc]) { dist[nr][nc]=nd; pq.offer(new int[]{nd,nr,nc}); }
+            }
+        }
+    } return 0;
+}</pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 20: 0-1 BFS & BELLMAN-FORD -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">10. 0-1 BFS &amp; Bellman‑Ford</div></div>
+    <div class="pn">PAGE 20/34</div>
+  </div>
+  <div class="g2">
+    <div class="box"><div class="bh">0-1 BFS</div><div class="bc"><p><strong>When:</strong> Edge weights are 0 or 1.</p><pre style="font-size:9.5pt;">if (w == 0) dq.offerFirst(v); else dq.offerLast(v);</pre></div></div>
+    <div class="box sky"><div class="bh">Bellman‑Ford</div><div class="bc"><p><strong>When:</strong> Negative edges.</p><pre style="font-size:9.5pt;">for (i=0; i<n-1; i++) for(edge: edges) dist[v]=min(dist[v], dist[u]+w);
+// Check for negative cycles</pre></div></div>
+  </div>
+  <!-- LC 1368 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 1368 · Minimum Cost</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info"><div class="io-box"><strong>In:</strong> grid=[[1,1,1,1],[2,2,2,2],[1,1,1,1],[2,2,2,2]]</div><div class="io-box"><strong>Out:</strong> 3</div></div>
+      <div class="prob-code"><pre>public int minCost(int[][] grid) {
+    int R=grid.length, C=grid[0].length;
+    int[][] dirs={{0,1},{0,-1},{1,0},{-1,0}};
+    int[][] cost=new int[R][C]; for(int[] row:cost) Arrays.fill(row, Integer.MAX_VALUE);
+    cost[0][0]=0; Deque<int[]> dq=new ArrayDeque<>(); dq.offer(new int[]{0,0});
+    while(!dq.isEmpty()){
+        int[] cur=dq.poll(); int r=cur[0], c=cur[1];
+        for(int i=0;i<4;i++){
+            int nr=r+dirs[i][0], nc=c+dirs[i][1];
+            if(nr>=0&&nr<R&&nc>=0&&nc<C){
+                int w = (grid[r][c] == i+1) ? 0 : 1;
+                if(cost[r][c] + w < cost[nr][nc]){
+                    cost[nr][nc] = cost[r][c] + w;
+                    if(w==0) dq.offerFirst(new int[]{nr,nc});
+                    else dq.offerLast(new int[]{nr,nc});
+                }
+            }
+        }
+    } return cost[R-1][C-1];
+}</pre></div>
+    </div>
+  </div>
+  <!-- LC 787 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 787 · Cheapest Flights</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info"><div class="io-box"><strong>In:</strong> n=3, flights=[[0,1,100],[1,2,100],[0,2,500]], src=0, dst=2, k=1</div><div class="io-box"><strong>Out:</strong> 200</div></div>
+      <div class="prob-code"><pre>int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+    int INF=Integer.MAX_VALUE/2; int[] dist=new int[n]; Arrays.fill(dist, INF); dist[src]=0;
+    for(int i=0;i<=k;i++){
+        int[] prev=dist.clone();
+        for(int[] f: flights){ int u=f[0], v=f[1], w=f[2]; if(prev[u]+w < dist[v]) dist[v]=prev[u]+w; }
+    } return dist[dst]==INF ? -1 : dist[dst];
+}</pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 21: BIPARTITE -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">11. Bipartite Graph</div></div>
+    <div class="pn">PAGE 21/34</div>
+  </div>
+  <div class="g2">
+    <div class="box"><div class="bh">🎨 TWO-COLORING</div><div class="bc"><p>Color nodes RED/BLUE such that adjacent nodes have different colors.</p><div class="aha"><div class="aha-t">💡 AHA</div>If neighbor has same color → NOT bipartite.</div></div></div>
+    <div class="box sky"><div class="bh">🔍 TEMPLATE (BFS)</div><div class="bc"><pre style="font-size:9.5pt;">color[src]=0; Queue q;
+while(!q.isEmpty()){ u=q.poll(); for(v:adj[u]) {
+    if(color[v]==-1){ color[v]=1-color[u]; q.offer(v); }
+    else if(color[v]==color[u]) return false;
+}} return true;</pre></div></div>
+  </div>
+  <!-- LC 785 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 785 · Is Graph Bipartite?</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info"><div class="io-box"><strong>In:</strong> graph=[[1,3],[0,2],[1,3],[0,2]]</div><div class="io-box"><strong>Out:</strong> true</div></div>
+      <div class="prob-code"><pre>public boolean isBipartite(int[][] graph) {
+    int n=graph.length; int[] color=new int[n]; Arrays.fill(color, -1);
+    for(int i=0;i<n;i++) if(color[i]==-1) {
+        Queue<Integer> q=new LinkedList<>(); q.offer(i); color[i]=0;
+        while(!q.isEmpty()){ int u=q.poll(); for(int v:graph[u]) {
+            if(color[v]==-1){ color[v]=1-color[u]; q.offer(v); }
+            else if(color[v]==color[u]) return false;
+        }}
+    } return true;
+}</pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 22: MST – KRUSKAL & PRIM -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">12. MST – Kruskal &amp; Prim</div></div>
+    <div class="pn">PAGE 22/34</div>
+  </div>
+  <div class="box"><div class="bh">🌲 MST – MINIMUM SPANNING TREE</div><div class="bc"><p><strong>Goal:</strong> Connect all nodes with minimum total edge cost.</p><div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;"><div style="border:1px solid #cbd5e1; border-radius:4px; padding:8px;"><strong>Kruskal</strong><div>Sort edges → DSU</div><div>O(E log E)</div></div><div style="border:1px solid #cbd5e1; border-radius:4px; padding:8px;"><strong>Prim</strong><div>Start node → PQ</div><div>O(E log V)</div></div></div></div></div>
+  <div class="g2">
+    <div class="box"><div class="bh">🔗 KRUSKAL TEMPLATE</div><div class="bc"><pre style="font-size:9.5pt;">int kruskal(int[][] edges, int n) {
+    Arrays.sort(edges, (a,b)->a[0]-b[0]);
+    DSU dsu=new DSU(n); int cost=0, count=0;
+    for(int[] e:edges){ if(dsu.union(e[1],e[2])) { cost+=e[0]; if(++count==n-1) break; } }
+    return cost;
+}</pre></div></div>
+    <div class="box sky"><div class="bh">🌲 PRIM TEMPLATE</div><div class="bc"><pre style="font-size:9.5pt;">int prim(List<int[]>[] adj) {
+    int n=adj.length; boolean[] inMST=new boolean[n];
+    PriorityQueue<int[]> pq=new PriorityQueue<>((a,b)->a[0]-b[0]);
+    pq.offer(new int[]{0,0}); int cost=0, count=0;
+    while(!pq.isEmpty() && count<n){
+        int[] cur=pq.poll(); int w=cur[0], u=cur[1];
+        if(inMST[u]) continue; inMST[u]=true; cost+=w; count++;
+        for(int[] e:adj[u]) if(!inMST[e[0]]) pq.offer(new int[]{e[1], e[0]});
+    } return cost;
+}</pre></div></div>
+  </div>
+  <!-- LC 1584 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 1584 · Min Cost to Connect Points</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info"><div class="io-box"><strong>In:</strong> points=[[0,0],[2,2],[3,10],[5,2],[7,0]]</div><div class="io-box"><strong>Out:</strong> 20</div></div>
+      <div class="prob-code"><pre>int minCostConnectPoints(int[][] points) {
+    int n=points.length; List<int[]> edges=new ArrayList<>();
+    for(int i=0;i<n;i++) for(int j=i+1;j<n;j++) {
+        int d=Math.abs(points[i][0]-points[j][0]) + Math.abs(points[i][1]-points[j][1]);
+        edges.add(new int[]{d,i,j});
+    }
+    Collections.sort(edges,(a,b)->a[0]-b[0]);
+    DSU dsu=new DSU(n); int cost=0, count=0;
+    for(int[] e:edges) if(dsu.union(e[1],e[2])) { cost+=e[0]; if(++count==n-1) break; }
+    return cost;
+}</pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 23: ADVANCED PATTERNS -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">13. Advanced Patterns</div></div>
+    <div class="pn">PAGE 23/34</div>
+  </div>
+  <div class="g2">
+    <div class="box"><div class="bh">⭐ BIDIRECTIONAL BFS</div><div class="bc"><p>Expand from both ends. <strong>LC 127</strong></p></div></div>
+    <div class="box sky"><div class="bh">🔗 SCC (Tarjan)</div><div class="bc"><p>Strongly Connected Components. <strong>LC 1192</strong></p></div></div>
+    <div class="box amb"><div class="bh">🌉 BRIDGES</div><div class="bc"><p>Edge whose removal disconnects graph. Use `disc` & `low`.</p></div></div>
+    <div class="box org"><div class="bh">🔄 EULERIAN PATH</div><div class="bc"><p>Traverse every edge once. <strong>LC 332</strong></p></div></div>
+  </div>
+</div>
+
+<!-- PAGE 24: PROBLEM EVOLUTION CHAINS -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">14. Problem Evolution Chains</div></div>
+    <div class="pn">PAGE 24/34</div>
+  </div>
+  <div class="g2">
+    <div class="box"><div class="bh">🏝️ ISLAND CHAIN</div><div class="bc">LC 733 → 200 → 695 → 130 → 417</div></div>
+    <div class="box sky"><div class="bh">🌊 BFS CHAIN</div><div class="bc">LC 994 → 542 → 1162</div></div>
+    <div class="box pur"><div class="bh">🎓 DEPENDENCY CHAIN</div><div class="bc">LC 207 → 210 → 269</div></div>
+    <div class="box grn"><div class="bh">🔗 DSU CHAIN</div><div class="bc">LC 684 → 721 → 947</div></div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGES 25–28: SINGLE‑COLUMN LIST – ALL 22 PROBLEMS (NO DUPS) -->
+<!-- ============================================================ -->
+
+<!-- PAGE 25: LC 1971, 547, 200, 695, 733 -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">15. All Problems – DFS / Grid (1/6)</div></div>
+    <div class="pn">PAGE 25/34</div>
+  </div>
+  <div style="display:grid; grid-template-columns:1fr; gap:14px;">
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 1971 · Find if Path Exists</span><span class="diff-e">EASY</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">n=3, edges=[[0,1],[1,2]], src=0, dest=2 → true</div></div><div class="prob-code"><pre>public boolean validPath(int n, int[][] edges, int src, int dest) {
+    List&lt;Integer&gt;[] adj = new ArrayList[n];
+    for (int i=0; i&lt;n; i++) adj[i]=new ArrayList&lt;&gt;();
+    for (int[] e : edges) { adj[e[0]].add(e[1]); adj[e[1]].add(e[0]); }
+    boolean[] vis = new boolean[n];
+    return dfs(src, dest, adj, vis);
+}
+boolean dfs(int u, int dest, List&lt;Integer&gt;[] adj, boolean[] vis) {
+    if (u == dest) return true;
+    vis[u]=true;
+    for (int v : adj[u]) if (!vis[v] && dfs(v, dest, adj, vis)) return true;
+    return false;
+}</pre></div></div></div>
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 547 · Number of Provinces</span><span class="diff-m">MEDIUM</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">isConnected=[[1,1,0],[1,1,0],[0,0,1]] → 2</div></div><div class="prob-code"><pre>public int findCircleNum(int[][] isConnected) {
+    int n = isConnected.length; boolean[] vis=new boolean[n]; int count=0;
+    for(int i=0;i<n;i++) if(!vis[i]) { dfs(i,isConnected,vis); count++; }
+    return count;
+}
+void dfs(int u, int[][] mat, boolean[] vis) {
+    vis[u]=true;
+    for(int v=0; v<mat.length; v++) if(mat[u][v]==1 && !vis[v]) dfs(v, mat, vis);
+}</pre></div></div></div>
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 200 · Number of Islands</span><span class="diff-m">MEDIUM</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">grid=[["1","1","0"],["0","1","0"],["1","0","1"]] → 3</div></div><div class="prob-code"><pre>int numIslands(char[][] grid) {
+    int count=0, R=grid.length, C=grid[0].length;
+    for(int r=0;r<R;r++) for(int c=0;c<C;c++)
+        if(grid[r][c]=='1'){ dfs(grid,r,c); count++; }
+    return count;
+}
+void dfs(char[][] g, int r, int c) {
+    if(r<0||r>=g.length||c<0||c>=g[0].length||g[r][c]=='0') return;
+    g[r][c]='0';
+    int[][] DIRS={{0,1},{0,-1},{1,0},{-1,0}};
+    for(int[] d:DIRS) dfs(g, r+d[0], c+d[1]);
+}</pre></div></div></div>
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 695 · Max Area of Island</span><span class="diff-m">MEDIUM</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">grid=[[0,1,1],[0,1,0],[0,0,1]] → 3</div></div><div class="prob-code"><pre>int maxAreaOfIsland(int[][] grid) {
+    int max=0, R=grid.length, C=grid[0].length;
+    for(int r=0;r<R;r++) for(int c=0;c<C;c++)
+        if(grid[r][c]==1) max=Math.max(max, dfsArea(grid,r,c));
+    return max;
+}
+int dfsArea(int[][] g, int r, int c) {
+    if(r<0||r>=g.length||c<0||c>=g[0].length||g[r][c]==0) return 0;
+    g[r][c]=0; int area=1;
+    int[][] DIRS={{0,1},{0,-1},{1,0},{-1,0}};
+    for(int[] d:DIRS) area += dfsArea(g, r+d[0], c+d[1]);
+    return area;
+}</pre></div></div></div>
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 733 · Flood Fill</span><span class="diff-e">EASY</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">image=[[1,1,1],[1,1,0]], sr=1, sc=1, color=2 → [[2,2,2],[2,2,0]]</div></div><div class="prob-code"><pre>public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+    int oc = image[sr][sc];
+    if(oc != color) dfs(image, sr, sc, oc, color);
+    return image;
+}
+void dfs(int[][] img, int r, int c, int oc, int nc) {
+    if(r<0||r>=img.length||c<0||c>=img[0].length||img[r][c]!=oc) return;
+    img[r][c]=nc;
+    int[][] DIRS={{0,1},{0,-1},{1,0},{-1,0}};
+    for(int[] d:DIRS) dfs(img, r+d[0], c+d[1], oc, nc);
+}</pre></div></div></div>
+  </div>
+</div>
+
+<!-- PAGE 26: LC 130, 1091, 994, 684, 1319 -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">15. All Problems – BFS / DSU (2/6)</div></div>
+    <div class="pn">PAGE 26/34</div>
+  </div>
+  <div style="display:grid; grid-template-columns:1fr; gap:14px;">
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 130 · Surrounded Regions</span><span class="diff-m">MEDIUM</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">board=[["X","X","X"],["X","O","X"],["X","X","X"]] → All X</div></div><div class="prob-code"><pre>void solve(char[][] board) {
+    int R=board.length, C=board[0].length;
+    int[][] DIRS={{0,1},{0,-1},{1,0},{-1,0}};
+    for(int r=0;r<R;r++){ if(board[r][0]=='O') dfs(board,r,0);
+        if(board[r][C-1]=='O') dfs(board,r,C-1); }
+    for(int c=0;c<C;c++){ if(board[0][c]=='O') dfs(board,0,c);
+        if(board[R-1][c]=='O') dfs(board,R-1,c); }
+    for(int r=0;r<R;r++) for(int c=0;c<C;c++){
+        if(board[r][c]=='O') board[r][c]='X';
+        else if(board[r][c]=='#') board[r][c]='O';
+    }
+}
+void dfs(char[][] b, int r, int c) {
+    if(r<0||r>=b.length||c<0||c>=b[0].length||b[r][c]!='O') return;
+    b[r][c]='#';
+    int[][] DIRS={{0,1},{0,-1},{1,0},{-1,0}};
+    for(int[] d:DIRS) dfs(b, r+d[0], c+d[1]);
+}</pre></div></div></div>
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 1091 · Shortest Path in Binary Matrix</span><span class="diff-m">MEDIUM</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">grid=[[0,1],[1,0]] → 2</div></div><div class="prob-code"><pre>public int shortestPathBinaryMatrix(int[][] grid) {
+    int n=grid.length;
+    if(grid[0][0]==1||grid[n-1][n-1]==1) return -1;
+    int[][] dirs={{-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1}};
+    Queue<int[]> q=new LinkedList<>();
+    q.offer(new int[]{0,0,1}); grid[0][0]=1;
+    while(!q.isEmpty()){
+        int[] cur=q.poll(); int r=cur[0], c=cur[1], d=cur[2];
+        if(r==n-1 && c==n-1) return d;
+        for(int[] dir: dirs){
+            int nr=r+dir[0], nc=c+dir[1];
+            if(nr>=0&&nr<n&&nc>=0&&nc<n&&grid[nr][nc]==0){
+                grid[nr][nc]=1; q.offer(new int[]{nr,nc,d+1});
+            }
+        }
+    } return -1;
+}</pre></div></div></div>
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 994 · Rotting Oranges</span><span class="diff-m">MEDIUM</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">[[2,1,1],[1,1,0],[0,1,1]] → 4</div></div><div class="prob-code"><pre>int orangesRotting(int[][] grid) {
+    Queue<int[]> q=new LinkedList<>();
+    int fresh=0, R=grid.length, C=grid[0].length;
+    for(int r=0;r<R;r++) for(int c=0;c<C;c++){
+        if(grid[r][c]==2) q.offer(new int[]{r,c});
+        else if(grid[r][c]==1) fresh++;
+    }
+    int time=0; int[][] DIRS={{0,1},{0,-1},{1,0},{-1,0}};
+    while(!q.isEmpty() && fresh>0){
+        int size=q.size();
+        for(int i=0;i<size;i++){
+            int[] cur=q.poll();
+            for(int[] d:DIRS){
+                int nr=cur[0]+d[0], nc=cur[1]+d[1];
+                if(nr>=0&&nr<R&&nc>=0&&nc<C&&grid[nr][nc]==1){
+                    grid[nr][nc]=2; fresh--; q.offer(new int[]{nr,nc});
+                }
+            }
+        } time++;
+    } return fresh==0 ? time : -1;
+}</pre></div></div></div>
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 684 · Redundant Connection</span><span class="diff-m">MEDIUM</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">edges=[[1,2],[1,3],[2,3]] → [2,3]</div></div><div class="prob-code"><pre>int[] findRedundantConnection(int[][] edges) {
+    DSU dsu = new DSU(edges.length + 1);
+    for (int[] e : edges) if (!dsu.union(e[0], e[1])) return e;
+    return new int[0];
+}</pre></div></div></div>
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 1319 · Number of Operations</span><span class="diff-m">MEDIUM</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">n=4, connections=[[0,1],[0,2],[1,2]] → 1</div></div><div class="prob-code"><pre>public int makeConnected(int n, int[][] connections) {
+    if (connections.length < n-1) return -1;
+    DSU dsu = new DSU(n); int extra=0;
+    for (int[] e : connections) if (!dsu.union(e[0], e[1])) extra++;
+    int comps=0; for (int i=0;i<n;i++) if (dsu.find(i)==i) comps++;
+    return (comps-1 <= extra) ? comps-1 : -1;
+}</pre></div></div></div>
+  </div>
+</div>
+
+<!-- PAGE 27: LC 207, 210, 743, 787, 1584 -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">15. All Problems – Topo / Dijkstra / MST (3/6)</div></div>
+    <div class="pn">PAGE 27/34</div>
+  </div>
+  <div style="display:grid; grid-template-columns:1fr; gap:14px;">
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 207 · Course Schedule I</span><span class="diff-m">MEDIUM</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">n=2, prereqs=[[1,0]] → true</div></div><div class="prob-code"><pre>public boolean canFinish(int n, int[][] prereqs) {
+    List&lt;Integer&gt;[] adj=new ArrayList[n]; int[] indegree=new int[n];
+    for(int i=0;i<n;i++) adj[i]=new ArrayList<>();
+    for(int[] p:prereqs){ adj[p[1]].add(p[0]); indegree[p[0]]++; }
+    Queue<Integer> q=new LinkedList<>();
+    for(int i=0;i<n;i++) if(indegree[i]==0) q.offer(i);
+    int processed=0;
+    while(!q.isEmpty()){ int u=q.poll(); processed++; for(int v:adj[u]) if(--indegree[v]==0) q.offer(v); }
+    return processed==n;
+}</pre></div></div></div>
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 210 · Course Schedule II</span><span class="diff-m">MEDIUM</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">n=2, prereqs=[[1,0]] → [0,1]</div></div><div class="prob-code"><pre>public int[] findOrder(int n, int[][] prereqs) {
+    List&lt;Integer&gt;[] adj=new ArrayList[n]; int[] indegree=new int[n];
+    for(int i=0;i<n;i++) adj[i]=new ArrayList<>();
+    for(int[] p:prereqs){ adj[p[1]].add(p[0]); indegree[p[0]]++; }
+    Queue<Integer> q=new LinkedList<>();
+    for(int i=0;i<n;i++) if(indegree[i]==0) q.offer(i);
+    int[] order=new int[n]; int idx=0;
+    while(!q.isEmpty()){ int u=q.poll(); order[idx++]=u; for(int v:adj[u]) if(--indegree[v]==0) q.offer(v); }
+    return idx==n ? order : new int[0];
+}</pre></div></div></div>
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 743 · Network Delay Time</span><span class="diff-m">MEDIUM</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">times=[[2,1,1],[2,3,1],[3,4,1]], n=4, k=2 → 2</div></div><div class="prob-code"><pre>public int networkDelayTime(int[][] times, int n, int k) {
+    List<int[]>[] adj = new ArrayList[n+1];
+    for(int i=1;i<=n;i++) adj[i]=new ArrayList<>();
+    for(int[] t: times) adj[t[0]].add(new int[]{t[1],t[2]});
+    int[] dist = dijkstra(k, adj);
+    int max=0; for(int i=1;i<=n;i++) { if(dist[i]==Integer.MAX_VALUE/2) return -1; max=Math.max(max, dist[i]); }
+    return max;
+}</pre></div></div></div>
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 787 · Cheapest Flights</span><span class="diff-m">MEDIUM</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">n=3, flights=[[0,1,100],[1,2,100],[0,2,500]], src=0, dst=2, k=1 → 200</div></div><div class="prob-code"><pre>int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+    int INF=Integer.MAX_VALUE/2; int[] dist=new int[n]; Arrays.fill(dist, INF); dist[src]=0;
+    for(int i=0;i<=k;i++){
+        int[] prev=dist.clone();
+        for(int[] f: flights){ int u=f[0], v=f[1], w=f[2]; if(prev[u]+w < dist[v]) dist[v]=prev[u]+w; }
+    } return dist[dst]==INF ? -1 : dist[dst];
+}</pre></div></div></div>
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 1584 · Min Cost to Connect Points</span><span class="diff-m">MEDIUM</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">points=[[0,0],[2,2],[3,10],[5,2],[7,0]] → 20</div></div><div class="prob-code"><pre>int minCostConnectPoints(int[][] points) {
+    int n=points.length; List<int[]> edges=new ArrayList<>();
+    for(int i=0;i<n;i++) for(int j=i+1;j<n;j++) {
+        int d=Math.abs(points[i][0]-points[j][0]) + Math.abs(points[i][1]-points[j][1]);
+        edges.add(new int[]{d,i,j});
+    }
+    Collections.sort(edges,(a,b)->a[0]-b[0]);
+    DSU dsu=new DSU(n); int cost=0, count=0;
+    for(int[] e:edges) if(dsu.union(e[1],e[2])) { cost+=e[0]; if(++count==n-1) break; }
+    return cost;
+}</pre></div></div></div>
+  </div>
+</div>
+
+<!-- PAGE 28: LC 785, 417, 133, 269 -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">15. All Problems – Bipartite / Misc (4/6)</div></div>
+    <div class="pn">PAGE 28/34</div>
+  </div>
+  <div style="display:grid; grid-template-columns:1fr; gap:14px;">
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 785 · Is Graph Bipartite?</span><span class="diff-m">MEDIUM</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">graph=[[1,3],[0,2],[1,3],[0,2]] → true</div></div><div class="prob-code"><pre>public boolean isBipartite(int[][] graph) {
+    int n=graph.length; int[] color=new int[n]; Arrays.fill(color, -1);
+    for(int i=0;i<n;i++) if(color[i]==-1) {
+        Queue<Integer> q=new LinkedList<>(); q.offer(i); color[i]=0;
+        while(!q.isEmpty()){ int u=q.poll(); for(int v:graph[u]) {
+            if(color[v]==-1){ color[v]=1-color[u]; q.offer(v); }
+            else if(color[v]==color[u]) return false;
+        }}
+    } return true;
+}</pre></div></div></div>
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 417 · Pacific Atlantic</span><span class="diff-m">MEDIUM</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">heights=[[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]] → [[0,4],[1,3]...]</div></div><div class="prob-code"><pre>public List&lt;List&lt;Integer&gt;&gt; pacificAtlantic(int[][] heights) {
+    int R=heights.length, C=heights[0].length;
+    boolean[][] pac=new boolean[R][C], atl=new boolean[R][C];
+    for(int c=0;c<C;c++){ dfs(heights,0,c,pac); dfs(heights,R-1,c,atl); }
+    for(int r=0;r<R;r++){ dfs(heights,r,0,pac); dfs(heights,r,C-1,atl); }
+    List&lt;List&lt;Integer&gt;&gt; res=new ArrayList<>();
+    for(int r=0;r<R;r++) for(int c=0;c<C;c++)
+        if(pac[r][c] && atl[r][c]) res.add(Arrays.asList(r,c));
+    return res;
+}
+void dfs(int[][] h, int r, int c, boolean[][] reach) {
+    reach[r][c]=true;
+    int[][] DIRS={{0,1},{0,-1},{1,0},{-1,0}};
+    for(int[] d:DIRS) {
+        int nr=r+d[0], nc=c+d[1];
+        if(nr>=0&&nr<h.length&&nc>=0&&nc<h[0].length&&!reach[nr][nc]&&h[nr][nc]>=h[r][c])
+            dfs(h, nr, nc, reach);
+    }
+}</pre></div></div></div>
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 133 · Clone Graph</span><span class="diff-m">MEDIUM</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">adjList = [[2,4],[1,3],[2,4],[1,3]]</div></div><div class="prob-code"><pre>public Node cloneGraph(Node node) {
+    if(node == null) return null;
+    Map&lt;Node, Node&gt; map = new HashMap&lt;&gt;();
+    return clone(node, map);
+}
+private Node clone(Node node, Map&lt;Node, Node&gt; map) {
+    if(map.containsKey(node)) return map.get(node);
+    Node copy = new Node(node.val);
+    map.put(node, copy);
+    for(Node nei : node.neighbors) copy.neighbors.add(clone(nei, map));
+    return copy;
+}</pre></div></div></div>
+    <div class="prob-card"><div class="prob-head"><span class="ptitle">LC 269 · Alien Dictionary</span><span class="diff-h">HARD</span></div><div class="prob-body" style="grid-template-columns:1fr 2fr;"><div class="prob-info"><div class="io-box">words=["wrt","wrf","er","ett","rftt"] → "wertf"</div><p><strong>Pattern:</strong> Kahn's</p></div><div class="prob-code"><pre>public String alienOrder(String[] words) {
+    Map&lt;Character, List&lt;Character&gt;&gt; adj = new HashMap&lt;&gt;();
+    Map&lt;Character, Integer&gt; indegree = new HashMap&lt;&gt;();
+    for (String w : words) for (char c : w.toCharArray()) indegree.put(c,0);
+    for (int i=0; i&lt;words.length-1; i++) {
+        String w1=words[i], w2=words[i+1];
+        int minLen = Math.min(w1.length(), w2.length());
+        boolean found=false;
+        for (int j=0; j&lt;minLen; j++) {
+            char c1=w1.charAt(j), c2=w2.charAt(j);
+            if(c1!=c2) {
+                adj.computeIfAbsent(c1, k->new ArrayList&lt;&gt;()).add(c2);
+                indegree.put(c2, indegree.get(c2)+1);
+                found=true; break;
+            }
+        }
+        if(!found && w1.length()>w2.length()) return "";
+    }
+    Queue&lt;Character&gt; q = new LinkedList&lt;&gt;();
+    for(char c : indegree.keySet()) if(indegree.get(c)==0) q.offer(c);
+    StringBuilder sb = new StringBuilder();
+    while(!q.isEmpty()){
+        char u=q.poll(); sb.append(u);
+        for(char v : adj.getOrDefault(u, new ArrayList&lt;&gt;())) {
+            indegree.put(v, indegree.get(v)-1);
+            if(indegree.get(v)==0) q.offer(v);
+        }
+    }
+    return sb.length()==indegree.size() ? sb.toString() : "";
+}</pre></div></div></div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGES 29–31: FULL‑PAGE HARD PROBLEMS                        -->
+<!-- ============================================================ -->
+
+<!-- PAGE 29: LC 127 · Word Ladder -->
+<div class="page hard-page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">16. HARD #1 – Word Ladder</div></div>
+    <div class="pn">PAGE 29/34</div>
+  </div>
+  <div class="prob-card" style="margin-bottom:0;">
+    <div class="prob-head"><span class="ptitle">LC 127 · Word Ladder</span><span class="diff-h">HARD</span></div>
+    <div class="prob-body" style="grid-template-columns:1fr 2.2fr;">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> begin="hit", end="cog", list=["hot","dot","dog","lot","log","cog"]</div>
+        <div class="io-box"><strong>Out:</strong> 5</div>
+        <p><strong>Pattern:</strong> Bidirectional BFS</p>
+        <div class="aha" style="padding:4px;"><div class="aha-t">💡 OPTIMIZATION</div>Expand from smaller frontier.</div>
+      </div>
+      <div class="prob-code">
+        <pre style="font-size:10.5pt;">public int ladderLength(String beginWord, String endWord, List&lt;String&gt; wordList) {
+    Set&lt;String&gt; set = new HashSet&lt;&gt;(wordList);
+    if(!set.contains(endWord)) return 0;
+    Set&lt;String&gt; start = new HashSet&lt;&gt;(), end = new HashSet&lt;&gt;();
+    start.add(beginWord); end.add(endWord);
+    int len=1;
+    while(!start.isEmpty() && !end.isEmpty()) {
+        if(start.size() > end.size()) { Set&lt;String&gt; tmp = start; start = end; end = tmp; }
+        Set&lt;String&gt; next = new HashSet&lt;&gt;();
+        for(String word : start) {
+            char[] arr = word.toCharArray();
+            for(int i=0; i&lt;arr.length; i++) {
+                char old = arr[i];
+                for(char c='a'; c&lt;='z'; c++) {
+                    arr[i]=c;
+                    String nw = new String(arr);
+                    if(end.contains(nw)) return len+1;
+                    if(set.contains(nw)) { set.remove(nw); next.add(nw); }
+                }
+                arr[i]=old;
+            }
+        }
+        start = next; len++;
+    }
+    return 0;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 30: LC 1192 · Critical Connections -->
+<div class="page hard-page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">16. HARD #2 – Critical Connections</div></div>
+    <div class="pn">PAGE 30/34</div>
+  </div>
+  <div class="prob-card" style="margin-bottom:0;">
+    <div class="prob-head"><span class="ptitle">LC 1192 · Critical Connections</span><span class="diff-h">HARD</span></div>
+    <div class="prob-body" style="grid-template-columns:1fr 2.2fr;">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> n=4, connections=[[0,1],[1,2],[2,0],[1,3]]</div>
+        <div class="io-box"><strong>Out:</strong> [[1,3]]</div>
+        <p><strong>Pattern:</strong> Tarjan (Bridges)</p>
+      </div>
+      <div class="prob-code">
+        <pre style="font-size:10.5pt;">public List&lt;List&lt;Integer&gt;&gt; criticalConnections(int n, List&lt;List&lt;Integer&gt;&gt; connections) {
+    List&lt;Integer&gt;[] graph = new ArrayList[n];
+    for (int i=0; i&lt;n; i++) graph[i] = new ArrayList&lt;&gt;();
+    for (List&lt;Integer&gt; edge : connections) {
+        int u = edge.get(0), v = edge.get(1);
+        graph[u].add(v); graph[v].add(u);
+    }
+    int[] disc = new int[n], low = new int[n];
+    Arrays.fill(disc, -1);
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    dfs(0, -1, 0, disc, low, graph, res);
+    return res;
+}
+void dfs(int u, int parent, int time, int[] disc, int[] low,
+         List&lt;Integer&gt;[] graph, List&lt;List&lt;Integer&gt;&gt; res) {
+    disc[u] = low[u] = time;
+    for (int v : graph[u]) {
+        if (v == parent) continue;
+        if (disc[v] == -1) {
+            dfs(v, u, time+1, disc, low, graph, res);
+            low[u] = Math.min(low[u], low[v]);
+            if (low[v] > disc[u]) res.add(Arrays.asList(u, v));
+        } else {
+            low[u] = Math.min(low[u], disc[v]);
+        }
+    }
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 31: LC 332 · Reconstruct Itinerary -->
+<div class="page hard-page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">16. HARD #3 – Reconstruct Itinerary</div></div>
+    <div class="pn">PAGE 31/34</div>
+  </div>
+  <div class="prob-card" style="margin-bottom:0;">
+    <div class="prob-head"><span class="ptitle">LC 332 · Reconstruct Itinerary</span><span class="diff-h">HARD</span></div>
+    <div class="prob-body" style="grid-template-columns:1fr 2.2fr;">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> tickets=[["MUC","LHR"],["JFK","MUC"],["SFO","SJC"],["LHR","SFO"]]</div>
+        <div class="io-box"><strong>Out:</strong> ["JFK","MUC","LHR","SFO","SJC"]</div>
+        <p><strong>Pattern:</strong> Hierholzer (Eulerian Path)</p>
+        <div class="aha" style="padding:4px;"><div class="aha-t">💡 GOOGLE CLASSIC</div>Always visit smallest lexical neighbor first.</div>
+      </div>
+      <div class="prob-code">
+        <pre style="font-size:10.5pt;">public List&lt;String&gt; findItinerary(List&lt;List&lt;String&gt;&gt; tickets) {
+    Map&lt;String, PriorityQueue&lt;String&gt;&gt; adj = new HashMap&lt;&gt;();
+    for (List&lt;String&gt; ticket : tickets) {
+        adj.computeIfAbsent(ticket.get(0), k -> new PriorityQueue&lt;&gt;())
+           .add(ticket.get(1));
+    }
+    List&lt;String&gt; result = new LinkedList&lt;&gt;();
+    dfs("JFK", adj, result);
+    Collections.reverse(result);
+    return result;
+}
+void dfs(String airport, Map&lt;String, PriorityQueue&lt;String&gt;&gt; adj,
+         List&lt;String&gt; result) {
+    PriorityQueue&lt;String&gt; pq = adj.get(airport);
+    while (pq != null && !pq.isEmpty()) {
+        dfs(pq.poll(), adj, result);
+    }
+    result.add(airport);
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGES 32–34: NOTES, CHEAT SHEET, COMPLEXITIES                -->
+<!-- ============================================================ -->
+
+<!-- PAGE 32: NOTES -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">17. Notes</div></div>
+    <div class="pn">PAGE 32/34</div>
+  </div>
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+    <div style="width:100%; border: 1px dashed #cbd5e1; min-height: 400px; padding: 20px; border-radius: 8px; background: #fafbfc; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+      <p style="color: #94a3b8; font-size:14pt; text-align:center;">📝 YOUR NOTES</p>
+      <p style="color: #94a3b8; font-size:11pt; text-align:center; margin-top: 10px;">Use this page for quick revision notes,<br>or to write down your own memory hooks.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 33: CHEAT SHEET -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">18. Cheat Sheet</div></div>
+    <div class="pn">PAGE 33/34</div>
+  </div>
+  <div class="g2">
+    <div class="box pur"><div class="bh">🧠 MEMORY BITES</div><div class="bc"><p><strong>DFS:</strong> STOP → MARK → PROCESS → EXPLORE</p><p><strong>BFS:</strong> QUEUE → LEVEL → SHORTEST</p><p><strong>DSU:</strong> FIND → UNION</p><p><strong>KAHN:</strong> INDEGREE → QUEUE → PROCESS</p><p><strong>DIJKSTRA:</strong> DIST → MIN HEAP → RELAX</p></div></div>
+    <div class="box grn"><div class="bh">💼 GOLDEN RULES</div><div class="bc"><p>1. Mark visited <strong>ON ENQUEUE</strong> in BFS</p><p>2. Unweighted → BFS, Weighted → Dijkstra</p><p>3. Grid → DIRS + DFS/BFS</p><p>4. DSU union false = cycle</p><p>5. Dependencies → Kahn's</p></div></div>
+  </div>
+</div>
+
+<!-- PAGE 34: COMPLEXITIES -->
+<div class="page">
+  <div class="ph">
+    <div><h2>GRAPHS</h2><div class="sub">19. Complexity Cheat Sheet</div></div>
+    <div class="pn">PAGE 34/34</div>
+  </div>
+  <div class="box grn">
+    <div class="bh">⏱️ GRAPH ALGORITHM COMPLEXITIES</div>
+    <div class="bc">
+      <table>
+        <tr><th>Algorithm</th><th>Time</th><th>Space</th></tr>
+        <tr><td>DFS / BFS</td><td>O(V+E)</td><td>O(V)</td></tr>
+        <tr><td>Dijkstra</td><td>O((V+E)logV)</td><td>O(V+E)</td></tr>
+        <tr><td>DSU</td><td>O(α(N))</td><td>O(N)</td></tr>
+        <tr><td>Kruskal</td><td>O(E log E)</td><td>O(V+E)</td></tr>
+        <tr><td>Bellman‑Ford</td><td>O(VE)</td><td>O(V)</td></tr>
+        <tr><td>Floyd‑Warshall</td><td>O(V³)</td><td>O(V²)</td></tr>
+        <tr><td>0-1 BFS</td><td>O(V+E)</td><td>O(V)</td></tr>
+        <tr><td>Bidirectional BFS</td><td>O(V^d/2)</td><td>O(V)</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

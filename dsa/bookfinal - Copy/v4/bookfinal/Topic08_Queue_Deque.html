@@ -1,0 +1,1134 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 08: Queue &amp; Deque Masterclass (Visual FAANG Edition)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#ffffff',
+            primaryTextColor: '#0f172a',
+            primaryBorderColor: '#2563eb',
+            lineColor: '#64748b',
+            fontFamily: 'Inter'
+        }
+    });
+</script>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+    }
+
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 11.8px;
+        line-height: 1.4;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 8px 16px;
+        display: flex;
+        
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand { font-weight: 900; font-size: 1rem; color: #38bdf8; }
+    .top-nav .nav-controls { display: flex; gap: 4px; flex-wrap: wrap; }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+
+    /* Sticky Sidebar Layout */
+    .app-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+
+    .toc-title { font-weight: 900; font-size: 0.85rem; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+
+    .main-content { min-width: 0; }
+
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 20px 24px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+        
+        display: flex;
+        flex-direction: column;
+        
+    }
+    [data-theme="dark"] .page { background: #1e293b; color: #f8fafc; }
+
+    /* Header Top */
+    .header-top {
+        display: flex;
+        
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 6px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top { background: #0f172a; border-color: #38bdf8; border-left-color: #38bdf8; }
+    .header-title-group { display: flex; align-items: center; gap: 8px; }
+    .header-top h1 { margin: 0; font-size: 1.15rem; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+    .header-top .page-num { background: #1e3a8a; color: white; padding: 2px 8px; border-radius: 14px; font-weight: 800; font-size: 0.72rem; }
+
+    /* Goal Badge Box */
+    .goal-badge {
+        border: 2px dashed #3b82f6;
+        background: #eff6ff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: #1e40af;
+        margin-bottom: 6px;
+    }
+
+    .cross-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #e0e7ff;
+        color: #3730a3;
+        border: 1px solid #c7d2fe;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-decoration: none;
+        margin-bottom: 4px;
+    }
+
+    /* Section Box */
+    .section-box {
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        background: white;
+        border: 2px solid #3b82f6;
+        width: 100%;
+    }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+    .section-header { padding: 4px 8px; font-weight: 800; font-size: 0.8rem; color: white; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+    .section-header .num { background: white; color: #0f172a; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 900; }
+    .section-content { padding: 6px 8px; font-size: 0.76rem; }
+
+    /* Color Themes */
+    .box-blue { border-color: #2563eb !important; } .box-blue .section-header { background: #2563eb !important; }
+    .box-green { border-color: #22c55e !important; } .box-green .section-header { background: #22c55e !important; }
+    .box-purple { border-color: #8b5cf6 !important; } .box-purple .section-header { background: #8b5cf6 !important; }
+    .box-red { border-color: #ef4444 !important; } .box-red .section-header { background: #ef4444 !important; }
+    .box-orange { border-color: #f97316 !important; } .box-orange .section-header { background: #f97316 !important; }
+    .box-teal { border-color: #0d9488 !important; } .box-teal .section-header { background: #0d9488 !important; }
+    .box-indigo { border-color: #6366f1 !important; } .box-indigo .section-header { background: #6366f1 !important; }
+    .box-amber { border-color: #d97706 !important; } .box-amber .section-header { background: #d97706 !important; }
+
+    /* Problem Split Grid */
+    .problem-split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+    .problem-info { display: flex; flex-direction: column; gap: 3px; }
+    .problem-code { display: flex; flex-direction: column; }
+
+    .meta-card { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 3px 6px; border-radius: 4px; display: flex;  align-items: center; font-weight: 700; font-size: 0.7rem; }
+    [data-theme="dark"] .meta-card { background: #0f172a; border-color: #334155; }
+    .badge-easy { background: #10b981; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-medium { background: #f59e0b; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .badge-hard { background: #ef4444; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 800; }
+    .company-tag { background: #1e3a8a; color: white; padding: 1px 4px; border-radius: 3px; font-size: 0.65rem; }
+
+    .flowchart-box { background: #eff6ff; border: 1px solid #93c5fd; border-left: 3px solid #2563eb; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: 700; color: #1e40af; }
+    .whynot-box { background: #fff7ed; border: 1px solid #fdba74; border-left: 3px solid #f97316; padding: 3px 6px; border-radius: 3px; font-size: 0.7rem; color: #9a3412; }
+
+    /* Enqueue / Dequeue Animation Box */
+    .queue-viz-box {
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        padding: 4px 6px;
+        margin: 3px 0;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.68rem;
+        line-height: 1.35;
+    }
+    .queue-state-title { font-weight: 800; color: #1e3a8a; font-family: 'Inter', sans-serif; }
+    [data-theme="dark"] .queue-state-title { color: #38bdf8; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    pre { background: #f8fafc; color: #0f172a; padding: 6px 8px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.71rem; line-height: 1.32; margin: 0; white-space: pre-wrap !important; word-break: break-word; border: 1px solid #cbd5e1; }
+    [data-theme="dark"] pre { background: #0f172a; color: #f8fafc; border-color: #334155; }
+    code { font-family: 'Fira Code', monospace; background: #f1f5f9; color: #0f172a; padding: 1px 3px; border-radius: 3px; font-size: 0.74rem; border: 1px solid #cbd5e1; }
+
+    .aha-box { background: #fefce8; border: 1px solid #eab308; border-left: 4px solid #ca8a04; color: #713f12; padding: 5px 8px; border-radius: 4px; font-size: 0.76rem; font-weight: 600; margin: 4px 0; }
+    .rule-box { padding: 4px 6px; border-radius: 4px; font-weight: 600; margin: 4px 0; font-size: 0.74rem; }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    .rule-purple { background: #faf5ff; border: 1px solid #a855f7; border-left: 4px solid #a855f7; color: #6b21a8; }
+    .rule-red { background: #fff1f2; border: 1px solid #ef4444; border-left: 4px solid #ef4444; color: #b91c1c; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+    table th, table td { border: 1px solid var(--border-color); padding: 3px 5px; text-align: left; }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+    .mermaid { display: flex; justify-content: center; margin: 2px 0; }
+    .back-to-top { position: fixed; bottom: 20px; right: 20px; background: #2563eb; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; border: none; z-index: 999; }
+
+    @page { size: A4 portrait; margin: 4mm; }
+    @media print {
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+        body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .top-nav, .back-to-top, .toc-sidebar { display: none !important; }
+        .app-layout { display: block !important; }
+        .container { max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+        .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.72; }
+        pre { background-color: #f8fafc !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; }
+    }
+
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+</style>
+</head>
+<body>
+
+<!-- Sticky Top Nav -->
+<div class="top-nav">
+    <div class="brand">⚡ FAANG DSA HANDBOOK — TOPIC 08: QUEUE &amp; DEQUE</div>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn" style="background:#059669; border-color:#10b981; font-weight:800;">🏠 Index</a>
+        <button class="nav-btn" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="nav-btn" onclick="toggleSidebar()">↕️ Expand/Shrink TOC</button>
+        <a href="#page1" class="nav-btn">P1</a>
+        <a href="#page2" class="nav-btn">P2</a>
+        <a href="#page3" class="nav-btn">P3</a>
+        <a href="#page4" class="nav-btn">P4</a>
+        <a href="#page5" class="nav-btn">P5</a>
+        <a href="#page6" class="nav-btn">P6</a>
+        <a href="#page7" class="nav-btn">P7</a>
+        <a href="#page8" class="nav-btn">P8</a>
+        <a href="#page9" class="nav-btn">P9</a>
+        <a href="#page10" class="nav-btn">P10</a>
+        <button class="nav-btn" onclick="window.print()" style="background: #2563eb;">🖨️ PDF</button>
+    </div>
+</div>
+
+<div class="container">
+<div class="app-layout" id="appLayout">
+
+    <!-- Sticky Table of Contents Sidebar -->
+    <div class="toc-sidebar">
+        <div class="toc-header-bar"><span class="toc-title">📋 SECTIONS</span><button class="shrink-btn" onclick="toggleSidebar()"><span class="toc-text">➖ Shrink</span></button></div>
+        <ul class="toc-list">
+            <li><a href="#page1" class="toc-link">08.0 Foundation &amp; FIFO</a></li>
+            <li><a href="#page2" class="toc-link">08.1 Circular Array Queue</a></li>
+            <li><a href="#page3" class="toc-link">08.2 Deque Double-Ended</a></li>
+            <li><a href="#page4" class="toc-link">08.3 Monotonic Deque</a></li>
+            <li><a href="#page5" class="toc-link">08.4 BFS &amp; Decision Tree</a></li>
+            <li><a href="#page6" class="toc-link">08.7 Easy NeetCode Suite</a></li>
+            <li><a href="#page7" class="toc-link">08.7 Sliding Max &amp; Circular</a></li>
+            <li><a href="#page8" class="toc-link">08.7 Dota2 &amp; Cards Order</a></li>
+            <li><a href="#page9" class="toc-link">08.7 Shortest Sum &amp; DP Max</a></li>
+            <li><a href="#page10" class="toc-link">08.8 Revision &amp; Summary</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Pages -->
+    <div class="main-content">
+
+    <!-- ========================================================= -->
+    <!-- PAGE 1: 08.0 QUEUE FOUNDATION & FIFO PRINCIPLE -->
+    <!-- ========================================================= -->
+    <div class="page" id="page1">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🚶‍♂️</span>
+                    <h1>TOPIC 08.0: QUEUE FOUNDATION &amp; FIFO PRINCIPLE</h1>
+                </div>
+                <span class="page-num">PAGE 1 OF 10</span>
+            </div>
+
+            <!-- Cross-Link Badges -->
+            <a href="Topic07_Stack.html" class="cross-link">🔗 See Topic 07 → Stack Masterclass</a>
+
+            <!-- Goal Badge -->
+            <div class="goal-badge">
+                🎯 <strong>GOAL:</strong> Master FIFO (First In, First Out) thinking, understand Double-Ended Queues (Deque), and master Monotonic Deque for Sliding Window Maximum in O(N) time!
+            </div>
+
+            <div class="section-box box-teal" style="margin-top:8px">
+                <div class="section-header">🧰 REUSABLE QUEUE &amp; DEQUE UTILITIES</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">Queue &amp; Deque Operation Reference:</p>
+<pre>
+// Queue (FIFO): offer(), poll(), peek()
+Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+q.offer(val); int front = q.poll();
+
+// Deque (Double Ended): offerFirst(), offerLast(), pollFirst(), pollLast()
+Deque&lt;Integer&gt; deque = new ArrayDeque&lt;&gt;();</pre>
+                        </div>
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">Circular Queue Modulo Math:</p>
+<pre>
+// Modulo Arithmetic for Circular Indexing
+int nextIndex = (currIndex + 1) % capacity;
+int prevIndex = (currIndex - 1 + capacity) % capacity;</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AHA Box #1 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #1: FIRST IN, FIRST OUT (FIFO) ORDER PRESERVATION</strong><br/>
+                A Queue is like a line at a supermarket checkout: elements enter at the rear (<code>enqueue / offer</code>) and leave from the front (<code>dequeue / poll</code>). Unlike Stack which reverses arrival order, Queue **preserves the exact arrival order**, making it the foundational engine for BFS graph traversals and streaming buffers!
+            </div>
+
+            <div class="grid-2">
+                <!-- Queue Operations -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> CORE QUEUE OPERATIONS (O(1) TIME)</div>
+                    <div class="section-content">
+                        <div>• <code>offer(x)</code>: Adds element `x` to rear of queue (O(1)).<br/>
+                        • <code>poll()</code>: Removes and returns front element (O(1)).<br/>
+                        • <code>peek()</code>: Views front element without removing (O(1)).<br/>
+                        • <code>isEmpty()</code>: Returns true if queue size is 0 (O(1)).</div>
+                    </div>
+                </div>
+
+                <!-- Queue vs Stack Matrix -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> QUEUE VS STACK PARADIGM COMPARISON</div>
+                    <div class="section-content">
+                        <table>
+                            <thead>
+                                <tr><th>Feature</th><th>Queue (FIFO)</th><th>Stack (LIFO)</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Processing Order</td><td>First In, First Out</td><td>Last In, First Out</td></tr>
+                                <tr><td>Primary Traversal</td><td>BFS (Level Order)</td><td>DFS (Depth First Search)</td></tr>
+                                <tr><td>Entry/Exit Point</td><td>Enter Rear, Exit Front</td><td>Enter Top, Exit Top</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enqueue/Dequeue Visual Diagram -->
+            <div class="section-box box-green">
+                <div class="section-header">🎨 VISUALIZING QUEUE ENQUEUE / DEQUEUE</div>
+                <div class="section-content">
+                    <div class="queue-viz-box">
+<span class="queue-state-title">1. OFFER(10), OFFER(20), OFFER(30):</span>
+   FRONT [ 10 ──► 20 ──► 30 ] REAR
+
+<span class="queue-state-title">2. POLL() ➔ Removes 10 (First Element):</span>
+   FRONT [ 20 ──► 30 ] REAR
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Use Queue whenever you must process requests in order of arrival or explore graph nodes layer-by-layer!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 2: CIRCULAR QUEUE & JAVA QUEUE IMPLEMENTATIONS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page2">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔄</span>
+                    <h1>TOPIC 08.1: CIRCULAR QUEUE &amp; JAVA IMPLEMENTATIONS</h1>
+                </div>
+                <span class="page-num">PAGE 2 OF 10</span>
+            </div>
+
+            <!-- AHA Box #2 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #2: CIRCULAR ARRAY MODULO ARITHMETIC</strong><br/>
+                In a standard fixed array, dequeueing elements leaves empty spaces at index 0. Shifting remaining items costs O(N)! A <strong>Circular Queue</strong> re-uses empty spots using wrap-around modulo arithmetic:
+                <br/><code>head = (head + 1) % capacity</code> and <code>tail = (tail + 1) % capacity</code> in O(1) time!
+            </div>
+
+            <div class="grid-2">
+                <!-- Circular Queue Code -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> CIRCULAR ARRAY QUEUE MECHANICS</div>
+                    <div class="section-content">
+<pre>
+class CircularQueue {
+    private int[] data;
+    private int head = 0, tail = 0, size = 0, capacity;
+    public CircularQueue(int k) {
+        capacity = k; data = new int[k];
+    }
+    public boolean enQueue(int value) {
+        if (isFull()) return false;
+        data[tail] = value;
+        tail = (tail + 1) % capacity; // Modulo wrap
+        size++; return true;
+    }
+    public boolean deQueue() {
+        if (isEmpty()) return false;
+        head = (head + 1) % capacity; // Modulo wrap
+        size--; return true;
+    }
+    public boolean isEmpty() { return size == 0; }
+    public boolean isFull() { return size == capacity; }
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Java Implementations Comparison -->
+                <div class="section-box box-amber">
+                    <div class="section-header"><span class="num">2</span> ArrayDeque VS LinkedList QUEUE</div>
+                    <div class="section-content">
+                        <table>
+                            <thead>
+                                <tr><th>Feature</th><th><code>ArrayDeque</code></th><th><code>LinkedList</code></th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Memory Overhead</td><td>Contiguous Array (Low)</td><td>Heap Node Objects (High)</td></tr>
+                                <tr><td>Cache Locality</td><td>High (CPU Cache friendly)</td><td>Low (Pointer chasing)</td></tr>
+                                <tr><td>Null Values</td><td>Disallows <code>null</code></td><td>Allows <code>null</code></td></tr>
+                                <tr><td>FAANG Verdict</td><td>✅ <strong>PREFERRED CHOICE</strong></td><td>⚠️ Avoid unless null needed</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            ⚠️ <strong>JAVA API TIP:</strong> Prefer <code>offer()</code>, <code>poll()</code>, <code>peek()</code> over <code>add()</code>, <code>remove()</code>, <code>element()</code> because offer/poll return <code>false</code>/<code>null</code> instead of throwing exceptions!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 3: DEQUE FOUNDATION (DOUBLE-ENDED QUEUE) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page3">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">↔️</span>
+                    <h1>TOPIC 08.2: DEQUE FOUNDATION (DOUBLE-ENDED QUEUE)</h1>
+                </div>
+                <span class="page-num">PAGE 3 OF 10</span>
+            </div>
+
+            <!-- AHA Box #3 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #3: DUAL-ENDED POWER (FRONT AND BACK ACCESS)</strong><br/>
+                A **Deque (Double-Ended Queue)** allows inserting and deleting from BOTH the front AND the back in O(1) time! This versatility allows a Deque to act as a FIFO Queue, a LIFO Stack, or a **Monotonic Deque** for Sliding Window Maximum!
+            </div>
+
+            <!-- Deque Method Cheat Sheet Table -->
+            <div class="section-box box-purple">
+                <div class="section-header">📜 DEQUE METHOD MAPPING CHEAT SHEET</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Operation</th><th>Front Method</th><th>Back Method</th><th>Equivalent Stack/Queue Usage</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Insert</strong></td><td><code>addFirst(e)</code> / <code>offerFirst(e)</code></td><td><code>addLast(e)</code> / <code>offerLast(e)</code></td><td>Queue Enqueue: <code>offerLast()</code>, Stack Push: <code>push() / addFirst()</code></td></tr>
+                            <tr><td><strong>Remove</strong></td><td><code>removeFirst()</code> / <code>pollFirst()</code></td><td><code>removeLast()</code> / <code>pollLast()</code></td><td>Queue Dequeue: <code>pollFirst()</code>, Stack Pop: <code>pop() / removeFirst()</code></td></tr>
+                            <tr><td><strong>Examine</strong></td><td><code>getFirst()</code> / <code>peekFirst()</code></td><td><code>getLast()</code> / <code>peekLast()</code></td><td>Queue Front: <code>peekFirst()</code>, Stack Top: <code>peek() / peekFirst()</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Deque Visual Diagram -->
+            <div class="section-box box-blue">
+                <div class="section-header">🎨 VISUALIZING DOUBLE-ENDED QUEUE (DEQUE)</div>
+                <div class="section-content">
+                    <div class="queue-viz-box">
+  offerFirst(5) ──►  ┌───────────────────────────┐  ◄── offerLast(20)
+                     │ 5 ──► 10 ──► 15 ──► 20    │
+  pollFirst()  ◄───  └───────────────────────────┘  ──► pollLast()
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Always declare <code>Deque&lt;Integer&gt; deque = new ArrayDeque&lt;&gt;();</code> for maximum efficiency!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 4: MONOTONIC DEQUE MASTERCLASS (SLIDING WINDOW MAX) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page4">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📈</span>
+                    <h1>TOPIC 08.3: MONOTONIC DEQUE MASTERCLASS (SLIDING WINDOW MAX)</h1>
+                </div>
+                <span class="page-num">PAGE 4 OF 10</span>
+            </div>
+
+            <!-- AHA Box #4 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #4: MONOTONIC DECREASING DEQUE (O(N) SLIDING WINDOW MAX)</strong><br/>
+                To find the Maximum in a Sliding Window of size K in O(N) total time, maintain a **Monotonic Decreasing Deque of indices**:
+                <br/>1. **Expire Old Elements**: If <code>deque.peekFirst() &lt;= i - K</code>, pop from FRONT!
+                <br/>2. **Maintain Decreasing Order**: While <code>!deque.isEmpty() &amp;&amp; arr[i] &gt;= arr[deque.peekLast()]</code>, pop from BACK!
+                <br/>3. Maximum for current window is ALWAYS at <code>deque.peekFirst()</code>!
+            </div>
+
+            <!-- Step-by-Step Monotonic Deque Trace Table -->
+            <div class="section-box box-purple">
+                <div class="section-header">📊 STEP-BY-STEP DEQUE STATE TRACE: WINDOW = [1, 3, -1, -3, 5], K = 3</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Read i</th><th>Value nums[i]</th><th>Monotonic Deque Action</th><th>Deque State (Indices / Values)</th><th>Window Max (peekFirst)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>0</td><td>1</td><td>Push index 0 ➔ Deque: <code>[0]</code></td><td><code>[1]</code></td><td>N/A ($i &lt; K-1$)</td></tr>
+                            <tr><td>1</td><td>3</td><td>3 &gt; 1 ➔ Pop 0 from BACK. Push 1 ➔ Deque: <code>[1]</code></td><td><code>[3]</code></td><td>N/A ($i &lt; K-1$)</td></tr>
+                            <tr><td>2</td><td>-1</td><td>-1 &lt; 3 ➔ Push 2 ➔ Deque: <code>[1, 2]</code></td><td><code>[3, -1]</code></td><td><strong>3</strong> (at idx 1)</td></tr>
+                            <tr><td>3</td><td>-3</td><td>-3 &lt; -1 ➔ Push 3 ➔ Deque: <code>[1, 2, 3]</code></td><td><code>[3, -1, -3]</code></td><td><strong>3</strong> (at idx 1)</td></tr>
+                            <tr><td>4</td><td>5</td><td>Expire idx 1 (1 &lt;= 4-3). 5 &gt; -3, 5 &gt; -1, 5 &gt; 3 ➔ Pop all from BACK! Push 4</td><td><code>[5]</code></td><td><strong>5</strong> (at idx 4)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Monotonic Deque achieves O(N) runtime because each element is pushed once and popped at most once!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 5: BFS PREVIEW, DECISION TREE & PRINTABLE CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page5">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📜</span>
+                    <h1>TOPIC 08.4, 08.5 &amp; 1-PAGE PRINTABLE CHEAT SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 5 OF 10</span>
+            </div>
+
+            <!-- Mermaid Decision Tree -->
+            <div class="section-box box-purple">
+                <div class="section-header">🌳 QUEUE &amp; DEQUE INTERVIEW DECISION TREE (MERMAID)</div>
+                <div class="section-content">
+                    <div class="mermaid">
+                        graph TD
+                            A[What is the Problem Type?]
+                            A --> B[Order Preserving FIFO / Streaming?]
+                            A --> C[Sliding Window Maximum / Minimum?]
+                            A --> D[Layer-by-Layer Tree/Graph Traversal?]
+                            B --> B1[Standard Queue ArrayDeque]
+                            C --> C1[Monotonic Deque ArrayDeque]
+                            D --> D1[BFS Queue Layer Processing]
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1-Page Printable Cheat Sheet -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📜 PRINTABLE QUEUE &amp; DEQUE CHEAT SHEET</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr><th>Pattern Type</th><th>Target Problem</th><th>Data Structure</th><th>Key Code Mechanism</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Standard FIFO Queue</td><td>Recent Calls (LC 933)</td><td><code>Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;()</code></td><td><code>q.offer(val)</code>, <code>q.poll()</code></td></tr>
+                            <tr><td>Circular Queue</td><td>Design Circular Queue (LC 622)</td><td>Array + Modulo Pointers</td><td><code>head = (head + 1) % K</code></td></tr>
+                            <tr><td>Sliding Window Max</td><td>Sliding Window Max (LC 239)</td><td>Monotonic Decreasing Deque</td><td>Pop smaller from back, pop expired from front</td></tr>
+                            <tr><td>BFS Layer Processing</td><td>Level Order Traversal</td><td>Queue</td><td><code>int size = q.size(); for(int i=0; i&lt;size; i++)</code></td></tr>
+                            <tr><td>Two-Queue Voting</td><td>Dota2 Senate (LC 649)</td><td>2 Queues (Radiant, Dire)</td><td>Compare front indices, re-enqueue winner with <code>+N</code> offset</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Print this page and review it 10 minutes before your technical interview!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 6: EASY NEETCODE SUITE (LC 232, LC 933, MOVING AVERAGE) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page6">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🧩</span>
+                    <h1>EASY NEETCODE: QUEUE USING STACKS, RECENT CALLS &amp; MOVING AVG</h1>
+                </div>
+                <span class="page-num">PAGE 6 OF 10</span>
+            </div>
+
+            <!-- Problem 1: LC 232 -->
+            <div class="section-box box-blue">
+                <div class="section-header">1. LEETCODE 232 — IMPLEMENT QUEUE USING STACKS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★★</span>
+                                <span>Two Stacks</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Microsoft</span>
+                            </div>
+                            <strong>Problem:</strong> Implement FIFO queue using two stacks (`input` &amp; `output`). Amortized O(1) time!
+                        </div>
+                        <div class="problem-code">
+<pre>
+class MyQueue {
+    private Deque&lt;Integer&gt; in = new ArrayDeque&lt;&gt;();
+    private Deque&lt;Integer&gt; out = new ArrayDeque&lt;&gt;();
+    public void push(int x) { in.push(x); }
+    public int pop() { peek(); return out.pop(); }
+    public int peek() {
+        if (out.isEmpty()) {
+            while (!in.isEmpty()) out.push(in.pop()); // Reverse order
+        }
+        return out.peek();
+    }
+    public boolean empty() { return in.isEmpty() &amp;&amp; out.isEmpty(); }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 2: LC 933 -->
+            <div class="section-box box-green">
+                <div class="section-header">2. LEETCODE 933 — NUMBER OF RECENT CALLS</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-easy">🟢 Easy ★★★★☆</span>
+                                <span>Queue Range Expiry</span>
+                                <span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Count number of recent requests within time range `[t - 3000, t]`.
+                        </div>
+                        <div class="problem-code">
+<pre>
+class RecentCounter {
+    private Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    public int ping(int t) {
+        q.offer(t);
+        while (!q.isEmpty() &amp;&amp; q.peek() &lt; t - 3000) {
+            q.poll(); // Expire timestamps older than t - 3000
+        }
+        return q.size();
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 232):</strong> Two LIFO reversals cancel out to form a perfect FIFO Queue!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 7: MEDIUM NEETCODE (SLIDING WINDOW MAX & CIRCULAR QUEUE) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page7">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">📈</span>
+                    <h1>MEDIUM NEETCODE: SLIDING WINDOW MAX &amp; CIRCULAR QUEUE</h1>
+                </div>
+                <span class="page-num">PAGE 7 OF 10</span>
+            </div>
+
+            <!-- Problem 3: LC 239 -->
+            <div class="section-box box-blue">
+                <div class="section-header">3. LEETCODE 239 — SLIDING WINDOW MAXIMUM</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Monotonic Decreasing Deque</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span><span class="company-tag">Google</span>
+                            </div>
+
+                            <!-- Flowchart -->
+                            <div class="flowchart-box">
+                                📌 FLOWCHART: Expire old idx from front ➔ Pop smaller from back ➔ Record peekFirst() when i &ge; K-1!
+                            </div>
+
+                            <strong>Problem:</strong> Return maximum element in sliding window of size K sliding from left to right in O(N) total time.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int[] maxSlidingWindow(int[] nums, int k) {
+    int n = nums.length, idx = 0;
+    int[] res = new int[n - k + 1];
+    Deque&lt;Integer&gt; deque = new ArrayDeque&lt;&gt;(); // Stores indices
+    for (int i = 0; i &lt; n; i++) {
+        if (!deque.isEmpty() &amp;&amp; deque.peekFirst() &lt;= i - k) {
+            deque.pollFirst(); // Expire index outside window
+        }
+        while (!deque.isEmpty() &amp;&amp; nums[i] &gt;= nums[deque.peekLast()]) {
+            deque.pollLast(); // Maintain monotonic decreasing order
+        }
+        deque.offerLast(i);
+        if (i &gt;= k - 1) res[idx++] = nums[deque.peekFirst()];
+    }
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 4: LC 622 -->
+            <div class="section-box box-purple">
+                <div class="section-header">4. LEETCODE 622 — DESIGN CIRCULAR QUEUE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★☆</span>
+                                <span>Array Modulo Pointer</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Meta</span>
+                            </div>
+                            <strong>Problem:</strong> Design a Circular Queue using a fixed-size array with O(1) operations.
+                        </div>
+                        <div class="problem-code">
+<pre>
+class MyCircularQueue {
+    private int[] data;
+    private int head = 0, tail = 0, size = 0, capacity;
+    public MyCircularQueue(int k) { capacity = k; data = new int[k]; }
+    public boolean enQueue(int value) {
+        if (isFull()) return false;
+        data[tail] = value; tail = (tail + 1) % capacity; size++; return true;
+    }
+    public boolean deQueue() {
+        if (isEmpty()) return false;
+        head = (head + 1) % capacity; size--; return true;
+    }
+    public int Front() { return isEmpty() ? -1 : data[head]; }
+    public int Rear() { return isEmpty() ? -1 : data[(tail - 1 + capacity) % capacity]; }
+    public boolean isEmpty() { return size == 0; }
+    public boolean isFull() { return size == capacity; }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 239):</strong> Monotonic Deque cuts time complexity from O(N \cdot K) brute-force to O(N) optimal!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 8: MEDIUM NEETCODE (DOTA2 SENATE & REVEAL CARDS) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page8">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🗳️</span>
+                    <h1>MEDIUM NEETCODE: DOTA2 SENATE &amp; REVEAL CARDS ORDER</h1>
+                </div>
+                <span class="page-num">PAGE 8 OF 10</span>
+            </div>
+
+            <!-- Problem 5: LC 649 -->
+            <div class="section-box box-green">
+                <div class="section-header">5. LEETCODE 649 — DOTA2 SENATE</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★☆</span>
+                                <span>Two Queues Simulation</span>
+                                <span class="company-tag">Uber</span>
+                            </div>
+                            <strong>Problem:</strong> Predict winning Senate party (`Radiant` vs `Dire`) in voting round simulation.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public String predictPartyVictory(String senate) {
+    int n = senate.length();
+    Queue&lt;Integer&gt; rad = new ArrayDeque&lt;&gt;(), dir = new ArrayDeque&lt;&gt;();
+    for (int i = 0; i &lt; n; i++) {
+        if (senate.charAt(i) == 'R') rad.offer(i);
+        else dir.offer(i);
+    }
+    while (!rad.isEmpty() &amp;&amp; !dir.isEmpty()) {
+        int rIdx = rad.poll(), dIdx = dir.poll();
+        if (rIdx &lt; dIdx) rad.offer(rIdx + n); // Radiant bans Dire!
+        else dir.offer(dIdx + n);             // Dire bans Radiant!
+    }
+    return rad.isEmpty() ? "Dire" : "Radiant";
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 6: LC 950 -->
+            <div class="section-box box-orange">
+                <div class="section-header">6. LEETCODE 950 — REVEAL CARDS IN INCREASING ORDER</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-medium">🟡 Medium ★★★★☆</span>
+                                <span>Deque Index Simulation</span>
+                                <span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Order deck of cards so that revealing top card and moving next to bottom reveals in sorted order.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int[] deckRevealedIncreasing(int[] deck) {
+    int n = deck.length; Arrays.sort(deck);
+    Deque&lt;Integer&gt; indexDeque = new ArrayDeque&lt;&gt;();
+    for (int i = 0; i &lt; n; i++) indexDeque.offer(i);
+    int[] res = new int[n];
+    for (int card : deck) {
+        res[indexDeque.pollFirst()] = card; // Place smallest card
+        if (!indexDeque.isEmpty()) {
+            indexDeque.offerLast(indexDeque.pollFirst()); // Move next to back
+        }
+    }
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 649):</strong> Re-enqueueing the winning senator with an index offset `idx + N` perfectly simulates round-robin voting!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 9: HARD NEETCODE (SHORTEST SUBARRAY SUM & DP MAX) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page9">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">🔥</span>
+                    <h1>HARD NEETCODE: SHORTEST SUBARRAY SUM &amp; CONSTRAINED DP</h1>
+                </div>
+                <span class="page-num">PAGE 9 OF 10</span>
+            </div>
+
+            <!-- Problem 7: LC 862 -->
+            <div class="section-box box-red">
+                <div class="section-header">7. LEETCODE 862 — SHORTEST SUBARRAY WITH SUM AT LEAST K</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>Prefix Sum + Monotonic Deque</span>
+                                <span class="company-tag">Amazon</span><span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Length of shortest non-empty subarray with sum >= K (handles negative numbers!).
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int shortestSubarray(int[] nums, int k) {
+    int n = nums.length, minLen = n + 1;
+    long[] P = new long[n + 1];
+    for (int i = 0; i &lt; n; i++) P[i + 1] = P[i] + nums[i];
+    Deque&lt;Integer&gt; deque = new ArrayDeque&lt;&gt;();
+    for (int i = 0; i &lt;= n; i++) {
+        while (!deque.isEmpty() &amp;&amp; P[i] - P[deque.peekFirst()] &gt;= k) {
+            minLen = Math.min(minLen, i - deque.pollFirst());
+        }
+        while (!deque.isEmpty() &amp;&amp; P[i] &lt;= P[deque.peekLast()]) {
+            deque.pollLast(); // Maintain monotonic increasing prefix sums
+        }
+        deque.offerLast(i);
+    }
+    return minLen &lt;= n ? minLen : -1;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 8: LC 1425 -->
+            <div class="section-box box-indigo">
+                <div class="section-header">8. LEETCODE 1425 — CONSTRAINED SUBSEQUENCE SUM</div>
+                <div class="section-content">
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <div class="meta-card">
+                                <span class="badge-hard">🔴 Hard ★★★★★</span>
+                                <span>DP + Monotonic Deque</span>
+                                <span class="company-tag">Google</span>
+                            </div>
+                            <strong>Problem:</strong> Max sum of subsequence such that index difference between consecutive elements is <= K.
+                        </div>
+                        <div class="problem-code">
+<pre>
+public int constrainedSubsetSum(int[] nums, int k) {
+    int n = nums.length, maxSum = nums[0];
+    int[] dp = new int[n];
+    Deque&lt;Integer&gt; deque = new ArrayDeque&lt;&gt;();
+    for (int i = 0; i &lt; n; i++) {
+        if (!deque.isEmpty() &amp;&amp; deque.peekFirst() &lt; i - k) deque.pollFirst();
+        dp[i] = nums[i] + (!deque.isEmpty() ? Math.max(0, dp[deque.peekFirst()]) : 0);
+        maxSum = Math.max(maxSum, dp[i]);
+        while (!deque.isEmpty() &amp;&amp; dp[i] &gt;= dp[deque.peekLast()]) deque.pollLast();
+        deque.offerLast(i);
+    }
+    return maxSum;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Combining Dynamic Programming with a Monotonic Deque reduces O(N \cdot K) DP transitions to O(N) linear time!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 10: MASTER REVISION & REFERENCE CHEAT SHEET -->
+    <!-- ========================================================= -->
+    <div class="page" id="page10">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.1rem;">💎</span>
+                    <h1>IF YOU REMEMBER ONLY ONE PAGE... MASTER REVISION SHEET</h1>
+                </div>
+                <span class="page-num">PAGE 10 OF 10</span>
+            </div>
+
+            <!-- 4 Golden Laws -->
+            <div class="section-box box-green">
+                <div class="section-header">⭐ THE 4 GOLDEN LAWS OF QUEUES &amp; DEQUES</div>
+                <div class="section-content">
+                    <div style="font-size:0.78rem; line-height:1.45;">
+                        1. <strong>Use ArrayDeque for Queue &amp; Deque:</strong> Always declare <code>Deque&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();</code> (Faster than LinkedList!).<br/>
+                        2. <strong>Monotonic Decreasing Deque for Sliding Max:</strong> Pop smaller elements from BACK, pop expired indices from FRONT.<br/>
+                        3. <strong>Circular Queue Modulo Math:</strong> Wrap indices via <code>(idx + 1) % capacity</code> to avoid O(N) element shifting.<br/>
+                        4. <strong>BFS Queue Snapshot:</strong> For layer-by-layer tree/graph processing, freeze size via <code>int size = q.size();</code> before inner loop!
+                    </div>
+                </div>
+            </div>
+
+            <!-- When Queue Fails -->
+            <div class="section-box box-amber">
+                <div class="section-header">⛔ WHEN QUEUE FAILS (DO NOT USE!)</div>
+                <div class="section-content">
+                    <div>• <strong>Random Index Access:</strong> Queue ONLY allows viewing front element (O(1)) ➔ Use <strong>Array / ArrayList</strong>!</div>
+                    <div>• <strong>LIFO Reversal:</strong> Queue preserves order ➔ Use <strong>Stack</strong> for LIFO reversal!</div>
+                </div>
+            </div>
+
+            <!-- NeetCode & Blind 75 Tracker -->
+            <div class="section-box box-indigo">
+                <div class="section-header">📊 NEETCODE &amp; BLIND 75 CONFIDENCE TRACKER</div>
+                <div class="section-content">
+                    <div class="grid-3">
+                        <div><span class="badge-easy">🟢 Easy</span> LC 232 Queue using Stacks</div>
+                        <div><span class="badge-easy">🟢 Easy</span> LC 933 Recent Calls</div>
+                        <div><span class="badge-easy">🟢 Easy</span> Moving Average Stream</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 622 Circular Queue</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 649 Dota2 Senate</div>
+                        <div><span class="badge-medium">🟡 Med</span> LC 950 Reveal Cards Order</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 239 Sliding Window Max</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 862 Shortest Subarray Sum</div>
+                        <div><span class="badge-hard">🔴 Hard</span> LC 1425 Constrained Subset Sum</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forward Cross Link -->
+            <a href="index.html" class="cross-link" style="background:#dcfce7; color:#15803d; border-color:#86efac; font-size:0.78rem;">👉 Next Master Topic: Topic 09 → Priority Queue &amp; Heap Masterclass</a>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🎉 <strong>TOPIC 08 QUEUE &amp; DEQUE MASTERCLASS COMPLETE!</strong> Turn the page to <strong>Topic 09: Priority Queue &amp; Heap Masterclass</strong>!
+        </div>
+    </div>
+
+    </div> <!-- end .main-content -->
+</div> <!-- end .app-layout -->
+</div> <!-- end .container -->
+
+<!-- Floating Back to Top Button -->
+<button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆</button>
+
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout') || document.querySelector('.app-layout');
+        const btn = document.querySelector('.shrink-btn span');
+        if (layout) {
+            layout.classList.toggle('shrunk');
+            if (btn) {
+                btn.innerText = layout.classList.contains('shrunk') ? '➕ Expand' : '➖ Shrink';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+

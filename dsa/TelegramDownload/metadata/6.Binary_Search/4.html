@@ -1,0 +1,324 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1 style="margin: 0; color: #1e3a8a; font-size: 3em;">BINARY SEARCH</h1>
+            <div class="subtitle" style="margin-left: 20px; background-color: #1e3a8a; color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 1.2em;">FAANG INTERVIEW CHEAT SHEET (JAVA)</div>
+        </div>
+        <div style="text-align: right; display: flex; align-items: center; gap: 15px;">
+            <div style="border: 2px solid #ef4444; border-radius: 8px; padding: 5px 10px; text-align: left; display: flex; align-items: center; gap: 10px;">
+                <div style="font-size: 2em; color: #ef4444;">&#127919;</div>
+                <div>
+                    <strong style="color: #1d4ed8; font-size: 1.1em;">GOAL:</strong><br>
+                    <small style="font-weight: bold;">Reduce search space<br>by half in every step<br>O(log n) time</small>
+                </div>
+            </div>
+            <div class="page-number" style="background-color: #1e3a8a; color: white; padding: 8px 15px; border-radius: 5px; font-weight: bold;">Page 4 of 4</div>
+        </div>
+    </div>
+
+    <div class="grid-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+        <div class="col-left">
+            <div class="section-box" style="border: 2px solid #6b21a8; border-radius: 8px; overflow: hidden; margin-bottom: 15px;">
+                <div class="section-header" style="background-color: #6b21a8; color: white; padding: 8px; font-weight: bold;"><span class="num" style="background: white; color: #6b21a8; padding: 2px 6px; border-radius: 4px; margin-right: 8px;">18.</span> TIME & SPACE COMPLEXITY SUMMARY</div>
+                <div class="section-content">
+                    <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 0.85em;">
+                        <tr style="background-color: #6b21a8; color: white;">
+                            <th style="padding: 8px;">Problem Type</th>
+                            <th style="padding: 8px;">Time Complexity</th>
+                            <th style="padding: 8px;">Space Complexity</th>
+                            <th style="padding: 8px;">Notes</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; text-align: left;"><span style="margin-right: 5px; font-size: 1.2em;">&#128269;</span> Classic Binary Search</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-weight: bold;">O(log n)</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">O(1)</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">Iterative</td>
+                        </tr>
+                        <tr style="background-color: #f8fafc;">
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; text-align: left;"><span style="margin-right: 5px; color: #16a34a; font-size: 1.2em;">&#128202;</span> First / Last Occurrence</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-weight: bold;">O(log n)</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">O(1)</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">Extra checks</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; text-align: left;"><span style="margin-right: 5px; color: #8b5cf6; font-size: 1.2em; border: 1px solid #8b5cf6; border-radius: 50%; padding: 0 4px;">?</span> Search on Answer</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-weight: bold;">O(log N &times; log M)</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">O(1)</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 0.9em;">N = array size,<br>M = answer range</td>
+                        </tr>
+                        <tr style="background-color: #f8fafc;">
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; text-align: left;"><span style="margin-right: 5px; color: #3b82f6; font-size: 1.2em;">&#128174;</span> Search in 2D Matrix</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-weight: bold;">O(log (m &times; n))</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">O(1)</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">Treat as 1D array</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; text-align: left;"><span style="margin-right: 5px; color: #2563eb; font-size: 1.2em;">&#127956;</span> Peak Element</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-weight: bold;">O(log n)</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">O(1)</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">Bitonic array</td>
+                        </tr>
+                        <tr style="background-color: #f8fafc;">
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; text-align: left;"><span style="margin-right: 5px; color: #f59e0b; font-size: 1.2em;">&#8635;</span> Rotated Sorted Array</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-weight: bold;">O(log n)</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">O(1)</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">Unique<br>elements</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section-box" style="border: 2px solid #1d4ed8; border-radius: 8px; overflow: hidden;">
+                <div class="section-header" style="background-color: #1d4ed8; color: white; padding: 8px; font-weight: bold;"><span class="num" style="background: white; color: #1d4ed8; padding: 2px 6px; border-radius: 4px; margin-right: 8px;">20.</span> BINARY SEARCH FLOW SUMMARY</div>
+                <div class="section-content" style="text-align: center; padding: 10px;">
+                    <div class="mermaid">
+                    graph TD
+                        A[Is the array sorted?] -->|YES| B[What are we looking for?]
+                        A -->|NO| C[Can we sort it?]
+                        B --> D[Exact<br>Element]
+                        B --> E[First / Last<br>Occurrence]
+                        B --> F[Min / Max<br>Satisfying<br>Condition]
+                        D --> D1[Classic<br>Binary Search]
+                        E --> E1[First / Last<br>Templates]
+                        F --> F1[Binary Search<br>on Answer]
+                        C -->|YES| G[Sort + Classic<br>Binary Search]
+                        C -->|NO| H[Binary Search<br>Not Applicable]
+                        
+                        style A fill:#eff6ff,stroke:#1d4ed8,stroke-width:2px
+                        style B fill:#f0fdf4,stroke:#16a34a,stroke-width:2px
+                        style C fill:#fef2f2,stroke:#ef4444,stroke-width:2px
+                        style D fill:#f0fdf4,stroke:#16a34a
+                        style E fill:#f0fdf4,stroke:#16a34a
+                        style F fill:#f0fdf4,stroke:#16a34a
+                        style G fill:#f0fdf4,stroke:#16a34a
+                        style H fill:#fef2f2,stroke:#ef4444
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-right">
+            <div class="section-box" style="border: 2px solid #16a34a; border-radius: 8px; overflow: hidden; margin-bottom: 15px;">
+                <div class="section-header" style="background-color: #16a34a; color: white; padding: 8px; font-weight: bold;"><span class="num" style="background: white; color: #16a34a; padding: 2px 6px; border-radius: 4px; margin-right: 8px;">19.</span> PATTERN RECOGNITION GUIDE</div>
+                <div class="section-content" style="padding: 15px;">
+                    <p style="margin-top:0; font-weight:bold; font-size:0.95em; margin-bottom: 15px;">Look at the problem and identify the pattern:</p>
+                    <table style="width: 100%; border-collapse: separate; border-spacing: 0 10px; font-size: 0.9em; font-weight: bold;">
+                        <tr>
+                            <td style="width: 45%;"><span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px;">&#128269;</span> Exact value in<br>sorted array</td>
+                            <td style="width: 10%; text-align: center;">&rarr;</td>
+                            <td style="border: 1px solid #16a34a; border-radius: 5px; padding: 8px; width: 45%; background-color: #f0fdf4; color: #166534;">Classic Binary Search</td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px; color: #ea580c;">&#128681;</span> First / Last position<br>of a target</td>
+                            <td style="text-align: center;">&rarr;</td>
+                            <td style="border: 1px solid #16a34a; border-radius: 5px; padding: 8px; background-color: #f0fdf4; color: #166534;">First / Last Occurrence<br>Templates</td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px; color: #dc2626;">&#127919;</span> Smallest / Largest value<br>satisfying a condition</td>
+                            <td style="text-align: center;">&rarr;</td>
+                            <td style="border: 1px solid #16a34a; border-radius: 5px; padding: 8px; background-color: #f0fdf4; color: #166534;">Binary Search on Answer<br>(Optimization Problems)</td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px; color: #d97706;">&#128302;</span> Matrix is sorted<br>(row-wise & col-wise)</td>
+                            <td style="text-align: center;">&rarr;</td>
+                            <td style="border: 1px solid #16a34a; border-radius: 5px; padding: 8px; background-color: #f0fdf4; color: #166534;">Treat as 1D Binary Search</td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px; color: #14b8a6;">&#8635;</span> Array is rotated<br>sorted</td>
+                            <td style="text-align: center;">&rarr;</td>
+                            <td style="border: 1px solid #16a34a; border-radius: 5px; padding: 8px; background-color: #f0fdf4; color: #166534;">Find pivot, then Binary Search<br>in correct half</td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px; color: #3b82f6;">&#127956;</span> Bitonic / Mountain<br>Array</td>
+                            <td style="text-align: center;">&rarr;</td>
+                            <td style="border: 1px solid #16a34a; border-radius: 5px; padding: 8px; background-color: #f0fdf4; color: #166534;">Find peak, then search in<br>increasing / decreasing part</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section-box" style="border: 2px solid #f59e0b; border-radius: 8px; overflow: hidden;">
+                <div class="section-header" style="background-color: #f59e0b; color: white; padding: 8px; font-weight: bold;"><span class="num" style="background: white; color: #f59e0b; padding: 2px 6px; border-radius: 4px; margin-right: 8px;">21.</span> BINARY SEARCH SUMMARY (KEY POINTS)</div>
+                <div class="section-content" style="padding: 15px;">
+                    <ul style="list-style-type: none; padding-left: 0; margin-top: 0; font-size: 0.95em; line-height: 1.8; font-weight: bold;">
+                        <li><span style="color: #f59e0b; margin-right: 8px; font-size: 1.2em;">&#10004;</span> Always think: Can I eliminate half of the search space?</li>
+                        <li><span style="color: #f59e0b; margin-right: 8px; font-size: 1.2em;">&#10004;</span> Define search space correctly.</li>
+                        <li><span style="color: #f59e0b; margin-right: 8px; font-size: 1.2em;">&#10004;</span> Choose the right template (classic / first / last / answer).</li>
+                        <li><span style="color: #f59e0b; margin-right: 8px; font-size: 1.2em;">&#10004;</span> Handle boundaries and edge cases.</li>
+                        <li><span style="color: #f59e0b; margin-right: 8px; font-size: 1.2em;">&#10004;</span> Avoid infinite loops by correct pointer updates.</li>
+                        <li><span style="color: #f59e0b; margin-right: 8px; font-size: 1.2em;">&#10004;</span> Dry run with small examples before coding.</li>
+                        <li><span style="color: #f59e0b; margin-right: 8px; font-size: 1.2em;">&#10004;</span> Write clean, bug-free, and well-commented code.</li>
+                    </ul>
+                    <div style="background-color: #fef3c7; padding: 15px; border-radius: 8px; display: flex; align-items: center; border: 1px solid #fde68a; margin-top: 15px;">
+                        <div style="font-size: 2.5em; margin-right: 15px;">&#128161;</div>
+                        <div>
+                            <strong style="color: #b45309; font-size: 1.1em;">REMEMBER:</strong><br>
+                            <span style="font-weight: bold; color: #451a03;">Binary Search is all about reducing uncertainty<br>in the smartest way possible!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="display: flex; gap: 15px; margin-top: 15px;">
+        <div style="flex: 1.2;">
+            <div class="section-box" style="border: 2px solid #ef4444; border-radius: 8px; overflow: hidden; height: 100%;">
+                <div class="section-header" style="background-color: #ef4444; color: white; padding: 8px; font-weight: bold;"><span class="num" style="background: white; color: #ef4444; padding: 2px 6px; border-radius: 4px; margin-right: 8px;">22.</span> COMMON EDGE CASES</div>
+                <div class="section-content" style="font-size: 0.85em; padding: 12px;">
+                    <ul style="list-style-type: disc; padding-left: 20px; margin: 0; color: #ef4444;">
+                        <li style="margin-bottom: 8px;"><span style="color: black; font-weight: bold;">Array with 1 element</span>
+                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 5px 8px; margin: 5px 0 0 0; font-family: monospace; color: #0f172a; border-radius: 4px;">nums = [5], target = 5 &rarr; return <span style="color: #2563eb;">0</span></div>
+                        </li>
+                        <li style="margin-bottom: 8px;"><span style="color: black; font-weight: bold;">Target not present</span>
+                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 5px 8px; margin: 5px 0 0 0; font-family: monospace; color: #0f172a; border-radius: 4px;">nums = [1,2,3,4], target = 10 &rarr; return <span style="color: #2563eb;">-1</span></div>
+                        </li>
+                        <li style="margin-bottom: 8px;"><span style="color: black; font-weight: bold;">All elements same</span>
+                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 5px 8px; margin: 5px 0 0 0; font-family: monospace; color: #0f172a; border-radius: 4px;">nums = [7,7,7,7], target = 7 &rarr; return first / last as per need</div>
+                        </li>
+                        <li style="margin-bottom: 8px;"><span style="color: black; font-weight: bold;">First element target</span>
+                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 5px 8px; margin: 5px 0 0 0; font-family: monospace; color: #0f172a; border-radius: 4px;">nums = [1,2,3,4], target = 1 &rarr; return <span style="color: #2563eb;">0</span></div>
+                        </li>
+                        <li style="margin-bottom: 8px;"><span style="color: black; font-weight: bold;">Last element target</span>
+                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 5px 8px; margin: 5px 0 0 0; font-family: monospace; color: #0f172a; border-radius: 4px;">nums = [1,2,3,4], target = 4 &rarr; return n-1</div>
+                        </li>
+                        <li><span style="color: black; font-weight: bold;">Check for overflow in mid calculation</span>
+                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 5px 8px; margin: 5px 0 0 0; font-family: monospace; color: #0f172a; border-radius: 4px;"><span style="color: #b91c1c;">int</span> mid = left + (right - left) / 2; <span style="color: #ef4444;">// safe</span></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="flex: 0.8;">
+            <div class="section-box" style="border: 2px solid #2563eb; border-radius: 8px; overflow: hidden; height: 100%;">
+                <div class="section-header" style="background-color: #2563eb; color: white; padding: 8px; font-weight: bold;"><span class="num" style="background: white; color: #2563eb; padding: 2px 6px; border-radius: 4px; margin-right: 8px;">23.</span> DRY RUN TIPS</div>
+                <div class="section-content" style="font-size: 0.85em; padding: 15px;">
+                    <ul style="list-style-type: disc; padding-left: 20px; margin: 0; color: #2563eb; line-height: 1.8; font-weight: bold;">
+                        <li><span style="color: black;">Always write left, right, mid.</span></li>
+                        <li><span style="color: black;">Highlight the mid element.</span></li>
+                        <li><span style="color: black;">Write the comparison result.</span></li>
+                        <li><span style="color: black;">Update the pointers.</span></li>
+                        <li><span style="color: black;">Repeat until condition breaks.</span></li>
+                        <li><span style="color: black;">Finally, write the answer.</span></li>
+                    </ul>
+                    <div style="background-color: #eff6ff; padding: 12px; border: 1px dashed #2563eb; border-radius: 8px; margin-top: 15px; display: flex; align-items: start; gap: 10px;">
+                        <div style="color: #1d4ed8; font-size: 1.5em;">&#11088;</div>
+                        <div>
+                            <strong style="color: #1d4ed8; font-size: 1.1em;">Pro Tip:</strong><br>
+                            <span style="font-weight: bold;">Practice dry run without coding first!<br>It improves your problem-solving speed.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="flex: 1.2;">
+            <div class="section-box" style="border: 2px solid #6366f1; border-radius: 8px; overflow: hidden; height: 100%;">
+                <div class="section-header" style="background-color: #6366f1; color: white; padding: 8px; font-weight: bold;"><span class="num" style="background: white; color: #6366f1; padding: 2px 6px; border-radius: 4px; margin-right: 8px;">24.</span> QUICK REFERENCE (JAVA)</div>
+                <div class="section-content" style="font-size: 0.8em; padding: 10px;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <tr>
+                            <td style="padding: 8px; color: #4338ca; font-weight: bold; border-bottom: 1px solid #e5e7eb; width: 35%;">Mid (Safe)</td>
+                            <td style="padding: 8px; font-family: monospace; color: #1e3a8a; border-bottom: 1px solid #e5e7eb; font-weight: bold;"><span style="color: #b91c1c;">int</span> mid = left + (right - left) / 2;</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; color: #4338ca; font-weight: bold; border-bottom: 1px solid #e5e7eb;">Left Half</td>
+                            <td style="padding: 8px; font-family: monospace; color: #1e3a8a; border-bottom: 1px solid #e5e7eb; font-weight: bold;">right = mid - 1;</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; color: #4338ca; font-weight: bold; border-bottom: 1px solid #e5e7eb;">Right Half</td>
+                            <td style="padding: 8px; font-family: monospace; color: #1e3a8a; border-bottom: 1px solid #e5e7eb; font-weight: bold;">left = mid + 1;</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; color: #4338ca; font-weight: bold; border-bottom: 1px solid #e5e7eb;">Loop Condition</td>
+                            <td style="padding: 8px; font-family: monospace; color: #1e3a8a; border-bottom: 1px solid #e5e7eb; font-weight: bold;"><span style="color: #b91c1c;">while</span> (left &lt;= right)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; color: #4338ca; font-weight: bold; border-bottom: 1px solid #e5e7eb;">Return Not Found</td>
+                            <td style="padding: 8px; font-family: monospace; color: #1e3a8a; border-bottom: 1px solid #e5e7eb; font-weight: bold;"><span style="color: #b91c1c;">return</span> -1;</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; color: #4338ca; font-weight: bold; border-bottom: 1px solid #e5e7eb;">First Occurrence</td>
+                            <td style="padding: 8px; font-family: monospace; color: #1e3a8a; border-bottom: 1px solid #e5e7eb; font-weight: bold;">right = mid - 1; <span style="color: #16a34a; float: right;">// when equal</span></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; color: #4338ca; font-weight: bold; border-bottom: 1px solid #e5e7eb;">Last Occurrence</td>
+                            <td style="padding: 8px; font-family: monospace; color: #1e3a8a; border-bottom: 1px solid #e5e7eb; font-weight: bold;">left = mid + 1; <span style="color: #16a34a; float: right;">// when equal</span></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; color: #4338ca; font-weight: bold; border-bottom: 1px solid #e5e7eb;">Lower Bound</td>
+                            <td style="padding: 8px; font-family: monospace; color: #1e3a8a; border-bottom: 1px solid #e5e7eb; font-weight: bold;">right = mid - 1; <span style="color: #16a34a; float: right;">// when equal</span></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; color: #4338ca; font-weight: bold;">Upper Bound</td>
+                            <td style="padding: 8px; font-family: monospace; color: #1e3a8a; font-weight: bold;">left = mid + 1; <span style="color: #16a34a; float: right;">// when equal</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 15px; margin-top: 15px;">
+        <div style="flex: 2;">
+            <div class="section-box" style="border: 2px solid #047857; border-radius: 8px; overflow: hidden; height: 100%;">
+                <div class="section-header" style="background-color: #047857; color: white; padding: 8px; font-weight: bold;"><span class="num" style="background: white; color: #047857; padding: 2px 6px; border-radius: 4px; margin-right: 8px;">25.</span> FAANG INTERVIEW CHECKLIST</div>
+                <div class="section-content" style="display: flex; gap: 15px; font-size: 0.9em; padding: 15px; font-weight: bold; align-items: center;">
+                    <div style="flex: 1;">
+                        <div style="margin-bottom: 8px;"><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">&#10004;</span> Understand problem & constraints</div>
+                        <div style="margin-bottom: 8px;"><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">&#10004;</span> Identify if Binary Search applies</div>
+                        <div style="margin-bottom: 8px;"><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">&#10004;</span> Choose correct template</div>
+                        <div style="margin-bottom: 8px;"><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">&#10004;</span> Define search space</div>
+                        <div style="margin-bottom: 8px;"><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">&#10004;</span> Handle edge cases</div>
+                        <div style="margin-bottom: 8px;"><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">&#10004;</span> Dry run with examples</div>
+                        <div><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">&#10004;</span> Write clean code</div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="margin-bottom: 8px;"><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">&#10004;</span> Check time & space complexity</div>
+                        <div style="margin-bottom: 8px;"><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">&#10004;</span> Test with custom cases</div>
+                        <div style="margin-bottom: 8px;"><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">&#10004;</span> Explain your approach clearly</div>
+                        <div style="margin-bottom: 8px;"><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">&#10004;</span> Be ready for follow-up questions</div>
+                        <div><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">&#10004;</span> Optimize if required</div>
+                    </div>
+                    <div style="flex: 1.2; border: 2px solid #fbbf24; border-radius: 8px; padding: 15px; text-align: center; background-color: #fffbeb;">
+                        <div style="font-size: 2em; margin-bottom: 5px;">&#127942;</div>
+                        <strong style="color: #b45309; font-size: 1.1em;">GOLDEN RULE</strong><br><br>
+                        If you can solve it by<br>eliminating half every time,<br>think Binary Search first!
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="flex: 1;">
+            <div class="section-box" style="border: 2px solid #be123c; border-radius: 8px; overflow: hidden; height: 100%;">
+                <div class="section-header" style="background-color: #be123c; color: white; padding: 8px; font-weight: bold;"><span class="num" style="background: white; color: #be123c; padding: 2px 6px; border-radius: 4px; margin-right: 8px;">26.</span> MOTIVATION BOOSTER</div>
+                <div class="section-content" style="font-size: 0.9em; padding: 15px; line-height: 2; font-weight: bold; position: relative;">
+                    <div style="margin-bottom: 5px;"><span style="font-size: 1.2em; margin-right: 5px;">&#11088;</span> Binary Search is a superpower.</div>
+                    <div style="margin-bottom: 5px;"><span style="font-size: 1.2em; margin-right: 5px;">&#11088;</span> It turns O(n) into O(log n).</div>
+                    <div style="margin-bottom: 5px;"><span style="font-size: 1.2em; margin-right: 5px;">&#11088;</span> Master this pattern,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;crack any interview!</div>
+                    <div style="text-align: center; color: #be123c; font-weight: bold; font-size: 1.3em; margin-top: 15px;">
+                        YOU'VE GOT THIS! &#128170;
+                    </div>
+                    <div style="position: absolute; right: 10px; top: 30px; font-size: 3.5em;">&#128640;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 2px solid #e5e7eb;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="font-size: 2em; color: #be123c;">&#127919;</div>
+            <div style="color: #1e3a8a; font-weight: bold; font-size: 1.1em; line-height: 1.4;">
+                MASTER BINARY SEARCH PATTERN,<br>NOT JUST THE CODE.
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="font-size: 2em; color: #f87171;">&#129504;</div>
+            <div style="text-align: left; color: #1d4ed8; font-weight: bold; font-size: 1.1em; line-height: 1.4;">
+                THINK &rarr; ELIMINATE &rarr; NARROW &rarr; FIND<br>
+                That's the Binary Search Way!
+            </div>
+        </div>
+        <div style="background-color: #eff6ff; padding: 10px 20px; border-radius: 8px; border: 1px solid #bfdbfe; color: #1e3a8a; font-weight: bold; text-align: center; font-size: 1.1em; line-height: 1.4;">
+            Practice. Analyze. Optimize.<br>Become Unstoppable!
+        </div>
+    </div>
+</div>

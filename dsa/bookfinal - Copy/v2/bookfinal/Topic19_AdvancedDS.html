@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Topic 19: Advanced Data Structures Masterclass — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 14px; }
+.ph h1 { font-size: 1.8rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.88rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.75rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; }
+.bh  { background: var(--pri); color: white; padding: 6px 12px;
+  font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 18px; height: 18px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 10px 12px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 6px 12px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.75rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.95rem; }
+.psub   { color: var(--sub); font-size: 0.8rem; }
+.prow-body { display: flex; }
+.pc { padding: 8px 10px; font-size: 0.78rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.72rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; }
+.prob-head { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.75rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.70rem; line-height: 1.4; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.76rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+th, td { border: 1px solid var(--bdr); padding: 5px 7px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.badge-b { background: #dbeafe; color: #1e40af; }
+.badge-g { background: #dcfce7; color: #166534; }
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.tip  { background: #f0fdf4; border-left: 4px solid var(--grn); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 8px 10px; margin-top: 6px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.82rem; margin-bottom: 3px; }
+
+.dt-wrap { font-size: 0.76rem; }
+.dt-root { background: var(--pri); color: white; padding: 5px 10px; border-radius: 5px; text-align: center; font-weight: 700; margin-bottom: 8px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 5px 7px; font-weight: 600; color: #1e40af; font-size: 0.72rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 5px 7px; color: #065f46; font-weight: 700; font-size: 0.72rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.75rem; padding: 4px 3px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 6px 10px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.85; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- PAGE 1: FOUNDATION & WHY -->
+<div class="page">
+<div class="ph">
+  <div><h1>ADVANCED DATA STRUCTURES</h1><div class="sub">FAANG Master Guide — Java Edition</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 1 OF 10</div><div class="ptag">FOUNDATION · DSU · SEGMENT TREE · FENWICK · LRU</div></div>
+</div>
+
+<div class="g3" style="margin-bottom:12px">
+  <div class="box pur">
+    <div class="bh">💡 WHY ADVANCED DATA STRUCTURES?</div>
+    <div class="bc">
+      <p style="margin-bottom:6px">Standard data structures break down under dynamic constraints. Advanced structures combine multiple techniques (e.g., Doubly Linked List + HashMap for LRU Cache) to guarantee **O(1) or O(log N) operations** under complex workloads!</p>
+      <div class="aha">
+        <div class="aha-t">💡 THE INVERSE ACKERMANN AHA</div>
+        Disjoint Set Union (DSU) with **Path Compression** and **Union by Rank** reduces `find()` and `union()` operations to near-constant $\alpha(N) \approx O(1)$ time!
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bh"><span class="n">1</span> 4 CORE ADVANCED STRUCTURES</div>
+    <div class="bc">
+      <ul style="margin-bottom:8px;padding-left:16px;font-size:0.78rem">
+        <li><strong>Union-Find (DSU):</strong> Dynamic connectivity, cycle detection in $O(\alpha(N))$.</li>
+        <li><strong>Segment Tree:</strong> Range minimum / sum queries &amp; point updates in $O(\log N)$.</li>
+        <li><strong>Fenwick Tree (BIT):</strong> Prefix sums and updates in $O(\log N)$ with zero tree overhead.</li>
+        <li><strong>LRU Cache:</strong> Doubly Linked List + HashMap for $O(1)$ get/put eviction.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box sky">
+    <div class="bh"><span class="n">2</span> VISUALIZING PATH COMPRESSION</div>
+    <div class="bc">
+      <div style="font-weight:700;color:var(--pri);margin-bottom:4px">Before vs After Path Compression:</div>
+<pre>Before: 4 -> 3 -> 2 -> 1 (root)
+find(4) flattens tree!
+After:  4 -> 1, 3 -> 1, 2 -> 1
+Tree height becomes 1!</pre>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">📚 PREREQUISITES &amp; COMPLEXITY REASONING</div>
+    <div class="bc">
+      <table style="font-size:0.76rem">
+        <tr><th>Data Structure</th><th>Query Time</th><th>Update Time</th><th>Space</th></tr>
+        <tr><td>Union-Find (DSU)</td><td><strong>O(α(N)) ≈ O(1)</strong></td><td><strong>O(α(N)) ≈ O(1)</strong></td><td><strong>O(N)</strong></td></tr>
+        <tr><td>Segment Tree</td><td><strong>O(log N) range</strong></td><td><strong>O(log N) point</strong></td><td><strong>O(4N) array</strong></td></tr>
+        <tr><td>Fenwick Tree (BIT)</td><td><strong>O(log N) prefix</strong></td><td><strong>O(log N) point</strong></td><td><strong>O(N) array</strong></td></tr>
+        <tr><td>LRU Cache</td><td><strong>O(1) get</strong></td><td><strong>O(1) put</strong></td><td><strong>O(Capacity)</strong></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box amb">
+    <div class="bh">⚡ CLUES THAT SCREAM ADVANCED DS</div>
+    <div class="bc">
+      <p style="font-size:0.8rem">1. <em>"Dynamic graph connectivity / Detect cycle in undirected graph"</em> $\rightarrow$ Union-Find (DSU)</p>
+      <p style="font-size:0.8rem">2. <em>"Dynamic range sum queries with point updates"</em> $\rightarrow$ Segment Tree or Fenwick Tree</p>
+      <p style="font-size:0.8rem">3. <em>"Design O(1) cache with least recently used eviction"</em> $\rightarrow$ LRU Cache (DLL + Map)</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 2: API & TOOLKIT -->
+<div class="page">
+<div class="ph">
+  <div><h1>ADVANCED DATA STRUCTURES</h1><div class="sub">Java Master DSU &amp; Cache Toolkit</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 2 OF 10</div><div class="ptag">DSU TEMPLATE · FENWICK TREE · DLL NODE</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:12px">
+  <div class="box">
+    <div class="bh"><span class="n">1</span> OPTIMAL UNION-FIND (DSU) TEMPLATE</div>
+    <div class="bc">
+<pre>class DSU {
+  int[] parent, rank;
+  public DSU(int n) {
+    parent = new int[n]; rank = new int[n];
+    for (int i = 0; i < n; i++) parent[i] = i;
+  }
+  public int find(int i) {
+    if (parent[i] == i) return i;
+    return parent[i] = find(parent[i]); // Path Compression!
+  }
+  public boolean union(int i, int j) {
+    int rootI = find(i), rootJ = find(j);
+    if (rootI == rootJ) return false; // Cycle detected!
+    if (rank[rootI] < rank[rootJ]) parent[rootI] = rootJ;
+    else if (rank[rootI] > rank[rootJ]) parent[rootJ] = rootI;
+    else { parent[rootJ] = rootI; rank[rootI]++; }
+    return true;
+  }
+}</pre>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh"><span class="n">2</span> FENWICK TREE (BINARY INDEXED TREE)</div>
+    <div class="bc">
+<pre>class FenwickTree {
+  int[] tree;
+  public FenwickTree(int n) { tree = new int[n + 1]; }
+  public void add(int i, int delta) {
+    for (i++; i < tree.length; i += i & -i) tree[i] += delta;
+  }
+  public int query(int i) {
+    int sum = 0;
+    for (i++; i > 0; i -= i & -i) sum += tree[i];
+    return sum;
+  }
+  public int rangeQuery(int l, int r) {
+    return query(r) - query(l - 1);
+  }
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 3: CORE PATTERNS (UNION-FIND DSU) -->
+<div class="page">
+<div class="ph">
+  <div><h1>ADVANCED DATA STRUCTURES</h1><div class="sub">Core Patterns — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 3 OF 10</div><div class="ptag">UNION-FIND · REDUNDANT CONNECTION · GRAPH CYCLES</div></div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 1</div>
+    <div class="ptitle">UNION-FIND CYCLE DETECTION (Redundant Connection)</div>
+    <div class="psub">e.g. Redundant Connection (LC 684), Number of Connected Components</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Cycle Detection Mechanics</div>
+      <div style="font-size:0.78rem">
+        For each edge $(u, v)$, if `union(u, v) == false` (meaning `find(u) == find(v)`), the current edge creates a cycle and is redundant!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 684</div>
+<pre>public int[] findRedundantConnection(int[][] edges) {
+  int n = edges.length;
+  DSU dsu = new DSU(n + 1);
+  for (int[] edge : edges) {
+    if (!dsu.union(edge[0], edge[1])) return edge; // Cycle edge found!
+  }
+  return new int[0];
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 4: CORE PATTERNS (SEGMENT TREE) -->
+<div class="page">
+<div class="ph">
+  <div><h1>ADVANCED DATA STRUCTURES</h1><div class="sub">Core Patterns — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 4 OF 10</div><div class="ptag">SEGMENT TREE · POINT UPDATE · RANGE QUERY</div></div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 2</div>
+    <div class="ptitle">SEGMENT TREE (Range Sum Query &amp; Point Update)</div>
+    <div class="psub">e.g. Range Sum Query - Mutable (LC 307)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Segment Tree Array Size $4N$</div>
+      <div style="font-size:0.78rem">
+        Divide range in half recursively. Left child $= 2i+1$, Right child $= 2i+2$. Point updates &amp; range sum queries run in $O(\log N)$!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 307</div>
+<pre>class NumArray {
+  int[] tree, nums; int n;
+  public NumArray(int[] nums) {
+    this.nums = nums; n = nums.length;
+    if (n > 0) { tree = new int[4 * n]; build(0, 0, n - 1); }
+  }
+  private void build(int node, int start, int end) {
+    if (start == end) { tree[node] = nums[start]; return; }
+    int mid = (start + end) / 2;
+    build(2 * node + 1, start, mid); build(2 * node + 2, mid + 1, end);
+    tree[node] = tree[2 * node + 1] + tree[2 * node + 2];
+  }
+  public void update(int index, int val) { updateTree(0, 0, n - 1, index, val); }
+  private void updateTree(int node, int start, int end, int idx, int val) {
+    if (start == end) { nums[idx] = val; tree[node] = val; return; }
+    int mid = (start + end) / 2;
+    if (start <= idx && idx <= mid) updateTree(2 * node + 1, start, mid, idx, val);
+    else updateTree(2 * node + 2, mid + 1, end, idx, val);
+    tree[node] = tree[2 * node + 1] + tree[2 * node + 2];
+  }
+  public int sumRange(int left, int right) { return query(0, 0, n - 1, left, right); }
+  private int query(int node, int start, int end, int L, int R) {
+    if (R < start || end < L) return 0;
+    if (L <= start && end <= R) return tree[node];
+    int mid = (start + end) / 2;
+    return query(2 * node + 1, start, mid, L, R) + query(2 * node + 2, mid + 1, end, L, R);
+  }
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 5: CORE PATTERNS (LRU CACHE) -->
+<div class="page">
+<div class="ph">
+  <div><h1>ADVANCED DATA STRUCTURES</h1><div class="sub">Core Patterns — Part 3</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 5 OF 10</div><div class="ptag">LRU CACHE · DOUBLY LINKED LIST + HASHMAP</div></div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 3</div>
+    <div class="ptitle">LRU CACHE (Doubly Linked List + HashMap)</div>
+    <div class="psub">e.g. LRU Cache (LC 146)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Sentinel Head &amp; Tail Guard</div>
+      <div style="font-size:0.78rem">
+        HashMap maps `key -> Node`. Dummy `head` and `tail` nodes eliminate edge case checks! Most recently used node is moved to head; least recently used at tail is evicted!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 146</div>
+<pre>class LRUCache {
+  class Node { int key, val; Node prev, next; Node(int k, int v) { key=k; val=v; } }
+  private final int capacity;
+  private final Map&lt;Integer, Node&gt; map = new HashMap&lt;&gt;();
+  private final Node head = new Node(0, 0), tail = new Node(0, 0);
+
+  public LRUCache(int capacity) {
+    this.capacity = capacity; head.next = tail; tail.prev = head;
+  }
+  public int get(int key) {
+    if (!map.containsKey(key)) return -1;
+    Node node = map.get(key); remove(node); insertToHead(node);
+    return node.val;
+  }
+  public void put(int key, int value) {
+    if (map.containsKey(key)) remove(map.get(key));
+    if (map.size() == capacity) { map.remove(tail.prev.key); remove(tail.prev); }
+    Node node = new Node(key, value); insertToHead(node); map.put(key, node);
+  }
+  private void remove(Node n) { n.prev.next = n.next; n.next.prev = n.prev; }
+  private void insertToHead(Node n) { n.next = head.next; n.next.prev = n; head.next = n; n.prev = head; }
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 6: CORE PATTERNS (LFU CACHE) -->
+<div class="page">
+<div class="ph">
+  <div><h1>ADVANCED DATA STRUCTURES</h1><div class="sub">Core Patterns — Part 4</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 6 OF 10</div><div class="ptag">LFU CACHE · MIN FREQUENCY MAP</div></div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 4</div>
+    <div class="ptitle">LFU CACHE (Frequency HashMap + Frequency Lists)</div>
+    <div class="psub">e.g. LFU Cache (LC 460)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Min Frequency State</div>
+      <div style="font-size:0.78rem">
+        Map `key -> Node`. Map `freq -> DoublyLinkedList`. Maintain `minFreq`. When capacity reached, evict from `freqMap.get(minFreq).tail.prev`!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 460</div>
+<pre>class LFUCache {
+  class Node { int key, val, freq = 1; Node prev, next; Node(int k, int v) { key=k; val=v; } }
+  class DoubleLinkedList {
+    Node head = new Node(0, 0), tail = new Node(0, 0); int size = 0;
+    DoubleLinkedList() { head.next = tail; tail.prev = head; }
+    void add(Node n) { n.next = head.next; n.next.prev = n; head.next = n; n.prev = head; size++; }
+    void remove(Node n) { n.prev.next = n.next; n.next.prev = n.prev; size--; }
+    Node removeLast() { if (size == 0) return null; Node n = tail.prev; remove(n); return n; }
+  }
+  int cap, minFreq = 0;
+  Map&lt;Integer, Node&gt; keyMap = new HashMap&lt;&gt;();
+  Map&lt;Integer, DoubleLinkedList&gt; freqMap = new HashMap&lt;&gt;();
+
+  public LFUCache(int capacity) { cap = capacity; }
+  public int get(int key) {
+    if (!keyMap.containsKey(key)) return -1;
+    Node node = keyMap.get(key); updateFreq(node); return node.val;
+  }
+  private void updateFreq(Node n) {
+    DoubleLinkedList oldList = freqMap.get(n.freq); oldList.remove(n);
+    if (n.freq == minFreq && oldList.size == 0) minFreq++;
+    n.freq++;
+    freqMap.computeIfAbsent(n.freq, k -> new DoubleLinkedList()).add(n);
+  }
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 7: DECISION TREE & TRIGGER WORDS -->
+<div class="page">
+<div class="ph">
+  <div><h1>ADVANCED DATA STRUCTURES</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 7 OF 10</div><div class="ptag">DECISION TREE · TRIGGER WORDS · TRADE-OFFS</div></div>
+</div>
+
+<div class="g2">
+  <div class="box">
+    <div class="bh">ADVANCED DS — WHICH STRUCTURE TO USE?</div>
+    <div class="bc dt-wrap">
+      <div class="dt-root">Start: What is the problem requirement?</div>
+      <div class="dt-grid">
+        <div class="dt-row">
+          <div class="dt-q">🔗 Dynamic graph components &amp; cycle checks</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Union-Find (DSU)<br><span style="font-weight:400;font-size:0.7rem">Path compression &amp; rank</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">📊 Range sum/min queries with point updates</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Segment / Fenwick Tree<br><span style="font-weight:400;font-size:0.7rem">$O(\log N)$ updates &amp; range queries</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">⚡ O(1) Cache eviction by least recent</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">LRU Cache<br><span style="font-weight:400;font-size:0.7rem">HashMap + Doubly Linked List</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🔥 O(1) Cache eviction by least frequent</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">LFU Cache<br><span style="font-weight:400;font-size:0.7rem">Frequency Map + DLL Lists</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div class="box pur">
+      <div class="bh">🎯 TRIGGER WORDS DIRECTORY</div>
+      <div class="bc">
+        <table>
+          <tr><th>Trigger Word</th><th>Variant</th><th>Action</th></tr>
+          <tr><td>"Redundant edge / Cycle detection"</td><td>Union-Find DSU</td><td>If `find(u) == find(v)`, cycle!</td></tr>
+          <tr><td>"Mutable range sum"</td><td>Segment / BIT</td><td>Tree update &amp; query in $O(\log N)$</td></tr>
+          <tr><td>"LRU Cache O(1)"</td><td>DLL + HashMap</td><td>Move to head on `get`, evict tail</td></tr>
+          <tr><td>"LFU Cache O(1)"</td><td>Freq Map + DLL</td><td>Maintain `minFreq` and update list</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="box amb">
+      <div class="bh">💼 INTERVIEW TRADE-OFFS &amp; FOLLOW-UPS</div>
+      <div class="bc">
+        <table>
+          <tr><th>Interviewer Asks</th><th>Your Answer</th></tr>
+          <tr><td>Segment Tree vs Fenwick Tree?</td><td>Fenwick Tree (BIT) uses 3x less memory and is easier to code for RANGE SUMS. Segment Tree handles generic operations (min/max/GCD)!</td></tr>
+          <tr><td>Why Doubly Linked List for LRU Cache?</td><td>A Doubly Linked List allows $O(1)$ deletion given a node pointer (`node.prev.next = node.next`), which a singly linked list cannot do!</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 8: PROBLEM LADDER PART 1 (4 PROBLEMS) -->
+<div class="page">
+<div class="ph">
+  <div><h1>ADVANCED DATA STRUCTURES</h1><div class="sub">Problem Ladder — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 8 OF 10</div><div class="ptag">PROBLEM LADDER — MEDIUM · HARD</div></div>
+</div>
+
+<div class="g2" style="gap:10px">
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — DSU &amp; Range Sums</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 684 · Redundant Connection</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> DSU Cycle Check</div>
+        <div><strong>Key Insight:</strong> Return edge if `union == false`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public int[] findRedundantConnection(int[][] edges) {
+  DSU dsu = new DSU(edges.length + 1);
+  for (int[] e : edges)
+    if (!dsu.union(e[0], e[1])) return e;
+  return new int[0];
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 307 · Range Sum Query - Mutable</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Fenwick Tree (BIT)</div>
+        <div><strong>Key Insight:</strong> `add()` and `query()` with `i & -i`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">class NumArray {
+  int[] tree, nums;
+  public NumArray(int[] nums) {
+    this.nums = nums; tree = new int[nums.length + 1];
+    for (int i = 0; i < nums.length; i++) add(i, nums[i]);
+  }
+  public void update(int i, int val) { add(i, val - nums[i]); nums[i] = val; }
+  private void add(int i, int d) { for (i++; i < tree.length; i += i & -i) tree[i] += d; }
+  public int sumRange(int l, int r) { return q(r) - q(l - 1); }
+  private int q(int i) { int s = 0; for (i++; i > 0; i -= i & -i) s += tree[i]; return s; }
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--red);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🔴 HARD — Cache Design</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fee2e2">
+      <span class="ptitle" style="color:var(--red)">LC 146 · LRU Cache</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Map + DLL</div>
+        <div><strong>Key Insight:</strong> Move to head on `get`, evict tail on full.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public int get(int key) {
+  if (!map.containsKey(key)) return -1;
+  Node n = map.get(key); remove(n); insertHead(n); return n.val;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fee2e2">
+      <span class="ptitle" style="color:var(--red)">LC 460 · LFU Cache</span>
+      <span class="diff-h">HARD</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Freq Map + DLL</div>
+        <div><strong>Key Insight:</strong> Evict from `freqMap.get(minFreq)`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">private void updateFreq(Node n) {
+  DoubleLinkedList oldL = freqMap.get(n.freq); oldL.remove(n);
+  if (n.freq == minFreq && oldL.size == 0) minFreq++;
+  n.freq++; freqMap.computeIfAbsent(n.freq, k->new DoubleLinkedList()).add(n);
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: PROBLEM LADDER PART 2 (SUMMARY TABLE) -->
+<div class="page">
+<div class="ph">
+  <div><h1>ADVANCED DATA STRUCTURES</h1><div class="sub">Problem Ladder — Part 2 &amp; Summary</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 9 OF 10</div><div class="ptag">PROBLEM LADDER — SUMMARY</div></div>
+</div>
+
+<!-- Master Summary Table -->
+<div class="box" style="margin-bottom:12px">
+  <div class="bh" style="padding:3px 6px;font-size:0.76rem">📊 COMPLETE ADVANCED DATA STRUCTURES PROBLEM LADDER SUMMARY</div>
+  <div class="bc" style="padding:4px 6px">
+    <table>
+      <tr><th>LC #</th><th>Problem</th><th>Pattern</th><th>Time</th><th>Space</th><th>Diff</th></tr>
+      <tr><td>684</td><td>Redundant Connection</td><td>Union-Find DSU</td><td>O(N · α(N))</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>307</td><td>Range Sum Query - Mutable</td><td>Fenwick Tree / Segment Tree</td><td>O(log N) query/update</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>146</td><td>LRU Cache</td><td>Doubly Linked List + Map</td><td>O(1) get/put</td><td>O(Capacity)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>460</td><td>LFU Cache</td><td>Frequency Map + DLL Lists</td><td>O(1) get/put</td><td>O(Capacity)</td><td><span class="diff-h">H</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="box pur">
+  <div class="bh">💡 MASTERING ADVANCED STRUCTURES — QUICK SUMMARY</div>
+  <div class="bc">
+    <p style="margin-bottom:6px;font-size:0.78rem">1. <strong>DSU:</strong> Use Path Compression (`parent[i] = find(parent[i])`) and Union by Rank for $O(\alpha(N))$ time.</p>
+    <p style="margin-bottom:6px;font-size:0.78rem">2. <strong>Fenwick Tree (BIT):</strong> Use lowbit `i & -i` to advance or retreat index. `add()` moves forward, `query()` moves backward.</p>
+    <p style="font-size:0.78rem">3. <strong>LRU &amp; LFU Caches:</strong> Always use dummy `head` and `tail` nodes in your Doubly Linked List to eliminate `null` pointer checks during node removal!</p>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 10: DRY RUN, MATH PROOFS & CHEAT SHEET -->
+<div class="page">
+<div class="ph">
+  <div><h1>ADVANCED DATA STRUCTURES</h1><div class="sub">Dry Run, Math Proofs &amp; Cheat Sheet</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 10 OF 10</div><div class="ptag">DRY RUN · PROOFS · CHEAT SHEET</div></div>
+</div>
+
+<div class="g2" style="margin-bottom:10px">
+  <div class="box">
+    <div class="bh">🔍 DRY RUN — DSU Path Compression (`find(4)`)</div>
+    <div class="bc">
+      <table style="font-size:0.70rem">
+        <tr><th>Step</th><th>Node</th><th>parent[i] Before</th><th>Action / Compression</th><th>parent[i] After</th></tr>
+        <tr><td>1</td><td>4</td><td>3</td><td>Recurse `find(3)`</td><td>1</td></tr>
+        <tr><td>2</td><td>3</td><td>2</td><td>Recurse `find(2)`</td><td>1</td></tr>
+        <tr><td>3</td><td>2</td><td>1</td><td>Recurse `find(1)` $\rightarrow$ Root is 1!</td><td>1</td></tr>
+        <tr><td>4</td><td>4</td><td>3</td><td>`parent[4] = 1` (Direct link to root!)</td><td>1 ✅</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh">📐 MATHEMATICAL PROOF — LOWBIT OPERATOR (`i & -i`)</div>
+    <div class="bc">
+      <div style="font-size:0.76rem">
+        <p style="margin-bottom:4px"><strong>Claim:</strong> `i & -i` isolates the lowest set bit (power of 2) of integer `i`.</p>
+        <p style="margin-bottom:4px"><strong>Proof:</strong> `-i` is computed as two's complement `~i + 1`. Inverting `i` flips all bits. Adding 1 flips trailing 1s back to 0 until reaching the first 0 (which was the lowest 1 in `i`). Performing `i & (~i + 1)` cancels all higher bits $\rightarrow$ <strong>Exact Lowest Bit Power of 2!</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+    <div class="bc">
+      <div class="g2" style="gap:6px">
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Write DSU with Path Compression &amp; Union by Rank</li>
+          <li>☐ Code Redundant Connection cycle check</li>
+          <li>☐ Implement Fenwick Tree (BIT) add &amp; query</li>
+          <li>☐ Code Segment Tree build, update, &amp; range query</li>
+        </ul>
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Implement LRU Cache (DLL + HashMap) in 10m</li>
+          <li>☐ Write LFU Cache min-frequency map eviction</li>
+          <li>☐ Use dummy head/tail sentinels for DLL</li>
+          <li>☐ Prove why `i & -i` extracts lowbit</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+    <div class="bc">
+      <div class="aha" style="margin-bottom:4px;padding:5px">
+        <div class="aha-t">Rule 1 — Always Perform Path Compression</div>
+        In DSU `find()`, write `return parent[i] = find(parent[i])`! Without assignment, trees can degrade to $O(N)$ height!
+      </div>
+      <div class="aha" style="padding:5px">
+        <div class="aha-t">Rule 2 — Always Check Map Size in LRU Put</div>
+        In `LRUCache.put()`, if key ALREADY EXISTS, remove old node first BEFORE checking if `map.size() == capacity`!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

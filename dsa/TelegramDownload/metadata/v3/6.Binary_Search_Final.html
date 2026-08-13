@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>6 Binary_Search (FAANG Cheat Sheet)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code&amp;display=swap" rel="stylesheet"/>
+
+
+
+<style id="faang-v3">
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap');
+
+:root {
+    --primary: #1e3a8a; /* Deep professional blue */
+    --secondary: #2563eb; /* Vibrant blue */
+    --green: #10b981;
+    --green-dark: #15803d;
+    --red: #ef4444;
+    --red-dark: #b91c1c;
+    --yellow: #f59e0b;
+    --yellow-dark: #b45309;
+    --purple: #8b5cf6;
+    --purple-dark: #5b21b6;
+    --orange: #f97316;
+    --orange-dark: #c2410c;
+    
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --bg-light: #f8fafc;
+    --border-color: #cbd5e1;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #e2e8f0;
+    color: var(--text-dark);
+    margin: 0;
+    padding: 20px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.page {
+    background: white;
+    max-width: 1100px; /* A4-ish proportions for screen */
+    margin: 0 auto 40px auto;
+    padding: 40px 50px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    page-break-after: always;
+    border-top: 6px solid var(--primary);
+    position: relative;
+    overflow: hidden;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid var(--primary);
+    padding-bottom: 12px;
+    margin-bottom: 25px;
+}
+.header-title-box { display: flex; align-items: baseline; gap: 15px; }
+.header-title-box h1 {
+    margin: 0; font-size: 2.4rem; color: var(--primary);
+    font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase;
+}
+.header-title-box .subtitle {
+    background-color: var(--secondary); color: white;
+    padding: 5px 14px; border-radius: 20px; font-weight: 800; font-size: 0.85rem;
+    box-shadow: 0 2px 4px rgba(37,99,235,0.2);
+}
+
+.toc-box {
+    background-color: #f8fafc;
+    border: 2px dashed var(--secondary);
+    border-radius: 10px;
+    padding: 20px 25px;
+    margin-bottom: 30px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+.toc-header {
+    color: var(--primary);
+    font-size: 1.3rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.5px;
+}
+.toc-masonry {
+    column-count: 3;
+    column-gap: 25px;
+}
+.toc-page-col {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 20px;
+    background: white;
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 8px;
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+.toc-page-title {
+    font-weight: 900;
+    color: white;
+    background-color: var(--secondary);
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    display: inline-block;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.toc-item {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+.toc-num {
+    background-color: var(--primary);
+    color: white;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    min-width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.content-masonry {
+    column-count: 2;
+    column-gap: 25px;
+    width: 100%;
+}
+.content-masonry > div {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 25px;
+    display: inline-block; /* Essential for masonry */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* WIDE BOXES FOR TABLES AND MERMAID CHARTS */
+.span-all {
+    column-span: all !important;
+    width: 100% !important;
+    display: block !important;
+}
+
+.section-box {
+    border: 1px solid var(--primary);
+    border-radius: 8px; 
+    overflow: hidden; 
+    background: white;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+}
+.section-header {
+    background: var(--primary); color: white;
+    padding: 10px 14px; font-weight: 800; font-size: 0.95rem;
+    display: flex; align-items: center; text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.section-box.color-green { border-color: var(--green-dark); }
+.section-box.color-green .section-header { background: var(--green-dark); }
+.section-box.color-green .section-header span.num { color: var(--green-dark); }
+.section-box.color-purple { border-color: var(--purple-dark); }
+.section-box.color-purple .section-header { background: var(--purple-dark); }
+.section-box.color-purple .section-header span.num { color: var(--purple-dark); }
+.section-box.color-orange { border-color: var(--orange-dark); }
+.section-box.color-orange .section-header { background: var(--orange-dark); }
+.section-box.color-orange .section-header span.num { color: var(--orange-dark); }
+.section-box.color-red { border-color: var(--red-dark); }
+.section-box.color-red .section-header { background: var(--red-dark); }
+.section-box.color-red .section-header span.num { color: var(--red-dark); }
+
+.section-header span.num {
+    background: white; color: var(--primary);
+    border-radius: 50%; width: 24px; height: 24px;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-right: 12px; font-size: 0.85rem; font-weight: 900;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.section-content { padding: 15px; }
+
+.box-aha { background-color: #f0fdf4; border: 2px solid #22c55e; border-radius: 8px; padding: 20px 15px 15px; position: relative; box-shadow: 0 2px 5px rgba(34,197,94,0.1); }
+.box-aha-title { background-color: #22c55e; color: white; padding: 4px 14px; border-radius: 20px; font-weight: bold; position: absolute; top: -14px; left: 15px; font-size: 0.85rem; letter-spacing: 0.5px; }
+.box-tip { background-color: #fffbeb; border: 2px solid #f59e0b; border-radius: 8px; padding: 20px 15px 15px; position: relative; box-shadow: 0 2px 5px rgba(245,158,11,0.1); }
+.box-tip-title { background-color: #f59e0b; color: white; padding: 4px 14px; border-radius: 20px; font-weight: bold; position: absolute; top: -14px; left: 15px; font-size: 0.85rem; letter-spacing: 0.5px; }
+.box-mistake { background-color: #fef2f2; border: 2px solid #ef4444; border-radius: 8px; padding: 20px 15px 15px; position: relative; box-shadow: 0 2px 5px rgba(239,68,68,0.1); }
+.box-mistake-title { background-color: #ef4444; color: white; padding: 4px 14px; border-radius: 20px; font-weight: bold; position: absolute; top: -14px; left: 15px; font-size: 0.85rem; letter-spacing: 0.5px; }
+
+pre {
+    background: #f8fafc !important; color: #0f172a !important;
+    border: 1px solid var(--border-color) !important; border-left: 4px solid var(--secondary) !important;
+    padding: 12px 15px !important; border-radius: 6px !important;
+    font-family: 'Fira Code', monospace !important; font-size: 0.85rem !important;
+    margin: 10px 0 !important; overflow-x: auto; white-space: pre-wrap; line-height: 1.5; 
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.01) !important;
+}
+code { background: #f1f5f9; color: var(--secondary); padding: 2px 6px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.9em; font-weight: 700; }
+pre code { background: transparent !important; color: inherit !important; padding: 0 !important; font-weight: 500; }
+
+table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.85rem; margin: 10px 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+table th { background: var(--primary) !important; color: white !important; padding: 8px 12px; text-align: left; font-weight: 700; white-space: nowrap; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; border-bottom: 2px solid rgba(0,0,0,0.1); }
+table td { border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); padding: 8px 12px; line-height: 1.4; }
+table tr td:last-child { border-right: none; }
+table tr:last-child td { border-bottom: none; }
+table tr:nth-child(even) td { background: #f8fafc; }
+table tr:hover td { background: #f1f5f9; }
+
+ul, ol { margin: 0; padding-left: 20px; } li { margin-bottom: 6px; line-height: 1.5; }
+
+.diff-easy { color: #16a34a; font-weight: 800; background: #dcfce7; padding: 2px 8px; border-radius: 12px; font-size: 0.8em; text-transform: uppercase; }
+.diff-med { color: #d97706; font-weight: 800; background: #fef3c7; padding: 2px 8px; border-radius: 12px; font-size: 0.8em; text-transform: uppercase; }
+.diff-hard { color: #dc2626; font-weight: 800; background: #fee2e2; padding: 2px 8px; border-radius: 12px; font-size: 0.8em; text-transform: uppercase; }
+
+[style*="background-color: #1e1e1e"],[style*="background-color:#1e1e1e"],[style*="background: #1e1e2e"] { background: transparent !important; }
+[style*="color: #d4d4d4"],[style*="color:#d4d4d4"],[style*="color: #e2e8f0"] { color: #0f172a !important; }
+[style*="color: #569cd6"] { color: #2563eb !important; font-weight: 700; } 
+[style*="color: #c586c0"] { color: #7e22ce !important; font-weight: 700; } 
+[style*="color: #b5cea8"] { color: #b91c1c !important; font-weight: 600; } 
+[style*="color: #6a9955"] { color: #64748b !important; font-style: italic; } 
+
+@media print {
+    body { background: white !important; padding: 0 !important; }
+    .page { box-shadow: none !important; margin: 0 !important; padding: 20px 0 !important; border: none !important; border-top: 4px solid var(--primary) !important; border-radius: 0 !important; }
+    .section-box, .box-aha, .box-tip, .box-mistake, .toc-box, .toc-page-col, .content-masonry > div { 
+        page-break-inside: avoid !important;
+        break-inside: avoid !important; 
+    }
+}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="header-top">
+<div>
+<h1>BINARY SEARCH</h1>
+<div class="subtitle">FAANG INTERVIEW CHEAT SHEET (JAVA)</div>
+</div>
+<div>
+<div style="border: 2px dashed #94a3b8; padding: 10px; border-radius: 8px; text-align: left; background-color: #f8fafc; display: inline-block;">
+<strong style="color: #e11d48; font-size: 1.1em;">🎯 Goal:</strong><br/>
+<strong>Reduce search space</strong><br/>
+<strong>by half in every step</strong><br/>
+                O(log n) time
+            </div>
+</div>
+</div><div class="toc-box"><div class="toc-header">📖 WHAT'S INSIDE THIS CHEAT SHEET</div><div class="toc-masonry"><div class="toc-page-col"><div class="toc-page-title">PAGE 1</div><div class="toc-item"><div class="toc-num">1</div>WHEN TO USE BINARY SEARCH?</div><div class="toc-item"><div class="toc-num">2</div>CLASSIC BINARY SEARCH TEMPLATE(EXACT MATCH)</div><div class="toc-item"><div class="toc-num">3</div>BINARY SEARCH DECISION TREE</div><div class="toc-item"><div class="toc-num">4</div>BINARY SEARCH ON SORTED ARRAY (EXAMPLE)</div><div class="toc-item"><div class="toc-num">5</div>COMPLEXITY ANALYSIS</div></div><div class="toc-page-col"><div class="toc-page-title">PAGE 2</div><div class="toc-item"><div class="toc-num">6</div>VARIANTS OF BINARY SEARCH</div><div class="toc-item"><div class="toc-num">7</div>SEARCH IN ROTATED SORTED ARRAY (UNIQUE ELEMENTS)</div><div class="toc-item"><div class="toc-num">8</div>VISUALIZING BINARY SEARCH (BOUNDARY SEARCH)</div><div class="toc-item"><div class="toc-num">9</div>FIRST &amp; LAST OCCURRENCE TEMPLATES</div><div class="toc-item"><div class="toc-num">10</div>BINARY SEARCH ON ANSWER</div><div class="toc-item"><div class="toc-num">11</div>COMMON MISTAKES &amp; HOW TO AVOID THEM</div></div><div class="toc-page-col"><div class="toc-page-title">PAGE 3</div><div class="toc-item"><div class="toc-num">12</div>BOUNDARY SEARCH VISUALIZATION</div><div class="toc-item"><div class="toc-num">13</div>BINARY SEARCH ON 2D MATRIX (ROW-WISE SORTED)</div><div class="toc-item"><div class="toc-num">14</div>SEARCH IN INFINITE / VERY LARGE ARRAY</div><div class="toc-item"><div class="toc-num">15</div>MORE BINARY SEARCH TEMPLATES</div><div class="toc-item"><div class="toc-num">16</div>SEARCH IN PEAK ELEMENT (BITONIC ARRAY)</div><div class="toc-item"><div class="toc-num">17</div>REAL INTERVIEW QUESTIONS (POPULAR)</div></div><div class="toc-page-col"><div class="toc-page-title">PAGE 4</div><div class="toc-item"><div class="toc-num">18</div>BINARY SEARCH FLOW SUMMARY</div><div class="toc-item"><div class="toc-num">19</div>PATTERN RECOGNITION GUIDE</div><div class="toc-item"><div class="toc-num">20</div>BINARY SEARCH SUMMARY (KEY POINTS)</div><div class="toc-item"><div class="toc-num">21</div>COMMON EDGE CASES</div><div class="toc-item"><div class="toc-num">22</div>DRY RUN TIPS</div><div class="toc-item"><div class="toc-num">23</div>QUICK REFERENCE (JAVA)</div><div class="toc-item"><div class="toc-num">24</div>FAANG INTERVIEW CHECKLIST</div><div class="toc-item"><div class="toc-num">25</div>MOTIVATION BOOSTER</div><div class="toc-item"><div class="toc-num">26</div>UNIVERSAL TEMPLATE (Leftmost)</div><div class="toc-item"><div class="toc-num">27</div>SEARCH ON ANSWER PATTERN</div><div class="toc-item"><div class="toc-num">28</div>ROTATED ARRAY TRICK</div></div></div></div>
+
+<div>
+<div>
+<div style="font-size: 2em; color: #dc2626;">🎯</div>
+<div>
+<strong style="color: #1e3a8a; display: block;">Master Binary Search Pattern, not just the code.</strong>
+<span style="color: #1e3a8a; font-size: 0.9em;">It helps in 90% of advanced DSA problems.</span>
+</div>
+</div>
+<div style="background-color: #1e40af; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold; font-size: 0.9em;">
+            Page 1 of 4
+        </div>
+</div>
+<div class="content-masonry"><div class="section-box">
+<div class="section-header"><span class="num">1</span> WHEN TO USE BINARY SEARCH?</div>
+<div class="section-content">
+<ul>
+<li>✅ Data is sorted or can be converted to sorted.</li>
+<li>✅ We can eliminate half of the search space.</li>
+<li>✅ Answer looks like → <strong style="color:#ef4444;">F</strong> <strong style="color:#ef4444;">F</strong> <strong style="color:#ef4444;">F</strong> <strong style="color:#22c55e;">T</strong> <strong style="color:#22c55e;">T</strong> <strong style="color:#22c55e;">T</strong> (False → True)</li>
+<li>✅ We can check a condition in O(1) time.</li>
+<li>✅ Used for exact match, first/last occurrence, or finding answer in search space.</li>
+</ul>
+</div>
+</div><div class="section-box">
+<div class="section-header"><span class="num">2</span> CLASSIC BINARY SEARCH TEMPLATE <span>(EXACT MATCH)</span></div>
+<div class="section-content">
+<pre style="background-color: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 0 0 8px 8px; margin: 0; font-size: 0.9em; overflow-x: auto;"><code><span style="color: #569cd6;">int</span> left = <span style="color: #b5cea8;">0</span>, right = n - <span style="color: #b5cea8;">1</span>;
+<span style="color: #c586c0;">while</span> (left &lt;= right) {
+    <span style="color: #569cd6;">int</span> mid = left + (right - left) / <span style="color: #b5cea8;">2</span>; <span style="color: #6a9955;">// safe mid</span>
+
+    <span style="color: #c586c0;">if</span> (nums[mid] == target) {
+        <span style="color: #c586c0;">return</span> mid; <span style="color: #6a9955;">// found</span>
+    } <span style="color: #c586c0;">else if</span> (nums[mid] &lt; target) {
+        left = mid + <span style="color: #b5cea8;">1</span>;     <span style="color: #6a9955;">// search right half</span>
+    } <span style="color: #c586c0;">else</span> {
+        right = mid - <span style="color: #b5cea8;">1</span>;    <span style="color: #6a9955;">// search left half</span>
+    }
+}
+<span style="color: #c586c0;">return</span> -<span style="color: #b5cea8;">1</span>; <span style="color: #6a9955;">// not found</span></code></pre>
+</div>
+</div><div class="section-box">
+<div class="section-header"><span class="num">3</span> BINARY SEARCH DECISION TREE</div>
+<div class="section-content">
+<div class="mermaid">
+                    graph TD
+                        A[Is array sorted?]
+                        A -- YES --&gt; B[Are we looking for<br/>exact element?]
+                        A -- NO --&gt; C[We cannot use<br/>Binary Search]
+                        B -- YES --&gt; D[Use Classic<br/>Binary Search<br/>(Exact Match)]
+                        B -- NO --&gt; E[Are we looking for<br/>first/last occurrence<br/>or boundary?]
+                        E -- YES --&gt; F[Use Boundary<br/>Binary Search<br/>(Templates in next pages)]
+                        E -- NO --&gt; G[Think again! 🤔<br/>Is Binary Search<br/>needed?]
+                        
+                        style C fill:#fee2e2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+                        style D fill:#dcfce7,stroke:#22c55e,stroke-width:2px,color:#166534
+                        style F fill:#dcfce7,stroke:#22c55e,stroke-width:2px,color:#166534
+                        style A fill:#f3e8ff,stroke:#9333ea,stroke-width:2px,color:#6b21a8
+                        style E fill:#fef9c3,stroke:#eab308,stroke-width:2px,color:#a16207
+                        style G fill:#ffedd5,stroke:#f97316,stroke-width:2px,color:#c2410c
+                        style B fill:#f8fafc,stroke:#22c55e,stroke-width:2px,color:#166534
+                    </div>
+</div>
+</div><div class="box-aha span-all">
+<div class="box-aha-title">💡 AHA MOMENT</div>
+<div>
+<strong>Binary Search</strong> is not about searching an element,<br/>
+                    it's about finding the boundary where the answer changes
+                </div>
+<div>Example:</div>
+<table>
+<tr>
+<td style="border: 2px solid #22c55e; padding: 8px; color: #ef4444;">F</td>
+<td style="border: 2px solid #22c55e; padding: 8px; color: #ef4444;">F</td>
+<td style="border: 2px solid #22c55e; padding: 8px; color: #ef4444;">F</td>
+<td style="border: 2px solid #22c55e; padding: 8px; color: #ef4444;">F</td>
+<td style="border: 2px solid #22c55e; padding: 8px; color: #22c55e;">T</td>
+<td style="border: 2px solid #22c55e; padding: 8px; color: #22c55e;">T</td>
+<td style="border: 2px solid #22c55e; padding: 8px; color: #22c55e;">T</td>
+<td style="border: 2px solid #22c55e; padding: 8px; color: #22c55e;">T</td>
+</tr>
+</table>
+<div>
+<div>↑</div>
+<div>Find the <strong style="color: #16a34a;">FIRST T</strong> (transition point)</div>
+</div>
+</div><div class="box-tip">
+<div class="box-tip-title">⭐ INTERVIEW TIP</div>
+<ul>
+<li>Always decide what the array is trying to tell you.</li>
+<li>Define the condition, not the element.</li>
+<li>Think: <strong style="color: #dc2626;">What am I searching for?</strong></li>
+<li>Dry run on examples before coding.</li>
+</ul>
+</div><div class="box-mistake">
+<div class="box-mistake-title">❌ COMMON MISTAKES</div>
+<ul>
+<li>Wrong boundaries update (leads to infinite loop)</li>
+<li>Using mid = (left + right) / 2 (overflow risk)</li>
+<li>Not handling edge cases (empty array, size 1)</li>
+<li>Wrong condition ( &lt; vs &lt;= )</li>
+<li>Returning wrong index (first/last occurrence problems)</li>
+</ul>
+</div><div class="section-box span-all">
+<div class="section-header"><span class="num">4</span> BINARY SEARCH ON SORTED ARRAY (EXAMPLE)</div>
+<div class="section-content">
+<div>Array: [5, 7, 7, 8, 8, 10]     Target = 8</div>
+<div>
+<div style="background-color: #eff6ff; color: #2563eb; padding: 3px 8px; border-radius: 4px; font-weight: bold; margin-right: 15px;">Step 1:</div>
+<table>
+<tr>
+<td>5</td>
+<td>7</td>
+<td>7</td>
+<td style="border: 1px solid #94a3b8; padding: 5px 10px; background-color: #fef08a;">8</td>
+<td style="border: 1px solid #94a3b8; padding: 5px 10px; background-color: #f1f5f9;">8</td>
+<td>10</td>
+</tr>
+<tr style="font-size: 0.8em; color: #64748b;">
+<td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td>
+</tr>
+</table>
+<div>
+<div>left = 0, right = 5</div>
+<div>mid = 2 -&gt; nums[2] = 7</div>
+<div>7 &lt; 8, <strong style="color: #16a34a;">move right</strong></div>
+</div>
+</div>
+<hr/>
+<div>
+<div style="background-color: #eff6ff; color: #2563eb; padding: 3px 8px; border-radius: 4px; font-weight: bold; margin-right: 15px;">Step 2:</div>
+<table>
+<tr>
+<td>5</td>
+<td>7</td>
+<td>7</td>
+<td>8</td>
+<td style="border: 1px solid #94a3b8; padding: 5px 10px; background-color: #fef08a; font-weight: bold;">8</td>
+<td>10</td>
+</tr>
+<tr style="font-size: 0.8em; color: #64748b;">
+<td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td>
+</tr>
+</table>
+<div>
+<div>left = 3, right = 5</div>
+<div>mid = 4 -&gt; nums[4] = 8</div>
+<div><strong style="color: #2563eb;">8 == 8, found!</strong></div>
+</div>
+</div>
+<hr/>
+<div>
+<div style="background-color: #eff6ff; color: #2563eb; padding: 3px 8px; border-radius: 4px; font-weight: bold; margin-right: 15px;">Step 3:</div>
+<table>
+<tr>
+<td>5</td>
+<td>7</td>
+<td>7</td>
+<td>8</td>
+<td style="border: 1px solid #94a3b8; padding: 5px 10px; background-color: #fef08a; font-weight: bold;">8</td>
+<td>10</td>
+</tr>
+</table>
+<div>Return index 4</div>
+</div>
+</div>
+</div><div class="section-box">
+<div class="section-header"><span class="num">5</span> COMPLEXITY ANALYSIS</div>
+<div class="section-content">
+<table>
+<thead>
+<tr style="background-color: #4f46e5; color: white;">
+<th>Operation</th>
+<th>Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding: 8px; border: 1px solid #c7d2fe; background-color: #f8fafc;">Time Complexity</td>
+<td style="padding: 8px; border: 1px solid #c7d2fe; text-align: center; background-color: #f8fafc;">O(log n)</td>
+</tr>
+<tr>
+<td style="padding: 8px; border: 1px solid #c7d2fe; background-color: #f1f5f9;">Space Complexity</td>
+<td style="padding: 8px; border: 1px solid #c7d2fe; text-align: center; background-color: #f1f5f9;">O(1) (Iterative)</td>
+</tr>
+<tr>
+<td style="padding: 8px; border: 1px solid #c7d2fe; background-color: #f8fafc;">Best Case</td>
+<td style="padding: 8px; border: 1px solid #c7d2fe; text-align: center; background-color: #f8fafc;">O(1) (if mid is target)</td>
+</tr>
+<tr>
+<td style="padding: 8px; border: 1px solid #c7d2fe; background-color: #f1f5f9;">Worst Case</td>
+<td style="padding: 8px; border: 1px solid #c7d2fe; text-align: center; background-color: #f1f5f9;">O(log n)</td>
+</tr>
+</tbody>
+</table>
+<div style="background-color: #faf5ff; border: 1px dashed #d8b4fe; padding: 15px; border-radius: 8px; flex-grow: 1; position: relative;">
+<span>📌</span>
+<div style="color: #9333ea; font-family: cursive, sans-serif; font-size: 1.2em; text-align: center; margin-bottom: 10px;">Remember</div>
+<div>
+                            Every step eliminates half of the search space.<br/><br/>
+                            That's the power of Binary Search! 💪
+                        </div>
+</div>
+</div>
+</div></div></div>
+<div class="page">
+<div class="header-top">
+<div>
+<h1 style="background-color: #1e3a8a; color: white; padding: 5px 15px; border-radius: 5px; margin: 0; font-size: 32px; font-weight: 900; letter-spacing: 2px;">BINARY SEARCH</h1>
+<div class="subtitle" style="background-color: #2563eb; color: white; padding: 5px 15px; border-radius: 20px; margin-left: 15px; font-weight: bold;">FAANG INTERVIEW CHEAT SHEET (JAVA)</div>
+</div>
+<div>
+<div>
+<div style="color: #ef4444; font-size: 24px; margin-right: 10px;">🎯</div>
+<div>
+<strong>GOAL:</strong><br/>
+                    Reduce search space<br/>by half in every step<br/>O(log n) time
+                </div>
+</div>
+<div class="page-number" style="background-color: #1e3a8a; color: white; padding: 5px 15px; font-weight: bold; display: flex; align-items: center; border-radius: 0 0 5px 5px;">Page 2 of 4</div>
+</div>
+</div>
+
+<div class="content-masonry"><div class="section-box">
+<div class="section-header" style="background-color: #5b21b6; color: white; padding: 5px 10px; font-weight: bold; border-radius: 5px 5px 0 0;"><span class="num">6</span> VARIANTS OF BINARY SEARCH</div>
+<div class="section-content">
+<table>
+<tr style="background-color: #4c1d95; color: white;">
+<th>Variant</th>
+<th>When to Use</th>
+</tr>
+<tr style="background-color: #f8fafc;">
+<td><span>🔍</span> Classic Binary Search</td>
+<td>Exact match in sorted array</td>
+</tr>
+<tr>
+<td><span style="color: #22c55e; font-size: 16px; margin-right: 5px;">📈</span> First Occurrence</td>
+<td>Find first index of target</td>
+</tr>
+<tr style="background-color: #f8fafc;">
+<td><span style="color: #22c55e; font-size: 16px; margin-right: 5px;">📉</span> Last Occurrence</td>
+<td>Find last index of target</td>
+</tr>
+<tr>
+<td><span style="color: #f59e0b; font-size: 16px; margin-right: 5px;">🔄</span> Search in Rotated Sorted Array</td>
+<td>Array is sorted but rotated</td>
+</tr>
+<tr style="background-color: #f8fafc;">
+<td><span style="color: #3b82f6; font-size: 16px; margin-right: 5px;">⛰️</span> Search in Peak Element</td>
+<td>Find peak element in bitonic array</td>
+</tr>
+<tr>
+<td><span style="color: #8b5cf6; font-size: 16px; margin-right: 5px;">❓</span> Binary Search on Answer</td>
+<td>Answer lies in a range, not searching element</td>
+</tr>
+</table>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background-color: #ea580c; color: white; padding: 5px 10px; font-weight: bold; border-radius: 5px 5px 0 0;"><span class="num">7</span> SEARCH IN ROTATED SORTED ARRAY (UNIQUE ELEMENTS)</div>
+<div class="section-content">
+<div>
+                        Example: nums = [4,5,6,7,0,1,2], target = <span style="color: #3b82f6;">0</span>
+</div>
+<div class="mermaid">
+                    graph TD
+                        A["Is nums[mid] == target?"]
+                        A -- YES --&gt; B["Return mid"]
+                        A -- NO --&gt; C["Is left half sorted?<br/>(nums[left] &lt;= nums[mid])"]
+                        C --&gt;|Left half is sorted| F["Is target in left half?<br/>nums[left] &lt;= target &lt; nums[mid]"]
+                        C --&gt;|Right half is sorted| G["Is target in right half?<br/>nums[mid] &lt; target &lt;= nums[right]"]
+                        F -- YES --&gt; H["right = mid - 1"]
+                        F -- NO --&gt; I["left = mid + 1"]
+                        G -- YES --&gt; J["left = mid + 1"]
+                        G -- NO --&gt; K["right = mid - 1"]
+                    </div>
+<div style="background-color: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 8px; border-radius: 5px; font-weight: bold; font-size: 13px;">
+<span style="color: #ef4444;">⭐</span> Always eliminate the half that is sorted first!
+                    </div>
+</div>
+</div><div class="section-box span-all">
+<div class="section-header" style="background-color: #4f46e5; color: white; padding: 5px 10px; font-weight: bold; border-radius: 5px 5px 0 0;"><span class="num">8</span> VISUALIZING BINARY SEARCH (BOUNDARY SEARCH)</div>
+<div class="section-content">
+<div style="font-size: 13px; margin-bottom: 15px; font-weight: bold; color: #1e3a8a;">
+                        Find First Occurrence of target = 4 in nums = [1, 2, 4, 4, 4, 5, 6]
+                    </div>
+<div>
+<div style="background-color: #eff6ff; color: #2563eb; padding: 5px 10px; border: 1px solid #bfdbfe; border-radius: 15px; font-size: 12px; font-weight: bold;">Step 1:</div>
+<div>
+<table>
+<tr>
+<td style="padding: 0 5px; color: #64748b;">0</td><td style="padding: 0 5px; color: #64748b;">1</td><td style="padding: 0 5px; color: #64748b;">2</td><td style="padding: 0 5px; color: #64748b;">3</td><td style="padding: 0 5px; color: #64748b;">4</td><td style="padding: 0 5px; color: #64748b;">5</td><td style="padding: 0 5px; color: #64748b;">6</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>4</td>
+<td style="border: 1px solid #94a3b8; padding: 5px 10px; background-color: #fef08a; font-weight: bold;">4</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<td style="color: #16a34a; padding-top: 5px;">↑<br/>l = 0</td>
+<td></td>
+<td></td>
+<td style="color: #2563eb; padding-top: 5px;">↑<br/>m = 3</td>
+<td></td>
+<td></td>
+<td style="color: #ef4444; padding-top: 5px;">↑<br/>r = 6</td>
+</tr>
+</table>
+</div>
+<div>
+                            nums[m] == 4<br/>
+                            ans = 3<br/>
+                            r = m - 1 = 2
+                        </div>
+</div>
+<div>
+<div style="background-color: #eff6ff; color: #2563eb; padding: 5px 10px; border: 1px solid #bfdbfe; border-radius: 15px; font-size: 12px; font-weight: bold;">Step 2:</div>
+<div>
+<table>
+<tr>
+<td style="padding: 0 5px; color: #64748b;">0</td><td style="padding: 0 5px; color: #64748b;">1</td><td style="padding: 0 5px; color: #64748b;">2</td><td style="padding: 0 5px; color: #64748b;">3</td><td style="padding: 0 5px; color: #64748b;">4</td><td style="padding: 0 5px; color: #64748b;">5</td><td style="padding: 0 5px; color: #64748b;">6</td>
+</tr>
+<tr>
+<td>1</td>
+<td style="border: 1px solid #94a3b8; padding: 5px 10px; background-color: #fef08a; font-weight: bold;">2</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<td style="color: #16a34a; padding-top: 5px;">↑<br/>l = 0</td>
+<td style="color: #2563eb; padding-top: 5px;">↑<br/>m = 1</td>
+<td style="color: #ef4444; padding-top: 5px;">↑<br/>r = 2</td>
+<td></td><td></td><td></td><td></td>
+</tr>
+</table>
+</div>
+<div>
+                            nums[m] &lt; 4 ? no<br/>
+                            nums[m] == 4<br/>
+                            ans = 1<br/>
+                            r = m - 1 = 0
+                        </div>
+</div>
+<div>
+<div style="background-color: #eff6ff; color: #2563eb; padding: 5px 10px; border: 1px solid #bfdbfe; border-radius: 15px; font-size: 12px; font-weight: bold;">Step 3:</div>
+<div>
+<table>
+<tr>
+<td style="padding: 0 5px; color: #64748b;">0</td><td style="padding: 0 5px; color: #64748b;">1</td><td style="padding: 0 5px; color: #64748b;">2</td><td style="padding: 0 5px; color: #64748b;">3</td><td style="padding: 0 5px; color: #64748b;">4</td><td style="padding: 0 5px; color: #64748b;">5</td><td style="padding: 0 5px; color: #64748b;">6</td>
+</tr>
+<tr>
+<td style="border: 1px solid #94a3b8; padding: 5px 10px; background-color: #fef08a; font-weight: bold;">1</td>
+<td>2</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<td style="color: #16a34a; padding-top: 5px;">↑<br/>l=0 m=0 r=0</td>
+<td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+</table>
+</div>
+<div>
+                            nums[m] &lt; 4<br/>
+                            l = m + 1 = 1<br/>
+                            Loop stops (l &gt; r)
+                        </div>
+</div>
+<div class="box-aha">
+                        Answer = 1 (first index of 4)
+                    </div>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background-color: #15803d; color: white; padding: 5px 10px; font-weight: bold; border-radius: 5px 5px 0 0;"><span class="num">9</span> FIRST &amp; LAST OCCURRENCE TEMPLATES</div>
+<div class="section-content">
+<div>
+<div>
+<div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; text-align: center; font-weight: bold; color: #16a34a; padding: 5px; margin-bottom: 5px; border-radius: 20px; font-size: 12px;">First Occurrence (Lower Bound)</div>
+<div style="font-size: 11px; margin-bottom: 5px; text-align: center; color: #333;">Find the first index where <code style="color: #0284c7; font-weight: bold;">nums[mid] == target</code></div>
+<pre style="background-color: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 5px; font-size: 10px; overflow-x: auto; margin: 0; line-height: 1.4;"><code><span style="color: #569cd6;">int</span> firstOccurrence(<span style="color: #569cd6;">int</span>[] nums, <span style="color: #569cd6;">int</span> target) {
+    <span style="color: #569cd6;">int</span> left = <span style="color: #b5cea8;">0</span>, right = nums.length - <span style="color: #b5cea8;">1</span>;
+    <span style="color: #569cd6;">int</span> ans = -<span style="color: #b5cea8;">1</span>;
+    <span style="color: #c586c0;">while</span> (left &lt;= right) {
+        <span style="color: #569cd6;">int</span> mid = left + (right - left) / <span style="color: #b5cea8;">2</span>;
+        <span style="color: #c586c0;">if</span> (nums[mid] &gt;= target) {
+            <span style="color: #c586c0;">if</span> (nums[mid] == target) ans = mid;
+            right = mid - <span style="color: #b5cea8;">1</span>;  <span style="color: #6a9955;">// move left</span>
+        } <span style="color: #c586c0;">else</span> {
+            left = mid + <span style="color: #b5cea8;">1</span>;   <span style="color: #6a9955;">// move right</span>
+        }
+    }
+    <span style="color: #c586c0;">return</span> ans;
+}</code></pre>
+</div>
+<div>
+<div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; text-align: center; font-weight: bold; color: #16a34a; padding: 5px; margin-bottom: 5px; border-radius: 20px; font-size: 12px;">Last Occurrence (Upper Bound)</div>
+<div style="font-size: 11px; margin-bottom: 5px; text-align: center; color: #333;">Find the last index where <code style="color: #0284c7; font-weight: bold;">nums[mid] == target</code></div>
+<pre style="background-color: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 5px; font-size: 10px; overflow-x: auto; margin: 0; line-height: 1.4;"><code><span style="color: #569cd6;">int</span> lastOccurrence(<span style="color: #569cd6;">int</span>[] nums, <span style="color: #569cd6;">int</span> target) {
+    <span style="color: #569cd6;">int</span> left = <span style="color: #b5cea8;">0</span>, right = nums.length - <span style="color: #b5cea8;">1</span>;
+    <span style="color: #569cd6;">int</span> ans = -<span style="color: #b5cea8;">1</span>;
+    <span style="color: #c586c0;">while</span> (left &lt;= right) {
+        <span style="color: #569cd6;">int</span> mid = left + (right - left) / <span style="color: #b5cea8;">2</span>;
+        <span style="color: #c586c0;">if</span> (nums[mid] &lt;= target) {
+            <span style="color: #c586c0;">if</span> (nums[mid] == target) ans = mid;
+            left = mid + <span style="color: #b5cea8;">1</span>;   <span style="color: #6a9955;">// move right</span>
+        } <span style="color: #c586c0;">else</span> {
+            right = mid - <span style="color: #b5cea8;">1</span>;  <span style="color: #6a9955;">// move left</span>
+        }
+    }
+    <span style="color: #c586c0;">return</span> ans;
+}</code></pre>
+</div>
+</div>
+<div style="margin-top: 15px; padding: 10px 15px; border: 1px solid #fde047; background-color: #fefce8; border-radius: 5px; display: flex; align-items: center; gap: 15px;">
+<div>💡</div>
+<div style="font-size: 12px; line-height: 1.5; color: #333; font-weight: bold;">
+<span>PRO TIP:</span>
+<span>
+                                For First occurrence → shrink right when equal<br/>
+                                For Last occurrence → shrink left when equal
+                            </span>
+</div>
+</div>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background-color: #2563eb; color: white; padding: 5px 10px; font-weight: bold; border-radius: 5px 5px 0 0;"><span class="num">10</span> BINARY SEARCH ON ANSWER</div>
+<div class="section-content">
+<div style="color: #1d4ed8; font-weight: bold; margin-bottom: 5px; font-size: 14px;">When to Use?</div>
+<ul style="margin: 0 0 15px 0; padding-left: 20px; font-size: 13px; color: #333; line-height: 1.5;">
+<li>Answer is not an element from array.</li>
+<li>We are asked to find minimum / maximum value that satisfies a condition.</li>
+<li>The condition is monotonic (T...T...T or F...F...F).</li>
+</ul>
+<div style="color: #1d4ed8; font-weight: bold; margin-bottom: 5px; font-size: 14px;">General Template</div>
+<pre style="background-color: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 5px; font-size: 11px; overflow-x: auto; margin: 0 0 15px 0; line-height: 1.4;"><code><span style="color: #569cd6;">int</span> left = <span style="color: #b5cea8;">0</span>;             <span style="color: #6a9955;">// minimum possible answer</span>
+<span style="color: #569cd6;">int</span> right = (<span style="color: #569cd6;">int</span>)<span style="color: #b5cea8;">1e9</span>;     <span style="color: #6a9955;">// maximum possible answer</span>
+<span style="color: #569cd6;">int</span> ans = -<span style="color: #b5cea8;">1</span>;
+<span style="color: #c586c0;">while</span> (left &lt;= right) {
+    <span style="color: #569cd6;">int</span> mid = left + (right - left) / <span style="color: #b5cea8;">2</span>;
+    <span style="color: #c586c0;">if</span> (isValid(mid)) {       <span style="color: #6a9955;">// condition check</span>
+        ans = mid;            <span style="color: #6a9955;">// store answer</span>
+        right = mid - <span style="color: #b5cea8;">1</span>;      <span style="color: #6a9955;">// try for better (smaller) answer</span>
+    } <span style="color: #c586c0;">else</span> {
+        left = mid + <span style="color: #b5cea8;">1</span>;       <span style="color: #6a9955;">// try for bigger answer</span>
+    }
+}
+<span style="color: #c586c0;">return</span> ans;</code></pre>
+<div style="color: #1d4ed8; font-weight: bold; margin-bottom: 5px; font-size: 14px;">Examples</div>
+<ul style="margin: 0; padding-left: 20px; font-size: 12px; color: #333; line-height: 1.5; column-count: 2; column-gap: 20px;">
+<li>Minimum days to make M bouquets</li>
+<li>Allocate minimum pages</li>
+<li>Koko eating bananas</li>
+<li>Split array largest sum</li>
+</ul>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background-color: #ef4444; color: white; padding: 5px 10px; font-weight: bold; border-radius: 5px 5px 0 0;"><span class="num">11</span> COMMON MISTAKES &amp; HOW TO AVOID THEM</div>
+<div class="section-content">
+<table>
+<tr style="background-color: #ef4444; color: white;">
+<th>Mistake</th>
+<th>Why It's Wrong</th>
+<th>Fix</th>
+</tr>
+<tr style="background-color: #fef2f2;">
+<td><span style="color: #ef4444; font-size: 16px; margin-right: 5px; vertical-align: middle;">❌</span> Using (left + right) / 2</td>
+<td>Can overflow when left and right are large</td>
+<td>Use <code style="background-color: #fff; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">left + (right - left) / 2</code></td>
+</tr>
+<tr>
+<td><span style="color: #ef4444; font-size: 16px; margin-right: 5px; vertical-align: middle;">❌</span> Incorrect boundary update</td>
+<td>Can cause infinite loop or wrong result</td>
+<td>Be careful with <br/><code style="background-color: #f8fafc; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">left = mid + 1</code> or <br/><code style="background-color: #f8fafc; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">right = mid - 1</code></td>
+</tr>
+<tr style="background-color: #fef2f2;">
+<td><span style="color: #ef4444; font-size: 16px; margin-right: 5px; vertical-align: middle;">❌</span> Not handling edge cases</td>
+<td>Empty array, size 1 array, target not found</td>
+<td>Always test edge cases</td>
+</tr>
+<tr>
+<td><span style="color: #ef4444; font-size: 16px; margin-right: 5px; vertical-align: middle;">❌</span> Confusing first &amp; last occurrence</td>
+<td>Logic difference in shrinking</td>
+<td>Remember:<br/>first → shrink right<br/>last → shrink left</td>
+</tr>
+<tr style="background-color: #fef2f2;">
+<td><span style="color: #ef4444; font-size: 16px; margin-right: 5px; vertical-align: middle;">❌</span> Wrong condition in rotated array</td>
+<td>Leads to eliminating wrong half</td>
+<td>Check which half is sorted first</td>
+</tr>
+</table>
+</div>
+</div></div></div>
+<div class="page" style="font-family: sans-serif; padding: 20px; background-color: #f8fafc; color: #1e293b;">
+<div class="header-top">
+<div>
+<span>🔍</span>
+<div>
+<h1 style="margin: 0; font-size: 48px; color: #1e3a8a; font-weight: 900; letter-spacing: 1px;">BINARY SEARCH</h1>
+<div class="subtitle" style="background: #1e3a8a; color: white; display: inline-block; padding: 5px 15px; font-weight: bold; border-radius: 5px; margin-top: 5px;">FAANG INTERVIEW CHEAT SHEET (JAVA)</div>
+</div>
+</div>
+<div>
+<div style="border: 2px solid #ef4444; border-radius: 10px; padding: 10px 15px; display: flex; align-items: center; background: white;">
+<span style="font-size: 24px; color: #ef4444; margin-right: 10px;">🎯</span>
+<div>
+<strong style="color: #1e3a8a;">GOAL:</strong><br/>
+                    Reduce search space<br/>
+                    by half in every step<br/>
+                    O(log n) time
+                </div>
+</div>
+<div class="page-number" style="background: #1e3a8a; color: white; padding: 8px 15px; border-radius: 20px; font-weight: bold;">Page 3 of 4</div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<div>
+<div style="flex: 2; background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 10px; padding: 15px; display: flex; align-items: flex-start; gap: 15px;">
+<span style="font-size: 40px; color: #dc2626;">🎯</span>
+<div>
+<strong style="color: #1e3a8a; font-size: 16px; display: block; margin-bottom: 5px;">KEY TAKEAWAY</strong>
+<div style="color: #1e3a8a; font-weight: bold; font-size: 14px;">
+                    Binary Search is about thinking smart, defining the search space correctly, and shrinking it efficiently.
+                </div>
+</div>
+</div>
+<div style="flex: 2; background: #fdf2f8; border: 2px solid #fbcfe8; border-radius: 10px; padding: 15px; display: flex; align-items: flex-start; gap: 15px;">
+<span>🧠</span>
+<div>
+<strong style="color: #1e3a8a; font-size: 16px; display: block; margin-bottom: 5px;">REMEMBER</strong>
+<ul style="margin: 0; padding-left: 20px; color: #1e3a8a; font-weight: bold; font-size: 13px;">
+<li>Think of the question type first.</li>
+<li>Choose the correct template.</li>
+<li>Handle edge cases carefully.</li>
+</ul>
+</div>
+</div>
+<div>
+<div style="background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 10px; padding: 15px; text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+<div style="color: #1e3a8a; font-weight: bold; font-size: 12px;">TIME COMPLEXITY</div>
+<div style="color: #1e3a8a; font-weight: 900; font-size: 20px;">O(log n)</div>
+</div>
+<div style="background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 10px; padding: 15px; text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+<div style="color: #1e3a8a; font-weight: bold; font-size: 12px;">SPACE COMPLEXITY</div>
+<div style="color: #1e3a8a; font-weight: 900; font-size: 20px;">O(1) (Iterative)</div>
+</div>
+</div>
+</div>
+<div class="content-masonry"><div class="section-box span-all" style="border: 2px solid #8b5cf6; border-radius: 10px; overflow: hidden; background: white;">
+<div class="section-header" style="background: #8b5cf6; color: white; padding: 10px 15px; font-weight: bold; font-size: 18px;"><span class="num">12</span>
+ BOUNDARY SEARCH VISUALIZATION
+                </div>
+<div class="section-content">
+<div style="background: #f3e8ff; color: #4c1d95; padding: 8px 15px; border-radius: 5px; font-weight: bold; margin-bottom: 15px; display: inline-block;">
+                        We are looking for FIRST occurrence of 8
+                    </div>
+<div>
+<strong>Array:</strong>
+<table>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>4</td>
+<td>5</td>
+<td>7</td>
+<td style="border: 1px solid #cbd5e1; padding: 8px; font-weight: bold; background: #fef08a;">8</td>
+<td style="border: 1px solid #cbd5e1; padding: 8px; font-weight: bold; background: #fef08a;">8</td>
+<td style="border: 1px solid #cbd5e1; padding: 8px; font-weight: bold; background: #fef08a;">8</td>
+<td style="border: 1px solid #cbd5e1; padding: 8px; font-weight: bold; background: #fef08a;">8</td>
+<td>10</td>
+<td>13</td>
+</tr>
+<tr style="font-size: 12px; color: #64748b;">
+<td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td>
+</tr>
+</table>
+</div>
+<table>
+<tr style="background: #8b5cf6; color: white;">
+<th>Step</th>
+<th>left</th>
+<th>right</th>
+<th>mid</th>
+<th>nums[mid]</th>
+<th>Action</th>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>10</td>
+<td>5</td>
+<td>8</td>
+<td>ans = 5, move left (right = 4)</td>
+</tr>
+<tr style="background: #f8fafc;">
+<td>2</td>
+<td>0</td>
+<td>4</td>
+<td>2</td>
+<td>4</td>
+<td>nums[mid] &lt; 8, move right (left = 3)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td>4</td>
+<td>3</td>
+<td>5</td>
+<td>nums[mid] &lt; 8, move right (left = 4)</td>
+</tr>
+<tr style="background: #f8fafc;">
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>7</td>
+<td>nums[mid] &lt; 8, move right (left = 5)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>5</td>
+<td>4</td>
+<td>-</td>
+<td>-</td>
+<td>left &gt; right, stop</td>
+</tr>
+</table>
+<div style="text-align: center; color: #15803d; font-weight: bold; font-size: 16px; margin-bottom: 15px;">
+<span style="background: #22c55e; color: white; border-radius: 50%; padding: 2px 6px; margin-right: 5px;">✔</span> Answer = 5 (First index of 8)
+                    </div>
+<div style="background: #f0f9ff; border: 1px dashed #3b82f6; border-radius: 8px; padding: 15px; display: flex; align-items: flex-start; gap: 15px;">
+<span>💡</span>
+<div>
+<strong style="color: #1e3a8a; display: block; margin-bottom: 5px;">Key Idea:</strong>
+<div>
+                                When nums[mid] == target, don't return immediately.<br/>
+                                Store the answer and keep searching in the left half.
+                            </div>
+</div>
+</div>
+</div>
+</div><div class="section-box span-all" style="border: 2px solid #1e40af; border-radius: 10px; overflow: hidden; background: white;">
+<div class="section-header" style="background: #1e40af; color: white; padding: 10px 15px; font-weight: bold; font-size: 18px;"><span class="num">13</span>
+ BINARY SEARCH ON 2D MATRIX (ROW-WISE SORTED)
+                </div>
+<div class="section-content">
+<div>
+<div>
+<strong style="color: #1e40af; display: block; margin-bottom: 10px;">Example Matrix:</strong>
+<table>
+<tr>
+<td>1</td>
+<td>3</td>
+<td>5</td>
+<td>7</td>
+</tr>
+<tr>
+<td>10</td>
+<td>11</td>
+<td>16</td>
+<td>20</td>
+</tr>
+<tr>
+<td>23</td>
+<td>30</td>
+<td style="border: 1px solid #94a3b8; padding: 10px; font-weight: bold; background: #e0f2fe;">34</td>
+<td>50</td>
+</tr>
+<tr>
+<td>60</td>
+<td>65</td>
+<td>70</td>
+<td>80</td>
+</tr>
+</table>
+</div>
+<div>
+<div>Search = 34</div>
+<strong style="color: #1e40af;">Approach:</strong>
+<ol>
+<li>Treat matrix as 1D array.</li>
+<li>Index mapping:
+                                    <div style="background: #f1f5f9; padding: 8px; border: 1px solid #cbd5e1; border-radius: 5px; margin: 5px 0; font-family: monospace;">
+                                        row = mid / m;<br/>
+                                        col = mid % m;
+                                    </div>
+</li>
+<li>Apply normal Binary Search.</li>
+</ol>
+</div>
+</div>
+<strong style="color: #1e40af;">Code:</strong>
+<pre style="background: #1e293b; color: #f8fafc; padding: 15px; border-radius: 8px; font-size: 13px; overflow-x: auto; margin-top: 5px;"><code><span style="color: #569cd6;">int</span> row = matrix.length, col = matrix[<span style="color: #b5cea8;">0</span>].length;
+<span style="color: #569cd6;">int</span> left = <span style="color: #b5cea8;">0</span>, right = row * col - <span style="color: #b5cea8;">1</span>;
+<span style="color: #c586c0;">while</span> (left &lt;= right) {
+    <span style="color: #569cd6;">int</span> mid = left + (right - left) / <span style="color: #b5cea8;">2</span>;
+    <span style="color: #569cd6;">int</span> r = mid / col, c = mid % col;
+    <span style="color: #c586c0;">if</span> (matrix[r][c] == target) <span style="color: #c586c0;">return true</span>;
+    <span style="color: #c586c0;">else if</span> (matrix[r][c] &lt; target) left = mid + <span style="color: #b5cea8;">1</span>;
+    <span style="color: #c586c0;">else</span> right = mid - <span style="color: #b5cea8;">1</span>;
+}
+<span style="color: #c586c0;">return false</span>;</code></pre>
+<div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 10px 15px; display: flex; align-items: center; gap: 15px; margin-top: 15px;">
+<span style="font-size: 24px; color: #2563eb;">★</span>
+<div style="font-size: 14px; color: #1e3a8a; font-weight: bold;">
+                            Works because each row is sorted and<br/>
+                            first element of a row is greater than last of previous row.
+                        </div>
+</div>
+</div>
+</div><div class="section-box span-all" style="border: 2px solid #dc2626; border-radius: 10px; overflow: hidden; background: white;">
+<div class="section-header" style="background: #dc2626; color: white; padding: 10px 15px; font-weight: bold; font-size: 18px;"><span class="num">14</span>
+ SEARCH IN INFINITE / VERY LARGE ARRAY
+                </div>
+<div class="section-content">
+<div>
+<div>
+<strong>Problem:</strong><br/>
+                            Array is sorted but size is unknown or very large.
+                            <br/><br/>
+<strong style="color: #dc2626;">Solution:</strong>
+<ol style="margin-top: 5px; padding-left: 15px; color: #dc2626; font-weight: bold;">
+<li><span style="color: #1e293b; font-weight: normal;">Find the range (low, high) where target can exist.</span></li>
+<li><span style="color: #1e293b; font-weight: normal;">Apply Binary Search in that range.</span></li>
+</ol>
+</div>
+<div>
+<div>Target = 15</div>
+<table>
+<tr>
+<td>...</td>
+<td>1</td>
+<td>3</td>
+<td>7</td>
+<td>9</td>
+<td style="border: 1px solid #94a3b8; padding: 8px; background: #fef08a; font-weight: bold;">12</td>
+<td style="border: 1px solid #94a3b8; padding: 8px; background: #f8fafc;">15</td>
+<td style="border: 1px solid #94a3b8; padding: 8px; background: #f8fafc;">18</td>
+<td style="border: 1px solid #94a3b8; padding: 8px; background: #f8fafc;">21</td>
+<td>...</td>
+</tr>
+<tr style="font-size: 12px; color: #64748b;">
+<td></td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td></td>
+</tr>
+</table>
+<div>
+<span>↑<br/>low = 4</span>
+<span>Expanding Range</span>
+<span>↑<br/>high = 7</span>
+</div>
+</div>
+</div>
+<div style="font-weight: bold; color: #dc2626; font-size: 14px; margin-bottom: 5px;">1. Expand range:</div>
+<div>
+<div style="background: #f1f5f9; padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; font-family: monospace; font-size: 14px; flex: 1;">
+                            low = high + 1;<br/>
+                            high = high * 2;
+                        </div>
+<div style="background: #f1f5f9; padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; font-size: 14px; flex: 1;">
+                            until <strong>arr[high] &gt;= target</strong><br/>
+                            or arr[high] is out of bounds
+                        </div>
+</div>
+<div>
+<div style="font-weight: bold; color: #dc2626; font-size: 14px;">2. <span style="color: #1e293b; font-weight: normal;">Apply normal Binary Search between low and high.</span></div>
+<div style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #15803d; padding: 8px 15px; border-radius: 20px; font-weight: bold; font-size: 13px;">
+<span style="background: #22c55e; color: white; border-radius: 50%; padding: 1px 5px; margin-right: 5px;">✔</span> Time Complexity: O(log index_of_target)
+                        </div>
+</div>
+</div>
+</div><div class="section-box" style="border: 2px solid #16a34a; border-radius: 10px; overflow: hidden; background: white;">
+<div class="section-header" style="background: #16a34a; color: white; padding: 10px 15px; font-weight: bold; font-size: 18px;"><span class="num">15</span>
+ MORE BINARY SEARCH TEMPLATES
+                </div>
+<div class="section-content" style="padding: 15px; background: #f0fdf4;">
+<!-- Lower Bound -->
+<div style="font-weight: bold; color: #16a34a; font-size: 16px; margin-bottom: 10px;">Lower Bound (First &gt;= target)</div>
+<div>
+<div>
+<pre style="background: #1e293b; color: #f8fafc; padding: 15px; border-radius: 8px; font-size: 12px; margin: 0;"><code><span style="color: #569cd6;">int</span> left = <span style="color: #b5cea8;">0</span>, right = n;
+<span style="color: #c586c0;">while</span> (left &lt; right) {
+    <span style="color: #569cd6;">int</span> mid = left + (right - left) / <span style="color: #b5cea8;">2</span>;
+    <span style="color: #c586c0;">if</span> (nums[mid] &gt;= target)
+        right = mid;
+    <span style="color: #c586c0;">else</span>
+        left = mid + <span style="color: #b5cea8;">1</span>;
+}
+<span style="color: #c586c0;">return</span> left;</code></pre>
+</div>
+<div style="flex: 1; font-size: 13px; background: white; border: 1px solid #bbf7d0; padding: 10px; border-radius: 8px;">
+<strong style="color: #16a34a;">Returns:</strong><br/>
+                            First index where<br/>
+<code style="background: #f1f5f9; padding: 2px 4px; border-radius: 3px;">nums[index] &gt;= target</code><br/>
+                            If none exists, returns n
+                            <br/><br/>
+<strong style="color: #16a34a;">Use Case:</strong>
+<ul>
+<li>Find insertion position (upper bound logic)</li>
+<li>Longest Increasing Subsequence (LIS)</li>
+</ul>
+</div>
+</div>
+<!-- Upper Bound -->
+<div style="font-weight: bold; color: #16a34a; font-size: 16px; margin-bottom: 10px;">Upper Bound (First &gt; target)</div>
+<div>
+<div>
+<pre style="background: #1e293b; color: #f8fafc; padding: 15px; border-radius: 8px; font-size: 12px; margin: 0;"><code><span style="color: #569cd6;">int</span> left = <span style="color: #b5cea8;">0</span>, right = n;
+<span style="color: #c586c0;">while</span> (left &lt; right) {
+    <span style="color: #569cd6;">int</span> mid = left + (right - left) / <span style="color: #b5cea8;">2</span>;
+    <span style="color: #c586c0;">if</span> (nums[mid] &gt; target)
+        right = mid;
+    <span style="color: #c586c0;">else</span>
+        left = mid + <span style="color: #b5cea8;">1</span>;
+}
+<span style="color: #c586c0;">return</span> left;</code></pre>
+</div>
+<div style="flex: 1; font-size: 13px; background: white; border: 1px solid #bbf7d0; padding: 10px; border-radius: 8px;">
+<strong style="color: #16a34a;">Returns:</strong><br/>
+                            First index where<br/>
+<code style="background: #f1f5f9; padding: 2px 4px; border-radius: 3px;">nums[index] &gt; target</code><br/>
+                            If none exists, returns n
+                            <br/><br/>
+<strong style="color: #16a34a;">Use Case:</strong>
+<ul>
+<li>Count elements &lt;= target</li>
+<li>Find last occurrence + 1</li>
+</ul>
+</div>
+</div>
+<!-- Floor -->
+<div style="font-weight: bold; color: #16a34a; font-size: 16px; margin-bottom: 10px;">Floor (Last &lt;= target)</div>
+<div>
+<div>
+<pre style="background: #1e293b; color: #f8fafc; padding: 15px; border-radius: 8px; font-size: 12px; margin: 0;"><code><span style="color: #569cd6;">int</span> left = <span style="color: #b5cea8;">0</span>, right = n - <span style="color: #b5cea8;">1</span>, ans = -<span style="color: #b5cea8;">1</span>;
+<span style="color: #c586c0;">while</span> (left &lt;= right) {
+    <span style="color: #569cd6;">int</span> mid = left + (right - left) / <span style="color: #b5cea8;">2</span>;
+    <span style="color: #c586c0;">if</span> (nums[mid] &lt;= target) {
+        ans = mid;
+        left = mid + <span style="color: #b5cea8;">1</span>;
+    } <span style="color: #c586c0;">else</span> right = mid - <span style="color: #b5cea8;">1</span>;
+}
+<span style="color: #c586c0;">return</span> ans;</code></pre>
+</div>
+<div style="flex: 1; font-size: 13px; background: white; border: 1px solid #bbf7d0; padding: 10px; border-radius: 8px;">
+<strong style="color: #16a34a;">Returns:</strong><br/>
+                            Last index where<br/>
+<code style="background: #f1f5f9; padding: 2px 4px; border-radius: 3px;">nums[index] &lt;= target</code><br/>
+                            If none exists, returns -1
+                            <br/><br/>
+<strong style="color: #16a34a;">Use Case:</strong>
+<ul>
+<li>Find floor value (greatest &lt;= target)</li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="section-box span-all" style="border: 2px solid #f97316; border-radius: 10px; overflow: hidden; background: white;">
+<div class="section-header" style="background: #f97316; color: white; padding: 10px 15px; font-weight: bold; font-size: 18px;"><span class="num">16</span>
+ SEARCH IN PEAK ELEMENT (BITONIC ARRAY)
+                </div>
+<div class="section-content">
+<div>Bitonic Array (First increasing then decreasing)</div>
+<div>
+<div>
+<strong>Array:</strong>
+<div>
+<table>
+<tr>
+<td>1</td>
+<td>3</td>
+<td>8</td>
+<td style="border: 1px solid #94a3b8; padding: 10px; font-weight: bold; width: 35px; background: #fef08a;">12</td>
+<td style="border: 1px solid #94a3b8; padding: 10px; font-weight: bold; width: 35px; color: #dc2626;">4</td>
+<td style="border: 1px solid #94a3b8; padding: 10px; font-weight: bold; width: 35px; color: #dc2626;">2</td>
+</tr>
+</table>
+<div>
+<div style="width: 50%; text-align: center; color: #16a34a; font-weight: bold;">←───→</div>
+<div style="width: 50%; text-align: center; color: #dc2626; font-weight: bold;">←───→</div>
+</div>
+</div>
+</div>
+<div>Search = 4</div>
+</div>
+<strong style="color: #f97316;">Steps:</strong>
+<ol>
+<li>Find the peak element index.</li>
+<li>If target == peak → return true</li>
+<li>If target &lt; peak → Binary Search in left (increasing part)</li>
+<li>If target &gt; peak → Binary Search in right (decreasing part)</li>
+</ol>
+<div>
+<div>
+<div style="text-align: center; color: #f97316; font-weight: bold; font-size: 14px; margin-bottom: 5px;">Find Peak Index</div>
+<pre style="background: #1e293b; color: #f8fafc; padding: 15px; border-radius: 8px; font-size: 12px; margin: 0; height: 100%;"><code><span style="color: #569cd6;">int</span> l = <span style="color: #b5cea8;">0</span>, r = n - <span style="color: #b5cea8;">1</span>;
+<span style="color: #c586c0;">while</span> (l &lt; r) {
+    <span style="color: #569cd6;">int</span> mid = l + (r - l) / <span style="color: #b5cea8;">2</span>;
+    <span style="color: #c586c0;">if</span> (arr[mid] &lt; arr[mid + <span style="color: #b5cea8;">1</span>])
+        l = mid + <span style="color: #b5cea8;">1</span>;
+    <span style="color: #c586c0;">else</span>
+        r = mid;
+}
+<span style="color: #c586c0;">return</span> l;</code></pre>
+</div>
+<div>
+<div style="text-align: center; color: #dc2626; font-weight: bold; font-size: 14px; margin-bottom: 5px;">Binary Search in Decreasing Order</div>
+<pre style="background: #1e293b; color: #f8fafc; padding: 15px; border-radius: 8px; font-size: 12px; margin: 0; height: 100%;"><code><span style="color: #c586c0;">while</span> (l &lt;= r) {
+    <span style="color: #569cd6;">int</span> mid = l + (r - l) / <span style="color: #b5cea8;">2</span>;
+    <span style="color: #c586c0;">if</span> (arr[mid] == target)
+        <span style="color: #c586c0;">return true</span>;
+    <span style="color: #c586c0;">else if</span> (arr[mid] &gt; target)
+        l = mid + <span style="color: #b5cea8;">1</span>;
+    <span style="color: #c586c0;">else</span>
+        r = mid - <span style="color: #b5cea8;">1</span>;
+}</code></pre>
+</div>
+</div>
+</div>
+</div><div class="section-box" style="border: 2px solid #6b21a8; border-radius: 10px; overflow: hidden; background: #faf5ff;">
+<div class="section-header" style="background: #6b21a8; color: white; padding: 10px 15px; font-weight: bold; font-size: 18px;"><span class="num">17</span>
+ REAL INTERVIEW QUESTIONS (POPULAR)
+                </div>
+<div class="section-content">
+<div style="display: flex; gap: 20px; font-size: 13px; font-weight: bold; color: #1e293b; margin-bottom: 15px;">
+<ol>
+<li>Binary Search</li>
+<li>Search Insert Position</li>
+<li>Find First and Last Position of Element in Sorted Array</li>
+<li>Search in Rotated Sorted Array</li>
+<li>Search in Rotated Sorted Array II (duplicates)</li>
+<li>Koko Eating Bananas</li>
+</ol>
+<ol start="7">
+<li>Minimum Eating Speed</li>
+<li>Ship Packages Within D Days</li>
+<li>Allocate Minimum Number of Pages</li>
+<li>Split Array Largest Sum</li>
+<li>Find Peak Element</li>
+<li>Find Minimum in Rotated Sorted Array</li>
+</ol>
+</div>
+<div style="background: white; border: 1px solid #d8b4fe; border-radius: 8px; padding: 15px; display: flex; align-items: center; gap: 15px;">
+<span>🏆</span>
+<div>
+<strong style="color: #4c1d95; font-size: 14px;">Most questions are variations of</strong>
+<ul style="margin: 5px 0 0 0; padding-left: 20px; color: #4c1d95; font-weight: bold; font-size: 13px;">
+<li>Boundary Search</li>
+<li>Search on Answer</li>
+<li>Rotated Array Search</li>
+</ul>
+</div>
+</div>
+</div>
+</div></div></div>
+<div class="page">
+<div class="header-top">
+<div>
+<h1 style="margin: 0; color: #1e3a8a; font-size: 3em;">BINARY SEARCH</h1>
+<div class="subtitle" style="margin-left: 20px; background-color: #1e3a8a; color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 1.2em;">FAANG INTERVIEW CHEAT SHEET (JAVA)</div>
+</div>
+<div>
+<div>
+<div style="font-size: 2em; color: #ef4444;">🎯</div>
+<div>
+<strong style="color: #1d4ed8; font-size: 1.1em;">GOAL:</strong><br/>
+<small>Reduce search space<br/>by half in every step<br/>O(log n) time</small>
+</div>
+</div>
+<div class="page-number" style="background-color: #1e3a8a; color: white; padding: 8px 15px; border-radius: 5px; font-weight: bold;">Page 4 of 4</div>
+</div>
+</div>
+
+<div>
+<div>
+
+</div>
+<div>
+
+</div>
+<div>
+
+</div>
+</div>
+<div>
+<div>
+
+</div>
+<div>
+
+</div>
+</div>
+<div>
+<div>
+<div style="font-size: 2em; color: #be123c;">🎯</div>
+<div style="color: #1e3a8a; font-weight: bold; font-size: 1.1em; line-height: 1.4;">
+                MASTER BINARY SEARCH PATTERN,<br/>NOT JUST THE CODE.
+            </div>
+</div>
+<div>
+<div style="font-size: 2em; color: #f87171;">🧠</div>
+<div style="text-align: left; color: #1d4ed8; font-weight: bold; font-size: 1.1em; line-height: 1.4;">
+                THINK → ELIMINATE → NARROW → FIND<br/>
+                That's the Binary Search Way!
+            </div>
+</div>
+<div style="background-color: #eff6ff; padding: 10px 20px; border-radius: 8px; border: 1px solid #bfdbfe; color: #1e3a8a; font-weight: bold; text-align: center; font-size: 1.1em; line-height: 1.4;">
+            Practice. Analyze. Optimize.<br/>Become Unstoppable!
+        </div>
+</div>
+<div class="content-masonry"><div class="section-box">
+<div class="section-header" style="background-color: #1d4ed8; color: white; padding: 8px; font-weight: bold;"><span class="num">18</span> BINARY SEARCH FLOW SUMMARY</div>
+<div class="section-content">
+<div class="mermaid">
+                    graph TD
+                        A[Is the array sorted?] --&gt;|YES| B[What are we looking for?]
+                        A --&gt;|NO| C[Can we sort it?]
+                        B --&gt; D[Exact<br/>Element]
+                        B --&gt; E[First / Last<br/>Occurrence]
+                        B --&gt; F[Min / Max<br/>Satisfying<br/>Condition]
+                        D --&gt; D1[Classic<br/>Binary Search]
+                        E --&gt; E1[First / Last<br/>Templates]
+                        F --&gt; F1[Binary Search<br/>on Answer]
+                        C --&gt;|YES| G[Sort + Classic<br/>Binary Search]
+                        C --&gt;|NO| H[Binary Search<br/>Not Applicable]
+                        
+                        style A fill:#eff6ff,stroke:#1d4ed8,stroke-width:2px
+                        style B fill:#f0fdf4,stroke:#16a34a,stroke-width:2px
+                        style C fill:#fef2f2,stroke:#ef4444,stroke-width:2px
+                        style D fill:#f0fdf4,stroke:#16a34a
+                        style E fill:#f0fdf4,stroke:#16a34a
+                        style F fill:#f0fdf4,stroke:#16a34a
+                        style G fill:#f0fdf4,stroke:#16a34a
+                        style H fill:#fef2f2,stroke:#ef4444
+                    </div>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background-color: #16a34a; color: white; padding: 8px; font-weight: bold;"><span class="num">19</span> PATTERN RECOGNITION GUIDE</div>
+<div class="section-content">
+<p>Look at the problem and identify the pattern:</p>
+<table>
+<tr>
+<td><span>🔍</span> Exact value in<br/>sorted array</td>
+<td>→</td>
+<td style="border: 1px solid #16a34a; border-radius: 5px; padding: 8px; width: 45%; background-color: #f0fdf4; color: #166534;">Classic Binary Search</td>
+</tr>
+<tr>
+<td><span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px; color: #ea580c;">🚩</span> First / Last position<br/>of a target</td>
+<td>→</td>
+<td style="border: 1px solid #16a34a; border-radius: 5px; padding: 8px; background-color: #f0fdf4; color: #166534;">First / Last Occurrence<br/>Templates</td>
+</tr>
+<tr>
+<td><span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px; color: #dc2626;">🎯</span> Smallest / Largest value<br/>satisfying a condition</td>
+<td>→</td>
+<td style="border: 1px solid #16a34a; border-radius: 5px; padding: 8px; background-color: #f0fdf4; color: #166534;">Binary Search on Answer<br/>(Optimization Problems)</td>
+</tr>
+<tr>
+<td><span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px; color: #d97706;">🔮</span> Matrix is sorted<br/>(row-wise &amp; col-wise)</td>
+<td>→</td>
+<td style="border: 1px solid #16a34a; border-radius: 5px; padding: 8px; background-color: #f0fdf4; color: #166534;">Treat as 1D Binary Search</td>
+</tr>
+<tr>
+<td><span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px; color: #14b8a6;">↻</span> Array is rotated<br/>sorted</td>
+<td>→</td>
+<td style="border: 1px solid #16a34a; border-radius: 5px; padding: 8px; background-color: #f0fdf4; color: #166534;">Find pivot, then Binary Search<br/>in correct half</td>
+</tr>
+<tr>
+<td><span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px; color: #3b82f6;">🏔</span> Bitonic / Mountain<br/>Array</td>
+<td>→</td>
+<td style="border: 1px solid #16a34a; border-radius: 5px; padding: 8px; background-color: #f0fdf4; color: #166534;">Find peak, then search in<br/>increasing / decreasing part</td>
+</tr>
+</table>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background-color: #f59e0b; color: white; padding: 8px; font-weight: bold;"><span class="num">20</span> BINARY SEARCH SUMMARY (KEY POINTS)</div>
+<div class="section-content">
+<ul>
+<li><span style="color: #f59e0b; margin-right: 8px; font-size: 1.2em;">✔</span> Always think: Can I eliminate half of the search space?</li>
+<li><span style="color: #f59e0b; margin-right: 8px; font-size: 1.2em;">✔</span> Define search space correctly.</li>
+<li><span style="color: #f59e0b; margin-right: 8px; font-size: 1.2em;">✔</span> Choose the right template (classic / first / last / answer).</li>
+<li><span style="color: #f59e0b; margin-right: 8px; font-size: 1.2em;">✔</span> Handle boundaries and edge cases.</li>
+<li><span style="color: #f59e0b; margin-right: 8px; font-size: 1.2em;">✔</span> Avoid infinite loops by correct pointer updates.</li>
+<li><span style="color: #f59e0b; margin-right: 8px; font-size: 1.2em;">✔</span> Dry run with small examples before coding.</li>
+<li><span style="color: #f59e0b; margin-right: 8px; font-size: 1.2em;">✔</span> Write clean, bug-free, and well-commented code.</li>
+</ul>
+<div style="background-color: #fef3c7; padding: 15px; border-radius: 8px; display: flex; align-items: center; border: 1px solid #fde68a; margin-top: 15px;">
+<div>💡</div>
+<div>
+<strong style="color: #b45309; font-size: 1.1em;">REMEMBER:</strong><br/>
+<span style="font-weight: bold; color: #451a03;">Binary Search is all about reducing uncertainty<br/>in the smartest way possible!</span>
+</div>
+</div>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background-color: #ef4444; color: white; padding: 8px; font-weight: bold;"><span class="num">21</span> COMMON EDGE CASES</div>
+<div class="section-content">
+<ul style="list-style-type: disc; padding-left: 20px; margin: 0; color: #ef4444;">
+<li><span style="color: black; font-weight: bold;">Array with 1 element</span>
+<div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 5px 8px; margin: 5px 0 0 0; font-family: monospace; color: #0f172a; border-radius: 4px;">nums = [5], target = 5 → return <span style="color: #2563eb;">0</span></div>
+</li>
+<li><span style="color: black; font-weight: bold;">Target not present</span>
+<div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 5px 8px; margin: 5px 0 0 0; font-family: monospace; color: #0f172a; border-radius: 4px;">nums = [1,2,3,4], target = 10 → return <span style="color: #2563eb;">-1</span></div>
+</li>
+<li><span style="color: black; font-weight: bold;">All elements same</span>
+<div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 5px 8px; margin: 5px 0 0 0; font-family: monospace; color: #0f172a; border-radius: 4px;">nums = [7,7,7,7], target = 7 → return first / last as per need</div>
+</li>
+<li><span style="color: black; font-weight: bold;">First element target</span>
+<div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 5px 8px; margin: 5px 0 0 0; font-family: monospace; color: #0f172a; border-radius: 4px;">nums = [1,2,3,4], target = 1 → return <span style="color: #2563eb;">0</span></div>
+</li>
+<li><span style="color: black; font-weight: bold;">Last element target</span>
+<div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 5px 8px; margin: 5px 0 0 0; font-family: monospace; color: #0f172a; border-radius: 4px;">nums = [1,2,3,4], target = 4 → return n-1</div>
+</li>
+<li><span style="color: black; font-weight: bold;">Check for overflow in mid calculation</span>
+<div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 5px 8px; margin: 5px 0 0 0; font-family: monospace; color: #0f172a; border-radius: 4px;"><span style="color: #b91c1c;">int</span> mid = left + (right - left) / 2; <span style="color: #ef4444;">// safe</span></div>
+</li>
+</ul>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background-color: #2563eb; color: white; padding: 8px; font-weight: bold;"><span class="num">22</span> DRY RUN TIPS</div>
+<div class="section-content">
+<ul style="list-style-type: disc; padding-left: 20px; margin: 0; color: #2563eb; line-height: 1.8; font-weight: bold;">
+<li><span style="color: black;">Always write left, right, mid.</span></li>
+<li><span style="color: black;">Highlight the mid element.</span></li>
+<li><span style="color: black;">Write the comparison result.</span></li>
+<li><span style="color: black;">Update the pointers.</span></li>
+<li><span style="color: black;">Repeat until condition breaks.</span></li>
+<li><span style="color: black;">Finally, write the answer.</span></li>
+</ul>
+<div style="background-color: #eff6ff; padding: 12px; border: 1px dashed #2563eb; border-radius: 8px; margin-top: 15px; display: flex; align-items: start; gap: 10px;">
+<div style="color: #1d4ed8; font-size: 1.5em;">⭐</div>
+<div>
+<strong style="color: #1d4ed8; font-size: 1.1em;">Pro Tip:</strong><br/>
+<span>Practice dry run without coding first!<br/>It improves your problem-solving speed.</span>
+</div>
+</div>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background-color: #6366f1; color: white; padding: 8px; font-weight: bold;"><span class="num">23</span> QUICK REFERENCE (JAVA)</div>
+<div class="section-content">
+<table>
+<tr>
+<td style="padding: 8px; color: #4338ca; font-weight: bold; border-bottom: 1px solid #e5e7eb; width: 35%;">Mid (Safe)</td>
+<td style="padding: 8px; font-family: monospace; color: #1e3a8a; border-bottom: 1px solid #e5e7eb; font-weight: bold;"><span style="color: #b91c1c;">int</span> mid = left + (right - left) / 2;</td>
+</tr>
+<tr>
+<td style="padding: 8px; color: #4338ca; font-weight: bold; border-bottom: 1px solid #e5e7eb;">Left Half</td>
+<td style="padding: 8px; font-family: monospace; color: #1e3a8a; border-bottom: 1px solid #e5e7eb; font-weight: bold;">right = mid - 1;</td>
+</tr>
+<tr>
+<td style="padding: 8px; color: #4338ca; font-weight: bold; border-bottom: 1px solid #e5e7eb;">Right Half</td>
+<td style="padding: 8px; font-family: monospace; color: #1e3a8a; border-bottom: 1px solid #e5e7eb; font-weight: bold;">left = mid + 1;</td>
+</tr>
+<tr>
+<td style="padding: 8px; color: #4338ca; font-weight: bold; border-bottom: 1px solid #e5e7eb;">Loop Condition</td>
+<td style="padding: 8px; font-family: monospace; color: #1e3a8a; border-bottom: 1px solid #e5e7eb; font-weight: bold;"><span style="color: #b91c1c;">while</span> (left &lt;= right)</td>
+</tr>
+<tr>
+<td style="padding: 8px; color: #4338ca; font-weight: bold; border-bottom: 1px solid #e5e7eb;">Return Not Found</td>
+<td style="padding: 8px; font-family: monospace; color: #1e3a8a; border-bottom: 1px solid #e5e7eb; font-weight: bold;"><span style="color: #b91c1c;">return</span> -1;</td>
+</tr>
+<tr>
+<td style="padding: 8px; color: #4338ca; font-weight: bold; border-bottom: 1px solid #e5e7eb;">First Occurrence</td>
+<td style="padding: 8px; font-family: monospace; color: #1e3a8a; border-bottom: 1px solid #e5e7eb; font-weight: bold;">right = mid - 1; <span style="color: #16a34a; float: right;">// when equal</span></td>
+</tr>
+<tr>
+<td style="padding: 8px; color: #4338ca; font-weight: bold; border-bottom: 1px solid #e5e7eb;">Last Occurrence</td>
+<td style="padding: 8px; font-family: monospace; color: #1e3a8a; border-bottom: 1px solid #e5e7eb; font-weight: bold;">left = mid + 1; <span style="color: #16a34a; float: right;">// when equal</span></td>
+</tr>
+<tr>
+<td style="padding: 8px; color: #4338ca; font-weight: bold; border-bottom: 1px solid #e5e7eb;">Lower Bound</td>
+<td style="padding: 8px; font-family: monospace; color: #1e3a8a; border-bottom: 1px solid #e5e7eb; font-weight: bold;">right = mid - 1; <span style="color: #16a34a; float: right;">// when equal</span></td>
+</tr>
+<tr>
+<td style="padding: 8px; color: #4338ca; font-weight: bold;">Upper Bound</td>
+<td style="padding: 8px; font-family: monospace; color: #1e3a8a; font-weight: bold;">left = mid + 1; <span style="color: #16a34a; float: right;">// when equal</span></td>
+</tr>
+</table>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background-color: #047857; color: white; padding: 8px; font-weight: bold;"><span class="num">24</span> FAANG INTERVIEW CHECKLIST</div>
+<div class="section-content">
+<div>
+<div><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">✔</span> Understand problem &amp; constraints</div>
+<div><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">✔</span> Identify if Binary Search applies</div>
+<div><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">✔</span> Choose correct template</div>
+<div><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">✔</span> Define search space</div>
+<div><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">✔</span> Handle edge cases</div>
+<div><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">✔</span> Dry run with examples</div>
+<div><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">✔</span> Write clean code</div>
+</div>
+<div>
+<div><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">✔</span> Check time &amp; space complexity</div>
+<div><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">✔</span> Test with custom cases</div>
+<div><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">✔</span> Explain your approach clearly</div>
+<div><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">✔</span> Be ready for follow-up questions</div>
+<div><span style="color: #047857; background: #d1fae5; border-radius: 4px; padding: 0 4px; margin-right: 5px;">✔</span> Optimize if required</div>
+</div>
+<div class="box-tip">
+<div>🏆</div>
+<strong style="color: #b45309; font-size: 1.1em;">GOLDEN RULE</strong><br/><br/>
+                        If you can solve it by<br/>eliminating half every time,<br/>think Binary Search first!
+                    </div>
+</div>
+</div><div class="section-box">
+<div class="section-header" style="background-color: #be123c; color: white; padding: 8px; font-weight: bold;"><span class="num">25</span> MOTIVATION BOOSTER</div>
+<div class="section-content">
+<div><span>⭐</span> Binary Search is a superpower.</div>
+<div><span>⭐</span> It turns O(n) into O(log n).</div>
+<div><span>⭐</span> Master this pattern,<br/>       crack any interview!</div>
+<div style="text-align: center; color: #be123c; font-weight: bold; font-size: 1.3em; margin-top: 15px;">
+                        YOU'VE GOT THIS! 💪
+                    </div>
+<div>🚀</div>
+</div>
+</div><div class="section-box color-purple"><div class="section-header"><span class="num">26</span>UNIVERSAL TEMPLATE (Leftmost)</div><div class="section-content"><pre>// Find LEFTMOST position where condition is true
+int lo = 0, hi = n;
+while (lo &lt; hi) {
+    int mid = lo + (hi - lo) / 2;
+    if (condition(mid)) hi = mid;
+    else lo = mid + 1;
+}
+return lo;</pre></div></div><div class="section-box color-orange"><div class="section-header"><span class="num">27</span>SEARCH ON ANSWER PATTERN</div><div class="section-content"><pre>// Minimize the maximum
+long lo = minPossible, hi = maxPossible;
+while (lo &lt; hi) {
+    long mid = lo + (hi - lo) / 2;
+    if (canAchieve(mid)) hi = mid;
+    else lo = mid + 1;
+}
+return lo;</pre></div></div><div class="section-box color-green"><div class="section-header"><span class="num">28</span>ROTATED ARRAY TRICK</div><div class="section-content"><pre>// Which half is sorted?
+if (nums[lo] &lt;= nums[mid]) {
+    // Left is sorted. Is target inside?
+    if (target &gt;= nums[lo] &amp;&amp; target &lt; nums[mid]) hi = mid - 1;
+    else lo = mid + 1;
+} else {
+    // Right is sorted...
+}</pre></div></div></div></div>
+
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#f8fafc',
+            primaryTextColor: '#0f172a',
+            primaryBorderColor: '#3b82f6',
+            lineColor: '#94a3b8',
+            fontFamily: 'Inter',
+            fontSize: '14px',
+            nodeBorder: '#3b82f6'
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('pre').forEach(pre => {
+            let code = pre.innerHTML;
+            if (code.indexOf('\n') === -1 && code.length > 60) {
+                code = code.replace(/; /g, ';\n    ');
+                code = code.replace(/{ /g, '{\n    ');
+                code = code.replace(/ }/g, '\n}');
+                pre.innerHTML = code;
+            }
+        });
+    });
+</script>
+</body>
+</html>

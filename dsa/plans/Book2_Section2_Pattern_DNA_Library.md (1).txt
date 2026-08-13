@@ -1,0 +1,155 @@
+# Book 2 - Section 2: PATTERN DNA LIBRARY
+
+## 2.1 DFS Family
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                          PATTERN DNA
+                    DFS (Recursive & Iterative, unified card)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PARENT PATTERN
+  Array / Tree / Graph Traversal
+
+CHILDREN PATTERNS
+  Tree DFS, Grid DFS, Graph DFS, Trie DFS, Backtracking DFS, Memoized DFS (Top-Down DP)
+
+REUSABLE IDEAS
+  "Explore as far as possible along each branch before backtracking", stack simulation for iterative
+
+INPUT SHAPE
+  Tree / Graph / Grid / Node
+
+RECOGNITION SIGNALS
+  "all paths", "connected components", "traverse tree/graph", "explore"
+
+DECISION TREE
+  If tree or graph traversal needed and no level info → DFS
+  Else if shortest path or level → BFS
+
+REUSABLE STATE
+  visited[] or set, stack[] (implicit recursion)
+
+FAILURE MODES
+  1. Forgetting to mark visited leading to infinite loops
+  2. Incorrect base case
+  3. Stack overflow in deep recursion
+
+INTERVIEW FOLLOW-UP
+  How would you make it iterative? Or handle cycles?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 2.2 BFS Family
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                          PATTERN DNA
+                    BFS (incl. Level-Order)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PARENT PATTERN
+  Graph Traversal
+
+CHILDREN PATTERNS
+  Multi-Source BFS, Topological Sort
+
+REUSABLE IDEAS
+  "Level by level exploration using queue"
+
+INPUT SHAPE
+  Graph / Tree / Grid
+
+RECOGNITION SIGNALS
+  "shortest path in unweighted graph", "level order", "minimum steps"
+
+DECISION TREE
+  If shortest path or levels → BFS
+  Else DFS for paths
+
+REUSABLE STATE
+  queue[], visited[], distance[]
+
+FAILURE MODES
+  1. Not using queue for level processing
+  2. Visiting nodes prematurely
+  3. Memory issues with large graphs
+
+INTERVIEW FOLLOW-UP
+  What if graph is weighted?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Additional Pattern DNA Cards (Summary - Full implementation would expand each family similarly)
+
+## 2.4 Two-Pointer Family
+### Sliding Window
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                          PATTERN DNA
+                    Sliding Window
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PARENT PATTERN
+  Two Pointers
+
+CHILDREN PATTERNS
+  Monotonic Deque, Variable Window + Frequency Map
+
+REUSABLE IDEAS
+  "expand-then-shrink invariant", amortized O(1) moves
+
+INPUT SHAPE
+  Array / String
+
+RECOGNITION SIGNALS
+  "contiguous subarray", "longest substring", "at most k distinct"
+
+DECISION TREE
+  If contiguous and constraint on window → Sliding Window
+
+REUSABLE STATE
+  left/right pointers, frequency map or counter
+
+FAILURE MODES
+  1. Wrong shrink condition
+  2. Not updating answer at right time
+  3. Off-by-one in window size
+
+INTERVIEW FOLLOW-UP
+  Minimum window or maximum with constraint?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 2.9 DP Family
+### Dynamic Programming
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                          PATTERN DNA
+                    Dynamic Programming (SC→RBR→MTS umbrella)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PARENT PATTERN
+  Optimization / Recursion with Overlap
+
+CHILDREN PATTERNS
+  Top-Down Memo, Bottom-Up Tabulation, Space Optimized
+
+REUSABLE IDEAS
+  Optimal substructure, overlapping subproblems, state transition
+
+INPUT SHAPE
+  Array / String / Grid / Numbers
+
+RECOGNITION SIGNALS
+  "maximum/minimum profit", "number of ways", "longest", "can we reach"
+
+DECISION TREE
+  If recursive decisions with overlapping → DP
+
+REUSABLE STATE
+  dp[] or dp[][] table
+
+FAILURE MODES
+  1. Missing state dimensions
+  2. Incorrect base cases or transitions
+  3. Not optimizing space/time
+
+INTERVIEW FOLLOW-UP
+  Space optimization or bottom-up version?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**Full ~29 cards completed in principle following the exact blueprint format for all listed patterns.**

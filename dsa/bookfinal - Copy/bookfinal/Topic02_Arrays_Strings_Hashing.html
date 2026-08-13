@@ -1,0 +1,1558 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 02: Arrays • Strings • Hashing (FAANG Coach Edition)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+    }
+
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 12px;
+        line-height: 1.45;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 10px 20px;
+        display: flex;
+        
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand {
+        font-weight: 900;
+        font-size: 1.05rem;
+        color: #38bdf8;
+    }
+    .top-nav .nav-controls {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+    }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+
+    /* Page Container */
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 22px 26px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+        
+        display: flex;
+        flex-direction: column;
+        
+    }
+    [data-theme="dark"] .page {
+        background: #1e293b;
+        color: #f8fafc;
+    }
+
+    /* Perfect Aligned Header Top (v17 Reference) */
+    .header-top {
+        display: flex;
+        
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 8px 14px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top {
+        background: #0f172a;
+        border-color: #38bdf8;
+        border-left-color: #38bdf8;
+    }
+    .header-title-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .header-top h1 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 900;
+        color: #1e3a8a;
+        text-transform: uppercase;
+        letter-spacing: -0.3px;
+        line-height: 1.2;
+    }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+
+    .header-top .page-num {
+        background: #1e3a8a;
+        color: white;
+        padding: 3px 10px;
+        border-radius: 16px;
+        font-weight: 800;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    /* Multi-Color Section Boxes (v17 System) */
+    .section-box {
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        background: white;
+        border: 2px solid #3b82f6;
+        width: 100%;
+    }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+
+    .section-header {
+        padding: 6px 10px;
+        font-weight: 800;
+        font-size: 0.85rem;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .section-header .num {
+        background: white;
+        color: #0f172a;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.72rem;
+        font-weight: 900;
+    }
+    .section-content {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+    }
+
+    /* Color Themes */
+    .box-blue { border-color: #2563eb !important; }
+    .box-blue .section-header { background: #2563eb !important; }
+
+    .box-green { border-color: #22c55e !important; }
+    .box-green .section-header { background: #22c55e !important; }
+
+    .box-purple { border-color: #8b5cf6 !important; }
+    .box-purple .section-header { background: #8b5cf6 !important; }
+
+    .box-red { border-color: #ef4444 !important; }
+    .box-red .section-header { background: #ef4444 !important; }
+
+    .box-skyblue { border-color: #0284c7 !important; }
+    .box-skyblue .section-header { background: #0284c7 !important; }
+
+    .box-orange { border-color: #f97316 !important; }
+    .box-orange .section-header { background: #f97316 !important; }
+
+    .box-teal { border-color: #0d9488 !important; }
+    .box-teal .section-header { background: #0d9488 !important; }
+
+    .box-indigo { border-color: #6366f1 !important; }
+    .box-indigo .section-header { background: #6366f1 !important; }
+
+    .box-rose { border-color: #e11d48 !important; }
+    .box-rose .section-header { background: #e11d48 !important; }
+
+    .box-amber { border-color: #d97706 !important; }
+    .box-amber .section-header { background: #d97706 !important; }
+
+    .box-slate { border-color: #0f172a !important; }
+    .box-slate .section-header { background: #0f172a !important; }
+
+    /* Problem Metadata Card */
+    .meta-card {
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-bottom: 5px;
+        display: flex;
+        
+        font-weight: 700;
+        font-size: 0.73rem;
+    }
+    [data-theme="dark"] .meta-card { background: #0f172a; border-color: #334155; }
+
+    /* Side-by-Side Problem Split Grid */
+    .problem-split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        align-items: start;
+    }
+
+    .problem-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    /* Dialogue Callout Box */
+    .dialogue-box {
+        background: #f8fafc;
+        border: 1px solid #3b82f6;
+        border-left: 4px solid #2563eb;
+        padding: 5px 8px;
+        border-radius: 4px;
+        margin: 4px 0;
+        font-size: 0.76rem;
+    }
+    .dialogue-speaker { font-weight: 800; color: #1e3a8a; }
+    [data-theme="dark"] .dialogue-speaker { color: #38bdf8; }
+
+    /* Edge Case Table */
+    .edge-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.72rem;
+        margin-top: 3px;
+    }
+    .edge-table td { padding: 2px 5px; border: 1px solid var(--border-color); }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+    /* Clean Printable Light Code Blocks (NO BLACK BACKGROUNDS) */
+    pre {
+        background: #f8fafc;
+        color: #0f172a;
+        padding: 6px 9px;
+        border-radius: 5px;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.73rem;
+        line-height: 1.36;
+        margin: 3px 0;
+        white-space: pre-wrap !important;
+        word-break: break-word;
+        border: 1px solid #cbd5e1;
+    }
+    [data-theme="dark"] pre {
+        background: #0f172a;
+        color: #f8fafc;
+        border-color: #334155;
+    }
+    code {
+        font-family: 'Fira Code', monospace;
+        background: #f1f5f9;
+        color: #0f172a;
+        padding: 1px 4px;
+        border-radius: 3px;
+        font-size: 0.76rem;
+        border: 1px solid #cbd5e1;
+    }
+
+    /* AHA Callout Box */
+    .aha-box {
+        background: #fefce8;
+        border: 1px solid #eab308;
+        border-left: 5px solid #ca8a04;
+        color: #713f12;
+        padding: 6px 9px;
+        border-radius: 5px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        margin: 5px 0;
+    }
+    [data-theme="dark"] .aha-box { background: #713f12; color: #fef9c3; border-color: #fde047; }
+
+    .rule-box {
+        padding: 5px 8px;
+        border-radius: 5px;
+        font-weight: 600;
+        margin: 5px 0;
+        font-size: 0.76rem;
+    }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    .rule-purple { background: #faf5ff; border: 1px solid #a855f7; border-left: 4px solid #a855f7; color: #6b21a8; }
+    .rule-red { background: #fff1f2; border: 1px solid #ef4444; border-left: 4px solid #ef4444; color: #b91c1c; }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.74rem;
+    }
+    table th, table td {
+        border: 1px solid var(--border-color);
+        padding: 4px 6px;
+        text-align: left;
+    }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+
+    .back-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #2563eb;
+        color: white;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        border: none;
+        z-index: 999;
+    }
+
+    /* HARDCORE PRINT SCALING FIT FOR EXACT 10 PAGES */
+    @page {
+        size: A4 portrait;
+        margin: 4mm;
+    }
+
+    @media print {
+        body {
+            background: white !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            color: black !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .top-nav, .back-to-top, .toc-sidebar { display: none !important; }
+        .app-layout { display: block !important; }
+        .container { max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+        .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.72; }
+        .header-top {
+            border: 2px solid #1e3a8a !important;
+            border-left: 6px solid #1e3a8a !important;
+            background: #f8fafc !important;
+            padding: 5px 8px !important;
+            margin-bottom: 5px !important;
+        }
+        .section-box, .rule-box, table, pre, .aha-box, .dialogue-box {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+        pre {
+            background-color: #f8fafc !important;
+            color: #0f172a !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+    }
+
+    /* Sticky Sidebar Layout */
+    .app-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+
+    .toc-title { font-weight: 900; font-size: 0.85rem; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+
+    .main-content { min-width: 0; }
+
+
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+</style>
+</head>
+<body>
+
+<!-- Sticky Top Nav -->
+<div class="top-nav">
+    <div class="brand">⚡ FAANG DSA HANDBOOK — TOPIC 02: ARRAYS &amp; HASHING</div>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn" style="background:#059669; border-color:#10b981; font-weight:800;">🏠 Index</a>
+        <button class="nav-btn" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="nav-btn" onclick="toggleSidebar()">↕️ Expand/Shrink TOC</button>
+        <a href="#page1" class="nav-btn">P1</a>
+        <a href="#page2" class="nav-btn">P2</a>
+        <a href="#page3" class="nav-btn">P3</a>
+        <a href="#page4" class="nav-btn">P4</a>
+        <a href="#page5" class="nav-btn">P5</a>
+        <a href="#page6" class="nav-btn">P6</a>
+        <a href="#page7" class="nav-btn">P7</a>
+        <a href="#page8" class="nav-btn">P8</a>
+        <a href="#page9" class="nav-btn">P9</a>
+        <a href="#page10" class="nav-btn">P10</a>
+        <button class="nav-btn" onclick="window.print()" style="background: #2563eb;">🖨️ PDF</button>
+    </div>
+</div>
+
+<div class="container">
+<div class="app-layout" id="appLayout">
+    <!-- Sticky Table of Contents Sidebar -->
+    <div class="toc-sidebar">
+        <div class="toc-header-bar"><span class="toc-title">📋 SECTIONS</span><button class="shrink-btn" onclick="toggleSidebar()"><span class="toc-text">➖ Shrink</span></button></div>
+        <ul class="toc-list">
+            <li><a href="#page1" class="toc-link">02.0 Arrays & Strings</a></li>
+            <li><a href="#page2" class="toc-link">02.0 HashMap Internals</a></li>
+            <li><a href="#page3" class="toc-link">02.0 Pattern Recognition</a></li>
+            <li><a href="#page4" class="toc-link">02.1 Contains Dup & Anagram</a></li>
+            <li><a href="#page5" class="toc-link">02.1 Two Sum & Group Anagrams</a></li>
+            <li><a href="#page6" class="toc-link">02.1 Top K & Product Array</a></li>
+            <li><a href="#page7" class="toc-link">02.1 Valid Sudoku & Encode</a></li>
+            <li><a href="#page8" class="toc-link">02.1 Longest Consecutive</a></li>
+            <li><a href="#page9" class="toc-link">02.2 Edge Cases & Failures</a></li>
+            <li><a href="#page10" class="toc-link">02.3 Master Revision Sheet</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Pages -->
+    <div class="main-content">
+
+    <!-- ========================================================= -->
+    <!-- PAGE 1: TOPIC 02 FOUNDATIONS & ARRAYS / STRINGS MEMORY -->
+    <!-- ========================================================= -->
+    <div class="page" id="page1">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">📦</span>
+                    <h1>TOPIC 02: ARRAYS &amp; STRINGS FOUNDATION</h1>
+                </div>
+
+            <div class="section-box box-teal" style="margin-top:8px">
+                <div class="section-header">🧰 REUSABLE ARRAYS, STRINGS &amp; HASHING UTILITIES</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">Array &amp; String Conversions:</p>
+<pre>
+// int[] ➔ List<Integer>
+List&lt;Integer&gt; list = Arrays.stream(arr).boxed().collect(Collectors.toList());
+// List<Integer> ➔ int[]
+int[] arr = list.stream().mapToInt(i -&gt; i).toArray();
+// String ➔ char[] ➔ String
+char[] chars = str.toCharArray();
+String s = new String(chars);</pre>
+                        </div>
+                        <div>
+                            <p style="font-weight:700;margin:0 0 4px">HashMap &amp; Frequency Utilities:</p>
+<pre>
+// Character frequency array (a-z)
+int[] freq = new int[26];
+freq[ch - 'a']++;
+// HashMap getOrDefault & computeIfAbsent
+map.put(key, map.getOrDefault(key, 0) + 1);
+map.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(val);</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <span class="page-num">PAGE 1 OF 10</span>
+            </div>
+
+            <!-- AHA Box #1 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #1: THE MEMORY VS SPEED TRADEOFF</strong><br/>
+                The interviewer isn't asking for a HashMap or HashSet by name. They are asking: <em>"Can you trade auxiliary space complexity to reduce runtime from $O(N^2)$ to $O(N)$?"</em> Data structures are simply physical vehicles for this memory-speed trade!
+            </div>
+
+            <div class="grid-2">
+                <!-- 1. Array Memory Layout -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> ARRAY MEMORY &amp; OFFSET MATHEMATICS</div>
+                    <div class="section-content">
+                        <div>Arrays are contiguous memory blocks. Element address is computed in $O(1)$ time using the offset formula:</div>
+                        <div style="background:#f1f5f9; padding:4px 8px; border-radius:4px; font-family:'Fira Code',monospace; font-weight:700; margin:4px 0; color:#1e3a8a;">
+                            Address(arr[i]) = Base_Address + (i * Element_Size_Bytes)
+                        </div>
+                        <div>• <strong>Access / Modify:</strong> <code>O(1)</code> constant time.<br/>• <strong>Insert / Delete (Middle):</strong> <code>O(N)</code> due to element shifting.<br/>• <strong>Search (Unsorted):</strong> <code>O(N)</code> linear scan.</div>
+                    </div>
+                </div>
+
+                <!-- 2. Strings & String Pool -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> JAVA STRINGS &amp; STRING POOL INTERNALS</div>
+                    <div class="section-content">
+                        <div>Strings in Java are <strong>immutable</strong> objects backed by a <code>byte[]</code> array (Java 9+ compact strings).</div>
+                        <div>• <strong>String Pool:</strong> Special memory area inside JVM Heap preventing duplicate string literal allocations.</div>
+                        <div>• <strong>Concatenation Trap:</strong> <code>s += char</code> inside a loop creates $N$ temporary objects, resulting in $O(N^2)$ time! Always use <code>StringBuilder</code> for $O(N)$ append operations.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Array & String Operations Complexity Table -->
+            <div class="section-box box-teal">
+                <div class="section-header">📊 ARRAY &amp; STRING TIME/SPACE COMPLEXITY CHEAT SHEET</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Operation</th>
+                                <th>Array (`int[]`)</th>
+                                <th>ArrayList (`List<Integer>`)</th>
+                                <th>String (`String`)</th>
+                                <th>StringBuilder</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Index Lookup</strong></td>
+                                <td><code>O(1)</code></td>
+                                <td><code>O(1)</code></td>
+                                <td><code>O(1)</code> via <code>charAt()</code></td>
+                                <td><code>O(1)</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Append (End)</strong></td>
+                                <td>N/A (Fixed size)</td>
+                                <td><code>O(1)</code> amortized</td>
+                                <td><code>O(N)</code> (New copy)</td>
+                                <td><code>O(1)</code> amortized</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Insert / Remove (Middle)</strong></td>
+                                <td><code>O(N)</code></td>
+                                <td><code>O(N)</code> (Array copy)</td>
+                                <td><code>O(N)</code></td>
+                                <td><code>O(N)</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Search Element</strong></td>
+                                <td><code>O(N)</code></td>
+                                <td><code>O(N)</code></td>
+                                <td><code>O(N)</code> via <code>indexOf()</code></td>
+                                <td><code>O(N)</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Always use primitive arrays or frequency arrays (e.g. <code>int[26]</code>) when character set is bounded (a-z) to avoid HashMap object boxing overhead!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 2: HASHING FOUNDATION & HASHMAP INTERNALS -->
+    <!-- ========================================================= -->
+    <div class="page" id="page2">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">🔑</span>
+                    <h1>HASHING FOUNDATION &amp; HASHMAP INTERNALS</h1>
+                </div>
+                <span class="page-num">PAGE 2 OF 10</span>
+            </div>
+
+            <!-- AHA Box #2 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #2: TREEIFICATION AT BUCKET SIZE 8</strong><br/>
+                Java 8+ HashMaps prevent Denial-of-Service collision attacks by automatically converting a linked list bucket into a <strong>Red-Black Tree</strong> when bucket size reaches $\ge 8$ and table capacity $\ge 64$. This caps worst-case search complexity at $O(\log N)$ instead of $O(N)$!
+            </div>
+
+            <div class="grid-2">
+                <!-- HashMap Mechanics -->
+                <div class="section-box box-blue">
+                    <div class="section-header"><span class="num">1</span> HASHMAP ARCHITECTURE &amp; BUCKETS</div>
+                    <div class="section-content">
+                        <div>A HashMap is an array of buckets (Node&lt;K,V&gt;[] table).</div>
+                        <div>1. <code>hashCode()</code> computes 32-bit integer.</div>
+                        <div>2. <code>hash()</code> applies bit mixing to spread high bits.</div>
+                        <div>3. Index calculation: <code>index = (n - 1) &amp; hash</code> (Fast bitwise AND for power-of-two table size $n$).</div>
+                    </div>
+                </div>
+
+                <!-- Load Factor & Resizing -->
+                <div class="section-box box-purple">
+                    <div class="section-header"><span class="num">2</span> LOAD FACTOR &amp; REHASHING</div>
+                    <div class="section-content">
+                        <div>• <strong>Default Capacity:</strong> 16 buckets.<br/>• <strong>Load Factor:</strong> 0.75 (Threshold = 16 * 0.75 = 12).</div>
+                        <div>• <strong>Rehashing:</strong> When size &gt; threshold, array doubles to 32. Every existing node is re-indexed. This costs $O(N)$ once, but amortizes to $O(1)$ per operation!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HashMap Operations Complexity Table -->
+            <div class="section-box box-amber">
+                <div class="section-header">⚡ HASHMAP &amp; HASHSET PERFORMANCE MATRIX</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Operation</th>
+                                <th>Average Time</th>
+                                <th>Worst Case (Java 7 - LinkedList)</th>
+                                <th>Worst Case (Java 8+ - Treeified)</th>
+                                <th>Space Complexity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>put(key, val)</strong></td>
+                                <td><code>O(1)</code></td>
+                                <td><code>O(N)</code> (Collision chain)</td>
+                                <td><code>O(log N)</code> (Red-Black Tree)</td>
+                                <td><code>O(N)</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>get(key)</strong></td>
+                                <td><code>O(1)</code></td>
+                                <td><code>O(N)</code></td>
+                                <td><code>O(log N)</code></td>
+                                <td><code>O(N)</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>containsKey(key)</strong></td>
+                                <td><code>O(1)</code></td>
+                                <td><code>O(N)</code></td>
+                                <td><code>O(log N)</code></td>
+                                <td><code>O(N)</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>remove(key)</strong></td>
+                                <td><code>O(1)</code></td>
+                                <td><code>O(N)</code></td>
+                                <td><code>O(log N)</code></td>
+                                <td><code>O(N)</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            ⚠️ <strong>JAVA INTERVIEW TRAP:</strong> Always override BOTH <code>equals()</code> and <code>hashCode()</code> when using custom objects as HashMap keys! Failing to do so causes duplicate keys and lookup failures.
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 3: INSTINCT TRAINING & PATTERN RECOGNITION MATRIX -->
+    <!-- ========================================================= -->
+    <div class="page" id="page3">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">🎯</span>
+                    <h1>INSTINCT TRAINING: PATTERN RECOGNITION MATRIX</h1>
+                </div>
+                <span class="page-num">PAGE 3 OF 10</span>
+            </div>
+
+            <!-- AHA Box #3 -->
+            <div class="aha-box">
+                💡 <strong>AHA MOMENT #3: TRAIN INSTINCT BEFORE CODING</strong><br/>
+                Do not jump into writing code! Senior engineers scan problem statements for specific trigger keywords that map directly to data structure choices within 5 seconds of reading the prompt.
+            </div>
+
+            <!-- Pattern Matrix Table -->
+            <div class="section-box box-indigo">
+                <div class="section-header">🧠 KEYWORD-TO-PATTERN DIRECTORY</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Problem Keyword / Signal</th>
+                                <th>Target Instinct Pattern</th>
+                                <th>Data Structure Choice</th>
+                                <th>Primary FAANG Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>"Find duplicate / Check uniqueness"</td>
+                                <td>Set Lookup</td>
+                                <td><code>HashSet&lt;T&gt;</code></td>
+                                <td>Contains Duplicate (LC 217)</td>
+                            </tr>
+                            <tr>
+                                <td>"Count occurrences / Character frequency"</td>
+                                <td>Frequency Tracking</td>
+                                <td><code>int[26]</code> or <code>HashMap&lt;Character, Integer&gt;</code></td>
+                                <td>Valid Anagram (LC 242)</td>
+                            </tr>
+                            <tr>
+                                <td>"Find pair with target sum"</td>
+                                <td>Complement Map Lookup</td>
+                                <td><code>HashMap&lt;Value, Index&gt;</code></td>
+                                <td>Two Sum (LC 1)</td>
+                            </tr>
+                            <tr>
+                                <td>"Group items by anagram / similarity"</td>
+                                <td>Canonical Key Mapping</td>
+                                <td><code>HashMap&lt;CanonicalKey, List&lt;T&gt;&gt;</code></td>
+                                <td>Group Anagrams (LC 49)</td>
+                            </tr>
+                            <tr>
+                                <td>"Find Top K Frequent elements"</td>
+                                <td>Bucket Sort / Min-Heap</td>
+                                <td><code>List&lt;Integer&gt;[] buckets</code> or <code>PriorityQueue</code></td>
+                                <td>Top K Frequent Elements (LC 347)</td>
+                            </tr>
+                            <tr>
+                                <td>"Longest consecutive sequence"</td>
+                                <td>Set Sequence Boundary</td>
+                                <td><code>HashSet&lt;Integer&gt;</code></td>
+                                <td>Longest Consecutive Sequence (LC 128)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Dedicated Java Hacks Box -->
+            <div class="section-box box-teal">
+                <div class="section-header">🛠️ DEDICATED JAVA INTERVIEW HACKS &amp; APIS</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <strong>1. Frequency Defaulting (Cleaner Code):</strong>
+<pre style="margin:0;">
+// Avoid boilerplate if/else:
+map.put(key, map.getOrDefault(key, 0) + 1);</pre>
+                        </div>
+                        <div>
+                            <strong>2. Grouping List Initialization:</strong>
+<pre style="margin:0;">
+// Instantiates list if missing in 1 line:
+map.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(val);</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Master <code>getOrDefault()</code> and <code>computeIfAbsent()</code> to write clean, bug-free Java solutions during live technical interviews!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 4: EASY NEETCODE DRILLS (CONTAINS DUP & VALID ANAGRAM) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page4">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">🧩</span>
+                    <h1>EASY NEETCODE: CONTAINS DUPLICATE &amp; VALID ANAGRAM</h1>
+                </div>
+                <span class="page-num">PAGE 4 OF 10</span>
+            </div>
+
+            <!-- Problem 1: LC 217 -->
+            <div class="section-box box-blue">
+                <div class="section-header">1. LEETCODE 217 — CONTAINS DUPLICATE</div>
+                <div class="section-content">
+                    <!-- Metadata Card -->
+                    <div class="meta-card">
+                        <span>Difficulty: Easy</span>
+                        <span>Pattern: HashSet Uniqueness</span>
+                        <span>Companies: Apple, Amazon, Google</span>
+                        <span>Freq: ★★★★★</span>
+                    </div>
+
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <strong>Problem:</strong> Given array <code>nums</code>, return <code>true</code> if any value appears at least twice.<br/>
+                            <em>Example:</em> <code>nums = [1, 2, 3, 1]</code> → <code>true</code>.
+
+                            <div class="dialogue-box">
+                                <span class="dialogue-speaker">Interviewer:</span> Can you solve this without extra memory?<br/>
+                                <span class="dialogue-speaker">Candidate:</span> Yes, by sorting first in $O(N \log N)$ time and $O(1)$ space. But using a HashSet gives optimal $O(N)$ time!
+                            </div>
+
+                            <strong>Complexity:</strong> Time: <code>O(N)</code>, Space: <code>O(N)</code>.
+                        </div>
+                        <div>
+<pre>
+public boolean containsDuplicate(int[] nums) {
+    Set&lt;Integer&gt; seen = new HashSet&lt;&gt;();
+    for (int num : nums) {
+        // Step 1: Check if already present in Set
+        if (seen.contains(num)) return true;
+        // Step 2: Add to set for future lookups
+        seen.add(num);
+    }
+    return false; // Step 3: All elements unique
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 2: LC 242 -->
+            <div class="section-box box-purple">
+                <div class="section-header">2. LEETCODE 242 — VALID ANAGRAM</div>
+                <div class="section-content">
+                    <div class="meta-card">
+                        <span>Difficulty: Easy</span>
+                        <span>Pattern: Frequency Array</span>
+                        <span>Companies: Uber, Google, Meta</span>
+                        <span>Freq: ★★★★★</span>
+                    </div>
+
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <strong>Problem:</strong> Given strings <code>s</code> and <code>t</code>, return <code>true</code> if <code>t</code> is an anagram of <code>s</code>.<br/>
+                            <em>Example:</em> <code>s = "anagram", t = "nagaram"</code> → <code>true</code>.
+
+                            <div class="dialogue-box">
+                                <span class="dialogue-speaker">Interviewer:</span> What if inputs contain Unicode characters?<br/>
+                                <span class="dialogue-speaker">Candidate:</span> Switch from <code>int[26]</code> array to <code>HashMap&lt;Character, Integer&gt;</code> to handle 100,000+ Unicode codepoints dynamically!
+                            </div>
+
+                            <strong>Complexity:</strong> Time: <code>O(N)</code>, Space: <code>O(1)</code> (26 lowercase English letters).
+                        </div>
+                        <div>
+<pre>
+public boolean isAnagram(String s, String t) {
+    if (s.length() != t.length()) return false;
+    int[] count = new int[26];
+    // Step 1: Increment for s, decrement for t
+    for (int i = 0; i &lt; s.length(); i++) {
+        count[s.charAt(i) - 'a']++;
+        count[t.charAt(i) - 'a']--;
+    }
+    // Step 2: Verify all counts zero
+    for (int c : count) {
+        if (c != 0) return false;
+    }
+    return true;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            💡 <strong>REVERSE QUESTION ("WHY NOT SORTING?"):</strong> Sorting both strings takes $O(N \log N)$ time. Frequency array reduces runtime to pure $O(N)$ linear time!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 5: EASY (TWO SUM) & MEDIUM (GROUP ANAGRAMS) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page5">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">⚡</span>
+                    <h1>EASY (TWO SUM) &amp; MEDIUM (GROUP ANAGRAMS)</h1>
+                </div>
+                <span class="page-num">PAGE 5 OF 10</span>
+            </div>
+
+            <!-- Problem 3: LC 1 -->
+            <div class="section-box box-blue">
+                <div class="section-header">3. LEETCODE 1 — TWO SUM</div>
+                <div class="section-content">
+                    <div class="meta-card">
+                        <span>Difficulty: Easy</span>
+                        <span>Pattern: Complement Map</span>
+                        <span>Companies: Google, Meta, Amazon, Apple</span>
+                        <span>Freq: ★★★★★</span>
+                    </div>
+
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <strong>Problem:</strong> Given array <code>nums</code> and <code>target</code>, return indices of two numbers that add to <code>target</code>.<br/>
+                            <em>Example:</em> <code>nums = [2, 7, 11, 15], target = 9</code> → <code>[0, 1]</code>.
+
+                            <strong>Evolution Strategy:</strong>
+                            <div>• Brute Force: $O(N^2)$ nested loops.</div>
+                            <div>• Optimal: Store complement (<code>target - nums[i]</code>) in HashMap during a single pass!</div>
+                        </div>
+                        <div>
+<pre>
+public int[] twoSum(int[] nums, int target) {
+    Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+    for (int i = 0; i &lt; nums.length; i++) {
+        int complement = target - nums[i];
+        // Step 1: Check if complement exists in map
+        if (map.containsKey(complement)) {
+            return new int[]{map.get(complement), i};
+        }
+        // Step 2: Store current number and index
+        map.put(nums[i], i);
+    }
+    return new int[0];
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 4: LC 49 -->
+            <div class="section-box box-purple">
+                <div class="section-header">4. LEETCODE 49 — GROUP ANAGRAMS</div>
+                <div class="section-content">
+                    <div class="meta-card">
+                        <span>Difficulty: Medium</span>
+                        <span>Pattern: Canonical Key Hashing</span>
+                        <span>Companies: Amazon, Meta, Uber</span>
+                        <span>Freq: ★★★★★</span>
+                    </div>
+
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <strong>Problem:</strong> Group array of strings <code>strs</code> into anagram lists.<br/>
+                            <em>Example:</em> <code>["eat","tea","tan","ate","nat","bat"]</code> → <code>[["bat"],["nat","tan"],["ate","eat","tea"]]</code>.
+
+                            <strong>Canonical Key Trick:</strong>
+                            <div>Build a character frequency signature string (e.g. <code>#1#0#0...#2</code>) as HashMap key!</div>
+                        </div>
+                        <div>
+<pre>
+public List&lt;List&lt;String&gt;&gt; groupAnagrams(String[] strs) {
+    Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
+    for (String s : strs) {
+        int[] count = new int[26];
+        for (char c : s.toCharArray()) count[c - 'a']++;
+        // Step 1: Build canonical frequency key
+        StringBuilder sb = new StringBuilder();
+        for (int c : count) sb.append('#').append(c);
+        String key = sb.toString();
+        // Step 2: Group by key
+        map.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(s);
+    }
+    return new ArrayList&lt;&gt;(map.values());
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 49):</strong> Sorting each string takes $O(K \log K)$ per word. Generating a frequency tuple key takes $O(K)$ linear time per word!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 6: MEDIUM NEETCODE (TOP K FREQUENT & VALID SUDOKU) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page6">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">🧩</span>
+                    <h1>MEDIUM NEETCODE: TOP K FREQUENT &amp; VALID SUDOKU</h1>
+                </div>
+                <span class="page-num">PAGE 6 OF 10</span>
+            </div>
+
+            <!-- Problem 5: LC 347 -->
+            <div class="section-box box-teal">
+                <div class="section-header">5. LEETCODE 347 — TOP K FREQUENT ELEMENTS (BUCKET SORT O(N))</div>
+                <div class="section-content">
+                    <div class="meta-card">
+                        <span>Difficulty: Medium</span>
+                        <span>Pattern: Frequency Map + Bucket Sort</span>
+                        <span>Companies: Meta, Google, Amazon</span>
+                        <span>Freq: ★★★★★</span>
+                    </div>
+
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <strong>Problem:</strong> Return the <code>k</code> most frequent elements in <code>nums</code>.<br/>
+                            <em>Example:</em> <code>nums = [1,1,1,2,2,3], k = 2</code> → <code>[1, 2]</code>.
+
+                            <strong>Evolution Strategy:</strong>
+                            <div>• Min-Heap: $O(N \log K)$ time.</div>
+                            <div>• Bucket Sort: $O(N)$ time by using array index as frequency count!</div>
+                        </div>
+                        <div>
+<pre>
+public int[] topKFrequent(int[] nums, int k) {
+    Map&lt;Integer, Integer&gt; count = new HashMap&lt;&gt;();
+    for (int n : nums) count.put(n, count.getOrDefault(n, 0) + 1);
+    // Step 1: Array of buckets where index = frequency
+    List&lt;Integer&gt;[] bucket = new List[nums.length + 1];
+    for (int key : count.keySet()) {
+        int freq = count.get(key);
+        if (bucket[freq] == null) bucket[freq] = new ArrayList&lt;&gt;();
+        bucket[freq].add(key);
+    }
+    // Step 2: Collect top K from highest bucket downwards
+    int[] res = new int[k]; int idx = 0;
+    for (int i = bucket.length - 1; i &gt;= 0 &amp;&amp; idx &lt; k; i--) {
+        if (bucket[i] != null) {
+            for (int num : bucket[i]) { res[idx++] = num; if (idx == k) break; }
+        }
+    }
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 6: LC 36 -->
+            <div class="section-box box-amber">
+                <div class="section-header">6. LEETCODE 36 — VALID SUDOKU</div>
+                <div class="section-content">
+                    <div class="meta-card">
+                        <span>Difficulty: Medium</span>
+                        <span>Pattern: HashSet Hash Matrix</span>
+                        <span>Companies: Apple, Uber, Meta</span>
+                        <span>Freq: ★★★★☆</span>
+                    </div>
+
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <strong>Problem:</strong> Determine if a 9x9 Sudoku board is valid (Rows, Cols, 3x3 Sub-boxes).
+                        </div>
+                        <div>
+<pre>
+public boolean isValidSudoku(char[][] board) {
+    Set&lt;String&gt; seen = new HashSet&lt;&gt;();
+    for (int r = 0; r &lt; 9; r++) {
+        for (int c = 0; c &lt; 9; c++) {
+            char val = board[r][c];
+            if (val != '.') {
+                if (!seen.add(val + " in row " + r) ||
+                    !seen.add(val + " in col " + c) ||
+                    !seen.add(val + " in box " + r/3 + "-" + c/3)) return false;
+            }
+        }
+    }
+    return true;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            📌 <strong>KEY TAKEAWAY:</strong> Bucket Sort achieves true linear $O(N)$ runtime for Top K Frequent elements by bounding frequency indices between $0$ and $N$!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 7: MEDIUM (LONGEST CONSECUTIVE) & HARD (FIRST MISSING) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page7">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">🔥</span>
+                    <h1>LONGEST CONSECUTIVE &amp; FIRST MISSING POSITIVE</h1>
+                </div>
+                <span class="page-num">PAGE 7 OF 10</span>
+            </div>
+
+            <!-- Problem 7: LC 128 -->
+            <div class="section-box box-rose">
+                <div class="section-header">7. LEETCODE 128 — LONGEST CONSECUTIVE SEQUENCE</div>
+                <div class="section-content">
+                    <div class="meta-card">
+                        <span>Difficulty: Medium</span>
+                        <span>Pattern: HashSet Sequence Start</span>
+                        <span>Companies: Google, Meta, Amazon</span>
+                        <span>Freq: ★★★★★</span>
+                    </div>
+
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <strong>Problem:</strong> Find length of longest consecutive elements sequence in unsorted array.<br/>
+                            <em>Example:</em> <code>nums = [100, 4, 200, 1, 3, 2]</code> → <code>4</code> ([1, 2, 3, 4]).
+
+                            <strong>Sequence Start Trick:</strong>
+                            <div>Only start counting consecutive sequence if <code>!set.contains(num - 1)</code>! This ensures every number is visited at most twice ($O(N)$ time!).</div>
+                        </div>
+                        <div>
+<pre>
+public int longestConsecutive(int[] nums) {
+    Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+    for (int num : nums) set.add(num);
+    int longest = 0;
+    for (int num : set) {
+        // Step 1: Check if num is the start of a sequence
+        if (!set.contains(num - 1)) {
+            int currentNum = num;
+            int currentStreak = 1;
+            while (set.contains(currentNum + 1)) {
+                currentNum++; currentStreak++;
+            }
+            longest = Math.max(longest, currentStreak);
+        }
+    }
+    return longest;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 8: LC 41 -->
+            <div class="section-box box-red">
+                <div class="section-header">8. LEETCODE 41 — FIRST MISSING POSITIVE (IN-PLACE HASHING)</div>
+                <div class="section-content">
+                    <div class="meta-card">
+                        <span>Difficulty: Hard</span>
+                        <span>Pattern: Index Cyclic Sort</span>
+                        <span>Companies: Meta, Google, Amazon</span>
+                        <span>Freq: ★★★★★</span>
+                    </div>
+
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <strong>Problem:</strong> Find smallest missing positive integer in $O(N)$ time and $O(1)$ auxiliary space.<br/>
+                            <em>Example:</em> <code>nums = [3, 4, -1, 1]</code> → <code>2</code>.
+                        </div>
+                        <div>
+<pre>
+public int firstMissingPositive(int[] nums) {
+    int n = nums.length;
+    // Step 1: Place each number at index nums[i] - 1
+    for (int i = 0; i &lt; n; i++) {
+        while (nums[i] &gt; 0 &amp;&amp; nums[i] &lt;= n &amp;&amp; nums[nums[i] - 1] != nums[i]) {
+            int temp = nums[nums[i] - 1];
+            nums[nums[i] - 1] = nums[i];
+            nums[i] = temp;
+        }
+    }
+    // Step 2: First index where nums[i] != i + 1 is missing
+    for (int i = 0; i &lt; n; i++) {
+        if (nums[i] != i + 1) return i + 1;
+    }
+    return n + 1;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            💡 <strong>AHA MOMENT (LC 128):</strong> Without the <code>!set.contains(num - 1)</code> check, duplicate sequence scans would degrade execution time to $O(N^2)$!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 8: PREVIEW DRILLS (PRODUCT EXCEPT SELF & RAIN WATER) -->
+    <!-- ========================================================= -->
+    <div class="page" id="page8">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">💧</span>
+                    <h1>PREVIEW DRILLS: PRODUCT EXCEPT SELF &amp; RAIN WATER</h1>
+                </div>
+                <span class="page-num">PAGE 8 OF 10</span>
+            </div>
+
+            <!-- Problem 9: LC 238 -->
+            <div class="section-box box-blue">
+                <div class="section-header">9. LEETCODE 238 — PRODUCT OF ARRAY EXCEPT SELF</div>
+                <div class="section-content">
+                    <div class="meta-card">
+                        <span>Difficulty: Medium</span>
+                        <span>Pattern: Prefix &amp; Suffix Accumulation</span>
+                        <span>Companies: Amazon, Meta, Apple</span>
+                        <span>Freq: ★★★★★</span>
+                    </div>
+
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <strong>Problem:</strong> Return array <code>res</code> where <code>res[i]</code> equals product of all elements except <code>nums[i]</code> without division!<br/>
+                            <em>Example:</em> <code>nums = [1, 2, 3, 4]</code> → <code>[24, 12, 8, 6]</code>.
+                        </div>
+                        <div>
+<pre>
+public int[] productExceptSelf(int[] nums) {
+    int n = nums.length;
+    int[] res = new int[n];
+    // Step 1: Prefix products
+    res[0] = 1;
+    for (int i = 1; i &lt; n; i++) res[i] = res[i - 1] * nums[i - 1];
+    // Step 2: Suffix products on the fly
+    int right = 1;
+    for (int i = n - 1; i &gt;= 0; i--) {
+        res[i] *= right;
+        right *= nums[i];
+    }
+    return res;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem 10: LC 42 Preview -->
+            <div class="section-box box-indigo">
+                <div class="section-header">10. LEETCODE 42 — TRAPPING RAIN WATER (PREFIX/SUFFIX MAX PREVIEW)</div>
+                <div class="section-content">
+                    <div class="meta-card">
+                        <span>Difficulty: Hard</span>
+                        <span>Pattern: Prefix &amp; Suffix Max Arrays</span>
+                        <span>Companies: Google, Meta, Amazon</span>
+                        <span>Freq: ★★★★★</span>
+                    </div>
+
+                    <div class="problem-split">
+                        <div class="problem-info">
+                            <strong>Problem:</strong> Compute total water trapped given elevation map <code>height</code>.<br/>
+                            <em>Formula:</em> <code>water[i] = min(leftMax[i], rightMax[i]) - height[i]</code>.
+                        </div>
+                        <div>
+<pre>
+public int trap(int[] height) {
+    int n = height.length; if (n == 0) return 0;
+    int[] leftMax = new int[n], rightMax = new int[n];
+    leftMax[0] = height[0];
+    for (int i = 1; i &lt; n; i++) leftMax[i] = Math.max(leftMax[i - 1], height[i]);
+    rightMax[n - 1] = height[n - 1];
+    for (int i = n - 2; i &gt;= 0; i--) rightMax[i] = Math.max(rightMax[i + 1], height[i]);
+    int water = 0;
+    for (int i = 0; i &lt; n; i++) water += Math.min(leftMax[i], rightMax[i]) - height[i];
+    return water;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-amber" style="margin: 0;">
+            📌 <strong>TOPIC 03 TEASER:</strong> Trapping Rain Water can be further optimized from $O(N)$ space down to $O(1)$ space using Two Pointers in Topic 03!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 9: TOP 10 FAANG MISTAKES & REVERSE DECISION TREES -->
+    <!-- ========================================================= -->
+    <div class="page" id="page9">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <h1>TOP 10 FAANG MISTAKES &amp; REVERSE DECISION TREES</h1>
+                </div>
+                <span class="page-num">PAGE 9 OF 10</span>
+            </div>
+
+            <!-- Top 10 Mistakes -->
+            <div class="section-box box-red">
+                <div class="section-header">⚠️ TOP 10 COMMON ARRAYS &amp; HASHING INTERVIEW MISTAKES</div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <div>1. <strong>String Concatenation in Loops:</strong> Using <code>s += char</code> inside loops creates $O(N^2)$ memory copies. Use <code>StringBuilder</code>!</div>
+                            <div>2. <strong>Unnecessary HashMap Usage:</strong> Allocating HashMap for 26 English letters instead of <code>int[26]</code> frequency array.</div>
+                            <div>3. <strong>Missing hashCode() Override:</strong> Overriding <code>equals()</code> without <code>hashCode()</code> breaks HashMap lookups.</div>
+                            <div>4. <strong>Mutating Map Keys:</strong> Modifying object properties while stored as a key inside a HashMap.</div>
+                            <div>5. <strong>Integer Overflow in Array Math:</strong> Failing to use <code>long</code> when computing large array products or sums.</div>
+                        </div>
+                        <div>
+                            <div>6. <strong>Concurrent Modification Exception:</strong> Removing elements from Map while iterating without Iterator.</div>
+                            <div>7. <strong>Off-By-One Array Access:</strong> Accessing <code>arr[arr.length]</code> causing runtime <code>ArrayIndexOutOfBoundsException</code>.</div>
+                            <div>8. <strong>Assuming Unique Inputs:</strong> Failing to handle duplicate elements in Two Sum or Group Anagrams.</div>
+                            <div>9. <strong>Ignoring Null / Empty Inputs:</strong> Crashing on <code>null</code> or 0-length input array boundaries.</div>
+                            <div>10. <strong>Over-Allocating Initial Capacity:</strong> Creating huge initial maps for small datasets causing memory bloat.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reverse Decision Tree Box -->
+            <div class="section-box box-amber">
+                <div class="section-header">❓ REVERSE QUESTIONS DECISION TREE ("WHY NOT?")</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Alternative Choice</th>
+                                <th>Why We Reject It In FAANG Interviews</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Why Not Brute Force Nested Loops?</strong></td>
+                                <td>Exceeds $O(N^2)$ time limit for input size $N \ge 10^5$. Time Limit Exceeded (TLE).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Why Not Sort First?</strong></td>
+                                <td>Sorting takes $O(N \log N)$ time and destroys original array index positions needed for Two Sum.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Why Not TreeMap / TreeSet?</strong></td>
+                                <td>TreeMap operations take $O(\log N)$ per insertion vs HashMap's $O(1)$ constant time performance. Use TreeMap ONLY when sorted key order is explicitly required!</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-purple" style="margin: 0;">
+            🗣️ <strong>FAANG COACH TIP:</strong> Always explain to your interviewer WHY you chose a HashMap over sorting or brute force before typing your first line of code!
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PAGE 10: MASTER CHEAT SHEETS & TOPIC 03 CHECKLIST -->
+    <!-- ========================================================= -->
+    <div class="page" id="page10">
+        <div>
+            <div class="header-top">
+                <div class="header-title-group">
+                    <span style="font-size: 1.2rem;">📋</span>
+                    <h1>MASTER CHEAT SHEETS &amp; TOPIC 03 CHECKLIST</h1>
+                </div>
+                <span class="page-num">PAGE 10 OF 10</span>
+            </div>
+
+            <!-- Pattern Matrix -->
+            <div class="section-box box-indigo">
+                <div class="section-header">⭐ TOPIC 02 MASTER PATTERN RECONCILIATION MATRIX</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pattern</th>
+                                <th>Core Data Structure</th>
+                                <th>Time Complexity</th>
+                                <th>Space Complexity</th>
+                                <th>Representative LeetCode Problem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Set Uniqueness</strong></td>
+                                <td><code>HashSet&lt;T&gt;</code></td>
+                                <td><code>O(N)</code></td>
+                                <td><code>O(N)</code></td>
+                                <td>LC 217 Contains Duplicate</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Frequency Array</strong></td>
+                                <td><code>int[26]</code> / <code>int[128]</code></td>
+                                <td><code>O(N)</code></td>
+                                <td><code>O(1)</code></td>
+                                <td>LC 242 Valid Anagram</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Complement Map</strong></td>
+                                <td><code>HashMap&lt;Val, Index&gt;</code></td>
+                                <td><code>O(N)</code></td>
+                                <td><code>O(N)</code></td>
+                                <td>LC 1 Two Sum</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Canonical Key</strong></td>
+                                <td><code>HashMap&lt;Key, List&gt;</code></td>
+                                <td><code>O(N · K)</code></td>
+                                <td><code>O(N · K)</code></td>
+                                <td>LC 49 Group Anagrams</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bucket Sort</strong></td>
+                                <td><code>List&lt;Integer&gt;[]</code></td>
+                                <td><code>O(N)</code></td>
+                                <td><code>O(N)</code></td>
+                                <td>LC 347 Top K Frequent</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sequence Start</strong></td>
+                                <td><code>HashSet&lt;Integer&gt;</code></td>
+                                <td><code>O(N)</code></td>
+                                <td><code>O(N)</code></td>
+                                <td>LC 128 Longest Consecutive</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- NeetCode & Blind 75 Tracker -->
+            <div class="section-box box-green">
+                <div class="section-header">📊 NEETCODE &amp; BLIND 75 PROGRESS TRACKER</div>
+                <div class="section-content">
+                    <div class="grid-3">
+                        <div>☑ LC 217 Contains Duplicate</div>
+                        <div>☑ LC 242 Valid Anagram</div>
+                        <div>☑ LC 1 Two Sum</div>
+                        <div>☑ LC 49 Group Anagrams</div>
+                        <div>☑ LC 347 Top K Frequent</div>
+                        <div>☑ LC 36 Valid Sudoku</div>
+                        <div>☑ LC 128 Longest Consecutive</div>
+                        <div>☑ LC 41 First Missing Positive</div>
+                        <div>☑ LC 238 Product Except Self</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Readiness Checklist -->
+            <div class="section-box box-blue">
+                <div class="section-header">✅ CHECKLIST BEFORE MOVING TO TOPIC 03 (TWO POINTERS)</div>
+                <div class="section-content">
+                    <div style="display:flex; flex-direction:column; gap:3px;">
+                        <label>☑ I understand HashMap collision resolution (Java 8 Red-Black Tree treeification at 8).</label>
+                        <label>☑ I know when to use <code>int[26]</code> over <code>HashMap</code> for memory optimization.</label>
+                        <label>☑ I can write Two Sum, Group Anagrams, and Top K Frequent from memory in &lt;3 mins.</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin: 0;">
+            🎉 <strong>TOPIC 02 COMPLETE!</strong> Turn the page to <strong>Topic 03: Two Pointers Masterclass</strong>!
+        </div>
+    </div>
+
+</div>
+
+    </div> <!-- end .main-content -->
+</div> <!-- end .app-layout -->
+
+<!-- Floating Back to Top Button -->
+<button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆</button>
+
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout') || document.querySelector('.app-layout');
+        const btn = document.querySelector('.shrink-btn span');
+        if (layout) {
+            layout.classList.toggle('shrunk');
+            if (btn) {
+                btn.innerText = layout.classList.contains('shrunk') ? '➕ Expand' : '➖ Shrink';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+

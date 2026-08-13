@@ -1,0 +1,2747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Graphs — FAANG Book 12 🔒 (32 Pages)</title>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 13px; line-height: 1.5; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 18px 24px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; break-after: page;
+  min-height: 850px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 10px; margin-bottom: 16px;
+  flex-shrink: 0; }
+.ph h1 { font-size: 2.1rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 1rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 4px 16px; border-radius: 20px;
+  font-weight: 800; font-size: 0.95rem; text-align: right; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; margin-bottom: 12px; }
+.bh  { background: var(--pri); color: white; padding: 8px 16px;
+  font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 22px; height: 22px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.8rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 14px 16px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 12px 14px; font-size: 0.82rem; line-height: 1.55; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-word; }
+code { font-size: 0.85rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th, td { border: 1px solid var(--bdr); padding: 8px 10px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur);
+  border-radius: 6px; padding: 12px 14px; margin-top: 8px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.9rem; margin-bottom: 4px; }
+
+.mt-auto { margin-top: auto; }
+
+.dt-row { display: flex; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; margin-bottom: 6px; }
+.dt-q { background: #eff6ff; padding: 6px 10px; font-weight: 600; flex: 1; font-size: 0.8rem; display: flex; align-items: center; }
+.dt-arrow { background: white; padding: 6px 6px; color: #64748b; font-size: 0.85rem; display: flex; align-items: center; }
+.dt-a { background: #f0fdf4; padding: 6px 10px; font-weight: 700; flex: 1.2; font-size: 0.8rem; display: flex; align-items: center; }
+
+.pattern-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.pattern-cell { background: #f8fafc; border: 1px solid var(--bdr); border-radius: 4px; padding: 5px 10px; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center; }
+.pattern-cell .trigger { font-weight: 600; color: var(--pri); }
+.pattern-cell .think { color: var(--grn); font-weight: 700; }
+
+.io-box {
+  background: #f8fafc; border: 1px solid var(--bdr); border-left: 3px solid var(--sec);
+  padding: 6px 12px; margin: 4px 0; border-radius: 4px; font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
+}
+
+.prob-card {
+  border: 1.5px solid var(--bdr);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.prob-head {
+  padding: 8px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--bdr);
+}
+.prob-head .ptitle { font-size: 0.9rem; font-weight: 700; color: var(--pri); }
+.diff-e { background: #dcfce7; color: #166534; padding: 2px 12px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 2px 12px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 2px 12px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+.prob-body {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  border-top: 1px solid var(--bdr);
+}
+.prob-info { padding: 10px 12px; border-right: 1px solid var(--bdr); font-size: 0.8rem; }
+.prob-code { padding: 10px 12px; background: #fafbfc; }
+.prob-code pre { font-size: 0.72rem; padding: 8px; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 10px 14px !important; width: 100% !important; page-break-after: always !important; break-after: page !important; height: auto !important; min-height: auto !important; overflow: visible !important; zoom: 1 !important; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+  pre {
+    background: #f8fafc !important;
+    color: #0f172a !important;
+    border: 1.5px solid #cbd5e1 !important;
+    font-family: 'Courier New', monospace !important;
+    font-size: 0.82rem !important;
+    line-height: 1.4 !important;
+    padding: 10px 12px !important;
+    white-space: pre-wrap !important;
+  }
+  body { font-family: Arial, Helvetica, sans-serif !important; }
+  .ph h1 { font-size: 1.6rem; }
+  .bh { font-size: 0.9rem; }
+  .bc { font-size: 0.85rem; }
+  .io-box { font-size: 0.75rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- ============================================================ -->
+<!-- PAGE 1: MASTER MAP & DECISION TREE -->
+<!-- ============================================================ -->
+<div class="page">
+  <div style="text-align:center; margin: 20px 0 30px 0;">
+    <h1 style="font-size: 2.8rem; color: var(--pri); letter-spacing: -0.5px;">GRAPHS</h1>
+    <p style="font-size: 1.4rem; color: var(--sub); font-weight: 600;">FAANG Interview Handbook</p>
+    <p style="font-size: 1.1rem; color: var(--sub);">Java — Master Pattern Recognition</p>
+    <div style="border-top: 2px solid var(--bdr); width: 60%; margin: 20px auto;"></div>
+    <p style="font-size: 0.9rem; color: #64748b;">Understand → Derive → Template → Problem → Pattern</p>
+  </div>
+
+  <div class="box pur">
+    <div class="bh">📌 GRAPH MASTER MAP</div>
+    <div class="bc" style="font-size:0.9rem; line-height:1.7;">
+      <pre style="background:none; border:none; padding:0; font-size:0.85rem; white-space:pre-wrap;">
+GRAPH
+  │
+  ├── INPUT → CONVERSION (Page 3)
+  │   ├── Edge List → Adj List (DFS/BFS)
+  │   ├── Prerequisites → Indegree (Kahn)
+  │   ├── Weighted → Weighted Adj (Dijkstra)
+  │   └── Grid → DIRS (Grid DFS/BFS)
+  │
+  ├── TRAVERSAL
+  │   ├── DFS (Pages 4-5)
+  │   └── BFS (Pages 6-8)
+  │
+  ├── PATTERNS
+  │   ├── Connected Components (Page 11)
+  │   ├── Grid (Pages 9-10)
+  │   ├── Multi‑source BFS (Page 8)
+  │   ├── Cycle Detection (Page 12)
+  │   ├── DSU (Pages 13-14)
+  │   └── Topological Sort (Pages 15-16)
+  │
+  ├── SHORTEST PATH
+  │   ├── Unweighted → BFS
+  │   ├── 0/1 → 0-1 BFS (Page 20)
+  │   ├── Weighted → Dijkstra (Pages 18-19)
+  │   ├── Negative → Bellman‑Ford (Page 20)
+  │   └── All‑pairs → Floyd‑Warshall (Page 20)
+  │
+  └── MST
+      ├── Kruskal (Page 22)
+      └── Prim (Page 22)</pre>
+      <div class="aha">
+        <div class="aha-t">💡 RECOGNITION RULE</div>
+        <p><strong>“Is the graph weighted? Unweighted? Directed? Grid? Dependency?”</strong><br>Answer these and the algorithm emerges.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="box" style="flex:1;">
+    <div class="bh">🎯 DECISION TREE – “Which Algorithm?”</div>
+    <div class="bc">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; font-size:0.8rem;">
+        <div><strong>❓ What is the question?</strong></div>
+        <div><strong>→ Algorithm</strong></div>
+        <div>“Explore all connected”</div>
+        <div>→ DFS / BFS</div>
+        <div>“Shortest path in unweighted”</div>
+        <div>→ BFS</div>
+        <div>“Spread / rotting / time”</div>
+        <div>→ Multi‑source BFS</div>
+        <div>“Dependency / order”</div>
+        <div>→ Topological Sort</div>
+        <div>“Cycle in undirected”</div>
+        <div>→ DSU / DFS-parent</div>
+        <div>“Dynamic connectivity”</div>
+        <div>→ DSU</div>
+        <div>“Weighted shortest”</div>
+        <div>→ Dijkstra</div>
+        <div>“Minimum spanning tree”</div>
+        <div>→ Kruskal / Prim</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 2: GRAPH BASICS -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">1. Foundation — What is a Graph?</div></div>
+    <div class="pn">PAGE 2/32</div>
+  </div>
+
+  <div class="g2">
+    <div class="box pur">
+      <div class="bh">💡 WHAT IS A GRAPH?</div>
+      <div class="bc">
+        <p><strong>Graph = Nodes (Vertices) + Edges (Connections).</strong></p>
+        <p>Models relationships: social networks, roads, dependencies, grids.</p>
+        <div style="background:#f4f7fa; border-radius:4px; padding:8px; margin:6px 0; font-size:0.8rem;">
+          <strong>Real-world:</strong> You + Friends = Nodes. Friendship = Edge.
+        </div>
+        <div class="aha" style="margin-top:6px;">
+          <div class="aha-t">⚠️ THE VISITED LAW</div>
+          <p>Graphs may have cycles. Always track <code>visited</code> to avoid infinite loops.</p>
+        </div>
+      </div>
+    </div>
+    <div class="box sky">
+      <div class="bh">📌 GRAPH TYPES</div>
+      <div class="bc">
+        <table>
+          <tr><th>Type</th><th>Definition</th></tr>
+          <tr><td>Undirected</td><td>Edges are 2‑way</td></tr>
+          <tr><td>Directed</td><td>Edges are 1‑way</td></tr>
+          <tr><td>Weighted</td><td>Edges have a cost</td></tr>
+          <tr><td>Unweighted</td><td>All edges cost 1</td></tr>
+          <tr><td>Connected</td><td>All nodes reachable</td></tr>
+          <tr><td>Disconnected</td><td>Multiple components</td></tr>
+          <tr><td>DAG</td><td>Directed + no cycles</td></tr>
+          <tr><td>Grid</td><td>2D lattice</td></tr>
+        </table>
+        <div style="margin-top:8px; font-size:0.8rem;"><strong>🎨 Visual:</strong></div>
+        <pre style="font-size:0.7rem; background:#f1f5f9; padding:6px;">
+Undirected:   A ─── B
+Directed:     A ───> B
+Weighted:     A ─5── B
+Cyclic:       A → B → C → A
+DAG:          A → B → C
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="box grn" style="margin-bottom:12px;">
+    <div class="bh">📚 COMPLEXITIES</div>
+    <div class="bc">
+      <table>
+        <tr><th>Algorithm</th><th>Time</th><th>Space</th><th>Why?</th></tr>
+        <tr><td>DFS / BFS</td><td>O(V+E)</td><td>O(V)</td><td>Each node/edge visited once</td></tr>
+        <tr><td>Dijkstra</td><td>O((V+E)logV)</td><td>O(V+E)</td><td>Heap operations per edge</td></tr>
+        <tr><td>DSU</td><td>O(α(N))</td><td>O(N)</td><td>Inverse Ackermann ≈ constant</td></tr>
+        <tr><td>Kruskal</td><td>O(E log E)</td><td>O(V+E)</td><td>Sorting edges dominates</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bh">🧠 WHAT STAYS THE SAME?</div>
+    <div class="bc">
+      <p>Every graph problem builds on:</p>
+      <ul style="padding-left:20px;">
+        <li><strong>Nodes + Edges</strong> – the atomic structure</li>
+        <li><strong>Traversal</strong> – DFS or BFS</li>
+        <li><strong>Visited</strong> – avoid infinite loops</li>
+        <li><strong>Conversion</strong> – edge list → adjacency list</li>
+      </ul>
+      <div class="aha" style="margin-top:6px;">
+        <div class="aha-t">💡 AHA</div>
+        <p><strong>Learn the 3 core templates (DFS, BFS, DSU) and the rest are variations.</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 3: CONVERSION HUB -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">2. Conversion — Input → Algorithm Ready</div></div>
+    <div class="pn">PAGE 3/32</div>
+  </div>
+
+  <div class="g2" style="gap:12px;">
+    <!-- Box 1: Edge List Undirected -->
+    <div class="box" style="border-color:var(--grn);">
+      <div class="bh" style="background:var(--grn);">1️⃣ Edge List (Undirected)</div>
+      <div class="bc">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:0.7rem;">
+          <div>
+            <strong>INPUT</strong>
+            <pre style="font-size:0.6rem;">[[0,1],[0,2],[1,3]]</pre>
+            <strong>VISUAL</strong>
+            <pre style="font-size:0.55rem;">0 ─ 1
+│   │
+2   3</pre>
+            <strong>RESULT (Adj List)</strong>
+            <pre style="font-size:0.55rem;">0 → [1,2]
+1 → [0,3]
+2 → [0]
+3 → [1]</pre>
+          </div>
+          <div>
+            <strong>CONVERT LOGIC</strong>
+            <pre style="font-size:0.55rem;">List&lt;Integer&gt;[] adj = new ArrayList[n];
+for (int i=0; i&lt;n; i++) adj[i]=new ArrayList&lt;&gt;();
+
+for (int[] e : edges) {
+    int u = e[0], v = e[1];
+    adj[u].add(v); // u → v
+    adj[v].add(u); // v → u (UNDIRECTED)
+}</pre>
+            <strong style="color:var(--grn);">✅ Ready for:</strong> DFS, BFS, Components, DSU
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Box 2: Prerequisites / Directed -->
+    <div class="box" style="border-color:var(--sky);">
+      <div class="bh" style="background:var(--sky);">2️⃣ Prerequisites (Directed)</div>
+      <div class="bc">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:0.7rem;">
+          <div>
+            <strong>INPUT</strong>
+            <pre style="font-size:0.6rem;">[[1,0],[2,1],[3,2]]</pre>
+            <strong>VISUAL</strong>
+            <pre style="font-size:0.55rem;">0 → 1 → 2 → 3</pre>
+            <strong>RESULT (Adj + Indegree)</strong>
+            <pre style="font-size:0.55rem;">adj[0]→[1]
+indegree[1]=1</pre>
+          </div>
+          <div>
+            <strong>CONVERT LOGIC</strong>
+            <pre style="font-size:0.55rem;">List&lt;Integer&gt;[] adj = new ArrayList[n];
+int[] indegree = new int[n];
+for (int[] p : prereqs) {
+    int course = p[0], prereq = p[1];
+    adj[prereq].add(course);
+    indegree[course]++; // count prerequisites
+}</pre>
+            <strong style="color:var(--sky);">✅ Ready for:</strong> Topological Sort (Kahn)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Box 3: Weighted Edge List -->
+    <div class="box" style="border-color:var(--amb);">
+      <div class="bh" style="background:var(--amb);">3️⃣ Weighted Edge List</div>
+      <div class="bc">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:0.7rem;">
+          <div>
+            <strong>INPUT</strong>
+            <pre style="font-size:0.6rem;">[[0,1,5],[1,2,3]]</pre>
+            <strong>VISUAL</strong>
+            <pre style="font-size:0.55rem;">0 ─5─ 1 ─3─ 2</pre>
+            <strong>RESULT (Weighted Adj)</strong>
+            <pre style="font-size:0.55rem;">0 → [(1,5)]
+1 → [(0,5),(2,3)]
+2 → [(1,3)]</pre>
+          </div>
+          <div>
+            <strong>CONVERT LOGIC</strong>
+            <pre style="font-size:0.55rem;">List&lt;int[]&gt;[] adj = new ArrayList[n];
+for (int[] e : edges) {
+    int u=e[0], v=e[1], w=e[2];
+    adj[u].add(new int[]{v, w});
+    adj[v].add(new int[]{u, w}); // undirected
+}</pre>
+            <strong style="color:var(--amb);">✅ Ready for:</strong> Dijkstra, MST
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Box 4: Grid -->
+    <div class="box" style="border-color:var(--org);">
+      <div class="bh" style="background:var(--org);">4️⃣ Grid</div>
+      <div class="bc">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:0.7rem;">
+          <div>
+            <strong>INPUT</strong>
+            <pre style="font-size:0.6rem;">[[1,1,0],[0,1,0],[1,0,1]]</pre>
+            <strong>VISUAL</strong>
+            <pre style="font-size:0.55rem;">Cells are Nodes</pre>
+            <strong>RESULT (Implicit)</strong>
+            <pre style="font-size:0.55rem;">DIRS = {right,left,down,up}</pre>
+          </div>
+          <div>
+            <strong>CONVERT LOGIC</strong>
+            <pre style="font-size:0.55rem;">int[][] DIRS = {
+    {0,1}, {0,-1}, {1,0}, {-1,0}
+};
+// Neighbors are implicit.
+// No adjacency list needed.</pre>
+            <strong style="color:var(--org);">✅ Ready for:</strong> Grid DFS / BFS
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 4: DFS CONCEPT & GENERIC TEMPLATE -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">3. DFS – Concept &amp; Generic Template</div></div>
+    <div class="pn">PAGE 4/32</div>
+  </div>
+
+  <div class="g2">
+    <div class="box">
+      <div class="bh">🧠 MENTAL MODEL</div>
+      <div class="bc">
+        <pre style="font-size:0.8rem;">STOP
+  ↓
+MARK
+  ↓
+PROCESS
+  ↓
+EXPLORE
+  ↓
+DFS(neighbor)</pre>
+        <p><strong>Visual:</strong></p>
+        <pre style="font-size:0.7rem;">    0
+   / \
+  1   2
+ /
+3
+
+DFS: 0 → 1 → 3 → back → 2</pre>
+        <div class="aha" style="margin-top:6px;">
+          <div class="aha-t">💡 AHA</div>
+          <p>DFS consumes an <strong>entire connected component</strong> in one go.</p>
+        </div>
+      </div>
+    </div>
+    <div class="box">
+      <div class="bh">☕ FULL JAVA TEMPLATE</div>
+      <div class="bc">
+        <pre>void dfs(int u, List&lt;Integer&gt;[] adj, boolean[] vis) {
+    // 1. STOP / invalid
+    if (vis[u]) return;
+    // 2. MARK
+    vis[u] = true;
+    // 3. PROCESS
+    // ... (count, area, check, etc.)
+    // 4. EXPLORE
+    for (int v : adj[u]) {
+        if (!vis[v]) dfs(v, adj, vis);
+    }
+}</pre>
+        <div style="margin-top:6px; font-size:0.75rem;">
+          <strong>Time:</strong> O(V+E) &nbsp;|&nbsp; <strong>Space:</strong> O(V) (recursion stack)
+        </div>
+        <div style="margin-top:6px; font-size:0.8rem;">
+          <strong>Iterative DFS (Stack):</strong>
+          <pre style="font-size:0.7rem; margin-top:4px;">Stack&lt;Integer&gt; st = new Stack&lt;&gt;();
+st.push(src);
+while (!st.isEmpty()) {
+    int u = st.pop();
+    if (vis[u]) continue;
+    vis[u] = true;
+    for (int v : adj[u]) if (!vis[v]) st.push(v);
+}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box red">
+    <div class="bh">🚨 COMMON MISTAKES</div>
+    <div class="bc">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; font-size:0.8rem;">
+        <div>❌ Forgetting visited</div>
+        <div>✅ Always mark at start</div>
+        <div>❌ Marking too late</div>
+        <div>✅ Mark BEFORE processing</div>
+        <div>❌ Wrong parent logic in cycle</div>
+        <div>✅ Pass parent parameter</div>
+        <div>❌ Infinite recursion</div>
+        <div>✅ Check visited first</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="aha" style="margin-top:6px;">
+    <div class="aha-t">🧠 MEMORY BITE</div>
+    <p><strong>DFS = STOP → MARK → PROCESS → EXPLORE</strong></p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 5: DFS ADAPTATIONS & PROBLEMS -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">3. DFS – Adaptations &amp; Problems</div></div>
+    <div class="pn">PAGE 5/32</div>
+  </div>
+
+  <div class="box">
+    <div class="bh">🔧 DFS ADAPTATIONS TO INPUTS (Full Templates)</div>
+    <div class="bc">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:0.7rem;">
+        <div style="border:1px solid var(--bdr); border-radius:4px; padding:8px;">
+          <strong style="color:var(--grn);">1. Adjacency List</strong>
+          <pre style="font-size:0.6rem;">void dfs(int u, List&lt;Integer&gt;[] adj, boolean[] vis) {
+    if (vis[u]) return;
+    vis[u] = true;
+    // PROCESS
+    for (int v : adj[u])
+        if (!vis[v]) dfs(v, adj, vis);
+}</pre>
+        </div>
+        <div style="border:1px solid var(--bdr); border-radius:4px; padding:8px;">
+          <strong style="color:var(--sky);">2. Grid</strong>
+          <pre style="font-size:0.6rem;">void dfs(int r, int c, int[][] grid, boolean[][] vis) {
+    if (r<0||r>=R||c<0||c>=C||vis[r][c]||grid[r][c]==0) return;
+    vis[r][c] = true;
+    // PROCESS
+    for (int[] d : DIRS)
+        dfs(r+d[0], c+d[1], grid, vis);
+}</pre>
+        </div>
+        <div style="border:1px solid var(--bdr); border-radius:4px; padding:8px;">
+          <strong style="color:var(--amb);">3. Matrix</strong>
+          <pre style="font-size:0.6rem;">void dfs(int u, int[][] matrix, boolean[] vis) {
+    if (vis[u]) return;
+    vis[u] = true;
+    // PROCESS
+    for (int v=0; v&lt;matrix.length; v++)
+        if (matrix[u][v]==1 && !vis[v])
+            dfs(v, matrix, vis);
+}</pre>
+        </div>
+        <div style="border:1px solid var(--bdr); border-radius:4px; padding:8px;">
+          <strong style="color:var(--org);">4. Weighted Adj</strong>
+          <pre style="font-size:0.6rem;">void dfs(int u, List&lt;int[]&gt;[] adj, boolean[] vis) {
+    if (vis[u]) return;
+    vis[u] = true;
+    // PROCESS
+    for (int[] e : adj[u]) {
+        int v = e[0];
+        if (!vis[v]) dfs(v, adj, vis);
+    }
+}</pre>
+        </div>
+      </div>
+      <div class="aha" style="margin-top:6px;">
+        <div class="aha-t">💡 AHA</div>
+        <p><strong>Only the neighbor retrieval changes. The logic (STOP→MARK→PROCESS→EXPLORE) is identical.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 1971 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 1971 · Find if Path Exists</span><span class="diff-e">EASY</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> n=3, edges=[[0,1],[1,2]], source=0, dest=2</div>
+        <div class="io-box"><strong>Out:</strong> true</div>
+        <div><strong>Pattern:</strong> DFS / BFS (Reachability)</div>
+        <div><strong>Time:</strong> O(V+E) | <strong>Space:</strong> O(V+E)</div>
+        <div class="aha" style="margin-top:4px; padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          <p>Build adjacency list. DFS from source, return true if we hit dest.</p>
+        </div>
+      </div>
+      <div class="prob-code">
+        <pre>public boolean validPath(int n, int[][] edges, int src, int dest) {
+    List&lt;Integer&gt;[] adj = new ArrayList[n];
+    for (int i=0; i&lt;n; i++) adj[i]=new ArrayList&lt;&gt;();
+    for (int[] e : edges) {
+        adj[e[0]].add(e[1]);
+        adj[e[1]].add(e[0]); // undirected
+    }
+    boolean[] vis = new boolean[n];
+    return dfs(src, dest, adj, vis);
+}
+boolean dfs(int u, int dest, List&lt;Integer&gt;[] adj, boolean[] vis) {
+    if (u == dest) return true;
+    vis[u]=true;
+    for (int v : adj[u])
+        if (!vis[v] && dfs(v, dest, adj, vis)) return true;
+    return false;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 200 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 200 · Number of Islands</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> grid=[["1","1","0"],["0","1","0"],["1","0","1"]]</div>
+        <div class="io-box"><strong>Out:</strong> 3</div>
+        <div><strong>Pattern:</strong> Grid DFS</div>
+        <div><strong>Time:</strong> O(R·C) | <strong>Space:</strong> O(R·C)</div>
+        <div class="aha" style="margin-top:4px; padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          Sink '1's as you visit them. Each DFS call consumes one island.
+        </div>
+      </div>
+      <div class="prob-code">
+        <pre>int numIslands(char[][] grid) {
+    int count=0;
+    for(int r=0; r&lt;grid.length; r++)
+        for(int c=0; c&lt;grid[0].length; c++)
+            if(grid[r][c]=='1'){ dfs(grid,r,c); count++; }
+    return count;
+}
+void dfs(char[][] g, int r, int c) {
+    if(r&lt;0||r&gt;=g.length||c&lt;0||c&gt;=g[0].length||g[r][c]=='0') return;
+    g[r][c]='0'; // sink
+    for(int[] d : DIRS) dfs(g, r+d[0], c+d[1]);
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 695 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 695 · Max Area of Island</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> grid=[[0,1,1],[0,1,0],[0,0,1]]</div>
+        <div class="io-box"><strong>Out:</strong> 3</div>
+        <div><strong>Pattern:</strong> Grid DFS (return int)</div>
+        <div><strong>Time:</strong> O(R·C) | <strong>Space:</strong> O(R·C)</div>
+        <div class="aha" style="margin-top:4px; padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          DFS returns <code>1 + sum of child areas</code>.
+        </div>
+      </div>
+      <div class="prob-code">
+        <pre>int maxAreaOfIsland(int[][] grid) {
+    int max=0;
+    for(int r=0; r&lt;grid.length; r++)
+        for(int c=0; c&lt;grid[0].length; c++)
+            if(grid[r][c]==1)
+                max=Math.max(max, dfsArea(grid,r,c));
+    return max;
+}
+int dfsArea(int[][] g, int r, int c) {
+    if(r&lt;0||r&gt;=g.length||c&lt;0||c&gt;=g[0].length||g[r][c]==0) return 0;
+    g[r][c]=0;
+    int area=1;
+    for(int[] d : DIRS) area += dfsArea(g, r+d[0], c+d[1]);
+    return area;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 6: BFS CONCEPT & GENERIC TEMPLATE -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">4. BFS – Concept &amp; Generic Template</div></div>
+    <div class="pn">PAGE 6/32</div>
+  </div>
+
+  <div class="g2">
+    <div class="box">
+      <div class="bh">🧠 MENTAL MODEL</div>
+      <div class="bc">
+        <pre style="font-size:0.8rem;">SOURCE
+  ↓
+QUEUE
+  ↓
+POP
+  ↓
+NEIGHBORS
+  ↓
+MARK + ENQUEUE</pre>
+        <p><strong>Visual:</strong></p>
+        <pre style="font-size:0.7rem;">    0
+  / | \
+  1 2 3
+ / \
+4   5
+
+Level 0: 0
+Level 1: 1 2 3
+Level 2: 4 5</pre>
+        <div class="aha" style="margin-top:6px;">
+          <div class="aha-t">💡 AHA</div>
+          <p>BFS guarantees <strong>shortest path</strong> in unweighted graphs.</p>
+        </div>
+      </div>
+    </div>
+    <div class="box">
+      <div class="bh">☕ FULL JAVA TEMPLATE</div>
+      <div class="bc">
+        <pre>void bfs(int src, List&lt;Integer&gt;[] adj, boolean[] vis) {
+    Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    q.offer(src);
+    vis[src] = true; // ⭐ Mark on enqueue
+    while (!q.isEmpty()) {
+        int u = q.poll();
+        // PROCESS u
+        for (int v : adj[u]) {
+            if (!vis[v]) {
+                vis[v] = true;
+                q.offer(v);
+            }
+        }
+    }
+}</pre>
+        <div style="margin-top:6px; font-size:0.75rem;">
+          <strong>Time:</strong> O(V+E) &nbsp;|&nbsp; <strong>Space:</strong> O(V)
+        </div>
+        <div class="aha" style="margin-top:6px;">
+          <div class="aha-t">💡 WHY MARK ON ENQUEUE?</div>
+          <p>Prevents duplicate enqueue and infinite loops.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box red">
+    <div class="bh">🚨 COMMON MISTAKES</div>
+    <div class="bc">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; font-size:0.8rem;">
+        <div>❌ Mark visited after dequeue</div>
+        <div>✅ Mark BEFORE enqueue</div>
+        <div>❌ Duplicate enqueue</div>
+        <div>✅ Check visited before offer</div>
+        <div>❌ Forget level size</div>
+        <div>✅ int size = q.size()</div>
+        <div>❌ Wrong multi-source init</div>
+        <div>✅ Enqueue ALL sources</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="aha" style="margin-top:6px;">
+    <div class="aha-t">🧠 MEMORY BITE</div>
+    <p><strong>BFS = QUEUE → LEVEL → SHORTEST</strong></p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 7: BFS ADAPTATIONS & PROBLEMS -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">4. BFS – Adaptations &amp; Problems</div></div>
+    <div class="pn">PAGE 7/32</div>
+  </div>
+
+  <div class="box">
+    <div class="bh">🔧 BFS ADAPTATIONS TO INPUTS (Full Templates)</div>
+    <div class="bc">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:0.7rem;">
+        <div style="border:1px solid var(--bdr); border-radius:4px; padding:8px;">
+          <strong style="color:var(--grn);">1. Adjacency List</strong>
+          <pre style="font-size:0.6rem;">void bfs(int src, List&lt;Integer&gt;[] adj, boolean[] vis) {
+    Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    q.offer(src); vis[src]=true;
+    while (!q.isEmpty()) {
+        int u = q.poll();
+        for (int v : adj[u])
+            if (!vis[v]) { vis[v]=true; q.offer(v); }
+    }
+}</pre>
+        </div>
+        <div style="border:1px solid var(--bdr); border-radius:4px; padding:8px;">
+          <strong style="color:var(--sky);">2. Grid</strong>
+          <pre style="font-size:0.6rem;">void bfs(int sr, int sc, int[][] grid, boolean[][] vis) {
+    Queue&lt;int[]&gt; q = new LinkedList&lt;&gt;();
+    q.offer(new int[]{sr,sc}); vis[sr][sc]=true;
+    while (!q.isEmpty()) {
+        int[] cur = q.poll();
+        for (int[] d : DIRS) {
+            int nr=cur[0]+d[0], nc=cur[1]+d[1];
+            if (valid && !vis[nr][nc] && grid[nr][nc]==1) {
+                vis[nr][nc]=true; q.offer(new int[]{nr,nc});
+            }
+        }
+    }
+}</pre>
+        </div>
+        <div style="border:1px solid var(--bdr); border-radius:4px; padding:8px;">
+          <strong style="color:var(--amb);">3. Multi‑source</strong>
+          <pre style="font-size:0.6rem;">void multiBFS(List&lt;int[]&gt; sources, int[][] grid) {
+    Queue&lt;int[]&gt; q = new LinkedList&lt;&gt;();
+    for (int[] s : sources) {
+        q.offer(s); vis[s[0]][s[1]]=true;
+    }
+    while (!q.isEmpty()) {
+        int[] cur = q.poll();
+        // ... same as grid BFS
+    }
+}</pre>
+        </div>
+        <div style="border:1px solid var(--bdr); border-radius:4px; padding:8px;">
+          <strong style="color:var(--org);">4. Weighted (Ignored)</strong>
+          <pre style="font-size:0.6rem;">// BFS works on unweighted.
+// For weighted, use Dijkstra (Page 18).</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 1091 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 1091 · Shortest Path in Binary Matrix</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> grid=[[0,1],[1,0]]</div>
+        <div class="io-box"><strong>Out:</strong> 2</div>
+        <div><strong>Pattern:</strong> Grid BFS (8 directions)</div>
+        <div><strong>Time:</strong> O(R·C) | <strong>Space:</strong> O(R·C)</div>
+        <div><strong>Step-by-step:</strong></div>
+        <div style="font-size:0.7rem;">
+          1. Enqueue (0,0) with distance 1.<br>
+          2. Mark as visited.<br>
+          3. While queue not empty, pop and check 8 neighbors.<br>
+          4. If (n-1,n-1) reached, return distance.
+        </div>
+        <div class="aha" style="margin-top:4px; padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          Track distance with each cell in the queue.
+        </div>
+      </div>
+      <div class="prob-code">
+        <pre>public int shortestPathBinaryMatrix(int[][] grid) {
+    int n = grid.length;
+    if(grid[0][0]==1 || grid[n-1][n-1]==1) return -1;
+    int[][] dirs = {{-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1}};
+    Queue&lt;int[]&gt; q = new LinkedList&lt;&gt;();
+    q.offer(new int[]{0,0,1}); // row, col, distance
+    grid[0][0]=1; // mark visited
+    while(!q.isEmpty()) {
+        int[] cur = q.poll();
+        int r=cur[0], c=cur[1], d=cur[2];
+        if(r==n-1 && c==n-1) return d;
+        for(int[] dir : dirs) {
+            int nr=r+dir[0], nc=c+dir[1];
+            if(nr>=0 && nr<n && nc>=0 && nc<n && grid[nr][nc]==0) {
+                grid[nr][nc]=1;
+                q.offer(new int[]{nr,nc,d+1});
+            }
+        }
+    }
+    return -1;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 8: MULTI-SOURCE BFS & ROTTING ORANGES (FULL CODE) -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">4. Multi‑source BFS</div></div>
+    <div class="pn">PAGE 8/32</div>
+  </div>
+
+  <div class="box">
+    <div class="bh">🔥 MULTI‑SOURCE BFS</div>
+    <div class="bc">
+      <p><strong>When?</strong> Multiple sources start simultaneously (e.g., rotting oranges, fire spread).</p>
+      <pre style="font-size:0.75rem;">Queue&lt;Node&gt; q = new LinkedList&lt;&gt;();
+for (Node src : sources) { q.offer(src); visited[src]=true; }
+int time = 0;
+while (!q.isEmpty()) {
+    int size = q.size();   // ⭐ freeze level
+    for (int i=0; i&lt;size; i++) {
+        Node cur = q.poll();
+        for (Node nei : cur.neighbors) {
+            if (!visited[nei]) {
+                visited[nei] = true;
+                q.offer(nei);
+            }
+        }
+    }
+    time++; // each level = one time unit
+}</pre>
+      <div class="aha" style="margin-top:6px;">
+        <div class="aha-t">💡 TIME‑EVOLUTION TABLE</div>
+        <pre style="font-size:0.7rem;">t=0: [source1, source2]
+t=1: [neighbors of source1 + source2]
+t=2: [neighbors of neighbors]
+...
+Each level = one time unit.</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 994 (FULL CODE WITH COMMENTS) -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 994 · Rotting Oranges</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> grid=[[2,1,1],[1,1,0],[0,1,1]]</div>
+        <div class="io-box"><strong>Out:</strong> 4</div>
+        <div><strong>Pattern:</strong> Multi‑source BFS</div>
+        <div><strong>Time:</strong> O(R·C) | <strong>Space:</strong> O(R·C)</div>
+        <div style="font-size:0.7rem; margin-top:4px;">
+          <strong>Dry Run (Minute by Minute):</strong>
+          <pre style="font-size:0.6rem; border:1px solid var(--bdr); padding:4px; background:#f8fafc;">
+t=0: [[2,1,1],[1,1,0],[0,1,1]]
+t=1: [[2,2,1],[2,1,0],[0,1,1]]
+t=2: [[2,2,2],[2,2,0],[0,1,1]]
+t=3: [[2,2,2],[2,2,0],[0,2,1]]
+t=4: [[2,2,2],[2,2,0],[0,2,2]] → all rotten! return 4
+          </pre>
+        </div>
+        <div class="aha" style="margin-top:4px; padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          All rotten start at t=0. Each BFS level = 1 minute.
+        </div>
+      </div>
+      <div class="prob-code">
+        <pre>int orangesRotting(int[][] grid) {
+    // Step 1: Initialize queue with all rotten oranges
+    //         Count total fresh oranges
+    Queue&lt;int[]&gt; q = new LinkedList&lt;&gt;();
+    int fresh = 0;
+    for (int r=0; r&lt;grid.length; r++) {
+        for (int c=0; c&lt;grid[0].length; c++) {
+            if (grid[r][c] == 2) q.offer(new int[]{r,c});
+            else if (grid[r][c] == 1) fresh++;
+        }
+    }
+
+    int time = 0;
+    int[][] DIRS = {{0,1},{0,-1},{1,0},{-1,0}};
+
+    // Step 2: BFS level by level (each level = 1 minute)
+    while (!q.isEmpty() && fresh > 0) {
+        int size = q.size(); // freeze current level
+        for (int i=0; i&lt;size; i++) {
+            int[] cur = q.poll();
+            int r = cur[0], c = cur[1];
+
+            // Check 4 neighbors
+            for (int[] d : DIRS) {
+                int nr = r + d[0];
+                int nc = c + d[1];
+
+                // If neighbor is a fresh orange, rot it
+                if (nr>=0 && nr&lt;grid.length && nc>=0 && nc&lt;grid[0].length
+                        && grid[nr][nc] == 1) {
+                    grid[nr][nc] = 2; // mark as rotten
+                    fresh--;
+                    q.offer(new int[]{nr, nc});
+                }
+            }
+        }
+        time++; // one minute passed
+    }
+
+    // Step 3: If fresh oranges remain, return -1
+    return fresh == 0 ? time : -1;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 9: GRID = GRAPH -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">5. Grid = Graph</div></div>
+    <div class="pn">PAGE 9/32</div>
+  </div>
+
+  <div class="g2">
+    <div class="box">
+      <div class="bh">🏁 GRID IS A GRAPH</div>
+      <div class="bc">
+        <p>Each cell = node. Neighbouring cells = edges.</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:6px;">
+          <div>
+            <pre>int[][] DIRS = {
+  {0,1}, {0,-1}, {1,0}, {-1,0}
+};</pre>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:center;">
+            <pre style="font-size:0.8rem; background:none; border:none;">
+   UP
+   ↑
+LEFT ← CELL → RIGHT
+   ↓
+  DOWN</pre>
+          </div>
+        </div>
+        <div class="aha">
+          <div class="aha-t">💡 MEMORY</div>
+          <p><strong>GRID → DIRS → DFS / BFS</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box sky">
+      <div class="bh">Grid DFS Template</div>
+      <div class="bc">
+        <pre>void dfs(int r, int c) {
+    if (out of bounds || invalid) return;
+    mark(r,c);
+    for (int[] d : DIRS)
+        dfs(r+d[0], c+d[1]);
+}</pre>
+      </div>
+    </div>
+    <div class="box amb" style="grid-column: span 2;">
+      <div class="bh">Grid BFS Template</div>
+      <div class="bc">
+        <pre>void bfs(int r, int c) {
+    Queue&lt;int[]&gt; q = new ArrayDeque<>();
+    q.offer(new int[]{r,c});
+    vis[r][c] = true;
+    while (!q.isEmpty()) {
+        int[] cur = q.poll();
+        for (int[] d : DIRS) {
+            int nr=cur[0]+d[0], nc=cur[1]+d[1];
+            if (valid && !vis[nr][nc]) { mark; q.offer; }
+        }
+    }
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 10: GRID PROBLEMS (ISLAND CHAIN WITH COMPLETE SOLUTIONS) -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">5. Grid Problems – Island Chain</div></div>
+    <div class="pn">PAGE 10/32</div>
+  </div>
+
+  <div class="box">
+    <div class="bh">🏝️ ISLAND PROBLEM EVOLUTION</div>
+    <div class="bc">
+      <div style="display:grid; grid-template-columns:auto 1fr; gap:4px 12px; font-size:0.8rem;">
+        <span><strong>LC 733</strong></span>
+        <span>Flood Fill — color replacement, simple DFS</span>
+        <span style="border-left:2px solid var(--amb); padding-left:8px;">↓</span>
+        <span><strong>LC 200</strong></span>
+        <span>Number of Islands — count components, sink '1's</span>
+        <span style="border-left:2px solid var(--amb); padding-left:8px;">↓</span>
+        <span><strong>LC 695</strong></span>
+        <span>Max Area — DFS returns size</span>
+        <span style="border-left:2px solid var(--amb); padding-left:8px;">↓</span>
+        <span><strong>LC 130</strong></span>
+        <span>Surrounded Regions — border DFS, flip</span>
+        <span style="border-left:2px solid var(--amb); padding-left:8px;">↓</span>
+        <span><strong>LC 417</strong></span>
+        <span>Pacific Atlantic — reverse DFS from oceans</span>
+      </div>
+      <div class="aha" style="margin-top:6px;">
+        <div class="aha-t">💡 AHA</div>
+        <p><strong>Same Grid DFS template – only the PROCESS changes.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 733 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 733 · Flood Fill</span><span class="diff-e">EASY</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> image=[[1,1,1],[1,1,0]], sr=1, sc=1, color=2</div>
+        <div class="io-box"><strong>Out:</strong> [[2,2,2],[2,2,0]]</div>
+        <div><strong>Pattern:</strong> Grid DFS</div>
+      </div>
+      <div class="prob-code">
+        <pre>public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+    int oc = image[sr][sc];
+    if (oc != color) dfs(image, sr, sc, oc, color);
+    return image;
+}
+void dfs(int[][] img, int r, int c, int oc, int nc) {
+    if(r&lt;0||r&gt;=img.length||c&lt;0||c&gt;=img[0].length||img[r][c]!=oc) return;
+    img[r][c]=nc;
+    for(int[] d:DIRS) dfs(img, r+d[0], c+d[1], oc, nc);
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 130 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 130 · Surrounded Regions</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> board=[["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]</div>
+        <div class="io-box"><strong>Out:</strong> [["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X","O","X","X"]]</div>
+        <div><strong>Pattern:</strong> Border-first DFS</div>
+        <div class="aha" style="margin-top:4px; padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          Mark border-connected 'O' as safe (#), flip rest to X.
+        </div>
+      </div>
+      <div class="prob-code">
+        <pre>void solve(char[][] board) {
+    int R=board.length, C=board[0].length;
+    for(int r=0;r<R;r++){ if(board[r][0]=='O') dfs(board,r,0);
+        if(board[r][C-1]=='O') dfs(board,r,C-1); }
+    for(int c=0;c<C;c++){ if(board[0][c]=='O') dfs(board,0,c);
+        if(board[R-1][c]=='O') dfs(board,R-1,c); }
+    for(int r=0;r<R;r++) for(int c=0;c<C;c++){
+        if(board[r][c]=='O') board[r][c]='X';
+        else if(board[r][c]=='#') board[r][c]='O';
+    }
+}
+void dfs(char[][] b, int r, int c) {
+    if(r<0||r>=b.length||c<0||c>=b[0].length||b[r][c]!='O') return;
+    b[r][c]='#';
+    for(int[] d:DIRS) dfs(b, r+d[0], c+d[1]);
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 417 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 417 · Pacific Atlantic</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> heights=[[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]</div>
+        <div class="io-box"><strong>Out:</strong> [[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]</div>
+        <div><strong>Pattern:</strong> Reverse DFS</div>
+        <div class="aha" style="margin-top:4px; padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          Start from oceans and flow upwards.
+        </div>
+      </div>
+      <div class="prob-code">
+        <pre>public List&lt;List&lt;Integer&gt;&gt; pacificAtlantic(int[][] heights) {
+    int R=heights.length, C=heights[0].length;
+    boolean[][] pac = new boolean[R][C];
+    boolean[][] atl = new boolean[R][C];
+
+    // DFS from Pacific (top & left)
+    for(int c=0; c<C; c++) dfs(heights, 0, c, pac);
+    for(int r=0; r<R; r++) dfs(heights, r, 0, pac);
+
+    // DFS from Atlantic (bottom & right)
+    for(int c=0; c<C; c++) dfs(heights, R-1, c, atl);
+    for(int r=0; r<R; r++) dfs(heights, r, C-1, atl);
+
+    // Intersection
+    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+    for(int r=0; r<R; r++)
+        for(int c=0; c<C; c++)
+            if(pac[r][c] && atl[r][c])
+                res.add(Arrays.asList(r,c));
+    return res;
+}
+void dfs(int[][] h, int r, int c, boolean[][] reach) {
+    reach[r][c]=true;
+    for(int[] d:DIRS) {
+        int nr=r+d[0], nc=c+d[1];
+        if(nr>=0 && nr<h.length && nc>=0 && nc<h[0].length
+                && !reach[nr][nc] && h[nr][nc] >= h[r][c]) {
+            dfs(h, nr, nc, reach);
+        }
+    }
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 11: CONNECTED COMPONENTS -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">6. Connected Components</div></div>
+    <div class="pn">PAGE 11/32</div>
+  </div>
+
+  <div class="g2">
+    <div class="box">
+      <div class="bh">🧩 WHAT ARE CONNECTED COMPONENTS?</div>
+      <div class="bc">
+        <p>A connected component is a maximal set of nodes where every pair is connected by a path.</p>
+        <pre style="font-size:0.75rem;">Graph: 0─1  2  3─4
+              │
+              5
+Components: {0,1}, {2,5}, {3,4} → 3 components</pre>
+        <div class="aha" style="margin-top:6px;">
+          <div class="aha-t">💡 AHA</div>
+          <p>Each DFS/BFS call from an unvisited node discovers <strong>one</strong> component.</p>
+        </div>
+      </div>
+    </div>
+    <div class="box sky">
+      <div class="bh">🔍 COUNT COMPONENTS (DFS)</div>
+      <div class="bc">
+        <pre>int countComponents(int n, List&lt;Integer&gt;[] adj) {
+    boolean[] vis = new boolean[n];
+    int count = 0;
+    for (int i=0; i&lt;n; i++) {
+        if (!vis[i]) {
+            dfs(i, adj, vis); // uses standard DFS template
+            count++;
+        }
+    }
+    return count;
+}</pre>
+        <p><strong>Time:</strong> O(V+E) &nbsp;|&nbsp; <strong>Space:</strong> O(V)</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 547 · Number of Provinces</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> isConnected=[[1,1,0],[1,1,0],[0,0,1]]</div>
+        <div class="io-box"><strong>Out:</strong> 2</div>
+        <div><strong>Pattern:</strong> DFS components on adjacency matrix</div>
+        <div><strong>Time:</strong> O(N²) | <strong>Space:</strong> O(N)</div>
+      </div>
+      <div class="prob-code">
+        <pre>public int findCircleNum(int[][] isConnected) {
+    int n = isConnected.length;
+    boolean[] vis = new boolean[n];
+    int count = 0;
+    for (int i=0; i&lt;n; i++) {
+        if (!vis[i]) {
+            dfs(i, isConnected, vis); // standard DFS on matrix
+            count++;
+        }
+    }
+    return count;
+}
+// Standard DFS on Matrix
+void dfs(int u, int[][] mat, boolean[] vis) {
+    vis[u]=true;
+    for (int v=0; v&lt;mat.length; v++) {
+        if(mat[u][v]==1 && !vis[v]) dfs(v, mat, vis);
+    }
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 12: CYCLE DETECTION -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">7. Cycle Detection</div></div>
+    <div class="pn">PAGE 12/32</div>
+  </div>
+
+  <div class="g2" style="height:auto;">
+    <div class="box">
+      <div class="bh">🔄 UNDIRECTED</div>
+      <div class="bc">
+        <p><strong>Key insight:</strong> visited neighbor ≠ parent → cycle.</p>
+        <pre style="font-size:0.7rem;">0 ── 1
+│    │
+└── 2
+
+DFS(0):
+  vis[0]=true
+  neighbor 1 → DFS(1)
+    vis[1]=true
+    neighbor 0 → parent, ignore
+    neighbor 2 → DFS(2)
+      vis[2]=true
+      neighbor 1 → visited and != parent → CYCLE!</pre>
+        <p><span style="font-weight:700;">🎯 LC 261</span> Graph Valid Tree</p>
+      </div>
+    </div>
+    <div class="box sky">
+      <div class="bh">🔄 DIRECTED</div>
+      <div class="bc">
+        <p><strong>3‑state DFS:</strong> 0=unvisited, 1=visiting, 2=done</p>
+        <pre style="font-size:0.7rem;">0 → 1 → 2
+↑       ↓
+└───────┘
+
+DFS(0): state[0]=1
+  DFS(1): state[1]=1
+    DFS(2): state[2]=1
+      neighbor 0 → state[0]==1 → CYCLE!</pre>
+        <p><span style="font-weight:700;">🎯 LC 207</span> Course Schedule</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bh">📊 CYCLE DETECTION — ALGORITHM COMPARISON</div>
+    <div class="bc">
+      <table>
+        <tr><th>Graph Type</th><th>Algorithm</th><th>Key Idea</th></tr>
+        <tr><td>Undirected</td><td>DFS + Parent</td><td>If neighbor visited and ≠ parent → cycle</td></tr>
+        <tr><td>Undirected</td><td>DSU</td><td>If union returns false → cycle</td></tr>
+        <tr><td>Directed</td><td>3‑state DFS</td><td>WHITE → GRAY → BLACK</td></tr>
+        <tr><td>Directed</td><td>Kahn (Topo)</td><td>processed < n → cycle</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="aha">
+    <div class="aha-t">🧠 MEMORY BITE</div>
+    <p><strong>Undirected: parent. Directed: state.</strong></p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 13: DSU (FULLY ALIGNED) -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">8. DSU – Why &amp; Template</div></div>
+    <div class="pn">PAGE 13/32</div>
+  </div>
+
+  <div class="g2" style="grid-template-columns:1fr 1fr; width:100%;">
+    <div class="box" style="grid-column:span 1;">
+      <div class="bh">🧠 WHY DSU?</div>
+      <div class="bc">
+        <p><strong>Problem:</strong> Receive edges one by one. Need to know: “Are these nodes already connected?”</p>
+        <p>DFS/BFS approach → traverse graph repeatedly → expensive.</p>
+        <p><strong>DSU:</strong> Keep track of GROUPS.</p>
+        <div style="margin-top:6px; font-size:0.8rem;">
+          <strong>🎨 Visual:</strong>
+          <pre style="font-size:0.7rem;">Before:
+1     3
+│     │
+2     4
+
+union(1,3) → After:
+    1
+   / \
+  2   3
+      │
+      4</pre>
+        </div>
+        <div style="margin-top:6px;">
+          <strong>parent[]</strong> = “Who is my boss?”<br>
+          <strong>rank[]</strong> = “How tall is my boss’s tree?”
+        </div>
+      </div>
+    </div>
+    <div class="box" style="grid-column:span 1;">
+      <div class="bh">🔗 DSU TEMPLATE</div>
+      <div class="bc">
+        <pre>class DSU {
+    int[] parent, rank;
+
+    DSU(int n) {
+        parent = new int[n];
+        rank = new int[n];
+        for (int i = 0; i < n; i++) {
+            parent[i] = i; // each node is its own parent
+        }
+    }
+
+    // Find root with path compression
+    int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
+    }
+
+    // Union: merge two sets
+    // Returns false if already connected (cycle detected)
+    boolean union(int a, int b) {
+        int ra = find(a);
+        int rb = find(b);
+
+        if (ra == rb) return false; // cycle!
+
+        // Union by rank
+        if (rank[ra] < rank[rb]) {
+            parent[ra] = rb;
+        } else if (rank[ra] > rank[rb]) {
+            parent[rb] = ra;
+        } else {
+            parent[rb] = ra;
+            rank[ra]++;
+        }
+        return true;
+    }
+}</pre>
+        <p><strong>Complexity:</strong> O(α(N)) ≈ O(1) per op.<br> α(N) = inverse Ackermann (≈ constant).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="box red">
+    <div class="bh">🚨 COMMON MISTAKES</div>
+    <div class="bc">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; font-size:0.8rem;">
+        <div>❌ No path compression</div>
+        <div>✅ parent[x] = find(parent[x])</div>
+        <div>❌ Wrong union (no rank)</div>
+        <div>✅ Union by rank/size</div>
+        <div>❌ Forgetting to initialize parent</div>
+        <div>✅ parent[i] = i</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="aha">
+    <div class="aha-t">🧠 MEMORY BITE</div>
+    <p><strong>DSU = FIND → UNION</strong></p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 14: DSU PROBLEMS (WITH COMMENTS) -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">8. DSU Problems</div></div>
+    <div class="pn">PAGE 14/32</div>
+  </div>
+
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 684 · Redundant Connection</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> edges=[[1,2],[1,3],[2,3]]</div>
+        <div class="io-box"><strong>Out:</strong> [2,3]</div>
+        <p><strong>Pattern:</strong> DSU (cycle detection)</p>
+        <div class="aha" style="margin-top:4px; padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          Union returns false when edge creates a cycle. That edge is the answer.
+        </div>
+        <p><strong>Time:</strong> O(E·α(N)) | <strong>Space:</strong> O(N)</p>
+      </div>
+      <div class="prob-code">
+        <pre>int[] findRedundantConnection(int[][] edges) {
+    DSU dsu = new DSU(edges.length + 1);
+
+    for (int[] e : edges) {
+        // union returns false if a and b already connected
+        if (!dsu.union(e[0], e[1])) {
+            return e; // this edge creates a cycle
+        }
+    }
+    return new int[0];
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 1319 · Number of Operations</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> n=4, connections=[[0,1],[0,2],[1,2]]</div>
+        <div class="io-box"><strong>Out:</strong> 1</div>
+        <p><strong>Pattern:</strong> DSU + components</p>
+        <p><strong>Time:</strong> O(E·α(N)) | <strong>Space:</strong> O(N)</p>
+      </div>
+      <div class="prob-code">
+        <pre>public int makeConnected(int n, int[][] connections) {
+    // Need at least n-1 cables to connect n nodes
+    if (connections.length < n-1) return -1;
+
+    DSU dsu = new DSU(n);
+    int extra = 0;
+
+    // Count extra cables (connections that create cycles)
+    for (int[] e : connections) {
+        if (!dsu.union(e[0], e[1])) {
+            extra++; // spare cable
+        }
+    }
+
+    // Count number of connected components
+    int comps = 0;
+    for (int i = 0; i < n; i++) {
+        if (dsu.find(i) == i) comps++;
+    }
+
+    // Need (comps - 1) cables to connect all components
+    // We have 'extra' spare cables
+    return (comps - 1 <= extra) ? comps - 1 : -1;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 15: TOPOLOGICAL SORT – CONCEPT -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">9. Topological Sort – Concept</div></div>
+    <div class="pn">PAGE 15/32</div>
+  </div>
+
+  <div class="box">
+    <div class="bh">🎯 WHAT IS TOPOLOGICAL SORT?</div>
+    <div class="bc">
+      <p><strong>Linear ordering of nodes in a DAG</strong> such that for every directed edge u → v, u comes before v.</p>
+      <pre style="font-size:0.75rem;">Dependency: 0 → 1 → 3
+            0 → 2 → 3
+
+Topological order: 0, 1, 2, 3 (or 0, 2, 1, 3)</pre>
+      <div class="aha" style="margin-top:6px;">
+        <div class="aha-t">💡 AHA</div>
+        <p><strong>Topological sort only exists for DAGs.</strong><br>
+        If cycle exists → no valid ordering.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="box">
+      <div class="bh">DFS TOPOLOGICAL</div>
+      <div class="bc">
+        <pre>void dfs(u) {
+    vis[u]=true;
+    for (v : adj[u]) if (!vis[v]) dfs(v);
+    order.add(u); // post-order
+}
+// Reverse order for topological order.</pre>
+        <p><span style="font-weight:700;">🎯 LC 210</span> Course Schedule II</p>
+      </div>
+    </div>
+    <div class="box sky">
+      <div class="bh">KAHN'S (BFS)</div>
+      <div class="bc">
+        <pre>Queue&lt;Integer&gt; q;
+for (i) if (indegree[i]==0) q.offer(i);
+while (!q.isEmpty()) {
+    u = q.poll();
+    order.add(u);
+    for (v : adj[u]) {
+        if (--indegree[v] == 0) q.offer(v);
+    }
+}
+if (order.size() < n) → cycle!</pre>
+        <p><span style="font-weight:700;">🎯 LC 207</span> Course Schedule</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="aha">
+    <div class="aha-t">🧠 MEMORY BITE</div>
+    <p><strong>Dependency → DAG → Topological Sort</strong></p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 16: TOPO PROBLEMS (COURSE SCHEDULE) -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">9. Topological Sort – Problems</div></div>
+    <div class="pn">PAGE 16/32</div>
+  </div>
+
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 207 · Course Schedule</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> n=2, prereqs=[[1,0]]</div>
+        <div class="io-box"><strong>Out:</strong> true</div>
+        <p><strong>Pattern:</strong> Kahn's cycle detection</p>
+        <div class="aha" style="margin-top:4px; padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          Build graph: prereq[i][1] → prereq[i][0]. Kahn's detects if all courses can be completed.
+        </div>
+        <p><strong>Time:</strong> O(V+E) | <strong>Space:</strong> O(V+E)</p>
+      </div>
+      <div class="prob-code">
+        <pre>public boolean canFinish(int n, int[][] prereqs) {
+    List&lt;Integer&gt;[] adj = new ArrayList[n];
+    int[] indegree = new int[n];
+    for (int i=0; i&lt;n; i++) adj[i]=new ArrayList&lt;&gt;();
+
+    // Build graph: prereq → course
+    for (int[] p : prereqs) {
+        adj[p[1]].add(p[0]); // p[1] must be taken before p[0]
+        indegree[p[0]]++;
+    }
+
+    Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();
+    for (int i=0; i&lt;n; i++) {
+        if (indegree[i] == 0) q.offer(i);
+    }
+
+    int processed = 0;
+    while (!q.isEmpty()) {
+        int u = q.poll();
+        processed++;
+
+        for (int v : adj[u]) {
+            if (--indegree[v] == 0) {
+                q.offer(v);
+            }
+        }
+    }
+
+    // If we processed all nodes, no cycle → can finish
+    return processed == n;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bh">🎓 DEPENDENCY EVOLUTION</div>
+    <div class="bc">
+      <div style="display:grid; grid-template-columns:auto 1fr; gap:4px 12px; font-size:0.8rem;">
+        <span><strong>LC 207</strong></span>
+        <span>Can finish all courses? → Kahn's cycle detection</span>
+        <span style="border-left:2px solid var(--amb); padding-left:8px;">↓</span>
+        <span><strong>LC 210</strong></span>
+        <span>Return the order → Kahn's with order array</span>
+        <span style="border-left:2px solid var(--amb); padding-left:8px;">↓</span>
+        <span><strong>LC 269</strong></span>
+        <span>Alien Dictionary → character graph + Kahn's</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 17: SHORTEST PATH DECISION TREE -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">10. Shortest Path – Decision Tree</div></div>
+    <div class="pn">PAGE 17/32</div>
+  </div>
+
+  <div class="box">
+    <div class="bh">🗺️ SHORTEST PATH ALGORITHM SELECTION</div>
+    <div class="bc">
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; text-align:center; font-size:0.8rem;">
+        <div style="border:1px solid var(--bdr); border-radius:4px; padding:8px; background:#f0fdf4;">
+          <strong style="color:var(--grn);">Unweighted</strong>
+          <div>→ BFS</div>
+          <div style="font-size:0.7rem;">O(V+E)</div>
+        </div>
+        <div style="border:1px solid var(--bdr); border-radius:4px; padding:8px; background:#fefce8;">
+          <strong style="color:var(--amb);">0 / 1 weights</strong>
+          <div>→ 0-1 BFS</div>
+          <div style="font-size:0.7rem;">O(V+E)</div>
+        </div>
+        <div style="border:1px solid var(--bdr); border-radius:4px; padding:8px; background:#eff6ff;">
+          <strong style="color:var(--sky);">Weighted non‑negative</strong>
+          <div>→ Dijkstra</div>
+          <div style="font-size:0.7rem;">O((V+E)logV)</div>
+        </div>
+        <div style="border:1px solid var(--bdr); border-radius:4px; padding:8px; background:#fff1f2;">
+          <strong style="color:var(--red);">Negative edges</strong>
+          <div>→ Bellman‑Ford</div>
+          <div style="font-size:0.7rem;">O(VE)</div>
+        </div>
+        <div style="border:1px solid var(--bdr); border-radius:4px; padding:8px; background:#faf5ff;">
+          <strong style="color:var(--pur);">All‑pairs (V ≤ 200)</strong>
+          <div>→ Floyd‑Warshall</div>
+          <div style="font-size:0.7rem;">O(V³)</div>
+        </div>
+        <div style="border:1px solid var(--bdr); border-radius:4px; padding:8px; background:#f8fafc;">
+          <strong style="color:var(--org);">Two ends known</strong>
+          <div>→ Bidirectional BFS</div>
+          <div style="font-size:0.7rem;">O(V^d/2)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bh">🎨 VISUAL: Decision Flow</div>
+    <div class="bc">
+      <pre style="font-size:0.75rem;">SOURCE
+  ↓
+┌─────────────┐
+│ What edges? │
+└──────┬──────┘
+       ↓
+unweighted → BFS
+0/1       → 0-1 BFS
+weighted  → Dijkstra / Bellman-Ford
+negative  → Bellman-Ford
+all-pairs → Floyd-Warshall</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 18: DIJKSTRA (WITH PSEUDO AND EXAMPLE) -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">10. Dijkstra – Concept &amp; Template</div></div>
+    <div class="pn">PAGE 18/32</div>
+  </div>
+
+  <div class="g2">
+    <div class="box">
+      <div class="bh">⚡ WHY DIJKSTRA?</div>
+      <div class="bc">
+        <p><strong>BFS fails for weighted graphs</strong> — it counts edges, not weights.</p>
+        <p><strong>Example:</strong></p>
+        <pre>0 ──1── 1
+│
+2
+│
+3</pre>
+        <p>BFS would think 0 → 1 is shortest (1 edge), but if weight is 10, it's not.</p>
+        <p>Dijkstra uses a <strong>PriorityQueue</strong> to always expand the closest unvisited node.</p>
+        <p><strong>Requires:</strong> Non‑negative edge weights.</p>
+        <p><strong>Time:</strong> O((V+E)logV) | <strong>Space:</strong> O(V+E)</p>
+        <div style="margin-top:6px; font-size:0.8rem;">
+          <strong>Pseudo:</strong>
+          <pre style="font-size:0.7rem;">dist[src]=0
+pq.add((0,src))
+while pq not empty:
+    pop (d,u)
+    if d > dist[u]: continue
+    for each edge (u,v,w):
+        if dist[u]+w < dist[v]:
+            dist[v]=dist[u]+w
+            pq.add((dist[v],v))</pre>
+        </div>
+      </div>
+    </div>
+    <div class="box">
+      <div class="bh">☕ DIJKSTRA — FULL JAVA TEMPLATE</div>
+      <div class="bc">
+        <pre>int[] dijkstra(int src, List&lt;int[]&gt;[] adj) {
+    int n = adj.length;
+    int[] dist = new int[n];
+    Arrays.fill(dist, Integer.MAX_VALUE/2);
+    dist[src] = 0;
+
+    // Min-heap: [distance, node]
+    PriorityQueue&lt;int[]&gt; pq =
+        new PriorityQueue&lt;&gt;((a,b) -> a[0] - b[0]);
+    pq.offer(new int[]{0, src});
+
+    while (!pq.isEmpty()) {
+        int[] cur = pq.poll();
+        int d = cur[0], u = cur[1];
+
+        // ⭐ Skip stale entries (important!)
+        if (d > dist[u]) continue;
+
+        // Relax all outgoing edges
+        for (int[] e : adj[u]) {
+            int v = e[0], w = e[1];
+            if (dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
+                pq.offer(new int[]{dist[v], v});
+            }
+        }
+    }
+    return dist;
+}</pre>
+        <div class="aha" style="margin-top:6px;">
+          <div class="aha-t">💡 STALE ENTRIES</div>
+          <p>When we update a node's distance, we may have older entries in the heap. <br>
+          <code>if (d > dist[u]) continue;</code> ensures we process only the latest best distance.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 19: DIJKSTRA PROBLEMS -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">10. Dijkstra – Problems</div></div>
+    <div class="pn">PAGE 19/32</div>
+  </div>
+
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 743 · Network Delay Time</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> times=[[2,1,1],[2,3,1],[3,4,1]], n=4, k=2</div>
+        <div class="io-box"><strong>Out:</strong> 2</div>
+        <p><strong>Pattern:</strong> Dijkstra</p>
+        <p><strong>Time:</strong> O((V+E)logV) | <strong>Space:</strong> O(V+E)</p>
+        <div class="aha" style="margin-top:4px; padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          Max distance from source to all nodes is the answer. Unreachable → -1.
+        </div>
+      </div>
+      <div class="prob-code">
+        <pre>public int networkDelayTime(int[][] times, int n, int k) {
+    List&lt;int[]&gt;[] adj = new ArrayList[n+1];
+    for (int i=1; i&lt;=n; i++) adj[i]=new ArrayList&lt;&gt;();
+
+    for (int[] t : times) {
+        adj[t[0]].add(new int[]{t[1], t[2]});
+    }
+
+    int[] dist = dijkstra(k, adj);
+
+    int max = 0;
+    for (int i=1; i&lt;=n; i++) {
+        if (dist[i] == Integer.MAX_VALUE/2) return -1;
+        max = Math.max(max, dist[i]);
+    }
+    return max;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 1631 · Path With Minimum Effort</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> heights=[[1,2,2],[3,8,2],[5,3,5]]</div>
+        <div class="io-box"><strong>Out:</strong> 2</div>
+        <p><strong>Pattern:</strong> Dijkstra on grid with absolute diff as weight.</p>
+        <p><strong>Time:</strong> O(R*C log(R*C)) | <strong>Space:</strong> O(R*C)</p>
+      </div>
+      <div class="prob-code">
+        <pre>public int minimumEffortPath(int[][] heights) {
+    int R=heights.length, C=heights[0].length;
+    int[][] dist = new int[R][C];
+    for(int[] row: dist) Arrays.fill(row, Integer.MAX_VALUE);
+    dist[0][0]=0;
+    PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;((a,b)->a[0]-b[0]);
+    pq.offer(new int[]{0,0,0});
+    int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
+    while(!pq.isEmpty()){
+        int[] cur=pq.poll();
+        int d=cur[0], r=cur[1], c=cur[2];
+        if(d>dist[r][c]) continue;
+        if(r==R-1 && c==C-1) return d;
+        for(int[] dir: dirs){
+            int nr=r+dir[0], nc=c+dir[1];
+            if(nr>=0 && nr<R && nc>=0 && nc<C){
+                int nd = Math.max(d, Math.abs(heights[r][c]-heights[nr][nc]));
+                if(nd < dist[nr][nc]){
+                    dist[nr][nc]=nd;
+                    pq.offer(new int[]{nd,nr,nc});
+                }
+            }
+        }
+    }
+    return 0;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 20: 0-1 BFS & BELLMAN-FORD (WITH LC 1368, LC 787) -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">10. 0-1 BFS &amp; Bellman‑Ford</div></div>
+    <div class="pn">PAGE 20/32</div>
+  </div>
+
+  <div class="g2">
+    <div class="box">
+      <div class="bh">0-1 BFS</div>
+      <div class="bc">
+        <p><strong>When:</strong> Edge weights are only 0 or 1.</p>
+        <p><strong>Why not Dijkstra?</strong> 0-1 BFS is O(V+E) vs O((V+E)logV).</p>
+        <p><strong>Idea:</strong> Deque – push weight 0 to front, weight 1 to back.</p>
+        <pre>Deque&lt;Node&gt; dq = new ArrayDeque<>();
+if (w == 0) dq.offerFirst(v);
+else dq.offerLast(v);</pre>
+        <p><span style="font-weight:700;">🎯 LC 1368</span> Minimum Cost</p>
+      </div>
+    </div>
+    <div class="box sky">
+      <div class="bh">Bellman‑Ford</div>
+      <div class="bc">
+        <p><strong>When:</strong> Negative edges (detect negative cycles).</p>
+        <p><strong>Why not Dijkstra?</strong> Dijkstra fails on negative weights.</p>
+        <p><strong>Concept:</strong> Relax all edges V-1 times.</p>
+        <pre>for (i=0; i&lt;n-1; i++)
+  for (edge : edges)
+    dist[v] = min(dist[v], dist[u] + w);
+// If dist improves after V-1 → negative cycle</pre>
+        <p><span style="font-weight:700;">🎯 LC 787</span> Cheapest Flights Within K Stops</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 1368 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 1368 · Minimum Cost</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> grid=[[1,1,1,1],[2,2,2,2],[1,1,1,1],[2,2,2,2]]</div>
+        <div class="io-box"><strong>Out:</strong> 3</div>
+        <p><strong>Pattern:</strong> 0-1 BFS</p>
+        <p><strong>Time:</strong> O(R·C) | <strong>Space:</strong> O(R·C)</p>
+        <div class="aha" style="margin-top:4px; padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          Edge cost 0 if moving in arrow direction, else 1. Use 0-1 BFS.
+        </div>
+      </div>
+      <div class="prob-code">
+        <pre>public int minCost(int[][] grid) {
+    int R=grid.length, C=grid[0].length;
+    int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
+    int[][] cost = new int[R][C];
+    for(int[] row: cost) Arrays.fill(row, Integer.MAX_VALUE);
+    cost[0][0]=0;
+    Deque&lt;int[]&gt; dq = new ArrayDeque<>();
+    dq.offer(new int[]{0,0});
+    while(!dq.isEmpty()){
+        int[] cur = dq.poll();
+        int r=cur[0], c=cur[1];
+        for(int i=0;i<4;i++){
+            int nr=r+dirs[i][0], nc=c+dirs[i][1];
+            if(nr>=0 && nr<R && nc>=0 && nc<C){
+                int w = (grid[r][c] == i+1) ? 0 : 1;
+                if(cost[r][c] + w < cost[nr][nc]){
+                    cost[nr][nc] = cost[r][c] + w;
+                    if(w==0) dq.offerFirst(new int[]{nr,nc});
+                    else dq.offerLast(new int[]{nr,nc});
+                }
+            }
+        }
+    }
+    return cost[R-1][C-1];
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- LC 787 -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 787 · Cheapest Flights</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> n=3, flights=[[0,1,100],[1,2,100],[0,2,500]], src=0, dst=2, k=1</div>
+        <div class="io-box"><strong>Out:</strong> 200</div>
+        <p><strong>Pattern:</strong> Bellman‑Ford (K‑stop constraint)</p>
+        <p><strong>Time:</strong> O(K·E) | <strong>Space:</strong> O(V)</p>
+      </div>
+      <div class="prob-code">
+        <pre>int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+    int INF = Integer.MAX_VALUE/2;
+    int[] dist = new int[n];
+    Arrays.fill(dist, INF);
+    dist[src] = 0;
+
+    // Relax all edges K+1 times
+    for (int i = 0; i <= k; i++) {
+        int[] prev = dist.clone();
+        for (int[] f : flights) {
+            int u = f[0], v = f[1], w = f[2];
+            if (prev[u] + w < dist[v]) {
+                dist[v] = prev[u] + w;
+            }
+        }
+    }
+    return dist[dst] == INF ? -1 : dist[dst];
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 21: BIPARTITE -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">11. Bipartite Graph</div></div>
+    <div class="pn">PAGE 21/32</div>
+  </div>
+
+  <div class="g2">
+    <div class="box">
+      <div class="bh">🎨 TWO-COLORING</div>
+      <div class="bc">
+        <p><strong>What is Bipartite?</strong><br>
+        A graph is bipartite if we can color each node RED or BLUE such that adjacent nodes have different colors.</p>
+        <pre style="font-size:0.75rem;">RED ─ BLUE
+ │      │
+BLUE ─ RED</pre>
+        <p><strong>Why do we care?</strong><br>
+        Detects odd‑length cycles. Used in scheduling and matching problems.</p>
+        <div class="aha" style="margin-top:6px;">
+          <div class="aha-t">💡 AHA</div>
+          If BFS/DFS finds a neighbor with the same color → NOT bipartite.
+        </div>
+      </div>
+    </div>
+    <div class="box sky">
+      <div class="bh">🔍 TEMPLATE (BFS)</div>
+      <div class="bc">
+        <pre>color[src] = 0;
+Queue q;
+while (!q.isEmpty()) {
+    u = q.poll();
+    for (v : adj[u]) {
+        if (color[v] == -1) {
+            color[v] = 1 - color[u];
+            q.offer(v);
+        } else if (color[v] == color[u]) {
+            return false; // conflict
+        }
+    }
+}
+return true;</pre>
+        <p><span style="font-weight:700;">🎯 LC 785</span> Is Graph Bipartite?</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 22: MST – KRUSKAL & PRIM (WITH CODE) -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">12. MST – Kruskal &amp; Prim</div></div>
+    <div class="pn">PAGE 22/32</div>
+  </div>
+
+  <div class="box">
+    <div class="bh">🌲 MST – MINIMUM SPANNING TREE</div>
+    <div class="bc">
+      <p><strong>Goal:</strong> Connect all nodes with minimum total edge cost (no cycles).</p>
+      <p><strong>MST vs Shortest Path:</strong> MST connects ALL nodes. Shortest path connects ONE source to ONE destination.</p>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:6px;">
+        <div style="border:1px solid var(--bdr); border-radius:4px; padding:8px; background:#f0fdf4;">
+          <strong style="color:var(--grn);">Kruskal</strong>
+          <div style="font-size:0.75rem;">Sort edges → DSU</div>
+          <div style="font-size:0.7rem;">O(E log E)</div>
+        </div>
+        <div style="border:1px solid var(--bdr); border-radius:4px; padding:8px; background:#eff6ff;">
+          <strong style="color:var(--sky);">Prim</strong>
+          <div style="font-size:0.75rem;">Start node → PQ</div>
+          <div style="font-size:0.7rem;">O(E log V)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="box">
+      <div class="bh">🔗 KRUSKAL — FULL JAVA TEMPLATE</div>
+      <div class="bc">
+        <pre>int kruskal(int[][] edges, int n) {
+    // edges = [weight, u, v]
+    Arrays.sort(edges, (a,b) -> a[0] - b[0]);
+
+    DSU dsu = new DSU(n);
+    int cost = 0;
+    int count = 0;
+
+    for (int[] e : edges) {
+        int w = e[0], u = e[1], v = e[2];
+
+        // If u and v are not connected, add this edge
+        if (dsu.union(u, v)) {
+            cost += w;
+            count++;
+
+            // MST has n-1 edges
+            if (count == n - 1) break;
+        }
+    }
+
+    return cost;
+}</pre>
+      </div>
+    </div>
+    <div class="box sky">
+      <div class="bh">🌲 PRIM — FULL JAVA TEMPLATE</div>
+      <div class="bc">
+        <pre>int prim(List&lt;int[]&gt;[] adj) {
+    int n = adj.length;
+    boolean[] inMST = new boolean[n];
+    PriorityQueue&lt;int[]&gt; pq =
+        new PriorityQueue&lt;&gt;((a,b)->a[0]-b[0]);
+    pq.offer(new int[]{0, 0}); // weight, node
+    int cost = 0;
+    int count = 0;
+
+    while (!pq.isEmpty() && count < n) {
+        int[] cur = pq.poll();
+        int w = cur[0], u = cur[1];
+        if (inMST[u]) continue;
+        inMST[u] = true;
+        cost += w;
+        count++;
+
+        for (int[] e : adj[u]) {
+            int v = e[0], wt = e[1];
+            if (!inMST[v]) {
+                pq.offer(new int[]{wt, v});
+            }
+        }
+    }
+    return cost;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 1584 · Min Cost to Connect Points</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> points=[[0,0],[2,2],[3,10],[5,2],[7,0]]</div>
+        <div class="io-box"><strong>Out:</strong> 20</div>
+        <p><strong>Pattern:</strong> Kruskal — build all edges, sort, DSU</p>
+      </div>
+      <div class="prob-code">
+        <pre>int minCostConnectPoints(int[][] points) {
+    int n = points.length;
+    List&lt;int[]&gt; edges = new ArrayList&lt;&gt;();
+
+    // Build all edges with Manhattan distance as weight
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            int dist = Math.abs(points[i][0] - points[j][0])
+                     + Math.abs(points[i][1] - points[j][1]);
+            edges.add(new int[]{dist, i, j});
+        }
+    }
+
+    Collections.sort(edges, (a,b) -> a[0] - b[0]);
+
+    DSU dsu = new DSU(n);
+    int cost = 0;
+    int count = 0;
+
+    for (int[] e : edges) {
+        if (dsu.union(e[1], e[2])) {
+            cost += e[0];
+            if (++count == n - 1) break;
+        }
+    }
+    return cost;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 23: ADVANCED PATTERNS (Bidirectional BFS, SCC, Bridges) -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">13. Advanced Patterns</div></div>
+    <div class="pn">PAGE 23/32</div>
+  </div>
+
+  <div class="g2">
+    <div class="box">
+      <div class="bh">⭐ BIDIRECTIONAL BFS</div>
+      <div class="bc">
+        <p><strong>When:</strong> Both source and target known, graph is large.</p>
+        <p><strong>Idea:</strong> Expand from both ends, meet in the middle.</p>
+        <p><strong>Time:</strong> O(V^d/2) vs O(V^d) for standard BFS.</p>
+        <p><span style="font-weight:700;">🎯 LC 127</span> Word Ladder</p>
+      </div>
+    </div>
+    <div class="box sky">
+      <div class="bh">🔗 SCC (Strongly Connected)</div>
+      <div class="bc">
+        <p><strong>Kosaraju:</strong> DFS on original, then reverse order.</p>
+        <p><strong>Tarjan:</strong> Single DFS with low-link values.</p>
+        <p><span style="font-weight:700;">🎯 LC 1192</span> Critical Connections (Bridges)</p>
+      </div>
+    </div>
+    <div class="box amb">
+      <div class="bh">🌉 BRIDGES &amp; ARTICULATION</div>
+      <div class="bc">
+        <p><strong>Bridge:</strong> Edge whose removal disconnects graph.</p>
+        <p><strong>Articulation point:</strong> Node whose removal disconnects graph.</p>
+        <p>Use Tarjan's DFS with `disc` and `low` arrays.</p>
+      </div>
+    </div>
+    <div class="box org">
+      <div class="bh">🔄 EULERIAN PATH</div>
+      <div class="bc">
+        <p>Path that uses every edge exactly once.</p>
+        <p>Hierholzer's algorithm. Used in LC 332 (Reconstruct Itinerary).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="box red">
+    <div class="bh">⚠️ WHEN TO USE ADVANCED TOPICS</div>
+    <div class="bc">
+      <table>
+        <tr><th>Topic</th><th>Trigger</th></tr>
+        <tr><td>SCC</td><td>“Can we break this into strongly connected groups?”</td></tr>
+        <tr><td>Bridges</td><td>“Which edge is critical for connectivity?”</td></tr>
+        <tr><td>Articulation Points</td><td>“Which node is critical?”</td></tr>
+        <tr><td>Eulerian</td><td>“Can we traverse every edge exactly once?”</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 24: PROBLEM EVOLUTION CHAINS -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">14. Problem Evolution Chains</div></div>
+    <div class="pn">PAGE 24/32</div>
+  </div>
+
+  <div class="g2">
+    <div class="box">
+      <div class="bh">🏝️ ISLAND CHAIN</div>
+      <div class="bc" style="font-size:0.8rem;">
+        <div>LC 733 · Flood Fill</div>
+        <div style="border-left:2px solid var(--amb); padding-left:8px; margin:2px 0;">↓</div>
+        <div>LC 200 · Number of Islands</div>
+        <div style="border-left:2px solid var(--amb); padding-left:8px; margin:2px 0;">↓</div>
+        <div>LC 695 · Max Area</div>
+        <div style="border-left:2px solid var(--amb); padding-left:8px; margin:2px 0;">↓</div>
+        <div>LC 130 · Surrounded Regions</div>
+        <div style="border-left:2px solid var(--amb); padding-left:8px; margin:2px 0;">↓</div>
+        <div>LC 1020 · Enclaves</div>
+        <div style="border-left:2px solid var(--amb); padding-left:8px; margin:2px 0;">↓</div>
+        <div>LC 417 · Pacific Atlantic (Reverse Flow ⭐)</div>
+      </div>
+    </div>
+    <div class="box sky">
+      <div class="bh">🌊 BFS CHAIN</div>
+      <div class="bc" style="font-size:0.8rem;">
+        <div>LC 994 · Rotting Oranges</div>
+        <div style="border-left:2px solid var(--amb); padding-left:8px; margin:2px 0;">↓</div>
+        <div>LC 542 · 01 Matrix</div>
+        <div style="border-left:2px solid var(--amb); padding-left:8px; margin:2px 0;">↓</div>
+        <div>LC 1162 · As Far from Land</div>
+      </div>
+    </div>
+    <div class="box pur">
+      <div class="bh">🎓 DEPENDENCY CHAIN</div>
+      <div class="bc" style="font-size:0.8rem;">
+        <div>LC 207 · Course Schedule I</div>
+        <div style="border-left:2px solid var(--amb); padding-left:8px; margin:2px 0;">↓</div>
+        <div>LC 210 · Course Schedule II</div>
+        <div style="border-left:2px solid var(--amb); padding-left:8px; margin:2px 0;">↓</div>
+        <div>LC 269 · Alien Dictionary</div>
+      </div>
+    </div>
+    <div class="box grn">
+      <div class="bh">🔗 DSU CHAIN</div>
+      <div class="bc" style="font-size:0.8rem;">
+        <div>LC 684 · Redundant Connection</div>
+        <div style="border-left:2px solid var(--amb); padding-left:8px; margin:2px 0;">↓</div>
+        <div>LC 721 · Accounts Merge</div>
+        <div style="border-left:2px solid var(--amb); padding-left:8px; margin:2px 0;">↓</div>
+        <div>LC 947 · Most Stones Removed</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="aha" style="margin-top:6px;">
+    <div class="aha-t">💡 PURPOSE</div>
+    <p>Same template → harder modification.<br>
+    <em>“Master the base, adapt to the variation.”</em></p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGES 25-27: ALL PROBLEMS IN ONE PLACE (WITH FULL CARDS) -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">15. All Problems – DFS / Grid / BFS</div></div>
+    <div class="pn">PAGE 25/32</div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 1971 · Path Exists</span><span class="diff-e">EASY</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> n=3, edges=[[0,1],[1,2]], src=0, dest=2</div><div class="io-box"><strong>Out:</strong> true</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// DFS reachability (see Page 5)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 547 · Provinces</span><span class="diff-m">MEDIUM</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> [[1,1,0],[1,1,0],[0,0,1]]</div><div class="io-box"><strong>Out:</strong> 2</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// DFS components on matrix (Page 11)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 200 · Islands</span><span class="diff-m">MEDIUM</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> grid=[["1","1","0"],["0","1","0"],["1","0","1"]]</div><div class="io-box"><strong>Out:</strong> 3</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Grid DFS sink (Page 5)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 695 · Max Area</span><span class="diff-m">MEDIUM</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> grid=[[0,1,1],[0,1,0],[0,0,1]]</div><div class="io-box"><strong>Out:</strong> 3</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Grid DFS return int (Page 5)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 733 · Flood Fill</span><span class="diff-e">EASY</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> image=[[1,1,1],[1,1,0]], sr=1, sc=1, color=2</div><div class="io-box"><strong>Out:</strong> [[2,2,2],[2,2,0]]</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Grid DFS recolor (Page 10)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 130 · Surrounded</span><span class="diff-m">MEDIUM</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> board=[["X","X","X"],["X","O","X"],["X","X","X"]]</div><div class="io-box"><strong>Out:</strong> [["X","X","X"],["X","X","X"],["X","X","X"]]</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Border-first DFS (Page 10)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 1091 · Shortest Path</span><span class="diff-m">MEDIUM</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> grid=[[0,1],[1,0]]</div><div class="io-box"><strong>Out:</strong> 2</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Grid BFS (8 dirs) (Page 7)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 994 · Rotting</span><span class="diff-m">MEDIUM</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> [[2,1,1],[1,1,0],[0,1,1]]</div><div class="io-box"><strong>Out:</strong> 4</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Multi-source BFS (Page 8)</pre></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 26 -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">15. All Problems – DSU / Topo / Shortest</div></div>
+    <div class="pn">PAGE 26/32</div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 684 · Redundant</span><span class="diff-m">MEDIUM</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> edges=[[1,2],[1,3],[2,3]]</div><div class="io-box"><strong>Out:</strong> [2,3]</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// DSU union false = cycle (Page 14)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 1319 · Network</span><span class="diff-m">MEDIUM</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> n=4, connections=[[0,1],[0,2],[1,2]]</div><div class="io-box"><strong>Out:</strong> 1</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// DSU + components (Page 14)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 207 · Course I</span><span class="diff-m">MEDIUM</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> n=2, prereqs=[[1,0]]</div><div class="io-box"><strong>Out:</strong> true</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Kahn's cycle detection (Page 16)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 210 · Course II</span><span class="diff-m">MEDIUM</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> n=2, prereqs=[[1,0]]</div><div class="io-box"><strong>Out:</strong> [0,1]</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Kahn's with order array (Page 16)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 269 · Alien Dict</span><span class="diff-h">HARD</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> ["wrt","wrf","er","ett","rftt"]</div><div class="io-box"><strong>Out:</strong> "wertf"</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Kahn's on character graph (Page 16)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 743 · Network Delay</span><span class="diff-m">MEDIUM</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> times=[[2,1,1],[2,3,1],[3,4,1]], n=4, k=2</div><div class="io-box"><strong>Out:</strong> 2</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Dijkstra (Page 19)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 787 · Cheapest</span><span class="diff-m">MEDIUM</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> n=3, flights=[[0,1,100],[1,2,100],[0,2,500]], src=0, dst=2, k=1</div><div class="io-box"><strong>Out:</strong> 200</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Bellman-Ford K-stops (Page 20)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 1584 · Min Cost</span><span class="diff-m">MEDIUM</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> points=[[0,0],[2,2],[3,10],[5,2],[7,0]]</div><div class="io-box"><strong>Out:</strong> 20</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Kruskal (MST) (Page 22)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 785 · Bipartite</span><span class="diff-m">MEDIUM</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> graph=[[1,3],[0,2],[1,3],[0,2]]</div><div class="io-box"><strong>Out:</strong> true</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// BFS coloring (Page 21)</pre></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 27 -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">15. All Problems – Advanced</div></div>
+    <div class="pn">PAGE 27/32</div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 417 · Pacific Atlantic</span><span class="diff-m">MEDIUM</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> heights=[[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]</div><div class="io-box"><strong>Out:</strong> [[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Reverse DFS from oceans (Page 10)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 133 · Clone Graph</span><span class="diff-m">MEDIUM</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> adjList = [[2,4],[1,3],[2,4],[1,3]]</div><div class="io-box"><strong>Out:</strong> [[2,4],[1,3],[2,4],[1,3]]</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// DFS + Map (see below)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 127 · Word Ladder</span><span class="diff-h">HARD</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> beginWord="hit", endWord="cog", wordList=["hot","dot","dog","lot","log","cog"]</div><div class="io-box"><strong>Out:</strong> 5</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Bidirectional BFS (see below)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 269 · Alien Dict</span><span class="diff-h">HARD</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> ["wrt","wrf","er","ett","rftt"]</div><div class="io-box"><strong>Out:</strong> "wertf"</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Kahn's on character graph (Page 26)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 1192 · Critical Connections</span><span class="diff-h">HARD</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> n=4, connections=[[0,1],[1,2],[2,0],[1,3]]</div><div class="io-box"><strong>Out:</strong> [[1,3]]</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Tarjan Bridges (concept only)</pre></div>
+      </div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-head"><span class="ptitle">LC 332 · Reconstruct Itinerary</span><span class="diff-h">HARD</span></div>
+      <div class="prob-body">
+        <div class="prob-info"><div class="io-box"><strong>In:</strong> tickets=[["MUC","LHR"],["JFK","MUC"],["SFO","SJC"],["LHR","SFO"]]</div><div class="io-box"><strong>Out:</strong> ["JFK","MUC","LHR","SFO","SJC"]</div></div>
+        <div class="prob-code"><pre style="font-size:0.6rem;">// Hierholzer (Eulerian) (concept only)</pre></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 28: CLONE GRAPH, WORD LADDER (COMPLETE) -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">15. Advanced Solutions – Clone &amp; Word Ladder</div></div>
+    <div class="pn">PAGE 28/32</div>
+  </div>
+
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 133 · Clone Graph</span><span class="diff-m">MEDIUM</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> adjList = [[2,4],[1,3],[2,4],[1,3]]</div>
+        <div class="io-box"><strong>Out:</strong> [[2,4],[1,3],[2,4],[1,3]]</div>
+        <p><strong>Pattern:</strong> DFS + HashMap</p>
+        <div class="aha" style="margin-top:4px; padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          Use map to track cloned nodes. DFS to clone recursively.
+        </div>
+      </div>
+      <div class="prob-code">
+        <pre>public Node cloneGraph(Node node) {
+    if(node == null) return null;
+    Map&lt;Node, Node&gt; map = new HashMap&lt;&gt;();
+    return clone(node, map);
+}
+private Node clone(Node node, Map&lt;Node, Node&gt; map) {
+    if(map.containsKey(node)) return map.get(node);
+    Node copy = new Node(node.val);
+    map.put(node, copy);
+    for(Node nei : node.neighbors) {
+        copy.neighbors.add(clone(nei, map));
+    }
+    return copy;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob-card">
+    <div class="prob-head"><span class="ptitle">LC 127 · Word Ladder</span><span class="diff-h">HARD</span></div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div class="io-box"><strong>In:</strong> beginWord="hit", endWord="cog", wordList=["hot","dot","dog","lot","log","cog"]</div>
+        <div class="io-box"><strong>Out:</strong> 5</div>
+        <p><strong>Pattern:</strong> Bidirectional BFS</p>
+        <div class="aha" style="margin-top:4px; padding:4px;">
+          <div class="aha-t">💡 AHA</div>
+          Expand from both ends to meet in the middle.
+        </div>
+      </div>
+      <div class="prob-code">
+        <pre>public int ladderLength(String beginWord, String endWord, List&lt;String&gt; wordList) {
+    Set&lt;String&gt; set = new HashSet&lt;&gt;(wordList);
+    if(!set.contains(endWord)) return 0;
+    Set&lt;String&gt; start = new HashSet&lt;&gt;();
+    Set&lt;String&gt; end = new HashSet&lt;&gt;();
+    start.add(beginWord); end.add(endWord);
+    int len = 1;
+    while(!start.isEmpty() && !end.isEmpty()) {
+        if(start.size() > end.size()) {
+            Set&lt;String&gt; tmp = start; start = end; end = tmp;
+        }
+        Set&lt;String&gt; next = new HashSet&lt;&gt;();
+        for(String word : start) {
+            char[] arr = word.toCharArray();
+            for(int i=0; i&lt;arr.length; i++) {
+                char old = arr[i];
+                for(char c='a'; c&lt;='z'; c++) {
+                    arr[i] = c;
+                    String nw = new String(arr);
+                    if(end.contains(nw)) return len+1;
+                    if(set.contains(nw)) {
+                        set.remove(nw);
+                        next.add(nw);
+                    }
+                }
+                arr[i] = old;
+            }
+        }
+        start = next;
+        len++;
+    }
+    return 0;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 29: CHEAT SHEET -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">16. Cheat Sheet</div></div>
+    <div class="pn">PAGE 29/32</div>
+  </div>
+
+  <div class="g2">
+    <div class="box pur">
+      <div class="bh">🧠 MEMORY BITES</div>
+      <div class="bc">
+        <p><strong>DFS:</strong> STOP → MARK → PROCESS → EXPLORE</p>
+        <p><strong>BFS:</strong> QUEUE → LEVEL → SHORTEST</p>
+        <p><strong>DSU:</strong> FIND → UNION</p>
+        <p><strong>KAHN:</strong> INDEGREE → QUEUE → PROCESS</p>
+        <p><strong>DIJKSTRA:</strong> DIST → MIN HEAP → RELAX</p>
+        <p><strong>GRID:</strong> DIRS → BOUNDS → VISIT</p>
+      </div>
+    </div>
+    <div class="box grn">
+      <div class="bh">💼 GOLDEN RULES</div>
+      <div class="bc">
+        <p>1. Mark visited <strong>ON ENQUEUE</strong> in BFS</p>
+        <p>2. Unweighted → BFS, Weighted → Dijkstra</p>
+        <p>3. Grid → DIRS + DFS/BFS</p>
+        <p>4. DSU union false = cycle</p>
+        <p>5. Dependencies → Kahn's</p>
+        <p>6. Multiple sources → Multi‑source BFS</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="box red">
+    <div class="bh">🚨 TOP 5 INTERVIEW KILLERS</div>
+    <div class="bc">
+      <ol style="font-size:0.85rem; padding-left:20px;">
+        <li><strong>Forgetting visited</strong> – infinite loops.</li>
+        <li><strong>Marking visited after dequeue</strong> – duplicate enqueue.</li>
+        <li><strong>Using DFS for shortest path</strong> – DFS doesn't guarantee shortest.</li>
+        <li><strong>Forgetting stale entries in Dijkstra</strong> – `if (d > dist[u]) continue;`</li>
+        <li><strong>Not handling disconnected components</strong> – outer loop is essential.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="aha" style="margin-top:6px;">
+    <div class="aha-t">📌 QUICK INTERVIEW FLOW</div>
+    <p><strong>Read → Identify Graph → Convert Input → Recognize Pattern → Choose Template → Modify → Dry Run → Complexity → Explain</strong></p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 30: COMPLEXITY CHEAT SHEET -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">17. Complexity Cheat Sheet</div></div>
+    <div class="pn">PAGE 30/32</div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh">⏱️ GRAPH ALGORITHM COMPLEXITIES</div>
+    <div class="bc">
+      <table>
+        <tr><th>Algorithm</th><th>Time</th><th>Space</th><th>Why?</th></tr>
+        <tr><td>DFS (recursive)</td><td>O(V+E)</td><td>O(V)</td><td>Each node/edge visited once; recursion stack</td></tr>
+        <tr><td>DFS (iterative)</td><td>O(V+E)</td><td>O(V)</td><td>Stack explicit, same time</td></tr>
+        <tr><td>BFS</td><td>O(V+E)</td><td>O(V)</td><td>Queue stores frontier</td></tr>
+        <tr><td>Dijkstra (binary heap)</td><td>O((V+E)logV)</td><td>O(V+E)</td><td>Heap operations per edge</td></tr>
+        <tr><td>DSU (find/union)</td><td>O(α(N))</td><td>O(N)</td><td>Inverse Ackermann ≈ constant</td></tr>
+        <tr><td>Kruskal</td><td>O(E log E)</td><td>O(V+E)</td><td>Sorting edges dominates</td></tr>
+        <tr><td>Prim (adjacency list + PQ)</td><td>O(E log V)</td><td>O(V+E)</td><td>Heap operations</td></tr>
+        <tr><td>Bellman‑Ford</td><td>O(VE)</td><td>O(V)</td><td>Relax all edges V-1 times</td></tr>
+        <tr><td>Floyd‑Warshall</td><td>O(V³)</td><td>O(V²)</td><td>Triple loop over vertices</td></tr>
+        <tr><td>0-1 BFS</td><td>O(V+E)</td><td>O(V)</td><td>Deque operations</td></tr>
+        <tr><td>Bidirectional BFS</td><td>O(V^d/2)</td><td>O(V)</td><td>Reduces effective branching</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 31: INTERVIEW FLOW -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">18. Interview Flow &amp; Final Words</div></div>
+    <div class="pn">PAGE 31/32</div>
+  </div>
+
+  <div class="box">
+    <div class="bh">🎤 THE 9-STEP INTERVIEW FLOW</div>
+    <div class="bc" style="font-size:0.85rem;">
+      <ol style="padding-left:20px;">
+        <li><strong>Read</strong> – Understand the problem statement completely.</li>
+        <li><strong>Identify Graph</strong> – Is there a hidden graph? Grid? Dependencies?</li>
+        <li><strong>Convert Input</strong> – Build adjacency list / matrix / DIRS (Page 3).</li>
+        <li><strong>Recognize Pattern</strong> – What is the question asking? (Page 1).</li>
+        <li><strong>Choose Template</strong> – DFS, BFS, DSU, Dijkstra, Kahn.</li>
+        <li><strong>Modify Template</strong> – Add distance, parent, count, time.</li>
+        <li><strong>Dry Run</strong> – Test on a small example.</li>
+        <li><strong>Complexity</strong> – State O(V+E) / O((V+E)logV) / O(α(N)).</li>
+        <li><strong>Explain</strong> – Communicate clearly, why you chose this approach.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin: 20px 0;">
+    <h2 style="color: var(--pri);">🔥 YOU ARE READY.</h2>
+    <p style="font-size: 1.1rem; color: var(--sub);">Master the base, adapt to any variation.</p>
+    <p style="font-size: 0.9rem; color: #64748b; margin-top: 6px;">"I see the clue → I identify the pattern → I know the template → I solve."</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 32: FINAL PAGE – BLANK FOR NOTES OR REVISION -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="ph">
+    <div><h1>GRAPHS</h1><div class="sub">19. Notes</div></div>
+    <div class="pn">PAGE 32/32</div>
+  </div>
+
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+    <div style="width:100%; border: 1px dashed var(--bdr); min-height: 400px; padding: 20px; border-radius: 8px; background: #fafbfc; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+      <p style="color: #94a3b8; font-size: 1.2rem; text-align:center;">📝 YOUR NOTES</p>
+      <p style="color: #94a3b8; font-size: 0.9rem; text-align:center; margin-top: 10px;">Use this page for quick revision notes,<br>or to write down your own memory hooks.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:auto; font-size:0.75rem; color:#94a3b8; border-top:1px solid #e2e8f0; padding-top:8px; text-align:center;">
+    🏆 Book 12: Graphs · 32/32 · FAANG Ready<br>
+    <span style="font-size:0.7rem;">Built for A4 print · Human-readable · Interview-focused</span>
+  </div>
+</div>
+
+</div>
+</div>
+</div>
+</body>
+</html>

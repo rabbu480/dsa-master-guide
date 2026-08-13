@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Topic 02: Arrays, Strings &amp; Hashing Masterclass — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.35; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 6px; margin-bottom: 10px; }
+.ph h1 { font-size: 1.65rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; margin:0; }
+.ph .sub { font-size: 0.82rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.72rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.bh  { background: var(--pri); color: white; padding: 5px 10px;
+  font-weight: 700; font-size: 0.84rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 16px; height: 16px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.70rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 8px 10px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 5px 10px; display: flex; align-items: center; gap: 8px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 6px;
+  border-radius: 4px; font-weight: 700; font-size: 0.72rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.90rem; }
+.psub   { color: var(--sub); font-size: 0.78rem; }
+.prow-body { display: flex; }
+.pc { padding: 6px 8px; font-size: 0.76rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.70rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 6px; }
+.prob-head { padding: 4px 8px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 1px 6px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 1px 6px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 4px 6px; border-right: 1px solid var(--bdr); font-size: 0.72rem; }
+.prob-code { padding: 4px 6px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 4px 6px; font-size: 0.68rem; line-height: 1.35; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.74rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+th, td { border: 1px solid var(--bdr); padding: 4px 6px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 4px 8px; border-radius: 0 4px 4px 0; font-size: 0.75rem; margin-top: 4px; }
+.tip  { background: #f0fdf4; border-left: 4px solid var(--grn); padding: 4px 8px; border-radius: 0 4px 4px 0; font-size: 0.75rem; margin-top: 4px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 6px 8px; margin-top: 4px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.78rem; margin-bottom: 2px; }
+
+.dt-wrap { font-size: 0.72rem; }
+.dt-root { background: var(--pri); color: white; padding: 4px 8px; border-radius: 4px; text-align: center; font-weight: 700; margin-bottom: 6px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 4px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 4px 6px; font-weight: 600; color: #1e40af; font-size: 0.70rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 4px 6px; color: #065f46; font-weight: 700; font-size: 0.70rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.72rem; padding: 3px 2px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 6px 10px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.85; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+
+@media print {
+  pre {
+    background: #f8fafc !important;
+    color: #0f172a !important;
+    border: 1.5px solid #cbd5e1 !important;
+    font-family: 'Fira Code', monospace !important;
+    font-size: 0.72rem !important;
+    line-height: 1.22 !important;
+    padding: 6px 8px !important;
+    white-space: pre-wrap !important;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+<div class="page"><div class="ph"><div><h1>ARRAYS, STRINGS &amp; HASHING</h1><div class="sub">FAANG Master Guide</div></div><div style="text-align:right"><div class="pn">PAGE 1</div></div></div><div>>
+
+<div class="g3" style="margin-bottom:8px">
+  <div class="box pur">
+    <div class="bh">🎬 THE REAL-WORLD STORY</div>
+    <div class="bc">
+      <p style="margin-bottom:4px">Imagine searching for a contact in a phonebook with 1,000,000 contacts. Scanning entry by entry takes 1,000,000 checks in the worst case!</p>
+      <div class="aha">
+        <div class="aha-t">💡 THE HASHMAP AHA MOMENT</div>
+        What if every contact name instantly transformed into an exact page number index via a mathematical hash function? Lookup time drops from <strong>O(N) to O(1)</strong>!
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bh">🤔 WHY DO ARRAYS ALONE FAIL?</div>
+    <div class="bc">
+      <ul style="padding-left:12px;font-size:0.73rem">
+        <li><strong>Array Lookup by Index:</strong> Fast O(1) if index `arr[i]` is known.</li>
+        <li><strong>Array Search by Value:</strong> Slow O(N) linear scan required.</li>
+        <li><strong>Array Insertion at Start:</strong> Slow O(N) shift of all elements!</li>
+        <li><strong>HashMap Solution:</strong> Sacrifices space to map `Value -> Index` for instantaneous O(1) lookups!</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box sky">
+    <div class="bh">🛠 HASH FUNCTION MECHANICS</div>
+    <div class="bc">
+      <div style="font-weight:700;color:var(--pri);margin-bottom:3px">Key -> Hash Code -> Bucket Index:</div>
+<pre>Key: "alice"
+  ↓ Hash Function: hash("alice") = 153029
+Bucket Index = 153029 % array_size (16) = 5
+  ↓ Direct Array Access!
+Bucket[5] stores ("alice", phoneNumber)
+O(1) Instant Lookup!</pre>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">📚 PREREQUISITES &amp; COMPLEXITY REASONING</div>
+    <div class="bc">
+      <table>
+        <tr><th>Operation / Structure</th><th>Time Complexity</th><th>Auxiliary Space</th></tr>
+        <tr><td>Array Index Access (`arr[i]`)</td><td><strong>O(1)</strong></td><td><strong>O(N) contiguous memory</strong></td></tr>
+        <tr><td>Linear Search / Scan</td><td><strong>O(N)</strong></td><td><strong>O(1) space</strong></td></tr>
+        <tr><td>HashMap Lookup / Put</td><td><strong>O(1) average</strong></td><td><strong>O(N) space</strong></td></tr>
+        <tr><td>Prefix Sum Array Query</td><td><strong>O(1) per range query</strong></td><td><strong>O(N) prefix array</strong></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box amb">
+    <div class="bh">⚡ CLUES THAT SCREAM HASHING</div>
+    <div class="bc">
+      <p style="font-size:0.75rem;margin-bottom:3px">1. <em>"Find a pair that sums to Target"</em> → HashMap storing `(Target - num) -> Index`</p>
+      <p style="font-size:0.75rem;margin-bottom:3px">2. <em>"Check for duplicates or count frequencies"</em> → HashSet or Frequency Array `int[26]`</p>
+      <p style="font-size:0.75rem">3. <em>"Group anagrams together"</em> → HashMap storing `SortedString -> List<String>`</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 2 OF 6: TOOLKIT & PATTERNS 1-2 -->
+<div style='margin-top:4px'></div><div>>
+
+<div class="g2" style="margin-bottom:8px">
+  <div class="box">
+    <div class="bh"><span class="n">1</span> 4 ESSENTIAL JAVA HASHING SNIPPETS</div>
+    <div class="bc">
+<pre>// 1. Frequency Map Increment:
+map.put(num, map.getOrDefault(num, 0) + 1);
+
+// 2. Character Frequency Array ('a'-'z'):
+int[] freq = new int[26];
+for (char c : str.toCharArray()) freq[c - 'a']++;
+
+// 3. Convert Char Array to String Key:
+String key = new String(freqChars);</pre>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh"><span class="n">2</span> PREFIX SUM RANGE QUERY UTILITY</div>
+    <div class="bc">
+<pre>class PrefixSumUtility {
+  private int[] prefix;
+  public PrefixSumUtility(int[] nums) {
+    prefix = new int[nums.length + 1];
+    for (int i = 0; i < nums.length; i++) prefix[i + 1] = prefix[i] + nums[i];
+  }
+  public int query(int L, int R) { return prefix[R + 1] - prefix[L]; }
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow" style="margin-bottom:8px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 1</div>
+    <div class="ptitle">COMPLEMENT HASHING (Two Sum)</div>
+    <div class="psub">e.g. Two Sum (LC 1)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.75rem">Finding two numbers in an unsorted array that add up to a target sum in a single pass O(N) time.</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 1</div>
+<pre>public int[] twoSum(int[] nums, int target) {
+  Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+  for (int i = 0; i < nums.length; i++) {
+    int complement = target - nums[i];
+    if (map.containsKey(complement)) return new int[]{map.get(complement), i};
+    map.put(nums[i], i);
+  }
+  return new int[0];
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 2</div>
+    <div class="ptitle">HASHSET DUPLICATE DETECTION (Contains Duplicate)</div>
+    <div class="psub">e.g. Contains Duplicate (LC 217)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.75rem">Check if any value appears at least twice in an array in O(N) time and O(N) space.</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 217</div>
+<pre>public boolean containsDuplicate(int[] nums) {
+  Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+  for (int num : nums) if (!set.add(num)) return true; // Returns false if duplicate!
+  return false;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 3 OF 6: CORE PATTERNS 3-6 -->
+</div>
+<div class="page"><div class="ph"><div><h1>ARRAYS, STRINGS &amp; HASHING</h1><div class="sub">FAANG Master Guide</div></div><div style="text-align:right"><div class="pn">PAGE 2</div></div></div><div>>
+
+<div class="prow" style="margin-bottom:8px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 3</div>
+    <div class="ptitle">CHARACTER FREQUENCY COUNTING (Valid Anagram)</div>
+    <div class="psub">e.g. Valid Anagram (LC 242)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.74rem">Check if string t is an anagram of s in O(N) time and O(1) space using fixed `int[26]` frequency array.</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 242</div>
+<pre>public boolean isAnagram(String s, String t) {
+  if (s.length() != t.length()) return false;
+  int[] count = new int[26];
+  for (int i = 0; i < s.length(); i++) {
+    count[s.charAt(i) - 'a']++; count[t.charAt(i) - 'a']--;
+  }
+  for (int c : count) if (c != 0) return false;
+  return true;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow" style="margin-bottom:8px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 4</div>
+    <div class="ptitle">HASHMAP GROUPING (Group Anagrams)</div>
+    <div class="psub">e.g. Group Anagrams (LC 49)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.74rem">Group strings with identical character counts using canonical sorted string key.</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 49</div>
+<pre>public List&lt;List&lt;String&gt;&gt; groupAnagrams(String[] strs) {
+  Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
+  for (String s : strs) {
+    char[] ca = s.toCharArray(); Arrays.sort(ca);
+    String key = String.valueOf(ca);
+    map.computeIfAbsent(key, k -> new ArrayList&lt;&gt;()).add(s);
+  }
+  return new ArrayList&lt;&gt;(map.values());
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow" style="margin-bottom:8px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 5</div>
+    <div class="ptitle">BUCKET SORT FREQUENCY AGGREGATION</div>
+    <div class="psub">e.g. Top K Frequent Elements (LC 347)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.74rem">Find top K most frequent elements in O(N) time using frequency buckets instead of heap sorting O(N log K).</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 347</div>
+<pre>public int[] topKFrequent(int[] nums, int k) {
+  Map&lt;Integer, Integer&gt; count = new HashMap&lt;&gt;();
+  for (int num : nums) count.put(num, count.getOrDefault(num, 0) + 1);
+  List&lt;Integer&gt;[] bucket = new List[nums.length + 1];
+  for (int key : count.keySet()) {
+    int freq = count.get(key);
+    if (bucket[freq] == null) bucket[freq] = new ArrayList&lt;&gt;();
+    bucket[freq].add(key);
+  }
+  int[] res = new int[k]; int idx = 0;
+  for (int i = bucket.length - 1; i >= 0 && idx < k; i--) {
+    if (bucket[i] != null) for (int num : bucket[i]) res[idx++] = num;
+  }
+  return res;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 6</div>
+    <div class="ptitle">PREFIX &amp; SUFFIX PRODUCT ACCUMULATION</div>
+    <div class="psub">e.g. Product of Array Except Self (LC 238)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.74rem">Calculate prefix products left-to-right, then multiply by suffix products right-to-left in O(N) time without division!</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 238</div>
+<pre>public int[] productExceptSelf(int[] nums) {
+  int n = nums.length; int[] res = new int[n]; res[0] = 1;
+  for (int i = 1; i < n; i++) res[i] = res[i - 1] * nums[i - 1];
+  int R = 1;
+  for (int i = n - 1; i >= 0; i--) { res[i] *= R; R *= nums[i]; }
+  return res;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 4 OF 6: PATTERN 7, DECISION TREE & TRADE-OFFS -->
+<div style='margin-top:4px'></div><div>>
+
+<div class="prow" style="margin-bottom:8px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 7</div>
+    <div class="ptitle">HASHSET SEQUENCE START IDENTIFICATION</div>
+    <div class="psub">e.g. Longest Consecutive Sequence (LC 128)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Sequence Start Condition</div>
+      <div style="font-size:0.74rem">
+        `num` is the START of a sequence ONLY if `!set.contains(num - 1)`. Guarantees elements are visited at most twice → <strong>O(N) Total Time!</strong>
+      </div>
+    </div>
+    <div class="pc" style="flex:1.7">
+      <div class="pc-head">Template — LC 128</div>
+<pre>public int longestConsecutive(int[] nums) {
+  Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+  for (int num : nums) set.add(num);
+  int maxLen = 0;
+  for (int num : set) {
+    if (!set.contains(num - 1)) {
+      int currNum = num, currLen = 1;
+      while (set.contains(currNum + 1)) { currNum++; currLen++; }
+      maxLen = Math.max(maxLen, currLen);
+    }
+  }
+  return maxLen;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box">
+    <div class="bh">ARRAYS &amp; HASHING — WHICH PATTERN TO USE?</div>
+    <div class="bc dt-wrap">
+      <div class="dt-root">Start: What is the array/string requirement?</div>
+      <div class="dt-grid">
+        <div class="dt-row">
+          <div class="dt-q">🎯 Find two numbers adding to target</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Complement Hashing<br><span style="font-weight:400;font-size:0.68rem">`map.containsKey(target - num)`</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🔤 Group anagrams / identical chars</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Canonical Key Hashing<br><span style="font-weight:400;font-size:0.68rem">Sorted char array string key</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">📊 Top K most frequent elements</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Bucket Sort Array<br><span style="font-weight:400;font-size:0.68rem">`List<Integer>[] bucket` by freq</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🔗 Longest consecutive numbers</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">HashSet Start Check<br><span style="font-weight:400;font-size:0.68rem">`if (!set.contains(num - 1))`</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div class="box pur" style="margin:0">
+      <div class="bh">🎯 TRIGGER WORDS DIRECTORY</div>
+      <div class="bc">
+        <table>
+          <tr><th>Trigger Word</th><th>Variant</th><th>Action</th></tr>
+          <tr><td>"Two elements sum to X"</td><td>Complement Hash</td><td>`target - nums[i]` in map</td></tr>
+          <tr><td>"Contains duplicate"</td><td>HashSet Lookup</td><td>`!set.add(num)`</td></tr>
+          <tr><td>"Valid anagram"</td><td>Char Freq Array</td><td>`int[26]` count match</td></tr>
+          <tr><td>"Product except self"</td><td>Prefix/Suffix Accum</td><td>Prefix pass, suffix pass</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="box amb" style="margin:0">
+      <div class="bh">💼 INTERVIEW TRADE-OFFS</div>
+      <div class="bc">
+        <table>
+          <tr><th>Interviewer Asks</th><th>Your Answer</th></tr>
+          <tr><td>Bucket Sort vs PriorityQueue for Top K?</td><td>Bucket sort runs in O(N) linear time vs PriorityQueue O(N log K)!</td></tr>
+          <tr><td>Custom objects as HashMap keys?</td><td>Must override both `equals()` and `hashCode()` cleanly!</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 5 OF 6: COMPLETE NEETCODE PROBLEM LADDER & SUMMARY -->
+</div>
+<div class="page"><div class="ph"><div><h1>ARRAYS, STRINGS &amp; HASHING</h1><div class="sub">FAANG Master Guide</div></div><div style="text-align:right"><div class="pn">PAGE 3</div></div></div><div>>
+
+<div class="g2" style="gap:8px;margin-bottom:8px">
+<div>
+  <div style="background:var(--grn);color:white;padding:2px 6px;border-radius:4px;font-weight:700;margin-bottom:4px;font-size:0.75rem">🟢 EASY PROBLEMS</div>
+
+  <div class="prob" style="margin-bottom:4px">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 1 · Two Sum</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">Map `target - num` to index.</div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public int[] twoSum(int[] nums, int target) {
+  Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+  for (int i = 0; i < nums.length; i++) {
+    if (map.containsKey(target - nums[i])) return new int[]{map.get(target - nums[i]), i};
+    map.put(nums[i], i);
+  }
+  return new int[0];
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob" style="margin-bottom:4px">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 217 · Contains Duplicate</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">`set.add(num)` returns false if present.</div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public boolean containsDuplicate(int[] nums) {
+  Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+  for (int n : nums) if (!set.add(n)) return true;
+  return false;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 242 · Valid Anagram</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">Fixed `int[26]` frequency matching.</div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public boolean isAnagram(String s, String t) {
+  if (s.length() != t.length()) return false;
+  int[] c = new int[26];
+  for (int i = 0; i < s.length(); i++) { c[s.charAt(i) - 'a']++; c[t.charAt(i) - 'a']--; }
+  for (int v : c) if (v != 0) return false;
+  return true;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--amb);color:white;padding:2px 6px;border-radius:4px;font-weight:700;margin-bottom:4px;font-size:0.75rem">🟡 MEDIUM PROBLEMS</div>
+
+  <div class="prob" style="margin-bottom:4px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 49 · Group Anagrams</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">Map sorted string key to list.</div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public List&lt;List&lt;String&gt;&gt; groupAnagrams(String[] strs) {
+  Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
+  for (String s : strs) {
+    char[] ca = s.toCharArray(); Arrays.sort(ca);
+    String key = String.valueOf(ca);
+    map.computeIfAbsent(key, k -> new ArrayList&lt;&gt;()).add(s);
+  }
+  return new ArrayList&lt;&gt;(map.values());
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob" style="margin-bottom:4px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 347 · Top K Frequent Elements</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">Bucket sort by frequency array.</div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public int[] topKFrequent(int[] nums, int k) {
+  Map&lt;Integer, Integer&gt; cnt = new HashMap&lt;&gt;();
+  for (int n : nums) cnt.put(n, cnt.getOrDefault(n, 0) + 1);
+  List&lt;Integer&gt;[] b = new List[nums.length + 1];
+  for (int key : cnt.keySet()) {
+    int f = cnt.get(key); if (b[f] == null) b[f] = new ArrayList&lt;&gt;(); b[f].add(key);
+  }
+  int[] res = new int[k]; int idx = 0;
+  for (int i = b.length - 1; i >= 0 && idx < k; i--) if (b[i] != null) for (int n : b[i]) res[idx++] = n;
+  return res;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 128 · Longest Consecutive</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">Count sequence if `!set.contains(n-1)`.</div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public int longestConsecutive(int[] nums) {
+  Set&lt;Integer&gt; set = new HashSet&lt;&gt;(); for (int n : nums) set.add(n);
+  int maxL = 0;
+  for (int n : set) {
+    if (!set.contains(n - 1)) {
+      int curr = n, len = 1; while (set.contains(curr + 1)) { curr++; len++; }
+      maxL = Math.max(maxL, len);
+    }
+  }
+  return maxL;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Master Summary Table -->
+<div class="box" style="margin:0">
+  <div class="bh" style="padding:3px 6px;font-size:0.76rem">📊 COMPLETE ARRAYS, STRINGS &amp; HASHING PROBLEM LADDER SUMMARY</div>
+  <div class="bc" style="padding:3px 6px">
+    <table>
+      <tr><th>LC #</th><th>Problem</th><th>Pattern</th><th>Time</th><th>Space</th><th>Diff</th></tr>
+      <tr><td>1</td><td>Two Sum</td><td>Complement Hashing</td><td>O(N)</td><td>O(N)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>217</td><td>Contains Duplicate</td><td>HashSet Add Check</td><td>O(N)</td><td>O(N)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>242</td><td>Valid Anagram</td><td>Char Frequency Array</td><td>O(N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>49</td><td>Group Anagrams</td><td>Sorted Key Map</td><td>O(N · K log K)</td><td>O(N · K)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>347</td><td>Top K Frequent Elements</td><td>Bucket Sort Array</td><td>O(N)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>238</td><td>Product of Array Except Self</td><td>Prefix &amp; Suffix Accumulation</td><td>O(N)</td><td>O(1)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>128</td><td>Longest Consecutive Sequence</td><td>HashSet Sequence Start Check</td><td>O(N)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 6 OF 6: DRY RUN, PROOFS & MASTERY CHECKLIST -->
+<div style='margin-top:4px'></div><div><div><div><div>>
+
+<div class="g2" style="margin-bottom:8px">
+  <div class="box">
+    <div class="bh">🔍 DRY RUN — Longest Consecutive Sequence ([100, 4, 200, 1, 3, 2])</div>
+    <div class="bc">
+      <table>
+        <tr><th>Step</th><th>num</th><th>set.contains(num - 1)?</th><th>Action</th><th>currLen</th><th>maxLen</th></tr>
+        <tr><td>1</td><td>100</td><td>No (99 missing)</td><td>Sequence start! Count 100</td><td>1</td><td>1</td></tr>
+        <tr><td>2</td><td>4</td><td>Yes (3 exists)</td><td>Skip (not start of sequence)</td><td>-</td><td>1</td></tr>
+        <tr><td>3</td><td>200</td><td>No (199 missing)</td><td>Sequence start! Count 200</td><td>1</td><td>1</td></tr>
+        <tr><td>4</td><td>1</td><td>No (0 missing)</td><td>Sequence start! Count 1 → 2 → 3 → 4</td><td>4</td><td>4 ✅</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh">📐 MATHEMATICAL PROOF — O(N) RUNTIME</div>
+    <div class="bc">
+      <div style="font-size:0.74rem">
+        <p style="margin-bottom:3px"><strong>Claim:</strong> Checking `!set.contains(num - 1)` guarantees total O(N) runtime.</p>
+        <p style="margin-bottom:3px"><strong>Proof:</strong> Inner while loop executes ONLY for the starting element of each sequence. Middle numbers are skipped in O(1) time. Each element is visited at most twice → <strong>Exact O(N) Total Operations!</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+    <div class="bc">
+      <ul style="font-size:0.73rem;list-style:none;padding:0">
+        <li>☐ Code Two Sum in 2m using Complement HashMap</li>
+        <li>☐ Check duplicates in O(N) using HashSet `add()`</li>
+        <li>☐ Implement Valid Anagram using `int[26]` array</li>
+        <li>☐ Group Anagrams using sorted char array key</li>
+        <li>☐ Code Top K Frequent in O(N) via Bucket Sort</li>
+        <li>☐ Write Product of Array Except Self without division</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh">💼 FAANG MENTOR GOLDEN RULES</div>
+    <div class="bc">
+      <div class="aha" style="margin-bottom:3px;padding:4px">
+        <div class="aha-t">Rule 1 — Space-Time Tradeoff</div>
+        Trading space (O(N) HashMap) for time (O(1) lookups) is the #1 most common optimization technique in FAANG technical interviews!
+      </div>
+      <div class="aha" style="padding:4px">
+        <div class="aha-t">Rule 2 — Frequency Array Over HashMap</div>
+        If inputs are fixed alphabet strings ('a'-'z'), use an `int[26]` array instead of HashMap for zero GC overhead!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

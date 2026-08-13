@@ -1,0 +1,149 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1>TREES</h1>
+            <div class="subtitle">Data Structures<br><small style="color:#64748b;font-weight:normal;">(FAANG Cheat Sheet)</small></div>
+        </div>
+    </div>
+
+    <div class="grid-container" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+        <!-- Column 1 -->
+        <div class="col">
+            <div class="section-box">
+                <div class="section-header" style="background: #1e3a8a; color: white; padding: 5px; text-align: center;"><span class="num">1.</span> TREE FOUNDATIONS</div>
+                <div class="section-content" style="padding: 10px; border: 1px solid #ccc; font-size: 12px;">
+                    <h4 style="text-align: center; color: #1e3a8a;">TREE vs BINARY TREE vs BST</h4>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div>
+                            <strong>Tree</strong><br>A hierarchical data structure.
+                        </div>
+                        <div>
+                            <strong>Binary Tree</strong><br>Each node has at most 2 children.
+                        </div>
+                        <div>
+                            <strong>Binary Search Tree</strong><br>Left < Root < Right
+                        </div>
+                    </div>
+                    <div class="mermaid">
+                    graph TD
+                        A(( )) --> B(( ))
+                        A --> C(( ))
+                    </div>
+                    <h4 style="text-align: center; color: #1e3a8a; margin-top: 10px;">TYPES OF BINARY TREES</h4>
+                    <p>Full Binary Tree, Complete Binary Tree, Perfect Binary Tree, Balanced Binary Tree.</p>
+                    <h4 style="text-align: center; color: #1e3a8a; margin-top: 10px;">KEY TERMINOLOGY</h4>
+                    <ul>
+                        <li>Node: Basic unit</li>
+                        <li>Root: Topmost node</li>
+                        <li>Parent, Child, Leaf, Internal Node, Edge, Subtree</li>
+                        <li>Height, Depth, Level</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="section-box" style="margin-top: 10px;">
+                <div class="section-header" style="background: #1e3a8a; color: white; padding: 5px; text-align: center;"><span class="num">5.</span> BFS PATTERN PROBLEMS</div>
+                <div class="section-content" style="padding: 10px; border: 1px solid #ccc; font-size: 12px;">
+                    <h4 style="text-align: center; color: #1e3a8a;">BFS TEMPLATE (LEVEL ORDER TRAVERSAL)</h4>
+                    <pre><code>Queue&lt;TreeNode&gt; q = new LinkedList&lt;&gt;();
+q.offer(root);
+while (!q.isEmpty()) {
+    int size = q.size();
+    for(int i=0; i&lt;size; i++) {
+        TreeNode node = q.poll();
+        if(node.left != null) q.offer(node.left);
+        if(node.right != null) q.offer(node.right);
+    }
+}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Column 2 -->
+        <div class="col">
+            <div class="section-box">
+                <div class="section-header" style="background: #1e3a8a; color: white; padding: 5px; text-align: center;"><span class="num">2.</span> TRAVERSALS</div>
+                <div class="section-content" style="padding: 10px; border: 1px solid #ccc; font-size: 12px;">
+                    <h4 style="text-align: center; color: #1e3a8a;">DEPTH FIRST SEARCH (DFS)</h4>
+                    <p><strong>Preorder (Root -> Left -> Right)</strong></p>
+                    <p><strong>Inorder (Left -> Root -> Right)</strong></p>
+                    <p><strong>Postorder (Left -> Right -> Root)</strong></p>
+                    <h4 style="text-align: center; color: #1e3a8a; margin-top: 10px;">BREADTH FIRST SEARCH (BFS)</h4>
+                    <p>Level Order Traversal</p>
+                </div>
+            </div>
+            <div class="section-box" style="margin-top: 10px;">
+                <div class="section-header" style="background: #1e3a8a; color: white; padding: 5px; text-align: center;"><span class="num">6.</span> BST BIBLE</div>
+                <div class="section-content" style="padding: 10px; border: 1px solid #ccc; font-size: 12px;">
+                    <h4 style="text-align: center; color: #1e3a8a;">BST RULE</h4>
+                    <p>Left Subtree < Root < Right Subtree</p>
+                    <h4 style="text-align: center; color: #1e3a8a; margin-top: 10px;">OPERATIONS IN BST</h4>
+                    <ol>
+                        <li>Search</li>
+                        <li>Insert</li>
+                        <li>Delete</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Column 3 -->
+        <div class="col">
+            <div class="section-box">
+                <div class="section-header" style="background: #1e3a8a; color: white; padding: 5px; text-align: center;"><span class="num">3.</span> TREE RECURSION TEMPLATE</div>
+                <div class="section-content" style="padding: 10px; border: 1px solid #ccc; font-size: 12px;">
+                    <h4 style="text-align: center; color: #1e3a8a;">THE RECURSION FLOW</h4>
+                    <ol>
+                        <li>Base Case</li>
+                        <li>Faith</li>
+                        <li>Recur Left</li>
+                        <li>Recur Right</li>
+                        <li>Combine</li>
+                        <li>Return</li>
+                    </ol>
+                    <h4 style="text-align: center; color: #1e3a8a; margin-top: 10px;">RETURN TYPE DECIDES RECURSION</h4>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr><th style="border: 1px solid #ccc;">Return Type</th><th style="border: 1px solid #ccc;">What it Means</th></tr>
+                        <tr><td style="border: 1px solid #ccc;">int</td><td style="border: 1px solid #ccc;">Return some value</td></tr>
+                        <tr><td style="border: 1px solid #ccc;">boolean</td><td style="border: 1px solid #ccc;">Return true/false</td></tr>
+                    </table>
+                </div>
+            </div>
+            <div class="section-box" style="margin-top: 10px;">
+                <div class="section-header" style="background: #1e3a8a; color: white; padding: 5px; text-align: center;"><span class="num">7.</span> ADVANCED TREE PROBLEMS</div>
+                <div class="section-content" style="padding: 10px; border: 1px solid #ccc; font-size: 12px;">
+                    <p>1. LCA in Binary Tree</p>
+                    <p>2. Build Tree from Traversals</p>
+                    <p>3. Path Sum</p>
+                    <p>4. Serialize/Deserialize</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Column 4 -->
+        <div class="col">
+            <div class="section-box">
+                <div class="section-header" style="background: #1e3a8a; color: white; padding: 5px; text-align: center;"><span class="num">4.</span> DFS PATTERN PROBLEMS</div>
+                <div class="section-content" style="padding: 10px; border: 1px solid #ccc; font-size: 12px;">
+                    <p><strong>1. MAX DEPTH</strong></p>
+                    <p><strong>2. SAME TREE</strong></p>
+                    <p><strong>3. INVERT TREE</strong></p>
+                    <p><strong>4. DIAMETER OF BINARY TREE</strong></p>
+                    <p><strong>5. BALANCED BINARY TREE</strong></p>
+                </div>
+            </div>
+            <div class="section-box" style="margin-top: 10px;">
+                <div class="section-header" style="background: #1e3a8a; color: white; padding: 5px; text-align: center;"><span class="num">8.</span> TREE - ONE PAGE REVISION</div>
+                <div class="section-content" style="padding: 10px; border: 1px solid #ccc; font-size: 12px;">
+                    <h4 style="text-align: center; color: #1e3a8a;">TRAVERSAL REMINDERS</h4>
+                    <p>Preorder, Inorder, Postorder, BFS</p>
+                    <h4 style="text-align: center; color: #1e3a8a; margin-top: 10px;">KEY AHA MOMENTS</h4>
+                    <ul>
+                        <li>Max Depth -> 1 + max(left, right)</li>
+                        <li>Same Tree -> left && right</li>
+                        <li>Invert Tree -> Swap then recurse</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,322 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline; justify-content: center; width: 100%;">
+            <h1 style="color: #60a5fa; margin: 0; font-size: 2.5em; text-align: center;">ARRAYS &amp; HASHING <span style="color: #fcd34d;">- JAVA CHEAT SHEET (IMAGE 2)</span></h1>
+        </div>
+        <div style="text-align: center; width: 100%; margin-top: 5px;">
+            <div class="subtitle" style="color: white; font-size: 1.2em;">Essential Java APIs, Syntax &amp; Utilities you use in <span style="color: #fcd34d;">Arrays + Hashing</span> problems</div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px;">
+        
+        <!-- COLUMN 1 -->
+        <div>
+            <div class="section-box" style="border-color: #2563eb; height: 100%;">
+                <div class="section-header" style="background-color: #1e3a8a; color: white;"><span class="num">1</span> DATA STRUCTURES - QUICK REFERENCE</div>
+                <div class="section-content">
+                    
+                    <h3 style="color: white; background: #0f172a; padding: 5px; margin: 0;"># HashSet&lt;E&gt; <span style="font-weight: normal;">(Unique Elements)</span></h3>
+                    <pre><code>Set&lt;Character&gt; set = new HashSet&lt;&gt;();
+set.add('a');      // true if added
+set.contains('a'); // O(1) avg
+set.remove('a');
+set.size();
+set.isEmpty();
+set.clear();</code></pre>
+                    <div style="color: #22c55e; font-size: 0.9em; margin-bottom: 10px;">Time Complexity: add/contains/remove -> O(1) avg</div>
+
+                    <h3 style="color: white; background: #0f172a; padding: 5px; margin: 0;">&#128269; HashMap&lt;K, V&gt; <span style="font-weight: normal;">(Key &rarr; Value)</span></h3>
+                    <pre><code>Map&lt;String, Integer&gt; map = new HashMap&lt;&gt;();
+map.put("a", 1);           // insert/update
+map.get("a");              // returns value or null
+map.getOrDefault("a", 0);  // default if not present
+map.containsKey("a");
+map.containsValue(1);
+map.remove("a");
+map.size();  map.isEmpty();  map.clear();</code></pre>
+                    <div style="color: #22c55e; font-size: 0.9em; margin-bottom: 10px;">Time Complexity: put/get/containsKey -> O(1) avg</div>
+
+                    <h3 style="color: white; background: #0f172a; padding: 5px; margin: 0;">&#9879; LinkedHashMap&lt;K, V&gt; <span style="font-weight: normal;">(Maintains Insertion Order)</span></h3>
+                    <pre><code>Map&lt;Integer, Integer&gt; lhm = new LinkedHashMap&lt;&gt;();
+lhm.put(1, 10); lhm.put(2, 20);
+// Iterates in insertion order</code></pre>
+
+                    <h3 style="color: white; background: #0f172a; padding: 5px; margin: 0; margin-top: 10px;">&#127794; TreeMap&lt;K, V&gt; <span style="font-weight: normal;">(Sorted by Key)</span></h3>
+                    <pre><code>Map&lt;Integer, String&gt; tm = new TreeMap&lt;&gt;();
+tm.put(3, "c"); tm.put(1, "a"); tm.put(2, "b");
+// Keys iterated in sorted order: 1, 2, 3</code></pre>
+                    <div style="color: #22c55e; font-size: 0.9em; margin-bottom: 10px;">Time Complexity: O(log n)</div>
+
+                    <h3 style="color: white; background: #0f172a; padding: 5px; margin: 0;">&#128274; PriorityQueue&lt;E&gt; <span style="font-weight: normal;">(Min-Heap by default)</span></h3>
+                    <pre><code>PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+pq.add(5); pq.add(1); pq.add(3);
+pq.peek();   // 1 (min)
+pq.poll();   // 1
+pq.size();   pq.isEmpty();
+
+// For Max-Heap:
+PriorityQueue&lt;Integer&gt; pqMax = new PriorityQueue&lt;&gt;(
+                Collections.reverseOrder());</code></pre>
+                    <div style="color: #22c55e; font-size: 0.9em;">Time Complexity: add/poll/peek -> O(log n)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMN 2 -->
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div class="section-box" style="border-color: #9333ea; flex: 1;">
+                <div class="section-header" style="background-color: #6b21a8; color: white;"><span class="num">2</span> COMMON JAVA CONVERSIONS</div>
+                <div class="section-content" style="padding: 10px;">
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <!-- Col 2 Left -->
+                        <div>
+                            <div style="background-color: #9d174d; color: white; text-align: center; font-weight: bold; padding: 2px;">String &harr; char[]</div>
+                            <pre style="margin-top: 5px; font-size: 0.85em; padding: 5px;"><code>String s = "abc";
+char[] arr = s.toCharArray();
+String s2 = new String(arr);</code></pre>
+
+                            <div style="background-color: #16a34a; color: white; text-align: center; font-weight: bold; padding: 2px; margin-top: 10px;">List &harr; Array</div>
+                            <pre style="margin-top: 5px; font-size: 0.85em; padding: 5px;"><code>List&lt;Integer&gt; list = Arrays.asList(1,2,3);
+// Fixed-size list backed by array
+Integer[] arr = list.toArray(new Integer[0]);
+int[] arr2 = list.stream().mapToInt(i -> i)
+              .toArray();</code></pre>
+
+                            <div style="background-color: #059669; color: white; text-align: center; font-weight: bold; padding: 2px; margin-top: 10px;">Set &harr; List / Array</div>
+                            <pre style="margin-top: 5px; font-size: 0.85em; padding: 5px;"><code>Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+set.add(1); set.add(2);
+List&lt;Integer&gt; list = new ArrayList&lt;&gt;(set);
+Integer[] arr = set.toArray(new Integer[0]);</code></pre>
+
+                            <div style="background-color: #16a34a; color: white; text-align: center; font-weight: bold; padding: 2px; margin-top: 10px;">StringBuilder <span style="font-weight: normal; font-size: 0.7em;">(for Encoding / Building Strings)</span></div>
+                            <pre style="margin-top: 5px; font-size: 0.85em; padding: 5px;"><code>StringBuilder sb = new StringBuilder();
+sb.append('a'); sb.append("bc"); sb.append(123);
+sb.length(); sb.charAt(0); sb.toString();
+sb.setLength(0);  // clear</code></pre>
+                        </div>
+
+                        <!-- Col 2 Right -->
+                        <div>
+                            <div style="background-color: #7e22ce; color: white; text-align: center; font-weight: bold; padding: 2px;">String &harr; int</div>
+                            <pre style="margin-top: 5px; font-size: 0.85em; padding: 5px;"><code>String s = "123";
+int x = Integer.parseInt(s);
+String s2 = String.valueOf(x);
+// or
+String s3 = x + "";</code></pre>
+
+                            <div style="background-color: #6d28d9; color: white; text-align: center; font-weight: bold; padding: 2px; margin-top: 10px;">Array &harr; List (Mutable)</div>
+                            <pre style="margin-top: 5px; font-size: 0.85em; padding: 5px;"><code>Integer[] arr = {1,2,3};
+List&lt;Integer&gt; list = new ArrayList&lt;&gt;(
+    Arrays.asList(arr));</code></pre>
+
+                            <div style="background-color: #4338ca; color: white; text-align: center; font-weight: bold; padding: 2px; margin-top: 10px;">Map Values / Keys</div>
+                            <pre style="margin-top: 5px; font-size: 0.85em; padding: 5px;"><code>Collection&lt;Integer&gt; values = map.values();
+Set&lt;String&gt; keys = map.keySet();
+List&lt;Integer&gt; valuesList = new ArrayList&lt;&gt;(
+    map.values());</code></pre>
+
+                            <div style="background-color: #3b82f6; color: white; text-align: center; font-weight: bold; padding: 2px; margin-top: 10px;">Math Utilities</div>
+                            <pre style="margin-top: 5px; font-size: 0.85em; padding: 5px;"><code>Math.max(a, b);   Math.min(a, b);
+Math.abs(x);      Math.pow(a, b);
+Math.floor(x);    Math.ceil(x);</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row below the conversions -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="section-box" style="border-color: #2563eb;">
+                    <div class="section-header" style="background-color: #1d4ed8; color: white; font-size: 0.8em; padding: 5px;"><span class="num">4</span> FREQUENCY ARRAY <span style="font-weight:normal;">(For Lowercase Letters)</span></div>
+                    <div class="section-content" style="padding: 5px;">
+                        <pre style="font-size: 0.75em; padding: 5px; margin: 0;"><code>int[] freq = new int[26];
+
+for (char c : s.toCharArray()) {
+    freq[c - 'a']++;
+}
+
+// index = char - 'a'  (0 to 25)
+// Works for 'a' to 'z' only</code></pre>
+                    </div>
+                </div>
+
+                <div class="section-box" style="border-color: #4338ca;">
+                    <div class="section-header" style="background-color: #3730a3; color: white; font-size: 0.8em; padding: 5px;"><span class="num">5</span> BUCKET / GROUPING PATTERN</div>
+                    <div class="section-content" style="padding: 5px;">
+                        <pre style="font-size: 0.75em; padding: 5px; margin: 0; white-space: pre-wrap;"><code>Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
+
+for (String s : strs) {
+    char[] arr = s.toCharArray();
+    Arrays.sort(arr);
+    String key = new String(arr);
+    map.computeIfAbsent(key, k -> new ArrayList&lt;&gt;()).add(s);
+}
+
+List&lt;List&lt;String&gt;&gt; res = new ArrayList&lt;&gt;(map.values());</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMN 3 -->
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div class="section-box" style="border-color: #2563eb;">
+                <div class="section-header" style="background-color: #1e3a8a; color: white;"><span class="num">3</span> USEFUL JAVA PATTERNS &amp; METHODS</div>
+                <div class="section-content" style="padding: 10px;">
+                    
+                    <div style="background-color: #1e40af; color: white; padding: 2px 5px; font-weight: bold; font-size: 0.9em;">computeIfAbsent() &ndash; Very Important!</div>
+                    <pre style="margin: 5px 0 10px 0; font-size: 0.8em; padding: 5px;"><code>Map&lt;Character, List&lt;Integer&gt;&gt; map = new HashMap&lt;&gt;();
+map.computeIfAbsent('a', k -> new ArrayList&lt;&gt;()).add(1);
+<span style="color: #22c55e;">// If key 'a' not present, creates new ArrayList&lt;&gt;</span>
+<span style="color: #22c55e;">// then adds 1. Else, directly adds to existing list.</span></code></pre>
+
+                    <div style="background-color: #1e40af; color: white; padding: 2px 5px; font-weight: bold; font-size: 0.9em;">getOrDefault()</div>
+                    <pre style="margin: 5px 0 10px 0; font-size: 0.8em; padding: 5px;"><code>int count = map.getOrDefault(key, 0);
+<span style="color: #22c55e;">// returns value if key exists, else default (0)</span></code></pre>
+
+                    <div style="background-color: #1e40af; color: white; padding: 2px 5px; font-weight: bold; font-size: 0.9em;">merge() &ndash; Another Powerful One</div>
+                    <pre style="margin: 5px 0 10px 0; font-size: 0.8em; padding: 5px;"><code>map.merge(key, 1, Integer::sum);
+<span style="color: #22c55e;">// If key absent -> put(key, 1)</span>
+<span style="color: #22c55e;">// If present -> oldVal + 1</span></code></pre>
+
+                    <div style="background-color: #1e40af; color: white; padding: 2px 5px; font-weight: bold; font-size: 0.9em;">forEach() with Lambda</div>
+                    <pre style="margin: 5px 0 10px 0; font-size: 0.8em; padding: 5px;"><code>map.forEach((key, val) -> {
+    System.out.println(key + " -> " + val);
+});</code></pre>
+
+                    <div style="font-weight: bold; color: #1e3a8a; border-bottom: 1px solid #1e3a8a; margin-bottom: 5px; font-size: 0.9em;">Stream APIs (Often Used)</div>
+                    <pre style="margin: 5px 0 10px 0; font-size: 0.8em; padding: 5px; white-space: pre-wrap;"><code>List&lt;Integer&gt; list = new ArrayList&lt;&gt;(map.values());
+list.stream().sorted().toList();
+list.stream().sorted(Comparator.reverseOrder()).toList();
+list.stream().limit(k).toList();
+list.stream().mapToInt(i -> i).toArray();
+Arrays.stream(arr).boxed().collect(Collectors.toList());</code></pre>
+
+                    <div style="font-weight: bold; color: #1e3a8a; border-bottom: 1px solid #1e3a8a; margin-bottom: 5px; font-size: 0.9em;">Arrays Utility</div>
+                    <pre style="margin: 5px 0 10px 0; font-size: 0.8em; padding: 5px;"><code>Arrays.sort(arr);
+Arrays.sort(arr, Comparator.reverseOrder());
+Arrays.fill(arr, 0);
+Arrays.copyOf(arr, newLength);
+Arrays.equals(arr1, arr2);</code></pre>
+
+                    <div style="font-weight: bold; color: #1e3a8a; border-bottom: 1px solid #1e3a8a; margin-bottom: 5px; font-size: 0.9em;">Queue / Deque</div>
+                    <pre style="margin: 5px 0 10px 0; font-size: 0.75em; padding: 5px; white-space: pre-wrap;"><code>Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();
+q.offer(1); q.poll(); q.peek();
+Deque&lt;Integer&gt; dq = new ArrayDeque&lt;&gt;();
+dq.offerFirst(1); dq.offerLast(2);
+dq.pollFirst(); dq.pollLast(); dq.peekFirst(); dq.peekLast();</code></pre>
+
+                    <div style="font-weight: bold; color: #1e3a8a; border-bottom: 1px solid #1e3a8a; margin-bottom: 5px; font-size: 0.9em;">Stack (Legacy) or Deque (Preferred)</div>
+                    <pre style="margin: 5px 0 0 0; font-size: 0.75em; padding: 5px; white-space: pre-wrap;"><code>Stack&lt;Integer&gt; st = new Stack&lt;&gt;();
+st.push(1); st.pop(); st.peek(); st.isEmpty();
+Deque&lt;Integer&gt; st2 = new ArrayDeque&lt;&gt;(); // better
+st2.push(1); st2.pop(); st2.peek(); st2.isEmpty();</code></pre>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 10px;">
+                <div class="section-box" style="border-color: #4c1d95;">
+                    <div class="section-header" style="background-color: #3b0764; color: white; font-size: 0.8em; padding: 5px;"><span class="num">6</span> TOP K FREQUENT - TEMPLATE <span style="font-weight:normal;">(HashMap + PQ)</span></div>
+                    <div class="section-content" style="padding: 5px;">
+                        <pre style="font-size: 0.7em; padding: 5px; margin: 0; white-space: pre-wrap;"><code>Map&lt;Integer, Integer&gt; freq = new HashMap&lt;&gt;();
+for (int n : nums) {
+    freq.merge(n, 1, Integer::sum);
+}
+PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;(
+    (a, b) -> a[1] - b[1]  // min-heap by freq
+);
+for (int[] e : freq.entrySet().stream()
+        .map(e -> new int[]{e.getKey(), e.getValue()})
+        .toList()) {
+    pq.offer(e);
+    if (pq.size() > k) pq.poll();
+}
+// Extract from pq (smallest to largest freq)
+int[][] ans = new int[k][2];
+for (int i = k - 1; i >= 0; i--) ans[i] = pq.poll();</code></pre>
+                    </div>
+                </div>
+
+                <div class="section-box" style="border-color: #dc2626;">
+                    <div class="section-header" style="background-color: #b91c1c; color: white; font-size: 0.8em; padding: 5px;"><span class="num">7</span> CHECKLIST - WHEN SOLVING</div>
+                    <div class="section-content" style="padding: 5px; font-size: 0.75em; line-height: 1.4;">
+                        <div>&#9989; <strong>Understand constraints</strong> (n, values, range).</div>
+                        <div>&#9989; <strong>Think: Can I use HashSet for O(1) lookups?</strong></div>
+                        <div>&#9989; <strong>Need counts? &rarr; Use HashMap / int[26]</strong></div>
+                        <div>&#9989; <strong>Need order? &rarr; LinkedHashMap / TreeMap</strong></div>
+                        <div>&#9989; <strong>Top K / Min/Max? &rarr; PriorityQueue (Heap)</strong></div>
+                        <div>&#9989; <strong>Need grouping? &rarr; HashMap&lt;Key, List&gt;</strong></div>
+                        <div>&#9989; <strong>Need encoding? &rarr; length#string</strong></div>
+                        <div>&#9989; <strong>Can I do prefix/suffix to avoid re-computation?</strong></div>
+                        <div>&#9989; <strong>Always analyze time &amp; space complexity.</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="section-box" style="border-color: #2563eb; margin-top: 15px;">
+        <div class="section-header" style="background-color: #1e3a8a; color: white;"><span class="num">8</span> QUICK SYNTAX REMINDER <span style="font-weight:normal;">(One-Liners You Use Often)</span></div>
+        <div class="section-content" style="display: flex; gap: 15px; padding: 10px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 140px;">
+                <div style="font-weight: bold; color: #1e3a8a; font-size: 0.9em;">Iterate HashMap</div>
+                <pre style="font-size: 0.75em; padding: 5px; margin: 5px 0;"><code>for (Map.Entry&lt;K, V&gt; e : map.entrySet()) {
+    K key = e.getKey();
+    V val = e.getValue();
+}</code></pre>
+            </div>
+            <div style="flex: 1; min-width: 120px;">
+                <div style="font-weight: bold; color: #1e3a8a; font-size: 0.9em;">Iterate HashSet</div>
+                <pre style="font-size: 0.75em; padding: 5px; margin: 5px 0;"><code>for (E e : set) {
+    // use e
+}</code></pre>
+            </div>
+            <div style="flex: 1; min-width: 160px;">
+                <div style="font-weight: bold; color: #1e3a8a; font-size: 0.9em;">Create List</div>
+                <pre style="font-size: 0.75em; padding: 5px; margin: 5px 0;"><code>List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+List&lt;Integer&gt; list2 = Arrays.asList(1,2,3);
+List&lt;Integer&gt; list3 = new ArrayList&lt;&gt;(list2);</code></pre>
+            </div>
+            <div style="flex: 1; min-width: 180px;">
+                <div style="font-weight: bold; color: #1e3a8a; font-size: 0.9em;">Convert List to Array</div>
+                <pre style="font-size: 0.75em; padding: 5px; margin: 5px 0;"><code>Integer[] arr = list.toArray(new Integer[0]);
+int[] arr2 = list.stream().mapToInt(i -> i)
+              .toArray();</code></pre>
+            </div>
+            <div style="flex: 1; min-width: 140px;">
+                <div style="font-weight: bold; color: #1e3a8a; font-size: 0.9em;">Sort List</div>
+                <pre style="font-size: 0.75em; padding: 5px; margin: 5px 0;"><code>Collections.sort(list);
+list.sort(Comparator.reverseOrder());</code></pre>
+            </div>
+            <div style="flex: 1; min-width: 120px;">
+                <div style="font-weight: bold; color: #1e3a8a; font-size: 0.9em;">Reverse String</div>
+                <pre style="font-size: 0.75em; padding: 5px; margin: 5px 0;"><code>new StringBuilder(s)
+  .reverse().toString();</code></pre>
+            </div>
+            <div style="width: 250px; background-color: #0f172a; color: white; padding: 10px; border-radius: 5px;">
+                <div style="color: #fcd34d; font-weight: bold; margin-bottom: 5px; font-size: 0.9em;">&bull; MOST USED IN INTERVIEWS</div>
+                <div style="font-size: 0.85em; line-height: 1.5;">
+                    <div>&bull; HashSet</div>
+                    <div>&bull; HashMap + computeIfAbsent</div>
+                    <div>&bull; getOrDefault / merge</div>
+                    <div>&bull; PriorityQueue</div>
+                    <div>&bull; Arrays.sort(), toArray(), asList()</div>
+                    <div>&bull; StringBuilder</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="background-color: #0f172a; color: white; display: flex; justify-content: space-around; padding: 12px; margin-top: 15px; font-weight: bold; border-radius: 5px; font-size: 0.9em;">
+        <div>&#11088; REMEMBER</div>
+        <div>&#129513; Pattern Recognition &gt; Code</div>
+        <div>&#127942; Know your Tools</div>
+        <div>&#128161; Write Clean &amp; Simple Code</div>
+        <div>&#128269; Analyze Complexity</div>
+        <div>&#128336; Practice Consistently</div>
+    </div>
+</div>

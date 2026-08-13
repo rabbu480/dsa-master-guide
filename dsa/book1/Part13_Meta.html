@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 - Part 13: Interview Meta Layer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+    :root { --primary: #1e3a8a; --secondary: #2563eb; --accent: #d97706; --emerald: #059669; --text-dark: #0f172a; --bg-light: #f8fafc; --border-color: #cbd5e1; }
+    body { font-family: 'Inter', sans-serif; background-color: #cbd5e1; color: var(--text-dark); margin: 0; padding: 20px; font-size: 13px; line-height: 1.5; }
+    .page { background: white; max-width: 1100px; margin: 0 auto 30px auto; padding: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 8px; page-break-after: always; }
+    .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--primary); padding-bottom: 12px; margin-bottom: 25px; background: #f1f5f9; padding: 15px 20px; border-radius: 6px; }
+    .header-top h1 { margin: 0; font-size: 1.8rem; color: var(--primary); font-weight: 900; text-transform: uppercase; }
+    .badge { background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; }
+    .section-box { border: 2px solid var(--primary); border-radius: 8px; margin-bottom: 25px; overflow: hidden; background: white; page-break-inside: avoid; }
+    .section-header { background: var(--primary); color: white; padding: 10px 18px; font-size: 1.1rem; font-weight: 800; }
+    .section-content { padding: 18px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 10px 0; }
+    table th, table td { border: 1px solid var(--border-color); padding: 8px 12px; text-align: left; }
+    table th { background: #f1f5f9; font-weight: 800; }
+    @media print { body { background: white; padding: 0; } .page { box-shadow: none; border: none; margin: 0; padding: 15px 0; max-width: 100%; } .section-box { page-break-inside: avoid !important; break-inside: avoid !important; } }
+</style>
+</head>
+<body>
+
+<div class="page">
+    <div class="header-top">
+        <div>
+            <h1>Book 1 — Part 13: Interview Meta Layer</h1>
+            <div style="font-size: 0.95rem; color: #475569; font-weight: 600;">Pages 189–196 · Pattern Recognition Flow, Verbatim Script & Rubrics</div>
+        </div>
+        <span class="badge">Part 13</span>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">13.1 Pattern Recognition "If You See... Think..." Table</div>
+        <div class="section-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>If problem asks / contains...</th>
+                        <th>Think this Pattern...</th>
+                        <th>Target Complexity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Sorted Array + Find Pair/Triplet</td><td>Two Pointers</td><td>O(N) or O(N<sup>2</sup>)</td></tr>
+                    <tr><td>Contiguous Subarray Optimizing Condition</td><td>Sliding Window</td><td>O(N)</td></tr>
+                    <tr><td>Subarray Sum = K (with negative numbers)</td><td>Prefix Sum + HashMap</td><td>O(N)</td></tr>
+                    <tr><td>Next Greater / Smaller Element</td><td>Monotonic Stack</td><td>O(N)</td></tr>
+                    <tr><td>Minimum Steps / Unweighted Shortest Path</td><td>BFS (Level Order)</td><td>O(V + E)</td></tr>
+                    <tr><td>Connected Components / Cycle Detection</td><td>DFS or Union-Find</td><td>O(V + E) or O(α(N))</td></tr>
+                    <tr><td>Prerequisites / Task Dependency Order</td><td>Topological Sort (Kahn's)</td><td>O(V + E)</td></tr>
+                    <tr><td>Weighted Shortest Path (non-negative)</td><td>Dijkstra's Algorithm</td><td>O((V + E) log V)</td></tr>
+                    <tr><td>Kth Smallest / Largest / Stream Median</td><td>PriorityQueue (Heap)</td><td>O(N log K)</td></tr>
+                    <tr><td>Prefix Matching / Autocomplete</td><td>Trie</td><td>O(L)</td></tr>
+                    <tr><td>Max/Min/Count with Overlapping Choices</td><td>Dynamic Programming</td><td>O(States × Transitions)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

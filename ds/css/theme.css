@@ -1,0 +1,1 @@
+:root{--primary:#2563EB;--bg:#EEF2F7;}*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);font-family:Arial,sans-serif;padding:30px}.page{width:210mm;min-height:297mm;margin:auto;background:#fff}.hero{background:linear-gradient(135deg,#1E3A8A,#2563EB,#3B82F6);color:#fff;padding:38px}.section{padding:26px 34px;}

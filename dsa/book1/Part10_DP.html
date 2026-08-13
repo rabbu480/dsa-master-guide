@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 - Part 10: Dynamic Programming</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+    :root { --primary: #1e3a8a; --secondary: #2563eb; --accent: #d97706; --emerald: #059669; --text-dark: #0f172a; --bg-light: #f8fafc; --border-color: #cbd5e1; --code-bg: #1e293b; --code-text: #f8fafc; }
+    body { font-family: 'Inter', sans-serif; background-color: #cbd5e1; color: var(--text-dark); margin: 0; padding: 20px; font-size: 13px; line-height: 1.5; }
+    .page { background: white; max-width: 1100px; margin: 0 auto 30px auto; padding: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 8px; page-break-after: always; }
+    .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--primary); padding-bottom: 12px; margin-bottom: 25px; background: #f1f5f9; padding: 15px 20px; border-radius: 6px; }
+    .header-top h1 { margin: 0; font-size: 1.8rem; color: var(--primary); font-weight: 900; text-transform: uppercase; }
+    .badge { background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; }
+    .section-box { border: 2px solid var(--primary); border-radius: 8px; margin-bottom: 25px; overflow: hidden; background: white; page-break-inside: avoid; }
+    .section-header { background: var(--primary); color: white; padding: 10px 18px; font-size: 1.1rem; font-weight: 800; }
+    .section-content { padding: 18px; }
+    pre { background: var(--code-bg); color: var(--code-text); padding: 16px; margin: 10px 0; border-radius: 6px; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 1.5; white-space: pre-wrap !important; word-break: break-word !important; }
+    @media print { body { background: white; padding: 0; } .page { box-shadow: none; border: none; margin: 0; padding: 15px 0; max-width: 100%; } .section-box { page-break-inside: avoid !important; break-inside: avoid !important; } }
+</style>
+</head>
+<body>
+
+<div class="page">
+    <div class="header-top">
+        <div>
+            <h1>Book 1 — Part 10: Dynamic Programming</h1>
+            <div style="font-size: 0.95rem; color: #475569; font-weight: 600;">Pages 151–172 · SC→RBR→MTS Framework, 1D/2D DP, Knapsack & LCS</div>
+        </div>
+        <span class="badge">Part 10</span>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">10.5 0/1 Knapsack Pattern (Refer to A.24)</div>
+        <div class="section-content">
+            <pre><code>public int knapsack(int[] wt, int[] val, int W) {
+    int n = wt.length;
+    int[] dp = new int[W + 1];
+    
+    for (int i = 0; i &lt; n; i++) {
+        for (int w = W; w &gt;= wt[i]; w--) { // Reverse loop for 1D space optimization
+            dp[w] = Math.max(dp[w], val[i] + dp[w - wt[i]]);
+        }
+    }
+    return dp[W];
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">10.7 Longest Common Subsequence (LCS)</div>
+        <div class="section-content">
+            <pre><code>public int longestCommonSubsequence(String text1, String text2) {
+    int m = text1.length(), n = text2.length();
+    int[][] dp = new int[m + 1][n + 1];
+    
+    for (int i = 1; i &lt;= m; i++) {
+        for (int j = 1; j &lt;= n; j++) {
+            if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+                dp[i][j] = 1 + dp[i - 1][j - 1];
+            } else {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    return dp[m][n];
+}</code></pre>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

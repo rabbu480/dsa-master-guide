@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QUEUE & DEQUE PATTERNS — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 12px; }
+.ph h1 { font-size: 1.7rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.85rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.74rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.bh  { background: var(--pri); color: white; padding: 5px 10px;
+  font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 16px; height: 16px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.70rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 8px 10px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 5px 10px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.72rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.90rem; }
+.psub   { color: var(--sub); font-size: 0.76rem; }
+.prow-body { display: flex; }
+.pc { padding: 8px 10px; font-size: 0.76rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.70rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.prob-head { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.76rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.68rem; line-height: 1.38; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.74rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.74rem; }
+th, td { border: 1px solid var(--bdr); padding: 4px 6px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 5px 8px; border-radius: 0 4px 4px 0; font-size: 0.76rem; margin-top: 4px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 6px 8px; margin-top: 4px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.80rem; margin-bottom: 2px; }
+
+.dt-wrap { font-size: 0.76rem; }
+.dt-root { background: var(--pri); color: white; padding: 4px 8px; border-radius: 4px; text-align: center; font-weight: 700; margin-bottom: 6px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 4px 6px; font-weight: 600; color: #1e40af; font-size: 0.72rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 4px 6px; color: #065f46; font-weight: 700; font-size: 0.72rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.72rem; padding: 2px 4px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 8px 12px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- PAGE 1: DISCOVERY & ORIENTATION -->
+<div class="page">
+<div class="ph">
+  <div><h1>QUEUE & DEQUE PATTERNS</h1><div class="sub">FAANG Master Guide — Java Edition</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 1 OF 10</div><div class="ptag">DISCOVERY JOURNEY · FIRST PRINCIPLES</div></div>
+</div>
+<div class="g3" style="margin-bottom:12px">
+<div class="box pur">
+<div class="bh">🎬 THE REAL-WORLD STORY</div>
+<div class="bc">
+<p style="margin-bottom:6px">Imagine standing in line at a movie theater ticket counter. The first person to arrive is the first person served (First-In, First-Out: FIFO).</p>
+<div class="aha">
+<div class="aha-t">💡 THE QUEUE &amp; DEQUE AHA MOMENT</div>
+        A Double-Ended Queue (Deque) allows <strong>O(1) insertions and deletions at BOTH ends</strong> (`head` and `tail`), making it the ultimate foundation for BFS tree/graph traversals and monotonic sliding window maximums!
+      </div>
+</div>
+</div>
+<div class="box">
+<div class="bh">🤔 WHY ARRAYLIST FAILS FOR QUEUES</div>
+<div class="bc">
+<ul style="padding-left:14px;font-size:0.76rem">
+<li><strong>ArrayList Remove First `list.remove(0)`:</strong> Requires shifting all remaining N elements -&gt; Slow O(N) time!</li>
+<li><strong>ArrayDeque `pollFirst()`:</strong> Uses a circular array buffer -&gt; Strict <strong>O(1) time</strong>!</li>
+<li><strong>Java Recommendation:</strong> ALWAYS use `ArrayDeque<t>` instead of legacy `Stack` or `LinkedList`!</t></li>
+</ul>
+</div>
+</div>
+<div class="box sky">
+<div class="bh">📌 VISUALIZING DOUBLE-ENDED QUEUE</div>
+<div class="bc">
+<div style="font-weight:700;color:var(--pri);margin-bottom:4px">Deque Operations (Both Ends O(1)):</div>
+<pre>addFirst(x)  -&gt;                      &lt;- addLast(x)
+pollFirst()  &lt;- [ Head | ... | Tail ] -&gt; pollLast()
+peekFirst()     ^^^^^         ^^^^^   peekLast()
+
+Double-ended power: Acts as both Stack &amp; Queue!</pre>
+</div>
+</div>
+</div><div class="g2">
+<div class="box grn">
+<div class="bh">📚 PREREQUISITES &amp; COMPLEXITY REASONING</div>
+<div class="bc">
+<table style="font-size:0.76rem">
+<tr><th>Data Structure / Pattern</th><th>Operation</th><th>Time Complexity</th><th>Auxiliary Space</th></tr>
+<tr><td>`ArrayDeque<t>`</t></td><td>`offer()`, `poll()`, `peek()`</td><td><strong>O(1) amortized</strong></td><td><strong>O(N) circular buffer</strong></td></tr>
+<tr><td>BFS Level Order Traversal</td><td>`queue.offer()` &amp; `poll()`</td><td><strong>O(V + E)</strong></td><td><strong>O(V) queue capacity</strong></td></tr>
+<tr><td>Monotonic Deque (Max Window)</td><td>`pollLast()`, `offerLast()`</td><td><strong>O(N) single pass</strong></td><td><strong>O(K) deque size</strong></td></tr>
+<tr><td>Circular Queue Implementation</td><td>`enQueue()`, `deQueue()`</td><td><strong>O(1) strictly</strong></td><td><strong>O(K) fixed array</strong></td></tr>
+</table>
+</div>
+</div>
+<div class="box amb">
+<div class="bh">⚡ CLUES THAT SCREAM QUEUE / DEQUE</div>
+<div class="bc">
+<p style="font-size:0.8rem">1. <em>"Level order traversal / Shortest path in unweighted graph"</em> -&gt; Standard BFS Queue (`ArrayDeque`)</p>
+<p style="font-size:0.8rem">2. <em>"Maximum/minimum in every sliding window of size K"</em> -&gt; Monotonic Decreasing Deque</p>
+<p style="font-size:0.8rem">3. <em>"First non-repeating character in a stream"</em> -&gt; Queue + Character Frequency Map</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 2: API & TOOLKIT -->
+<div class="page">
+<div class="ph">
+  <div><h1>QUEUE & DEQUE PATTERNS</h1><div class="sub">Java Master Toolkit &amp; Utility Classes</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 2 OF 10</div><div class="ptag">JAVA UTILITIES · REUSABLE TEMPLATES</div></div>
+</div>
+
+</div>
+
+<!-- PAGE 3: CORE PATTERN 1 -->
+<div class="page">
+<div class="ph">
+  <div><h1>QUEUE & DEQUE PATTERNS</h1><div class="sub">Core Patterns — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 3 OF 10</div><div class="ptag">PATTERN 1</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 1</div>
+<div class="ptitle">BFS LEVEL ORDER TRAVERSAL (Queue Snapshot Loop)</div>
+<div class="psub">e.g. Binary Tree Level Order Traversal (LC 102)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">Level Snapshot Strategy</div>
+<div style="font-size:0.78rem">
+        At the start of each level loop, capture `int size = queue.size()`. Process EXACTLY `size` nodes for the current level before advancing to the next level!
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — LC 102</div>
+<pre>public List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {
+  List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+  if (root == null) return res;
+  Queue&lt;TreeNode&gt; queue = new ArrayDeque&lt;&gt;();
+  queue.offer(root);
+  while (!queue.isEmpty()) {
+    int levelSize = queue.size(); // Snapshot size for current level!
+    List&lt;Integer&gt; currentLevel = new ArrayList&lt;&gt;();
+    for (int i = 0; i &lt; levelSize; i++) {
+      TreeNode node = queue.poll();
+      currentLevel.add(node.val);
+      if (node.left != null) queue.offer(node.left);
+      if (node.right != null) queue.offer(node.right);
+    }
+    res.add(currentLevel);
+  }
+  return res;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 4: CORE PATTERN 2 -->
+<div class="page">
+<div class="ph">
+  <div><h1>QUEUE & DEQUE PATTERNS</h1><div class="sub">Core Patterns — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 4 OF 10</div><div class="ptag">PATTERN 2</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 2</div>
+<div class="ptitle">MONOTONIC DEQUE (Sliding Window Maximum)</div>
+<div class="psub">e.g. Sliding Window Maximum (LC 239)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">Monotonic Decreasing Order</div>
+<div style="font-size:0.78rem">
+        Store array indices in deque. Maintain decreasing order of values. Pop smaller tail elements before adding `i`. Front of deque is ALWAYS the max element of current window!
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — LC 239</div>
+<pre>public int[] maxSlidingWindow(int[] nums, int k) {
+  int n = nums.length;
+  int[] res = new int[n - k + 1];
+  Deque&lt;Integer&gt; dq = new ArrayDeque&lt;&gt;();
+  for (int i = 0; i &lt; n; i++) {
+    // 1. Remove elements outside current window range:
+    if (!dq.isEmpty() &amp;&amp; dq.peekFirst() &lt; i - k + 1) dq.pollFirst();
+    // 2. Remove smaller elements from tail:
+    while (!dq.isEmpty() &amp;&amp; nums[dq.peekLast()] &lt; nums[i]) dq.pollLast();
+    dq.offerLast(i);
+    // 3. Record max when window size &gt;= k:
+    if (i &gt;= k - 1) res[i - k + 1] = nums[dq.peekFirst()];
+  }
+  return res;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 5: CORE PATTERN 3 -->
+<div class="page">
+<div class="ph">
+  <div><h1>QUEUE & DEQUE PATTERNS</h1><div class="sub">Core Patterns — Part 3</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 5 OF 10</div><div class="ptag">PATTERN 3</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 3</div>
+<div class="ptitle">STREAM QUEUE (First Unique Character in String)</div>
+<div class="psub">e.g. First Unique Character in a String (LC 387)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">Frequency Array + Queue</div>
+<div style="font-size:0.78rem">
+        Count frequencies in `int[26]`. Offer characters into queue. Poll from front while `count[queue.peek()] &gt; 1`!
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — LC 387</div>
+<pre>public int firstUniqChar(String s) {
+  int[] count = new int[26];
+  for (int i = 0; i &lt; s.length(); i++) count[s.charAt(i) - 'a']++;
+  for (int i = 0; i &lt; s.length(); i++) {
+    if (count[s.charAt(i) - 'a'] == 1) return i;
+  }
+  return -1;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 6: CORE PATTERN 4 -->
+<div class="page">
+<div class="ph">
+  <div><h1>QUEUE & DEQUE PATTERNS</h1><div class="sub">Core Patterns — Part 4</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 6 OF 10</div><div class="ptag">PATTERN 4</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 4</div>
+<div class="ptitle">DESIGN CIRCULAR QUEUE (Fixed Array + Modulo Head/Tail)</div>
+<div class="psub">e.g. Design Circular Queue (LC 622)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">Modulo Array Buffer</div>
+<div style="font-size:0.78rem">
+        Use fixed array `a[capacity]`. Increment `tail = (tail + 1) % capacity` on `enQueue()`, and `head = (head + 1) % capacity` on `deQueue()`.
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — LC 622</div>
+<pre>class MyCircularQueue {
+  private int[] a;
+  private int head = 0, tail = 0, count = 0, cap;
+  public MyCircularQueue(int k) { cap = k; a = new int[k]; }
+  public boolean enQueue(int val) {
+    if (isFull()) return false;
+    a[tail] = val; tail = (tail + 1) % cap; count++; return true;
+  }
+  public boolean deQueue() {
+    if (isEmpty()) return false;
+    head = (head + 1) % cap; count--; return true;
+  }
+  public int Front() { return isEmpty() ? -1 : a[head]; }
+  public int Rear() { return isEmpty() ? -1 : a[(tail - 1 + cap) % cap]; }
+  public boolean isEmpty() { return count == 0; }
+  public boolean isFull() { return count == cap; }
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 7: DECISION TREE & TRIGGER WORDS -->
+<div class="page">
+<div class="ph">
+  <div><h1>QUEUE & DEQUE PATTERNS</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 7 OF 10</div><div class="ptag">DECISION TREE · TRIGGER WORDS · TRADE-OFFS</div></div>
+</div>
+<div class="box">
+<div class="bh" style="padding:3px 6px;font-size:0.76rem">📊 COMPLETE QUEUE &amp; DEQUE PROBLEM LADDER SUMMARY</div>
+<div class="bc" style="padding:4px 6px">
+<table>
+<tr><th>LC #</th><th>Problem</th><th>Pattern</th><th>Time</th><th>Space</th><th>Diff</th></tr>
+<tr><td>387</td><td>First Unique Character in String</td><td>Character Frequency Scan</td><td>O(N)</td><td>O(1)</td><td><span class="diff-e">E</span></td></tr>
+<tr><td>102</td><td>Binary Tree Level Order Traversal</td><td>BFS Queue Snapshot Loop</td><td>O(N)</td><td>O(W)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>622</td><td>Design Circular Queue</td><td>Fixed Array + Modulo Pointers</td><td>O(1)</td><td>O(K)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>225</td><td>Implement Stack using Queues</td><td>Single Queue Rotation Loop</td><td>O(N) push</td><td>O(N)</td><td><span class="diff-e">E</span></td></tr>
+<tr><td>232</td><td>Implement Queue using Stacks</td><td>2-Stack Inversion</td><td>O(1) amortized</td><td>O(N)</td><td><span class="diff-e">E</span></td></tr>
+<tr><td>103</td><td>Binary Tree Zigzag Level Order</td><td>BFS + Deque Alternating Insert</td><td>O(N)</td><td>O(W)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>239</td><td>Sliding Window Maximum</td><td>Monotonic Decreasing Deque</td><td>O(N)</td><td>O(K)</td><td><span class="diff-h">H</span></td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<!-- PAGE 8: PROBLEM LADDER PART 1 -->
+<div class="page">
+<div class="ph">
+  <div><h1>QUEUE & DEQUE PATTERNS</h1><div class="sub">Curated Problem Ladder — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 8 OF 10</div><div class="ptag">PROBLEM LADDER · EASY &amp; MEDIUM</div></div>
+</div>
+<div class="g2">
+<div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#f0fdf4">
+<span class="ptitle" style="color:var(--grn)">LC 387 · First Unique Character</span>
+<span class="diff-e">EASY</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Freq Array Scan</div>
+<div><strong>Key Insight:</strong> `int[26]` frequency count.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.62rem">public int firstUniqChar(String s) {
+  int[] c = new int[26];
+  for (int i = 0; i &lt; s.length(); i++) c[s.charAt(i) - 'a']++;
+  for (int i = 0; i &lt; s.length(); i++) if (c[s.charAt(i) - 'a'] == 1) return i;
+  return -1;
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 102 · Binary Tree Level Order Traversal</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> BFS Queue Snapshot</div>
+<div><strong>Key Insight:</strong> Loop `int sz = q.size()`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.62rem">public List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {
+  List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;(); if (root == null) return res;
+  Queue&lt;TreeNode&gt; q = new ArrayDeque&lt;&gt;(); q.offer(root);
+  while (!q.isEmpty()) {
+    int sz = q.size(); List&lt;Integer&gt; cur = new ArrayList&lt;&gt;();
+    for (int i = 0; i &lt; sz; i++) {
+      TreeNode n = q.poll(); cur.add(n.val);
+      if (n.left != null) q.offer(n.left); if (n.right != null) q.offer(n.right);
+    }
+    res.add(cur);
+  }
+  return res;
+}</pre>
+</div>
+</div>
+</div><div class="prob">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 622 · Design Circular Queue</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Modulo Pointer Array</div>
+<div><strong>Key Insight:</strong> `tail = (tail + 1) % cap`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.62rem">class MyCircularQueue {
+  int[] a; int head = 0, tail = 0, count = 0, cap;
+  public MyCircularQueue(int k) { cap = k; a = new int[k]; }
+  public boolean enQueue(int val) {
+    if (isFull()) return false;
+    a[tail] = val; tail = (tail + 1) % cap; count++; return true;
+  }
+  public boolean deQueue() {
+    if (isEmpty()) return false;
+    head = (head + 1) % cap; count--; return true;
+  }
+  public boolean isEmpty() { return count == 0; }
+  public boolean isFull() { return count == cap; }
+}</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: PROBLEM LADDER PART 2 -->
+<div class="page">
+<div class="ph">
+  <div><h1>QUEUE & DEQUE PATTERNS</h1><div class="sub">Curated Problem Ladder — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 9 OF 10</div><div class="ptag">PROBLEM LADDER · MEDIUM &amp; HARD</div></div>
+</div>
+<div class="g2">
+<div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 225 · Implement Stack using Queues</span>
+<span class="diff-e">EASY</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Single Queue Rotation</div>
+<div><strong>Key Insight:</strong> Rotate `sz - 1` items to back.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.60rem">class MyStack {
+  Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();
+  public void push(int x) {
+    q.offer(x);
+    for (int i = 0; i &lt; q.size() - 1; i++) q.offer(q.poll());
+  }
+  public int pop() { return q.poll(); }
+  public int top() { return q.peek(); }
+  public boolean empty() { return q.isEmpty(); }
+}</pre>
+</div>
+</div>
+</div><div class="prob">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 232 · Implement Queue using Stacks</span>
+<span class="diff-e">EASY</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> 2-Stack Inversion</div>
+<div><strong>Key Insight:</strong> Transfer `in` stack to `out` stack.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.60rem">class MyQueue {
+  Stack&lt;Integer&gt; in = new Stack&lt;&gt;(), out = new Stack&lt;&gt;();
+  public void push(int x) { in.push(x); }
+  public int pop() { peek(); return out.pop(); }
+  public int peek() {
+    if (out.isEmpty()) while (!in.isEmpty()) out.push(in.pop());
+    return out.peek();
+  }
+  public boolean empty() { return in.isEmpty() &amp;&amp; out.isEmpty(); }
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fee2e2">
+<span class="ptitle" style="color:var(--red)">LC 239 · Sliding Window Maximum</span>
+<span class="diff-h">HARD</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Monotonic Deque</div>
+<div><strong>Key Insight:</strong> Deque front stores window max index.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.58rem">public int[] maxSlidingWindow(int[] nums, int k) {
+  int n = nums.length; int[] res = new int[n - k + 1];
+  Deque&lt;Integer&gt; dq = new ArrayDeque&lt;&gt;();
+  for (int i = 0; i &lt; n; i++) {
+    if (!dq.isEmpty() &amp;&amp; dq.peekFirst() &lt; i - k + 1) dq.pollFirst();
+    while (!dq.isEmpty() &amp;&amp; nums[dq.peekLast()] &lt; nums[i]) dq.pollLast();
+    dq.offerLast(i);
+    if (i &gt;= k - 1) res[i - k + 1] = nums[dq.peekFirst()];
+  }
+  return res;
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:6px">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 103 · Binary Tree Zigzag Level Order</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> BFS + Deque Insertion</div>
+<div><strong>Key Insight:</strong> Alternate level insertion direction.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.58rem">public List&lt;List&lt;Integer&gt;&gt; zigzagLevelOrder(TreeNode root) {
+  List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;(); if (root == null) return res;
+  Queue&lt;TreeNode&gt; q = new ArrayDeque&lt;&gt;(); q.offer(root); boolean lToR = true;
+  while (!q.isEmpty()) {
+    int sz = q.size(); LinkedList&lt;Integer&gt; level = new LinkedList&lt;&gt;();
+    for (int i = 0; i &lt; sz; i++) {
+      TreeNode n = q.poll();
+      if (lToR) level.addLast(n.val); else level.addFirst(n.val);
+      if (n.left != null) q.offer(n.left); if (n.right != null) q.offer(n.right);
+    }
+    res.add(level); lToR = !lToR;
+  }
+  return res;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 10: DRY RUN, PROOFS & MASTERY CHEAT SHEET -->
+<div class="page">
+<div class="ph">
+  <div><h1>QUEUE & DEQUE PATTERNS</h1><div class="sub">Dry Run, Proofs &amp; Mastery Cheat Sheet</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 10 OF 10</div><div class="ptag">DRY RUN · PROOFS · MASTERY CHECKLIST</div></div>
+</div>
+<div class="g2" style="margin-bottom:10px">
+<div class="box">
+<div class="bh">🔍 DRY RUN — Circular Queue Enqueue &amp; Dequeue</div>
+<div class="bc">
+<table style="font-size:0.70rem">
+<tr><th>Step</th><th>Operation</th><th>head</th><th>tail</th><th>count</th><th>Array State (cap = 3)</th></tr>
+<tr><td>1</td><td>`enQueue(10)`</td><td>0</td><td>1</td><td>1</td><td>`[10, _, _]`</td></tr>
+<tr><td>2</td><td>`enQueue(20)`</td><td>0</td><td>2</td><td>2</td><td>`[10, 20, _]`</td></tr>
+<tr><td>3</td><td>`deQueue()`</td><td>1</td><td>2</td><td>1</td><td>`[_, 20, _]`</td></tr>
+<tr><td>4</td><td>`enQueue(30)`</td><td>1</td><td>0 (mod 3)</td><td>2</td><td>`[30, 20, _]` ✅ Modulo Wrap!</td></tr>
+</table>
+</div>
+</div>
+<div class="box grn">
+<div class="bh">📐 MATHEMATICAL PROOF — O(1) AMORTIZED TIME OF 2-STACK QUEUE</div>
+<div class="bc">
+<div style="font-size:0.76rem">
+<p style="margin-bottom:4px"><strong>Claim:</strong> 2-Stack Queue `pop()` and `peek()` run in O(1) amortized time.</p>
+<p style="margin-bottom:4px"><strong>Proof:</strong> Each element is pushed to `in` stack once, popped from `in` stack once, pushed to `out` stack once, and popped from `out` stack once. Total 4 operations per element over N calls $\implies 4N / N = 4 = \mathbf{O(1)\text{ Amortized Time}!}$</p>
+</div>
+</div>
+</div>
+</div><div class="g2">
+<div class="box grn">
+<div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+<div class="bc">
+<div class="g2" style="gap:6px">
+<ul style="font-size:0.75rem;list-style:none;padding:0">
+<li>☐ Write BFS Level Order Traversal with queue snapshot</li>
+<li>☐ Implement Circular Queue using array and modulo arithmetic</li>
+<li>☐ Code Implement Stack using single Queue rotation</li>
+<li>☐ Code Implement Queue using 2 Stacks in O(1) amortized</li>
+</ul>
+<ul style="font-size:0.75rem;list-style:none;padding:0">
+<li>☐ Write Monotonic Deque for Sliding Window Maximum in O(N)</li>
+<li>☐ Code Zigzag Level Order Traversal with Deque insertion</li>
+<li>☐ Explain why `ArrayDeque` outperforms `LinkedList` in Java</li>
+<li>☐ Prove why 2-stack queue runs in O(1) amortized time</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="box pur">
+<div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+<div class="bc">
+<div class="aha" style="margin-bottom:4px;padding:5px">
+<div class="aha-t">Rule 1 — Always Snapshot Queue Size for BFS Levels</div>
+        In BFS level order traversals, ALWAYS snapshot `int size = queue.size()` at the top of the outer loop before starting the inner loop. Do NOT evaluate `queue.size()` dynamically inside the inner loop!
+      </div>
+<div class="aha" style="padding:5px">
+<div class="aha-t">Rule 2 — Deque Stores Indices for Range Pruning</div>
+        In Monotonic Deque problems, ALWAYS store array indices instead of values so you can easily prune elements that fall outside the active window (`dq.peekFirst() &lt; i - k + 1`).
+      </div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

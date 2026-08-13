@@ -1,0 +1,401 @@
+<div class="page">
+<div class="header-top">
+    <div style="display: flex; align-items: baseline;">
+        <h1>GRAPH PATTERN GUIDE</h1>
+        <div class="subtitle">PAGE 4 &mdash; MASTER DFS TEMPLATE GUIDE<br><small style="color:#64748b;font-weight:normal;">"One DFS algorithm. Five reusable templates."</small></div>
+    </div>
+    <div style="text-align: right;">
+        <div class="page-number">PAGE 4</div>
+    </div>
+</div>
+
+<div class="grid-container">
+    <div class="col-left">
+        <div class="section-box">
+            <div class="section-header"><span class="num">1</span> MASTER IDEA</div>
+            <div class="section-content">
+                <p><strong>Almost every Graph DFS interview problem uses one of five reusable templates.</strong></p>
+                <hr style="border: none; border-top: 1px dashed #cbd5e1; margin: 10px 0;">
+                <p>The DFS traversal almost never changes.</p>
+                <hr style="border: none; border-top: 1px dashed #cbd5e1; margin: 10px 0;">
+                <p>Only the caller, input, return type and tiny logic change.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-right">
+        <div class="section-box">
+            <div class="section-header"><span class="num">2</span> GRAPH DFS TEMPLATE <span style="color:#3b82f6;">★★★★★</span></div>
+            <div class="section-content" style="display: flex; gap: 10px;">
+                <table style="width: 40%; font-size: 0.9em; border-collapse: collapse;">
+                    <tr><td style="padding: 5px; border-bottom: 1px solid #e2e8f0;"><span style="color:#64748b; margin-right: 5px;">&#x1F4E4;</span> Input</td><td style="padding: 5px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">Adjacency List</td></tr>
+                    <tr><td style="padding: 5px; border-bottom: 1px solid #e2e8f0;"><span style="color:#64748b; margin-right: 5px;">&#x1F4DE;</span> Caller</td><td style="padding: 5px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">dfs(start)</td></tr>
+                    <tr><td style="padding: 5px; border-bottom: 1px solid #e2e8f0;"><span style="color:#64748b; margin-right: 5px;">&#x1F4D6;</span> Visited</td><td style="padding: 5px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">boolean[]</td></tr>
+                    <tr><td style="padding: 5px; border-bottom: 1px solid #e2e8f0;"><span style="color:#64748b; margin-right: 5px;">&#x21A9;&#xFE0F;</span> Return</td><td style="padding: 5px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">void / boolean / int</td></tr>
+                    <tr><td style="padding: 5px; border-bottom: 1px solid #e2e8f0;"><span style="color:#64748b; margin-right: 5px;">&#x1F527;</span> Used In</td><td style="padding: 5px; border-bottom: 1px solid #e2e8f0; font-weight: bold;"><ul style="margin: 0; padding-left: 15px; font-size: 0.9em;"><li>Valid Path</li><li>Connected Components</li><li>Graph Valid Tree</li></ul></td></tr>
+                </table>
+                <div style="width: 60%;">
+                    <div style="background-color: #dcfce7; padding: 2px 8px; border-radius: 4px; border: 1px solid #bbf7d0; font-size: 0.75em; font-weight: bold; color: #166534; display: inline-block; margin-bottom: -5px; position: relative; z-index: 1;">Java Template</div>
+                    <pre style="border: 1px solid #e2e8f0; padding: 10px; padding-top: 15px; border-radius: 4px; margin: 0; font-size: 0.85em; background-color: #f8fafc;"><code style="color: #0f172a;"><span style="color: #2563eb;">private void</span> dfs(<span style="color: #2563eb;">int</span> node, List&lt;List&lt;Integer&gt;&gt; graph, <span style="color: #2563eb;">boolean</span>[] visited) {
+    visited[node] = <span style="color: #2563eb;">true</span>; <span style="color: #16a34a;">// mark visited</span>
+    <span style="color: #2563eb;">for</span> (<span style="color: #2563eb;">int</span> neighbor : graph.get(node)) { <span style="color: #16a34a;">// explore neighbors</span>
+        <span style="color: #2563eb;">if</span> (!visited[neighbor]) {
+            dfs(neighbor, graph, visited);
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+            <div style="background-color: #f1f5f9; padding: 8px 12px; border-radius: 4px; margin-top: 10px; display: flex; align-items: center; gap: 10px; border: 1px solid #e2e8f0;">
+                <span style="background-color: #1e3a8a; color: white; padding: 2px 8px; border-radius: 12px; font-weight: bold; font-size: 0.8em;">AHA</span>
+                <span style="font-weight: 700; color: #0f172a; font-size: 0.9em;">Graph traversal only changes neighbor source: graph.get(node)</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid-container">
+    <div class="col-left">
+        <div class="section-box">
+            <div class="section-header"><span class="num">3</span> GRID DFS TEMPLATE <span style="color:#3b82f6;">★★★★★</span></div>
+            <div class="section-content" style="display: flex; gap: 10px;">
+                <table style="width: 30%; font-size: 0.8em; border-collapse: collapse;">
+                    <tr><td style="padding: 4px; border-bottom: 1px solid #e2e8f0;">Input</td><td style="padding: 4px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">Grid</td></tr>
+                    <tr><td style="padding: 4px; border-bottom: 1px solid #e2e8f0;">Caller</td><td style="padding: 4px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">dfs(r, c)</td></tr>
+                    <tr><td style="padding: 4px; border-bottom: 1px solid #e2e8f0;">Visited</td><td style="padding: 4px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">boolean[][]</td></tr>
+                    <tr><td style="padding: 4px; border-bottom: 1px solid #e2e8f0;">Movement</td><td style="padding: 4px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">dirs[]</td></tr>
+                    <tr><td style="padding: 4px; border-bottom: 1px solid #e2e8f0;">Used In</td><td style="padding: 4px; border-bottom: 1px solid #e2e8f0; font-weight: bold;"><ul style="margin: 0; padding-left: 10px; font-size: 0.9em;"><li>Number of Islands</li><li>Flood Fill</li><li>Max Area of Island</li><li>Surrounded Regions</li></ul></td></tr>
+                </table>
+                <div style="width: 70%;">
+                    <div style="background-color: #dcfce7; padding: 2px 8px; border-radius: 4px; border: 1px solid #bbf7d0; font-size: 0.75em; font-weight: bold; color: #166534; display: inline-block; margin-bottom: -5px; position: relative; z-index: 1;">Java Template</div>
+                    <pre style="border: 1px solid #e2e8f0; padding: 8px; padding-top: 12px; border-radius: 4px; margin: 0; font-size: 0.75em; background-color: #f8fafc;"><code style="color: #0f172a;"><span style="color: #2563eb;">private void</span> dfs(<span style="color: #2563eb;">int</span> r, <span style="color: #2563eb;">int</span> c, <span style="color: #2563eb;">char</span>[][] grid, <span style="color: #2563eb;">boolean</span>[][] visited) {
+    <span style="color: #2563eb;">int</span> m = grid.length;
+    <span style="color: #2563eb;">int</span> n = grid[0].length;
+    
+    <span style="color: #16a34a;">// 1. Boundary check</span>
+    <span style="color: #2563eb;">if</span> (r < 0 || r >= m || c < 0 || c >= n) <span style="color: #2563eb;">return</span>;
+    
+    <span style="color: #16a34a;">// 2. Visited or blocked check</span>
+    <span style="color: #2563eb;">if</span> (visited[r][c] || grid[r][c] == <span style="color: #a31515;">'0'</span> || grid[r][c] == <span style="color: #a31515;">'X'</span>) <span style="color: #2563eb;">return</span>;
+    
+    <span style="color: #16a34a;">// 3. Mark visited</span>
+    visited[r][c] = <span style="color: #2563eb;">true</span>;
+    
+    <span style="color: #16a34a;">// 4. Explore 4 directions</span>
+    <span style="color: #2563eb;">int</span>[][] dirs = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+    <span style="color: #2563eb;">for</span> (<span style="color: #2563eb;">int</span>[] d : dirs) {
+        <span style="color: #2563eb;">int</span> nr = r + d[0];
+        <span style="color: #2563eb;">int</span> nc = c + d[1];
+        dfs(nr, nc, grid, visited);
+    }
+}</code></pre>
+                </div>
+            </div>
+            <div style="background-color: #f1f5f9; padding: 6px 10px; border-radius: 4px; margin-top: 8px; display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0;">
+                <span style="background-color: #1e3a8a; color: white; padding: 2px 6px; border-radius: 12px; font-weight: bold; font-size: 0.7em;">AHA</span>
+                <span style="font-weight: 700; color: #0f172a; font-size: 0.85em;">Grid is an implicit graph.</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-right">
+        <div class="section-box">
+            <div class="section-header"><span class="num">4</span> NODE GRAPH TEMPLATE <span style="color:#3b82f6;">★★★★</span></div>
+            <div class="section-content" style="display: flex; gap: 10px;">
+                <table style="width: 35%; font-size: 0.8em; border-collapse: collapse;">
+                    <tr><td style="padding: 4px; border-bottom: 1px solid #e2e8f0;"><span style="color:#64748b; margin-right: 5px;">&#x1F4E4;</span> Input</td><td style="padding: 4px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">Node</td></tr>
+                    <tr><td style="padding: 4px; border-bottom: 1px solid #e2e8f0;"><span style="color:#64748b; margin-right: 5px;">&#x1F4DE;</span> Caller</td><td style="padding: 4px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">dfs(node)</td></tr>
+                    <tr><td style="padding: 4px; border-bottom: 1px solid #e2e8f0;"><span style="color:#64748b; margin-right: 5px;">&#x1F4D6;</span> Visited</td><td style="padding: 4px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">HashMap&lt;Node, Node&gt;</td></tr>
+                    <tr><td style="padding: 4px; border-bottom: 1px solid #e2e8f0;"><span style="color:#64748b; margin-right: 5px;">&#x21A9;&#xFE0F;</span> Return</td><td style="padding: 4px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">Node (cloned node)</td></tr>
+                    <tr><td style="padding: 4px; border-bottom: 1px solid #e2e8f0;"><span style="color:#64748b; margin-right: 5px;">&#x1F527;</span> Used In</td><td style="padding: 4px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">Clone Graph</td></tr>
+                </table>
+                <div style="width: 65%;">
+                    <div style="background-color: #dcfce7; padding: 2px 8px; border-radius: 4px; border: 1px solid #bbf7d0; font-size: 0.75em; font-weight: bold; color: #166534; display: inline-block; margin-bottom: -5px; position: relative; z-index: 1;">Java Template</div>
+                    <pre style="border: 1px solid #e2e8f0; padding: 8px; padding-top: 12px; border-radius: 4px; margin: 0; font-size: 0.75em; background-color: #f8fafc;"><code style="color: #0f172a;"><span style="color: #2563eb;">private</span> Node dfs(Node node, HashMap&lt;Node, Node&gt; map) {
+    <span style="color: #2563eb;">if</span> (node == <span style="color: #2563eb;">null</span>) <span style="color: #2563eb;">return null</span>;
+    
+    <span style="color: #2563eb;">if</span> (map.containsKey(node)) {
+        <span style="color: #2563eb;">return</span> map.get(node); <span style="color: #16a34a;">// already cloned</span>
+    }
+    
+    <span style="color: #16a34a;">// 1. Create clone for current node</span>
+    Node clone = <span style="color: #2563eb;">new</span> Node(node.val);
+    map.put(node, clone);
+    
+    <span style="color: #16a34a;">// 2. Clone all neighbors</span>
+    <span style="color: #2563eb;">for</span> (Node nei : node.neighbors) {
+        clone.neighbors.add(dfs(nei, map));
+    }
+    
+    <span style="color: #2563eb;">return</span> clone;
+}</code></pre>
+                </div>
+            </div>
+            <div style="background-color: #f1f5f9; padding: 6px 10px; border-radius: 4px; margin-top: 8px; display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0;">
+                <span style="background-color: #1e3a8a; color: white; padding: 2px 6px; border-radius: 12px; font-weight: bold; font-size: 0.7em;">AHA</span>
+                <span style="font-weight: 700; color: #0f172a; font-size: 0.85em;">HashMap replaces visited[].</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid-container">
+    <div class="col-left">
+        <div class="section-box">
+            <div class="section-header"><span class="num">5</span> MULTI-START DFS <span style="color:#3b82f6;">★★★★</span></div>
+            <div class="section-content" style="display: flex; gap: 10px;">
+                <div style="width: 50%;">
+                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
+                        <span style="background-color: #3b82f6; color: white; padding: 2px 6px; border-radius: 50%; font-weight: bold; font-size: 0.8em;">A</span>
+                        <strong style="color: #1e3a8a;">OUTER LOOP DFS</strong>
+                    </div>
+                    <table style="width: 100%; font-size: 0.75em; border-collapse: collapse; margin-bottom: 5px;">
+                        <tr><td style="padding: 4px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Pattern</td><td style="padding: 4px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Used In</td></tr>
+                        <tr>
+                            <td style="padding: 4px; border: 1px solid #e2e8f0;"><pre style="margin:0; background:none; border:none; padding:0;"><code><span style="color: #2563eb;">for</span> (all nodes)<br>  <span style="color: #2563eb;">if</span> (!visited[i])<br>    dfs(i)</code></pre></td>
+                            <td style="padding: 4px; border: 1px solid #e2e8f0;"><ul style="margin: 0; padding-left: 15px; font-size: 0.9em;"><li>Connected Components</li><li>Number of Provinces</li><li>Number of Islands</li></ul></td>
+                        </tr>
+                    </table>
+                    <div style="background-color: #dcfce7; padding: 2px 8px; border-radius: 4px; border: 1px solid #bbf7d0; font-size: 0.7em; font-weight: bold; color: #166534; display: inline-block; margin-bottom: -5px; position: relative; z-index: 1;">Java Snippet</div>
+                    <pre style="border: 1px solid #e2e8f0; padding: 8px; padding-top: 10px; border-radius: 4px; margin: 0; font-size: 0.7em; background-color: #f8fafc;"><code style="color: #0f172a;"><span style="color: #2563eb;">for</span> (<span style="color: #2563eb;">int</span> i = 0; i < n; i++) {
+    <span style="color: #2563eb;">if</span> (!visited[i]) {
+        dfs(i, graph, visited);
+    }
+}</code></pre>
+                </div>
+                
+                <div style="width: 50%;">
+                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
+                        <span style="background-color: #9333ea; color: white; padding: 2px 6px; border-radius: 50%; font-weight: bold; font-size: 0.8em;">B</span>
+                        <strong style="color: #581c87;">BORDER DFS</strong>
+                    </div>
+                    <table style="width: 100%; font-size: 0.75em; border-collapse: collapse; margin-bottom: 5px;">
+                        <tr><td style="padding: 4px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Pattern</td><td style="padding: 4px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Used In</td></tr>
+                        <tr>
+                            <td style="padding: 4px; border: 1px solid #e2e8f0;"><pre style="margin:0; background:none; border:none; padding:0;"><code><span style="color: #2563eb;">for</span> (each border cell / node)<br>  <span style="color: #2563eb;">if</span> (!visited[b])<br>    dfs(b)</code></pre></td>
+                            <td style="padding: 4px; border: 1px solid #e2e8f0;"><ul style="margin: 0; padding-left: 15px; font-size: 0.9em;"><li>Pacific Atlantic</li><li>Surrounded Regions</li></ul></td>
+                        </tr>
+                    </table>
+                    <div style="background-color: #dcfce7; padding: 2px 8px; border-radius: 4px; border: 1px solid #bbf7d0; font-size: 0.7em; font-weight: bold; color: #166534; display: inline-block; margin-bottom: -5px; position: relative; z-index: 1;">Java Snippet</div>
+                    <pre style="border: 1px solid #e2e8f0; padding: 8px; padding-top: 10px; border-radius: 4px; margin: 0; font-size: 0.7em; background-color: #f8fafc;"><code style="color: #0f172a;"><span style="color: #16a34a;">// Example for grid</span>
+<span style="color: #2563eb;">for</span> (<span style="color: #2563eb;">int</span> c = 0; c < n; c++) {
+    dfs(0, c, grid, visited);       <span style="color: #16a34a;">// top row</span>
+    dfs(m - 1, c, grid, visited);   <span style="color: #16a34a;">// bottom row</span>
+}
+<span style="color: #2563eb;">for</span> (<span style="color: #2563eb;">int</span> r = 0; r < m; r++) {
+    dfs(r, 0, grid, visited);       <span style="color: #16a34a;">// left col</span>
+    dfs(r, n - 1, grid, visited);   <span style="color: #16a34a;">// right col</span>
+}</code></pre>
+                </div>
+            </div>
+            <div style="background-color: #fef9c3; padding: 8px; border-radius: 4px; margin-top: 10px; display: flex; justify-content: center; align-items: center; border: 1px solid #fde047; font-weight: bold; color: #854d0e; font-size: 0.85em;">
+                &#x2B50; The DFS never changes. Only WHERE it starts changes.
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-right">
+        <div class="section-box">
+            <div class="section-header"><span class="num">6</span> WHAT ACTUALLY CHANGES? <span style="color:#3b82f6;">★★★★★</span></div>
+            <div class="section-content">
+                <table style="width: 100%; font-size: 0.75em; border-collapse: collapse; text-align: center;">
+                    <tr style="background-color: #f1f5f9;">
+                        <th style="padding: 6px; border: 1px solid #e2e8f0;">Template</th>
+                        <th style="padding: 6px; border: 1px solid #e2e8f0;">Input</th>
+                        <th style="padding: 6px; border: 1px solid #e2e8f0;">Caller</th>
+                        <th style="padding: 6px; border: 1px solid #e2e8f0;">Visited</th>
+                        <th style="padding: 6px; border: 1px solid #e2e8f0;">Return</th>
+                        <th style="padding: 6px; border: 1px solid #e2e8f0;">ONLY THING THAT CHANGES</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; gap: 5px;"><span style="color:#64748b;">&#x1F517;</span> Graph DFS<br>(Adj List)</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">Adjacency<br>List</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">dfs(start)</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">boolean[]</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">void /<br>boolean /<br>int</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">Neighbors come from<br>graph.get(node)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; gap: 5px;"><span style="color:#64748b;">&#x1F3F0;</span> Grid DFS</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">Grid</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">dfs(r, c)</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">boolean[][]</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">void /<br>int or<br>boolean</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">Movement using dirs[]<br>+ boundary checks</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; gap: 5px;"><span style="color:#64748b;">&#x1F539;</span> Node DFS</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">Node<br>Graph</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">dfs(node)</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">HashMap&lt;Node,<br>Node&gt;</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">Node</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">Visited is HashMap<br>instead of boolean[]</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; gap: 5px;"><span style="color:#64748b;">&#x21BA;</span> Outer Loop DFS</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">Adj List /<br>Grid</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">for all nodes<br>if !visited<br>dfs(i)</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">boolean[] /<br>boolean[][]</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">int /<br>List /<br>void</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">Starts DFS from every<br>unvisited node</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; gap: 5px;"><span style="color:#64748b;">&#x25A1;</span> Border DFS</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">Grid /<br>Graph</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">for each<br>border<br>run dfs()</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">boolean[] /<br>boolean[][]</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">void</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold;">Starts DFS from borders<br>/ multiple sources</td>
+                    </tr>
+                </table>
+                <div style="background-color: #fef9c3; padding: 8px; border-radius: 4px; margin-top: 10px; display: flex; justify-content: center; align-items: center; border: 1px solid #fde047; font-weight: bold; color: #854d0e; font-size: 0.85em;">
+                    &#x2B50; This table is your 30-second interview revision sheet.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid-container" style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; margin-top: 15px;">
+    <div>
+        <div class="section-box" style="height: 100%;">
+            <div class="section-header"><span class="num">7</span> RETURN TYPE GUIDE <span style="color:#3b82f6;">★★★★★</span></div>
+            <div class="section-content">
+                <table style="width: 100%; font-size: 0.75em; border-collapse: collapse;">
+                    <tr style="background-color: #f1f5f9;">
+                        <th style="padding: 6px; border: 1px solid #e2e8f0; text-align: center;">Return Type</th>
+                        <th style="padding: 6px; border: 1px solid #e2e8f0;">Purpose</th>
+                        <th style="padding: 6px; border: 1px solid #e2e8f0;">Typical Problems</th>
+                        <th style="padding: 6px; border: 1px solid #e2e8f0;">Interview Meaning</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold; text-align: center; color: #1e3a8a;">void</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0;">Marking / Traversal<br><small>(No direct output)</small></td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0;">Flood Fill, Surrounded Regions, Pacific Atlantic</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0;">We only visit nodes / cells. No value returned.</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold; text-align: center; color: #16a34a;">boolean</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0;">Searching / Decision</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0;">Valid Path, Graph Valid Tree, Cycle Detection</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0;">Returns true as soon as condition is met.</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold; text-align: center; color: #ea580c;">int</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0;">Counting / Aggregation</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0;">Number of Islands, Max Area of Island, Count Components</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0;">Accumulate and return numeric result.</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold; text-align: center; color: #9333ea;">Node</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0;">Graph Construction</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0;">Clone Graph</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0;">Returns a new structure (node).</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0; font-weight: bold; text-align: center; color: #db2777;">List</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0;">Collecting Results</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0;">All Paths, Topological Sort, Articulation Points</td>
+                        <td style="padding: 6px; border: 1px solid #e2e8f0;">Collect multiple answers and return.</td>
+                    </tr>
+                </table>
+                <div style="background-color: #f1f5f9; padding: 6px; border-radius: 4px; margin-top: 8px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #0f172a; font-size: 0.8em; border: 1px solid #e2e8f0;">
+                    &#x2B50; Changing the return type usually changes the solution.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div>
+        <div class="section-box" style="height: 100%;">
+            <div class="section-header"><span class="num" style="background-color: #1e3a8a;">8</span> AHA MOMENTS <span style="color:#3b82f6;">★★★★★</span></div>
+            <div class="section-content" style="font-size: 0.8em;">
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
+                    <li style="display: flex; gap: 8px; align-items: flex-start;"><span style="color: #64748b;">&#x1F517;</span> <span style="font-weight: bold;">Adjacency List changes only neighbor traversal.</span></li>
+                    <li style="display: flex; gap: 8px; align-items: flex-start;"><span style="color: #64748b;">&#x1F3F0;</span> <span style="font-weight: bold;">Grid DFS changes only movement using dirs[].</span></li>
+                    <li style="display: flex; gap: 8px; align-items: flex-start;"><span style="color: #64748b;">&#x1F539;</span> <span style="font-weight: bold;">Node DFS changes visited[] into HashMap.</span></li>
+                    <li style="display: flex; gap: 8px; align-items: flex-start;"><span style="color: #64748b;">&#x21BA;</span> <span style="font-weight: bold;">Outer Loop handles disconnected graphs.</span></li>
+                    <li style="display: flex; gap: 8px; align-items: flex-start;"><span style="color: #64748b;">&#x25A1;</span> <span style="font-weight: bold;">Border DFS changes only starting nodes.</span></li>
+                    <li style="display: flex; gap: 8px; align-items: flex-start; margin-top: 5px; padding-top: 5px; border-top: 1px dashed #cbd5e1;"><span style="color: #eab308; font-size: 1.2em;">&#x1F4A1;</span> <span style="font-weight: bold;">95% of interview problems modify only one or two lines from these templates.</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div>
+        <div class="section-box" style="height: 100%;">
+            <div class="section-header"><span class="num" style="background-color: #1e3a8a;">9</span> COMMON INTERVIEW MISTAKES <span style="color:#3b82f6;">★★★★★</span></div>
+            <div class="section-content" style="font-size: 0.8em;">
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
+                    <li style="display: flex; gap: 8px; align-items: flex-start;"><span style="color: #ef4444;">&#x24E7;</span> <span>Forgot visited[].</span></li>
+                    <li style="display: flex; gap: 8px; align-items: flex-start;"><span style="color: #ef4444;">&#x24E7;</span> <span>Forgot boundary check (for grid).</span></li>
+                    <li style="display: flex; gap: 8px; align-items: flex-start;"><span style="color: #ef4444;">&#x24E7;</span> <span>Forgot dirs[] for grid movement.</span></li>
+                    <li style="display: flex; gap: 8px; align-items: flex-start;"><span style="color: #ef4444;">&#x24E7;</span> <span>Forgot outer loop for disconnected graphs.</span></li>
+                    <li style="display: flex; gap: 8px; align-items: flex-start;"><span style="color: #ef4444;">&#x24E7;</span> <span>Forgot HashMap in Clone Graph.</span></li>
+                    <li style="display: flex; gap: 8px; align-items: flex-start;"><span style="color: #ef4444;">&#x24E7;</span> <span>Infinite recursion.</span></li>
+                    <li style="display: flex; gap: 8px; align-items: flex-start;"><span style="color: #ef4444;">&#x24E7;</span> <span>Marked visited after recursion.</span></li>
+                    <li style="display: flex; gap: 8px; align-items: flex-start;"><span style="color: #ef4444;">&#x24E7;</span> <span>Forgot disconnected graph handling.</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid-container" style="display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-top: 15px;">
+    <div>
+        <div class="section-box">
+            <div class="section-header"><span class="num" style="background-color: #1e3a8a;">10</span> INTERVIEW THINKING <span style="color:#3b82f6;">★★★★★</span></div>
+            <div class="section-content">
+                <div class="mermaid" style="display: flex; justify-content: space-between; align-items: center;">
+                    graph LR
+                    A((?)) -- Input<br>Type? --> B{Adjacency<br>List?}
+                    B --> C{Grid?}
+                    C --> D{Node<br>Graph?}
+                    D --> E{Disconnected<br>Graph?}
+                    E --> F{Border /<br>Multi-Start?}
+                    style A fill:#fff,stroke:#64748b
+                    style B fill:#f1f5f9,stroke:#94a3b8
+                    style C fill:#f1f5f9,stroke:#94a3b8
+                    style D fill:#f1f5f9,stroke:#94a3b8
+                    style E fill:#f1f5f9,stroke:#94a3b8
+                    style F fill:#f1f5f9,stroke:#94a3b8
+                </div>
+                <div style="display: flex; justify-content: space-around; margin-top: 10px; font-weight: bold; font-size: 0.85em;">
+                    <div style="display: flex; align-items: center; gap: 5px;"><span>Choose Template</span> <span style="font-size: 1.2em;">&rarr;</span></div>
+                    <div style="display: flex; align-items: center; gap: 5px;"><span>Write Code</span> <span style="background-color: #fef08a; padding: 2px 5px; border-radius: 4px; border: 1px solid #facc15;">&lt;/&gt;</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div>
+        <div class="section-box">
+            <div class="section-header"><span class="num" style="background-color: #1e3a8a;">11</span> PAGE 5 PREVIEW <span style="color:#3b82f6;">★★★★★</span></div>
+            <div class="section-content" style="display: flex; align-items: center; gap: 10px;">
+                <div style="font-size: 2em; color: #1e3a8a;">&#x1F4D6;</div>
+                <div style="font-size: 0.85em;">
+                    <strong>real interview problems.</strong><br>
+                    For each problem, we show:
+                </div>
+                <div class="mermaid" style="transform: scale(0.7); transform-origin: left center;">
+                    graph LR
+                    A[Base<br>Template] --> B[Changed<br>Lines]
+                    B --> C((AHA<br>Moment))
+                    C --> D[Complexity]
+                    D --> E((Interview<br>Tip))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display: flex; justify-content: space-between; margin-top: 20px; font-size: 0.75em; color: #64748b; font-weight: bold; background-color: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+    <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 1.5em; border: 1px solid #cbd5e1; border-radius: 50%; padding: 0 5px;">?</span> Problem<br>(Understand) <span style="margin-left: 5px;">&rarr;</span></div>
+    <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 1.5em;">&#x1F4E4;</span> Input<br>(What given) <span style="margin-left: 5px;">&rarr;</span></div>
+    <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 1.5em; border: 1px solid #cbd5e1; border-radius: 4px; padding: 0 3px;">&#x25A6;</span> Representation<br>(How to model) <span style="margin-left: 5px;">&rarr;</span></div>
+    <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 1.5em;">&#x1F527;</span> Helper Structure<br>(Visited, dist, etc.) <span style="margin-left: 5px;">&rarr;</span></div>
+    <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 1.5em;">&#x2699;&#xFE0F;</span> Pattern<br>(DFS / BFS /<br>Union Find / etc.) <span style="margin-left: 5px;">&rarr;</span></div>
+    <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 1.5em;">&#x270E;</span> Tiny Logic Change<br>(Per Problem) <span style="margin-left: 5px;">&rarr;</span></div>
+    <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 1.5em; border: 1px solid #cbd5e1; border-radius: 50%; padding: 0 5px;">&#x25B6;</span> Dry Run<br>(Example) <span style="margin-left: 5px;">&rarr;</span></div>
+    <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 1.5em;">&#x23F1;&#xFE0F;</span> Optimize<br>(Time/Space)</div>
+</div>
+</div>

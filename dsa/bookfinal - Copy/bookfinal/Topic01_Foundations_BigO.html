@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 — Topic 01: Foundations &amp; Big-O Complexity Masterclass</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#ffffff', primaryTextColor: '#0f172a', primaryBorderColor: '#2563eb', lineColor: '#64748b', fontFamily: 'Inter' } });
+</script>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --text-dark: #0f172a;
+        --bg-page: #cbd5e1;
+        --border-color: #cbd5e1;
+    }
+    [data-theme="dark"] {
+        --text-dark: #f8fafc;
+        --bg-page: #0f172a;
+        --border-color: #334155;
+    }
+    * { box-sizing: border-box; }
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 12px;
+        line-height: 1.45;
+    }
+    .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        color: white;
+        padding: 8px 16px;
+        display: flex;
+        
+        align-items: center;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .top-nav .brand { font-weight: 900; font-size: 1rem; color: #38bdf8; }
+    .top-nav .nav-controls { display: flex; gap: 5px; flex-wrap: wrap; }
+    .nav-btn {
+        background: #1e293b;
+        color: white;
+        border: 1px solid #475569;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .nav-btn:hover { background: #2563eb; border-color: #3b82f6; }
+    .app-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-title { font-weight: 900; font-size: 0.85rem; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .toc-link { color: #334155; text-decoration: none; font-weight: 700; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; display: block; transition: all 0.2s; }
+    [data-theme="dark"] .toc-link { color: #cbd5e1; }
+    .toc-link:hover { background: #2563eb; color: white; }
+    .main-content { min-width: 0; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .page {
+        background: white;
+        border-radius: 8px;
+        padding: 22px 26px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        page-break-after: always;
+        page-break-inside: avoid;
+    }
+    [data-theme="dark"] .page { background: #1e293b; color: #f8fafc; }
+    .header-top {
+        display: flex;
+        
+        align-items: center;
+        background: #f8fafc;
+        border: 2px solid #1e3a8a;
+        border-left: 6px solid #1e3a8a;
+        padding: 8px 14px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        width: 100%;
+    }
+    [data-theme="dark"] .header-top { background: #0f172a; border-color: #38bdf8; border-left-color: #38bdf8; }
+    .header-top h1 { margin: 0; font-size: 1.2rem; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
+    [data-theme="dark"] .header-top h1 { color: #38bdf8; }
+    .header-top .page-num { background: #1e3a8a; color: white; padding: 3px 10px; border-radius: 16px; font-weight: 800; font-size: 0.75rem; }
+    .section-box { border-radius: 6px; overflow: hidden; margin-bottom: 12px; background: white; border: 2px solid #3b82f6; width: 100%; }
+    [data-theme="dark"] .section-box { background: #1e293b; }
+    .section-header { padding: 6px 10px; font-weight: 800; font-size: 0.85rem; color: white; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+    .section-content { padding: 10px 12px; font-size: 0.8rem; }
+    .box-blue { border-color: #2563eb !important; } .box-blue .section-header { background: #2563eb !important; }
+    .box-green { border-color: #22c55e !important; } .box-green .section-header { background: #22c55e !important; }
+    .box-purple { border-color: #8b5cf6 !important; } .box-purple .section-header { background: #8b5cf6 !important; }
+    .box-orange { border-color: #f97316 !important; } .box-orange .section-header { background: #f97316 !important; }
+    .box-teal { border-color: #0d9488 !important; } .box-teal .section-header { background: #0d9488 !important; }
+    .box-amber { border-color: #d97706 !important; } .box-amber .section-header { background: #d97706 !important; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.74rem; }
+    table th, table td { border: 1px solid var(--border-color); padding: 4px 6px; text-align: left; }
+    table th { background: #f1f5f9; color: #0f172a; font-weight: 800; }
+    .aha-box { background: #fefce8; border: 1px solid #eab308; border-left: 5px solid #ca8a04; color: #713f12; padding: 6px 9px; border-radius: 5px; font-size: 0.78rem; font-weight: 600; margin: 5px 0; }
+    .rule-box { padding: 5px 8px; border-radius: 5px; font-weight: 600; margin: 5px 0; font-size: 0.76rem; }
+    .rule-amber { background: #fffbeb; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; color: #92400e; }
+    .rule-green { background: #f0fdf4; border: 1px solid #22c55e; border-left: 4px solid #22c55e; color: #15803d; }
+    pre { background: #f8fafc; color: #0f172a; padding: 6px 9px; border-radius: 5px; font-family: 'Fira Code', monospace; font-size: 0.73rem; line-height: 1.36; margin: 3px 0; white-space: pre-wrap !important; word-break: break-word; border: 1px solid #cbd5e1; }
+    @page { size: A4 portrait; margin: 4mm; }
+    @media print {
+        body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .top-nav, .toc-sidebar { display: none !important; }
+        .app-layout { display: block !important; }
+        .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 4px 6px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.72; }
+    }
+
+    .app-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 15px;
+        align-items: start;
+        transition: grid-template-columns 0.3s ease;
+    }
+    .app-layout.shrunk {
+        grid-template-columns: 60px 1fr;
+    }
+    .toc-sidebar {
+        position: sticky;
+        top: 60px;
+        background: white;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    [data-theme="dark"] .toc-sidebar { background: #1e293b; border-color: #38bdf8; }
+    .toc-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+    .toc-title { font-weight: 900; font-size: 0.82rem; color: #1e3a8a; text-transform: uppercase; margin: 0; }
+    [data-theme="dark"] .toc-title { color: #38bdf8; }
+    .shrink-btn {
+        background: #e0e7ff;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .shrink-btn:hover { background: #2563eb; color: white; }
+    .app-layout.shrunk .toc-title, .app-layout.shrunk .toc-text { display: none; }
+    .app-layout.shrunk .toc-sidebar { padding: 6px; text-align: center; }
+
+</style>
+</head>
+<body>
+
+<div class="top-nav">
+    <div class="brand">⚡ FAANG DSA HANDBOOK — TOPIC 01: FOUNDATIONS &amp; BIG-O</div>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn" style="background:#059669; border-color:#10b981; font-weight:800;">🏠 Index</a>
+        <button class="nav-btn" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="nav-btn" onclick="toggleSidebar()">↕️ Expand/Shrink TOC</button>
+        <a href="#page1" class="nav-btn">P1</a>
+        <a href="#page2" class="nav-btn">P2</a>
+        <a href="#page3" class="nav-btn">P3</a>
+        <a href="#page4" class="nav-btn">P4</a>
+        <a href="#page5" class="nav-btn">P5</a>
+        <a href="#page6" class="nav-btn">P6</a>
+        <button class="nav-btn" onclick="window.print()" style="background: #2563eb;">🖨️ PDF</button>
+    </div>
+</div>
+
+<div class="container">
+<div class="app-layout" id="appLayout">
+
+    <div class="toc-sidebar">
+        <div class="toc-header-bar"><span class="toc-title">📋 SECTIONS</span><button class="shrink-btn" onclick="toggleSidebar()"><span class="toc-text">➖ Shrink</span></button></div>
+        <ul class="toc-list">
+            <li><a href="#page1" class="toc-link">01.1 Big-O Fundamentals</a></li>
+            <li><a href="#page2" class="toc-link">01.2 Growth Rates Matrix</a></li>
+            <li><a href="#page3" class="toc-link">01.3 Code Analysis Rules</a></li>
+            <li><a href="#page4" class="toc-link">01.4 Space Complexity &amp; Stack</a></li>
+            <li><a href="#page5" class="toc-link">01.5 Constraint ➔ Complexity</a></li>
+            <li><a href="#page6" class="toc-link">01.6 Revision &amp; Master Summary</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+
+    <!-- PAGE 1: BIG-O FUNDAMENTALS -->
+    <div class="page" id="page1">
+        <div class="header-top">
+            <h1>TOPIC 01.1: BIG-O ASYMPTOTIC NOTATION &amp; DEFINITIONS</h1>
+            <span class="page-num">PAGE 1 OF 6</span>
+        </div>
+
+            <div class="section-box box-teal" style="margin-top:8px">
+                <div class="section-header">🧰 REUSABLE COMPLEXITY &amp; MATH UTILITIES</div>
+                <div class="section-content">
+                    <p style="font-weight:700;margin:0 0 4px">Common Asymptotic Computation Helpers:</p>
+<pre>
+// 1. Log2 Computation: log2(N) = log(N) / log(2)
+int log2(int n) { return (int)(Math.log(n) / Math.log(2)); }
+
+// 2. Power of 2 Check: n & (n - 1) == 0 (for n > 0)
+boolean isPowerOfTwo(int n) { return n > 0 && (n & (n - 1)) == 0; }
+
+// 3. Fast Bitwise Shift for 2^N: (1 << N)
+long powerOfTwo(int n) { return 1L << n; }</pre>
+                </div>
+            </div>
+
+        <div class="aha-box">
+            💡 <strong>AHA MOMENT #1: BIG-O IS WORST-CASE UPPER BOUND ON GROWTH</strong><br/>
+            Big-O $O(f(N))$ measures how execution time or memory space grows as the input size $N$ approaches infinity. It ignores hardware speed, compiler optimizations, and constant factors to isolate algorithmic efficiency!
+        </div>
+
+        <div class="grid-3">
+            <div class="section-box box-blue">
+                <div class="section-header">1. BIG-O (O)</div>
+                <div class="section-content">
+                    <p style="font-weight:700;margin:0 0 4px">Worst-Case Upper Bound</p>
+                    <div>Guarantees algorithm will take NO MORE THAN $f(N)$ time.</div>
+                    <div style="font-size:0.72rem;color:#2563eb;margin-top:4px">Used 99% of time in FAANG interviews.</div>
+                </div>
+            </div>
+            <div class="section-box box-green">
+                <div class="section-header">2. BIG-OMEGA (Ω)</div>
+                <div class="section-content">
+                    <p style="font-weight:700;margin:0 0 4px">Best-Case Lower Bound</p>
+                    <div>Guarantees algorithm will take AT LEAST $f(N)$ time.</div>
+                    <div style="font-size:0.72rem;color:#15803d;margin-top:4px">E.g., Linear scan best case is $\Omega(1)$.</div>
+                </div>
+            </div>
+            <div class="section-box box-purple">
+                <div class="section-header">3. BIG-THETA (Θ)</div>
+                <div class="section-content">
+                    <p style="font-weight:700;margin:0 0 4px">Tight Bound</p>
+                    <div>Algorithm is BOTH $O(f(N))$ AND $\Omega(f(N))$. Exact growth rate.</div>
+                    <div style="font-size:0.72rem;color:#6d28d9;margin-top:4px">MergeSort is $\Theta(N \log N)$ in all cases.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-box box-orange">
+            <div class="section-header">📐 THE 3 SIMPLIFICATION RULES</div>
+            <div class="section-content">
+                <p><strong>Rule 1: Drop Constants</strong> — $O(2N) \rightarrow O(N)$. Two sequential loops over $N$ is still linear $O(N)$.</p>
+                <p><strong>Rule 2: Drop Non-Dominant Terms</strong> — $O(N^2 + N + 100) \rightarrow O(N^2)$. As $N \rightarrow \infty$, $N^2$ completely dominates $N$.</p>
+                <p><strong>Rule 3: Additive vs Multiplicative</strong> — Sequential steps add ($O(A + B)$), nested loops multiply ($O(A \times B)$).</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 2: GROWTH RATES MATRIX -->
+    <div class="page" id="page2">
+        <div class="header-top">
+            <h1>TOPIC 01.2: GROWTH RATE MATRIX &amp; VISUAL SCALING</h1>
+            <span class="page-num">PAGE 2 OF 6</span>
+        </div>
+
+        <div class="section-box box-teal">
+            <div class="section-header">📊 ASYMPTOTIC GROWTH RATE RANKING MATRIX</div>
+            <div class="section-content">
+                <table>
+                    <thead>
+                        <tr><th>Notation</th><th>Name</th><th>N = 10</th><th>N = 1,000</th><th>Max N For 1 Sec</th><th>Example Algorithms</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background:#f0fdf4"><td>$O(1)$</td><td>Constant</td><td>1</td><td>1</td><td>$10^9+$</td><td>Array index lookup, HashMap get avg, Stack push</td></tr>
+                        <tr style="background:#f0fdf4"><td>$O(\log N)$</td><td>Logarithmic</td><td>3</td><td>10</td><td>$10^{18}$</td><td>Binary search, Balanced BST lookup, Euclidean GCD</td></tr>
+                        <tr style="background:#f0fdf4"><td>$O(N)$</td><td>Linear</td><td>10</td><td>1,000</td><td>$10^7$</td><td>Single loop scan, Two Pointers, Sliding Window</td></tr>
+                        <tr style="background:#fef9c3"><td>$O(N \log N)$</td><td>Linearithmic</td><td>33</td><td>10,000</td><td>$10^6$</td><td>MergeSort, QuickSort avg, HeapSort, PriorityQueue scan</td></tr>
+                        <tr style="background:#fff7ed"><td>$O(N^2)$</td><td>Quadratic</td><td>100</td><td>$10^6$</td><td>$10,000$</td><td>Nested loops, Bubble Sort, 2D Grid DP</td></tr>
+                        <tr style="background:#fef2f2"><td>$O(2^N)$</td><td>Exponential</td><td>1,024</td><td>$10^{301}$ (Fails)</td><td>$20 - 25$</td><td>Backtracking subsets, Fibonacci naive recursion</td></tr>
+                        <tr style="background:#fef2f2"><td>$O(N!)$</td><td>Factorial</td><td>$3.6 \times 10^6$</td><td>$\infty$ (Fails)</td><td>$10 - 12$</td><td>Permutations generation, Travelling Salesperson</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="aha-box">💡 <strong>FAANG BENCHMARK:</strong> Modern CPUs execute roughly $10^8$ operations per second. Keep total operations under $10^8$ to pass online judge time limits!</div>
+    </div>
+
+    <!-- PAGE 3: CODE ANALYSIS RULES -->
+    <div class="page" id="page3">
+        <div class="header-top">
+            <h1>TOPIC 01.3: CODE ANALYSIS RULES &amp; EXAMPLES</h1>
+            <span class="page-num">PAGE 3 OF 6</span>
+        </div>
+
+        <div class="grid-2">
+            <div class="section-box box-blue">
+                <div class="section-header">EXAMPLE 1: NESTED VS INDEPENDENT LOOPS</div>
+                <div class="section-content">
+<pre>
+// Independent Loops: O(A + B)
+for (int a : arrayA) { ... } // O(A)
+for (int b : arrayB) { ... } // O(B)
+
+// Nested Loops: O(A * B)
+for (int a : arrayA) {
+    for (int b : arrayB) { ... } // O(A * B)
+}</pre>
+                </div>
+            </div>
+
+            <div class="section-box box-purple">
+                <div class="section-header">EXAMPLE 2: LOGARITHMIC LOOP</div>
+                <div class="section-content">
+<pre>
+// Loop variable doubles each iteration
+for (int i = 1; i &lt; n; i *= 2) {
+    // Executes log2(N) times -> O(log N)
+}
+
+// Loop variable halved each iteration
+while (n &gt; 0) { n /= 2; } // O(log N)</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-box box-orange">
+            <div class="section-header">EXAMPLE 3: AMORTIZED ANALYSIS (ArrayList Growth)</div>
+            <div class="section-content">
+                <p>When an `ArrayList` reaches capacity, it doubles its array size ($O(N)$ copy). However, doubling happens only at powers of 2 ($1, 2, 4, 8, 16, \dots$).</p>
+                <p>Total cost for $N$ inserts: $N + 1 + 2 + 4 + \dots + N = N + 2N = 3N \rightarrow O(3N)$.</p>
+                <p>Dividing by $N$ items: $\frac{3N}{N} = 3 \rightarrow$ <strong>$O(1)$ Amortized Time per insert!</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 4: SPACE COMPLEXITY -->
+    <div class="page" id="page4">
+        <div class="header-top">
+            <h1>TOPIC 01.4: SPACE COMPLEXITY &amp; CALL STACK MEMORY</h1>
+            <span class="page-num">PAGE 4 OF 6</span>
+        </div>
+
+        <div class="grid-2">
+            <div class="section-box box-blue">
+                <div class="section-header">AUXILIARY SPACE VS TOTAL SPACE</div>
+                <div class="section-content">
+                    <p>• <strong>Total Space:</strong> Memory used by input + auxiliary memory.</p>
+                    <p>• <strong>Auxiliary Space:</strong> Extra memory allocated by algorithm (excluding input data).</p>
+                    <div class="rule-box rule-amber">FAANG interviewers care about Auxiliary Space. If input is `int[] arr` of size N, auxiliary space is $O(1)$ unless you allocate a new data structure.</div>
+                </div>
+            </div>
+
+            <div class="section-box box-purple">
+                <div class="section-header">RECURSIVE CALL STACK MEMORY</div>
+                <div class="section-content">
+                    <p>Every recursive call pushes a frame onto the JVM Call Stack (local variables + return address).</p>
+                    <p>Stack depth = max simultaneous active recursive calls.</p>
+                    <div class="rule-box rule-purple">Tree DFS call stack space = $O(H)$ where $H$ is tree height (worst case $O(N)$ for skewed tree, $O(\log N)$ for balanced tree).</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-box box-green">
+            <div class="section-header">CALL STACK TRACE DEMO: RECURSIVE FACTORIAL</div>
+            <div class="section-content">
+<pre>
+int fact(int n) {
+    if (n &lt;= 1) return 1;
+    return n * fact(n - 1);
+}
+// fact(4) -> fact(3) -> fact(2) -> fact(1)
+// Max stack depth = 4 -> Auxiliary Space O(N)</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 5: CONSTRAINT TO COMPLEXITY MAPPING -->
+    <div class="page" id="page5">
+        <div class="header-top">
+            <h1>TOPIC 01.5: CONSTRAINT ➔ COMPLEXITY MAPPING SYSTEM</h1>
+            <span class="page-num">PAGE 5 OF 6</span>
+        </div>
+
+        <div class="section-box box-amber">
+            <div class="section-header">⚡ N CONSTRAINT TO EXPECTED TIME COMPLEXITY</div>
+            <div class="section-content">
+                <table>
+                    <thead>
+                        <tr><th>N Range in Problem</th><th>Expected Complexity</th><th>Likely Pattern</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>$N \le 10 - 12$</td><td>$O(N!)$</td><td>Permutations, TSP backtracking</td></tr>
+                        <tr><td>$N \le 20 - 25$</td><td>$O(2^N)$</td><td>Subsets, Bitmask DP, Combination Sum</td></tr>
+                        <tr><td>$N \le 100$</td><td>$O(N^4)$ or $O(N^3)$</td><td>Floyd-Warshall, 3D DP, 4-sum</td></tr>
+                        <tr><td>$N \le 1,000$</td><td>$O(N^2)$</td><td>2D DP, Nested loops, All pairs check</td></tr>
+                        <tr><td>$N \le 100,000$ ($10^5$)</td><td>$O(N \log N)$ or $O(N)$</td><td>Sorting, Heap, Two Pointers, Sliding Window, Prefix Sum</td></tr>
+                        <tr><td>$N \le 1,000,000$ ($10^6$)</td><td>$O(N)$ or $O(N \log N)$</td><td>Single pass array scan, HashMap, Fast I/O</td></tr>
+                        <tr><td>$N \ge 10^9$</td><td>$O(\log N)$ or $O(1)$</td><td>Binary Search on Answer, Math formula, Bitwise</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="aha-box">💡 <strong>FAANG TRICK:</strong> Look at the constraints FIRST! If $N = 10^5$, immediately reject $O(N^2)$ brute force ideas and think Sorting / Two Pointers / HashMap / Sliding Window!</div>
+    </div>
+
+    <!-- PAGE 6: REVISION SUMMARY & INTERVIEW TRAPS -->
+    <div class="page" id="page6">
+        <div class="header-top">
+            <h1>TOPIC 01.6: REVISION &amp; MASTER COMPLEXITY SUMMARY</h1>
+            <span class="page-num">PAGE 6 OF 6</span>
+        </div>
+
+        <div class="grid-2">
+            <div class="section-box box-green">
+                <div class="section-header"><span class="num">1</span> REVISION CHECKLIST</div>
+                <div class="section-content">
+                    <p>✅ Know the growth order: $O(1) < O(\log N) < O(N) < O(N \log N) < O(N^2) < O(2^N) < O(N!)$</p>
+                    <p>✅ Drop constants and non-dominant terms during analysis</p>
+                    <p>✅ Always analyze BOTH Time Complexity and Auxiliary Space Complexity</p>
+                    <p>✅ Factor in recursive stack depth for space complexity</p>
+                    <p>✅ Match $N$ constraint to target time complexity in the first 30 seconds of an interview</p>
+                </div>
+            </div>
+
+            <div class="section-box box-red">
+                <div class="section-header"><span class="num">2</span> ⚠️ COMMON BIG-O INTERVIEW TRAPS</div>
+                <div class="section-content">
+                    <p>❌ <strong>Confusing String Concatenation:</strong> `s += char` in a loop over length $N$ takes $O(N^2)$ total time because strings are immutable in Java! Use `StringBuilder` for $O(N)$.</p>
+                    <p>❌ <strong>Ignoring String Comparison:</strong> `stringA.equals(stringB)` is $O(L)$ where $L$ is string length, not $O(1)$!</p>
+                    <p>❌ <strong>Assuming HashMap `get()` is Always $O(1)$:</strong> Hash collision worst-case is $O(\log N)$ in Java 8+ (Treeified) or $O(N)$ in Java 7.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-box box-indigo">
+            <div class="section-header"><span class="num">3</span> 🗣️ HOW TO COMMUNICATE BIG-O TO THE INTERVIEWER</div>
+            <div class="section-content">
+                <p><strong>Script 1 (Time Complexity):</strong> <em>"The time complexity is $O(N \log N)$ because we first sort the array of $N$ elements using Dual-Pivot QuickSort, and then perform a single linear scan of $O(N)$."</em></p>
+                <p><strong>Script 2 (Space Complexity):</strong> <em>"The auxiliary space complexity is $O(K)$ because our Min-Heap holds at most $K$ elements at any time. We do not count the input array."</em></p>
+            </div>
+        </div>
+
+        <div class="rule-box rule-green" style="margin-top:6px">🚀 Next Step: Move to <strong>Topic 02: Arrays, Strings &amp; Hashing Masterclass</strong>.</div>
+    </div>
+
+    </div>
+</div>
+</div>
+
+
+<script>
+    function toggleTheme() {
+        document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
+    }
+    function toggleSidebar() {
+        const layout = document.getElementById('appLayout') || document.querySelector('.app-layout');
+        const btn = document.querySelector('.shrink-btn span');
+        if (layout) {
+            layout.classList.toggle('shrunk');
+            if (btn) {
+                btn.innerText = layout.classList.contains('shrunk') ? '➕ Expand' : '➖ Shrink';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>

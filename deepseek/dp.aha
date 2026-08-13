@@ -1,0 +1,129 @@
+Yes bro — this is **Edit Distance**, and your choices are almost there, but you have **Insert/Delete swapped in terms of which word index moves**.
+
+Assume:
+
+```text
+Solve(i, j)
+```
+
+means:
+
+> Convert `word1[i...]` → `word2[j...]`
+
+Now look at the current characters:
+
+```text
+word1[i]     word2[j]
+   ↓             ↓
+   A             B
+```
+
+If they are different, 3 choices.
+
+### 1️⃣ INSERT
+
+We need to insert `word2[j]` into `word1`.
+
+So we have now matched `word2[j]`, but **we haven't consumed `word1[i]`**.
+
+Therefore:
+
+```text
+INSERT
+cost 1
+↓
+Solve(i, j+1)
+```
+
+```text
+word1: A B C
+       ↑
+word2: X B C
+       ↑
+```
+
+Insert `X` before `A`:
+
+```text
+word1: X A B C
+          ↑
+```
+
+We move in **word2**:
+
+```text
+(i, j+1)
+```
+
+---
+
+### 2️⃣ DELETE
+
+Delete `word1[i]`.
+
+So we consume `word1[i]`, but `word2[j]` is still waiting.
+
+```text
+DELETE
+cost 1
+↓
+Solve(i+1, j)
+```
+
+---
+
+### 3️⃣ REPLACE
+
+Replace `word1[i]` with `word2[j]`.
+
+Both characters are now handled:
+
+```text
+REPLACE
+cost 1
+↓
+Solve(i+1, j+1)
+```
+
+---
+
+## 🧠 So memorize this
+
+```text
+Different characters:
+
+INSERT
+    ↓
+(i, j+1)
+
+DELETE
+    ↓
+(i+1, j)
+
+REPLACE
+    ↓
+(i+1, j+1)
+```
+
+Your version:
+
+```text
+insert  → (i+1,j+1) ❌
+delete  → (i+1,j)   ✅
+replace → (i,j+1)   ❌
+```
+
+The key is:
+
+> **Ask: which character did I consume?**
+
+```text
+INSERT  → consume word2 → j+1
+DELETE  → consume word1 → i+1
+REPLACE → consume both   → i+1,j+1
+```
+
+That's the AHA. 🔥
+
+
+DP AHA..

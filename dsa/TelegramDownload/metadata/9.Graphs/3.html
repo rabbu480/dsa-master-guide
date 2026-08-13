@@ -1,0 +1,207 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1>GRAPH PATTERN GUIDE</h1>
+            <div class="subtitle">PAGE 2 - GRAPH INPUT TYPES & CONSTRUCTION GUIDE<br><small style="color:#64748b;font-weight:normal;">"Every graph interview begins by converting the input into the right representation."</small></div>
+        </div>
+        <div style="text-align: right;">
+            <div class="page-number">PAGE 2</div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 20px;">
+        <div style="flex: 1;">
+            <div class="section-box">
+                <div class="section-header"><span class="num">1</span> PLAIN ENGLISH</div>
+                <div class="section-content">
+                    <ul>
+                        <li>Interviewers rarely give you a graph directly.</li>
+                        <li>Instead they give edges, grids, matrices or node objects.</li>
+                        <li>Your first job is to identify the input and convert it into the correct graph representation.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="flex: 3;">
+            <div class="section-box">
+                <div class="section-header"><span class="num">2</span> INPUT TYPES (What Interviewers Give You)</div>
+                <div class="section-content">
+                    <div style="display: flex; gap: 10px; text-align: center;">
+                        <div style="flex: 1; border: 1px solid #ddd; padding: 10px;">
+                            <strong style="color: #22c55e;">1 EDGE LIST</strong><br>
+                            <small>Example Input</small><br>
+                            <code>[[0,1],[1,2],[2,3]]</code>
+                            <div class="mermaid">
+                            graph LR
+                                0((0)) --- 1((1))
+                                1 --- 2((2))
+                                2 --- 3((3))
+                            </div>
+                        </div>
+                        <div style="flex: 1; border: 1px solid #ddd; padding: 10px;">
+                            <strong style="color: #3b82f6;">2 WEIGHTED EDGE LIST</strong><br>
+                            <small>Example Input</small><br>
+                            <code>[[2,1,1], [2,3,1], [3,4,1]]</code>
+                            <div class="mermaid">
+                            graph TD
+                                2((2)) -->|1| 1((1))
+                                2 -->|1| 3((3))
+                                3 -->|1| 4((4))
+                            </div>
+                        </div>
+                        <div style="flex: 1; border: 1px solid #ddd; padding: 10px;">
+                            <strong style="color: #a855f7;">3 GRID</strong><br>
+                            <small>Example Input</small><br>
+                            <code>
+                            1 1 0 1 0<br>
+                            1 1 1 0 0
+                            </code>
+                        </div>
+                        <div style="flex: 1; border: 1px solid #ddd; padding: 10px;">
+                            <strong style="color: #f97316;">4 ADJACENCY MATRIX</strong><br>
+                            <small>Example Input</small><br>
+                            <code>
+                            0 1 0<br>
+                            1 0 1<br>
+                            0 1 0
+                            </code>
+                            <div class="mermaid">
+                            graph TD
+                                1((1)) --- 0((0))
+                                1 --- 2((2))
+                            </div>
+                        </div>
+                        <div style="flex: 1; border: 1px solid #ddd; padding: 10px;">
+                            <strong style="color: #ef4444;">5 NODE GRAPH (OBJECTS)</strong><br>
+                            <small>Example Input</small><br>
+                            <div class="mermaid">
+                            graph TD
+                                1((1)) --- 2((2))
+                                2 --- 3((3))
+                                2 --- 4((4))
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 20px; margin-top: 20px;">
+        <div style="flex: 1;">
+            <div class="section-box">
+                <div class="section-header"><span class="num">3</span> BRAIN SWITCH</div>
+                <div class="section-content">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 5px;">Edge List</td>
+                            <td style="border: 1px solid #ddd; padding: 5px;">&rarr; Build AdjList</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 5px;">Weighted Edge List</td>
+                            <td style="border: 1px solid #ddd; padding: 5px;">&rarr; Build Weighted AdjList</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 5px;">Grid</td>
+                            <td style="border: 1px solid #ddd; padding: 5px;">&rarr; Treat Cell as Node</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 5px;">Adjacency Matrix</td>
+                            <td style="border: 1px solid #ddd; padding: 5px;">&rarr; Convert or Traverse Directly</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 5px;">Node Graph</td>
+                            <td style="border: 1px solid #ddd; padding: 5px;">&rarr; Use Existing Neighbors</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div style="flex: 3;">
+            <div class="section-box">
+                <div class="section-header"><span class="num">4</span> GRAPH CONSTRUCTION GUIDE</div>
+                <div class="section-content">
+                    <table style="width: 100%; border-collapse: collapse; text-align: center;">
+                        <tr style="background: #f1f5f9;">
+                            <th style="border: 1px solid #ddd; padding: 5px;">Input (Interview Gives)</th>
+                            <th style="border: 1px solid #ddd; padding: 5px;">How to Build</th>
+                            <th style="border: 1px solid #ddd; padding: 5px;">Output (Your Representation)</th>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 5px; color: #22c55e;">Edge List<br><code>[[u,v], ...]</code></td>
+                            <td style="border: 1px solid #ddd; padding: 5px;">Build Adjacency List (Undirected / Directed)</td>
+                            <td style="border: 1px solid #ddd; padding: 5px;"><code>List&lt;List&lt;Integer&gt;&gt;</code></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 5px; color: #3b82f6;">Weighted Edge List<br><code>[[u,v,w], ...]</code></td>
+                            <td style="border: 1px solid #ddd; padding: 5px;">Build Weighted Adjacency List</td>
+                            <td style="border: 1px solid #ddd; padding: 5px;"><code>List&lt;List&lt;int[]&gt;&gt;</code></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 5px; color: #a855f7;">Grid<br><code>matrix[m][n]</code></td>
+                            <td style="border: 1px solid #ddd; padding: 5px;">Use directions (dirs[]) Treat valid cell as node</td>
+                            <td style="border: 1px solid #ddd; padding: 5px;">Implicit Graph</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 5px; color: #f97316;">Adjacency Matrix<br><code>matrix[n][n]</code></td>
+                            <td style="border: 1px solid #ddd; padding: 5px;">Use matrix directly or convert to AdjList</td>
+                            <td style="border: 1px solid #ddd; padding: 5px;"><code>int[][]</code> matrix</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 5px; color: #ef4444;">Node Graph<br><code>Node object</code></td>
+                            <td style="border: 1px solid #ddd; padding: 5px;">Use existing neighbors directly</td>
+                            <td style="border: 1px solid #ddd; padding: 5px;">Node (given)</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-box" style="margin-top: 20px;">
+        <div class="section-header"><span class="num">5</span> VISUAL CONVERSION EXAMPLES</div>
+        <div class="section-content">
+            <div style="display: flex; gap: 10px; text-align: center;">
+                <div style="flex: 1; border: 1px solid #ddd; padding: 10px;">
+                    <strong>1. Edge List &rarr; Adjacency List</strong>
+                    <div class="mermaid">
+                    graph LR
+                        0((0)) --- 1((1))
+                        1 --- 2((2))
+                        2 --- 3((3))
+                    </div>
+                </div>
+                <div style="flex: 1; border: 1px solid #ddd; padding: 10px;">
+                    <strong>2. Weighted Edge &rarr; Weighted AdjList</strong>
+                    <div class="mermaid">
+                    graph TD
+                        0((0)) -->|4| 1((1))
+                        0 -->|2| 2((2))
+                        2 -->|5| 1
+                    </div>
+                </div>
+                <div style="flex: 1; border: 1px solid #ddd; padding: 10px;">
+                    <strong>3. Grid &rarr; Implicit Graph</strong>
+                    <div>Implicit Graph (4-Directions)</div>
+                </div>
+                <div style="flex: 1; border: 1px solid #ddd; padding: 10px;">
+                    <strong>4. Matrix &rarr; Graph</strong>
+                    <div class="mermaid">
+                    graph TD
+                        1((1)) --- 0((0))
+                        1 --- 2((2))
+                    </div>
+                </div>
+                <div style="flex: 1; border: 1px solid #ddd; padding: 10px;">
+                    <strong>5. Node Objects &rarr; Graph</strong>
+                    <div class="mermaid">
+                    graph TD
+                        1((1)) --- 2((2))
+                        2 --- 3((3))
+                        2 --- 4((4))
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

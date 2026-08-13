@@ -1,0 +1,533 @@
+<div class="page">
+    <div class="header-top" style="background-color: #1a365d; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; margin-bottom: 20px;">
+        <div style="display: flex; align-items: baseline;">
+            <h1 style="margin: 0; font-size: 24px; text-transform: uppercase;">⭐ ARRAYS & HASHING - CHEAT SHEET <span style="color: #fbbf24;">(VOLUME 1)</span></h1>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 2fr 3fr; gap: 15px; margin-bottom: 15px;">
+        <!-- 1. INTERVIEW FLOW -->
+        <div class="section-box" style="border: 2px solid #2563eb; border-radius: 8px;">
+            <div class="section-header" style="background-color: #2563eb; color: white; padding: 8px; font-weight: bold; text-align: center;">1. INTERVIEW FLOW</div>
+            <div class="section-content" style="padding: 10px; font-size: 12px;">
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <div style="width: 24px; height: 24px; background: #e0f2fe; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 8px; font-weight: bold;">?</div>
+                    <div><strong>1 Clarify</strong><br><span style="color: #64748b; font-size: 11px;">Constraints, edge cases, input range, duplicates?</span></div>
+                </div>
+                <div style="text-align: center; color: #94a3b8; font-size: 10px; margin: 2px 0;">↓</div>
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <div style="width: 24px; height: 24px; background: #e0f2fe; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 8px; font-weight: bold;">2</div>
+                    <div><strong>2 Brute Force</strong><br><span style="color: #64748b; font-size: 11px;">Write simple solution</span></div>
+                </div>
+                <div style="text-align: center; color: #94a3b8; font-size: 10px; margin: 2px 0;">↓</div>
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <div style="width: 24px; height: 24px; background: #e0f2fe; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 8px; font-weight: bold;">3</div>
+                    <div><strong>3 Better</strong><br><span style="color: #64748b; font-size: 11px;">Optimize Time</span></div>
+                </div>
+                <div style="text-align: center; color: #94a3b8; font-size: 10px; margin: 2px 0;">↓</div>
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <div style="width: 24px; height: 24px; background: #fee2e2; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 8px; font-weight: bold; color: #ef4444;">4</div>
+                    <div><strong>4 Optimal</strong><br><span style="color: #64748b; font-size: 11px;">Best approach</span></div>
+                </div>
+                <div style="text-align: center; color: #94a3b8; font-size: 10px; margin: 2px 0;">↓</div>
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <div style="width: 24px; height: 24px; background: #e0f2fe; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 8px; font-weight: bold;">5</div>
+                    <div><strong>5 Complexity</strong><br><span style="color: #64748b; font-size: 11px;">Time & Space</span></div>
+                </div>
+                <div style="text-align: center; color: #94a3b8; font-size: 10px; margin: 2px 0;">↓</div>
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <div style="width: 24px; height: 24px; background: #dcfce7; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 8px; font-weight: bold; color: #22c55e;">6</div>
+                    <div><strong>6 Code</strong><br><span style="color: #64748b; font-size: 11px;">Clean & bug free</span></div>
+                </div>
+                <div style="text-align: center; color: #94a3b8; font-size: 10px; margin: 2px 0;">↓</div>
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 24px; height: 24px; background: #e0f2fe; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 8px; font-weight: bold;">7</div>
+                    <div><strong>7 Explain</strong><br><span style="color: #64748b; font-size: 11px;">Walk through</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. PATTERN RECOGNITION -->
+        <div class="section-box" style="border: 2px solid #22c55e; border-radius: 8px;">
+            <div class="section-header" style="background-color: #22c55e; color: white; padding: 8px; font-weight: bold; text-align: center;">2. PATTERN RECOGNITION</div>
+            <div class="section-content" style="padding: 10px; font-size: 13px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; color: #3b82f6;">🛡️</td>
+                        <td style="padding: 8px 0;">Need uniqueness?</td>
+                        <td style="padding: 8px 0; font-weight: bold;">HashSet</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; color: #3b82f6;">📊</td>
+                        <td style="padding: 8px 0;">Need frequency count?</td>
+                        <td style="padding: 8px 0; font-weight: bold;">HashMap</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; color: #22c55e; font-weight: bold;">abc</td>
+                        <td style="padding: 8px 0;">Small fixed alphabet (a-z)?</td>
+                        <td style="padding: 8px 0; font-weight: bold;">int[26]</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; color: #f59e0b;">👥</td>
+                        <td style="padding: 8px 0;">Need grouping?</td>
+                        <td style="padding: 8px 0; font-weight: bold;">HashMap&lt;Key, List&gt;</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; color: #8b5cf6;">🏆</td>
+                        <td style="padding: 8px 0;">Need Top K frequent?</td>
+                        <td style="padding: 8px 0; font-weight: bold;">HashMap + Heap</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; color: #3b82f6; font-weight: bold;">&lt;/&gt;</td>
+                        <td style="padding: 8px 0;">Need Left & Right products?</td>
+                        <td style="padding: 8px 0; font-weight: bold;">Prefix / Suffix</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; color: #3b82f6;">🔵</td>
+                        <td style="padding: 8px 0;">Need sequence (consecutive)?</td>
+                        <td style="padding: 8px 0; font-weight: bold;">HashSet</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; color: #3b82f6;">#️⃣</td>
+                        <td style="padding: 8px 0;">Need matrix validation?</td>
+                        <td style="padding: 8px 0; font-weight: bold;">HashSet</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- 3. PROBLEMS COVERED -->
+        <div class="section-box" style="border: 2px solid #8b5cf6; border-radius: 8px;">
+            <div class="section-header" style="background-color: #8b5cf6; color: white; padding: 8px; font-weight: bold; text-align: center;">3. PROBLEMS COVERED</div>
+            <div class="section-content" style="padding: 0;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
+                    <tr style="background-color: #f3f4f6; border-bottom: 1px solid #e2e8f0;">
+                        <th style="padding: 8px; font-weight: bold; color: #64748b;">LC</th>
+                        <th style="padding: 8px; font-weight: bold; color: #64748b;">Problem</th>
+                        <th style="padding: 8px; font-weight: bold; color: #64748b;">Pattern</th>
+                        <th style="padding: 8px; font-weight: bold; color: #64748b;">One-line Memory Trick</th>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px; color: #0ea5e9; font-weight: bold;">217</td>
+                        <td style="padding: 8px; font-weight: bold;">Contains Duplicate</td>
+                        <td style="padding: 8px;">HashSet</td>
+                        <td style="padding: 8px;">Duplicate => !set.add()</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px; color: #22c55e; font-weight: bold;">242</td>
+                        <td style="padding: 8px; font-weight: bold;">Valid Anagram</td>
+                        <td style="padding: 8px;">Freq Array</td>
+                        <td style="padding: 8px;">Increment one, decrement other</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px; color: #22c55e; font-weight: bold;">1</td>
+                        <td style="padding: 8px; font-weight: bold;">Two Sum</td>
+                        <td style="padding: 8px;">HashMap</td>
+                        <td style="padding: 8px;">Target - current</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px; color: #f43f5e; font-weight: bold;">49</td>
+                        <td style="padding: 8px; font-weight: bold;">Group Anagrams</td>
+                        <td style="padding: 8px;">HashMap + Freq</td>
+                        <td style="padding: 8px;">26-count key</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px; color: #f59e0b; font-weight: bold;">347</td>
+                        <td style="padding: 8px; font-weight: bold;">Top K Frequent</td>
+                        <td style="padding: 8px;">HashMap + Heap</td>
+                        <td style="padding: 8px;">Frequency → Min Heap</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px; color: #f59e0b; font-weight: bold;">271</td>
+                        <td style="padding: 8px; font-weight: bold;">Encode & Decode Strings</td>
+                        <td style="padding: 8px;">String Encoding</td>
+                        <td style="padding: 8px; font-weight: bold;">length#string</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px; color: #0ea5e9; font-weight: bold;">238</td>
+                        <td style="padding: 8px; font-weight: bold;">Product Except Self</td>
+                        <td style="padding: 8px;">Prefix / Suffix</td>
+                        <td style="padding: 8px;">Left × Right</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px; color: #22c55e; font-weight: bold;">128</td>
+                        <td style="padding: 8px; font-weight: bold;">Longest Consecutive Seq.</td>
+                        <td style="padding: 8px;">HashSet</td>
+                        <td style="padding: 8px;">Start only if num-1 absent</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; color: #22c55e; font-weight: bold;">36</td>
+                        <td style="padding: 8px; font-weight: bold;">Valid Sudoku</td>
+                        <td style="padding: 8px;">HashSet</td>
+                        <td style="padding: 8px;">Rows, Columns, Boxes</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+        <!-- 4. BIGGEST AHA MOMENTS -->
+        <div class="section-box" style="border: 2px solid #ef4444; border-radius: 8px; grid-column: span 1;">
+            <div class="section-header" style="background-color: #ef4444; color: white; padding: 8px; font-weight: bold; text-align: center;">4. BIGGEST AHA MOMENTS</div>
+            <div class="section-content" style="padding: 10px; font-size: 11px;">
+                <div style="background-color: #fee2e2; padding: 2px 5px; color: #ef4444; font-weight: bold; border-radius: 4px; display: inline-block; margin-bottom: 4px;">Group Anagrams</div>
+                <div style="font-family: monospace; font-weight: bold; margin-bottom: 2px;">key.append(freq).append("#")</div>
+                <div style="color: #64748b; margin-bottom: 10px;"># avoids ambiguity</div>
+
+                <div style="background-color: #fee2e2; padding: 2px 5px; color: #ef4444; font-weight: bold; border-radius: 4px; display: inline-block; margin-bottom: 4px;">Top K Frequent</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+                    <span style="font-weight: bold;">HashMap</span>
+                    <span>→</span>
+                    <span style="font-weight: bold;">PriorityQueue (min heap)</span>
+                </div>
+                <div style="color: #64748b; margin-bottom: 10px;">Keep only K elements</div>
+
+                <div style="background-color: #fee2e2; padding: 2px 5px; color: #ef4444; font-weight: bold; border-radius: 4px; display: inline-block; margin-bottom: 4px;">Product Except Self</div>
+                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 2px; font-weight: bold;">
+                    <span>Brute Force</span> <span>→</span> <span>Left[]</span> <span>→</span> <span>Right[]</span> <span>→</span> <span>Left × Right</span>
+                </div>
+                <div style="margin-bottom: 10px; font-weight: bold;">Result[] = rightProduct</div>
+
+                <div style="background-color: #fee2e2; padding: 2px 5px; color: #ef4444; font-weight: bold; border-radius: 4px; display: inline-block; margin-bottom: 4px;">Longest Consecutive</div>
+                <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 4px; font-size: 10px;">
+                    <span>Sorting?</span> <span>→</span> <span style="color: red; font-weight: bold;">No</span> <span>→</span> <span>!contains(num-1)</span> <span>→</span> <span>while(contains(num+1))</span>
+                </div>
+                <div style="color: #64748b; margin-bottom: 10px; font-size: 10px;">The if is for avoiding repeated traversals, not for correctness.</div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="background-color: #fee2e2; padding: 2px 5px; color: #ef4444; font-weight: bold; border-radius: 4px; display: inline-block; margin-bottom: 4px;">Encode & Decode</div>
+                    <div style="background-color: #f1f5f9; padding: 2px 5px; border: 1px solid #cbd5e1; font-family: monospace; font-weight: bold;">5#Hello</div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 10px;">
+                    <span style="font-weight: bold;">length#string</span>
+                    <span style="color: #64748b;">Never use split(). Parse length first.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. COMPLEXITY QUICK REFERENCE -->
+        <div class="section-box" style="border: 2px solid #0284c7; border-radius: 8px; grid-column: span 1;">
+            <div class="section-header" style="background-color: #0284c7; color: white; padding: 8px; font-weight: bold; text-align: center;">5. COMPLEXITY QUICK REFERENCE</div>
+            <div class="section-content" style="padding: 10px; font-size: 12px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0;">HashSet contains / add / remove</td>
+                        <td style="padding: 8px 0; font-weight: bold; text-align: right;">O(1) avg</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0;">HashMap get / put / containsKey</td>
+                        <td style="padding: 8px 0; font-weight: bold; text-align: right;">O(1) avg</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0;">Array access</td>
+                        <td style="padding: 8px 0; font-weight: bold; text-align: right;">O(1)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0;">For loop (n times)</td>
+                        <td style="padding: 8px 0; font-weight: bold; text-align: right;">O(n)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0;">Two separate loops</td>
+                        <td style="padding: 8px 0; font-weight: bold; text-align: right;">O(2n) = O(n)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0;">Nested loops (n x n)</td>
+                        <td style="padding: 8px 0; font-weight: bold; text-align: right;">O(n^2)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0;">Sorting</td>
+                        <td style="padding: 8px 0; font-weight: bold; text-align: right;">O(n log n)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0;">PriorityQueue offer / poll</td>
+                        <td style="padding: 8px 0; font-weight: bold; text-align: right;">O(log n)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- 6. BIG-O RULES -->
+        <div class="section-box" style="border: 2px solid #f97316; border-radius: 8px; grid-column: span 1;">
+            <div class="section-header" style="background-color: #f97316; color: white; padding: 8px; font-weight: bold; text-align: center;">6. BIG-O RULES</div>
+            <div class="section-content" style="padding: 10px; font-size: 13px; text-align: center;">
+                <div style="margin-bottom: 15px;">
+                    <div style="font-weight: bold;">Sequential loops</div>
+                    <div style="color: #ef4444; font-weight: bold; margin-bottom: 5px;">ADD</div>
+                    <div style="font-family: monospace; color: #64748b;">for i in n</div>
+                    <div style="font-family: monospace; color: #64748b;">...</div>
+                    <div style="font-family: monospace; color: #64748b;">for j in n</div>
+                    <div style="font-family: monospace; color: #64748b;">...</div>
+                    <div style="font-weight: bold; margin-top: 5px;">= O(2n) = O(n)</div>
+                </div>
+                <hr style="border: 0; border-top: 1px dashed #cbd5e1; margin: 15px 0;">
+                <div style="margin-bottom: 15px;">
+                    <div style="font-weight: bold;">Nested loops</div>
+                    <div style="color: #ef4444; font-weight: bold; margin-bottom: 5px;">MULTIPLY</div>
+                    <div style="font-family: monospace; color: #64748b;">for i in n</div>
+                    <div style="font-family: monospace; color: #64748b; padding-left: 20px;">for j in n</div>
+                    <div style="font-family: monospace; color: #64748b; padding-left: 40px;">...</div>
+                    <div style="font-weight: bold; margin-top: 5px; text-align: right;">= O(n²)</div>
+                </div>
+                <div style="background-color: #f1f5f9; padding: 8px; border-radius: 4px; font-size: 11px; margin-top: 15px;">
+                    <strong>Always drop constants.</strong><br>
+                    Focus on growth.
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. JAVA APIS USED -->
+        <div class="section-box" style="border: 2px solid #0d9488; border-radius: 8px; grid-column: span 1;">
+            <div class="section-header" style="background-color: #0d9488; color: white; padding: 8px; font-weight: bold; text-align: center;">7. JAVA APIS USED</div>
+            <div class="section-content" style="padding: 10px; font-size: 12px; font-family: monospace;">
+                <div style="margin-bottom: 15px;">
+                    <div style="color: #0d9488; font-weight: bold; margin-bottom: 4px;">HashMap</div>
+                    <div>⮑ put(key, val)</div>
+                    <div>⮑ get(key)</div>
+                    <div>⮑ containsKey(key)</div>
+                    <div>⮑ getOrDefault(key, def)</div>
+                    <div>⮑ computeIfAbsent(key, k -> val)</div>
+                    <div>⮑ keySet() / values()</div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                    <div>
+                        <div style="color: #0d9488; font-weight: bold; margin-bottom: 4px;">HashSet</div>
+                        <div>⮑ add(val)</div>
+                        <div>⮑ contains(val)</div>
+                        <div>⮑ remove(val)</div>
+                    </div>
+                    <div>
+                        <div style="color: #0d9488; font-weight: bold; margin-bottom: 4px;">StringBuilder</div>
+                        <div>⮑ append(x)</div>
+                        <div>⮑ toString()</div>
+                    </div>
+                </div>
+
+                <div>
+                    <div style="color: #0d9488; font-weight: bold; margin-bottom: 4px;">Arrays</div>
+                    <div>⮑ sort(arr)</div>
+                    <div>⮑ toString(arr)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1.5fr 1.5fr 2fr 1fr; gap: 15px; margin-bottom: 15px;">
+        <!-- 8. COMMON CONVERSIONS -->
+        <div class="section-box" style="border: 2px solid #3b82f6; border-radius: 8px; grid-column: span 1;">
+            <div class="section-header" style="background-color: #3b82f6; color: white; padding: 8px; font-weight: bold; text-align: center;">8. COMMON CONVERSIONS</div>
+            <div class="section-content" style="padding: 10px; font-size: 12px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; color: #3b82f6; font-weight: bold; white-space: nowrap;">String → char[]</td>
+                        <td style="padding: 8px 0; font-family: monospace;">s.toCharArray()</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; color: #3b82f6; font-weight: bold; white-space: nowrap;">char[] → String</td>
+                        <td style="padding: 8px 0; font-family: monospace;">new String(arr)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; color: #3b82f6; font-weight: bold; white-space: nowrap;">int → String</td>
+                        <td style="padding: 8px 0; font-family: monospace;">String.valueOf(n)<br>Integer.toString(n)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; color: #3b82f6; font-weight: bold; white-space: nowrap;">String → int</td>
+                        <td style="padding: 8px 0; font-family: monospace;">Integer.parseInt(s)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; color: #3b82f6; font-weight: bold; white-space: nowrap;">char → int</td>
+                        <td style="padding: 8px 0; font-family: monospace;">c - '0'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; color: #3b82f6; font-weight: bold; white-space: nowrap;">int → char</td>
+                        <td style="padding: 8px 0; font-family: monospace;">(char) (n + '0')</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- 9. LAMBDA EXPRESSIONS (QUICK) -->
+        <div class="section-box" style="border: 2px solid #6366f1; border-radius: 8px; grid-column: span 1;">
+            <div class="section-header" style="background-color: #6366f1; color: white; padding: 8px; font-weight: bold; text-align: center;">9. LAMBDA EXPRESSIONS (QUICK)</div>
+            <div class="section-content" style="padding: 10px; font-size: 11px;">
+                <div style="color: #6366f1; font-weight: bold; text-decoration: underline; margin-bottom: 4px;">Compute If Absent</div>
+                <div style="font-family: monospace; background: #f1f5f9; padding: 4px; border-radius: 4px; margin-bottom: 10px;">map.computeIfAbsent(key, k -> new ArrayList<>())</div>
+
+                <div style="color: #6366f1; font-weight: bold; text-decoration: underline; margin-bottom: 4px;">Comparator (Min Heap)</div>
+                <div style="font-family: monospace; background: #f1f5f9; padding: 4px; border-radius: 4px; margin-bottom: 10px;">(a, b) -> a - b</div>
+
+                <div style="color: #6366f1; font-weight: bold; text-decoration: underline; margin-bottom: 4px;">Comparator (by frequency)</div>
+                <div style="font-family: monospace; background: #f1f5f9; padding: 4px; border-radius: 4px; margin-bottom: 10px;">(a, b) -> freqMap.get(a) - freqMap.get(b)</div>
+
+                <div style="color: #6366f1; font-weight: bold; text-decoration: underline; margin-bottom: 4px;">Sort (custom)</div>
+                <div style="font-family: monospace; background: #f1f5f9; padding: 4px; border-radius: 4px;">arr.sort((a, b) -> b - a)</div>
+            </div>
+        </div>
+
+        <!-- 10. WHEN TO USE WHAT? -->
+        <div class="section-box" style="border: 2px solid #16a34a; border-radius: 8px; grid-column: span 1;">
+            <div class="section-header" style="background-color: #16a34a; color: white; padding: 8px; font-weight: bold; text-align: center;">10. WHEN TO USE WHAT?</div>
+            <div class="section-content" style="padding: 10px; font-size: 12px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <th style="padding: 8px 0; text-align: left; color: #16a34a;">Use This</th>
+                        <th style="padding: 8px 0; text-align: left; color: #16a34a;">When?</th>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; font-weight: bold;">HashSet</td>
+                        <td style="padding: 8px 0;">Check existence / uniqueness</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; font-weight: bold;">HashMap</td>
+                        <td style="padding: 8px 0;">Count frequency / key-value</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; font-weight: bold;">int[26]</td>
+                        <td style="padding: 8px 0;">Only lowercase letters a-z</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; font-weight: bold;">Heap (PQ)</td>
+                        <td style="padding: 8px 0;">Top K / Priority based</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; font-weight: bold;">Prefix/Suffix</td>
+                        <td style="padding: 8px 0;">Left/Right contribution problems</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px 0; font-weight: bold;">HashSet (Seq)</td>
+                        <td style="padding: 8px 0;">Consecutive sequence problems</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; font-weight: bold;">HashSet (Matrix)</td>
+                        <td style="padding: 8px 0;">Row / Col / Box validation</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- 11. TIPS & TRICKS -->
+        <div class="section-box" style="border: 2px solid #e11d48; border-radius: 8px; grid-column: span 1;">
+            <div class="section-header" style="background-color: #e11d48; color: white; padding: 8px; font-weight: bold; text-align: center;">11. TIPS & TRICKS</div>
+            <div class="section-content" style="padding: 10px; font-size: 12px;">
+                <div style="display: flex; margin-bottom: 8px;">
+                    <div style="color: #22c55e; margin-right: 8px;">✔️</div>
+                    <div>Think pattern first, code later.</div>
+                </div>
+                <div style="display: flex; margin-bottom: 8px;">
+                    <div style="color: #22c55e; margin-right: 8px;">✔️</div>
+                    <div><strong>Can HashSet replace sorting? Always ask!</strong></div>
+                </div>
+                <div style="display: flex; margin-bottom: 8px;">
+                    <div style="color: #22c55e; margin-right: 8px;">✔️</div>
+                    <div>Avoid repeated work (like in Longest Consecutive).</div>
+                </div>
+                <div style="display: flex; margin-bottom: 8px;">
+                    <div style="color: #22c55e; margin-right: 8px;">✔️</div>
+                    <div>Use freq array for small fixed ranges (0-25).</div>
+                </div>
+                <div style="display: flex; margin-bottom: 8px;">
+                    <div style="color: #22c55e; margin-right: 8px;">✔️</div>
+                    <div>For Top K → use Min Heap of size K.</div>
+                </div>
+                <div style="display: flex;">
+                    <div style="color: #22c55e; margin-right: 8px;">✔️</div>
+                    <div>Edge cases decide AC/TLE. Handle them early.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 15px; margin-bottom: 15px;">
+        <!-- 12. COMMON PITFALLS -->
+        <div class="section-box" style="border: 2px solid #ea580c; border-radius: 8px; grid-column: span 1;">
+            <div class="section-header" style="background-color: #ea580c; color: white; padding: 8px; font-weight: bold; text-align: center;">12. COMMON PITFALLS</div>
+            <div class="section-content" style="padding: 10px; font-size: 12px;">
+                <div style="display: flex; margin-bottom: 8px;">
+                    <div style="color: #ef4444; margin-right: 8px; font-weight: bold;">❌</div>
+                    <div>Forgetting to handle empty input</div>
+                </div>
+                <div style="display: flex; margin-bottom: 8px;">
+                    <div style="color: #ef4444; margin-right: 8px; font-weight: bold;">❌</div>
+                    <div>Not clearing data structure in multiple test cases</div>
+                </div>
+                <div style="display: flex; margin-bottom: 8px;">
+                    <div style="color: #ef4444; margin-right: 8px; font-weight: bold;">❌</div>
+                    <div>Using split() in Encode/Decode (TLE)</div>
+                </div>
+                <div style="display: flex; margin-bottom: 8px;">
+                    <div style="color: #ef4444; margin-right: 8px; font-weight: bold;">❌</div>
+                    <div>Wrong comparator in PriorityQueue</div>
+                </div>
+                <div style="display: flex;">
+                    <div style="color: #ef4444; margin-right: 8px; font-weight: bold;">❌</div>
+                    <div>Not checking num-1 before starting sequence (LC 128)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 13. MEMORY TRICKS -->
+        <div class="section-box" style="border: 2px solid #d97706; border-radius: 8px; grid-column: span 1;">
+            <div class="section-header" style="background-color: #d97706; color: white; padding: 8px; font-weight: bold; text-align: center;">13. MEMORY TRICKS</div>
+            <div class="section-content" style="padding: 10px; font-size: 12px; line-height: 1.8;">
+                <div><span style="font-weight: bold;">Set</span> for <span style="font-weight: bold;">YES/NO (Exists?)</span></div>
+                <div><span style="font-weight: bold;">Map</span> for <span style="font-weight: bold;">HOW MANY / VALUE (Count / Store)</span></div>
+                <div><span style="font-weight: bold;">Heap</span> for <span style="font-weight: bold;">TOP K (Sorted partially)</span></div>
+                <div><span style="font-weight: bold;">Left × Right</span> (Product Except Self)</div>
+                <div><span style="font-weight: bold;">Start from BEGINNING</span> (num-1 not exists)</div>
+                <div><span style="font-weight: bold;">Length#String</span> (Encoding rule)</div>
+                <div><span style="font-weight: bold;">Row, Col, Box</span> (Sudoku rule)</div>
+            </div>
+        </div>
+
+        <!-- 14. COMPLEXITY SUMMARY TABLE -->
+        <div class="section-box" style="border: 2px solid #0f172a; border-radius: 8px; grid-column: span 1;">
+            <div class="section-header" style="background-color: #0f172a; color: white; padding: 8px; font-weight: bold; text-align: center;">14. COMPLEXITY SUMMARY TABLE</div>
+            <div class="section-content" style="padding: 10px; font-size: 11px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <th style="padding: 6px 0; text-align: left; font-weight: bold;">Approach</th>
+                        <th style="padding: 6px 0; text-align: center; font-weight: bold;">Time Complexity</th>
+                        <th style="padding: 6px 0; text-align: center; font-weight: bold;">Space Complexity</th>
+                        <th style="padding: 6px 0; text-align: left; font-weight: bold;">Example Problems</th>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0; background-color: #f8fafc;">
+                        <td style="padding: 6px 0;">Brute Force (Nested Loop)</td>
+                        <td style="padding: 6px 0; text-align: center;">O(n^2)</td>
+                        <td style="padding: 6px 0; text-align: center;">O(1)</td>
+                        <td style="padding: 6px 0;">Two Sum, Product Except Self</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 6px 0;">Hashing (Set/Map)</td>
+                        <td style="padding: 6px 0; text-align: center;">O(n)</td>
+                        <td style="padding: 6px 0; text-align: center;">O(n)</td>
+                        <td style="padding: 6px 0;">Contains Duplicate, Two Sum</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0; background-color: #f8fafc;">
+                        <td style="padding: 6px 0;">Sorting</td>
+                        <td style="padding: 6px 0; text-align: center;">O(n log n)</td>
+                        <td style="padding: 6px 0; text-align: center;">O(1) / O(n)</td>
+                        <td style="padding: 6px 0;">Group Anagrams (alt), Longest Consecutive (alt)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 6px 0;">Heap (Top K)</td>
+                        <td style="padding: 6px 0; text-align: center;">O(n log k)</td>
+                        <td style="padding: 6px 0; text-align: center;">O(k)</td>
+                        <td style="padding: 6px 0;">Top K Frequent Elements</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px 0; background-color: #f8fafc;">Prefix / Suffix</td>
+                        <td style="padding: 6px 0; text-align: center; background-color: #f8fafc;">O(n)</td>
+                        <td style="padding: 6px 0; text-align: center; background-color: #f8fafc;">O(n)</td>
+                        <td style="padding: 6px 0; background-color: #f8fafc;">Product Except Self</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div style="background-color: #1a365d; color: white; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; font-size: 14px;">
+        <span style="color: #fbbf24;">🏆</span> GOLDEN RULE: CLARIFY → THINK → CHOOSE RIGHT DS → OPTIMIZE → CODE → EXPLAIN <span style="color: #fbbf24;">⭐</span>
+        <span style="float: right; font-weight: normal; font-size: 13px;">Keep Practicing. Keep Improving. Crack FAANG! 💪</span>
+    </div>
+</div>

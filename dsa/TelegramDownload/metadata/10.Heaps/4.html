@@ -1,0 +1,279 @@
+<div class="page">
+    <div class="header-top">
+        <div style="display: flex; align-items: baseline;">
+            <h1>HEAP - FAANG HIDDEN TRIGGERS</h1>
+            <div class="subtitle" style="color:#d32f2f; font-weight: bold; margin-left: 20px;">How Interviewers Hide Heap Problems (Recognition Guide)</div>
+        </div>
+        <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end;">
+            <div class="page-number">PAGE 4</div>
+            <div style="background-color: #f3e8ff; border: 1px solid #c084fc; border-radius: 8px; padding: 8px; margin-top: 10px; text-align: center;">
+                <div style="color: #1e3a8a; font-weight: bold; font-size: 0.9em;">They won't say "Use Heap"</div>
+                <div style="color: #6b21a8; font-weight: bold; font-size: 0.9em;">You must recognize it !</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container">
+        <div class="col-left">
+            <div class="section-box">
+                <div class="section-header"><span class="num">1</span> WHEN TO THINK HEAP ? (UNSEEN QUESTION CLUES)</div>
+                <div class="section-content">
+                    <table>
+                        <tr>
+                            <th>Question Says...</th>
+                            <th>Think Heap Because...</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Top K / K largest / K smallest</strong></td>
+                            <td>We only care about best K elements.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>K closest / K farthest</strong></td>
+                            <td>Keep best K based on distance / value.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Kth largest / Kth smallest</strong></td>
+                            <td>Heap gives Kth in optimal time.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Most frequent / Top frequent</strong></td>
+                            <td>Use heap on frequency map.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Continuously receive data ("data stream")</strong></td>
+                            <td>Need to maintain running result.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Running median / Median at any time</strong></td>
+                            <td>Two Heaps maintain middle efficiently.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Merge K sorted lists / arrays / streams</strong></td>
+                            <td>Pick smallest current from K sources.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Always need smallest / largest repeatedly</strong></td>
+                            <td>Heap gives min/max in O(log n) each time.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Scheduling / Highest priority task</strong></td>
+                            <td>Always process highest (or lowest) priority first.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Resource allocation</strong></td>
+                            <td>Allocate best resource (min waste / min cost).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Find N smallest among millions</strong></td>
+                            <td>Min Heap of size N.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Live leaderboard / Top scores</strong></td>
+                            <td>Maintain top K scores dynamically.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sliding window maximum/minimum</strong></td>
+                            <td>(Usually Deque) but if K is large and needs frequent removal by value &rarr; Heap (advanced).</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header"><span class="num">3</span> HEAP VS OTHER DS (CHOOSE RIGHT TOOL)</div>
+                <div class="section-content">
+                    <table>
+                        <tr>
+                            <th>Problem Type / Goal</th>
+                            <th>Best Tool</th>
+                            <th>Why?</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Get min / max repeatedly</strong></td>
+                            <td><strong style="color: #16a34a;">Heap</strong></td>
+                            <td>O(log n) per operation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Top K elements</strong></td>
+                            <td><strong style="color: #16a34a;">Heap</strong></td>
+                            <td>O(n log k) better than sorting</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Kth largest / smallest</strong></td>
+                            <td><strong>Heap / Quickselect</strong></td>
+                            <td>Heap: O(n log k), Quickselect: O(n) avg</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Merge K sorted things</strong></td>
+                            <td><strong style="color: #16a34a;">Heap</strong></td>
+                            <td>One candidate per source</td>
+                        </tr>
+                        <tr>
+                            <td><strong>FIFO order</strong></td>
+                            <td>Queue</td>
+                            <td>Heap not for order</td>
+                        </tr>
+                        <tr>
+                            <td><strong>LIFO order</strong></td>
+                            <td>Stack</td>
+                            <td>Heap not for order</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Need sorted output</strong></td>
+                            <td>Sort</td>
+                            <td>Full order required</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Range queries</strong></td>
+                            <td>Segment Tree / BIT</td>
+                            <td>Heap not for range aggregation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dynamic min with delete by value</strong></td>
+                            <td>TreeMap / Balanced BST</td>
+                            <td>Heap can't delete arbitrary element efficiently</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header"><span class="num">5</span> RECOGNITION SHORTCUT (3 QUESTIONS)</div>
+                <div class="section-content" style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                    <div style="flex: 2;">
+                        <ol style="list-style-type: none; padding-left: 0; counter-reset: custom-counter; margin: 0;">
+                            <li style="margin-bottom: 10px; display: flex; align-items: center;"><span style="background-color: #4f46e5; color: white; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold;">1</span> <strong>What am I optimizing? (min/max/priority)</strong></li>
+                            <li style="margin-bottom: 10px; display: flex; align-items: center;"><span style="background-color: #4f46e5; color: white; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold;">2</span> <strong>Do I need only top/bottom K or keep discarding irrelevant elements?</strong></li>
+                            <li style="display: flex; align-items: center;"><span style="background-color: #4f46e5; color: white; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold;">3</span> <strong>Is the data coming continuously or from multiple sorted sources?</strong></li>
+                        </ol>
+                    </div>
+                    <div style="flex: 1; text-align: center; font-size: 24px;">&rarr;</div>
+                    <div style="flex: 1; border: 2px solid #a7f3d0; background-color: #ecfdf5; padding: 10px; border-radius: 8px; text-align: center;">
+                        <div>If <strong>YES</strong> to any</div>
+                        <div style="font-weight: bold; margin-top: 5px;">&rarr; Think HEAP &check;</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-right">
+            <div class="section-box">
+                <div class="section-header"><span class="num">2</span> FAANG FAVORITE HEAP PROBLEM THEMES</div>
+                <div class="section-content">
+                    <table style="border-collapse: collapse; border: none;">
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="border: none; padding: 8px 0; width: 30px;"><div style="font-size: 20px;">⚙️</div></td>
+                            <td style="border: none; padding: 8px 10px;">
+                                <div style="color: #1d4ed8; font-weight: bold;">System Design Like Problems</div>
+                                <div style="font-size: 0.9em;">Design Twitter Feed, Task Scheduler, Rate Limiter, Job Scheduler</div>
+                            </td>
+                            <td style="border: none; padding: 8px 0; color: #7e22ce; font-weight: bold; text-align: right;">Heap (Max)</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="border: none; padding: 8px 0; width: 30px;"><div style="font-size: 20px;">📈</div></td>
+                            <td style="border: none; padding: 8px 10px;">
+                                <div style="color: #1d4ed8; font-weight: bold;">Streaming / Real Time Data</div>
+                                <div style="font-size: 0.9em;">Running Median, Data Stream as Disjoint Intervals</div>
+                            </td>
+                            <td style="border: none; padding: 8px 0; color: #7e22ce; font-weight: bold; text-align: right;">Two Heaps</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="border: none; padding: 8px 0; width: 30px;"><div style="font-size: 20px;">🥇</div></td>
+                            <td style="border: none; padding: 8px 10px;">
+                                <div style="color: #1d4ed8; font-weight: bold;">Top K / Ranking</div>
+                                <div style="font-size: 0.9em;">Top K Frequent, Top K Elements, K Closest Points</div>
+                            </td>
+                            <td style="border: none; padding: 8px 0; color: #7e22ce; font-weight: bold; text-align: right;">Min Heap<br><small>(size K)</small></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="border: none; padding: 8px 0; width: 30px;"><div style="font-size: 20px;">🔗</div></td>
+                            <td style="border: none; padding: 8px 10px;">
+                                <div style="color: #1d4ed8; font-weight: bold;">Merge / K Sorted Sources</div>
+                                <div style="font-size: 0.9em;">Merge K Sorted Lists, Smallest Range in K Lists</div>
+                            </td>
+                            <td style="border: none; padding: 8px 0; color: #7e22ce; font-weight: bold; text-align: right;">Min Heap</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="border: none; padding: 8px 0; width: 30px;"><div style="font-size: 20px;">⚡</div></td>
+                            <td style="border: none; padding: 8px 10px;">
+                                <div style="color: #1d4ed8; font-weight: bold;">Greedy + Priority</div>
+                                <div style="font-size: 0.9em;">IPO, Find K Pairs with Smallest Sums, Maximize Capital</div>
+                            </td>
+                            <td style="border: none; padding: 8px 0; color: #7e22ce; font-weight: bold; text-align: right;">Max Heap</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="border: none; padding: 8px 0; width: 30px;"><div style="font-size: 20px;">🕒</div></td>
+                            <td style="border: none; padding: 8px 10px;">
+                                <div style="color: #1d4ed8; font-weight: bold;">Intervals / Meetings</div>
+                                <div style="font-size: 0.9em;">Meeting Rooms (III), Employee Free Time, Conference Room Scheduler</div>
+                            </td>
+                            <td style="border: none; padding: 8px 0; color: #7e22ce; font-weight: bold; text-align: right;">Min Heap</td>
+                        </tr>
+                        <tr>
+                            <td style="border: none; padding: 8px 0; width: 30px;"><div style="font-size: 20px;">🔺</div></td>
+                            <td style="border: none; padding: 8px 10px;">
+                                <div style="color: #1d4ed8; font-weight: bold;">Graphs / Advanced</div>
+                                <div style="font-size: 0.9em;">Dijkstra's Algorithm, Prim's MST, Network Delay Time</div>
+                            </td>
+                            <td style="border: none; padding: 8px 0; color: #7e22ce; font-weight: bold; text-align: right;">Min Heap</td>
+                        </tr>
+                    </table>
+
+                    <div style="background-color: #fefce8; border: 1px solid #fef08a; border-radius: 8px; padding: 15px; margin-top: 15px;">
+                        <div style="font-weight: bold; display: flex; align-items: center;"><span style="font-size: 20px; margin-right: 5px;">💡</span> Pro Tip</div>
+                        <div style="margin-top: 5px; font-size: 0.95em;">Translate the problem into:</div>
+                        <div style="color: #b91c1c; font-weight: bold;">"Which element should come out first?"</div>
+                        <div style="margin-top: 5px; font-weight: bold;">&rarr; That is your heap priority.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header" style="background-color: #1e3a8a; color: white;"><span class="num" style="background-color: white; color: #1e3a8a;">4</span> INTERVIEWER TRICKS TO WATCH OUT</div>
+                <div class="section-content">
+                    <ul style="list-style-type: none; padding-left: 0;">
+                        <li style="margin-bottom: 8px;"><strong style="color: #dc2626;">&#10008;</strong> They never say "Use Heap" explicitly.</li>
+                        <li style="margin-bottom: 8px;"><strong style="color: #dc2626;">&#10008;</strong> They mix multiple concepts (e.g., Heap + HashMap).</li>
+                        <li style="margin-bottom: 8px;"><strong style="color: #dc2626;">&#10008;</strong> They change the goal (e.g., maximize instead of minimize).</li>
+                        <li style="margin-bottom: 8px;"><strong style="color: #dc2626;">&#10008;</strong> They give huge constraints to hint suboptimal solutions will TLE.</li>
+                        <li style="margin-bottom: 8px;"><strong style="color: #dc2626;">&#10008;</strong> They ask for real time / online processing &rarr; think Heap.</li>
+                        <li style="margin-bottom: 8px;"><strong style="color: #dc2626;">&#10008;</strong> They change K during the process (dynamic K).</li>
+                        <li style="margin-bottom: 8px;"><strong style="color: #dc2626;">&#10008;</strong> They ask for both min and max &rarr; think Two Heaps.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header" style="background-color: #1e3a8a; color: white;"><span class="num" style="background-color: white; color: #1e3a8a;">6</span> AHA MOMENTS (DON'T FORGET)</div>
+                <div class="section-content" style="display: flex;">
+                    <div style="flex: 1;">
+                        <ul style="list-style-type: none; padding-left: 0;">
+                            <li style="margin-bottom: 8px;"><strong style="color: #16a34a; background-color: #dcfce7; padding: 2px 4px; border-radius: 4px;">&check;</strong> Heap = Priority, NOT Sorting.</li>
+                            <li style="margin-bottom: 8px;"><strong style="color: #16a34a; background-color: #dcfce7; padding: 2px 4px; border-radius: 4px;">&check;</strong> Heap guarantees the BEST element only.</li>
+                            <li style="margin-bottom: 8px;"><strong style="color: #16a34a; background-color: #dcfce7; padding: 2px 4px; border-radius: 4px;">&check;</strong> Ask yourself: "What should I discard?"</li>
+                            <li style="margin-bottom: 8px;"><strong style="color: #16a34a; background-color: #dcfce7; padding: 2px 4px; border-radius: 4px;">&check;</strong> Heap size K keeps only what I care about.</li>
+                            <li style="margin-bottom: 8px;"><strong style="color: #16a34a; background-color: #dcfce7; padding: 2px 4px; border-radius: 4px;">&check;</strong> Comparator decides priority (not the data structure).</li>
+                            <li style="margin-bottom: 8px;"><strong style="color: #16a34a; background-color: #dcfce7; padding: 2px 4px; border-radius: 4px;">&check;</strong> <span style="color: #b91c1c; font-weight: bold;">Every Heap problem fits into one of the 4 patterns on Page 2.</span></li>
+                        </ul>
+                    </div>
+                    <div style="width: 80px; display: flex; align-items: center; justify-content: center; font-size: 50px;">
+                        💡
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="margin-top: 20px; display: flex; align-items: stretch;">
+        <div style="border: 2px solid #bfdbfe; border-radius: 8px; padding: 15px; display: flex; align-items: center; justify-content: center; background-color: #eff6ff; margin-right: 15px;">
+            <div style="color: #1e3a8a; font-weight: bold; font-size: 1.2em;"><span style="color: #fbbf24; font-size: 24px; margin-right: 10px;">⭐</span> GOLDEN RULE</div>
+        </div>
+        <div style="border: 2px solid #e5e7eb; border-radius: 8px; padding: 15px; flex: 1; display: flex; align-items: center; background-color: white;">
+            <div>The best way to solve Heap problems is to <strong style="color: #dc2626;">RECOGNIZE</strong> them fast, choose the <strong style="color: #dc2626;">RIGHT HEAP</strong>, and <strong style="color: #dc2626;">MAINTAIN the INVARIANT</strong>.</div>
+        </div>
+        <div style="border: 2px solid #e9d5ff; border-radius: 8px; padding: 15px; margin-left: 15px; background-color: #faf5ff; display: flex; flex-direction: column; justify-content: center; text-align: center;">
+            <div style="color: #6b21a8; font-weight: bold;">Master Recognition,</div>
+            <div style="color: #6b21a8; font-weight: bold;">Not Just Implementation !</div>
+        </div>
+    </div>
+</div>

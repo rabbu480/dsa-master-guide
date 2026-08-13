@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>6.Binary Search</title>
+    
+<style>
+    :root {
+        --bg-color: #0f172a;
+        --card-bg: #1e293b;
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --accent: #38bdf8;
+        --accent-secondary: #f59e0b;
+        --accent-tertiary: #10b981;
+        --border-color: #334155;
+    }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        line-height: 1.6;
+        margin: 0;
+        padding: 40px;
+    }
+    .page-title {
+        text-align: center;
+        font-size: 3rem;
+        font-weight: 800;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 50px;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 20px;
+    }
+    /* Masonry / Multi-column layout */
+    .masonry {
+        column-count: 2;
+        column-gap: 30px;
+    }
+    @media (max-width: 1000px) {
+        .masonry { column-count: 1; }
+    }
+    /* Cards for each section */
+    .card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 30px;
+        break-inside: avoid;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    }
+    .card > h2 {
+        margin-top: 0;
+        color: #fff;
+        font-size: 1.5rem;
+        border-left: 5px solid var(--accent-secondary);
+        padding-left: 12px;
+        margin-bottom: 20px;
+    }
+    h1, h3, h4, h5, h6 {
+        color: var(--accent);
+        margin-top: 24px;
+        margin-bottom: 16px;
+    }
+    h1 { font-size: 2em; }
+    h3 { font-size: 1.25em; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;}
+    p, ul, ol {
+        color: #e2e8f0;
+        margin-bottom: 16px;
+    }
+    li {
+        margin-bottom: 8px;
+    }
+    strong {
+        color: var(--accent-secondary);
+        font-weight: 700;
+    }
+    em {
+        color: var(--text-muted);
+    }
+    pre {
+        background-color: #020617;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 16px;
+        overflow-x: auto;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9em;
+        margin-bottom: 16px;
+    }
+    code {
+        background-color: #020617;
+        color: #a5b4fc;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9em;
+    }
+    pre code {
+        background-color: transparent;
+        padding: 0;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        background: #0f172a;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    th {
+        background: #2563eb;
+        color: white;
+        text-align: left;
+        padding: 12px 16px;
+        font-weight: 600;
+    }
+    td {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    tr:last-child td { border-bottom: none; }
+    blockquote {
+        border-left: 4px solid var(--accent-tertiary);
+        background: #1e293b;
+        padding: 16px 20px;
+        margin: 0 0 20px 0;
+        border-radius: 0 8px 8px 0;
+        font-style: italic;
+    }
+    img {
+        max-width: 100%;
+        border-radius: 8px;
+        margin-bottom: 16px;
+    }
+    .page-indicator {
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin: 40px 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    /* PRINT STYLES */
+    @media print {
+        body { background: white; color: black; padding: 0; margin: 0; }
+        .page-title { color: black; border-bottom: 2px solid #ccc; }
+        .card { background: white; border: 1px solid #ccc; box-shadow: none; break-inside: avoid; }
+        .card > h2 { color: black; border-left-color: #3b82f6; }
+        h1, h3, h4 { color: black; }
+        strong { color: #d97706; }
+        pre { background: #f1f5f9; border: 1px solid #ccc; }
+        code { color: #b91c1c; background: #f1f5f9; }
+        table { border: 1px solid #ccc; background: white; }
+        th { background: #3b82f6; color: white; }
+        tr:nth-child(even) td { background: #f8fafc; }
+        .masonry { column-count: 2; column-gap: 20px; }
+        .page-break { page-break-before: always; }
+        .page-indicator { display: none; }
+    }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Fira+Code&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <h1 class="page-title">6.Binary Search</h1>
+    <div class="masonry"><div class="card"><h2>BINARY SEARCH</h2></div><div class="card"><h2>FAANG INTERVIEW CHEAT SHEET (JAVA)</h2><p><strong>Goal:</strong>
+Reduce search space by half in every step
+O(log n) time</p><hr/><h3>1. WHEN TO USE BINARY SEARCH?</h3><ul>
+<li>[✅] Data is sorted or can be converted to sorted.</li>
+<li>[✅] We can eliminate half of the search space.</li>
+<li>[✅] Answer looks like → <strong>F F F T T T</strong> (False → True)</li>
+<li>[✅] We can check a condition in O(1) time.</li>
+<li>[✅] Used for exact match, first/last occurrence, or finding answer in search space.</li>
+</ul><hr/><h3>💡 AHA MOMENT</h3><p><strong>Binary Search</strong> is not about searching an element, it's about finding the boundary where the answer changes</p><p><strong>Example:</strong>
+| F | F | F | F | T | T | T | T |
+|---|---|---|---|---|---|---|---|
+                                <strong>↑</strong>
+                            Find the <strong>FIRST T</strong> (transition point)</p><hr/><h3>2. CLASSIC BINARY SEARCH TEMPLATE (EXACT MATCH)</h3><pre><code class="language-java">int left = 0, right = n - 1;
+while (left &lt;= right) {
+    int mid = left + (right - left) / 2; // safe mid
+
+    if (nums[mid] == target) {
+        return mid; // found
+    } else if (nums[mid] &lt; target) {
+        left = mid + 1;      // search right half
+    } else {
+        right = mid - 1;     // search left half
+    }
+}
+return -1; // not found
+</code></pre><blockquote>
+<p><strong>Why mid = left + (right - left) / 2 ?</strong>
+To avoid integer overflow that can happen in (left + right) / 2</p>
+</blockquote><hr/><h3>⭐ INTERVIEW TIP</h3><ul>
+<li>[•] Always decide what the array is trying to tell you.</li>
+<li>[•] Define the condition, not the element.</li>
+<li>[•] Think: <strong>What am I searching for?</strong></li>
+<li>[•] Dry run on examples before coding.</li>
+</ul><hr/><h3>❌ COMMON MISTAKES</h3><ul>
+<li>[❌] Wrong boundaries update (leads to infinite loop)</li>
+<li>[❌] Using <code>mid = (left + right) / 2</code> (overflow risk)</li>
+<li>[❌] Not handling edge cases (empty array, size 1)</li>
+<li>[❌] Wrong condition ( <code>&lt;</code> vs <code>&lt;=</code> )</li>
+<li>[❌] Returning wrong index (first/last occurrence problems)</li>
+</ul><hr/><h3>3. BINARY SEARCH DECISION TREE</h3><pre><code class="language-mermaid">graph TD
+    A[Is array sorted?]
+    A -- YES --&gt; B[Are we looking for exact element?]
+    A -- NO --&gt; C[We cannot use Binary Search]
+
+    B -- YES --&gt; D[Use Classic Binary Search &lt;br&gt; Exact Match]
+    B -- NO --&gt; E[Are we looking for first/last occurrence or boundary?]
+
+    E -- YES --&gt; F[Use Boundary Binary Search &lt;br&gt; Templates in next pages]
+    E -- NO --&gt; G[Think again! 🤔 &lt;br&gt; Is Binary Search needed?]
+</code></pre><hr/><h3>4. BINARY SEARCH ON SORTED ARRAY (EXAMPLE)</h3><p><strong>Array:</strong> <code>[5, 7, 7, 8, 8, 10]</code>     <strong>Target = 8</strong></p><p><strong>Step 1:</strong>
+| 5 | 7 | 7 | <strong>8</strong> | 8 | 10 |
+|---|---|---|---|---|---|
+| 0 | 1 | 2 | 3 | 4 | 5 |</p><p>left = 0, right = 5
+mid = 2 -&gt; nums[2] = 7
+7 &lt; 8, <strong>move right</strong></p><p><strong>Step 2:</strong>
+| 5 | 7 | 7 | 8 | <strong>8</strong> | 10 |
+|---|---|---|---|---|---|
+| 0 | 1 | 2 | 3 | 4 | 5 |</p><p>left = 3, right = 5
+mid = 4 -&gt; nums[4] = 8
+8 == 8, <strong>found!</strong></p><p><strong>Step 3:</strong>
+| 5 | 7 | 7 | 8 | <strong>8</strong> | 10 |</p><p>Return index 4</p><hr/><h3>5. COMPLEXITY ANALYSIS</h3><table>
+<thead>
+<tr>
+<th style="text-align: left;">Operation</th>
+<th style="text-align: left;">Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Time Complexity</td>
+<td style="text-align: left;">O(log n)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Space Complexity</td>
+<td style="text-align: left;">O(1) (Iterative)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Best Case</td>
+<td style="text-align: left;">O(1) (if mid is target)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Worst Case</td>
+<td style="text-align: left;">O(log n)</td>
+</tr>
+</tbody>
+</table><blockquote>
+<p><strong>📌 Remember</strong>
+Every step eliminates half of the search space.
+That's the power of Binary Search! 💪</p>
+</blockquote><hr/><p>🎯 <strong>Master Binary Search Pattern, not just the code.</strong>
+It helps in 90% of advanced DSA problems.</p><p><strong>Page 1 of 4</strong></p><!-- PAGE_BREAK --></div><div class="card"><h2>BINARY SEARCH</h2></div><div class="card"><h2>FAANG INTERVIEW CHEAT SHEET (JAVA)</h2><p><strong>GOAL:</strong>
+Reduce search space by half in every step O(log n) time</p><p><strong>Page 2 of 4</strong></p><h3>6. VARIANTS OF BINARY SEARCH</h3><table>
+<thead>
+<tr>
+<th style="text-align: left;">Variant</th>
+<th style="text-align: left;">When to Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Classic Binary Search</strong></td>
+<td style="text-align: left;">Exact match in sorted array</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>First Occurrence</strong></td>
+<td style="text-align: left;">Find first index of target</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Last Occurrence</strong></td>
+<td style="text-align: left;">Find last index of target</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Search in Rotated Sorted Array</strong></td>
+<td style="text-align: left;">Array is sorted but rotated</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Search in Peak Element</strong></td>
+<td style="text-align: left;">Find peak element in bitonic array</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Binary Search on Answer</strong></td>
+<td style="text-align: left;">Answer lies in a range, not searching element</td>
+</tr>
+</tbody>
+</table><hr/><h3>7. FIRST &amp; LAST OCCURRENCE TEMPLATES</h3><p><strong>First Occurrence (Lower Bound)</strong>
+Find the first index where <code>nums[mid] == target</code></p><pre><code class="language-java">int firstOccurrence(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    int ans = -1;
+
+    while (left &lt;= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] &gt;= target) {
+            if (nums[mid] == target) ans = mid;
+            right = mid - 1;   // move left
+        } else {
+            left = mid + 1;  // move right
+        }
+    }
+    return ans;
+}
+</code></pre><p><strong>Last Occurrence (Upper Bound)</strong>
+Find the last index where <code>nums[mid] == target</code></p><pre><code class="language-java">int lastOccurrence(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    int ans = -1;
+
+    while (left &lt;= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] &lt;= target) {
+            if (nums[mid] == target) ans = mid;
+            left = mid + 1;   // move right
+        } else {
+            right = mid - 1;  // move left
+        }
+    }
+    return ans;
+}
+</code></pre><blockquote>
+<p><strong>PRO TIP:</strong> 
+- For First occurrence → shrink right when equal
+- For Last occurrence → shrink left when equal</p>
+</blockquote><hr/><h3>8. SEARCH IN ROTATED SORTED ARRAY (UNIQUE ELEMENTS)</h3><p>Example: <code>nums = [4,5,6,7,0,1,2]</code>, target = 0</p><ul>
+<li><strong>Is <code>nums[mid] == target</code>?</strong></li>
+<li><strong>YES</strong> → Return mid</li>
+<li><strong>NO</strong> ↓<ul>
+<li><strong>Is left half sorted? (<code>nums[left] &lt;= nums[mid]</code>)</strong></li>
+<li>Is target in left half? <code>nums[left] &lt;= target &lt; nums[mid]</code><ul>
+<li>YES → <code>right = mid - 1</code></li>
+<li>NO → <code>left = mid + 1</code></li>
+</ul>
+</li>
+<li><strong>Right half is sorted</strong></li>
+<li>Is target in right half? <code>nums[mid] &lt; target &lt;= nums[right]</code><ul>
+<li>YES → <code>left = mid + 1</code></li>
+<li>NO → <code>right = mid - 1</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><p><strong>★ Always eliminate the half that is sorted first!</strong></p><hr/><h3>9. BINARY SEARCH ON ANSWER</h3><p><strong>When to Use?</strong>
+- Answer is not an element from array.
+- We are asked to find minimum / maximum value that satisfies a condition.
+- The condition is monotonic (T...T...T or F...F...F).</p><p><strong>General Template</strong></p><pre><code class="language-java">int left = 0;              // minimum possible answer
+int right = (int)1e9;      // maximum possible answer
+int ans = -1;
+
+while (left &lt;= right) {
+    int mid = left + (right - left) / 2;
+    if (isValid(mid)) {        // condition check
+        ans = mid;             // store answer
+        right = mid - 1;       // try for better (smaller) answer
+    } else {
+        left = mid + 1;        // try for bigger answer
+    }
+}
+return ans;
+</code></pre><p><strong>Examples</strong>
+- Minimum days to make M bouquets
+- Koko eating bananas
+- Allocate minimum pages
+- Split array largest sum</p><hr/><h3>10. VISUALIZING BINARY SEARCH (BOUNDARY SEARCH)</h3><p>Find First Occurrence of target = 4 in <code>nums = [1, 2, 4, 4, 4, 5, 6]</code></p><p><strong>Step 1:</strong></p><pre><code>  0   1   2   3   5   6
+| 1 | 2 | 4 | 4 | 5 | 6 |
+  ↑           ↑       ↑
+ l=0         m=3     r=6
+</code></pre><p><code>nums[m] == 4</code>
+<code>ans = 3</code>
+<code>r = m - 1 = 2</code></p><p><strong>Step 2:</strong></p><pre><code>  0   1   3   4   5   6
+| 1 | 2 | 4 | 4 | 5 | 6 |
+  ↑   ↑       ↑       
+ l=0 m=1     r=2
+</code></pre><p><code>nums[m] &lt; 4 ? no</code>
+<code>nums[m] == 4</code>
+<code>ans = 1</code>
+<code>r = m - 1 = 0</code></p><p><strong>Step 3:</strong></p><pre><code>  0   1   2   4   5   6
+| 1 | 2 | 4 | 4 | 5 | 6 |
+  ↑   ↑       ↑
+ l=0 m=0     r=0
+</code></pre><p><code>nums[m] &lt; 4</code>
+<code>l = m + 1 = 1</code>
+Loop stops (<code>l &gt; r</code>)</p><p><strong>Answer = 1 (first index of 4)</strong></p><hr/><h3>11. COMMON MISTAKES &amp; HOW TO AVOID THEM</h3><table>
+<thead>
+<tr>
+<th style="text-align: left;">Mistake</th>
+<th style="text-align: left;">Why It's Wrong</th>
+<th style="text-align: left;">Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Using (left + right) / 2</strong></td>
+<td style="text-align: left;">Can overflow when left and right are large</td>
+<td style="text-align: left;">Use <code>left + (right - left) / 2</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Incorrect boundary update</strong></td>
+<td style="text-align: left;">Can cause infinite loop or wrong result</td>
+<td style="text-align: left;">Be careful with <code>left = mid + 1</code> or <code>right = mid - 1</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Not handling edge cases</strong></td>
+<td style="text-align: left;">Empty array, size 1 array, target not found</td>
+<td style="text-align: left;">Always test edge cases</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Confusing first &amp; last occurrence</strong></td>
+<td style="text-align: left;">Logic difference in shrinking</td>
+<td style="text-align: left;">Remember: first → shrink right, last → shrink left</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Wrong condition in rotated array</strong></td>
+<td style="text-align: left;">Leads to eliminating wrong half</td>
+<td style="text-align: left;">Check which half is sorted first</td>
+</tr>
+</tbody>
+</table><hr/><h3>🎯 REMEMBER</h3><p>Binary Search is all about reducing the search space.
+The key is to think about the answer, not the element!</p><h3>⭐ INTERVIEW GOLDEN RULE</h3><p>Dry run on paper. Visualize.
+Write clean, bug-free code. Handle all edge cases.</p><!-- PAGE_BREAK --></div><div class="card"><h2>BINARY SEARCH</h2><p>FAANG INTERVIEW CHEAT SHEET (JAVA)</p><p><strong>GOAL:</strong>
+Reduce search space by half in every step
+O(log n) time
+Page 3 of 4</p></div><div class="card"><h2>12. BOUNDARY SEARCH VISUALIZATION</h2><p><strong>We are looking for FIRST occurrence of 8</strong></p><p><strong>Array:</strong>
+| | 1 | 2 | 4 | 5 | 7 | <strong>8</strong> | <strong>8</strong> | <strong>8</strong> | <strong>8</strong> | 10 | 13 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| | <strong>0</strong> | <strong>1</strong> | <strong>2</strong> | <strong>3</strong> | <strong>4</strong> | <strong>5</strong> | <strong>6</strong> | <strong>7</strong> | <strong>8</strong> | <strong>9</strong> | <strong>10</strong> |</p><table>
+<thead>
+<tr>
+<th>Step</th>
+<th>left</th>
+<th>right</th>
+<th>mid</th>
+<th>nums[mid]</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>10</td>
+<td>5</td>
+<td>8</td>
+<td>ans = 5, move left (right = 4)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>4</td>
+<td>2</td>
+<td>4</td>
+<td>nums[mid] &lt; 8, move right (left = 3)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td>4</td>
+<td>3</td>
+<td>5</td>
+<td>nums[mid] &lt; 8, move right (left = 4)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>7</td>
+<td>nums[mid] &lt; 8, move right (left = 5)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>5</td>
+<td>4</td>
+<td>-</td>
+<td>-</td>
+<td>left &gt; right, stop</td>
+</tr>
+</tbody>
+</table><p><strong>Answer = 5 (First index of 8)</strong></p><p><strong>Key Idea:</strong>
+When <code>nums[mid] == target</code>, don't return immediately.
+Store the answer and keep searching in the left half.</p><hr/></div><div class="card"><h2>13. MORE BINARY SEARCH TEMPLATES</h2><h3>Lower Bound (First &gt;= target)</h3><pre><code class="language-java">int left = 0, right = n;
+while (left &lt; right) {
+    int mid = left + (right - left) / 2;
+    if (nums[mid] &gt;= target)
+        right = mid;
+    else
+        left = mid + 1;
+}
+return left;
+</code></pre><p><strong>Returns:</strong>
+First index where <code>nums[index] &gt;= target</code>
+If none exists, returns <code>n</code></p><p><strong>Use Case:</strong>
+* Find insertion position (upper bound logic)
+* Longest Increasing Subsequence (LIS)</p><h3>Upper Bound (First &gt; target)</h3><pre><code class="language-java">int left = 0, right = n;
+while (left &lt; right) {
+    int mid = left + (right - left) / 2;
+    if (nums[mid] &gt; target)
+        right = mid;
+    else
+        left = mid + 1;
+}
+return left;
+</code></pre><p><strong>Returns:</strong>
+First index where <code>nums[index] &gt; target</code>
+If none exists, returns <code>n</code></p><p><strong>Use Case:</strong>
+* Count elements &lt;= target
+* Find last occurrence + 1</p><h3>Floor (Last &lt;= target)</h3><pre><code class="language-java">int left = 0, right = n - 1, ans = -1;
+while (left &lt;= right) {
+    int mid = left + (right - left) / 2;
+    if (nums[mid] &lt;= target) {
+        ans = mid;
+        left = mid + 1;
+    } else right = mid - 1;
+}
+return ans;
+</code></pre><p><strong>Returns:</strong>
+Last index where <code>nums[index] &lt;= target</code>
+If none exists, returns <code>-1</code></p><p><strong>Use Case:</strong>
+* Find floor value (greatest &lt;= target)</p><hr/></div><div class="card"><h2>14. BINARY SEARCH ON 2D MATRIX (ROW-WISE SORTED)</h2><p><strong>Example Matrix:</strong>
+| 1 | 3 | 5 | 7 |
+|---|---|---|---|
+| 10 | 11 | 16 | 20 |
+| 23 | 30 | 34 | 50 |
+| 60 | 65 | 70 | 80 |</p><p><strong>Search = 34</strong></p><p><strong>Approach:</strong>
+1. Treat matrix as 1D array.
+2. Index mapping:</p><pre><code class="language-java">row = mid / m;
+col = mid % m;
+</code></pre><ol>
+<li>Apply normal Binary Search.</li>
+</ol><p><strong>Code:</strong></p><pre><code class="language-java">int row = matrix.length, col = matrix[0].length;
+int left = 0, right = row * col - 1;
+while (left &lt;= right) {
+    int mid = left + (right - left) / 2;
+    int r = mid / col, c = mid % col;
+    if (matrix[r][c] == target) return true;
+    else if (matrix[r][c] &lt; target) left = mid + 1;
+    else right = mid - 1;
+}
+return false;
+</code></pre><p>★ Works because each row is sorted and first element of a row is greater than last of previous row.</p><hr/></div><div class="card"><h2>15. SEARCH IN PEAK ELEMENT (BITONIC ARRAY)</h2><p><strong>Bitonic Array (First increasing then decreasing)</strong>
+<strong>Array:</strong> <code>[1, 3, 8, 12, 4, 2]</code><br/>
+<strong>Search = 4</strong></p><p><strong>Steps:</strong>
+1. Find the peak element index.
+2. If <code>target == peak</code> -&gt; return <code>true</code>
+3. If <code>target &lt; peak</code> -&gt; Binary Search in left (increasing part)
+4. If <code>target &gt; peak</code> -&gt; Binary Search in right (decreasing part)</p><p><strong>Find Peak Index</strong></p><pre><code class="language-java">int l = 0, r = n - 1;
+while (l &lt; r) {
+    int mid = l + (r - l) / 2;
+    if (arr[mid] &lt; arr[mid + 1])
+        l = mid + 1;
+    else
+        r = mid;
+}
+return l;
+</code></pre><p><strong>Binary Search in Decreasing Order</strong></p><pre><code class="language-java">while (l &lt;= r) {
+    int mid = l + (r - l) / 2;
+    if (arr[mid] == target)
+        return true;
+    else if (arr[mid] &gt; target)
+        l = mid + 1;
+    else
+        r = mid - 1;
+}
+</code></pre><hr/></div><div class="card"><h2>16. SEARCH IN INFINITE / VERY LARGE ARRAY</h2><p><strong>Problem:</strong>
+Array is sorted but size is unknown or very large. <strong>Target = 15</strong></p><table>
+<thead>
+<tr>
+<th>...</th>
+<th>1</th>
+<th>3</th>
+<th>7</th>
+<th>9</th>
+<th><strong>12</strong></th>
+<th>15</th>
+<th>18</th>
+<th>21</th>
+<th>...</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td><strong>4</strong></td>
+<td>5</td>
+<td>6</td>
+<td><strong>7</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table><p><em>(low = 4, high = 7. Expanding Range)</em></p><p><strong>Solution:</strong>
+1. Find the range <code>(low, high)</code> where target can exist.
+2. Apply Binary Search in that range.</p><p><strong>1. Expand range:</strong></p><pre><code class="language-java">low = high + 1;
+high = high * 2;
+</code></pre><p>until <code>arr[high] &gt;= target</code> or <code>arr[high]</code> is out of bounds</p><p><strong>2. Apply normal Binary Search</strong> between <code>low</code> and <code>high</code>.</p><p>✔ <strong>Time Complexity:</strong> <code>O(log index_of_target)</code></p><hr/></div><div class="card"><h2>17. REAL INTERVIEW QUESTIONS (POPULAR)</h2><ol>
+<li>Binary Search</li>
+<li>Search Insert Position</li>
+<li>Find First and Last Position of Element in Sorted Array</li>
+<li>Search in Rotated Sorted Array</li>
+<li>Search in Rotated Sorted Array II (duplicates)</li>
+<li>Koko Eating Bananas</li>
+<li>Minimum Eating Speed</li>
+<li>Ship Packages Within D Days</li>
+<li>Allocate Minimum Number of Pages</li>
+<li>Split Array Largest Sum</li>
+<li>Find Peak Element</li>
+<li>Find Minimum in Rotated Sorted Array</li>
+</ol><p><strong>Most questions are variations of:</strong>
+* Boundary Search
+* Search on Answer
+* Rotated Array Search</p><hr/><p><strong>KEY TAKEAWAY</strong>
+Binary Search is about thinking smart, defining the search space correctly, and shrinking it efficiently.</p><p><strong>REMEMBER</strong>
+* Think of the question type first.
+* Choose the correct template.
+* Handle edge cases carefully.</p><p><strong>TIME COMPLEXITY</strong>
+<code>O(log n)</code></p><p><strong>SPACE COMPLEXITY</strong>
+<code>O(1)</code> (Iterative)</p><!-- PAGE_BREAK --></div><div class="card"><h2>BINARY SEARCH</h2><p>FAANG INTERVIEW CHEAT SHEET (JAVA)</p><p><strong>GOAL:</strong>
+Reduce search space by half in every step
+O(log n) time</p><p>Page 4 of 4</p></div><div class="card"><h2>18. TIME &amp; SPACE COMPLEXITY SUMMARY</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Problem Type</th>
+<th style="text-align: left;">Time Complexity</th>
+<th style="text-align: left;">Space Complexity</th>
+<th style="text-align: left;">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Classic Binary Search</td>
+<td style="text-align: left;">O(log n)</td>
+<td style="text-align: left;">O(1)</td>
+<td style="text-align: left;">Iterative</td>
+</tr>
+<tr>
+<td style="text-align: left;">First / Last Occurrence</td>
+<td style="text-align: left;">O(log n)</td>
+<td style="text-align: left;">O(1)</td>
+<td style="text-align: left;">Extra checks</td>
+</tr>
+<tr>
+<td style="text-align: left;">Search on Answer</td>
+<td style="text-align: left;">O(log N × log M)</td>
+<td style="text-align: left;">O(1)</td>
+<td style="text-align: left;">N = array size, M = answer range</td>
+</tr>
+<tr>
+<td style="text-align: left;">Search in 2D Matrix</td>
+<td style="text-align: left;">O(log (m × n))</td>
+<td style="text-align: left;">O(1)</td>
+<td style="text-align: left;">Treat as 1D array</td>
+</tr>
+<tr>
+<td style="text-align: left;">Peak Element</td>
+<td style="text-align: left;">O(log n)</td>
+<td style="text-align: left;">O(1)</td>
+<td style="text-align: left;">Bitonic array</td>
+</tr>
+<tr>
+<td style="text-align: left;">Rotated Sorted Array</td>
+<td style="text-align: left;">O(log n)</td>
+<td style="text-align: left;">O(1)</td>
+<td style="text-align: left;">Unique elements</td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>19. PATTERN RECOGNITION GUIDE</h2><p>Look at the problem and identify the pattern:</p><ul>
+<li><strong>Exact value in sorted array</strong> ➔ Classic Binary Search</li>
+<li><strong>First / Last position of a target</strong> ➔ First / Last Occurrence Templates</li>
+<li><strong>Smallest / Largest value satisfying a condition</strong> ➔ Binary Search on Answer (Optimization Problems)</li>
+<li><strong>Matrix is sorted (row-wise &amp; col-wise)</strong> ➔ Treat as 1D Binary Search</li>
+<li><strong>Array is rotated sorted</strong> ➔ Find pivot, then Binary Search in correct half</li>
+<li><strong>Bitonic / Mountain Array</strong> ➔ Find peak, then search in increasing / decreasing part</li>
+</ul></div><div class="card"><h2>20. BINARY SEARCH FLOW SUMMARY</h2><p><strong>Is the array sorted?</strong>
+* <strong>YES</strong>
+  * What are we looking for?
+    * Exact Element ➔ Classic Binary Search
+    * First / Last Occurrence ➔ First / Last Templates
+    * Min / Max Satisfying Condition ➔ Binary Search on Answer
+* <strong>NO</strong>
+  * Can we sort it?
+    * YES ➔ Sort + Classic Binary Search
+    * NO ➔ Binary Search Not Applicable</p></div><div class="card"><h2>21. BINARY SEARCH SUMMARY (KEY POINTS)</h2><ul>
+<li>Always think: Can I eliminate half of the search space?</li>
+<li>Define search space correctly.</li>
+<li>Choose the right template (classic / first / last / answer).</li>
+<li>Handle boundaries and edge cases.</li>
+<li>Avoid infinite loops by correct pointer updates.</li>
+<li>Dry run with small examples before coding.</li>
+<li>Write clean, bug-free, and well-commented code.</li>
+</ul><p><strong>REMEMBER:</strong>
+Binary Search is all about reducing uncertainty in the smartest way possible!</p></div><div class="card"><h2>22. COMMON EDGE CASES</h2><ul>
+<li><strong>Array with 1 element</strong>
+<code>nums = [5], target = 5 ➔ return 0</code></li>
+<li><strong>Target not present</strong>
+<code>nums = [1,2,3,4], target = 10 ➔ return -1</code></li>
+<li><strong>All elements same</strong>
+<code>nums = [7,7,7,7], target = 7 ➔ return first / last as per need</code></li>
+<li><strong>First element target</strong>
+<code>nums = [1,2,3,4], target = 1 ➔ return 0</code></li>
+<li><strong>Last element target</strong>
+<code>nums = [1,2,3,4], target = 4 ➔ return n-1</code></li>
+<li><strong>Check for overflow in mid calculation</strong>
+<code>int mid = left + (right - left) / 2; // safe</code></li>
+</ul></div><div class="card"><h2>23. DRY RUN TIPS</h2><ul>
+<li>Always write left, right, mid.</li>
+<li>Highlight the mid element.</li>
+<li>Write the comparison result.</li>
+<li>Update the pointers.</li>
+<li>Repeat until condition breaks.</li>
+<li>Finally, write the answer.</li>
+</ul><p><strong>Pro Tip:</strong>
+Practice dry run without coding first! It improves your problem-solving speed.</p></div><div class="card"><h2>24. QUICK REFERENCE (JAVA)</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Mid (Safe)</strong></td>
+<td style="text-align: left;"><code>int mid = left + (right - left) / 2;</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Left Half</strong></td>
+<td style="text-align: left;"><code>right = mid - 1;</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Right Half</strong></td>
+<td style="text-align: left;"><code>left = mid + 1;</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Loop Condition</strong></td>
+<td style="text-align: left;"><code>while (left &lt;= right)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Return Not Found</strong></td>
+<td style="text-align: left;"><code>return -1;</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>First Occurrence</strong></td>
+<td style="text-align: left;"><code>right = mid - 1; // when equal</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Last Occurrence</strong></td>
+<td style="text-align: left;"><code>left = mid + 1; // when equal</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Lower Bound</strong></td>
+<td style="text-align: left;"><code>right = mid - 1; // when equal</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Upper Bound</strong></td>
+<td style="text-align: left;"><code>left = mid + 1; // when equal</code></td>
+</tr>
+</tbody>
+</table></div><div class="card"><h2>25. FAANG INTERVIEW CHECKLIST</h2><ul>
+<li>[x] Understand problem &amp; constraints</li>
+<li>[x] Identify if Binary Search applies</li>
+<li>[x] Choose correct template</li>
+<li>[x] Define search space</li>
+<li>[x] Handle edge cases</li>
+<li>[x] Dry run with examples</li>
+<li>[x] Write clean code</li>
+<li>[x] Check time &amp; space complexity</li>
+<li>[x] Test with custom cases</li>
+<li>[x] Explain your approach clearly</li>
+<li>[x] Be ready for follow-up questions</li>
+<li>[x] Optimize if required</li>
+</ul><p><strong>🏆 GOLDEN RULE</strong>
+If you can solve it by eliminating half every time, think Binary Search first!</p></div><div class="card"><h2>26. MOTIVATION BOOSTER</h2><ul>
+<li>⭐ Binary Search is a superpower.</li>
+<li>⭐ It turns O(n) into O(log n).</li>
+<li>⭐ Master this pattern, crack any interview!</li>
+</ul><p><strong>YOU'VE GOT THIS! 💪</strong></p><hr/><p><strong>🎯 MASTER BINARY SEARCH PATTERN, NOT JUST THE CODE.</strong>
+<strong>🧠 THINK ➔ ELIMINATE ➔ NARROW ➔ FIND</strong>
+<strong>That's the Binary Search Way!</strong>
+<strong>Practice. Analyze. Optimize.</strong>
+<strong>Become Unstoppable!</strong></p><!-- PAGE_BREAK --></div></div>
+</body>
+</html>

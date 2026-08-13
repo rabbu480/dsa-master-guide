@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>FAANG DSA Cheat Sheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="assets/style.css"/>
+</head>
+<body>
+<!-- PAGE 1 -->
+<div class="page">
+<div class="header-top">
+<div>
+<h1>HEAP</h1>
+<div class="subtitle">Priority Queue<br/><small>(FAANG Cheat Sheet)</small></div>
+</div>
+<div>
+<div class="page-number">PAGE 1</div>
+<div>Fundamentals &amp; Java Basics</div>
+</div>
+</div>
+<div class="grid-container">
+<!-- Left Column -->
+<div class="col-left">
+<!-- 1. WHAT IS A HEAP? -->
+<div class="section-box">
+<div class="section-header"><span class="num">1</span> WHAT IS A HEAP?</div>
+<div class="section-content">
+<ul>
+<li>A Heap is a <strong>Complete Binary Tree</strong>.</li>
+<li>It satisfies the <strong>Heap Property</strong>.</li>
+<li>It is <strong>NOT</strong> a sorted data structure.</li>
+<li>Only the root element is guaranteed to be the minimum (Min Heap) or maximum (Max Heap).</li>
+<li>Heaps are used to implement <strong>Priority Queue</strong>.</li>
+</ul>
+</div>
+</div>
+<!-- 2. MIN HEAP VS MAX HEAP -->
+<div class="section-box">
+<div class="section-header"><span class="num">2</span> MIN HEAP VS MAX HEAP</div>
+<div class="section-content flex-row">
+<div class="flex-col">
+<div class="bg-green">MIN HEAP</div>
+<div>Parent ≤ Children</div>
+<div class="mermaid">
+                            graph TD
+                                classDef greenNode fill:#fff,stroke:#10b981,stroke-width:2px,color:#10b981,font-weight:bold;
+                                A((2)):::greenNode --&gt; B((3)):::greenNode
+                                A --&gt; C((5)):::greenNode
+                                B --&gt; D((4)):::greenNode
+                                B --&gt; E((7)):::greenNode
+                                C --&gt; F((6)):::greenNode
+                                C --&gt; G((8)):::greenNode
+                            </div>
+<div>Smallest element<br/>is at the root.</div>
+</div>
+<div class="flex-col">
+<div class="bg-red">MAX HEAP</div>
+<div>Parent ≥ Children</div>
+<div class="mermaid">
+                            graph TD
+                                classDef redNode fill:#fff,stroke:#ef4444,stroke-width:2px,color:#ef4444,font-weight:bold;
+                                A((10)):::redNode --&gt; B((9)):::redNode
+                                A --&gt; C((7)):::redNode
+                                B --&gt; D((3)):::redNode
+                                B --&gt; E((5)):::redNode
+                                C --&gt; F((1)):::redNode
+                                C --&gt; G((2)):::redNode
+                            </div>
+<div>Largest element<br/>is at the root.</div>
+</div>
+</div>
+</div>
+<!-- 3. COMPLETE BINARY TREE -->
+<div class="section-box">
+<div class="section-header"><span class="num">3</span> COMPLETE BINARY TREE</div>
+<div class="section-content">
+<p>All levels are completely filled except possibly the last level, and all nodes in the last level are as far left as possible.</p>
+<div class="flex-row">
+<div class="flex-col">
+<div>✅</div>
+<div class="mermaid">
+                                graph TD
+                                    classDef default fill:#e2e8f0,stroke:#94a3b8,stroke-width:2px,color:transparent;
+                                    A(( )) --&gt; B(( ))
+                                    A --&gt; C(( ))
+                                    B --&gt; D(( ))
+                                    B --&gt; E(( ))
+                                    C --&gt; F(( ))
+                                </div>
+</div>
+<div class="flex-col">
+<div>❌</div>
+<div class="mermaid">
+                                graph TD
+                                    classDef default fill:#e2e8f0,stroke:#94a3b8,stroke-width:2px,color:transparent;
+                                    A(( )) --&gt; B(( ))
+                                    A --&gt; C(( ))
+                                    B --&gt; D(( ))
+                                    C --&gt; E(( ))
+                                </div>
+</div>
+</div>
+</div>
+</div>
+<!-- 4. ARRAY REPRESENTATION -->
+<div class="section-box">
+<div class="section-header"><span class="num">4</span> ARRAY REPRESENTATION (0-INDEXED)</div>
+<div class="section-content flex-row">
+<div class="flex-col">
+<strong>Example Tree</strong>
+<div class="mermaid">
+                            graph TD
+                                classDef blueNode fill:#fff,stroke:#3b82f6,stroke-width:2px,color:#3b82f6,font-weight:bold;
+                                A((1)):::blueNode --&gt; B((2)):::blueNode
+                                A --&gt; C((3)):::blueNode
+                                B --&gt; D((4)):::blueNode
+                                B --&gt; E((5)):::blueNode
+                                C --&gt; F((6)):::blueNode
+                                C --&gt; G((7)):::blueNode
+                            </div>
+</div>
+<div class="flex-col">
+<strong>Index Relationships</strong><br/><br/>
+                            Parent(i) = (i - 1) / 2<br/>
+                            Left(i) = 2 * i + 1<br/>
+                            Right(i) = 2 * i + 2
+                        </div>
+</div>
+<div class="section-content">
+<strong>Array Representation</strong>
+<table>
+<tr>
+<th>Index</th>
+<td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td>
+</tr>
+<tr>
+<th>Value</th>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+</tr>
+</table>
+</div>
+</div>
+<!-- 5. TIME COMPLEXITIES -->
+<div class="section-box">
+<div class="section-header"><span class="num">5</span> TIME COMPLEXITIES</div>
+<div class="section-content">
+<table>
+<tr>
+<th>Operation</th>
+<th>Min Heap</th>
+<th>Max Heap</th>
+<th>Why?</th>
+</tr>
+<tr>
+<td><strong>offer(x)</strong></td><td>O(log n)</td><td>O(log n)</td><td>Heapify Up</td>
+</tr>
+<tr>
+<td><strong>poll()</strong></td><td>O(log n)</td><td>O(log n)</td><td>Heapify Down</td>
+</tr>
+<tr>
+<td><strong>peek()</strong></td><td>O(1)</td><td>O(1)</td><td>Root access</td>
+</tr>
+<tr>
+<td><strong>size()</strong></td><td>O(1)</td><td>O(1)</td><td>Just length</td>
+</tr>
+<tr>
+<td><strong>isEmpty()</strong></td><td>O(1)</td><td>O(1)</td><td>Just length</td>
+</tr>
+<tr>
+<td><strong>Build Heap</strong><br/><small>(n elements)</small></td>
+<td>O(n)</td><td>O(n)</td><td>Bottom-up heapify</td>
+</tr>
+</table>
+<div class="rule-box">
+<span>⭐</span> <strong>Build Heap</strong> (Bottom-Up) is O(n) which is better than inserting n elements one by one (O(n log n)).
+                        </div>
+</div>
+</div>
+</div> <!-- End Left Column -->
+<!-- Right Column -->
+<div class="col-right">
+<!-- 6. JAVA PRIORITYQUEUE -->
+<div class="section-box">
+<div class="section-header"><span class="num">6</span> JAVA PRIORITYQUEUE</div>
+<div class="section-content">
+<strong>a) Min Heap (Default)</strong>
+<pre><code>PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+<span>// Smallest element at peek()</span></code></pre>
+<strong>b) Max Heap (3 Ways)</strong>
+<div>1. Using Collections.reverseOrder() <strong>(Recommended)</strong></div>
+<pre><code>PriorityQueue&lt;Integer&gt; maxHeap =
+    new PriorityQueue&lt;&gt;(Collections.reverseOrder());</code></pre>
+<div>2. Using Comparator (Integer.compare)</div>
+<pre><code>PriorityQueue&lt;Integer&gt; maxHeap =
+    new PriorityQueue&lt;&gt;((a, b) -&gt; Integer.compare(b, a));</code></pre>
+<div>3. Using subtraction <strong>(Not recommended - overflow risk)</strong></div>
+<pre><code>PriorityQueue&lt;Integer&gt; maxHeap =
+    new PriorityQueue&lt;&gt;((a, b) -&gt; b - a);</code></pre>
+<strong>c) Common Operations</strong>
+<table>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><strong>offer(x)</strong></td><td>Inserts element x into heap.</td>
+</tr>
+<tr>
+<td><strong>poll()</strong></td><td>Removes and returns root element (min or max).</td>
+</tr>
+<tr>
+<td><strong>peek()</strong></td><td>Returns root element without removing.</td>
+</tr>
+<tr>
+<td><strong>size()</strong></td><td>Returns number of elements.</td>
+</tr>
+<tr>
+<td><strong>isEmpty()</strong></td><td>Checks if heap is empty.</td>
+</tr>
+</table>
+</div>
+</div>
+<!-- 7. IMPORTANT TERMINOLOGY -->
+<div class="section-box">
+<div class="section-header"><span class="num">7</span> IMPORTANT TERMINOLOGY</div>
+<div class="section-content">
+<table>
+<tr><td><strong>Root</strong></td><td>: Topmost element.</td></tr>
+<tr><td><strong>Parent(i)</strong></td><td>: (i - 1) / 2</td></tr>
+<tr><td><strong>Left Child(i)</strong></td><td>: 2 * i + 1</td></tr>
+<tr><td><strong>Right Child(i)</strong></td><td>: 2 * i + 2</td></tr>
+<tr><td><strong>Height</strong></td><td>: Longest path from root to leaf.</td></tr>
+<tr><td><strong>Leaf Node</strong></td><td>: Node with no children.</td></tr>
+<tr><td><strong>Heapify</strong></td><td>: Process of restoring heap property (Bubble Up or Bubble Down).</td></tr>
+</table>
+</div>
+</div>
+<!-- 8. KEY POINTS TO REMEMBER -->
+<div class="section-box">
+<div class="section-header"><span class="num">8</span> KEY POINTS TO REMEMBER</div>
+<div class="section-content">
+<ul>
+<li><span>✔</span> Heap is a Complete Binary Tree.</li>
+<li><span>✔</span> Heap ≠ Sorted Array.</li>
+<li><span>✔</span> Heaps are used for <strong>Priority</strong>, not order.</li>
+<li><span>✔</span> Choose <strong>Min Heap</strong> or <strong>Max Heap</strong> based on the problem goal.</li>
+<li><span>✔</span> Heap operations are logarithmic time (O(log n)).</li>
+</ul>
+</div>
+</div>
+<!-- 9. COMMON MISTAKES -->
+<div class="section-box">
+<div class="section-header"><span class="num">9</span> COMMON MISTAKES</div>
+<div class="section-content">
+<ul>
+<li>❌ Confusing Min Heap with Max Heap.</li>
+<li>❌ Using wrong comparator.</li>
+<li>❌ Forgetting that default PriorityQueue in Java is Min Heap.</li>
+<li>❌ Not handling empty heap before poll/peek.</li>
+<li>❌ Assuming heap gives sorted order.</li>
+</ul>
+</div>
+</div>
+</div> <!-- End Right Column -->
+<!-- Bottom Full Width Rule -->
+<div class="full-width rule-box">
+<div><span>💡</span> <strong>Golden Rule: Heaps are all about PRIORITY. Ask: "What element should come out first?"</strong></div>
+<div>➡ Next Page: Heap Patterns Overview</div>
+</div>
+</div>
+</div>
+<div class="page">
+<!-- Header -->
+<div class="header-top">
+<div>
+<h1>HEAP - PATTERNS</h1>
+<div class="subtitle">Top Interview Patterns with Heaps (Priority Queue)</div>
+</div>
+<div>
+<div class="page-number">PAGE 2</div>
+</div>
+</div>
+<!-- Banner -->
+<div>
+<div><span>Max Heap</span> → largest element on top</div>
+<div><span>Min Heap</span> → <span>smallest element</span> on top</div>
+<div>PQ → PriorityQueue</div>
+</div>
+<!-- PATTERN 1 -->
+<div class="section-box">
+<div class="section-header">
+<div>PATTERN 1</div>
+<div>REPEATED MAX / MIN RETRIEVAL</div>
+<div>(e.g., Last Stone Weight)</div>
+</div>
+<div>
+<!-- When to use -->
+<div>
+<div>WHEN TO USE?</div>
+<ul>
+<li>We always take the largest (or smallest) element.</li>
+<li>Do something with it.</li>
+<li>Put the result back.</li>
+<li>Repeat until 1 (or none) left.</li>
+</ul>
+</div>
+<!-- Heap to use -->
+<div>
+<div>HEAP TO USE</div>
+<div><span>Max Heap</span> → largest</div>
+<div class="mermaid">
+                graph TD
+                    A((7)) --&gt; B((5))
+                    A --&gt; C((6))
+                    B --&gt; D((2))
+                    B --&gt; E((4))
+                    C --&gt; F((1))
+                    C --&gt; G((3))
+                </div>
+</div>
+<!-- Idea / Aha -->
+<div>
+<div>IDEA / AHA</div>
+<div>💡</div>
+<div>
+                    We always care about the current largest element.<br/><br/>
+                    Heap gives it in O(1).
+                </div>
+</div>
+<!-- Template -->
+<div>
+<div>TEMPLATE (JAVA)</div>
+<pre><code>PriorityQueue&lt;Integer&gt; pq = 
+    new PriorityQueue&lt;&gt;(Collections.
+    reverseOrder());  <span>// Max Heap</span>
+
+<span>// Build heap</span>
+for (int x : arr) pq.offer(x);
+
+while (pq.size() &gt; 1) {
+    int a = pq.poll();  <span>// largest</span>
+    int b = pq.poll();  <span>// 2nd largest</span>
+    if (a != b) pq.offer(a - b);
+}
+return pq.isEmpty() ? 0 : pq.peek();</code></pre>
+</div>
+<!-- Complexity -->
+<div>
+<div>COMPLEXITY</div>
+<div>
+                    • <strong>Time:</strong> O(n log n)<br/>
+<span>(n insertions +<br/><span>up to n polls)</span></span><br/>
+                    • <strong>Space:</strong> O(n)
+                </div>
+<div>
+<div>EXAMPLES</div>
+<ul>
+<li>LeetCode 1046<br/>Last Stone Weight</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- PATTERN 2 -->
+<div class="section-box">
+<div class="section-header">
+<div>PATTERN 2</div>
+<div>TOP-K ELEMENTS</div>
+<div>(e.g., Kth Largest, Top K Frequent)</div>
+</div>
+<div>
+<!-- When to use -->
+<div>
+<div>WHEN TO USE?</div>
+<ul>
+<li>Need the K largest/smallest elements.</li>
+<li>Or K most frequent, top K, K closest, etc.</li>
+<li>We discard the rest.</li>
+</ul>
+</div>
+<!-- Heap to use -->
+<div>
+<div>HEAP TO USE</div>
+<div>Top K Largest → <span>Min Heap</span> (size K)</div>
+<div class="mermaid">
+                graph TD
+                    A((1)) --&gt; B((2))
+                    A --&gt; C((3))
+                </div>
+<div>(Keep K=3 largest seen so far)</div>
+<div>Top K Smallest → <span>Max Heap</span> (size K)</div>
+<div class="mermaid">
+                graph TD
+                    D((9)) --&gt; E((8))
+                    D --&gt; F((7))
+                </div>
+<div>(Keep K=3 smallest seen so far)</div>
+</div>
+<!-- Idea / Aha -->
+<div>
+<div>IDEA / AHA</div>
+<div>
+                    Keep only K best candidates in heap.
+                </div>
+<div>
+                    If better element comes, replace root (worst among K).
+                </div>
+</div>
+<!-- Template -->
+<div>
+<div>TEMPLATE (JAVA)</div>
+<div>→ Top K Largest (Min Heap)</div>
+<pre><code>PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+for (int x : nums) {
+    pq.offer(x);
+    if (pq.size() &gt; k) pq.poll(); <span>// remove smallest</span>
+}
+<span>// pq contains top K largest</span>
+List&lt;Integer&gt; res = new ArrayList&lt;&gt;(pq);</code></pre>
+<div>→ Top K Smallest (Max Heap)</div>
+<pre><code>PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;(
+    Collections.reverseOrder());
+for (int x : nums) {
+    pq.offer(x);
+    if (pq.size() &gt; k) pq.poll(); <span>// remove largest</span>
+}
+<span>// pq contains top K smallest</span></code></pre>
+</div>
+<!-- Complexity -->
+<div>
+<div>
+                    • <strong>Time:</strong> O(n log k)<br/>
+                    • <strong>Space:</strong> O(k)
+                </div>
+<div>
+<div>EXAMPLES</div>
+<ul>
+<li>LC 215 Kth Largest Element in Array</li>
+<li>LC 347 Top K Frequent Elements</li>
+<li>LC 973 K Closest Points to Origin</li>
+<li>LC 692 Top K Frequent Words</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- PATTERN 3 -->
+<div class="section-box">
+<div class="section-header">
+<div>PATTERN 3</div>
+<div>MERGE K SORTED LISTS / ARRAYS</div>
+<div>(e.g., Merge K Sorted Lists)</div>
+</div>
+<div>
+<!-- When to use -->
+<div>
+<div>WHEN TO USE?</div>
+<ul>
+<li>We have K sorted lists/arrays.</li>
+<li>Need to merge into one sorted output.</li>
+<li>Always pick the smallest current candidate.</li>
+</ul>
+</div>
+<!-- Heap to use -->
+<div>
+<div>HEAP TO USE</div>
+<div>Min Heap</div>
+<div class="mermaid">
+                graph LR
+                    A((1)) --&gt; B((4)) --&gt; C((7))
+                    D((2)) --&gt; E((5)) --&gt; F((8))
+                    G((3)) --&gt; H((6)) --&gt; I((9))
+                    A -.-&gt; J[Min Heap]
+                    D -.-&gt; J
+                    G -.-&gt; J
+                </div>
+<div>1 2 3 4 5 6 7 8 9</div>
+</div>
+<!-- Idea / Aha -->
+<div>
+<div>IDEA / AHA</div>
+<div>
+                    Put the first element of each list into heap.
+                </div>
+<div>
+                    Pop smallest node, add its next node (if exists).
+                </div>
+</div>
+<!-- Template -->
+<div>
+<div>TEMPLATE (JAVA)</div>
+<pre><code>class Node { int val; Node next; }
+
+PriorityQueue&lt;Node&gt; pq = new PriorityQueue&lt;&gt;(
+    (a, b) -&gt; a.val - b.val); <span>// Min Heap</span>
+
+<span>// 1. Add head of each list</span>
+for (Node head : lists)
+    if (head != null) pq.offer(head);
+
+Node dummy = new Node(0), tail = dummy;
+
+while (!pq.isEmpty()) {
+    Node cur = pq.poll();
+    tail.next = cur; tail = tail.next;
+    if (cur.next != null) pq.offer(cur.next);
+}
+return dummy.next;</code></pre>
+</div>
+<!-- Complexity -->
+<div>
+<div>
+                    • <strong>Time:</strong> O(N log k)<br/>
+<span>(N = total nodes,<br/><span>k = number of lists)</span></span><br/>
+                    • <strong>Space:</strong> O(k)
+                </div>
+<div>
+<div>EXAMPLES</div>
+<ul>
+<li>LeetCode 23<br/>Merge K Sorted Lists</li>
+<li>LeetCode 373<br/>Find K Pairs with<br/>Smallest Sums</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- PATTERN 4 -->
+<div class="section-box">
+<div class="section-header">
+<div>PATTERN 4</div>
+<div>TWO HEAPS (MEDIAN FROM DATA STREAM)</div>
+<div>(e.g., Find Median from Data Stream)</div>
+</div>
+<div>
+<!-- When to use -->
+<div>
+<div>WHEN TO USE?</div>
+<ul>
+<li>Need median at any point in a stream of numbers.</li>
+<li>Insertions happen one by one.</li>
+<li>Need O(log n) insert and O(1) median.</li>
+</ul>
+</div>
+<!-- Heap to use -->
+<div>
+<div>HEAP TO USE</div>
+<div>
+<div>
+<div>Max Heap<br/><span>(Smaller Half)</span></div>
+<div class="mermaid">
+                        graph TD
+                            A((5)) --&gt; B((2))
+                            A --&gt; C((3))
+                            B --&gt; D((1))
+                            B --&gt; E((4))
+                        </div>
+</div>
+<div>
+<div>Min Heap<br/><span>(Larger Half)</span></div>
+<div class="mermaid">
+                        graph TD
+                            F((8)) --&gt; G((9))
+                            F --&gt; H((10))
+                        </div>
+</div>
+</div>
+</div>
+<!-- Idea / Aha -->
+<div>
+<div>IDEA / AHA</div>
+<div>💡</div>
+<div>
+                    Maintain two halves.<br/><br/>
+                    1) maxHeap.peek() ≤ minHeap.peek()<br/>
+                    2) Size difference ≤ 1<br/><br/>
+                    Median is either top of one heap or avg of both.
+                </div>
+</div>
+<!-- Template -->
+<div>
+<div>TEMPLATE (JAVA) - (Add Number)</div>
+<pre><code><span>// maxHeap: left half (max heap)
+// minHeap: right half (min heap)</span>
+PriorityQueue&lt;Integer&gt; maxHeap = 
+    new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+
+void addNum(int num) {
+    if (maxHeap.isEmpty() || num &lt;= maxHeap.peek())
+        maxHeap.offer(num);
+    else
+        minHeap.offer(num);
+        
+    <span>// Rebalance</span>
+    if (maxHeap.size() &gt; minHeap.size() + 1)
+        minHeap.offer(maxHeap.poll());
+    else if (minHeap.size() &gt; maxHeap.size())
+        maxHeap.offer(minHeap.poll());
+}
+
+double findMedian() {
+    if (maxHeap.size() == minHeap.size())
+        return (maxHeap.peek() + minHeap.peek()) / 2.0;
+    return maxHeap.peek();
+}</code></pre>
+</div>
+<!-- Complexity -->
+<div>
+<div>
+                    • <strong>addNum:</strong> O(log n)<br/>
+                    • <strong>findMedian:</strong> O(1)<br/>
+                    • <strong>Space:</strong> O(n)
+                </div>
+<div>
+<div>EXAMPLES</div>
+<ul>
+<li>LeetCode 295<br/>Find Median from<br/>Data Stream</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- AHA SUMMARY / PATTERN RECOGNITION TRIGGERS -->
+<div>
+<div>
+<div>⭐</div>
+<div>
+<div>AHA SUMMARY</div>
+<ul>
+<li>✅ What do I care about most right now? Put it on top!</li>
+<li>✅ Use heap to discard what I don't need.</li>
+<li>✅ Heap ≠ Sorting. Heap gives priority, not full order.</li>
+</ul>
+</div>
+</div>
+<div>
+<div>🔴</div>
+<div>
+<div>PATTERN RECOGNITION TRIGGERS</div>
+<div>
+                    • Top K / Kth / Most Frequent / Closest / Smallest / Largest / Merge K / Running Median / Priority / Stream / Scheduler
+                </div>
+</div>
+</div>
+</div>
+</div>
+<div class="page">
+<div class="header-top">
+<div>
+<h1>HEAP - CHEAT SHEET &amp; DECISION GUIDE</h1>
+<div class="subtitle">Quick Reference for Interviews<br/><small></small></div>
+</div>
+<div>
+<div class="page-number">PAGE 3</div>
+</div>
+</div>
+<div class="grid-container">
+<div class="col-left">
+<div class="section-box">
+<div class="section-header"><span class="num">1.</span> HEAP DECISION TREE</div>
+<div class="section-content">
+<div class="mermaid">
+                    graph TD
+                        Goal[What is the Goal?]
+                        Goal --&gt; L[Need largest element repeatedly?]
+                        Goal --&gt; S[Need smallest element repeatedly?]
+                        Goal --&gt; TopK[Need Top-K elements?]
+                        Goal --&gt; MergeK[Merge K sorted sources?]
+                        Goal --&gt; Median[Find Median from data stream?]
+                        
+                        L --&gt; UMax[Use Max Heap<br/>(largest on top)]
+                        S --&gt; UMin[Use Min Heap<br/>(smallest on top)]
+                        
+                        TopK --&gt; Discard[What should we discard?]
+                        Discard --&gt; DSmall[Discard smallest]
+                        Discard --&gt; DLarge[Discard largest]
+                        DSmall --&gt; UMinK[Use Min Heap<br/>(size K)]
+                        DLarge --&gt; UMaxK[Use Max Heap<br/>(size K)]
+                        
+                        MergeK --&gt; UMinMerge[Use Min Heap<br/>(one candidate<br/>from each source)]
+                        Median --&gt; UTwo[Use Two Heaps<br/>(Min + Max)]
+                        
+                        classDef default fill:#f8fafc,stroke:#cbd5e1,stroke-width:1px;
+                        classDef yellow fill:#fef3c7,stroke:#fcd34d,stroke-width:1px;
+                        classDef green fill:#ecfdf5,stroke:#6ee7b7,stroke-width:1px;
+                        classDef red fill:#fef2f2,stroke:#fca5a5,stroke-width:1px;
+                        
+                        class Goal yellow;
+                        class Discard yellow;
+                        class DSmall yellow;
+                        class DLarge yellow;
+                        class L green;
+                        class S green;
+                        class TopK green;
+                        class MergeK green;
+                        class Median green;
+                        class UMax red;
+                        class UMin red;
+                        class UMinK red;
+                        class UMaxK red;
+                        class UMinMerge red;
+                        class UTwo red;
+                    </div>
+</div>
+</div>
+<div class="section-box">
+<div class="section-header"><span class="num">3.</span> COMPLEXITY TABLE</div>
+<div class="section-content">
+<table>
+<tr>
+<th>Operation</th>
+<th>Min Heap</th>
+<th>Max Heap</th>
+<th>Notes</th>
+</tr>
+<tr>
+<td>Insert (offer)</td>
+<td>O(log n)</td>
+<td>O(log n)</td>
+<td>Heapify Up</td>
+</tr>
+<tr>
+<td>Remove (poll)</td>
+<td>O(log n)</td>
+<td>O(log n)</td>
+<td>Heapify Down</td>
+</tr>
+<tr>
+<td>Peek</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>Root access</td>
+</tr>
+<tr>
+<td>Size</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>Just length</td>
+</tr>
+<tr>
+<td>isEmpty</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>Just length</td>
+</tr>
+<tr>
+<td>Build Heap<br/><small>(from n elements)</small></td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td>Bottom-up<br/>heapify</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="section-box">
+<div class="section-header"><span class="num">4.</span> KEY INVARIANTS</div>
+<div class="section-content">
+<div>
+<div>
+<h3>Min Heap</h3>
+<p><strong>For every node i:</strong><br/>parent(i) &lt;= child(i)<br/><strong>Root = smallest element</strong></p>
+<div class="mermaid">
+                            graph TD
+                                A((2)) --&gt; B((3))
+                                A --&gt; C((5))
+                                B --&gt; D((4))
+                                B --&gt; E((7))
+                                C --&gt; F((6))
+                                C --&gt; G((8))
+                                classDef node fill:white,stroke:#000,stroke-width:1px;
+                            </div>
+<div>Always true for all nodes</div>
+</div>
+<div>
+<h3>Max Heap</h3>
+<p><strong>For every node i:</strong><br/>parent(i) &gt;= child(i)<br/><strong>Root = largest element</strong></p>
+<div class="mermaid">
+                            graph TD
+                                A((10)) --&gt; B((9))
+                                A --&gt; C((7))
+                                B --&gt; D((3))
+                                B --&gt; E((5))
+                                C --&gt; F((1))
+                                C --&gt; G((2))
+                                classDef node fill:white,stroke:#dc2626,stroke-width:1px,color:#dc2626;
+                            </div>
+<div>Always true for all nodes</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-right">
+<div class="section-box">
+<div class="section-header"><span class="num">2.</span> JAVA TEMPLATES (QUICK)</div>
+<div class="section-content">
+<p>Min Heap (Default)</p>
+<pre><code><span>PriorityQueue</span>&lt;<span>Integer</span>&gt; <span>minHeap</span> = 
+    <span>new</span> PriorityQueue&lt;&gt;();
+<span>// smallest element at peek()</span></code></pre>
+<p>Max Heap (Using reverseOrder)</p>
+<pre><code><span>PriorityQueue</span>&lt;<span>Integer</span>&gt; <span>maxHeap</span> = 
+    <span>new</span> PriorityQueue&lt;&gt;(<span>Collections.reverseOrder()</span>);
+<span>// largest element at peek()</span></code></pre>
+<p>Max Heap (Using Comparator)</p>
+<pre><code><span>PriorityQueue</span>&lt;<span>Integer</span>&gt; <span>maxHeap</span> = 
+    <span>new</span> PriorityQueue&lt;&gt;((a, b) -&gt; Integer.compare(b, a));
+<span>// largest element at peek()</span></code></pre>
+<p>Top-K Largest (Min Heap of size K)</p>
+<pre><code><span>PriorityQueue</span>&lt;<span>Integer</span>&gt; pq = <span>new</span> PriorityQueue&lt;&gt;();
+<span>for</span> (<span>int</span> x : nums) {
+    pq.offer(x);
+    <span>if</span> (pq.size() &gt; k) pq.poll(); <span>// remove smallest</span>
+}
+<span>// pq contains k largest</span></code></pre>
+<p>Top-K Smallest (Max Heap of size K)</p>
+<pre><code><span>PriorityQueue</span>&lt;<span>Integer</span>&gt; pq = 
+    <span>new</span> PriorityQueue&lt;&gt;((a, b) -&gt; Integer.compare(b, a));
+<span>for</span> (<span>int</span> x : nums) {
+    pq.offer(x);
+    <span>if</span> (pq.size() &gt; k) pq.poll(); <span>// remove largest</span>
+}
+<span>// pq contains k smallest</span></code></pre>
+</div>
+</div>
+<div class="section-box">
+<div class="section-header"><span class="num">5.</span> COMMON INTERVIEW CHECKLIST</div>
+<div class="section-content">
+<ul>
+<li><span>✅</span> Understand the goal clearly.</li>
+<li><span>✅</span> Ask: What should I keep? What should I discard?</li>
+<li><span>✅</span> Choose the right Heap (Min / Max).</li>
+<li><span>✅</span> Decide the size (K or all elements).</li>
+<li><span>✅</span> Maintain Heap invariant after every insertion/removal.</li>
+<li><span>✅</span> Think about edge cases (empty, k = 0, k &gt; n, duplicates).</li>
+<li><span>✅</span> Analyze Time and Space Complexity.</li>
+</ul>
+</div>
+</div>
+<div class="section-box">
+<div class="section-header"><span class="num">6.</span> COMMON MISTAKES</div>
+<div class="section-content">
+<ul>
+<li><span>✖</span> Using Min Heap when Max Heap is required (or vice versa).</li>
+<li><span>✖</span> Forgetting that PriorityQueue in Java is Min Heap by default.</li>
+<li><span>✖</span> Not maintaining heap size while solving Top-K problems.</li>
+<li><span>✖</span> Forgetting to add next element in Merge K after poll().</li>
+<li><span>✖</span> Not handling empty heap before peek()/poll().</li>
+<li><span>✖</span> Using subtraction in comparator (a - b) -&gt; overflow risk.</li>
+<li><span>✖</span> Confusing Heap with Sorted Array / Tree.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<h3><span>💡</span> 7. AHA MOMENTS</h3>
+<ul>
+<li><span>⭐</span> Heap gives you the best element in O(1).</li>
+<li><span>⭐</span> It is about PRIORITY, not sorting.</li>
+<li><span>⭐</span> Think: "What should I discard?" for Top-K problems.</li>
+<li><span>⭐</span> Merge K = One candidate per source.</li>
+<li><span>⭐</span> Median = Balance two halves.</li>
+</ul>
+</div>
+<div>
+<h3><span>🎯</span> PATTERN RECOGNITION TRIGGERS</h3>
+<div>
+<div><span>➡️</span> Top K / Kth Largest / Kth Smallest</div>
+<div><span>➡️</span> Find Median / Running Median</div>
+<div><span>➡️</span> Most Frequent / Least Frequent</div>
+<div><span>➡️</span> Task Scheduler / CPU Scheduling</div>
+<div><span>➡️</span> Merge K Sorted / K Sorted Lists</div>
+<div><span>➡️</span> Closest K / Smallest Range / Meeting Rooms</div>
+</div>
+</div>
+</div>
+<div>
+<span>⭐</span> Remember: Every Heap problem belongs to one of the <span>4 patterns on Page 2</span>.
+    </div>
+</div>
+<div class="page">
+<div class="header-top">
+<div>
+<h1>HEAP - FAANG HIDDEN TRIGGERS</h1>
+<div class="subtitle">How Interviewers Hide Heap Problems (Recognition Guide)</div>
+</div>
+<div>
+<div class="page-number">PAGE 4</div>
+<div>
+<div>They won't say "Use Heap"</div>
+<div>You must recognize it !</div>
+</div>
+</div>
+</div>
+<div class="grid-container">
+<div class="col-left">
+<div class="section-box">
+<div class="section-header"><span class="num">1</span> WHEN TO THINK HEAP ? (UNSEEN QUESTION CLUES)</div>
+<div class="section-content">
+<table>
+<tr>
+<th>Question Says...</th>
+<th>Think Heap Because...</th>
+</tr>
+<tr>
+<td><strong>Top K / K largest / K smallest</strong></td>
+<td>We only care about best K elements.</td>
+</tr>
+<tr>
+<td><strong>K closest / K farthest</strong></td>
+<td>Keep best K based on distance / value.</td>
+</tr>
+<tr>
+<td><strong>Kth largest / Kth smallest</strong></td>
+<td>Heap gives Kth in optimal time.</td>
+</tr>
+<tr>
+<td><strong>Most frequent / Top frequent</strong></td>
+<td>Use heap on frequency map.</td>
+</tr>
+<tr>
+<td><strong>Continuously receive data ("data stream")</strong></td>
+<td>Need to maintain running result.</td>
+</tr>
+<tr>
+<td><strong>Running median / Median at any time</strong></td>
+<td>Two Heaps maintain middle efficiently.</td>
+</tr>
+<tr>
+<td><strong>Merge K sorted lists / arrays / streams</strong></td>
+<td>Pick smallest current from K sources.</td>
+</tr>
+<tr>
+<td><strong>Always need smallest / largest repeatedly</strong></td>
+<td>Heap gives min/max in O(log n) each time.</td>
+</tr>
+<tr>
+<td><strong>Scheduling / Highest priority task</strong></td>
+<td>Always process highest (or lowest) priority first.</td>
+</tr>
+<tr>
+<td><strong>Resource allocation</strong></td>
+<td>Allocate best resource (min waste / min cost).</td>
+</tr>
+<tr>
+<td><strong>Find N smallest among millions</strong></td>
+<td>Min Heap of size N.</td>
+</tr>
+<tr>
+<td><strong>Live leaderboard / Top scores</strong></td>
+<td>Maintain top K scores dynamically.</td>
+</tr>
+<tr>
+<td><strong>Sliding window maximum/minimum</strong></td>
+<td>(Usually Deque) but if K is large and needs frequent removal by value → Heap (advanced).</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="section-box">
+<div class="section-header"><span class="num">3</span> HEAP VS OTHER DS (CHOOSE RIGHT TOOL)</div>
+<div class="section-content">
+<table>
+<tr>
+<th>Problem Type / Goal</th>
+<th>Best Tool</th>
+<th>Why?</th>
+</tr>
+<tr>
+<td><strong>Get min / max repeatedly</strong></td>
+<td><strong>Heap</strong></td>
+<td>O(log n) per operation</td>
+</tr>
+<tr>
+<td><strong>Top K elements</strong></td>
+<td><strong>Heap</strong></td>
+<td>O(n log k) better than sorting</td>
+</tr>
+<tr>
+<td><strong>Kth largest / smallest</strong></td>
+<td><strong>Heap / Quickselect</strong></td>
+<td>Heap: O(n log k), Quickselect: O(n) avg</td>
+</tr>
+<tr>
+<td><strong>Merge K sorted things</strong></td>
+<td><strong>Heap</strong></td>
+<td>One candidate per source</td>
+</tr>
+<tr>
+<td><strong>FIFO order</strong></td>
+<td>Queue</td>
+<td>Heap not for order</td>
+</tr>
+<tr>
+<td><strong>LIFO order</strong></td>
+<td>Stack</td>
+<td>Heap not for order</td>
+</tr>
+<tr>
+<td><strong>Need sorted output</strong></td>
+<td>Sort</td>
+<td>Full order required</td>
+</tr>
+<tr>
+<td><strong>Range queries</strong></td>
+<td>Segment Tree / BIT</td>
+<td>Heap not for range aggregation</td>
+</tr>
+<tr>
+<td><strong>Dynamic min with delete by value</strong></td>
+<td>TreeMap / Balanced BST</td>
+<td>Heap can't delete arbitrary element efficiently</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="section-box">
+<div class="section-header"><span class="num">5</span> RECOGNITION SHORTCUT (3 QUESTIONS)</div>
+<div class="section-content">
+<div>
+<ol>
+<li><span>1</span> <strong>What am I optimizing? (min/max/priority)</strong></li>
+<li><span>2</span> <strong>Do I need only top/bottom K or keep discarding irrelevant elements?</strong></li>
+<li><span>3</span> <strong>Is the data coming continuously or from multiple sorted sources?</strong></li>
+</ol>
+</div>
+<div>→</div>
+<div>
+<div>If <strong>YES</strong> to any</div>
+<div>→ Think HEAP ✓</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-right">
+<div class="section-box">
+<div class="section-header"><span class="num">2</span> FAANG FAVORITE HEAP PROBLEM THEMES</div>
+<div class="section-content">
+<table>
+<tr>
+<td><div>⚙️</div></td>
+<td>
+<div>System Design Like Problems</div>
+<div>Design Twitter Feed, Task Scheduler, Rate Limiter, Job Scheduler</div>
+</td>
+<td>Heap (Max)</td>
+</tr>
+<tr>
+<td><div>📈</div></td>
+<td>
+<div>Streaming / Real Time Data</div>
+<div>Running Median, Data Stream as Disjoint Intervals</div>
+</td>
+<td>Two Heaps</td>
+</tr>
+<tr>
+<td><div>🥇</div></td>
+<td>
+<div>Top K / Ranking</div>
+<div>Top K Frequent, Top K Elements, K Closest Points</div>
+</td>
+<td>Min Heap<br/><small>(size K)</small></td>
+</tr>
+<tr>
+<td><div>🔗</div></td>
+<td>
+<div>Merge / K Sorted Sources</div>
+<div>Merge K Sorted Lists, Smallest Range in K Lists</div>
+</td>
+<td>Min Heap</td>
+</tr>
+<tr>
+<td><div>⚡</div></td>
+<td>
+<div>Greedy + Priority</div>
+<div>IPO, Find K Pairs with Smallest Sums, Maximize Capital</div>
+</td>
+<td>Max Heap</td>
+</tr>
+<tr>
+<td><div>🕒</div></td>
+<td>
+<div>Intervals / Meetings</div>
+<div>Meeting Rooms (III), Employee Free Time, Conference Room Scheduler</div>
+</td>
+<td>Min Heap</td>
+</tr>
+<tr>
+<td><div>🔺</div></td>
+<td>
+<div>Graphs / Advanced</div>
+<div>Dijkstra's Algorithm, Prim's MST, Network Delay Time</div>
+</td>
+<td>Min Heap</td>
+</tr>
+</table>
+<div>
+<div><span>💡</span> Pro Tip</div>
+<div>Translate the problem into:</div>
+<div>"Which element should come out first?"</div>
+<div>→ That is your heap priority.</div>
+</div>
+</div>
+</div>
+<div class="section-box">
+<div class="section-header"><span class="num">4</span> INTERVIEWER TRICKS TO WATCH OUT</div>
+<div class="section-content">
+<ul>
+<li><strong>✘</strong> They never say "Use Heap" explicitly.</li>
+<li><strong>✘</strong> They mix multiple concepts (e.g., Heap + HashMap).</li>
+<li><strong>✘</strong> They change the goal (e.g., maximize instead of minimize).</li>
+<li><strong>✘</strong> They give huge constraints to hint suboptimal solutions will TLE.</li>
+<li><strong>✘</strong> They ask for real time / online processing → think Heap.</li>
+<li><strong>✘</strong> They change K during the process (dynamic K).</li>
+<li><strong>✘</strong> They ask for both min and max → think Two Heaps.</li>
+</ul>
+</div>
+</div>
+<div class="section-box">
+<div class="section-header"><span class="num">6</span> AHA MOMENTS (DON'T FORGET)</div>
+<div class="section-content">
+<div>
+<ul>
+<li><strong>✓</strong> Heap = Priority, NOT Sorting.</li>
+<li><strong>✓</strong> Heap guarantees the BEST element only.</li>
+<li><strong>✓</strong> Ask yourself: "What should I discard?"</li>
+<li><strong>✓</strong> Heap size K keeps only what I care about.</li>
+<li><strong>✓</strong> Comparator decides priority (not the data structure).</li>
+<li><strong>✓</strong> <span>Every Heap problem fits into one of the 4 patterns on Page 2.</span></li>
+</ul>
+</div>
+<div>
+                        💡
+                    </div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div><span>⭐</span> GOLDEN RULE</div>
+</div>
+<div>
+<div>The best way to solve Heap problems is to <strong>RECOGNIZE</strong> them fast, choose the <strong>RIGHT HEAP</strong>, and <strong>MAINTAIN the INVARIANT</strong>.</div>
+</div>
+<div>
+<div>Master Recognition,</div>
+<div>Not Just Implementation !</div>
+</div>
+</div>
+</div>
+<div class="page">
+<div class="header-top">
+<div>
+<h1>HEAP - PATTERNS</h1>
+<div class="subtitle">Top Interview Patterns with Heaps<br/><small>(FAANG Cheat Sheet)</small></div>
+</div>
+<div>
+<div class="page-number">PAGE 2</div>
+</div>
+</div>
+<div>
+<strong>Max Heap</strong> → largest element on top 
+        <span></span>
+<strong>Min Heap</strong> → smallest element on top 
+        <span></span>
+        PQ → PriorityQueue
+    </div>
+<!-- PATTERN 1 -->
+<div class="section-box">
+<div class="section-header">
+<strong>PATTERN 1</strong>
+<strong>REPEATED MAX / MIN RETRIEVAL</strong> <span>(e.g., Last Stone Weight)</span>
+</div>
+<div>
+<table>
+<tr>
+<th>When to Use?</th>
+<th>Heap to Use</th>
+<th>Idea / AHA</th>
+<th>Template / Approach (Java)</th>
+<th>Examples</th>
+</tr>
+<tr>
+<td>
+<ul>
+<li>We repeatedly take the largest (or smallest) element.</li>
+<li>Do some operation with it.</li>
+<li>Put the result back.</li>
+<li>Repeat until 1 (or none) left.</li>
+</ul>
+</td>
+<td>
+<div>Max Heap → largest<br/>element on top</div>
+<div class="mermaid">
+                        graph TD
+                            7((7)) --&gt; 5((5))
+                            7 --&gt; 6((6))
+                            5 --&gt; 2((2))
+                            5 --&gt; 4((4))
+                            6 --&gt; 1((1))
+                            6 --&gt; 3((3))
+                        </div>
+</td>
+<td>
+<div>💡</div>
+<div>
+                            Always care about the current largest (or smallest) element.<br/><br/>
+                            Heap gives it in O(1).
+                        </div>
+</td>
+<td>
+<pre><code>PriorityQueue&lt;Integer&gt; maxHeap = 
+    new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+
+for (int x : nums) maxHeap.offer(x);
+
+while (maxHeap.size() &gt; 1) {
+    int a = maxHeap.poll();  // largest
+    int b = maxHeap.poll();  // 2nd largest
+    if (a != b) maxHeap.offer(a - b);
+}
+
+return maxHeap.isEmpty() ? 0 : maxHeap.peek();</code></pre>
+</td>
+<td>
+<div>
+<div>📌 LC 1046</div>
+<div>Last Stone Weight</div>
+<div>
+<div>Complexity</div>
+<ul>
+<li>Time: O(n log n)</li>
+<li>Space: O(n)</li>
+</ul>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<!-- PATTERN 2 -->
+<div class="section-box">
+<div class="section-header">
+<strong>PATTERN 2</strong>
+<strong>TOP-K ELEMENTS</strong> <span>(e.g., Kth Largest, Top K Frequent)</span>
+</div>
+<div>
+<table>
+<tr>
+<th>When to Use?</th>
+<th>Heap to Use</th>
+<th>Idea / AHA</th>
+<th>Template / Approach (Java)</th>
+<th>Examples</th>
+</tr>
+<tr>
+<td>
+<ul>
+<li>Need the K largest / smallest / most frequent elements.</li>
+<li>K is much smaller than n.</li>
+<li>We don't want to sort everything.</li>
+</ul>
+</td>
+<td>
+<div>Top K Largest → Min Heap (size K)</div>
+<div class="mermaid">
+                        graph TD
+                            3((3)) --&gt; 1((1))
+                            3 --&gt; 2((2))
+                        </div>
+<div>(Keep K=3 largest seen so far)</div>
+<div>Top K Smallest → Max Heap (size K)</div>
+<div class="mermaid">
+                        graph TD
+                            7((7)) --&gt; 9((9))
+                            7 --&gt; 8((8))
+                        </div>
+<div>(Keep K=3 smallest seen so far)</div>
+</td>
+<td>
+<div>💡</div>
+<div>
+                            Keep only K best candidates in heap.
+                        </div>
+<div>
+                            If better element comes, replace root (worst among K).
+                        </div>
+</td>
+<td>
+<div>Top K Largest (Min Heap of size K)</div>
+<pre><code>PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+for (int x : nums) {
+    pq.offer(x);
+    if (pq.size() &gt; k) pq.poll(); // remove smallest
+}
+// pq contains k largest elements</code></pre>
+<div>Top K Smallest (Max Heap of size K)</div>
+<pre><code>PriorityQueue&lt;Integer&gt; pq = 
+    new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+for (int x : nums) {
+    pq.offer(x);
+    if (pq.size() &gt; k) pq.poll(); // remove largest
+}
+// pq contains k smallest elements</code></pre>
+</td>
+<td>
+<ul>
+<li><strong>LC 215</strong> Kth Largest Element in an Array</li>
+<li><strong>LC 347</strong> Top K Frequent Elements</li>
+<li><strong>LC 973</strong> K Closest Points to Origin</li>
+<li><strong>LC 692</strong> Top K Frequent Words</li>
+</ul>
+<div>
+<div>Complexity</div>
+<ul>
+<li>Time: O(n log k)</li>
+<li>Space: O(k)</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<!-- PATTERN 3 -->
+<div class="section-box">
+<div class="section-header">
+<strong>PATTERN 3</strong>
+<strong>MERGE K SORTED LISTS / ARRAYS</strong> <span>(e.g., Merge K Sorted Lists)</span>
+</div>
+<div>
+<table>
+<tr>
+<th>When to Use?</th>
+<th>Heap to Use</th>
+<th>Idea / AHA</th>
+<th>Template / Approach (Java)</th>
+<th>Examples</th>
+</tr>
+<tr>
+<td>
+<ul>
+<li>We have K sorted lists / arrays.</li>
+<li>Need to merge into one sorted output.</li>
+<li>Always pick the smallest current candidate.</li>
+</ul>
+</td>
+<td>
+<div>Min Heap</div>
+<div class="mermaid">
+                        graph LR
+                            A1((1)) --&gt; A4((4)) --&gt; A7((7))
+                            B2((2)) --&gt; B5((5)) --&gt; B8((8))
+                            C3((3)) --&gt; C6((6)) --&gt; C9((9))
+                            A1 -.-&gt; MH[Min Heap]
+                            B2 -.-&gt; MH
+                            C3 -.-&gt; MH
+                            MH -.-&gt; R[1 2 3 4 5 6 7 8 9]
+                        </div>
+</td>
+<td>
+<div>💡</div>
+<div>
+                            Put the first element of each list into heap.<br/><br/>
+                            Pop smallest, add its next element (if any).<br/><br/>
+                            Repeat.
+                        </div>
+</td>
+<td>
+<pre><code>class Node {
+    int val, list, index; // value, which list, index in list
+}
+PriorityQueue&lt;Node&gt; pq = new PriorityQueue&lt;&gt;(
+    (a, b) -&gt; a.val - b.val
+);
+// 1. Add first element of each list
+for (int i = 0; i &lt; lists.length; i++) {
+    pq.offer(new Node(lists[i].get(0), i, 0));
+}
+List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+while (!pq.isEmpty()) {
+    Node cur = pq.poll();
+    res.add(cur.val);
+    int nextIdx = cur.index + 1;
+    if (nextIdx &lt; lists[cur.list].size()) {
+        pq.offer(new Node(lists[cur.list].get(nextIdx), 
+                          cur.list, nextIdx));
+    }
+}
+// res is merged sorted list</code></pre>
+</td>
+<td>
+<ul>
+<li><strong>LC 23</strong><br/>Merge k Sorted Lists</li>
+<li><strong>LC 378</strong><br/>Kth Smallest Element in a Sorted Matrix</li>
+<li><strong>LC 1246</strong><br/>Palindrome Removal</li>
+</ul>
+<div>
+<div>Complexity</div>
+<ul>
+<li>Time: O(N log k)<br/><span>(N = total elements)</span></li>
+<li>Space: O(k)</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<!-- PATTERN 4 -->
+<div class="section-box">
+<div class="section-header">
+<strong>PATTERN 4</strong>
+<strong>TWO HEAPS (MEDIAN FROM DATA STREAM)</strong> <span>(e.g., Find Median from Data Stream)</span>
+</div>
+<div>
+<table>
+<tr>
+<th>When to Use?</th>
+<th>Heap to Use</th>
+<th>Idea / AHA</th>
+<th>Template / Approach (Java)</th>
+<th>Examples</th>
+</tr>
+<tr>
+<td>
+<ul>
+<li>Need median at any point in a stream.</li>
+<li>Insertions happen one by one.</li>
+<li>Need O(log n) insert and O(1) median.</li>
+</ul>
+</td>
+<td>
+<div>
+<div>
+<div>Max Heap<br/><span>(Smaller Half)</span></div>
+<div class="mermaid">
+                                graph TD
+                                    5((5)) --&gt; 2((2))
+                                    5 --&gt; 3((3))
+                                    2 --&gt; 1((1))
+                                    2 --&gt; 4((4))
+                                </div>
+</div>
+<div>
+<div>Min Heap<br/><span>(Larger Half)</span></div>
+<div class="mermaid">
+                                graph TD
+                                    8((8)) --&gt; 9((9))
+                                    8 --&gt; 10((10))
+                                </div>
+</div>
+</div>
+</td>
+<td>
+<div>💡</div>
+<div>
+<strong>Maintain two heaps:</strong><br/>
+                            1) maxHeap (left half) → top = max of left half<br/>
+                            2) minHeap (right half) → top = min of right half<br/><br/>
+                            Balance size difference ≤ 1.<br/><br/>
+                            Median is either top of maxHeap or avg of both tops.
+                        </div>
+</td>
+<td>
+<pre><code>PriorityQueue&lt;Integer&gt; maxHeap = 
+    new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+
+void addNum(int num) {
+    if (maxHeap.isEmpty() || num &lt;= maxHeap.peek())
+        maxHeap.offer(num);
+    else
+        minHeap.offer(num);
+        
+    // Balance
+    if (maxHeap.size() - minHeap.size() &gt; 1)
+        minHeap.offer(maxHeap.poll());
+    else if (minHeap.size() - maxHeap.size() &gt; 1)
+        maxHeap.offer(minHeap.poll());
+}
+
+double findMedian() {
+    if (maxHeap.size() &gt; minHeap.size())
+        return maxHeap.peek();
+    else
+        return (maxHeap.peek() + minHeap.peek()) / 2.0;
+}</code></pre>
+</td>
+<td>
+<ul>
+<li><strong>LC 295</strong><br/>Find Median from Data Stream</li>
+</ul>
+<div>
+<div>Complexity</div>
+<ul>
+<li>Time: O(log n)<br/>per operation</li>
+<li>Space: O(n)</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<!-- FOOTER -->
+<div>
+<div>
+<div>
+<span>🎯</span> 
+                RECOGNITION TRIGGERS (If you see these in a question, think HEAP!)
+            </div>
+<div>
+<div>Top K / Kth<br/>Largest / Smallest</div>
+<div></div>
+<div>Most Frequent /<br/>Top Frequent</div>
+<div></div>
+<div>Merge K<br/>Sorted</div>
+<div></div>
+<div>Running Median /<br/>Median at any time</div>
+<div></div>
+<div>Continuously pick<br/>Max / Min</div>
+</div>
+</div>
+<div>
+<div>GOLDEN RULE:</div>
+            Heaps are all about <strong>PRIORITY, not sorting.</strong> Choose the right heap and maintain the invariant!
+        </div>
+</div>
+</div>
+</body>
+</html>

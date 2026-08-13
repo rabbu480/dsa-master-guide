@@ -1,0 +1,430 @@
+<div class="page" style="font-family: sans-serif; color: #1e293b; background-color: #f8fafc; padding: 20px;">
+    <!-- Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 10px; margin-bottom: 20px;">
+        <div style="display: flex; align-items: baseline;">
+            <div style="background-color: #1e3a8a; color: white; padding: 10px 20px; font-size: 36px; font-weight: bold; border-radius: 4px; margin-right: 15px;">7</div>
+            <h1 style="color: #1e3a8a; margin: 0; font-size: 32px; letter-spacing: 1px;">ADVANCED TREE PROBLEMS</h1>
+            <div style="margin-left: 20px; font-size: 16px; font-weight: bold; position: relative;">
+                <span style="position: absolute; left: -10px; top: 50%; transform: translateY(-50%); width: 20px; height: 2px; background-color: #cbd5e1;"></span>
+                Important Problems beyond Basics
+                <span style="position: absolute; right: -10px; top: 50%; transform: translateY(-50%); width: 20px; height: 2px; background-color: #cbd5e1;"></span>
+            </div>
+        </div>
+        <div style="font-size: 14px; display: grid; grid-template-columns: auto auto; gap: 10px; align-items: center;">
+            <div>💡 AHA = Key Insight</div>
+            <div>⚙️ Pattern = How to think</div>
+            <div>∑ Formula / Idea</div>
+            <div>⏱️ Complexity</div>
+        </div>
+    </div>
+
+    <!-- 3x3 Grid using Flexbox -->
+    <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+        
+        <!-- Column 1 -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+            <!-- Box 1 -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; background: white; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div style="background-color: #15803d; color: white; padding: 10px; text-align: center; font-weight: bold; font-size: 14px;">
+                    1. LOWEST COMMON ANCESTOR<br>IN BINARY TREE (LC 236)
+                </div>
+                <div style="padding: 15px;">
+                    <div style="font-size: 12px; font-weight: bold; margin-bottom: 10px;">Example</div>
+                    <div class="mermaid" style="text-align: center;">
+                    graph TD
+                        3((3)) --> 5((5))
+                        3 --> 1((1))
+                        5 --> 6((6))
+                        5 --> 2((2))
+                        2 --> 7((7))
+                        2 --> 4((4))
+                        1 --> 0((0))
+                        1 --> 8((8))
+                        style 3 fill:#bbf7d0,stroke:#22c55e,stroke-width:2px
+                        style 5 fill:#bbf7d0,stroke:#22c55e,stroke-width:2px
+                        style 1 fill:#bbf7d0,stroke:#22c55e,stroke-width:2px
+                    </div>
+                    <div style="text-align: center; font-weight: bold; margin-top: 10px; font-size: 14px;">
+                        p = 5, q = 1 &nbsp; ➔ &nbsp; LCA = <span style="background-color: #bbf7d0; padding: 2px 6px; border-radius: 4px; border: 1px solid #22c55e;">3</span>
+                    </div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+                    
+                    <div style="font-weight: bold; color: #d97706; margin-bottom: 5px;">💡 AHA</div>
+                    <div style="font-size: 13px; line-height: 1.5; margin-bottom: 10px;">
+                        Children report back.<br>
+                        If both left and right return non-null ➔<br>
+                        current node is LCA.
+                    </div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+
+                    <div style="font-weight: bold; color: #059669; margin-bottom: 5px;">⚙️ Pattern</div>
+                    <div style="font-size: 13px; margin-bottom: 10px;">Postorder (Left ➔ Right ➔ Root)</div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+
+                    <div style="font-weight: bold; color: #4f46e5; margin-bottom: 5px;">∑ Idea / Formula</div>
+                    <pre style="font-size: 12px; background: #f8fafc; padding: 10px; border-radius: 4px; border: 1px solid #e2e8f0; margin-bottom: 15px; white-space: pre-wrap;"><code>If root == null or root == p or root == q ➔ return root
+left = recurse(left), right = recurse(right)
+If left != null and right != null ➔ return root
+Else return left if not null else right</code></pre>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; background-color: #f1f5f9; padding: 8px; border-radius: 4px; font-size: 13px;">
+                        <span style="background-color: #15803d; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold;">Complexity</span>
+                        <span>Time: <b>O(n)</b></span>
+                        <span>Space: <b>O(h)</b></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Box 4 -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; background: white; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div style="background-color: #d97706; color: white; padding: 10px; text-align: center; font-weight: bold; font-size: 14px;">
+                    4. PATH SUM (LC 112 / 113)
+                </div>
+                <div style="padding: 15px;">
+                    <div style="font-size: 12px; font-weight: bold; margin-bottom: 10px;">Example (Sum = 22)</div>
+                    <div class="mermaid" style="text-align: center;">
+                    graph TD
+                        5((5)) --> 4a((4))
+                        5 --> 8((8))
+                        4a --> 11((11))
+                        11 --> 7((7))
+                        11 --> 2((2))
+                        8 --> 13((13))
+                        8 --> 4b((4))
+                        4b --> 1((1))
+                        style 5 fill:#fef3c7,stroke:#d97706,stroke-width:2px
+                        style 4a fill:#fef3c7,stroke:#d97706,stroke-width:2px
+                        style 11 fill:#fef3c7,stroke:#d97706,stroke-width:2px
+                        style 2 fill:#fef3c7,stroke:#d97706,stroke-width:2px
+                    </div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+                    
+                    <div style="font-weight: bold; color: #d97706; margin-bottom: 5px;">💡 AHA</div>
+                    <div style="font-size: 13px; line-height: 1.5; margin-bottom: 10px;">
+                        Need root to leaf path.<br>
+                        Keep subtracting from target.<br>
+                        If leaf and target == 0 ➔ valid path.
+                    </div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+
+                    <div style="font-weight: bold; color: #ea580c; margin-bottom: 5px;">⚙️ Pattern</div>
+                    <div style="font-size: 13px; margin-bottom: 10px;">DFS (Preorder)</div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+
+                    <div style="font-weight: bold; color: #4f46e5; margin-bottom: 5px;">∑ Idea / Formula</div>
+                    <pre style="font-size: 12px; background: #f8fafc; padding: 10px; border-radius: 4px; border: 1px solid #e2e8f0; margin-bottom: 15px; white-space: pre-wrap;"><code>target -= node.val
+If leaf and target == 0 ➔ true
+Else check left and right</code></pre>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; background-color: #f1f5f9; padding: 8px; border-radius: 4px; font-size: 13px;">
+                        <span style="background-color: #d97706; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold;">Complexity</span>
+                        <span>Time: <b>O(n)</b></span>
+                        <span>Space: <b>O(h)</b></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Column 2 -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+            <!-- Box 2 -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; background: white; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div style="background-color: #6b21a8; color: white; padding: 10px; text-align: center; font-weight: bold; font-size: 14px;">
+                    2. CONSTRUCT BINARY TREE<br>FROM TRAVERSALS (LC 105)
+                </div>
+                <div style="padding: 15px;">
+                    <div style="font-size: 12px; font-weight: bold; margin-bottom: 10px;">Example</div>
+                    <div style="font-family: monospace; font-size: 13px; margin-bottom: 15px; background: #faf5ff; padding: 10px; border-radius: 4px;">
+                        <div>Inorder &nbsp;: &nbsp;[9, 3, 15, 20, 7]</div>
+                        <div>Preorder : &nbsp;[3, 9, 20, 15, 7]</div>
+                    </div>
+                    <div class="mermaid" style="text-align: center;">
+                    graph TD
+                        3((3)) --> 9((9))
+                        3 --> 20((20))
+                        20 --> 15((15))
+                        20 --> 7((7))
+                    </div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+                    
+                    <div style="font-weight: bold; color: #d97706; margin-bottom: 5px;">💡 AHA</div>
+                    <div style="font-size: 13px; line-height: 1.5; margin-bottom: 10px;">
+                        Preorder ➔ Root comes first.<br>
+                        Inorder ➔ Left and Right parts.<br>
+                        Build tree using indices.
+                    </div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+
+                    <div style="font-weight: bold; color: #7e22ce; margin-bottom: 5px;">⚙️ Pattern</div>
+                    <div style="font-size: 13px; margin-bottom: 10px;">Recursive (Divide & Conquer)</div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+
+                    <div style="font-weight: bold; color: #4f46e5; margin-bottom: 5px;">∑ Idea / Formula</div>
+                    <ol style="font-size: 13px; margin: 0; padding-left: 20px; line-height: 1.6; margin-bottom: 15px;">
+                        <li>First element in preorder = Root</li>
+                        <li>Find root in inorder ➔ split left & right</li>
+                        <li>Recur for left part and right part</li>
+                    </ol>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; background-color: #f1f5f9; padding: 8px; border-radius: 4px; font-size: 13px;">
+                        <span style="background-color: #6b21a8; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold;">Complexity</span>
+                        <span>Time: <b>O(n)</b></span>
+                        <span>Space: <b>O(n)</b></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Box 5 -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; background: white; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div style="background-color: #16a34a; color: white; padding: 10px; text-align: center; font-weight: bold; font-size: 14px;">
+                    5. BUILD TREE FROM INORDER<br>AND POSTORDER (LC 106)
+                </div>
+                <div style="padding: 15px;">
+                    <div style="font-size: 12px; font-weight: bold; margin-bottom: 10px;">Example</div>
+                    <div style="font-family: monospace; font-size: 13px; margin-bottom: 15px; background: #f0fdf4; padding: 10px; border-radius: 4px;">
+                        <div>Inorder &nbsp;: &nbsp;[9, 3, 15, 20, 7]</div>
+                        <div>Postorder : &nbsp;[9, 15, 7, 20, 3]</div>
+                    </div>
+                    <div class="mermaid" style="text-align: center;">
+                    graph TD
+                        3((3)) --> 9((9))
+                        3 --> 20((20))
+                        20 --> 15((15))
+                        20 --> 7((7))
+                    </div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+                    
+                    <div style="font-weight: bold; color: #d97706; margin-bottom: 5px;">💡 AHA</div>
+                    <div style="font-size: 13px; line-height: 1.5; margin-bottom: 10px;">
+                        Postorder ➔ Root comes last.<br>
+                        Inorder ➔ Left and Right parts.
+                    </div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+
+                    <div style="font-weight: bold; color: #16a34a; margin-bottom: 5px;">⚙️ Pattern</div>
+                    <div style="font-size: 13px; margin-bottom: 10px;">Recursive (Divide & Conquer)</div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+
+                    <div style="font-weight: bold; color: #4f46e5; margin-bottom: 5px;">∑ Idea / Formula</div>
+                    <ol style="font-size: 13px; margin: 0; padding-left: 20px; line-height: 1.6; margin-bottom: 15px;">
+                        <li>Last element in postorder = Root</li>
+                        <li>Find root in inorder ➔ split left & right</li>
+                        <li>Recur for left part and right part</li>
+                    </ol>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; background-color: #f1f5f9; padding: 8px; border-radius: 4px; font-size: 13px;">
+                        <span style="background-color: #16a34a; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold;">Complexity</span>
+                        <span>Time: <b>O(n)</b></span>
+                        <span>Space: <b>O(n)</b></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Column 3 -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+            <!-- Box 3 -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; background: white; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div style="background-color: #0d9488; color: white; padding: 10px; text-align: center; font-weight: bold; font-size: 14px;">
+                    3. SERIALIZE AND DESERIALIZE<br>BINARY TREE (LC 297)
+                </div>
+                <div style="padding: 15px;">
+                    <div style="font-size: 12px; font-weight: bold; margin-bottom: 10px;">Example (Serialize)</div>
+                    <div class="mermaid" style="text-align: center;">
+                    graph TD
+                        1((1)) --> 2((2))
+                        1 --> 3((3))
+                        3 --> 4((4))
+                        3 --> 5((5))
+                    </div>
+                    <div style="font-size: 12px; font-family: monospace; background: #f0fdfa; padding: 10px; border-radius: 4px; margin-top: 15px; margin-bottom: 15px; line-height: 1.5;">
+                        <div style="color: #64748b; margin-bottom: 5px;">Serialized:</div>
+                        <div>[1,2,4,null,null,5,3,null,6]</div>
+                        <div style="color: #64748b;">(Level Order with nulls)</div>
+                    </div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+                    
+                    <div style="font-weight: bold; color: #d97706; margin-bottom: 5px;">💡 AHA</div>
+                    <div style="font-size: 13px; line-height: 1.5; margin-bottom: 10px;">
+                        Store structure + values.<br>
+                        Use null marker for missing nodes.
+                    </div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+
+                    <div style="font-weight: bold; color: #0d9488; margin-bottom: 5px;">⚙️ Pattern</div>
+                    <div style="font-size: 13px; margin-bottom: 10px;">BFS (Level Order) or Preorder</div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+
+                    <div style="font-weight: bold; color: #4f46e5; margin-bottom: 5px;">∑ Idea / Formula</div>
+                    <div style="font-size: 13px; line-height: 1.6; margin-bottom: 15px;">
+                        <b>Serialize</b> ➔ Traverse and add values (add nulls)<br>
+                        <b>Deserialize</b> ➔ Rebuild tree from values
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; background-color: #f1f5f9; padding: 8px; border-radius: 4px; font-size: 13px;">
+                        <span style="background-color: #0d9488; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold;">Complexity</span>
+                        <span>Time: <b>O(n)</b></span>
+                        <span>Space: <b>O(n)</b></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Box 6 -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; background: white; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div style="background-color: #dc2626; color: white; padding: 10px; text-align: center; font-weight: bold; font-size: 14px;">
+                    6. BURNING BINARY TREE (LC 2385)
+                </div>
+                <div style="padding: 15px;">
+                    <div style="font-size: 12px; font-weight: bold; margin-bottom: 10px;">Example</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="mermaid" style="flex: 1; text-align: center;">
+                        graph TD
+                            1((1)) --> 2((2))
+                            1 --> 3((3))
+                            2 --> 4((4))
+                            2 --> 5((5))
+                            5 --> 7((7))
+                            3 --> 6((6))
+                            style 5 fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#dc2626
+                        </div>
+                        <div style="font-size: 12px; text-align: right; line-height: 1.8;">
+                            Start Node = <span style="font-weight: bold; border-bottom: 1px solid #dc2626; padding-bottom: 2px;">5</span><br>
+                            Time to burn<br>all nodes = <span style="border: 1px solid #dc2626; padding: 2px 6px; border-radius: 4px; font-weight: bold; color: #dc2626; background: #fef2f2;">4</span>
+                        </div>
+                    </div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+                    
+                    <div style="font-weight: bold; color: #d97706; margin-bottom: 5px;">💡 AHA</div>
+                    <div style="font-size: 13px; line-height: 1.5; margin-bottom: 10px;">
+                        Fire spreads in all 4 directions.<br>
+                        Convert tree to graph (undirected).<br>
+                        Do BFS from start node.
+                    </div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+
+                    <div style="font-weight: bold; color: #dc2626; margin-bottom: 5px;">⚙️ Pattern</div>
+                    <div style="font-size: 13px; margin-bottom: 10px;">Graph + BFS</div>
+                    <hr style="border-top: 1px solid #f1f5f9; margin: 15px 0;">
+
+                    <div style="font-weight: bold; color: #4f46e5; margin-bottom: 5px;">∑ Idea / Formula</div>
+                    <ol style="font-size: 13px; margin: 0; padding-left: 20px; line-height: 1.6; margin-bottom: 15px;">
+                        <li>Convert tree to undirected graph</li>
+                        <li>BFS from start node</li>
+                        <li>Count levels (time)</li>
+                    </ol>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; background-color: #f1f5f9; padding: 8px; border-radius: 4px; font-size: 13px;">
+                        <span style="background-color: #dc2626; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold;">Complexity</span>
+                        <span>Time: <b>O(n)</b></span>
+                        <span>Space: <b>O(n)</b></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Section -->
+    <div style="display: flex; gap: 20px;">
+        
+        <!-- Bottom Col 1: Mental Models -->
+        <div style="flex: 1; border: 1px solid #e2e8f0; border-radius: 8px; background: white; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <div style="text-align: center; color: #334155; font-weight: bold; font-size: 14px; margin-bottom: 15px; text-transform: uppercase;">Common Mental Models</div>
+            <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 8px 0; color: #64748b;">👥</td>
+                    <td style="padding: 8px;">Need parent first</td>
+                    <td style="padding: 8px; text-align: right; font-weight: bold; color: #3b82f6;">Preorder</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 8px 0; color: #64748b;">🔄</td>
+                    <td style="padding: 8px;">Need sorted order</td>
+                    <td style="padding: 8px; text-align: right; font-weight: bold; color: #3b82f6;">Inorder</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 8px 0; color: #64748b;">🌲</td>
+                    <td style="padding: 8px;">Need children first</td>
+                    <td style="padding: 8px; text-align: right; font-weight: bold; color: #3b82f6;">Postorder</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 8px 0; color: #64748b;">🏢</td>
+                    <td style="padding: 8px;">Need level by level</td>
+                    <td style="padding: 8px; text-align: right; font-weight: bold; color: #3b82f6;">BFS</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 8px 0; color: #64748b;">🛤️</td>
+                    <td style="padding: 8px;">Path / Root to Leaf</td>
+                    <td style="padding: 8px; text-align: right; font-weight: bold; color: #3b82f6;">DFS (Backtrack)</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; color: #64748b;">🎯</td>
+                    <td style="padding: 8px;">Multiple directions</td>
+                    <td style="padding: 8px; text-align: right; font-weight: bold; color: #3b82f6;">Graph + BFS</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Bottom Col 2: Tree Building Index Rules -->
+        <div style="flex: 1; border: 1px solid #e2e8f0; border-radius: 8px; background: white; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <div style="text-align: center; color: #6b21a8; font-weight: bold; font-size: 14px; margin-bottom: 15px; text-transform: uppercase;">Tree Building Index Rules</div>
+            
+            <div style="margin-bottom: 15px;">
+                <div style="font-weight: bold; color: #334155; font-size: 13px; margin-bottom: 5px; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Preorder + Inorder</div>
+                <div style="display: grid; grid-template-columns: 80px auto; gap: 10px; font-size: 12px; font-family: monospace; line-height: 1.8; margin-top: 10px;">
+                    <div>Preorder</div>
+                    <div><b style="color: #6b21a8;">Root</b> | Left | Right</div>
+                    <div>Inorder</div>
+                    <div>Left | <b style="color: #6b21a8;">Root</b> | Right</div>
+                </div>
+                <div style="font-size: 12px; color: #6b21a8; font-weight: bold; margin-top: 5px;">➔ Use root from preorder</div>
+            </div>
+
+            <div>
+                <div style="font-weight: bold; color: #334155; font-size: 13px; margin-bottom: 5px; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Inorder + Postorder</div>
+                <div style="display: grid; grid-template-columns: 80px auto; gap: 10px; font-size: 12px; font-family: monospace; line-height: 1.8; margin-top: 10px;">
+                    <div>Inorder</div>
+                    <div>Left | <b style="color: #16a34a;">Root</b> | Right</div>
+                    <div>Postorder</div>
+                    <div>Left | Right | <b style="color: #16a34a;">Root</b></div>
+                </div>
+                <div style="font-size: 12px; color: #16a34a; font-weight: bold; margin-top: 5px;">➔ Use root from postorder</div>
+            </div>
+        </div>
+
+        <!-- Bottom Col 3: Quick Recap -->
+        <div style="flex: 1; border: 1px solid #e2e8f0; border-radius: 8px; background: white; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: relative;">
+            <div style="text-align: center; color: #059669; font-weight: bold; font-size: 14px; margin-bottom: 15px; text-transform: uppercase;">Quick Recap</div>
+            <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; line-height: 1.8;">
+                <li>✅ Traversal decides the way you think.</li>
+                <li>✅ Return type decides the recursion.</li>
+                <li>✅ Break into subproblems.</li>
+                <li>✅ Combine results.</li>
+                <li>✅ Handle base cases carefully.</li>
+                <li>✅ Draw the tree. Dry run.</li>
+                <li style="font-weight: bold; color: #0f172a; margin-top: 5px;">✅ That's 80% of the battle won!</li>
+            </ul>
+            <div style="position: absolute; bottom: 10px; right: 10px; font-size: 32px;">🏆</div>
+        </div>
+    </div>
+
+    <!-- Final Mantra -->
+    <div style="margin-top: 20px; background-color: #fffbeb; border: 1px solid #fef3c7; padding: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; font-weight: bold; font-size: 14px; color: #1e293b; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 16px; color: #000;">
+            <span>🏆</span> <span>FINAL MANTRA</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 15px; color: #334155; font-size: 13px;">
+            <span>Understand the Problem</span>
+            <span style="color: #d97706;">➔</span>
+            <span>Choose Pattern</span>
+            <span style="color: #d97706;">➔</span>
+            <span>Draw Tree</span>
+            <span style="color: #d97706;">➔</span>
+            <span>Apply Template</span>
+            <span style="color: #d97706;">➔</span>
+            <span>Code</span>
+            <span style="color: #d97706;">➔</span>
+            <span>Dry Run</span>
+            <span style="color: #d97706;">➔</span>
+            <span>Optimize</span>
+        </div>
+    </div>
+</div>

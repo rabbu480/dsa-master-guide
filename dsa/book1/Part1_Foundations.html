@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book 1 - Part 1: Foundations</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --secondary: #2563eb;
+        --accent: #d97706;
+        --text-dark: #0f172a;
+        --bg-light: #f8fafc;
+        --border-color: #cbd5e1;
+        --code-bg: #1e293b;
+        --code-text: #f8fafc;
+    }
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #cbd5e1;
+        color: var(--text-dark);
+        margin: 0;
+        padding: 20px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+    .page {
+        background: white;
+        max-width: 1100px;
+        margin: 0 auto 30px auto;
+        padding: 35px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        page-break-after: always;
+    }
+    .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 3px solid var(--primary);
+        padding-bottom: 12px;
+        margin-bottom: 25px;
+        background: #f1f5f9;
+        padding: 15px 20px;
+        border-radius: 6px;
+    }
+    .header-top h1 {
+        margin: 0;
+        font-size: 1.8rem;
+        color: var(--primary);
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+    .badge {
+        background: var(--primary);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.85rem;
+    }
+    .section-box {
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        background: white;
+    }
+    .section-header {
+        background: var(--primary);
+        color: white;
+        padding: 8px 15px;
+        font-weight: 800;
+        font-size: 1rem;
+    }
+    .section-content {
+        padding: 15px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        margin: 10px 0;
+    }
+    table th, table td {
+        border: 1px solid var(--border-color);
+        padding: 8px 12px;
+        text-align: left;
+    }
+    table th {
+        background: #f1f5f9;
+        font-weight: 800;
+    }
+    pre {
+        background: var(--code-bg);
+        color: var(--code-text);
+        padding: 12px 15px;
+        border-radius: 6px;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.82rem;
+        white-space: pre-wrap !important;
+        word-break: break-word !important;
+    }
+    .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    @media print {
+        body { background: white; padding: 0; }
+        .page { box-shadow: none; border: none; margin: 0; padding: 15px 0; max-width: 100%; }
+    }
+</style>
+</head>
+<body>
+
+<!-- Page 4 -->
+<div class="page">
+    <div class="header-top">
+        <div>
+            <h1>Book 1 — Part 1: Foundations (Big-O Analysis)</h1>
+            <div style="font-size: 0.95rem; color: #475569; font-weight: 600;">Pages 4–13 · Asymptotic Analysis, Tradeoffs, Math & Bitwise Operations</div>
+        </div>
+        <span class="badge">Page 4</span>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">1.1 Big-O Analysis: Rules & Complexity Growth</div>
+        <div class="section-content">
+            <p>Big-O notation describes the upper bound performance scaling of an algorithm as input size $N$ grows towards infinity. In interviews, drop non-dominant terms and constant multipliers.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Big-O Class</th>
+                        <th>Name</th>
+                        <th>Max Input N (for 1s limit)</th>
+                        <th>Common Interview Pattern</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>O(1)</td><td>Constant</td><td>10<sup>9</sup></td><td>HashMap lookup, Array indexing, Bitwise ops</td></tr>
+                    <tr><td>O(log N)</td><td>Logarithmic</td><td>10<sup>9</sup></td><td>Binary Search, Heap insert/poll, Divide & Conquer</td></tr>
+                    <tr><td>O(N)</td><td>Linear</td><td>10<sup>7</sup></td><td>Single-pass Array scan, Two Pointers, HashMap traversal</td></tr>
+                    <tr><td>O(N log N)</td><td>Linearithmic</td><td>10<sup>6</sup></td><td>Sorting (Merge/Quick/HeapSort), PriorityQueue Top-K</td></tr>
+                    <tr><td>O(N<sup>2</sup>)</td><td>Quadratic</td><td>10<sup>4</sup></td><td>Nested loops, 2D Grid DP, Matrix operations</td></tr>
+                    <tr><td>O(2<sup>N</sup>)</td><td>Exponential</td><td>20–25</td><td>Backtracking (Subsets, Permutations), Recursion Tree</td></tr>
+                    <tr><td>O(N!)</td><td>Factorial</td><td>10–12</td><td>Full Permutations generation, Traveling Salesperson</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Page 5 -->
+<div class="page">
+    <div class="header-top">
+        <div>
+            <h1>Part 1: Complexity Growth & Loop Analysis</h1>
+            <div style="font-size: 0.95rem; color: #475569; font-weight: 600;">Big-O Loop Analysis & Dry Runs</div>
+        </div>
+        <span class="badge">Page 5</span>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">Nested Loop Complexity Rules</div>
+        <div class="section-content">
+            <div class="grid-2">
+                <div>
+                    <h4>Rule 1: Sequential Loops (Add)</h4>
+                    <pre><code>// O(N) + O(M) = O(N + M)
+for (int i = 0; i &lt; n; i++) { ... }
+for (int j = 0; j &lt; m; j++) { ... }</code></pre>
+                </div>
+                <div>
+                    <h4>Rule 2: Nested Loops (Multiply)</h4>
+                    <pre><code>// O(N * M)
+for (int i = 0; i &lt; n; i++) {
+    for (int j = 0; j &lt; m; j++) { ... }
+}</code></pre>
+                </div>
+            </div>
+            
+            <h4>Rule 3: Halving Loops (Logarithmic)</h4>
+            <pre><code>// O(log N)
+while (n &gt; 0) {
+    n /= 2;
+}</code></pre>
+        </div>
+    </div>
+</div>
+
+<!-- Page 6 -->
+<div class="page">
+    <div class="header-top">
+        <div>
+            <h1>Part 1: Time vs Space Tradeoffs</h1>
+            <div style="font-size: 0.95rem; color: #475569; font-weight: 600;">Tradeoff Patterns & Decision Matrix</div>
+        </div>
+        <span class="badge">Page 6</span>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">1.2 Time vs Space Tradeoffs</div>
+        <div class="section-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Technique</th>
+                        <th>Time Before → After</th>
+                        <th>Space Before → After</th>
+                        <th>Tradeoff Explanation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>HashMap Caching</strong></td>
+                        <td>O(N<sup>2</sup>) → O(N)</td>
+                        <td>O(1) → O(N)</td>
+                        <td>Store previous values to eliminate inner search loops (e.g. Two Sum).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DP Memoization</strong></td>
+                        <td>O(2<sup>N</sup>) → O(N)</td>
+                        <td>O(N) stack → O(N) table</td>
+                        <td>Cache overlapping subproblem results in array to avoid exponential tree re-computation.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>In-Place Mutation</strong></td>
+                        <td>O(N) → O(N)</td>
+                        <td>O(N) → O(1)</td>
+                        <td>Modify input array/grid directly (e.g. Island sinking) to save memory.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Page 7-9: Math -->
+<div class="page">
+    <div class="header-top">
+        <div>
+            <h1>Part 1: Mathematics for DSA</h1>
+            <div style="font-size: 0.95rem; color: #475569; font-weight: 600;">GCD, Sieve of Eratosthenes & Modular Arithmetic</div>
+        </div>
+        <span class="badge">Pages 7–9</span>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">1.3A GCD & LCM (Euclidean Algorithm)</div>
+        <div class="section-content">
+            <pre><code>public int gcd(int a, int b) {
+    return b == 0 ? a : gcd(b, a % b);
+}
+public int lcm(int a, int b) {
+    return (a / gcd(a, b)) * b; // Divide first to prevent overflow
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">1.3B Sieve of Eratosthenes O(N log log N)</div>
+        <div class="section-content">
+            <pre><code>public boolean[] sieve(int n) {
+    boolean[] isPrime = new boolean[n + 1];
+    Arrays.fill(isPrime, true);
+    isPrime[0] = isPrime[1] = false;
+    for (int p = 2; p * p &lt;= n; p++) {
+        if (isPrime[p]) {
+            for (int i = p * p; i &lt;= n; i += p) isPrime[i] = false;
+        }
+    }
+    return isPrime;
+}</code></pre>
+        </div>
+    </div>
+</div>
+
+<!-- Page 10-12: Bit Manipulation -->
+<div class="page">
+    <div class="header-top">
+        <div>
+            <h1>Part 1: Bit Manipulation & Masking</h1>
+            <div style="font-size: 0.95rem; color: #475569; font-weight: 600;">Bitwise Tricks & Masking Cheatsheet</div>
+        </div>
+        <span class="badge">Pages 10–12</span>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">1.4 Bit Masking & Interview Tricks</div>
+        <div class="section-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Bitwise Expression</th>
+                        <th>Example / Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Get i-th bit</td><td><code>(n &gt;&gt; i) &amp; 1</code></td><td>Check if i-th bit is set to 1</td></tr>
+                    <tr><td>Set i-th bit</td><td><code>n | (1 &lt;&lt; i)</code></td><td>Turn i-th bit ON</td></tr>
+                    <tr><td>Clear i-th bit</td><td><code>n &amp; ~(1 &lt;&lt; i)</code></td><td>Turn i-th bit OFF</td></tr>
+                    <tr><td>Toggle i-th bit</td><td><code>n ^ (1 &lt;&lt; i)</code></td><td>Flip i-th bit</td></tr>
+                    <tr><td>Clear lowest set bit</td><td><code>n &amp; (n - 1)</code></td><td>Counts set bits (Kernighan's) / Check power of 2</td></tr>
+                    <tr><td>Is Power of 2?</td><td><code>n &gt; 0 &amp;&amp; (n &amp; (n - 1)) == 0</code></td><td>Returns true if n is 2<sup>k</sup></td></tr>
+                    <tr><td>Get lowest set bit</td><td><code>n &amp; (-n)</code></td><td>Isolates lowest 1-bit (Used in Fenwick Tree)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Page 13: Complexity Cheat Sheet -->
+<div class="page">
+    <div class="header-top">
+        <div>
+            <h1>Part 1: Master Complexity Cheat Sheet</h1>
+            <div style="font-size: 0.95rem; color: #475569; font-weight: 600;">Page 13 · Comprehensive Operation Complexity Reference</div>
+        </div>
+        <span class="badge">Page 13</span>
+    </div>
+
+    <div class="section-box">
+        <div class="section-header">All Data Structures × Operations × Big-O</div>
+        <div class="section-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data Structure</th>
+                        <th>Access</th>
+                        <th>Search</th>
+                        <th>Insertion</th>
+                        <th>Deletion</th>
+                        <th>Space</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Array</td><td>O(1)</td><td>O(N)</td><td>O(N)</td><td>O(N)</td><td>O(N)</td></tr>
+                    <tr><td>Stack / Queue / Deque</td><td>O(N)</td><td>O(N)</td><td>O(1)</td><td>O(1)</td><td>O(N)</td></tr>
+                    <tr><td>Singly / Doubly LL</td><td>O(N)</td><td>O(N)</td><td>O(1)</td><td>O(1)</td><td>O(N)</td></tr>
+                    <tr><td>HashSet / HashMap</td><td>N/A</td><td>O(1) avg</td><td>O(1) avg</td><td>O(1) avg</td><td>O(N)</td></tr>
+                    <tr><td>Binary Search Tree (Balanced)</td><td>O(log N)</td><td>O(log N)</td><td>O(log N)</td><td>O(log N)</td><td>O(N)</td></tr>
+                    <tr><td>PriorityQueue (Heap)</td><td>O(1) min/max</td><td>O(N)</td><td>O(log N)</td><td>O(log N)</td><td>O(N)</td></tr>
+                    <tr><td>Trie</td><td>O(L)</td><td>O(L)</td><td>O(L)</td><td>O(L)</td><td>O(N × L)</td></tr>
+                    <tr><td>Union-Find</td><td>N/A</td><td>O(α(N))</td><td>O(α(N))</td><td>N/A</td><td>O(N)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

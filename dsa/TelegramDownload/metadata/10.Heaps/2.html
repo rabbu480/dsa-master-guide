@@ -1,0 +1,384 @@
+<div class="page">
+    <!-- Header -->
+    <div class="header-top" style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 3px solid #1e3a8a; margin-bottom: 10px;">
+        <div>
+            <h1 style="color: #1e3a8a; font-size: 2.5rem; margin: 0; font-weight: 800; letter-spacing: 2px;">HEAP - PATTERNS</h1>
+            <div class="subtitle" style="color: #334155; font-size: 1.1rem; margin-top: 5px; font-weight: 500;">Top Interview Patterns with Heaps (Priority Queue)</div>
+        </div>
+        <div>
+            <div class="page-number" style="background-color: #1e3a8a; color: white; font-weight: bold; padding: 8px 16px; border-radius: 20px; font-size: 1.2rem;">PAGE 2</div>
+        </div>
+    </div>
+
+    <!-- Banner -->
+    <div style="border: 1px solid #94a3b8; border-radius: 8px; padding: 12px; display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; font-weight: bold; font-size: 1.1rem; color: #334155;">
+        <div><span style="color: #dc2626;">Max Heap</span> &rarr; largest element on top</div>
+        <div><span style="color: #16a34a;">Min Heap</span> &rarr; <span style="text-decoration: underline;">smallest element</span> on top</div>
+        <div>PQ &rarr; PriorityQueue</div>
+    </div>
+
+    <!-- PATTERN 1 -->
+    <div class="section-box" style="border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 15px; overflow: hidden;">
+        <div class="section-header" style="background-color: #f1f5f9; padding: 10px 15px; border-bottom: 1px solid #cbd5e1; display: flex; align-items: center; gap: 15px;">
+            <div style="background-color: #1e3a8a; color: white; font-weight: bold; padding: 4px 12px; border-radius: 4px;">PATTERN 1</div>
+            <div style="color: #1e3a8a; font-weight: bold; font-size: 1.2rem;">REPEATED MAX / MIN RETRIEVAL</div>
+            <div style="color: #64748b; font-size: 1rem;">(e.g., Last Stone Weight)</div>
+        </div>
+        <div style="display: flex;">
+            <!-- When to use -->
+            <div style="flex: 1.2; padding: 15px; border-right: 1px dashed #cbd5e1;">
+                <div style="color: #16a34a; font-weight: bold; text-align: center; margin-bottom: 10px;">WHEN TO USE?</div>
+                <ul style="margin: 0; padding-left: 20px; font-size: 0.95rem; line-height: 1.4;">
+                    <li>We always take the largest (or smallest) element.</li>
+                    <li>Do something with it.</li>
+                    <li>Put the result back.</li>
+                    <li>Repeat until 1 (or none) left.</li>
+                </ul>
+            </div>
+            <!-- Heap to use -->
+            <div style="flex: 1.2; padding: 15px; border-right: 1px dashed #cbd5e1; text-align: center;">
+                <div style="color: #dc2626; font-weight: bold; margin-bottom: 10px;">HEAP TO USE</div>
+                <div style="font-weight: bold; font-size: 0.95rem;"><span style="color: #dc2626;">Max Heap</span> &rarr; largest</div>
+                <div class="mermaid" style="margin-top: 5px;">
+                graph TD
+                    A((7)) --> B((5))
+                    A --> C((6))
+                    B --> D((2))
+                    B --> E((4))
+                    C --> F((1))
+                    C --> G((3))
+                </div>
+            </div>
+            <!-- Idea / Aha -->
+            <div style="flex: 1; padding: 15px; border-right: 1px dashed #cbd5e1; text-align: center;">
+                <div style="color: #7e22ce; font-weight: bold; margin-bottom: 10px;">IDEA / AHA</div>
+                <div style="font-size: 1.5rem; margin-bottom: 10px;">💡</div>
+                <div style="border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; padding: 10px; font-size: 0.9rem;">
+                    We always care about the current largest element.<br><br>
+                    Heap gives it in O(1).
+                </div>
+            </div>
+            <!-- Template -->
+            <div style="flex: 1.8; padding: 15px; border-right: 1px dashed #cbd5e1;">
+                <div style="color: #3b82f6; font-weight: bold; text-align: center; margin-bottom: 10px;">TEMPLATE (JAVA)</div>
+                <pre style="margin: 0; font-size: 0.75rem; font-family: monospace; background: none; padding: 0;"><code>PriorityQueue&lt;Integer&gt; pq = 
+    new PriorityQueue&lt;&gt;(Collections.
+    reverseOrder());  <span style="color: #16a34a;">// Max Heap</span>
+
+<span style="color: #16a34a;">// Build heap</span>
+for (int x : arr) pq.offer(x);
+
+while (pq.size() > 1) {
+    int a = pq.poll();  <span style="color: #16a34a;">// largest</span>
+    int b = pq.poll();  <span style="color: #16a34a;">// 2nd largest</span>
+    if (a != b) pq.offer(a - b);
+}
+return pq.isEmpty() ? 0 : pq.peek();</code></pre>
+            </div>
+            <!-- Complexity -->
+            <div style="flex: 1; padding: 15px;">
+                <div style="color: #16a34a; font-weight: bold; text-align: center; margin-bottom: 10px;">COMPLEXITY</div>
+                <div style="font-size: 0.9rem; margin-bottom: 15px;">
+                    &bull; <strong>Time:</strong> O(n log n)<br>
+                    <span style="color: #64748b; font-size: 0.8rem; margin-left: 10px;">(n insertions +<br><span style="margin-left:10px;">up to n polls)</span></span><br>
+                    &bull; <strong>Space:</strong> O(n)
+                </div>
+                <div style="border: 1px solid #86efac; background: #f0fdf4; border-radius: 6px; padding: 8px;">
+                    <div style="color: #16a34a; font-weight: bold; text-align: center; font-size: 0.85rem; margin-bottom: 5px;">EXAMPLES</div>
+                    <ul style="margin: 0; padding-left: 15px; font-size: 0.8rem;">
+                        <li>LeetCode 1046<br>Last Stone Weight</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PATTERN 2 -->
+    <div class="section-box" style="border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 15px; overflow: hidden;">
+        <div class="section-header" style="background-color: #f1f5f9; padding: 10px 15px; border-bottom: 1px solid #cbd5e1; display: flex; align-items: center; gap: 15px;">
+            <div style="background-color: #1e3a8a; color: white; font-weight: bold; padding: 4px 12px; border-radius: 4px;">PATTERN 2</div>
+            <div style="color: #1e3a8a; font-weight: bold; font-size: 1.2rem;">TOP-K ELEMENTS</div>
+            <div style="color: #64748b; font-size: 1rem;">(e.g., Kth Largest, Top K Frequent)</div>
+        </div>
+        <div style="display: flex;">
+            <!-- When to use -->
+            <div style="flex: 1.2; padding: 15px; border-right: 1px dashed #cbd5e1;">
+                <div style="color: #16a34a; font-weight: bold; text-align: center; margin-bottom: 10px;">WHEN TO USE?</div>
+                <ul style="margin: 0; padding-left: 20px; font-size: 0.95rem; line-height: 1.4;">
+                    <li>Need the K largest/smallest elements.</li>
+                    <li>Or K most frequent, top K, K closest, etc.</li>
+                    <li>We discard the rest.</li>
+                </ul>
+            </div>
+            <!-- Heap to use -->
+            <div style="flex: 1.2; padding: 15px; border-right: 1px dashed #cbd5e1; text-align: center;">
+                <div style="color: #dc2626; font-weight: bold; margin-bottom: 10px;">HEAP TO USE</div>
+                <div style="font-weight: bold; font-size: 0.85rem; margin-bottom: 5px;">Top K Largest &rarr; <span style="color: #16a34a;">Min Heap</span> (size K)</div>
+                <div class="mermaid" style="margin-bottom: 5px;">
+                graph TD
+                    A((1)) --> B((2))
+                    A --> C((3))
+                </div>
+                <div style="font-size: 0.8rem; color: #475569; margin-bottom: 10px;">(Keep K=3 largest seen so far)</div>
+                
+                <div style="font-weight: bold; font-size: 0.85rem; margin-bottom: 5px;">Top K Smallest &rarr; <span style="color: #dc2626;">Max Heap</span> (size K)</div>
+                <div class="mermaid" style="margin-bottom: 5px;">
+                graph TD
+                    D((9)) --> E((8))
+                    D --> F((7))
+                </div>
+                <div style="font-size: 0.8rem; color: #475569;">(Keep K=3 smallest seen so far)</div>
+            </div>
+            <!-- Idea / Aha -->
+            <div style="flex: 1; padding: 15px; border-right: 1px dashed #cbd5e1; text-align: center;">
+                <div style="color: #7e22ce; font-weight: bold; margin-bottom: 10px;">IDEA / AHA</div>
+                <div style="border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; padding: 8px; font-size: 0.85rem; margin-bottom: 10px;">
+                    Keep only K best candidates in heap.
+                </div>
+                <div style="border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; padding: 8px; font-size: 0.85rem;">
+                    If better element comes, replace root (worst among K).
+                </div>
+            </div>
+            <!-- Template -->
+            <div style="flex: 1.8; padding: 15px; border-right: 1px dashed #cbd5e1;">
+                <div style="color: #3b82f6; font-weight: bold; text-align: center; margin-bottom: 10px;">TEMPLATE (JAVA)</div>
+                <div style="font-size: 0.8rem; font-weight: bold; margin-bottom: 2px;">&rarr; Top K Largest (Min Heap)</div>
+                <pre style="margin: 0 0 10px 0; font-size: 0.7rem; font-family: monospace; background: none; padding: 0;"><code>PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+for (int x : nums) {
+    pq.offer(x);
+    if (pq.size() > k) pq.poll(); <span style="color: #16a34a;">// remove smallest</span>
+}
+<span style="color: #16a34a;">// pq contains top K largest</span>
+List&lt;Integer&gt; res = new ArrayList&lt;&gt;(pq);</code></pre>
+                
+                <div style="font-size: 0.8rem; font-weight: bold; margin-bottom: 2px;">&rarr; Top K Smallest (Max Heap)</div>
+                <pre style="margin: 0; font-size: 0.7rem; font-family: monospace; background: none; padding: 0;"><code>PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;(
+    Collections.reverseOrder());
+for (int x : nums) {
+    pq.offer(x);
+    if (pq.size() > k) pq.poll(); <span style="color: #16a34a;">// remove largest</span>
+}
+<span style="color: #16a34a;">// pq contains top K smallest</span></code></pre>
+            </div>
+            <!-- Complexity -->
+            <div style="flex: 1; padding: 15px;">
+                <div style="font-size: 0.9rem; margin-bottom: 15px; margin-top: 25px;">
+                    &bull; <strong>Time:</strong> O(n log k)<br>
+                    &bull; <strong>Space:</strong> O(k)
+                </div>
+                <div style="border: 1px solid #86efac; background: #f0fdf4; border-radius: 6px; padding: 8px;">
+                    <div style="color: #16a34a; font-weight: bold; text-align: center; font-size: 0.85rem; margin-bottom: 5px;">EXAMPLES</div>
+                    <ul style="margin: 0; padding-left: 15px; font-size: 0.75rem; line-height: 1.3;">
+                        <li>LC 215 Kth Largest Element in Array</li>
+                        <li style="margin-top:4px;">LC 347 Top K Frequent Elements</li>
+                        <li style="margin-top:4px;">LC 973 K Closest Points to Origin</li>
+                        <li style="margin-top:4px;">LC 692 Top K Frequent Words</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PATTERN 3 -->
+    <div class="section-box" style="border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 15px; overflow: hidden;">
+        <div class="section-header" style="background-color: #f1f5f9; padding: 10px 15px; border-bottom: 1px solid #cbd5e1; display: flex; align-items: center; gap: 15px;">
+            <div style="background-color: #1e3a8a; color: white; font-weight: bold; padding: 4px 12px; border-radius: 4px;">PATTERN 3</div>
+            <div style="color: #1e3a8a; font-weight: bold; font-size: 1.2rem;">MERGE K SORTED LISTS / ARRAYS</div>
+            <div style="color: #64748b; font-size: 1rem;">(e.g., Merge K Sorted Lists)</div>
+        </div>
+        <div style="display: flex;">
+            <!-- When to use -->
+            <div style="flex: 1.2; padding: 15px; border-right: 1px dashed #cbd5e1;">
+                <div style="color: #16a34a; font-weight: bold; text-align: center; margin-bottom: 10px;">WHEN TO USE?</div>
+                <ul style="margin: 0; padding-left: 20px; font-size: 0.95rem; line-height: 1.4;">
+                    <li>We have K sorted lists/arrays.</li>
+                    <li>Need to merge into one sorted output.</li>
+                    <li>Always pick the smallest current candidate.</li>
+                </ul>
+            </div>
+            <!-- Heap to use -->
+            <div style="flex: 1.2; padding: 15px; border-right: 1px dashed #cbd5e1; text-align: center;">
+                <div style="color: #dc2626; font-weight: bold; margin-bottom: 10px;">HEAP TO USE</div>
+                <div style="color: #dc2626; font-weight: bold; font-size: 1rem; margin-bottom: 5px;">Min Heap</div>
+                <div class="mermaid">
+                graph LR
+                    A((1)) --> B((4)) --> C((7))
+                    D((2)) --> E((5)) --> F((8))
+                    G((3)) --> H((6)) --> I((9))
+                    A -.-> J[Min Heap]
+                    D -.-> J
+                    G -.-> J
+                </div>
+                <div style="border: 1px solid #94a3b8; display: inline-block; padding: 5px; margin-top: 10px; font-family: monospace;">1 2 3 4 5 6 7 8 9</div>
+            </div>
+            <!-- Idea / Aha -->
+            <div style="flex: 1; padding: 15px; border-right: 1px dashed #cbd5e1; text-align: center;">
+                <div style="color: #7e22ce; font-weight: bold; margin-bottom: 10px;">IDEA / AHA</div>
+                <div style="border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; padding: 10px; font-size: 0.85rem; margin-bottom: 10px;">
+                    Put the first element of each list into heap.
+                </div>
+                <div style="border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; padding: 10px; font-size: 0.85rem;">
+                    Pop smallest node, add its next node (if exists).
+                </div>
+            </div>
+            <!-- Template -->
+            <div style="flex: 1.8; padding: 15px; border-right: 1px dashed #cbd5e1;">
+                <div style="color: #3b82f6; font-weight: bold; text-align: center; margin-bottom: 10px;">TEMPLATE (JAVA)</div>
+                <pre style="margin: 0; font-size: 0.7rem; font-family: monospace; background: none; padding: 0;"><code>class Node { int val; Node next; }
+
+PriorityQueue&lt;Node&gt; pq = new PriorityQueue&lt;&gt;(
+    (a, b) -> a.val - b.val); <span style="color: #16a34a;">// Min Heap</span>
+
+<span style="color: #16a34a;">// 1. Add head of each list</span>
+for (Node head : lists)
+    if (head != null) pq.offer(head);
+
+Node dummy = new Node(0), tail = dummy;
+
+while (!pq.isEmpty()) {
+    Node cur = pq.poll();
+    tail.next = cur; tail = tail.next;
+    if (cur.next != null) pq.offer(cur.next);
+}
+return dummy.next;</code></pre>
+            </div>
+            <!-- Complexity -->
+            <div style="flex: 1; padding: 15px;">
+                <div style="font-size: 0.85rem; margin-bottom: 15px; margin-top: 25px;">
+                    &bull; <strong>Time:</strong> O(N log k)<br>
+                    <span style="color: #64748b; font-size: 0.75rem; margin-left: 10px;">(N = total nodes,<br><span style="margin-left:10px;">k = number of lists)</span></span><br>
+                    &bull; <strong>Space:</strong> O(k)
+                </div>
+                <div style="border: 1px solid #86efac; background: #f0fdf4; border-radius: 6px; padding: 8px;">
+                    <div style="color: #16a34a; font-weight: bold; text-align: center; font-size: 0.85rem; margin-bottom: 5px;">EXAMPLES</div>
+                    <ul style="margin: 0; padding-left: 15px; font-size: 0.75rem; line-height: 1.3;">
+                        <li>LeetCode 23<br>Merge K Sorted Lists</li>
+                        <li style="margin-top:6px;">LeetCode 373<br>Find K Pairs with<br>Smallest Sums</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PATTERN 4 -->
+    <div class="section-box" style="border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 15px; overflow: hidden;">
+        <div class="section-header" style="background-color: #f1f5f9; padding: 10px 15px; border-bottom: 1px solid #cbd5e1; display: flex; align-items: center; gap: 15px;">
+            <div style="background-color: #1e3a8a; color: white; font-weight: bold; padding: 4px 12px; border-radius: 4px;">PATTERN 4</div>
+            <div style="color: #1e3a8a; font-weight: bold; font-size: 1.2rem;">TWO HEAPS (MEDIAN FROM DATA STREAM)</div>
+            <div style="color: #64748b; font-size: 1rem;">(e.g., Find Median from Data Stream)</div>
+        </div>
+        <div style="display: flex;">
+            <!-- When to use -->
+            <div style="flex: 1.2; padding: 15px; border-right: 1px dashed #cbd5e1;">
+                <div style="color: #16a34a; font-weight: bold; text-align: center; margin-bottom: 10px;">WHEN TO USE?</div>
+                <ul style="margin: 0; padding-left: 20px; font-size: 0.95rem; line-height: 1.4;">
+                    <li>Need median at any point in a stream of numbers.</li>
+                    <li>Insertions happen one by one.</li>
+                    <li>Need O(log n) insert and O(1) median.</li>
+                </ul>
+            </div>
+            <!-- Heap to use -->
+            <div style="flex: 1.2; padding: 15px; border-right: 1px dashed #cbd5e1; text-align: center;">
+                <div style="color: #dc2626; font-weight: bold; margin-bottom: 10px;">HEAP TO USE</div>
+                <div style="display: flex; justify-content: center; gap: 20px;">
+                    <div>
+                        <div style="font-weight: bold; font-size: 0.85rem;">Max Heap<br><span style="font-weight: normal; color: #475569;">(Smaller Half)</span></div>
+                        <div class="mermaid" style="margin-top: 5px;">
+                        graph TD
+                            A((5)) --> B((2))
+                            A --> C((3))
+                            B --> D((1))
+                            B --> E((4))
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-weight: bold; font-size: 0.85rem;">Min Heap<br><span style="font-weight: normal; color: #475569;">(Larger Half)</span></div>
+                        <div class="mermaid" style="margin-top: 5px;">
+                        graph TD
+                            F((8)) --> G((9))
+                            F --> H((10))
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Idea / Aha -->
+            <div style="flex: 1; padding: 15px; border-right: 1px dashed #cbd5e1; text-align: center;">
+                <div style="color: #7e22ce; font-weight: bold; margin-bottom: 10px;">IDEA / AHA</div>
+                <div style="font-size: 1.5rem; margin-bottom: 5px;">💡</div>
+                <div style="border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; padding: 8px; font-size: 0.85rem; text-align: left;">
+                    Maintain two halves.<br><br>
+                    1) maxHeap.peek() &le; minHeap.peek()<br>
+                    2) Size difference &le; 1<br><br>
+                    Median is either top of one heap or avg of both.
+                </div>
+            </div>
+            <!-- Template -->
+            <div style="flex: 1.8; padding: 15px; border-right: 1px dashed #cbd5e1;">
+                <div style="color: #3b82f6; font-weight: bold; text-align: center; margin-bottom: 5px;">TEMPLATE (JAVA) - (Add Number)</div>
+                <pre style="margin: 0; font-size: 0.65rem; font-family: monospace; background: none; padding: 0;"><code><span style="color: #16a34a;">// maxHeap: left half (max heap)
+// minHeap: right half (min heap)</span>
+PriorityQueue&lt;Integer&gt; maxHeap = 
+    new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+
+void addNum(int num) {
+    if (maxHeap.isEmpty() || num <= maxHeap.peek())
+        maxHeap.offer(num);
+    else
+        minHeap.offer(num);
+        
+    <span style="color: #16a34a;">// Rebalance</span>
+    if (maxHeap.size() > minHeap.size() + 1)
+        minHeap.offer(maxHeap.poll());
+    else if (minHeap.size() > maxHeap.size())
+        maxHeap.offer(minHeap.poll());
+}
+
+double findMedian() {
+    if (maxHeap.size() == minHeap.size())
+        return (maxHeap.peek() + minHeap.peek()) / 2.0;
+    return maxHeap.peek();
+}</code></pre>
+            </div>
+            <!-- Complexity -->
+            <div style="flex: 1; padding: 15px;">
+                <div style="font-size: 0.85rem; margin-bottom: 15px; margin-top: 25px;">
+                    &bull; <strong>addNum:</strong> O(log n)<br>
+                    &bull; <strong>findMedian:</strong> O(1)<br>
+                    &bull; <strong>Space:</strong> O(n)
+                </div>
+                <div style="border: 1px solid #86efac; background: #f0fdf4; border-radius: 6px; padding: 8px;">
+                    <div style="color: #16a34a; font-weight: bold; text-align: center; font-size: 0.85rem; margin-bottom: 5px;">EXAMPLES</div>
+                    <ul style="margin: 0; padding-left: 15px; font-size: 0.75rem; line-height: 1.3;">
+                        <li>LeetCode 295<br>Find Median from<br>Data Stream</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AHA SUMMARY / PATTERN RECOGNITION TRIGGERS -->
+    <div style="display: flex; gap: 20px;">
+        <div style="flex: 1; border: 1px solid #cbd5e1; border-radius: 8px; padding: 15px; display: flex; align-items: flex-start; gap: 15px;">
+            <div style="color: #eab308; font-size: 1.5rem;">⭐</div>
+            <div>
+                <div style="color: #1e3a8a; font-weight: bold; margin-bottom: 8px;">AHA SUMMARY</div>
+                <ul style="list-style-type: none; padding: 0; margin: 0; font-size: 0.95rem; line-height: 1.5;">
+                    <li>✅ What do I care about most right now? Put it on top!</li>
+                    <li>✅ Use heap to discard what I don't need.</li>
+                    <li>✅ Heap &ne; Sorting. Heap gives priority, not full order.</li>
+                </ul>
+            </div>
+        </div>
+        <div style="flex: 1; border: 1px solid #cbd5e1; border-radius: 8px; padding: 15px; display: flex; align-items: flex-start; gap: 15px;">
+            <div style="color: #ef4444; font-size: 1.5rem;">🔴</div>
+            <div>
+                <div style="color: #1e3a8a; font-weight: bold; margin-bottom: 8px;">PATTERN RECOGNITION TRIGGERS</div>
+                <div style="font-size: 0.95rem; line-height: 1.5; color: #334155;">
+                    &bull; Top K / Kth / Most Frequent / Closest / Smallest / Largest / Merge K / Running Median / Priority / Stream / Scheduler
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

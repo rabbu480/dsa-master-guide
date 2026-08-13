@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Topic 07: Stack Masterclass — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 14px; }
+.ph h1 { font-size: 1.8rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.88rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.75rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; }
+.bh  { background: var(--pri); color: white; padding: 6px 12px;
+  font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 18px; height: 18px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 10px 12px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 6px 12px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.75rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.95rem; }
+.psub   { color: var(--sub); font-size: 0.8rem; }
+.prow-body { display: flex; }
+.pc { padding: 8px 10px; font-size: 0.78rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.72rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; }
+.prob-head { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.75rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.70rem; line-height: 1.4; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.76rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+th, td { border: 1px solid var(--bdr); padding: 5px 7px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.badge-b { background: #dbeafe; color: #1e40af; }
+.badge-g { background: #dcfce7; color: #166534; }
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.tip  { background: #f0fdf4; border-left: 4px solid var(--grn); padding: 6px 10px; border-radius: 0 4px 4px 0; font-size: 0.78rem; margin-top: 6px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 8px 10px; margin-top: 6px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.82rem; margin-bottom: 3px; }
+
+.dt-wrap { font-size: 0.76rem; }
+.dt-root { background: var(--pri); color: white; padding: 5px 10px; border-radius: 5px; text-align: center; font-weight: 700; margin-bottom: 8px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 5px 7px; font-weight: 600; color: #1e40af; font-size: 0.72rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 5px 7px; color: #065f46; font-weight: 700; font-size: 0.72rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.75rem; padding: 4px 3px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 6px 10px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; height: 98vh !important; overflow: hidden !important; zoom: 0.85; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+
+@media print {
+  pre {
+    background: #f8fafc !important;
+    color: #0f172a !important;
+    border: 1.5px solid #cbd5e1 !important;
+    font-family: 'Fira Code', monospace !important;
+    font-size: 0.72rem !important;
+    line-height: 1.22 !important;
+    padding: 6px 8px !important;
+    white-space: pre-wrap !important;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+<!-- PAGE 1 -->
+<div class="page"><div class="ph"><div><h1>STACK</h1><div class="sub">Foundation &amp; Templates</div></div><div style="text-align:right"><div class="pn">PAGE 1 OF 6</div></div></div><div>>
+
+<div class="g3" style="margin-bottom:12px">
+  <div class="box pur">
+    <div class="bh">💡 WHY STACKS?</div>
+    <div class="bc">
+      <p style="margin-bottom:6px">Arrays give random access, but Stacks enforce <strong>LIFO (Last-In, First-Out) order</strong>. This is essential for matching nested structures, expression evaluation, and backtracking memory!</p>
+      <div class="aha">
+        <div class="aha-t">💡 THE ARRAYDEQUE AHA</div>
+        Never use `java.util.Stack` in Java! It inherits from `Vector` and uses synchronized methods (slow). Always use `Deque<Integer> stack = new ArrayDeque<>()`!
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bh"><span class="n">1</span> 3 CORE VARIANTS</div>
+    <div class="bc">
+      <ul style="margin-bottom:8px;padding-left:16px">
+        <li><strong>Matching / Pair Cancellation:</strong> Valid parentheses, string reduction, asteroid collisions.</li>
+        <li><strong>Monotonic Stack:</strong> Stack of strictly increasing or decreasing elements to find next greater / previous smaller element in O(N)!</li>
+        <li><strong>Expression Evaluation:</strong> Reverse Polish Notation (RPN), infix to postfix operators.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box sky">
+    <div class="bh"><span class="n">2</span> VISUALIZING MONOTONIC STACK</div>
+    <div class="bc">
+      <div style="font-weight:700;color:var(--pri);margin-bottom:4px">Decreasing Stack (Next Greater Element):</div>
+<pre>Array: [ 73, 74, 75, 71, 69, 72 ]
+Push 73 ➔ Stack: [73]
+Element 74 > 73 ➔ Pop 73! Next Greater of 73 is 74.
+Push 74 ➔ Stack: [74]
+Element 75 > 74 ➔ Pop 74! Next Greater of 74 is 75.
+Push 75, 71, 69 ➔ Stack: [75, 71, 69]</pre>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">📚 PREREQUISITES &amp; COMPLEXITY REASONING</div>
+    <div class="bc">
+      <table style="font-size:0.76rem">
+        <tr><th>Operation</th><th>ArrayDeque Complexity</th><th>Deprecated Stack</th></tr>
+        <tr><td>Push (top insert)</td><td><strong>O(1) amortized</strong></td><td>O(1) synchronized</td></tr>
+        <tr><td>Pop (top remove)</td><td><strong>O(1)</strong></td><td>O(1) synchronized</td></tr>
+        <tr><td>Peek (top view)</td><td><strong>O(1)</strong></td><td>O(1) synchronized</td></tr>
+        <tr><td>Monotonic Scan</td><td><strong>O(N) total</strong></td><td>O(N) total</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box amb">
+    <div class="bh">⚡ CLUES THAT SCREAM STACK</div>
+    <div class="bc">
+      <p style="font-size:0.8rem">1. <em>"Valid parentheses / matching brackets"</em> \rightarrow Character Stack</p>
+      <p style="font-size:0.8rem">2. <em>"Next greater element" / "Daily temperatures"</em> \rightarrow Monotonic Decreasing Stack</p>
+      <p style="font-size:0.8rem">3. <em>"Largest rectangle in histogram"</em> \rightarrow Monotonic Increasing Stack</p>
+      <p style="font-size:0.8rem">4. <em>"Evaluate arithmetic expression / RPN"</em> \rightarrow Operand Stack</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<div style="margin-top:4px"></div><div>>
+
+<div class="g2" style="margin-bottom:12px">
+  <div class="box">
+    <div class="bh"><span class="n">1</span> OPTIMAL ARRAYDEQUE TOOLKIT</div>
+    <div class="bc">
+<pre>// Standard FAANG Stack Declaration:
+Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+
+stack.push(val);  // Push onto top of stack
+int top = stack.pop();  // Pop from top of stack
+int peek = stack.peek(); // View top without popping
+boolean empty = stack.isEmpty();</pre>
+      <div class="tip" style="margin-top:6px">💡 `ArrayDeque` uses resizable circular array, zero garbage collector node allocations!</div>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh"><span class="n">2</span> MIN STACK WITH TWO STACKS</div>
+    <div class="bc">
+<pre>class MinStack {
+  private Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+  private Deque&lt;Integer&gt; minStack = new ArrayDeque&lt;&gt;();
+
+  public void push(int val) {
+    stack.push(val);
+    if (minStack.isEmpty() || val <= minStack.peek()) {
+      minStack.push(val);
+    }
+  }
+  public void pop() {
+    if (stack.pop().equals(minStack.peek())) minStack.pop();
+  }
+  public int top() { return stack.peek(); }
+  public int getMin() { return minStack.peek(); }
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box sky">
+    <div class="bh"><span class="n">3</span> PARENTHESIS MATCHING MAP</div>
+    <div class="bc">
+<pre>public static boolean isValidPair(char open, char close) {
+  return (open == '(' && close == ')') ||
+         (open == '[' && close == ']') ||
+         (open == '{' && close == '}');
+}</pre>
+    </div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh"><span class="n">4</span> MONOTONIC INDEX POP LOOP</div>
+    <div class="bc">
+<pre>// Monotonic Decreasing Stack loop (Find Next Greater Element)
+while (!stack.isEmpty() && nums[stack.peek()] < nums[i]) {
+  int prevIndex = stack.pop();
+  result[prevIndex] = i - prevIndex; // Distance to next greater!
+}
+stack.push(i);</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<!-- PAGE 2 -->
+<div class="page"><div class="ph"><div><h1>STACK</h1><div class="sub">Core Patterns — Part 1 &amp; Part 2</div></div><div style="text-align:right"><div class="pn">PAGE 2 OF 6</div></div></div><div>>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 1</div>
+    <div class="ptitle">PARENTHESES &amp; BRACKET MATCHING</div>
+    <div class="psub">e.g. Valid Parentheses (LC 20), Backspace String Compare (LC 844)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.78rem">Push opening brackets `(`, `[`, `{`. When closing bracket encountered, verify top of stack matches and pop!</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 20</div>
+<pre>public boolean isValid(String s) {
+  Deque&lt;Character&gt; stack = new ArrayDeque&lt;&gt;();
+  for (char c : s.toCharArray()) {
+    if (c == '(') stack.push(')');
+    else if (c == '{') stack.push('}');
+    else if (c == '[') stack.push(']');
+    else if (stack.isEmpty() || stack.pop() != c) return false;
+  }
+  return stack.isEmpty();
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 2</div>
+    <div class="ptitle">PAIR CANCELLATION &amp; SIMULATION</div>
+    <div class="psub">e.g. Asteroid Collision (LC 735), Remove All Adjacent Duplicates</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.78rem">Simulate collision/cancellation between incoming elements and previous active elements at top of stack.</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 735</div>
+<pre>public int[] asteroidCollision(int[] asteroids) {
+  Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+  for (int a : asteroids) {
+    while (!stack.isEmpty() && a < 0 && stack.peek() > 0) {
+      int diff = a + stack.peek();
+      if (diff < 0) stack.pop(); // Incoming destroys top
+      else if (diff == 0) { stack.pop(); a = 0; } // Both destroyed
+      else a = 0; // Incoming destroyed
+    }
+    if (a != 0) stack.push(a);
+  }
+  int[] res = new int[stack.size()];
+  for (int i = res.length - 1; i >= 0; i--) res[i] = stack.pop();
+  return res;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<div style="margin-top:4px"></div><div>>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 3</div>
+    <div class="ptitle">MONOTONIC DECREASING STACK (Next Greater Element)</div>
+    <div class="psub">e.g. Daily Temperatures (LC 739), Next Greater Element I &amp; II</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Why O(N) Total Time</div>
+      <div style="font-size:0.78rem">
+        Every index is pushed onto the stack exactly once and popped at most once. Total push/pop operations across N elements $= 2N \rightarrow O(N)$!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 739</div>
+<pre>public int[] dailyTemperatures(int[] temperatures) {
+  int n = temperatures.length;
+  int[] res = new int[n];
+  Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;(); // stores indices
+  for (int i = 0; i < n; i++) {
+    while (!stack.isEmpty() && temperatures[i] > temperatures[stack.peek()]) {
+      int prevIndex = stack.pop();
+      res[prevIndex] = i - prevIndex;
+    }
+    stack.push(i);
+  }
+  return res;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 4</div>
+    <div class="ptitle">MONOTONIC STACK WITH MONOTONIC VALUES (Car Fleet)</div>
+    <div class="psub">e.g. Car Fleet (LC 853)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Car Fleet Intuition</div>
+      <div style="font-size:0.78rem">
+        Sort cars by position descending. Calculate arrival time `(target - pos) / speed`. If a car behind arrives <= car ahead, it merges into fleet (pop)!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 853</div>
+<pre>public int carFleet(int target, int[] position, int[] speed) {
+  int n = position.length;
+  double[][] cars = new double[n][2];
+  for (int i = 0; i < n; i++) {
+    cars[i] = new double[]{position[i], (double)(target - position[i]) / speed[i]};
+  }
+  Arrays.sort(cars, (a, b) -> Double.compare(b[0], a[0]));
+  Deque&lt;Double&gt; stack = new ArrayDeque&lt;&gt;();
+  for (double[] car : cars) {
+    double time = car[1];
+    if (!stack.isEmpty() && time <= stack.peek()) continue; // Merges!
+    stack.push(time);
+  }
+  return stack.size();
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<!-- PAGE 3 -->
+<div class="page"><div class="ph"><div><h1>STACK</h1><div class="sub">Core Patterns — Part 3 &amp; Part 4</div></div><div style="text-align:right"><div class="pn">PAGE 3 OF 6</div></div></div><div>>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 5</div>
+    <div class="ptitle">LARGEST RECTANGLE IN HISTOGRAM (Monotonic Increasing Stack)</div>
+    <div class="psub">e.g. Largest Rectangle in Histogram (LC 84), Maximal Rectangle</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Monotonic Increasing Stack Mechanics</div>
+      <div style="font-size:0.78rem">
+        When `heights[i]` is smaller than stack top, the popped height's right boundary is `i`, and left boundary is current stack top!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.8">
+      <div class="pc-head">Template — LC 84</div>
+<pre>public int largestRectangleArea(int[] heights) {
+  int n = heights.length, maxArea = 0;
+  Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+  for (int i = 0; i <= n; i++) {
+    int h = (i == n) ? 0 : heights[i];
+    while (!stack.isEmpty() && h < heights[stack.peek()]) {
+      int height = heights[stack.pop()];
+      int width = stack.isEmpty() ? i : i - stack.peek() - 1;
+      maxArea = Math.max(maxArea, height * width);
+    }
+    stack.push(i);
+  }
+  return maxArea;
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+<div style="margin-top:4px"></div><div>>
+
+<div class="prow" style="margin-bottom:12px">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 6</div>
+    <div class="ptitle">EVALUATE REVERSE POLISH NOTATION (Postfix Operators)</div>
+    <div class="psub">e.g. Evaluate Reverse Polish Notation (LC 150)</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">When to Use</div>
+      <div style="font-size:0.78rem">Push numbers. When operator (+, -, *, /) encountered, pop second operand `b`, pop first operand `a`, evaluate `a op b`, push result!</div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 150</div>
+<pre>public int evalRPN(String[] tokens) {
+  Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+  for (String t : tokens) {
+    if (t.equals("+")) stack.push(stack.pop() + stack.pop());
+    else if (t.equals("-")) { int b = stack.pop(), a = stack.pop(); stack.push(a - b); }
+    else if (t.equals("*")) stack.push(stack.pop() * stack.pop());
+    else if (t.equals("/")) { int b = stack.pop(), a = stack.pop(); stack.push(a / b); }
+    else stack.push(Integer.parseInt(t));
+  }
+  return stack.pop();
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="prow">
+  <div class="prow-head">
+    <div class="ptag2">PATTERN 7</div>
+    <div class="ptitle">DECODE STRING (Nested Multipliers &amp; String Stack)</div>
+    <div class="psub">e.g. Decode String (LC 394) — `3[a2[c]]` \rightarrow `accaccacc`</div>
+  </div>
+  <div class="prow-body">
+    <div class="pc" style="flex:1">
+      <div class="pc-head">Nested Stack Strategy</div>
+      <div style="font-size:0.78rem">
+        Use count stack &amp; string stack. On `[`, push current multiplier and string buffer. On `]`, pop multiplier and repeat string!
+      </div>
+    </div>
+    <div class="pc" style="flex:1.5">
+      <div class="pc-head">Template — LC 394</div>
+<pre>public String decodeString(String s) {
+  Deque&lt;Integer&gt; countStack = new ArrayDeque&lt;&gt;();
+  Deque&lt;StringBuilder&gt; stringStack = new ArrayDeque&lt;&gt;();
+  StringBuilder curr = new StringBuilder(); int k = 0;
+  for (char c : s.toCharArray()) {
+    if (Character.isDigit(c)) k = k * 10 + (c - '0');
+    else if (c == '[') {
+      countStack.push(k); stringStack.push(curr);
+      curr = new StringBuilder(); k = 0;
+    } else if (c == ']') {
+      StringBuilder prev = stringStack.pop(); int count = countStack.pop();
+      for (int i = 0; i < count; i++) prev.append(curr);
+      curr = prev;
+    } else curr.append(c);
+  }
+  return curr.toString();
+}</pre>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<!-- PAGE 4 -->
+<div class="page"><div class="ph"><div><h1>STACK</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div><div style="text-align:right"><div class="pn">PAGE 4 OF 6</div></div></div><div>>
+
+<div class="g2">
+  <div class="box">
+    <div class="bh">STACK — WHICH PATTERN TO USE?</div>
+    <div class="bc dt-wrap">
+      <div class="dt-root">Start: What is the stack problem type?</div>
+      <div class="dt-grid">
+        <div class="dt-row">
+          <div class="dt-q">🧩 Matching parentheses / symbols</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Matching Stack<br><span style="font-weight:400;font-size:0.7rem">Push opening, pop matching closing</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🌡️ Next Greater / Warmer Temp</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Monotonic Decreasing<br><span style="font-weight:400;font-size:0.7rem">Pop elements smaller than current</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">📊 Histogram / Previous Smaller</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Monotonic Increasing<br><span style="font-weight:400;font-size:0.7rem">Pop elements greater than current</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🧮 RPN / Expression Parsing</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Operand Stack<br><span style="font-weight:400;font-size:0.7rem">Push numbers, pop 2 on operator</span></div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-q">🔤 Nested Bracket Repeats `3[a]`</div>
+          <div class="dt-arrow">→</div>
+          <div class="dt-a">Nested Dual Stack<br><span style="font-weight:400;font-size:0.7rem">`countStack` + `stringStack`</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div class="box pur">
+      <div class="bh">🎯 TRIGGER WORDS DIRECTORY</div>
+      <div class="bc">
+        <table>
+          <tr><th>Trigger Word</th><th>Variant</th><th>Action</th></tr>
+          <tr><td>"Valid parentheses", "Matching brackets"</td><td>Matching Stack</td><td>Push closing bracket onto stack</td></tr>
+          <tr><td>"Next greater", "Daily temperatures"</td><td>Monotonic Decreasing</td><td>Pop stack while `stack.peek() < num`</td></tr>
+          <tr><td>"Histogram", "Max rectangle"</td><td>Monotonic Increasing</td><td>Pop stack while `stack.peek() > height`</td></tr>
+          <tr><td>"RPN", "Postfix evaluation"</td><td>Operand Stack</td><td>Pop b then a, apply `a op b`</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="box amb">
+      <div class="bh">💼 INTERVIEW TRADE-OFFS &amp; FOLLOW-UPS</div>
+      <div class="bc">
+        <table>
+          <tr><th>Interviewer Asks</th><th>Your Answer</th></tr>
+          <tr><td>Why `ArrayDeque` over `java.util.Stack`?</td><td>`java.util.Stack` is legacy, thread-synchronized, and inherits from Vector. `ArrayDeque` is unsynchronized array-backed O(1)!</td></tr>
+          <tr><td>How to implement O(1) Min Stack?</td><td>Maintain a parallel `minStack` storing current minimum at each push!</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<!-- PAGE 5 -->
+<div class="page"><div class="ph"><div><h1>STACK</h1><div class="sub">FAANG Problem Ladder (All 10 Problems)</div></div><div style="text-align:right"><div class="pn">PAGE 5 OF 6</div></div></div><div>>
+
+<div class="g2" style="gap:10px">
+<div>
+  <div style="background:var(--grn);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟢 EASY &amp; MEDIUM — Parentheses &amp; Min Stack</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#f0fdf4">
+      <span class="ptitle" style="color:var(--grn)">LC 20 · Valid Parentheses</span>
+      <span class="diff-e">EASY</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Parenthesis Match</div>
+        <div><strong>Key Insight:</strong> Push expected closing character.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public boolean isValid(String s) {
+  Deque&lt;Character&gt; st = new ArrayDeque&lt;&gt;();
+  for (char c : s.toCharArray()) {
+    if (c == '(') st.push(')');
+    else if (c == '{') st.push('}');
+    else if (c == '[') st.push(']');
+    else if (st.isEmpty() || st.pop() != c) return false;
+  }
+  return st.isEmpty();
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 155 · Min Stack</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Dual Stack</div>
+        <div><strong>Key Insight:</strong> Auxiliary stack tracks minimum value.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">class MinStack {
+  Deque&lt;Integer&gt; st = new ArrayDeque&lt;&gt;(), minSt = new ArrayDeque&lt;&gt;();
+  public void push(int val) {
+    st.push(val);
+    if (minSt.isEmpty() || val <= minSt.peek()) minSt.push(val);
+  }
+  public void pop() { if (st.pop().equals(minSt.peek())) minSt.pop(); }
+  public int top() { return st.peek(); }
+  public int getMin() { return minSt.peek(); }
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 150 · Evaluate RPN</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> RPN Operand Stack</div>
+        <div><strong>Key Insight:</strong> Pop `b` then `a`, apply `a op b`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public int evalRPN(String[] tokens) {
+  Deque&lt;Integer&gt; st = new ArrayDeque&lt;&gt;();
+  for (String t : tokens) {
+    if (t.equals("+")) st.push(st.pop() + st.pop());
+    else if (t.equals("-")) { int b=st.pop(), a=st.pop(); st.push(a-b); }
+    else if (t.equals("*")) st.push(st.pop() * st.pop());
+    else if (t.equals("/")) { int b=st.pop(), a=st.pop(); st.push(a/b); }
+    else st.push(Integer.parseInt(t));
+  }
+  return st.pop();
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM — Monotonic Decreasing &amp; Fleets</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 739 · Daily Temperatures</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Monotonic Decreasing</div>
+        <div><strong>Key Insight:</strong> Stack stores indices. Pop when warmer!</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public int[] dailyTemperatures(int[] T) {
+  int[] res = new int[T.length];
+  Deque&lt;Integer&gt; st = new ArrayDeque&lt;&gt;();
+  for (int i = 0; i < T.length; i++) {
+    while (!st.isEmpty() && T[i] > T[st.peek()]) {
+      int prev = st.pop(); res[prev] = i - prev;
+    }
+    st.push(i);
+  }
+  return res;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 853 · Car Fleet</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Time Stack</div>
+        <div><strong>Key Insight:</strong> Sort by position desc. Time <= top merges.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.62rem">public int carFleet(int target, int[] pos, int[] speed) {
+  int n = pos.length; double[][] cars = new double[n][2];
+  for (int i = 0; i < n; i++) cars[i] = new double[]{pos[i], (double)(target - pos[i]) / speed[i]};
+  Arrays.sort(cars, (a,b)->Double.compare(b[0], a[0]));
+  Deque&lt;Double&gt; st = new ArrayDeque&lt;&gt;();
+  for (double[] c : cars) {
+    if (!st.isEmpty() && c[1] <= st.peek()) continue;
+    st.push(c[1]);
+  }
+  return st.size();
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<div style="margin-top:4px"></div><div>>
+
+<div class="g2" style="gap:10px;margin-bottom:10px">
+<div>
+  <div style="background:var(--amb);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🟡 MEDIUM &amp; HARD — Asteroids &amp; Decoding</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 735 · Asteroid Collision</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Collision Simulation</div>
+        <div><strong>Key Insight:</strong> Destroy smaller top when incoming is negative.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public int[] asteroidCollision(int[] ast) {
+  Deque&lt;Integer&gt; st = new ArrayDeque&lt;&gt;();
+  for (int a : ast) {
+    while (!st.isEmpty() && a < 0 && st.peek() > 0) {
+      int diff = a + st.peek();
+      if (diff < 0) st.pop();
+      else if (diff == 0) { st.pop(); a = 0; }
+      else a = 0;
+    }
+    if (a != 0) st.push(a);
+  }
+  int[] res = new int[st.size()];
+  for (int i = res.length - 1; i >= 0; i--) res[i] = st.pop();
+  return res;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 394 · Decode String</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Nested Dual Stack</div>
+        <div><strong>Key Insight:</strong> Push buffer on `[`, repeat on `]`.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public String decodeString(String s) {
+  Deque&lt;Integer&gt; countSt = new ArrayDeque&lt;&gt;();
+  Deque&lt;StringBuilder&gt; strSt = new ArrayDeque&lt;&gt;();
+  StringBuilder curr = new StringBuilder(); int k = 0;
+  for (char c : s.toCharArray()) {
+    if (Character.isDigit(c)) k = k * 10 + (c - '0');
+    else if (c == '[') {
+      countSt.push(k); strSt.push(curr); curr = new StringBuilder(); k = 0;
+    } else if (c == ']') {
+      StringBuilder prev = strSt.pop(); int cnt = countSt.pop();
+      for (int i = 0; i < cnt; i++) prev.append(curr);
+      curr = prev;
+    } else curr.append(c);
+  }
+  return curr.toString();
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div style="background:var(--red);color:white;padding:3px 8px;border-radius:4px;font-weight:700;margin-bottom:6px">🔴 HARD — Largest Rectangle in Histogram</div>
+
+  <div class="prob" style="margin-bottom:6px">
+    <div class="prob-head" style="background:#fee2e2">
+      <span class="ptitle" style="color:var(--red)">LC 84 · Largest Rectangle in Histogram</span>
+      <span class="diff-h">HARD</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Monotonic Increasing</div>
+        <div><strong>Key Insight:</strong> Width $= i - \text{stack.peek()} - 1$.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public int largestRectangleArea(int[] heights) {
+  int n = heights.length, maxArea = 0;
+  Deque&lt;Integer&gt; st = new ArrayDeque&lt;&gt;();
+  for (int i = 0; i <= n; i++) {
+    int h = (i == n) ? 0 : heights[i];
+    while (!st.isEmpty() && h < heights[st.peek()]) {
+      int height = heights[st.pop()];
+      int width = st.isEmpty() ? i : i - st.peek() - 1;
+      maxArea = Math.max(maxArea, height * width);
+    }
+    st.push(i);
+  }
+  return maxArea;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head" style="background:#fefce8">
+      <span class="ptitle" style="color:var(--amb)">LC 22 · Generate Parentheses</span>
+      <span class="diff-m">MEDIUM</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-info">
+        <div><strong>Pattern:</strong> Backtracking Stack</div>
+        <div><strong>Key Insight:</strong> Add `(` if open &lt; N, add `)` if close &lt; open.</div>
+      </div>
+      <div class="prob-code">
+<pre style="font-size:0.58rem">public List&lt;String&gt; generateParenthesis(int n) {
+  List&lt;String&gt; res = new ArrayList&lt;&gt;();
+  backtrack(res, new StringBuilder(), 0, 0, n);
+  return res;
+}
+private void backtrack(List&lt;String&gt; res, StringBuilder sb, int open, int close, int n) {
+  if (sb.length() == 2 * n) { res.add(sb.toString()); return; }
+  if (open < n) { sb.append('('); backtrack(res, sb, open + 1, close, n); sb.deleteCharAt(sb.length() - 1); }
+  if (close < open) { sb.append(')'); backtrack(res, sb, open, close + 1, n); sb.deleteCharAt(sb.length() - 1); }
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Master Summary Table -->
+<div class="box">
+  <div class="bh" style="padding:3px 6px;font-size:0.76rem">📊 COMPLETE STACK PROBLEM LADDER SUMMARY</div>
+  <div class="bc" style="padding:4px 6px">
+    <table>
+      <tr><th>LC #</th><th>Problem</th><th>Pattern</th><th>Time</th><th>Space</th><th>Diff</th></tr>
+      <tr><td>20</td><td>Valid Parentheses</td><td>Parenthesis Match</td><td>O(N)</td><td>O(N)</td><td><span class="diff-e">E</span></td></tr>
+      <tr><td>155</td><td>Min Stack</td><td>Dual Stack Minimum</td><td>O(1) all ops</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>150</td><td>Evaluate RPN</td><td>Operand Stack</td><td>O(N)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>739</td><td>Daily Temperatures</td><td>Monotonic Decreasing</td><td>O(N)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>853</td><td>Car Fleet</td><td>Time Stack</td><td>O(N log N)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>735</td><td>Asteroid Collision</td><td>Collision Simulation</td><td>O(N)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>394</td><td>Decode String</td><td>Nested Dual Stack</td><td>O(N)</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+      <tr><td>84</td><td>Largest Rectangle in Histogram</td><td>Monotonic Increasing</td><td>O(N)</td><td>O(N)</td><td><span class="diff-h">H</span></td></tr>
+      <tr><td>22</td><td>Generate Parentheses</td><td>Backtracking Stack</td><td>O(4^N / sqrt(N))</td><td>O(N)</td><td><span class="diff-m">M</span></td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+</div>
+<!-- PAGE 6 -->
+<div class="page"><div class="ph"><div><h1>STACK</h1><div class="sub">Dry Run, Proofs &amp; Cheat Sheet</div></div><div style="text-align:right"><div class="pn">PAGE 6 OF 6</div></div></div><div><div><div><div>>
+
+<div class="g2" style="margin-bottom:10px">
+  <div class="box">
+    <div class="bh">🔍 DRY RUN — Daily Temperatures ([73, 74, 75, 71, 69, 72])</div>
+    <div class="bc">
+      <table style="font-size:0.70rem">
+        <tr><th>Index</th><th>Temp</th><th>Stack State (Indices)</th><th>Action / Result Assignment</th></tr>
+        <tr><td>0</td><td>73</td><td>[0]</td><td>Push 0</td></tr>
+        <tr><td>1</td><td>74</td><td>[1]</td><td>74 > 73 \rightarrow Pop 0! `res[0] = 1 - 0 = 1`. Push 1</td></tr>
+        <tr><td>2</td><td>75</td><td>[2]</td><td>75 > 74 \rightarrow Pop 1! `res[1] = 2 - 1 = 1`. Push 2</td></tr>
+        <tr><td>3</td><td>71</td><td>[2, 3]</td><td>71 < 75 \rightarrow Push 3</td></tr>
+        <tr><td>4</td><td>69</td><td>[2, 3, 4]</td><td>69 < 71 \rightarrow Push 4</td></tr>
+        <tr><td>5</td><td>72</td><td>[2, 5]</td><td>72 > 69 \rightarrow Pop 4! `res[4]=1`. 72 > 71 \rightarrow Pop 3! `res[3]=2`. Push 5</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="box grn">
+    <div class="bh">📐 MATHEMATICAL PROOF — O(N) MONOTONIC STACK</div>
+    <div class="bc">
+      <div style="font-size:0.76rem">
+        <p style="margin-bottom:4px"><strong>Claim:</strong> The inner `while (!stack.isEmpty() && ...)` loop does not make Monotonic Stack O(N^2).</p>
+        <p style="margin-bottom:4px"><strong>Proof:</strong> Each element is pushed onto the stack exactly once. An element can be popped from the stack at most once. Total pops across entire execution <= N. Total operations $= N \text{ pushes} + \text{at most } N \text{ pops} = 2N \rightarrow$ <strong>Strictly O(N) Time!</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="box grn">
+    <div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+    <div class="bc">
+      <div class="g2" style="gap:6px">
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Use `ArrayDeque` instead of `java.util.Stack`</li>
+          <li>☐ Code Valid Parentheses (LC 20) in 2m</li>
+          <li>☐ Implement Min Stack O(1) operations</li>
+          <li>☐ Code Daily Temperatures with Monotonic Stack</li>
+        </ul>
+        <ul style="font-size:0.75rem;list-style:none;padding:0">
+          <li>☐ Write RPN Evaluator (LC 150)</li>
+          <li>☐ Code Car Fleet sorting by position desc</li>
+          <li>☐ Code Largest Rectangle in Histogram (LC 84)</li>
+          <li>☐ Prove why Monotonic Stack is O(N)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="box pur">
+    <div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+    <div class="bc">
+      <div class="aha" style="margin-bottom:4px;padding:5px">
+        <div class="aha-t">Rule 1 — Store Indices, Not Values</div>
+        In Monotonic Stack problems calculating distances (e.g. Daily Temperatures, Histogram width), store ARRAY INDICES in the Stack!
+      </div>
+      <div class="aha" style="padding:5px">
+        <div class="aha-t">Rule 2 — Sentinel 0 Height</div>
+        In Largest Rectangle in Histogram, append a dummy 0 height at index N to force popping all remaining elements from the stack!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,515 @@
+<div class="page" style="font-family: Arial, sans-serif; background-color: #f8fafc; padding: 20px;">
+    <!-- HEADER -->
+    <div class="header-top" style="margin-bottom: 20px;">
+        <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="background-color: #1e3a8a; color: white; padding: 5px 15px; font-weight: bold; font-size: 24px; border-radius: 4px;">PAGE 15</div>
+                <h1 style="color: #1e3a8a; margin: 0; font-size: 32px;">GRAPH PATTERN GUIDE</h1>
+            </div>
+            <div>
+                <span style="font-size: 24px;">📖</span>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 10px;">
+            <div class="subtitle" style="color: #1e3a8a; font-size: 18px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <span style="height: 2px; background-color: #1e3a8a; flex-grow: 1; max-width: 100px;"></span>
+                PAGE 15 &mdash; SPECIAL GRAPH PROBLEMS GUIDE (APPLY TEMPLATES)
+                <span style="height: 2px; background-color: #1e3a8a; flex-grow: 1; max-width: 100px;"></span>
+            </div>
+            <div style="color: #1e3a8a; font-style: italic; margin-top: 5px;">"These problems test deeper understanding + clean thinking."</div>
+        </div>
+    </div>
+
+    <!-- TOP SECTION: HOW TO USE / LEGEND -->
+    <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+        <!-- HOW TO USE -->
+        <div style="flex: 1; border: 1px solid #e2e8f0; border-radius: 8px; background-color: white; overflow: hidden;">
+            <div style="background-color: #4c1d95; color: white; padding: 8px; text-align: center; font-weight: bold;">HOW TO USE THIS PAGE</div>
+            <div style="padding: 10px; display: flex; align-items: center;">
+                <ol style="margin: 0; padding-left: 20px; line-height: 1.6; color: #1e293b; flex: 1; list-style-type: none;">
+                    <li><span style="color: #4c1d95; font-weight: bold; margin-right: 5px;">①</span> Find the problem.</li>
+                    <li><span style="color: #4c1d95; font-weight: bold; margin-right: 5px;">②</span> Identify the base template.</li>
+                    <li><span style="color: #4c1d95; font-weight: bold; margin-right: 5px;">③</span> Read the <strong>CHANGED LINES</strong>.</li>
+                    <li><span style="color: #4c1d95; font-weight: bold; margin-right: 5px;">④</span> Understand the <strong>AHA</strong>.</li>
+                    <li><span style="color: #4c1d95; font-weight: bold; margin-right: 5px;">⑤</span> Review complexity & interview tip.</li>
+                    <li><span style="color: #4c1d95; font-weight: bold; margin-right: 5px;">⑥</span> Practice writing from memory.</li>
+                </ol>
+                <div style="font-size: 40px; color: #1e3a8a;">🎯</div>
+            </div>
+        </div>
+        
+        <!-- LEGEND -->
+        <div style="flex: 2; border: 1px solid #e2e8f0; border-radius: 8px; background-color: white; overflow: hidden;">
+            <div style="background-color: #1e3a8a; color: white; padding: 8px; text-align: center; font-weight: bold;">TEMPLATE LEGEND (From Page 14)</div>
+            <div style="padding: 10px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 5px; width: 30%;"><div style="background-color: #1e3a8a; color: white; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold;">A</div> Network Delay (Dijkstra)</div>
+                <div style="display: flex; align-items: center; gap: 5px; width: 30%;"><div style="background-color: #16a34a; color: white; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold;">B</div> Dijkstra with Path</div>
+                <div style="display: flex; align-items: center; gap: 5px; width: 30%;"><div style="background-color: #6d28d9; color: white; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold;">C</div> Minimum Effort Path</div>
+                <div style="display: flex; align-items: center; gap: 5px; width: 30%;"><div style="background-color: #ea580c; color: white; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold;">D</div> Cheapest Flights (K Stops)</div>
+                <div style="display: flex; align-items: center; gap: 5px; width: 30%;"><div style="background-color: #be185d; color: white; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold;">E</div> Path with Minimum Effort</div>
+                <div style="display: flex; align-items: center; gap: 5px; width: 30%;"><div style="background-color: #0d9488; color: white; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold;">F</div> Shortest Path in Undirected Graph</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN 3-COLUMN GRID -->
+    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+        
+        <!-- COLUMN 1 -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 15px;">
+            <!-- 1. CLONE GRAPH -->
+            <div class="section-box" style="border: 1px solid #e2e8f0; background: white;">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 5px; font-weight: bold; display: flex; justify-content: space-between;">
+                    <span><span style="background-color: white; color: #1e3a8a; padding: 0 6px; margin-right: 5px;">1</span> CLONE GRAPH</span>
+                    <span style="background-color: #6d28d9; padding: 0 6px;">S</span>
+                </div>
+                <div class="section-content" style="padding: 10px; font-size: 11px;">
+                    <div style="text-align: center; color: #1e3a8a; font-weight: bold; margin-bottom: 5px;">Base Template: DFS (Graph Traversal)</div>
+                    <div style="font-weight: bold; color: #1e3a8a;">Problem</div>
+                    <div>Given a reference of a node in a connected undirected graph, return a deep copy (clone) of the graph.</div>
+                    <div style="font-weight: bold; color: #1e3a8a; margin-top: 5px;">Changed Lines (from Template)</div>
+                    <pre style="background: #f1f5f9; padding: 5px; margin: 5px 0; border-left: 3px solid #3b82f6; overflow-x: auto; color: #333;"><code>Map&lt;Node, Node&gt; map = new HashMap&lt;&gt;();
+private Node clone(Node node) {
+  if (node == null) return null;
+  if (map.containsKey(node)) return map.get(node); // already cloned
+  Node copy = new Node(node.val); // clone current
+  map.put(node, copy);
+  for (Node nei : node.neighbors) {
+    copy.neighbors.add(clone(nei));
+  }
+  return copy;
+}</code></pre>
+                    <table style="width: 100%; text-align: center; margin-top: 5px; border-collapse: collapse;">
+                        <tr style="color: #1e3a8a; font-weight: bold; border-bottom: 1px solid #cbd5e1;">
+                            <td>Caller</td><td>Return</td><td>Key Idea</td>
+                        </tr>
+                        <tr>
+                            <td><code>clone(node)</code></td><td><code>Node</code></td><td>Use map to avoid<br>infinite loop & duplicates</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 5px; background: #fffbeb; padding: 5px; border-left: 3px solid #f59e0b;">
+                        <strong>💡 AHA:</strong> Store cloned node before traversing neighbors.
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <div>
+                            <div style="font-weight: bold; color: #1e3a8a;">Complexity</div>
+                            Time: O(V + E)<br>Space: O(V)
+                        </div>
+                        <div>
+                            <div style="font-weight: bold; color: #1e3a8a;">Interview Tip</div>
+                            Essentially a graph + hash map problem.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. ROTTING ORANGES -->
+            <div class="section-box" style="border: 1px solid #e2e8f0; background: white;">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 5px; font-weight: bold; display: flex; justify-content: space-between;">
+                    <span><span style="background-color: white; color: #1e3a8a; padding: 0 6px; margin-right: 5px;">4</span> ROTTING ORANGES</span>
+                    <span style="background-color: #0d9488; padding: 0 6px;">I</span>
+                </div>
+                <div class="section-content" style="padding: 10px; font-size: 11px;">
+                    <div style="text-align: center; color: #1e3a8a; font-weight: bold; margin-bottom: 5px;">Base Template: Multi-Source BFS</div>
+                    <div style="font-weight: bold; color: #1e3a8a;">Problem</div>
+                    <div>Each minute, a rotten orange makes adjacent fresh oranges rotten. Return time to rot all or -1.</div>
+                    <div style="font-weight: bold; color: #1e3a8a; margin-top: 5px;">Changed Lines (from Template)</div>
+                    <pre style="background: #f1f5f9; padding: 5px; margin: 5px 0; border-left: 3px solid #3b82f6; overflow-x: auto; color: #333;"><code>Queue&lt;int[]&gt; q = new LinkedList&lt;&gt;();
+int fresh = 0, time = 0;
+// 1. Add all rotten oranges to queue & count fresh
+// 2. BFS level by level
+while (!q.isEmpty() && fresh > 0) {
+  int size = q.size();
+  time++;
+  while (size-- > 0) {
+    int[] cur = q.poll();
+    // infect fresh neighbors
+  }
+}
+return fresh == 0 ? time : -1;</code></pre>
+                    <table style="width: 100%; text-align: center; margin-top: 5px; border-collapse: collapse;">
+                        <tr style="color: #1e3a8a; font-weight: bold; border-bottom: 1px solid #cbd5e1;">
+                            <td>Caller</td><td>Return</td><td>Key Idea</td>
+                        </tr>
+                        <tr>
+                            <td><code>orangesRotting(grid)</code></td><td><code>int</code></td><td>Level order = minutes</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 5px; background: #fffbeb; padding: 5px; border-left: 3px solid #f59e0b;">
+                        <strong>💡 AHA:</strong> Processing one level = one minute.
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <div>
+                            <div style="font-weight: bold; color: #1e3a8a;">Complexity</div>
+                            Time: O(m * n)<br>Space: O(m * n)
+                        </div>
+                        <div>
+                            <div style="font-weight: bold; color: #1e3a8a;">Interview Tip</div>
+                            Classic BFS with multi-source.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMN 2 -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 15px;">
+            <!-- 2. SURROUNDED REGIONS -->
+            <div class="section-box" style="border: 1px solid #e2e8f0; background: white;">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 5px; font-weight: bold; display: flex; justify-content: space-between;">
+                    <span><span style="background-color: white; color: #1e3a8a; padding: 0 6px; margin-right: 5px;">2</span> SURROUNDED REGIONS</span>
+                    <span style="background-color: #0d9488; padding: 0 6px;">I</span>
+                </div>
+                <div class="section-content" style="padding: 10px; font-size: 11px;">
+                    <div style="text-align: center; color: #1e3a8a; font-weight: bold; margin-bottom: 5px;">Base Template: DFS from Boundary</div>
+                    <div style="font-weight: bold; color: #1e3a8a;">Problem</div>
+                    <div>Capture all regions that are surrounded by 'X'. Regions connected to boundary stay 'O'.</div>
+                    <div style="font-weight: bold; color: #1e3a8a; margin-top: 5px;">Changed Lines (from Template)</div>
+                    <pre style="background: #f1f5f9; padding: 5px; margin: 5px 0; border-left: 3px solid #3b82f6; overflow-x: auto; color: #333;"><code>// 1. DFS from all boundary 'O'
+for (int i = 0; i &lt; m; i++) {
+  dfs(i, 0); dfs(i, n-1);
+}
+for (int j = 0; j &lt; n; j++) {
+  dfs(0, j); dfs(m-1, j);
+}
+// 2. Flip inside 'O' to 'X'
+for (int i = 0; i &lt; m; i++) {
+  for (int j = 0; j &lt; n; j++) {
+    if (board[i][j] == 'O') board[i][j] = 'X';
+    if (board[i][j] == 'E') board[i][j] = 'O';
+  }
+}
+// dfs() marks reachable 'O' as 'E'</code></pre>
+                    <table style="width: 100%; text-align: center; margin-top: 5px; border-collapse: collapse;">
+                        <tr style="color: #1e3a8a; font-weight: bold; border-bottom: 1px solid #cbd5e1;">
+                            <td>Caller</td><td>Return</td><td>Key Idea</td>
+                        </tr>
+                        <tr>
+                            <td><code>solve(board)</code></td><td><code>void</code></td><td>Mark safe 'O's first,<br>then flip the rest</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 5px; background: #fffbeb; padding: 5px; border-left: 3px solid #f59e0b;">
+                        <strong>💡 AHA:</strong> Only boundary-connected 'O's are safe.
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <div>
+                            <div style="font-weight: bold; color: #1e3a8a;">Complexity</div>
+                            Time: O(m * n)<br>Space: O(m * n)
+                        </div>
+                        <div>
+                            <div style="font-weight: bold; color: #1e3a8a;">Interview Tip</div>
+                            Classic boundary DFS pattern.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. COURSE SCHEDULE II -->
+            <div class="section-box" style="border: 1px solid #e2e8f0; background: white;">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 5px; font-weight: bold; display: flex; justify-content: space-between;">
+                    <span><span style="background-color: white; color: #1e3a8a; padding: 0 6px; margin-right: 5px;">5</span> COURSE SCHEDULE II</span>
+                    <span style="background-color: #16a34a; padding: 0 6px;">K</span>
+                </div>
+                <div class="section-content" style="padding: 10px; font-size: 11px;">
+                    <div style="text-align: center; color: #1e3a8a; font-weight: bold; margin-bottom: 5px;">Base Template: Topological Sort (BFS)</div>
+                    <div style="font-weight: bold; color: #1e3a8a;">Problem</div>
+                    <div>Return any valid order to finish all courses. If impossible, return [].</div>
+                    <div style="font-weight: bold; color: #1e3a8a; margin-top: 5px;">Changed Lines (from Template)</div>
+                    <pre style="background: #f1f5f9; padding: 5px; margin: 5px 0; border-left: 3px solid #3b82f6; overflow-x: auto; color: #333;"><code>// Instead of just checking cycle, store order
+List&lt;Integer&gt; order = new ArrayList&lt;&gt;();
+Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();
+
+// push all indegree 0
+while (!q.isEmpty()) {
+  int node = q.poll();
+  order.add(node);
+  for (int nei : graph.get(node)) {
+    indegree[nei]--;
+    if (indegree[nei] == 0) q.offer(nei);
+  }
+}
+return order.size() == numCourses ? order : new ArrayList&lt;&gt;();</code></pre>
+                    <table style="width: 100%; text-align: center; margin-top: 5px; border-collapse: collapse;">
+                        <tr style="color: #1e3a8a; font-weight: bold; border-bottom: 1px solid #cbd5e1;">
+                            <td>Caller</td><td>Return</td><td>Key Idea</td>
+                        </tr>
+                        <tr>
+                            <td><code>findOrder(n, prerequisites)</code></td><td><code>int[]</code></td><td>If order size != n,<br>cycle exists</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 5px; background: #fffbeb; padding: 5px; border-left: 3px solid #f59e0b;">
+                        <strong>💡 AHA:</strong> Topo sort can produce order, not just detect cycle.
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <div>
+                            <div style="font-weight: bold; color: #1e3a8a;">Complexity</div>
+                            Time: O(V + E)<br>Space: O(V + E)
+                        </div>
+                        <div>
+                            <div style="font-weight: bold; color: #1e3a8a;">Interview Tip</div>
+                            BFS topo sort is iterative & safe.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMN 3 -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 15px;">
+            <!-- 3. PACIFIC ATLANTIC WATER FLOW -->
+            <div class="section-box" style="border: 1px solid #e2e8f0; background: white;">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 5px; font-weight: bold; display: flex; justify-content: space-between;">
+                    <span><span style="background-color: white; color: #1e3a8a; padding: 0 6px; margin-right: 5px;">3</span> PACIFIC ATLANTIC WATER FLOW</span>
+                    <span style="background-color: #0d9488; padding: 0 6px;">I</span>
+                </div>
+                <div class="section-content" style="padding: 10px; font-size: 11px;">
+                    <div style="text-align: center; color: #1e3a8a; font-weight: bold; margin-bottom: 5px;">Base Template: Multi-Source BFS / DFS</div>
+                    <div style="font-weight: bold; color: #1e3a8a;">Problem</div>
+                    <div>Find all cells where water can flow to both Pacific (top/left) and Atlantic (bottom/right) oceans.</div>
+                    <div style="font-weight: bold; color: #1e3a8a; margin-top: 5px;">Changed Lines (from Template)</div>
+                    <pre style="background: #f1f5f9; padding: 5px; margin: 5px 0; border-left: 3px solid #3b82f6; overflow-x: auto; color: #333;"><code>// 1. BFS/DFS from all Pacific borders (mark visitP)
+// 2. BFS/DFS from all Atlantic borders (mark visitA)
+// 3. Cells reachable in both -> answer
+// Condition: move to neighbor with >= height
+public List&lt;List&lt;Integer&gt;&gt; pacificAtlantic(int[][] h) {
+  int m = h.length, n = h[0].length;
+  boolean[][] p = new boolean[m][n];
+  boolean[][] a = new boolean[m][n];
+  // bfs(pacific) & bfs(atlantic)
+  // collect cells where p[i][j] && a[i][j]
+}</code></pre>
+                    <table style="width: 100%; text-align: center; margin-top: 5px; border-collapse: collapse;">
+                        <tr style="color: #1e3a8a; font-weight: bold; border-bottom: 1px solid #cbd5e1;">
+                            <td>Caller</td><td>Return</td><td>Key Idea</td>
+                        </tr>
+                        <tr>
+                            <td><code>pacificAtlantic(h)</code></td><td><code>List&lt;List&lt;Integer&gt;&gt;</code></td><td>Reverse flow:<br>ocean &rarr; cells</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 5px; background: #fffbeb; padding: 5px; border-left: 3px solid #f59e0b;">
+                        <strong>💡 AHA:</strong> Think reverse - water flows from ocean to land.
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <div>
+                            <div style="font-weight: bold; color: #1e3a8a;">Complexity</div>
+                            Time: O(m * n)<br>Space: O(m * n)
+                        </div>
+                        <div>
+                            <div style="font-weight: bold; color: #1e3a8a;">Interview Tip</div>
+                            Two traversals + intersection.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. GRAPH VALID TREE -->
+            <div class="section-box" style="border: 1px solid #e2e8f0; background: white;">
+                <div class="section-header" style="background-color: #1e3a8a; color: white; padding: 5px; font-weight: bold; display: flex; justify-content: space-between;">
+                    <span><span style="background-color: white; color: #1e3a8a; padding: 0 6px; margin-right: 5px;">6</span> GRAPH VALID TREE</span>
+                    <span style="background-color: #16a34a; padding: 0 6px;">K</span>
+                </div>
+                <div class="section-content" style="padding: 10px; font-size: 11px;">
+                    <div style="text-align: center; color: #1e3a8a; font-weight: bold; margin-bottom: 5px;">Base Template: Union Find / DFS</div>
+                    <div style="font-weight: bold; color: #1e3a8a;">Problem</div>
+                    <div>Determine if an undirected graph is a valid tree.</div>
+                    <div style="font-weight: bold; color: #1e3a8a; margin-top: 5px;">Changed Lines (from Template)</div>
+                    <pre style="background: #f1f5f9; padding: 5px; margin: 5px 0; border-left: 3px solid #3b82f6; overflow-x: auto; color: #333;"><code>// For Union Find
+if (edges.length != n - 1) return false;
+for (int[] e : edges) {
+  if (union(e[0], e[1])) return false; // cycle
+}
+return true;
+
+// OR DFS: Check connected + no cycle</code></pre>
+                    <table style="width: 100%; text-align: center; margin-top: 5px; border-collapse: collapse;">
+                        <tr style="color: #1e3a8a; font-weight: bold; border-bottom: 1px solid #cbd5e1;">
+                            <td>Caller</td><td>Return</td><td>Key Idea</td>
+                        </tr>
+                        <tr>
+                            <td><code>validTree(n, edges)</code></td><td><code>boolean</code></td><td>Tree = (n-1 edges)<br>+ connected<br>+ no cycle</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 5px; background: #fffbeb; padding: 5px; border-left: 3px solid #f59e0b;">
+                        <strong>💡 AHA:</strong> Quick checks save time: edges == n-1.
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <div>
+                            <div style="font-weight: bold; color: #1e3a8a;">Complexity</div>
+                            Time: O(V + E)<br>Space: O(V)
+                        </div>
+                        <div>
+                            <div style="font-weight: bold; color: #1e3a8a;">Interview Tip</div>
+                            Union Find is fastest approach.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM SECTION: 4 PANELS -->
+    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+        <!-- 7. CHANGED LINES SUMMARY -->
+        <div style="flex: 1; min-width: 300px; border: 1px solid #e2e8f0; background: white;">
+            <div style="background-color: #1e3a8a; color: white; padding: 5px; font-weight: bold;">
+                <span style="background-color: white; color: #1e3a8a; padding: 0 6px; margin-right: 5px;">7</span> CHANGED LINES SUMMARY
+            </div>
+            <div style="padding: 10px; font-size: 11px;">
+                <table style="width: 100%; border-collapse: collapse; text-align: center;">
+                    <tr style="color: #1e3a8a; border-bottom: 1px solid #cbd5e1;">
+                        <th style="padding: 4px;">#</th><th style="padding: 4px;">Problem</th><th style="padding: 4px;">Base Template</th><th style="padding: 4px;">Key Change</th>
+                    </tr>
+                    <tr style="background: #f8fafc;"><td style="padding: 4px;">1</td><td>Clone Graph</td><td>DFS</td><td>Use HashMap old-&gt;new to avoid re-visit</td></tr>
+                    <tr><td style="padding: 4px;">2</td><td>Surrounded Regions</td><td>DFS from Boundary</td><td>Mark boundary 'O's first, then flip</td></tr>
+                    <tr style="background: #f8fafc;"><td style="padding: 4px;">3</td><td>Pacific Atlantic</td><td>Multi-Source BFS/DFS</td><td>Reverse flow from ocean to land</td></tr>
+                    <tr><td style="padding: 4px;">4</td><td>Rotting Oranges</td><td>Multi-Source BFS</td><td>Level order = minutes</td></tr>
+                    <tr style="background: #f8fafc;"><td style="padding: 4px;">5</td><td>Course Schedule II</td><td>Topo Sort (BFS)</td><td>Store order while doing BFS</td></tr>
+                    <tr><td style="padding: 4px;">6</td><td>Graph Valid Tree</td><td>Union Find / DFS</td><td>Edges == n-1 & no cycle & connected</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- 8. COMPLEXITY QUICK GUIDE -->
+        <div style="flex: 1; min-width: 300px; border: 1px solid #e2e8f0; background: white;">
+            <div style="background-color: #1e3a8a; color: white; padding: 5px; font-weight: bold;">
+                <span style="background-color: white; color: #1e3a8a; padding: 0 6px; margin-right: 5px;">8</span> COMPLEXITY QUICK GUIDE
+            </div>
+            <div style="padding: 10px; font-size: 11px;">
+                <table style="width: 100%; border-collapse: collapse; text-align: center;">
+                    <tr style="color: #1e3a8a; border-bottom: 1px solid #cbd5e1;">
+                        <th style="padding: 4px;">Pattern</th><th style="padding: 4px;">Time Complexity</th><th style="padding: 4px;">Space Complexity</th>
+                    </tr>
+                    <tr style="background: #f8fafc;"><td style="padding: 4px;">BFS / DFS (Traversal)</td><td>O(V + E)</td><td>O(V)</td></tr>
+                    <tr><td style="padding: 4px;">Dijkstra</td><td>O((V + E) log V)</td><td>O(V)</td></tr>
+                    <tr style="background: #f8fafc;"><td style="padding: 4px;">Multi-Source BFS</td><td>O(V + E)</td><td>O(V)</td></tr>
+                    <tr><td style="padding: 4px;">Topo Sort (BFS)</td><td>O(V + E)</td><td>O(V)</td></tr>
+                    <tr style="background: #f8fafc;"><td style="padding: 4px;">Union Find</td><td>O(E &alpha;(V))</td><td>O(V)</td></tr>
+                </table>
+                <div style="margin-top: 5px; text-align: center; color: #16a34a; background: #f0fdf4; padding: 4px;">
+                    &alpha;(V) = Inverse Ackermann (almost constant)
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. RETURN TYPE GUIDE -->
+        <div style="flex: 1; min-width: 300px; border: 1px solid #e2e8f0; background: white;">
+            <div style="background-color: #1e3a8a; color: white; padding: 5px; font-weight: bold;">
+                <span style="background-color: white; color: #1e3a8a; padding: 0 6px; margin-right: 5px;">9</span> RETURN TYPE GUIDE
+            </div>
+            <div style="padding: 10px; font-size: 11px;">
+                <table style="width: 100%; border-collapse: collapse; text-align: center;">
+                    <tr style="color: #1e3a8a; border-bottom: 1px solid #cbd5e1;">
+                        <th style="padding: 4px;">Pattern</th><th style="padding: 4px;">Return Type</th><th style="padding: 4px;">Use When</th><th style="padding: 4px;">Example Problems</th>
+                    </tr>
+                    <tr style="background: #f8fafc;"><td style="padding: 4px;">List&lt;List&lt;Integer&gt;&gt;</td><td>List of cells</td><td>Collect multiple cells</td><td>Pacific Atlantic</td></tr>
+                    <tr><td style="padding: 4px;">int</td><td>Value</td><td>Time, count, min/max</td><td>Rotting Oranges</td></tr>
+                    <tr style="background: #f8fafc;"><td style="padding: 4px;">int[] / List&lt;Integer&gt;</td><td>Order / Path</td><td>Return order or path</td><td>Course Schedule II</td></tr>
+                    <tr><td style="padding: 4px;">boolean</td><td>True / False</td><td>Validity / existence</td><td>Valid Tree</td></tr>
+                    <tr style="background: #f8fafc;"><td style="padding: 4px;">Node</td><td>Graph Node</td><td>Clone / Copy graph</td><td>Clone Graph</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- 10. INTERVIEW CHECKLIST -->
+        <div style="flex: 1; min-width: 250px; border: 1px solid #e2e8f0; background: white;">
+            <div style="background-color: #1e3a8a; color: white; padding: 5px; font-weight: bold;">
+                <span style="background-color: white; color: #1e3a8a; padding: 0 6px; margin-right: 5px;">10</span> INTERVIEW CHECKLIST
+            </div>
+            <div style="padding: 10px; font-size: 12px; color: #1e293b; line-height: 1.6;">
+                <div><span style="color: #3b82f6;">☑</span> Did I understand the problem clearly?</div>
+                <div><span style="color: #3b82f6;">☑</span> Did I pick the right base template?</div>
+                <div><span style="color: #3b82f6;">☑</span> Did I change only what is needed?</div>
+                <div><span style="color: #3b82f6;">☑</span> Did I handle edge cases?</div>
+                <div><span style="color: #3b82f6;">☑</span> Did I analyze time & space?</div>
+                <div><span style="color: #3b82f6;">☑</span> Can I explain my approach aloud?</div>
+                <div><span style="color: #3b82f6;">☑</span> Can I implement without help?</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM ROW: FLOWS & PREVIEW -->
+    <div style="display: flex; gap: 15px; margin-top: 15px;">
+        <!-- 11. INTERVIEW THINKING FLOW -->
+        <div style="flex: 2; border: 1px solid #e2e8f0; background: white;">
+            <div style="background-color: #1e3a8a; color: white; padding: 5px; font-weight: bold;">
+                <span style="background-color: white; color: #1e3a8a; padding: 0 6px; margin-right: 5px;">11</span> INTERVIEW THINKING FLOW
+            </div>
+            <div style="padding: 15px; text-align: center;">
+                <div style="display: flex; justify-content: space-around; align-items: center; font-size: 12px; font-weight: bold; color: #1e3a8a; margin-bottom: 10px;">
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span style="font-size: 24px;">❓</span>
+                        Understand<br>Problem
+                    </div>
+                    <span>&rarr;</span>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span style="font-size: 24px;">🔍</span>
+                        Identify<br>Graph Type
+                    </div>
+                    <span>&rarr;</span>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span style="font-size: 24px;">📋</span>
+                        Pick Base<br>Template
+                    </div>
+                    <span>&rarr;</span>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span style="font-size: 24px;">✏️</span>
+                        Apply Changes<br>from Template
+                    </div>
+                    <span>&rarr;</span>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span style="font-size: 24px;">▶️</span>
+                        Test on Examples<br>& Edge Cases
+                    </div>
+                    <span>&rarr;</span>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span style="font-size: 24px;">🎯</span>
+                        Optimize &<br>Explain
+                    </div>
+                </div>
+                <div style="background-color: #f0fdf4; border: 1px solid #16a34a; padding: 5px; display: inline-block; color: #166534; font-size: 12px; font-weight: bold; border-radius: 4px;">
+                    TIP: Before coding - explain your plan. Communication matters!
+                </div>
+            </div>
+        </div>
+
+        <!-- 12. PAGE 16 PREVIEW -->
+        <div style="flex: 1; border: 1px solid #e2e8f0; background: white;">
+            <div style="background-color: #1e3a8a; color: white; padding: 5px; font-weight: bold;">
+                <span style="background-color: white; color: #1e3a8a; padding: 0 6px; margin-right: 5px;">12</span> PAGE 16 PREVIEW
+            </div>
+            <div style="padding: 10px; font-size: 12px; color: #1e3a8a;">
+                <div style="margin-bottom: 10px;">
+                    Next page contains <strong>GRAPH PATTERN CHEAT SHEETS.</strong><br>
+                    For each pattern, you will see:
+                </div>
+                <div style="display: flex; justify-content: space-between; text-align: center; font-size: 10px;">
+                    <div>📝<br>Pattern<br>Summary</div>
+                    <div>🎯<br>When to Use</div>
+                    <div>🔑<br>Key<br>Steps</div>
+                    <div>📸<br>Template<br>Snapshot</div>
+                    <div>⚠️<br>Common<br>Pitfalls</div>
+                    <div>⏱️<br>Complexity</div>
+                    <div>💡<br>Interview<br>Tip</div>
+                </div>
+                <div style="text-align: center; font-weight: bold; margin-top: 10px;">
+                    One-page cheatsheets. Quick recall before interviews!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHEAT PIPELINE -->
+    <div style="margin-top: 15px; border: 1px solid #e2e8f0; background: white; padding: 10px; text-align: center;">
+        <div style="font-weight: bold; color: #1e3a8a; font-size: 12px; margin-bottom: 10px;">CHEAT PIPELINE (INTERVIEW SUCCESS FORMULA)</div>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 11px; color: #1e293b;">
+            <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 16px;">❓</span> <div>Problem<br>(Understand)</div></div> &rarr;
+            <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 16px;">📥</span> <div>Input<br>(What given)</div></div> &rarr;
+            <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 16px;">📊</span> <div>Representation<br>(Graph + Weights)</div></div> &rarr;
+            <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 16px;">🎯</span> <div>Choose Pattern<br>(Best Fit)</div></div> &rarr;
+            <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 16px;">🛠️</span> <div>Helper Structure<br>(PQ / Visited / DSU)</div></div> &rarr;
+            <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 16px;">⚙️</span> <div>Logic Change<br>(Apply Minimal)</div></div> &rarr;
+            <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 16px;">▶️</span> <div>Dry Run<br>(Example)</div></div> &rarr;
+            <div style="display: flex; align-items: center; gap: 5px;"><span style="font-size: 16px;">⚡</span> <div>Optimize<br>(Time / Space)</div></div>
+        </div>
+    </div>
+</div>

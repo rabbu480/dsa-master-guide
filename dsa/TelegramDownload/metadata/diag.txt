@@ -1,0 +1,52 @@
+--- Sudoku ---
+
+--- List <-> Array ---
+<div>
+ <div style="background-color: #9d174d; color: white; text-align: center; font-weight: bold; padding: 2px;">
+  String ↔ char[]
+ </div>
+ <pre style="margin-top: 5px; font-size: 0.85em; padding: 5px;"><code>String s = "abc";
+char[] arr = s.toCharArray();
+String s2 = new String(arr);</code></pre>
+ <div style="background-color: #16a34a; color: white; text-align: center; font-weight: bold; padding: 2px; margin-top: 10px;">
+  List ↔ Array
+ </div>
+ <pre style="margin-top: 5px; font-size: 0.85em; padding: 5px;"><code>List&lt;Integer&gt; list = Arrays.asList(1,2,3);
+// Fixed-size list backed by array
+Integer[] arr = list.toArray(new Integer[0]);
+int[] arr2 = list.stream().mapToInt(i -&gt; i)
+              .toArray();</code></pre>
+ <div style="background-color: #059669; color: white; text-align: center; font-weight: bold; padding: 2px; margin-top: 10px;">
+  Set ↔ List / Array
+ </div>
+ <pre style="margin-top: 5px; font-size: 0.85em; padding: 5px;"><code>Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+set.add(1); set.add(2);
+List&lt;Integer&gt; list = new ArrayList&lt;&gt;(set);
+Integer[] arr = set.toArray(new Integer[0]);</code></pre>
+ <div style="background-color: #16a34a; color: white; text-align: center; font-weight: bold; padding: 2px; margin-top: 10px;">
+  StringBuilder
+  <span style="font-weight: normal; font-size: 0.7em;">
+   (for Encoding / Building Strings)
+  </span>
+ </div>
+ <pre style="margin-top: 5px; font-size: 0.85em; padding: 5px;"><code>StringBuilder sb = new StringBuilder();
+sb.append('a'); sb.append("bc"); sb.append(123);
+sb.length(); sb.charAt(0); sb.toString();
+sb.setLength(0);  // clear</code></pre>
+</div>
+
+
+--- TIPS & REMINDERS ---
+<div class="section-header" style="color: #1e3a8a; border-bottom: 1px solid #bbf7d0; font-size: 0.9em;">
+ ⭐ TIPS &amp; REMINDERS
+</div>
+
+
+--- COMMON HASHMAP METHODS ---
+<div class="section-header" style="color: #1e3a8a; border-bottom: 1px solid #bfdbfe; font-size: 0.9em;">
+ ⚙️ COMMON HASHMAP METHODS (JAVA)
+</div>
+
+
+--- Graphs Boxes ---
+Number of section-box in Graphs: 312

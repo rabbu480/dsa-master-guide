@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>8.Trees</title>
+    
+<style>
+    :root {
+        --bg-color: #0f172a;
+        --card-bg: #1e293b;
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --accent: #38bdf8;
+        --accent-secondary: #f59e0b;
+        --accent-tertiary: #10b981;
+        --border-color: #334155;
+    }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        line-height: 1.6;
+        margin: 0;
+        padding: 40px;
+    }
+    .page-title {
+        text-align: center;
+        font-size: 3rem;
+        font-weight: 800;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 50px;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 20px;
+    }
+    /* Masonry / Multi-column layout */
+    .masonry {
+        column-count: 2;
+        column-gap: 30px;
+    }
+    @media (max-width: 1000px) {
+        .masonry { column-count: 1; }
+    }
+    /* Cards for each section */
+    .card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 30px;
+        break-inside: avoid;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    }
+    .card > h2 {
+        margin-top: 0;
+        color: #fff;
+        font-size: 1.5rem;
+        border-left: 5px solid var(--accent-secondary);
+        padding-left: 12px;
+        margin-bottom: 20px;
+    }
+    h1, h3, h4, h5, h6 {
+        color: var(--accent);
+        margin-top: 24px;
+        margin-bottom: 16px;
+    }
+    h1 { font-size: 2em; }
+    h3 { font-size: 1.25em; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;}
+    p, ul, ol {
+        color: #e2e8f0;
+        margin-bottom: 16px;
+    }
+    li {
+        margin-bottom: 8px;
+    }
+    strong {
+        color: var(--accent-secondary);
+        font-weight: 700;
+    }
+    em {
+        color: var(--text-muted);
+    }
+    pre {
+        background-color: #020617;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 16px;
+        overflow-x: auto;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9em;
+        margin-bottom: 16px;
+    }
+    code {
+        background-color: #020617;
+        color: #a5b4fc;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9em;
+    }
+    pre code {
+        background-color: transparent;
+        padding: 0;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        background: #0f172a;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    th {
+        background: #2563eb;
+        color: white;
+        text-align: left;
+        padding: 12px 16px;
+        font-weight: 600;
+    }
+    td {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    tr:last-child td { border-bottom: none; }
+    blockquote {
+        border-left: 4px solid var(--accent-tertiary);
+        background: #1e293b;
+        padding: 16px 20px;
+        margin: 0 0 20px 0;
+        border-radius: 0 8px 8px 0;
+        font-style: italic;
+    }
+    img {
+        max-width: 100%;
+        border-radius: 8px;
+        margin-bottom: 16px;
+    }
+    .page-indicator {
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin: 40px 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    /* PRINT STYLES */
+    @media print {
+        body { background: white; color: black; padding: 0; margin: 0; }
+        .page-title { color: black; border-bottom: 2px solid #ccc; }
+        .card { background: white; border: 1px solid #ccc; box-shadow: none; break-inside: avoid; }
+        .card > h2 { color: black; border-left-color: #3b82f6; }
+        h1, h3, h4 { color: black; }
+        strong { color: #d97706; }
+        pre { background: #f1f5f9; border: 1px solid #ccc; }
+        code { color: #b91c1c; background: #f1f5f9; }
+        table { border: 1px solid #ccc; background: white; }
+        th { background: #3b82f6; color: white; }
+        tr:nth-child(even) td { background: #f8fafc; }
+        .masonry { column-count: 2; column-gap: 20px; }
+        .page-break { page-break-before: always; }
+        .page-indicator { display: none; }
+    }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Fira+Code&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <h1 class="page-title">8.Trees</h1>
+    <div class="masonry"><div class="card"><h2>TREES COMPLETE CHEAT SHEET</h2><p><strong>All 8 sections at a glance · Foundations · Traversals · Recursion · DFS · BFS · BST · Advanced · Revision</strong></p><hr/></div><div class="card"><h2>1. TREE FOUNDATIONS</h2><h3>Tree vs Binary Tree vs BST</h3><h4>Tree</h4><p>A hierarchical data structure. Each node can have 0 or more children. No ordering between child nodes.</p><h4>Binary Tree</h4><p>Each node has at most 2 children: Left and Right. No ordering.</p><h4>Binary Search Tree (BST)</h4><p>Left &lt; Root &lt; Right. Inorder traversal gives sorted order.</p><h3>Types of Binary Trees</h3><ol>
+<li><strong>Full:</strong> Every node has 0 or 2 children.</li>
+<li><strong>Complete:</strong> All levels filled except possibly the last level, nodes as far left as possible.</li>
+<li><strong>Perfect:</strong> All internal nodes have 2 children, leaves at same level.</li>
+<li><strong>Balanced:</strong> $|height(L) - height(R)| \le 1$ for every node.</li>
+<li><strong>Skewed:</strong> Every node has only 1 child.</li>
+</ol><h3>Key Terminology</h3><ul>
+<li>Node · Root · Edge · Parent/Child · Leaf</li>
+<li>Height = edges to deepest leaf</li>
+<li>Depth = edges from root</li>
+<li>Level = Depth + 1</li>
+</ul><hr/></div><div class="card"><h2>2. TRAVERSALS</h2><h3>2.1 Depth First Search (DFS)</h3><ul>
+<li><strong>Preorder</strong> (Root → Left → Right) | Order: 1-2-4-5-3-6-7 | AHA: Need parent first.</li>
+<li><strong>Inorder</strong> (Left → Root → Right) | Order: 4-2-5-1-6-3-7 | AHA: Sorted order in BST.</li>
+<li><strong>Postorder</strong> (Left → Right → Root) | Order: 4-5-2-6-7-3-1 | AHA: Children answers first.</li>
+</ul><h3>2.2 Breadth First Search (BFS)</h3><ul>
+<li>Level Order | Uses Queue | Order: 1-2-3-4-5-6-7 | Queue size = current level size.</li>
+</ul><hr/></div><div class="card"><h2>3. TREE RECURSION TEMPLATE</h2><h3>The Recursion Flow</h3><ol>
+<li><strong>Base Case:</strong> check and handle <code>if (node == null) return ...;</code></li>
+<li><strong>Faith:</strong> assume left and right subtrees return correct answer.</li>
+<li><strong>Recur Left:</strong> <code>left = solve(node.left);</code></li>
+<li><strong>Recur Right:</strong> <code>right = solve(node.right);</code></li>
+<li><strong>Combine:</strong> use left &amp; right results to compute current.</li>
+<li><strong>Return</strong> answer.</li>
+</ol><pre><code class="language-java">Type solve(TreeNode node) {
+    if (node == null) return ...; // Base Case
+    Type left = solve(node.left);
+    Type right = solve(node.right);
+    return combine(left, right);
+}
+</code></pre><hr/></div><div class="card"><h2>4. DFS PATTERN PROBLEMS (POSTORDER FOCUSED)</h2><ol>
+<li><strong>Max Depth:</strong> <code>1 + max(left, right)</code></li>
+<li><strong>Same Tree:</strong> <code>left &amp;&amp; right</code></li>
+<li><strong>Invert Tree:</strong> Swap left and right, then recurse</li>
+<li><strong>Diameter:</strong> <code>max(diameter, left + right)</code> at each node</li>
+<li><strong>Balanced Tree:</strong> <code>abs(left - right) &lt;= 1</code> for all nodes</li>
+</ol><hr/></div><div class="card"><h2>5. BFS PATTERN PROBLEMS</h2><ol>
+<li><strong>Level Order Traversal (LC 102):</strong> Store level lists using Queue size iteration.</li>
+<li><strong>Right Side View (LC 199):</strong> Capture the last node of each level iteration.</li>
+<li><strong>Zigzag Level Order (LC 103):</strong> Reverse list insertion direction on odd levels.</li>
+</ol><hr/></div><div class="card"><h2>6. BST BIBLE</h2><ul>
+<li><strong>BST Rule:</strong> Left Subtree &lt; Node &lt; Right Subtree</li>
+<li><strong>Search:</strong> key &lt; root → go left; key &gt; root → go right; else found.</li>
+<li><strong>Insert:</strong> find NULL leaf position and insert.</li>
+<li><strong>Delete:</strong> Case 1: Leaf (delete) | Case 2: 1 Child (bypass) | Case 3: 2 Children (successor swap).</li>
+<li><strong>Kth Smallest:</strong> Inorder traversal count up to K.</li>
+<li><strong>Validate BST:</strong> Recurse down checking range <code>[min, max]</code>.</li>
+</ul><hr/></div><div class="card"><h2>7. ADVANCED TREE PROBLEMS</h2><ol>
+<li><strong>LCA in Binary Tree (LC 236):</strong> If both subtrees return non-null, root is LCA.</li>
+<li><strong>Build Tree (Pre + In) (LC 105):</strong> Use preorder element as root, partition inorder array.</li>
+<li><strong>Path Sum (LC 112):</strong> Subtract node value down to leaf; return true if target == 0.</li>
+<li><strong>Serialize / Deserialize (LC 297):</strong> Convert to level-order string using commas and <code>null</code> markers.</li>
+</ol><hr/></div><div class="card"><h2>8. REVISION CHEAT SHEET</h2><ul>
+<li><strong>Height:</strong> O(n) Time, O(h) Space</li>
+<li><strong>Diameter:</strong> O(n) Time, O(h) Space</li>
+<li><strong>Validate BST:</strong> O(n) Time, O(h) Space</li>
+<li><strong>LCA:</strong> O(n) Time, O(h) Space</li>
+</ul><hr/></div><div class="card"><h2>⭐ FINAL MANTRA</h2><p>Understand the Problem → Choose Pattern → Draw Tree → Apply Template → Code → Dry Run → Optimize</p><!-- PAGE_BREAK --></div><div class="card"><h2>1. TREE FOUNDATIONS</h2></div><div class="card"><h2>1.1 TREE vs BINARY TREE vs BINARY SEARCH TREE (BST)</h2><h3>TREE</h3><ul>
+<li>A hierarchical data structure.</li>
+<li>Each node can have 0 or more children.</li>
+<li>No ordering between child nodes.</li>
+</ul><pre><code>      1
+    / | \
+   2  3  4
+</code></pre><h3>BINARY TREE</h3><ul>
+<li>Each node has at most 2 children: Left and Right.</li>
+<li>No ordering between left and right subtree.</li>
+</ul><pre><code>        1
+       / \
+      2   3
+     / \ /
+    4  5 6
+</code></pre><h3>BINARY SEARCH TREE (BST)</h3><ul>
+<li>Binary Tree +</li>
+<li>Left &lt; Root &lt; Right for every node.</li>
+<li>Inorder traversal gives sorted order.</li>
+</ul><pre><code>        8
+       / \
+      3   10
+     / \    \
+    1   6   14
+</code></pre><hr/></div><div class="card"><h2>1.2 TYPES OF BINARY TREES</h2><h3>FULL BINARY TREE</h3><p>Every node has 0 or 2 children.</p><pre><code>        1
+       / \
+      2   3
+     / \ / \
+    4  5 6  7
+</code></pre><h3>COMPLETE BINARY TREE</h3><p>All levels are completely filled except possibly the last level, and all nodes are as far left as possible.</p><pre><code>        1
+       / \
+      2   3
+     / \ /
+    4  5 6
+</code></pre><h3>PERFECT BINARY TREE</h3><p>All internal nodes have 2 children and all leaves are at the same level.</p><pre><code>        1
+       / \
+      2   3
+     / \ / \
+    4  5 6  7
+</code></pre><h3>BALANCED BINARY TREE</h3><p>For every node, |height(left) - height(right)| &lt;= 1.</p><pre><code>        1
+       / \
+      2   3
+     / \ /
+    4  5 6
+</code></pre><h3>SKEWED BINARY TREE</h3><p>Every node has only one child. (Left Skewed or Right Skewed)</p><pre><code>    1          1
+   /            \
+  2              2
+ /                \
+3                  3
+ \                  \
+  4                  4
+</code></pre><hr/></div><div class="card"><h2>1.3 KEY TERMINOLOGY</h2><ul>
+<li><strong>Node</strong> : Basic unit of a tree.</li>
+<li><strong>Root</strong> : Topmost node of the tree.</li>
+<li><strong>Edge</strong> : Connection between parent and child nodes.</li>
+<li><strong>Parent</strong> : Immediate ancestor of a node.</li>
+<li><strong>Child</strong> : Immediate descendant of a node.</li>
+<li><strong>Leaf Node</strong> : Node with no children.</li>
+<li><strong>Internal Node</strong> : Node with at least one child.</li>
+<li><strong>Siblings</strong> : Children of the same parent.</li>
+<li><strong>Depth of Node</strong> : Number of edges from root to the node (Root depth = 0).</li>
+<li><strong>Level of Node</strong> : Depth + 1 (Root level = 1).</li>
+<li><strong>Height of Node</strong> : Number of edges on the longest path from the node to a leaf.</li>
+<li><strong>Height of Tree</strong> : Height of the root node (Longest path from root to a leaf).</li>
+<li><strong>Path</strong> : Sequence of nodes connected by edges.</li>
+<li><strong>Subtree</strong> : A tree formed by a node and its descendants.</li>
+</ul><blockquote>
+<p><strong>Remember:</strong> Tree is a hierarchical structure. Understanding these basics makes every tree problem easier!</p>
+</blockquote><!-- PAGE_BREAK --></div><div class="card"><h2>2. TRAVERSALS</h2><p><strong>Ways to visit every node of a tree</strong></p><hr/></div><div class="card"><h2>2.1 DEPTH FIRST SEARCH (DFS) TRAVERSALS</h2><h3>1 PREORDER (Root → Left → Right)</h3><ul>
+<li><strong>ORDER OF VISIT:</strong> 1 - 2 - 4 - 5 - 3 - 6 - 7</li>
+<li><strong>AHA MOMENT:</strong> Need parent first. Visit root before its children.</li>
+<li><strong>WHEN TO USE?:</strong></li>
+<li>Create / Copy / Clone Tree</li>
+<li>Serialize Tree</li>
+<li>Prefix expressions</li>
+<li>Build Tree (with Inorder)</li>
+</ul><h3>2 INORDER (Left → Root → Right)</h3><ul>
+<li><strong>ORDER OF VISIT:</strong> 4 - 2 - 5 - 1 - 6 - 3 - 7</li>
+<li><strong>AHA MOMENT:</strong> In BST, Inorder gives sorted order.</li>
+<li><strong>WHEN TO USE?:</strong></li>
+<li>BST Problems</li>
+<li>Sorted order</li>
+<li>Kth Smallest / Largest in BST</li>
+<li>Validate BST (Iterative)</li>
+</ul><h3>3 POSTORDER (Left → Right → Root)</h3><ul>
+<li><strong>ORDER OF VISIT:</strong> 4 - 5 - 2 - 6 - 7 - 3 - 1</li>
+<li><strong>AHA MOMENT:</strong> Need children's answers first. Process children before parent.</li>
+<li><strong>WHEN TO USE?:</strong></li>
+<li>Delete / Free Tree</li>
+<li>Postfix expressions</li>
+<li>Evaluate expressions</li>
+<li>Height, Diameter, Balanced, LCA, Path Sum (etc.)</li>
+</ul><hr/></div><div class="card"><h2>2.2 BREADTH FIRST SEARCH (BFS) TRAVERSAL (LEVEL ORDER)</h2><ul>
+<li><strong>ORDER OF VISIT (LEVEL ORDER):</strong> 1 - 2 - 3 - 4 - 5 - 6 - 7</li>
+<li><strong>AHA MOMENT:</strong> Need level by level. Use Queue. Queue size tells current level.</li>
+</ul><h3>TEMPLATE (BFS LEVEL ORDER)</h3><pre><code class="language-java">Queue&lt;Node&gt; q = new LinkedList&lt;&gt;();
+q.offer(root);
+
+while (!q.isEmpty()) {
+    int size = q.size(); // nodes in current level
+    for (int i = 0; i &lt; size; i++) {
+        Node node = q.poll();
+        // process node
+        if (node.left != null) q.offer(node.left);
+        if (node.right != null) q.offer(node.right);
+    }
+}
+</code></pre><hr/></div><div class="card"><h2>2.3 DFS vs BFS</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">DFS (Depth First Search)</th>
+<th style="text-align: left;">BFS (Breadth First Search)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Strategy</strong></td>
+<td style="text-align: left;">Go deep to a leaf, then backtrack</td>
+<td style="text-align: left;">Visit level by level from left to right</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Data Structure</strong></td>
+<td style="text-align: left;">Stack (or Recursion)</td>
+<td style="text-align: left;">Queue</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Time Complexity</strong></td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">O(n)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Space Complexity</strong></td>
+<td style="text-align: left;">O(h) (h = height of tree)</td>
+<td style="text-align: left;">O(w) (w = max width of tree)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Best For</strong></td>
+<td style="text-align: left;">Path, Height, DP on trees, Backtracking</td>
+<td style="text-align: left;">Shortest path in unweighted tree, Level wise problems</td>
+</tr>
+</tbody>
+</table><hr/></div><div class="card"><h2>2.4 WHEN TO USE WHICH TRAVERSAL?</h2><ul>
+<li>Need parent before children? → <strong>Use Preorder</strong></li>
+<li>Need sorted order (BST)? → <strong>Use Inorder</strong></li>
+<li>Need children's results first? → <strong>Use Postorder</strong></li>
+<li>Need level by level? → <strong>Use BFS</strong></li>
+<li>Modify / Build / Serialize Tree? → <strong>Mostly Preorder</strong></li>
+<li>Delete / Free / Evaluate? → <strong>Mostly Postorder</strong></li>
+</ul><hr/></div><div class="card"><h2>FINAL MANTRA</h2><ul>
+<li>Tree problems → Think DFS first.</li>
+<li>Level problems → Think BFS first.</li>
+<li>Understand the need, then choose the traversal.</li>
+</ul><p><em>Note:</em>
+* $n$ = number of nodes
+* $h$ = height of tree
+* $w$ = maximum width of tree</p><!-- PAGE_BREAK --></div><div class="card"><h2>3. TREE RECURSION TEMPLATE</h2><p><strong>Master this template, solve any tree problem!</strong></p><hr/></div><div class="card"><h2>3.1 THE RECURSION FLOW (FAITH → RECUR → COMBINE → RETURN)</h2><ol>
+<li><strong>BASE CASE</strong>: Check and handle the base condition.
+   <code>if (node == null)
+       return ...;</code></li>
+<li><strong>FAITH</strong>: Assume left and right subtrees will give correct answers.</li>
+<li><strong>RECUR LEFT</strong>: Recur for the left subtree.
+   <code>left = solve(node.left);</code></li>
+<li><strong>RECUR RIGHT</strong>: Recur for the right subtree.
+   <code>right = solve(node.right);</code></li>
+<li><strong>COMBINE</strong>: Use left and right results. Do the required work.
+   <code>ans = ...;</code></li>
+<li><strong>RETURN</strong>: Return the final answer.
+   <code>return ans;</code></li>
+</ol><hr/></div><div class="card"><h2>UNIVERSAL TEMPLATE</h2><pre><code>Type solve(Node* node) {
+    if (node == null) {
+        return ...;          // Base Case
+    }
+
+    Type left = solve(node.left);   // Recur Left
+    Type right = solve(node.right); // Recur Right
+
+    Type ans = ...;          // Combine
+    return ans;              // Return
+}
+</code></pre><h3>KEY IDEA</h3><ul>
+<li>Break the problem into left and right subproblems.</li>
+<li>Solve both (faith).</li>
+<li>Combine their results.</li>
+<li>Return the final answer up the recursion stack.</li>
+</ul><blockquote>
+<p><strong>FAITH</strong> → You assume your recursive calls (left &amp; right) are correct and return the right answer.</p>
+</blockquote><hr/></div><div class="card"><h2>3.2 RETURN TYPE DECIDES THE RECURSION</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Return Type</th>
+<th style="text-align: left;">What it Means</th>
+<th style="text-align: left;">Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>int</strong></td>
+<td style="text-align: left;">Return some value (height, count, sum, etc.)</td>
+<td style="text-align: left;">Max Depth, Diameter, Sum of Nodes</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>boolean</strong></td>
+<td style="text-align: left;">Return true / false info</td>
+<td style="text-align: left;">Same Tree, Balanced Tree, Valid BST</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>TreeNode*</strong></td>
+<td style="text-align: left;">Return a node</td>
+<td style="text-align: left;">LCA, Invert Tree, Search in BST</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>List / Vector</strong></td>
+<td style="text-align: left;">Return a list of values / nodes</td>
+<td style="text-align: left;">All Paths, Level Order, Right Side View</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>void</strong></td>
+<td style="text-align: left;">Do something (print / modify)</td>
+<td style="text-align: left;">Print Traversals, Populate Result</td>
+</tr>
+</tbody>
+</table><hr/></div><div class="card"><h2>3.3 WHICH TRAVERSAL TO USE?</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Goal</th>
+<th style="text-align: left;">Need</th>
+<th style="text-align: left;">Traversal</th>
+<th style="text-align: left;">Why?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Need parent before children?</td>
+<td style="text-align: left;">Parent info first</td>
+<td style="text-align: left;"><strong>Preorder</strong> (Root → Left → Right)</td>
+<td style="text-align: left;">Visit root before going to children.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Need sorted order (in BST)?</td>
+<td style="text-align: left;">Left first, then root, then right</td>
+<td style="text-align: left;"><strong>Inorder</strong> (Left → Root → Right)</td>
+<td style="text-align: left;">In BST, Inorder gives sorted order.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Need children's answers first?</td>
+<td style="text-align: left;">Children results before parent</td>
+<td style="text-align: left;"><strong>Postorder</strong> (Left → Right → Root)</td>
+<td style="text-align: left;">Process children before the root.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Need level by level?</td>
+<td style="text-align: left;">Level wise processing</td>
+<td style="text-align: left;"><strong>BFS</strong> (Level Order)</td>
+<td style="text-align: left;">Visit nodes level by level using Queue.</td>
+</tr>
+</tbody>
+</table><hr/></div><div class="card"><h2>3.4 PREORDER vs INORDER vs POSTORDER (DECISION GUIDE)</h2><ul>
+<li>What do you need?</li>
+<li>Need parent information first? → <strong>YES</strong> → Use <strong>PREORDER</strong> (Root → Left → Right)<ul>
+<li><em>Examples:</em> Build Tree (Pre + In), Serialize / Copy / Clone, Prefix Expression.</li>
+</ul>
+</li>
+<li>Need sorted order (in BST)? → <strong>YES</strong> → Use <strong>INORDER</strong> (Left → Root → Right)<ul>
+<li><em>Examples:</em> BST Problems, Kth Smallest / Largest, Validate BST (Iterative).</li>
+</ul>
+</li>
+<li>Need children's results first? → <strong>YES</strong> → Use <strong>POSTORDER</strong> (Left → Right → Root)<ul>
+<li><em>Examples:</em> Height / Diameter, Balanced Tree, Delete / Free Tree, Postfix Expression.</li>
+</ul>
+</li>
+<li>Need level wise? → <strong>YES</strong> → Use <strong>BFS</strong> (Level Order)<ul>
+<li><em>Examples:</em> Level Order Traversal, Right Side View, Zigzag Traversal.</li>
+</ul>
+</li>
+</ul><hr/></div><div class="card"><h2>3.5 COMMON BASE CASES</h2><ul>
+<li><code>if (node == null) return ...;</code></li>
+<li>Used in almost all problems. Empty subtree.</li>
+<li><code>if (node.left == null &amp;&amp; node.right == null) return ...;</code></li>
+<li>Leaf node condition.</li>
+<li><code>if (node == target) return ...;</code></li>
+<li>Found the target node.</li>
+<li><code>if (k == 0) return ...;</code></li>
+<li>Base case for depth / distance based problems.</li>
+<li><code>if (low &gt; high) return ...;</code></li>
+<li>Used in tree construction from array / traversal.</li>
+</ul><hr/></div><div class="card"><h2>3.6 TIPS TO MASTER RECURSION</h2><ol>
+<li>Draw the tree and try dry run.</li>
+<li>Identify what you need at each node.</li>
+<li>Decide return type.</li>
+<li>Write the template first.</li>
+<li>Fill the combine logic.</li>
+<li>Dry run again and verify.</li>
+</ol><h3>GOLDEN RULE</h3><ul>
+<li>Think small, Recur small, Combine smartly, Return clearly.</li>
+</ul><!-- PAGE_BREAK --></div><div class="card"><h2>4. DFS PATTERN PROBLEMS (POSTORDER FOCUSED)</h2><p><strong>Most important tree problems follow DFS (Postorder). Master these patterns!</strong></p><hr/></div><div class="card"><h2>1. MAX DEPTH OF BINARY TREE</h2><h3>Example</h3><pre><code>        1
+       / \
+      2   3
+     /   / \
+    4   5   6
+</code></pre><ul>
+<li><strong>Output:</strong> 3</li>
+</ul><h3>Column Details</h3><ul>
+<li><strong>💡 AHA:</strong> Need the height of left and right subtrees first, then take max. That's Postorder.</li>
+<li><strong>⚙️ Pattern:</strong> Postorder (Left → Right → Root)</li>
+<li><strong>Σ Formula:</strong></li>
+<li><code>1 + max(left, right)</code></li>
+<li>Base Case: <code>if (node == null) return 0;</code></li>
+<li><strong>Code (Java):</strong>
+<code>java
+  int maxDepth(TreeNode root) {
+      if (root == null) return 0;  // Base Case
+      int left = maxDepth(root.left);  // Left
+      int right = maxDepth(root.right); // Right
+      return 1 + Math.max(left, right); // Combine
+  }</code></li>
+<li><strong>Complexity:</strong> Time: O(n), Space: O(h) (h = height of tree)</li>
+</ul><hr/></div><div class="card"><h2>2. SAME TREE</h2><h3>Example</h3><pre><code>Tree p:        Tree q:
+     1              1
+    / \            / \
+   2   3          2   3
+  /   /          /   /
+ 4   4          4   4
+</code></pre><ul>
+<li><strong>Output:</strong> true</li>
+</ul><h3>Column Details</h3><ul>
+<li><strong>💡 AHA:</strong> Both trees must match at current node, left subtree and right subtree. Return boolean.</li>
+<li><strong>⚙️ Pattern:</strong> Postorder (Left → Right → Root)</li>
+<li><strong>Σ Formula:</strong></li>
+<li><code>Left &amp;&amp; Right</code></li>
+<li>Base Case:<ul>
+<li>Both null → <code>true</code></li>
+<li>One null → <code>false</code></li>
+<li>Values not equal → <code>false</code></li>
+</ul>
+</li>
+<li><strong>Code (Java):</strong>
+<code>java
+  boolean isSameTree(TreeNode p, TreeNode q) {
+      if (p == null &amp;&amp; q == null) return true;
+      if (p == null || q == null) return false;
+      if (p.val != q.val) return false;
+      boolean left = isSameTree(p.left, q.left);
+      boolean right = isSameTree(p.right, q.right);
+      return left &amp;&amp; right; // Combine
+  }</code></li>
+<li><strong>Complexity:</strong> Time: O(n), Space: O(h)</li>
+</ul><hr/></div><div class="card"><h2>3. INVERT BINARY TREE</h2><h3>Example</h3><pre><code>Input:         Output:
+     1              1
+    / \            / \
+   2   3          3   2
+  / \              / \
+ 4   5            5   4
+</code></pre><h3>Column Details</h3><ul>
+<li><strong>💡 AHA:</strong> Need to process parent first, then swap children and recurse. That's Preorder.</li>
+<li><strong>⚙️ Pattern:</strong> Preorder (Root → Left → Right)</li>
+<li><strong>Σ Formula:</strong></li>
+<li>Swap Left and Right</li>
+<li>Base Case: <code>if (node == null) return null;</code></li>
+<li><strong>Code (Java):</strong>
+<code>java
+  TreeNode invertTree(TreeNode root) {
+      if (root == null) return null; // Base Case
+      TreeNode temp = root.left;    // Swap
+      root.left = root.right;
+      root.right = temp;
+      invertTree(root.left);        // Left
+      invertTree(root.right);       // Right
+      return root;
+  }</code></li>
+<li><strong>Complexity:</strong> Time: O(n), Space: O(h)</li>
+</ul><hr/></div><div class="card"><h2>4. DIAMETER OF BINARY TREE</h2><h3>Example</h3><pre><code>        1
+       / \
+      2   3
+     / \
+    4   5
+</code></pre><ul>
+<li><strong>Output:</strong> 3 (Path: 4 → 2 → 1 → 3)</li>
+</ul><h3>Column Details</h3><ul>
+<li><strong>💡 AHA:</strong> Diameter can pass through any node. Need left height and right height at every node. Update global answer.</li>
+<li><strong>⚙️ Pattern:</strong> Postorder (Left → Right → Root)</li>
+<li><strong>Σ Formula:</strong></li>
+<li><code>diameter = max(diameter, left + right)</code></li>
+<li><code>return height = 1 + max(left, right)</code></li>
+<li><strong>Code (Java):</strong>
+<code>java
+  int diameter = 0; // global
+  int diameterOfBinaryTree(TreeNode root) {
+      height(root);
+      return diameter;
+  }
+  int height(TreeNode node) {
+      if (node == null) return 0;
+      int left = height(node.left);
+      int right = height(node.right);
+      diameter = Math.max(diameter, left + right); // update
+      return 1 + Math.max(left, right); // height
+  }</code></li>
+<li><strong>Complexity:</strong> Time: O(n), Space: O(h)</li>
+</ul><hr/></div><div class="card"><h2>5. BALANCED BINARY TREE</h2><h3>Example</h3><pre><code>        1
+       / \
+      2   3
+     / \
+    4   5
+</code></pre><ul>
+<li><strong>Output:</strong> true</li>
+</ul><h3>Column Details</h3><ul>
+<li><strong>💡 AHA:</strong> Every node must have left and right subtree heights difference &lt;= 1. Need height of subtrees.</li>
+<li><strong>⚙️ Pattern:</strong> Postorder (Left → Right → Root)</li>
+<li><strong>Σ Formula:</strong></li>
+<li><code>if |left - right| &gt; 1 return -1</code> (imbalance found)</li>
+<li><code>Else return 1 + max(left, right)</code></li>
+<li><strong>Code (Java):</strong>
+<code>java
+  boolean isBalanced(TreeNode root) {
+      return height(root) != -1;
+  }
+  int height(TreeNode node) {
+      if (node == null) return 0;
+      int left = height(node.left);
+      if (left == -1) return -1;
+      int right = height(node.right);
+      if (right == -1) return -1;
+      if (Math.abs(left - right) &gt; 1) return -1;
+      return 1 + Math.max(left, right);
+  }</code></li>
+<li><strong>Complexity:</strong> Time: O(n), Space: O(h)</li>
+</ul><hr/></div><div class="card"><h2>POSTORDER - WHEN TO USE?</h2><ul>
+<li>Need children's answers first.</li>
+<li>Need height / depth / size.</li>
+<li>Need info from left &amp; right to compute current node.</li>
+<li>Delete / Free / Evaluate expressions.</li>
+<li>Diameter, Balanced, Max Path Sum, LCA (Binary Tree) etc.</li>
+</ul><hr/></div><div class="card"><h2>QUICK RECAP</h2><ul>
+<li><strong>Height / Depth:</strong> <code>1 + max(left, right)</code></li>
+<li><strong>Diameter:</strong> <code>left + right (update ans)</code></li>
+<li><strong>Balanced:</strong> <code>abs(left - right) &lt;= 1</code></li>
+<li><strong>Same Tree:</strong> <code>left &amp;&amp; right</code></li>
+<li><strong>Invert Tree:</strong> <code>Swap + Recur</code></li>
+</ul><hr/></div><div class="card"><h2>COMPLEXITY LEGEND</h2><ul>
+<li>$n$ = number of nodes, $h$ = height of tree</li>
+<li><strong>Best Case (Balanced):</strong> Time: O(n), Space: O(log n)</li>
+<li><strong>Worst Case (Skewed):</strong> Time: O(n), Space: O(n)</li>
+</ul><hr/></div><div class="card"><h2>⭐ FINAL MANTRA</h2><p>Identify pattern → Write template → Apply formula → Handle base cases → Return correct type</p><!-- PAGE_BREAK --></div><div class="card"><h2>5. BFS PATTERN PROBLEMS (LEVEL ORDER FOCUSED)</h2><p><strong>BFS = Level by Level using Queue</strong></p><hr/></div><div class="card"><h2>BFS TEMPLATE (LEVEL ORDER TRAVERSAL)</h2><pre><code class="language-java">Queue&lt;TreeNode&gt; q = new LinkedList&lt;&gt;();
+q.offer(root);
+
+while (!q.isEmpty()) {
+    int size = q.size(); // nodes in current level
+    List&lt;Integer&gt; level = new ArrayList&lt;&gt;();
+
+    for (int i = 0; i &lt; size; i++) {
+        TreeNode node = q.poll();
+        level.add(node.val);
+
+        if (node.left != null) q.offer(node.left);
+        if (node.right != null) q.offer(node.right);
+    }
+    result.add(level);
+}
+</code></pre><ul>
+<li><strong>Queue View:</strong> Shows elements entering and exiting the queue level by level.</li>
+</ul><hr/></div><div class="card"><h2>1. LEVEL ORDER TRAVERSAL (LC 102)</h2><h3>Example</h3><pre><code>        1
+       / \
+      2   3
+     / \ / \
+    4  5 6  7
+</code></pre><ul>
+<li><strong>Output:</strong> <code>[[1], [2,3], [4,5,6,7]]</code></li>
+</ul><h3>Column Details</h3><ul>
+<li><strong>💡 AHA:</strong> Need nodes level by level. Use Queue. Queue size tells current level.</li>
+<li><strong>⚙️ Pattern:</strong> BFS (Level Order) using Queue</li>
+<li><strong>Σ Idea / Formula:</strong> Process all nodes in queue (size = current level). Add children to queue.</li>
+<li><strong>Code (Java):</strong>
+<code>java
+  List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {
+      List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+      if (root == null) return res;
+      Queue&lt;TreeNode&gt; q = new LinkedList&lt;&gt;();
+      q.offer(root);
+      while (!q.isEmpty()) {
+          int size = q.size();
+          List&lt;Integer&gt; level = new ArrayList&lt;&gt;();
+          for (int i = 0; i &lt; size; i++) {
+              TreeNode node = q.poll();
+              level.add(node.val);
+              if (node.left != null) q.offer(node.left);
+              if (node.right != null) q.offer(node.right);
+          }
+          res.add(level);
+      }
+      return res;
+  }</code></li>
+<li><strong>Complexity:</strong></li>
+<li>Time: O(n) (Every node visited once)</li>
+<li>Space: O(n) (Queue can hold max nodes of last level)</li>
+</ul><hr/></div><div class="card"><h2>2. RIGHT SIDE VIEW (LC 199)</h2><h3>Example</h3><pre><code>        1
+       / \
+      2   3 (selected)
+     / \ / \
+    4  5 6  7 (selected)
+</code></pre><ul>
+<li><strong>Output:</strong> <code>[1, 3, 7]</code> (Rightmost of each level)</li>
+</ul><h3>Column Details</h3><ul>
+<li><strong>💡 AHA:</strong> We need the last node of each level. In each level, the last node we pop is the rightmost.</li>
+<li><strong>⚙️ Pattern:</strong> BFS (Level Order)</li>
+<li><strong>Σ Idea:</strong> In each level, pick the last node's value.</li>
+<li><strong>Code (Java):</strong>
+<code>java
+  List&lt;Integer&gt; rightSideView(TreeNode root) {
+      List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+      if (root == null) return res;
+      Queue&lt;TreeNode&gt; q = new LinkedList&lt;&gt;();
+      q.offer(root);
+      while (!q.isEmpty()) {
+          int size = q.size();
+          for (int i = 0; i &lt; size; i++) {
+              TreeNode node = q.poll();
+              if (i == size - 1) res.add(node.val);
+              if (node.left != null) q.offer(node.left);
+              if (node.right != null) q.offer(node.right);
+          }
+      }
+      return res;
+  }</code></li>
+<li><strong>Complexity:</strong> Time: O(n), Space: O(w)</li>
+</ul><hr/></div><div class="card"><h2>3. ZIGZAG LEVEL ORDER (LC 103)</h2><h3>Example</h3><pre><code>        1         --&gt; (Left to Right: 1)
+       / \
+      2   3       &lt;-- (Right to Left: 3, 2)
+     / \ / \
+    4  5 6  7     --&gt; (Left to Right: 4, 5, 6, 7)
+</code></pre><ul>
+<li><strong>Output:</strong> <code>[[1], [3,2], [4,5,6,7]]</code></li>
+</ul><h3>Column Details</h3><ul>
+<li><strong>💡 AHA:</strong> Direction changes at every level. Use a flag.</li>
+<li><strong>⚙️ Pattern:</strong> BFS + Direction Toggle</li>
+<li><strong>Σ Idea:</strong> If leftToRight -&gt; add left to right. Else -&gt; right to left.</li>
+<li><strong>Code (Java):</strong>
+<code>java
+  List&lt;List&lt;Integer&gt;&gt; zigzagLevelOrder(TreeNode root) {
+      List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+      if (root == null) return res;
+      Queue&lt;TreeNode&gt; q = new LinkedList&lt;&gt;();
+      q.offer(root);
+      boolean leftToRight = true;
+      while (!q.isEmpty()) {
+          int size = q.size();
+          LinkedList&lt;Integer&gt; level = new LinkedList&lt;&gt;();
+          for (int i = 0; i &lt; size; i++) {
+              TreeNode node = q.poll();
+              if (leftToRight) level.addLast(node.val);
+              else level.addFirst(node.val);
+              if (node.left != null) q.offer(node.left);
+              if (node.right != null) q.offer(node.right);
+          }
+          res.add(level);
+          leftToRight = !leftToRight; // toggle
+      }
+      return res;
+  }</code></li>
+<li><strong>Complexity:</strong> Time: O(n), Space: O(w)</li>
+</ul><hr/></div><div class="card"><h2>4. BFS TEMPLATE (REMEMBER THIS!)</h2><pre><code class="language-java">// BFS Template
+if (root == null) return;
+Queue&lt;TreeNode&gt; q = new LinkedList&lt;&gt;();
+q.offer(root);
+while (!q.isEmpty()) {
+    int size = q.size(); // nodes in current level
+    for (int i = 0; i &lt; size; i++) {
+        TreeNode node = q.poll();
+        // ---- Do something with node here ----
+        if (node.left != null) q.offer(node.left);
+        if (node.right != null) q.offer(node.right);
+    } // ---- Level completed ----
+}
+</code></pre><h3>Key Points</h3><ul>
+<li>Use Queue</li>
+<li><code>queue.size() = current level size</code></li>
+<li>Process level by level</li>
+<li>Add children for next level</li>
+</ul><hr/></div><div class="card"><h2>5. HOW QUEUE WORKS IN BFS</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Step</th>
+<th style="text-align: left;">Queue (Front → Back)</th>
+<th style="text-align: left;">Level</th>
+<th style="text-align: left;">Action</th>
+<th style="text-align: left;">Visual Flow</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1</strong></td>
+<td style="text-align: left;"><code>[1]</code></td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Start: push root</td>
+<td style="text-align: left;">Node 1 (Level 0)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2</strong></td>
+<td style="text-align: left;"><code>[] → [2, 3]</code></td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Pop 1, push 2, 3</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3</strong></td>
+<td style="text-align: left;"><code>[2, 3]</code></td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Process level 1</td>
+<td style="text-align: left;">Nodes 2, 3 (Level 1)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>4</strong></td>
+<td style="text-align: left;"><code>[] → [4, 5, 6, 7]</code></td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">Pop 2 → push 4,5. Pop 3 → push 6,7.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>5</strong></td>
+<td style="text-align: left;"><code>[4, 5, 6, 7]</code></td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">Process level 2</td>
+<td style="text-align: left;">Nodes 4, 5, 6, 7 (Level 2)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>6</strong></td>
+<td style="text-align: left;"><code>[]</code></td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">All nodes processed</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>7</strong></td>
+<td style="text-align: left;"><code>[]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Queue empty, done!</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table><hr/></div><div class="card"><h2>WHEN TO USE BFS?</h2><ul>
+<li>Need level by level processing</li>
+<li>Shortest path in unweighted graphs</li>
+<li>Minimum steps / transformations</li>
+<li>Problems involving distance / levels</li>
+<li>Tree view from top / side / bottom</li>
+</ul><hr/></div><div class="card"><h2>BFS vs DFS (QUICK COMPARISON)</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">BFS</th>
+<th style="text-align: left;">DFS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Strategy</strong></td>
+<td style="text-align: left;">Level by Level</td>
+<td style="text-align: left;">Go Deep, then Backtrack</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Data Structure</strong></td>
+<td style="text-align: left;">Queue</td>
+<td style="text-align: left;">Stack / Recursion</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Best For</strong></td>
+<td style="text-align: left;">Level problems</td>
+<td style="text-align: left;">Path / Depth problems</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Space</strong></td>
+<td style="text-align: left;">O(max width)</td>
+<td style="text-align: left;">O(max depth)</td>
+</tr>
+</tbody>
+</table><hr/></div><div class="card"><h2>QUICK RECAP</h2><ul>
+<li>Use Queue for BFS.</li>
+<li><code>queue.size()</code> gives current level.</li>
+<li>Process all nodes of a level together.</li>
+<li>Add children for next level.</li>
+<li>BFS = Clean + Level Order + Optimal (for shortest path problems).</li>
+</ul><hr/></div><div class="card"><h2>⭐ FINAL MANTRA</h2><p>Think Level by Level → Use Queue → Process Level → Add Children → Repeat → Get Answer</p><!-- PAGE_BREAK --></div><div class="card"><h2>6. BST BIBLE (BINARY SEARCH TREE)</h2><p><strong>The most Important BST rules, operations and patterns</strong></p><hr/></div><div class="card"><h2>1. BST RULE</h2><p>For every node N in BST:
+<strong>All values in Left Subtree &lt; N &lt; All values in Right Subtree</strong></p><h3>Example</h3><pre><code>        8
+       / \
+      3   10
+     / \    \
+    1   6   14
+</code></pre><ul>
+<li><strong>All &lt; 8</strong> on left side: <code>1, 3, 6</code></li>
+<li>
+<p><strong>All &gt; 8</strong> on right side: <code>10, 14</code></p>
+</li>
+<li>
+<p>Left subtree → smaller values</p>
+</li>
+<li>Right subtree → larger values</li>
+<li>Inorder traversal gives sorted order</li>
+</ul><hr/></div><div class="card"><h2>2. SEARCH IN BST</h2><p><strong>Idea:</strong> Use BST property to decide the direction.
+* <code>if key == root.val</code> → found
+* <code>else if key &lt; root.val</code> → go left
+* <code>else</code> → go right</p><h3>Example (Search: 6)</h3><pre><code>        8   (8 &gt; 6 → go left)
+       / \
+      3   10 (3 &lt; 6 → go right)
+     / \    \
+    1   6   14 (6 == 6 → found!)
+</code></pre><h3>Complexity</h3><ul>
+<li>Time: O(h)</li>
+<li>Space: O(1) iterative / O(h) recursive ($h$ = height of tree)</li>
+</ul><hr/></div><div class="card"><h2>3. INSERT INTO BST</h2><p><strong>Idea:</strong> Find correct position and insert.
+<strong>Steps:</strong>
+1. If tree is empty → new node becomes root
+2. Else compare and go left or right
+3. Insert when NULL is found</p><h3>Example (Insert 7)</h3><pre><code>        8                     8
+       / \                   / \
+      3   10       →        3   10
+     / \    \              / \    \
+    1   6   14            1   6   14
+                               \
+                                7
+</code></pre><h3>Complexity</h3><ul>
+<li>Time: O(h)</li>
+<li>Space: O(1) iterative / O(h) recursive</li>
+</ul><hr/></div><div class="card"><h2>4. DELETE FROM BST</h2><p>Cases to handle when deleting node X:</p><h3>Case 1: X is a leaf node</h3><p>→ Just delete it.</p><pre><code>      6                  6
+     / \     →          /
+    5   8              5
+</code></pre><h3>Case 2: X has one child</h3><p>→ Replace X with its child.</p><pre><code>      6                  6
+     / \     →          / \
+    5   8              5   7
+       /
+      7
+</code></pre><h3>Case 3: X has two children</h3><p>→ Replace X with Inorder Successor (smallest in right subtree) or Inorder Predecessor (largest in left subtree).</p><pre><code>      6                  7
+     / \     →          / \
+    5   8              5   8
+       / \                / \
+      7   9              4   9
+</code></pre><h3>Complexity</h3><ul>
+<li>Time: O(h)</li>
+<li>Space: O(1) iterative / O(h) recursive</li>
+</ul><hr/></div><div class="card"><h2>5. Kth SMALLEST ELEMENT (LC 230)</h2><p><strong>Idea:</strong> Inorder traversal of BST gives sorted order.
+<strong>Steps:</strong>
+1. Do Inorder (Left → Root → Right)
+2. Count nodes
+3. When count == k → return node</p><h3>Example</h3><pre><code>        8
+       / \
+      3   10       Inorder: 1, 3, 6, 8, 10, 14
+     / \    \      k = 3 → Answer = 6
+    1   6   14
+</code></pre><h3>Complexity</h3><ul>
+<li>Time: O(h + k)</li>
+<li>Space: O(h) ($h$ = height, $k$ = position of answer)</li>
+</ul><hr/></div><div class="card"><h2>6. VALIDATE BST (LC 98)</h2><p><strong>Idea:</strong> Each node must lie in a valid range.
+For every node: <strong>min &lt; node.val &lt; max</strong></p><p><strong>Steps:</strong>
+1. Use two bounds: <code>min</code> and <code>max</code>
+2. Check: <code>min &lt; node.val &lt; max</code>
+3. Recur Left → <code>(min, node.val)</code>
+4. Recur Right → <code>(node.val, max)</code></p><h3>Example</h3><pre><code>        8
+       / \
+      3   10       For node 6: Range (3, 8) ✓
+     / \    \      For node 14: Range (10, +∞) ✓
+    1   6   14     All nodes satisfy → Valid BST
+</code></pre><h3>Complexity</h3><ul>
+<li>Time: O(n)</li>
+<li>Space: O(h)</li>
+</ul><hr/></div><div class="card"><h2>7. LCA IN BST (LC 235)</h2><p><strong>Idea:</strong> Use BST property to find LCA.
+* If both p and q &lt; root → go left
+* If both p and q &gt; root → go right
+* Else → root is LCA</p><h3>Example (p = 1, q = 14)</h3><pre><code>        8  (1 &lt; 8 and 14 &gt; 8 → 8 is LCA)
+       / \
+      3   10
+     / \    \
+    1   6   14
+</code></pre><h3>Complexity</h3><ul>
+<li>Time: O(h)</li>
+<li>Space: O(1) iterative / O(h) recursive</li>
+</ul><hr/></div><div class="card"><h2>BST CHEAT SHEET</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Operation</th>
+<th style="text-align: left;">Idea</th>
+<th style="text-align: left;">Time</th>
+<th style="text-align: left;">Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Search</strong></td>
+<td style="text-align: left;">Use BST property</td>
+<td style="text-align: left;">O(h)</td>
+<td style="text-align: left;">O(1) / O(h)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Insert</strong></td>
+<td style="text-align: left;">Find position &amp; insert</td>
+<td style="text-align: left;">O(h)</td>
+<td style="text-align: left;">O(1) / O(h)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Delete</strong></td>
+<td style="text-align: left;">Handle 3 cases</td>
+<td style="text-align: left;">O(h)</td>
+<td style="text-align: left;">O(1) / O(h)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Kth Smallest</strong></td>
+<td style="text-align: left;">Inorder + count</td>
+<td style="text-align: left;">O(h + k)</td>
+<td style="text-align: left;">O(h)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Validate BST</strong></td>
+<td style="text-align: left;">Use range (min, max)</td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">O(h)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LCA (BST)</strong></td>
+<td style="text-align: left;">Use BST property</td>
+<td style="text-align: left;">O(h)</td>
+<td style="text-align: left;">O(1) / O(h)</td>
+</tr>
+</tbody>
+</table><hr/></div><div class="card"><h2>8. INORDER = SORTED ORDER</h2><h3>Proof by Example</h3><pre><code>        8
+       / \
+      3   10       Inorder Traversal (Left → Root → Right)
+     / \    \      = 1, 3, 6, 8, 10, 14 (sorted order)
+    1   6   14
+</code></pre><h3>Why?</h3><p>All left &lt; root &lt; all right. So visiting Left → Root → Right gives increasing order.</p><hr/></div><div class="card"><h2>BST PROPERTIES</h2><ul>
+<li><code>Left &lt; Root &lt; Right</code></li>
+<li><code>Inorder = Sorted</code></li>
+<li>No duplicates (by default)</li>
+<li>Efficient operations: O(h)</li>
+<li>Balanced BST → O(log n)</li>
+</ul><hr/></div><div class="card"><h2>REMEMBER</h2><ul>
+<li>Think in terms of range.</li>
+<li>Inorder is your best friend.</li>
+<li>BST gives you direction.</li>
+</ul><hr/></div><div class="card"><h2>⭐ FINAL MANTRA</h2><p>Understand Rule (Left &lt; Root &lt; Right) → Use Property (Decide Direction) → Apply Pattern (Search / Insert / Delete) → Inorder for Sorted / Range for Validation → Practice &amp; Master All BST Problems</p><!-- PAGE_BREAK --></div><div class="card"><h2>7. ADVANCED TREE PROBLEMS</h2><p><strong>Important Problems beyond Basics</strong></p><hr/></div><div class="card"><h2>1. LOWEST COMMON ANCESTOR IN BINARY TREE (LC 236)</h2><h3>Example</h3><pre><code>         3 (LCA)
+       /   \
+      5     1
+     / \   / \
+    6   2  0  8
+       / \
+      7   4
+</code></pre><ul>
+<li><code>p = 5, q = 1</code> → <code>LCA = 3</code></li>
+</ul><h3>Column Details</h3><ul>
+<li><strong>💡 AHA:</strong> Children report back. If both left and right return non-null, current node is LCA.</li>
+<li><strong>⚙️ Pattern:</strong> Postorder (Left → Right → Root)</li>
+<li><strong>Σ Idea / Formula:</strong></li>
+<li><code>If root == null or root == p or root == q</code> → return root</li>
+<li><code>left = recurse(left), right = recurse(right)</code></li>
+<li><code>If left != null and right != null</code> → return root</li>
+<li><code>Else return left if not null else right</code></li>
+<li><strong>Complexity:</strong> Time: O(n), Space: O(h)</li>
+</ul><hr/></div><div class="card"><h2>2. CONSTRUCT BINARY TREE FROM TRAVERSALS (LC 105)</h2><h3>Example</h3><ul>
+<li><strong>Inorder:</strong> <code>[9, 3, 15, 20, 7]</code></li>
+<li><strong>Preorder:</strong> <code>[3, 9, 20, 15, 7]</code></li>
+</ul><pre><code>        3
+       / \
+      9  20
+        /  \
+       15   7
+</code></pre><h3>Column Details</h3><ul>
+<li><strong>💡 AHA:</strong> Preorder → Root comes first. Inorder → Left and Right parts. Build tree using indices.</li>
+<li><strong>⚙️ Pattern:</strong> Recursive (Divide &amp; Conquer)</li>
+<li><strong>Σ Idea / Formula:</strong></li>
+<li>First element in preorder = Root</li>
+<li>Find root in inorder → split left &amp; right</li>
+<li>Recur for left part and right part</li>
+<li><strong>Complexity:</strong> Time: O(n), Space: O(n)</li>
+<li><strong>Preorder / Inorder Alignment:</strong></li>
+<li>Preorder: <code>1 2 4 5 3 6 7</code></li>
+<li>Inorder: <code>4 2 5 1 6 3 7</code></li>
+</ul><hr/></div><div class="card"><h2>3. SERIALIZE AND DESERIALIZE BINARY TREE (LC 297)</h2><h3>Example (Serialize)</h3><pre><code>        1
+       / \
+      2   3
+     / \   \
+    4   5   6
+</code></pre><ul>
+<li><strong>Serialized:</strong> <code>[1, 2, 4, null, null, 5, 3, null, 6]</code> (Level Order with nulls)</li>
+</ul><h3>Column Details</h3><ul>
+<li><strong>💡 AHA:</strong> Store structure + values. Use null marker for missing nodes.</li>
+<li><strong>⚙️ Pattern:</strong> BFS (Level Order) or Preorder</li>
+<li><strong>Σ Idea / Formula:</strong></li>
+<li>Serialize → Traverse and add values (add nulls)</li>
+<li>Deserialize → Rebuild tree from values</li>
+<li><strong>Complexity:</strong> Time: O(n), Space: O(n)</li>
+</ul><hr/></div><div class="card"><h2>4. PATH SUM (LC 112 / 113)</h2><h3>Example (Sum = 22)</h3><pre><code>            5
+           / \
+          4   8
+         /   / \
+        11  13  4
+       /  \      \
+      7    2      1
+</code></pre><ul>
+<li>Path: <code>5 → 4 → 11 → 2</code> (Sum = 22)</li>
+</ul><h3>Column Details</h3><ul>
+<li><strong>💡 AHA:</strong> Need root to leaf path. Keep subtracting from target. If leaf and target == 0 → valid path.</li>
+<li><strong>⚙️ Pattern:</strong> DFS (Preorder)</li>
+<li><strong>Σ Idea / Formula:</strong></li>
+<li><code>target -= node.val</code></li>
+<li>If leaf and target == 0 → true</li>
+<li>Else check left and right</li>
+<li><strong>Complexity:</strong> Time: O(n), Space: O(h)</li>
+</ul><hr/></div><div class="card"><h2>5. BUILD TREE FROM INORDER AND POSTORDER (LC 106)</h2><h3>Example</h3><ul>
+<li><strong>Inorder:</strong> <code>[9, 3, 15, 20, 7]</code></li>
+<li><strong>Postorder:</strong> <code>[9, 15, 7, 20, 3]</code></li>
+</ul><pre><code>        3
+       / \
+      9  20
+        /  \
+       15   7
+</code></pre><h3>Column Details</h3><ul>
+<li><strong>💡 AHA:</strong> Postorder → Root comes last. Inorder → Left and Right parts.</li>
+<li><strong>⚙️ Pattern:</strong> Recursive (Divide &amp; Conquer)</li>
+<li><strong>Σ Idea / Formula:</strong></li>
+<li>Last element in postorder = Root</li>
+<li>Find root in inorder → split left &amp; right</li>
+<li>Recur for left part and right part</li>
+<li><strong>Complexity:</strong> Time: O(n), Space: O(n)</li>
+</ul><hr/></div><div class="card"><h2>6. BURNING BINARY TREE (LC 2385)</h2><h3>Example</h3><pre><code>        1
+       / \
+      2   3
+     / \   \
+    4   5   6
+       /
+      7
+</code></pre><ul>
+<li><strong>Start Node = 5</strong> (colored/highlighted in red)</li>
+<li><strong>Time to burn all nodes = 4</strong></li>
+</ul><h3>Column Details</h3><ul>
+<li><strong>💡 AHA:</strong> Fire spreads in all 4 directions. Convert tree to graph (undirected). Do BFS from start node.</li>
+<li><strong>⚙️ Pattern:</strong> Graph + BFS</li>
+<li><strong>Σ Idea / Formula:</strong></li>
+<li>Convert tree to undirected graph</li>
+<li>BFS from start node</li>
+<li>Count levels (time)</li>
+<li><strong>Complexity:</strong> Time: O(n), Space: O(n)</li>
+</ul><hr/></div><div class="card"><h2>COMMON MENTAL MODELS</h2><ul>
+<li>Need parent first → <strong>Preorder</strong></li>
+<li>Need sorted order → <strong>Inorder</strong></li>
+<li>Need children first → <strong>Postorder</strong></li>
+<li>Need level by level → <strong>BFS</strong></li>
+<li>Path / Root to Leaf → <strong>DFS (Backtrack)</strong></li>
+<li>Multiple directions → <strong>Graph + BFS</strong></li>
+</ul><hr/></div><div class="card"><h2>TREE BUILDING INDEX RULES</h2><h3>Preorder + Inorder</h3><ul>
+<li><strong>Preorder:</strong> Root | Left | Right</li>
+<li><strong>Inorder:</strong> Left | Root | Right</li>
+<li><em>Action:</em> Use root from preorder</li>
+</ul><h3>Inorder + Postorder</h3><ul>
+<li><strong>Inorder:</strong> Left | Root | Right</li>
+<li><strong>Postorder:</strong> Left | Right | Root</li>
+<li><em>Action:</em> Use root from postorder</li>
+</ul><hr/></div><div class="card"><h2>QUICK RECAP</h2><ul>
+<li>Traversal decides the way you think.</li>
+<li>Return type decides the recursion.</li>
+<li>Break into subproblems.</li>
+<li>Combine results.</li>
+<li>Handle base cases carefully.</li>
+<li>Draw the tree. Dry run.</li>
+<li>That's 80% of the battle won!</li>
+</ul><hr/></div><div class="card"><h2>⭐ FINAL MANTRA</h2><p>Understand the Problem → Choose Pattern → Draw Tree → Apply Template → Code → Dry Run → Optimize</p><!-- PAGE_BREAK --></div><div class="card"><h2>8. TREES - FAANG ONE PAGE REVISION</h2><p><strong>Aha Moments • Patterns • When to use what</strong></p><hr/></div><div class="card"><h2>1. WHEN TO USE WHICH TRAVERSAL?</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Goal / Need</th>
+<th style="text-align: left;">Use This</th>
+<th style="text-align: left;">Why?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Need parent first (decision at node)</td>
+<td style="text-align: left;"><strong>Preorder</strong></td>
+<td style="text-align: left;">Process node before children</td>
+</tr>
+<tr>
+<td style="text-align: left;">Need sorted order (BST problems)</td>
+<td style="text-align: left;"><strong>Inorder</strong></td>
+<td style="text-align: left;">Left → Node → Right gives sorted order</td>
+</tr>
+<tr>
+<td style="text-align: left;">Need children's information first</td>
+<td style="text-align: left;"><strong>Postorder</strong></td>
+<td style="text-align: left;">Process children before node</td>
+</tr>
+<tr>
+<td style="text-align: left;">Need level by level (each level together)</td>
+<td style="text-align: left;"><strong>BFS (Level Order)</strong></td>
+<td style="text-align: left;">Visit nodes level by level</td>
+</tr>
+<tr>
+<td style="text-align: left;">Need all paths (root to leaf)</td>
+<td style="text-align: left;"><strong>DFS (Backtracking)</strong></td>
+<td style="text-align: left;">Go deep, explore all paths</td>
+</tr>
+</tbody>
+</table><hr/></div><div class="card"><h2>2. RECURSION - GOLDEN TEMPLATE (DFS)</h2><h3>The Recursion Steps</h3><ol>
+<li><strong>BASE CASE (blue):</strong> Handle null / edge case</li>
+<li><strong>FAITH (green):</strong> Assume left &amp; right give correct answer</li>
+<li><strong>RECUR LEFT (orange):</strong> Recur for left subtree</li>
+<li><strong>RECUR RIGHT (red):</strong> Recur for right subtree</li>
+<li><strong>COMBINE (purple):</strong> Use left &amp; right results, do required work</li>
+<li><strong>RETURN (dark):</strong> Return the final answer</li>
+</ol><h3>Code Block</h3><pre><code class="language-java">Type solve(Node node) {
+    if (node == null)
+        return ...;       // 1. Base Case
+
+    Type left = solve(node.left);  // 3. Recur Left
+    Type right = solve(node.right); // 4. Recur Right
+
+    // 5. Combine
+    Type ans = ...;
+
+    return ans;           // 6. Return
+}
+</code></pre><blockquote>
+<p><strong>REMEMBER:</strong> Return type decides what you can compute. Break every problem into left &amp; right subproblems.</p>
+</blockquote><hr/></div><div class="card"><h2>3. DFS PATTERN RECAP</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Problem</th>
+<th style="text-align: left;">Key Idea / Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Max Depth</strong></td>
+<td style="text-align: left;"><code>1 + max(left, right)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Same Tree</strong></td>
+<td style="text-align: left;"><code>left &amp;&amp; right</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Invert Tree</strong></td>
+<td style="text-align: left;">Swap left &amp; right</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Diameter</strong></td>
+<td style="text-align: left;">Through node = <code>left + right</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Balanced Tree</strong></td>
+<td style="text-align: left;"><code>|left - right| &lt;= 1</code></td>
+</tr>
+</tbody>
+</table><hr/></div><div class="card"><h2>4. BFS PATTERN RECAP</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Problem</th>
+<th style="text-align: left;">Key Idea / Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Level Order</strong></td>
+<td style="text-align: left;">Queue + level size</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Right Side View</strong></td>
+<td style="text-align: left;">Last node of each level</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Zigzag Order</strong></td>
+<td style="text-align: left;">Left to Right / Right to Left toggle</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Average of Levels</strong></td>
+<td style="text-align: left;">Sum / size of level</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Level Order (N-ary)</strong></td>
+<td style="text-align: left;">Same BFS with N children</td>
+</tr>
+</tbody>
+</table><hr/></div><div class="card"><h2>5. BST QUICK HITS</h2><ul>
+<li>Left Subtree &lt; Node &lt; Right Subtree</li>
+<li>Inorder of BST = Sorted Array</li>
+<li>Search / Insert = Compare &amp; Go</li>
+<li>Delete = 3 cases (0 child, 1 child, 2 children)</li>
+<li>Validate BST = Check range (min, max)</li>
+<li>Kth Smallest = Inorder (kth element)</li>
+<li>LCA in BST = Use BST property</li>
+</ul><hr/></div><div class="card"><h2>6. COMMON TREE PROBLEM PATTERNS</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Pattern</th>
+<th style="text-align: left;">Think</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Height / Depth</strong></td>
+<td style="text-align: left;">Add <code>1 + max(left, right)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Exists / Search</strong></td>
+<td style="text-align: left;">Return true if found in left or right</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Count / Sum</strong></td>
+<td style="text-align: left;">Count/Sum from left + right + current</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Path Problems</strong></td>
+<td style="text-align: left;">Carry path / sum while going down</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Construct Tree</strong></td>
+<td style="text-align: left;">Use Inorder + (Pre/Post)order</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Validate / Check</strong></td>
+<td style="text-align: left;">Use constraints / ranges while traversing</td>
+</tr>
+</tbody>
+</table><hr/></div><div class="card"><h2>7. MENTAL MODELS (AHA MOMENTS)</h2><ul>
+<li>⭐ Preorder → I do (parent) first</li>
+<li>⭐ Inorder → I am in the middle (sorted for BST)</li>
+<li>⭐ Postorder → I check results of my children first</li>
+<li>⭐ BFS → I explore level by level</li>
+<li>⭐ DFS → I go deep and backtrack</li>
+<li>⭐ Every node can be a center of diameter</li>
+<li>⭐ Tree is a connected acyclic graph</li>
+<li>⭐ Remove null checks with base case</li>
+<li>⭐ For BST → think in terms of range</li>
+<li>⭐ Break problem → Solve small → Combine → Return</li>
+</ul><hr/></div><div class="card"><h2>8. COMPLEXITY CHEAT SHEET</h2><table>
+<thead>
+<tr>
+<th style="text-align: left;">Operation / Problem</th>
+<th style="text-align: left;">Time</th>
+<th style="text-align: left;">Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Traversal (DFS)</strong></td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">O(h)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Traversal (BFS)</strong></td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">O(w)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Search in BST</strong></td>
+<td style="text-align: left;">O(h)</td>
+<td style="text-align: left;">O(1) / O(h)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Insert in BST</strong></td>
+<td style="text-align: left;">O(h)</td>
+<td style="text-align: left;">O(1) / O(h)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Delete in BST</strong></td>
+<td style="text-align: left;">O(h)</td>
+<td style="text-align: left;">O(h)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Height of Tree</strong></td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">O(h)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Diameter</strong></td>
+<td style="text-align: left;">O(n)</td>
+<td style="text-align: left;">O(h)</td>
+</tr>
+</tbody>
+</table><p><em>Note:</em> $n$ = number of nodes, $h$ = height, $w$ = max width</p><hr/></div><div class="card"><h2>9. TRAVERSAL VISUAL SUMMARY</h2><h3>1. Preorder (Root → Left → Right)</h3><ul>
+<li><strong>Order:</strong> 1, 2, 4, 5, 3, 6, 7</li>
+</ul><pre><code>      1
+     / \
+    2   3
+   / \ / \
+  4  5 6  7
+</code></pre><h3>2. Inorder (Left → Root → Right)</h3><ul>
+<li><strong>Order:</strong> 4, 2, 5, 1, 6, 3, 7</li>
+</ul><h3>3. Postorder (Left → Right → Root)</h3><ul>
+<li><strong>Order:</strong> 4, 5, 2, 6, 7, 3, 1</li>
+</ul><h3>4. Level Order (BFS) (Level by Level)</h3><ul>
+<li><strong>Order:</strong> 1, 2, 3, 4, 5, 6, 7</li>
+<li>Level 0: 1</li>
+<li>Level 1: 2, 3</li>
+<li>Level 2: 4, 5, 6, 7</li>
+</ul><hr/></div><div class="card"><h2>10. FINAL MANTRA</h2><ul>
+<li>🎯 Understand the Problem</li>
+<li>🧩 Choose the Right Pattern</li>
+<li>🏗️ Draw / Dry Run</li>
+<li><code>&lt;/&gt;</code> Write Clean Code</li>
+<li>⭕ Test All Edge Cases</li>
+<li>🏆 Optimize if needed</li>
+</ul><blockquote>
+<p><strong>PRACTICE → ANALYZE → REFLECT → IMPROVE → REPEAT</strong></p>
+</blockquote><hr/></div><div class="card"><h2>IMPORTANT REMINDERS</h2><ul>
+<li>Draw the tree (Always helps!)</li>
+<li>Dry run before coding</li>
+<li>Handle null carefully</li>
+<li>Think recursively, not iteratively</li>
+<li>Keep solving, keep improving! 💪</li>
+</ul><!-- PAGE_BREAK --></div></div>
+</body>
+</html>

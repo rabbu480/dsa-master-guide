@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TRIE (PREFIX TREE) MASTERCLASS — FAANG Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --pri: #1e3a8a; --sec: #2563eb; --grn: #059669; --red: #dc2626;
+  --pur: #7c3aed; --org: #ea580c; --amb: #d97706; --sky: #0284c7;
+  --txt: #0f172a; --sub: #475569; --bdr: #cbd5e1; --bg: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #e2e8f0; color: var(--txt); font-size: 11px; line-height: 1.36; padding: 20px; }
+
+.page {
+  background: white; max-width: 1100px; margin: 0 auto 30px auto;
+  padding: 14px 18px; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  page-break-after: always; page-break-inside: avoid;
+}
+
+.ph { display:flex; justify-content:space-between; align-items:center;
+  border-bottom: 3px solid var(--pri); padding-bottom: 8px; margin-bottom: 12px; }
+.ph h1 { font-size: 1.7rem; font-weight: 900; color: var(--pri); letter-spacing: 0.5px; }
+.ph .sub { font-size: 0.85rem; font-weight: 600; color: var(--sub); margin-top: 2px; }
+.ph .pn { background: var(--pri); color: white; padding: 3px 12px; border-radius: 16px;
+  font-weight: 800; font-size: 0.85rem; text-align: right; }
+.ph .ptag { font-size: 0.74rem; color: var(--sub); font-weight: 600; margin-top: 3px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+.box { border: 1.5px solid var(--pri); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.bh  { background: var(--pri); color: white; padding: 5px 10px;
+  font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+.bh .n { background: white; color: var(--pri); border-radius: 50%;
+  width: 16px; height: 16px; display:inline-flex; align-items:center;
+  justify-content:center; font-size: 0.70rem; font-weight: 800; flex-shrink: 0; }
+.bc  { padding: 8px 10px; }
+
+.box.grn  { border-color: var(--grn); }   .box.grn .bh  { background: var(--grn); }
+.box.red  { border-color: var(--red); }   .box.red .bh  { background: var(--red); }
+.box.pur  { border-color: var(--pur); }   .box.pur .bh  { background: var(--pur); }
+.box.org  { border-color: var(--org); }   .box.org .bh  { background: var(--org); }
+.box.amb  { border-color: var(--amb); }   .box.amb .bh  { background: var(--amb); }
+.box.sky  { border-color: var(--sky); }   .box.sky .bh  { background: var(--sky); }
+
+.prow { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.prow-head { background: #f1f5f9; border-bottom: 1px solid var(--bdr);
+  padding: 5px 10px; display: flex; align-items: center; gap: 10px; }
+.ptag2 { background: var(--pri); color: white; padding: 2px 8px;
+  border-radius: 4px; font-weight: 700; font-size: 0.72rem; }
+.ptitle { color: var(--pri); font-weight: 700; font-size: 0.90rem; }
+.psub   { color: var(--sub); font-size: 0.76rem; }
+.prow-body { display: flex; }
+.pc { padding: 8px 10px; font-size: 0.76rem; }
+.pc + .pc { border-left: 1px dashed var(--bdr); }
+.pc-head { font-weight: 700; font-size: 0.70rem; color: var(--sub);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.prob { border: 1.5px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.prob-head { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.diff-e { background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-m { background: #fef9c3; color: #854d0e; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.diff-h { background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; }
+.prob-body { display: grid; grid-template-columns: 1fr 1.6fr; border-top: 1px solid var(--bdr); }
+.prob-info { padding: 6px 8px; border-right: 1px solid var(--bdr); font-size: 0.76rem; }
+.prob-code { padding: 6px 8px; background: #fafbfc; }
+
+pre, code { font-family: 'Fira Code', monospace; }
+pre { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px;
+  padding: 6px 8px; font-size: 0.68rem; line-height: 1.38; overflow-x: hidden;
+  white-space: pre-wrap; word-break: break-all; }
+code { font-size: 0.74rem; color: var(--pri); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.74rem; }
+th, td { border: 1px solid var(--bdr); padding: 4px 6px; text-align: left; }
+th { background: #f1f5f9; font-weight: 700; }
+
+.rule { background: #fffbeb; border-left: 4px solid var(--amb); padding: 5px 8px; border-radius: 0 4px 4px 0; font-size: 0.76rem; margin-top: 4px; }
+.aha  { background: linear-gradient(135deg, #ede9fe, #dbeafe); border: 1.5px solid var(--pur); border-radius: 6px; padding: 6px 8px; margin-top: 4px; }
+.aha-t { font-weight: 800; color: var(--pur); font-size: 0.80rem; margin-bottom: 2px; }
+
+.dt-wrap { font-size: 0.76rem; }
+.dt-root { background: var(--pri); color: white; padding: 4px 8px; border-radius: 4px; text-align: center; font-weight: 700; margin-bottom: 6px; }
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.dt-row { display: flex; align-items: stretch; gap: 0; border: 1.5px solid var(--bdr); border-radius: 5px; overflow: hidden; }
+.dt-q { background: #eff6ff; border-right: 1.5px solid var(--bdr); padding: 4px 6px; font-weight: 600; color: #1e40af; font-size: 0.72rem; display: flex; align-items: center; flex: 1; }
+.dt-a { background: #f0fdf4; padding: 4px 6px; color: #065f46; font-weight: 700; font-size: 0.72rem; display: flex; align-items: center; flex: 1.2; }
+.dt-arrow { color: var(--sub); font-size: 0.72rem; padding: 2px 4px; display: flex; align-items: center; background: white; }
+
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+  body { background: white !important; padding: 0 !important; margin: 0 !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .top-nav, .toc-sidebar { display: none !important; }
+  .app-layout { display: block !important; }
+  .page { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 8px 12px !important; width: 100% !important; page-break-after: always !important; page-break-inside: avoid !important; break-inside: avoid !important; }
+  table, tr, td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="app-layout">
+<div class="main-content">
+
+<!-- PAGE 1: DISCOVERY & ORIENTATION -->
+<div class="page">
+<div class="ph">
+  <div><h1>TRIE (PREFIX TREE) MASTERCLASS</h1><div class="sub">FAANG Discovery Journey — First Principles</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 1 OF 10</div><div class="ptag">DISCOVERY JOURNEY · FIRST PRINCIPLES</div></div>
+</div>
+<div class="g3" style="margin-bottom:8px">
+<div class="box pur">
+<div class="bh">🎬 PHASE 1 — THE REAL-WORLD STORY</div>
+<div class="bc">
+<p style="margin-bottom:3px">Every time you type a character into Google Search (e.g., <code>g</code> \rightarrow <code>go</code> \rightarrow <code>goo</code> \rightarrow <code>goog</code>), Google instantly drops down word suggestions.</p>
+<div class="aha">
+<div class="aha-t">💡 THE DISCOVERY QUESTION</div>
+        Google cannot scan millions of dictionary words on every single keystroke. How does it search prefixes in milliseconds?
+      </div>
+</div>
+</div>
+<div class="box">
+<div class="bh">🤔 PHASE 2 — WHY HASHMAP FAILS FOR PREFIXES</div>
+<div class="bc">
+<ul style="padding-left:12px;font-size:0.74rem">
+<li><strong>HashMap Lookup:</strong> Can find exact word <code>"apple"</code> in O(L) time.</li>
+<li><strong>HashMap Prefix Search:</strong> Fails! <code>contains("ap")</code> returns false. <code>contains("app")</code> returns false. Finding words with prefix <code>"app"</code> requires scanning ALL N dictionary keys \rightarrow Slow O(N · L)!</li>
+</ul>
+</div>
+</div>
+<div class="box sky">
+<div class="bh">💡 PHASE 3 &amp; AHA MOMENT</div>
+<div class="bc">
+<div style="font-weight:700;color:var(--pri);margin-bottom:2px">Can we reuse shared character paths?</div>
+<p style="font-size:0.74rem">Instead of storing <code>"apple"</code>, <code>"app"</code>, and <code>"application"</code> separately, store them along the shared path <code>a -&gt; p -&gt; p</code>!</p>
+<div class="rule">
+<strong>Aha Moment:</strong> Every Character = Node | Whole Word = Path | Prefix = Shared Tree Path!
+      </div>
+</div>
+</div>
+</div><div class="g2">
+<div class="box grn">
+<div class="bh">🛠 BUILD TRIE YOURSELF (VISUAL INSIGHT)</div>
+<div class="bc">
+<pre style="margin:0;font-size:0.70rem">Root
+  ↓
+  a  -&gt;  p  -&gt;  p (isWord=true)
+                ↓
+                l  -&gt;  e (isWord=true)
+                ↓
+                i  -&gt;  c  -&gt;  a  -&gt;  t  -&gt;  i  -&gt;  o  -&gt;  n (isWord=true)</pre>
+<p style="font-size:0.74rem;margin-top:3px">When inserting <code>"application"</code>, the path <code>a -&gt; p -&gt; p</code> already exists! Only new characters are appended!</p>
+</div>
+</div>
+<div class="box amb">
+<div class="bh">⚡ UNIVERSAL TRIE OPERATIONS</div>
+<div class="bc">
+<table style="font-size:0.72rem">
+<tr><th>Operation</th><th>Algorithm Logic</th><th>Time</th></tr>
+<tr><td><strong>Insert(word)</strong></td><td>Traverse `children[c - 'a']`. Create node if null. Set `isWord = true` at leaf.</td><td>O(L)</td></tr>
+<tr><td><strong>Search(word)</strong></td><td>Traverse `children[c - 'a']`. Return `false` if null, else return `node.isWord`.</td><td>O(L)</td></tr>
+<tr><td><strong>StartsWith(prefix)</strong></td><td>Traverse prefix. Return `true` as long as path exists (no `isWord` check needed!).</td><td>O(L)</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 2: API & TOOLKIT -->
+<div class="page">
+<div class="ph">
+  <div><h1>TRIE (PREFIX TREE) MASTERCLASS</h1><div class="sub">Java Master Toolkit &amp; Utility Classes</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 2 OF 10</div><div class="ptag">JAVA UTILITIES · REUSABLE TEMPLATES</div></div>
+</div>
+<div class="box pur">
+<div class="bh">💥 THE BIGGEST AHA: WHY DFS + TRIE ARE COMBINED</div>
+<div class="bc">
+<div class="g2">
+<div>
+<p style="font-size:0.74rem"><strong>Trie Controls:</strong> <em>VALID WORDS</em> (tells us if current prefix exists in dictionary).</p>
+<p style="font-size:0.74rem;margin-top:2px"><strong>DFS Controls:</strong> <em>VALID PATHS</em> (tells us where we can move on the 2D grid).</p>
+</div>
+<div>
+<div class="aha" style="margin:0">
+<div class="aha-t">💡 Why Trie Stores `node.word` at Leaf?</div>
+          Instead of building a `StringBuilder` on every recursive DFS call, store the full string `node.word` at terminal leaf nodes. When DFS reaches a leaf node, simply do `res.add(node.word)` in O(1) time without string reconstruction!
+        </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 3: CORE PATTERN 1 -->
+<div class="page">
+<div class="ph">
+  <div><h1>TRIE (PREFIX TREE) MASTERCLASS</h1><div class="sub">Core Patterns — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 3 OF 10</div><div class="ptag">PATTERN 1</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 1</div>
+<div class="ptitle">IMPLEMENT TRIE (Prefix Tree Operations)</div>
+<div class="psub">e.g. Implement Trie (Prefix Tree) (LC 208)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">When to Use</div>
+<div style="font-size:0.76rem">Implement `insert(word)`, `search(word)`, and `startsWith(prefix)` methods in O(L) time.</div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — LC 208</div>
+<pre>class Trie {
+  static class Node {
+    Node[] children = new Node[26];
+    boolean isEnd = false;
+  }
+  private Node root = new Node();
+
+  public void insert(String word) {
+    Node node = root;
+    for (char c : word.toCharArray()) {
+      int idx = c - 'a';
+      if (node.children[idx] == null) node.children[idx] = new Node();
+      node = node.children[idx];
+    }
+    node.isEnd = true;
+  }
+
+  public boolean search(String word) {
+    Node node = find(word);
+    return node != null &amp;&amp; node.isEnd;
+  }
+
+  public boolean startsWith(String prefix) {
+    return find(prefix) != null;
+  }
+
+  private Node find(String str) {
+    Node node = root;
+    for (char c : str.toCharArray()) {
+      int idx = c - 'a';
+      if (node.children[idx] == null) return null;
+      node = node.children[idx];
+    }
+    return node;
+  }
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 4: CORE PATTERN 2 -->
+<div class="page">
+<div class="ph">
+  <div><h1>TRIE (PREFIX TREE) MASTERCLASS</h1><div class="sub">Core Patterns — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 4 OF 10</div><div class="ptag">PATTERN 2</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 2</div>
+<div class="ptitle">WORD SEARCH II (Trie + 2D Grid DFS Pruning)</div>
+<div class="psub">e.g. Word Search II (LC 212)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">Grid DFS + Trie Combo</div>
+<div style="font-size:0.76rem">
+        Pass `TrieNode` directly in DFS. If `node.children[ch - 'a'] == null`, prune immediately! Set `node.word = null` after adding to result list to prevent duplicate additions.
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — LC 212</div>
+<pre>class Solution {
+  static class TrieNode {
+    TrieNode[] children = new TrieNode[26];
+    String word = null;
+  }
+
+  public List&lt;String&gt; findWords(char[][] board, String[] words) {
+    TrieNode root = new TrieNode();
+    for (String w : words) {
+      TrieNode node = root;
+      for (char c : w.toCharArray()) {
+        int idx = c - 'a';
+        if (node.children[idx] == null) node.children[idx] = new TrieNode();
+        node = node.children[idx];
+      }
+      node.word = w; // Store complete word at leaf node!
+    }
+
+    List&lt;String&gt; result = new ArrayList&lt;&gt;();
+    for (int r = 0; r &lt; board.length; r++) {
+      for (int c = 0; c &lt; board[0].length; c++) {
+        dfs(board, r, c, root, result);
+      }
+    }
+    return result;
+  }
+
+  private void dfs(char[][] board, int r, int c, TrieNode node, List&lt;String&gt; res) {
+    char ch = board[r][c];
+    if (ch == '#' || node.children[ch - 'a'] == null) return; // Prune branch!
+    node = node.children[ch - 'a'];
+    if (node.word != null) {
+      res.add(node.word);
+      node.word = null; // Prevent duplicate additions!
+    }
+    board[r][c] = '#'; // Mark visited!
+    int[] dr = {-1, 1, 0, 0}, dc = {0, 0, -1, 1};
+    for (int i = 0; i &lt; 4; i++) {
+      int nr = r + dr[i], nc = c + dc[i];
+      if (nr &gt;= 0 &amp;&amp; nr &lt; board.length &amp;&amp; nc &gt;= 0 &amp;&amp; nc &lt; board[0].length) {
+        dfs(board, nr, nc, node, res);
+      }
+    }
+    board[r][c] = ch; // Backtrack!
+  }
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 5: CORE PATTERN 3 -->
+<div class="page">
+<div class="ph">
+  <div><h1>TRIE (PREFIX TREE) MASTERCLASS</h1><div class="sub">Core Patterns — Part 3</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 5 OF 10</div><div class="ptag">PATTERN 3</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 3</div>
+<div class="ptitle">DESIGN ADD AND SEARCH WORDS (Wildcard Search)</div>
+<div class="psub">e.g. Design Add and Search Words Data Structure (LC 211)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">Wildcard DFS Search</div>
+<div style="font-size:0.76rem">
+        If char is '.', branch to all non-null children nodes. Otherwise follow exact character branch index `c - 'a'`.
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — LC 211</div>
+<pre>class WordDictionary {
+  static class Node {
+    Node[] children = new Node[26];
+    boolean isEnd = false;
+  }
+  private Node root = new Node();
+
+  public void addWord(String word) {
+    Node node = root;
+    for (char c : word.toCharArray()) {
+      int idx = c - 'a';
+      if (node.children[idx] == null) node.children[idx] = new Node();
+      node = node.children[idx];
+    }
+    node.isEnd = true;
+  }
+
+  public boolean search(String word) {
+    return dfs(word, 0, root);
+  }
+
+  private boolean dfs(String word, int idx, Node node) {
+    if (node == null) return false;
+    if (idx == word.length()) return node.isEnd;
+    char c = word.charAt(idx);
+    if (c != '.') {
+      return dfs(word, idx + 1, node.children[c - 'a']);
+    }
+    for (int i = 0; i &lt; 26; i++) {
+      if (node.children[i] != null &amp;&amp; dfs(word, idx + 1, node.children[i])) return true;
+    }
+    return false;
+  }
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 6: CORE PATTERN 4 -->
+<div class="page">
+<div class="ph">
+  <div><h1>TRIE (PREFIX TREE) MASTERCLASS</h1><div class="sub">Core Patterns — Part 4</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 6 OF 10</div><div class="ptag">PATTERN 4</div></div>
+</div>
+<div class="prow">
+<div class="prow-head">
+<div class="ptag2">PATTERN 4</div>
+<div class="ptitle">REPLACE WORDS (Shortest Dictionary Root Match)</div>
+<div class="psub">e.g. Replace Words (LC 648)</div>
+</div>
+<div class="prow-body">
+<div class="pc" style="flex:1">
+<div class="pc-head">Shortest Root Replacement</div>
+<div style="font-size:0.76rem">
+        Insert roots into Trie. For each word in sentence, traverse Trie. Stop and replace as soon as `node.isEnd == true`!
+      </div>
+</div>
+<div class="pc" style="flex:1.8">
+<div class="pc-head">Template — LC 648</div>
+<pre>public String replaceWords(List&lt;String&gt; dictionary, String sentence) {
+  Trie trie = new Trie();
+  for (String root : dictionary) trie.insert(root);
+  String[] words = sentence.split(" ");
+  StringBuilder sb = new StringBuilder();
+  for (int i = 0; i &lt; words.length; i++) {
+    if (i &gt; 0) sb.append(" ");
+    sb.append(findRoot(words[i], trie.root));
+  }
+  return sb.toString();
+}
+private String findRoot(String word, TrieNode root) {
+  TrieNode node = root;
+  StringBuilder prefix = new StringBuilder();
+  for (char c : word.toCharArray()) {
+    int idx = c - 'a';
+    if (node.children[idx] == null || node.isEnd) break;
+    prefix.append(c);
+    node = node.children[idx];
+  }
+  return node.isEnd ? prefix.toString() : word;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 7: DECISION TREE & TRIGGER WORDS -->
+<div class="page">
+<div class="ph">
+  <div><h1>TRIE (PREFIX TREE) MASTERCLASS</h1><div class="sub">Decision Tree &amp; Trigger Words</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 7 OF 10</div><div class="ptag">DECISION TREE · TRIGGER WORDS · TRADE-OFFS</div></div>
+</div>
+<div class="box">
+<div class="bh" style="padding:2px 6px;font-size:0.74rem">📊 COMPLETE TRIE PROBLEM LADDER SUMMARY</div>
+<div class="bc" style="padding:3px 5px">
+<table>
+<tr><th>LC #</th><th>Problem</th><th>Pattern</th><th>Time</th><th>Space</th><th>Diff</th></tr>
+<tr><td>208</td><td>Implement Trie</td><td>Standard Trie Operations</td><td>O(L)</td><td>O(Total Chars)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>211</td><td>Design Add &amp; Search Words</td><td>Wildcard Dot DFS</td><td>O(26^L) worst</td><td>O(L) stack</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>648</td><td>Replace Words</td><td>Shortest Root Match</td><td>O(L) per word</td><td>O(Total Chars)</td><td><span class="diff-m">M</span></td></tr>
+<tr><td>212</td><td>Word Search II</td><td>Trie + 2D Grid DFS Pruning</td><td>O(M · N · 4^L)</td><td>O(Total Chars)</td><td><span class="diff-h">H</span></td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<!-- PAGE 8: PROBLEM LADDER PART 1 -->
+<div class="page">
+<div class="ph">
+  <div><h1>TRIE (PREFIX TREE) MASTERCLASS</h1><div class="sub">Curated Problem Ladder — Part 1</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 8 OF 10</div><div class="ptag">PROBLEM LADDER · EASY &amp; MEDIUM</div></div>
+</div>
+<div class="g2">
+<div class="prob" style="margin-bottom:4px">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 208 · Implement Trie</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Standard Trie</div>
+<div><strong>Key Insight:</strong> `children[26]` array.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.60rem">public void insert(String word) {
+  Node node = root;
+  for (char c : word.toCharArray()) {
+    int idx = c - 'a';
+    if (node.children[idx] == null) node.children[idx] = new Node();
+    node = node.children[idx];
+  }
+  node.isEnd = true;
+}</pre>
+</div>
+</div>
+</div><div class="prob">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 211 · Design Add &amp; Search Words</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Wildcard DFS</div>
+<div><strong>Key Insight:</strong> Branch 26 children on '.'.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.60rem">private boolean dfs(String w, int i, Node n) {
+  if (n == null) return false;
+  if (i == w.length()) return n.isEnd;
+  char c = w.charAt(i);
+  if (c != '.') return dfs(w, i + 1, n.children[c - 'a']);
+  for (int j = 0; j &lt; 26; j++)
+    if (n.children[j] != null &amp;&amp; dfs(w, i + 1, n.children[j])) return true;
+  return false;
+}</pre>
+</div>
+</div>
+</div><div class="prob" style="margin-bottom:4px">
+<div class="prob-head" style="background:#fefce8">
+<span class="ptitle" style="color:var(--amb)">LC 648 · Replace Words</span>
+<span class="diff-m">MEDIUM</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Shortest Root Match</div>
+<div><strong>Key Insight:</strong> Stop on first `isEnd == true`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.58rem">private String findRoot(String w, Node root) {
+  Node n = root; StringBuilder prefix = new StringBuilder();
+  for (char c : w.toCharArray()) {
+    int idx = c - 'a';
+    if (n.children[idx] == null || n.isEnd) break;
+    prefix.append(c); n = n.children[idx];
+  }
+  return n.isEnd ? prefix.toString() : w;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: PROBLEM LADDER PART 2 -->
+<div class="page">
+<div class="ph">
+  <div><h1>TRIE (PREFIX TREE) MASTERCLASS</h1><div class="sub">Curated Problem Ladder — Part 2</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 9 OF 10</div><div class="ptag">PROBLEM LADDER · MEDIUM &amp; HARD</div></div>
+</div>
+<div class="g2">
+<div class="prob" style="margin-bottom:4px">
+<div class="prob-head" style="background:#fee2e2">
+<span class="ptitle" style="color:var(--red)">LC 212 · Word Search II</span>
+<span class="diff-h">HARD</span>
+</div>
+<div class="prob-body">
+<div class="prob-info">
+<div><strong>Pattern:</strong> Grid DFS + Trie Combo</div>
+<div><strong>Key Insight:</strong> Pass `TrieNode` in grid DFS, nullify `node.word`.</div>
+</div>
+<div class="prob-code">
+<pre style="font-size:0.56rem">private void dfs(char[][] b, int r, int c, Node n, List&lt;String&gt; res) {
+  char ch = b[r][c];
+  if (ch == '#' || n.children[ch - 'a'] == null) return;
+  n = n.children[ch - 'a'];
+  if (n.word != null) { res.add(n.word); n.word = null; }
+  b[r][c] = '#';
+  int[] dr = {-1,1,0,0}, dc = {0,0,-1,1};
+  for (int i = 0; i &lt; 4; i++) {
+    int nr = r + dr[i], nc = c + dc[i];
+    if (nr&gt;=0 &amp;&amp; nr<b.length &amp;&amp;="" nc="">=0 &amp;&amp; nc<b[0].length) b[r][c]="ch;" dfs(b,="" n,="" nc,="" nr,="" pre="" res);="" }="" }<="">
+      </b[0].length)></b.length></pre></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 10: DRY RUN, PROOFS & MASTERY CHEAT SHEET -->
+<div class="page">
+<div class="ph">
+  <div><h1>TRIE (PREFIX TREE) MASTERCLASS</h1><div class="sub">Dry Run, Proofs &amp; Mastery Cheat Sheet</div></div>
+  <div style="text-align:right"><div class="pn">PAGE 10 OF 10</div><div class="ptag">DRY RUN · PROOFS · MASTERY CHECKLIST</div></div>
+</div>
+<div class="g2" style="margin-bottom:8px">
+<div class="box">
+<div class="bh">🔍 DRY RUN — Word Search II Trie Pruning</div>
+<div class="bc">
+<table style="font-size:0.68rem">
+<tr><th>Grid Pos</th><th>Char</th><th>Trie Child (`n.children[ch - 'a']`)</th><th>Action / Result</th></tr>
+<tr><td>(0, 0)</td><td>'a'</td><td>Non-null (points to 'a' node)</td><td>Continue DFS to neighbours</td></tr>
+<tr><td>(0, 1)</td><td>'p'</td><td>Non-null (points to 'p' node)</td><td>Continue DFS to neighbours</td></tr>
+<tr><td>(0, 2)</td><td>'z'</td><td>NULL!</td><td>PRUNE IMMEDIATELY! Backtrack! ✅</td></tr>
+</table>
+</div>
+</div>
+<div class="box grn">
+<div class="bh">📐 MATHEMATICAL PROOF — O(L) INDEPENDENCE FROM DICTIONARY SIZE N</div>
+<div class="bc">
+<div style="font-size:0.74rem">
+<p style="margin-bottom:3px"><strong>Claim:</strong> Searching a prefix of length L in a Trie takes O(L) time regardless of whether the dictionary contains 100 or 10,000,000 words.</p>
+<p style="margin-bottom:3px"><strong>Proof:</strong> At each character step `i`, the algorithm performs 1 array index lookup `children[c - 'a']` in O(1) time. For prefix of length L, exactly L steps are taken $\implies \mathbf{O(L)\text{ Time, Independent of N}!}$</p>
+</div>
+</div>
+</div>
+</div><div class="g2">
+<div class="box grn">
+<div class="bh">✅ MASTERY CHECKLIST — CAN YOU DO THIS?</div>
+<div class="bc">
+<div class="g2" style="gap:4px">
+<ul style="font-size:0.73rem;list-style:none;padding:0">
+<li>☐ Implement Trie (`insert`, `search`, `startsWith`) in 5m</li>
+<li>☐ Design TrieNode with `Node[26]` and `String word`</li>
+<li>☐ Write Wildcard Search with '.' recursion</li>
+<li>☐ Code Replace Words with shortest root match</li>
+</ul>
+<ul style="font-size:0.73rem;list-style:none;padding:0">
+<li>☐ Implement Word Search II (LC 212) Trie + Grid DFS</li>
+<li>☐ Prune grid DFS when `n.children[ch - 'a'] == null`</li>
+<li>☐ Nullify `node.word = null` after match to prevent duplicates</li>
+<li>☐ Prove why Trie search runtime is independent of N</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="box pur">
+<div class="bh">💼 GOLDEN RULES — NEVER FORGET</div>
+<div class="bc">
+<div class="aha" style="margin-bottom:3px;padding:4px">
+<div class="aha-t">Rule 1 — Store Complete Word String at Leaf Nodes for Grid DFS</div>
+        In Word Search II (LC 212), ALWAYS store `node.word = word` inside the Trie leaf node! This avoids reconstructing the string during 2D grid DFS and speeds up execution by 5x!
+      </div>
+<div class="aha" style="padding:4px">
+<div class="aha-t">Rule 2 — Nullify Word After Result Addition</div>
+        When a word match is found during grid DFS, set `node.word = null` immediately after adding to `result` list. This prevents adding duplicate instances of the same word found via different grid paths!
+      </div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>
