@@ -10,6 +10,7 @@ class Solution {
                 if(Solve(i,j,s)) {
                     if(maxLength<j-i+1){
                         maxLength=j-i+1;
+                        //Java's substring(start, end) uses an exclusive end index.
                         str=s.substring(i,j+1);
                     }
                 }
@@ -32,7 +33,6 @@ class Solution {
         }
         return  Solve(i+1,j-1,s);
     }
-
 
 
 }
