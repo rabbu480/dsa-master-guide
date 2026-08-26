@@ -14,8 +14,8 @@ class Solution {
         // }
         
         int[] dp1= new int[n];
-            Arrays.fill(dp1,-1);
-            Boolean[][] dp= new Boolean[n][n];
+        Arrays.fill(dp1,-1);
+        Boolean[][] dp= new Boolean[n][n];
         return SolveCut(0,s,dp1,dp);
     }
 
@@ -28,8 +28,11 @@ class Solution {
 
     int SolveCut(int i,String s,int[] dp1, Boolean[][] dp){
         int n=s.length();
-        
+        if (i == n) {
+            return 0;
+        }
         if(dp1[i] != -1) return dp1[i];
+
 
         int min = Integer.MAX_VALUE;
         for(int j=i; j<n ; j++){
