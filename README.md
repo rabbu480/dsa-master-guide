@@ -68,6 +68,7 @@ To run it locally:
 | [0063-unique-paths-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0063-unique-paths-ii) |
 | [0064-minimum-path-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0064-minimum-path-sum) |
 | [0074-search-a-2d-matrix](https://github.com/rabbu480/dsa-master-guide/tree/master/0074-search-a-2d-matrix) |
+| [0078-subsets](https://github.com/rabbu480/dsa-master-guide/tree/master/0078-subsets) |
 | [0128-longest-consecutive-sequence](https://github.com/rabbu480/dsa-master-guide/tree/master/0128-longest-consecutive-sequence) |
 | [0130-surrounded-regions](https://github.com/rabbu480/dsa-master-guide/tree/master/0130-surrounded-regions) |
 | [0153-find-minimum-in-rotated-sorted-array](https://github.com/rabbu480/dsa-master-guide/tree/master/0153-find-minimum-in-rotated-sorted-array) |
@@ -369,6 +370,7 @@ To run it locally:
 ## Backtracking
 |  |
 | ------- |
+| [0078-subsets](https://github.com/rabbu480/dsa-master-guide/tree/master/0078-subsets) |
 | [0212-word-search-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0212-word-search-ii) |
 | [0494-target-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0494-target-sum) |
 ## Combinatorics
@@ -397,4 +399,8 @@ To run it locally:
 |  |
 | ------- |
 | [0005-longest-palindromic-substring](https://github.com/rabbu480/dsa-master-guide/tree/master/0005-longest-palindromic-substring) |
+## Bit Manipulation
+|  |
+| ------- |
+| [0078-subsets](https://github.com/rabbu480/dsa-master-guide/tree/master/0078-subsets) |
 <!---LeetCode Topics End-->
