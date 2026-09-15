@@ -22,19 +22,16 @@ class Solution {
 
     void Solve(int i,String digits,StringBuffer path) {
 
-        if(path.length() == digits.length()){
+        if(i == digits.length()){
             result.add(""+path);
             return;
         }
 
-        // char[] digiChar=digits.toCharArray();
-        for(int j =i ; j < digits.length() ; j++){
-            String letter =digiMap.get(""+digits.charAt(j));
-            for(char c: letter.toCharArray()) {  
-                path.append(c);
-                Solve(j+1,digits,path);
-                path.deleteCharAt(path.length() - 1);
-            }
+        String letter =digiMap.get(""+digits.charAt(i));
+        for(char c: letter.toCharArray()) {  
+            path.append(c);
+            Solve(i+1,digits,path);
+            path.deleteCharAt(path.length() - 1);
         }
 
     }
