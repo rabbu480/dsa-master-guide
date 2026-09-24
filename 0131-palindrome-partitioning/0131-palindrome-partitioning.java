@@ -14,18 +14,18 @@ class Solution {
 
 
 
-    void Solve(int j,String s,List<String> path){
-        if(j==s.length()){
+    void Solve(int i,String s,List<String> path){
+        if(i==s.length()){
             result.add(new ArrayList(path));
             return;
         }
 
-        for(int i=j ; i< s.length(); i++){
+        for(int j=i ; j< s.length(); j++){
 
-            if(isValidPalindrome(j,i,s)){
-                path.add(s.substring(j,i+1));
+            if(isValidPalindrome(i,j,s)){
+                path.add(s.substring(i,j+1));
                 System.out.println("path >>"+path );
-                Solve(i+1,s,path);
+                Solve(j+1,s,path);
                 path.remove(path.size()-1); 
             }
 
