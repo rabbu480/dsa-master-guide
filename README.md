@@ -143,6 +143,7 @@ To run it locally:
 | [0091-decode-ways](https://github.com/rabbu480/dsa-master-guide/tree/master/0091-decode-ways) |
 | [0115-distinct-subsequences](https://github.com/rabbu480/dsa-master-guide/tree/master/0115-distinct-subsequences) |
 | [0125-valid-palindrome](https://github.com/rabbu480/dsa-master-guide/tree/master/0125-valid-palindrome) |
+| [0131-palindrome-partitioning](https://github.com/rabbu480/dsa-master-guide/tree/master/0131-palindrome-partitioning) |
 | [0132-palindrome-partitioning-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0132-palindrome-partitioning-ii) |
 | [0208-implement-trie-prefix-tree](https://github.com/rabbu480/dsa-master-guide/tree/master/0208-implement-trie-prefix-tree) |
 | [0211-design-add-and-search-words-data-structure](https://github.com/rabbu480/dsa-master-guide/tree/master/0211-design-add-and-search-words-data-structure) |
@@ -350,6 +351,7 @@ To run it locally:
 | [0072-edit-distance](https://github.com/rabbu480/dsa-master-guide/tree/master/0072-edit-distance) |
 | [0091-decode-ways](https://github.com/rabbu480/dsa-master-guide/tree/master/0091-decode-ways) |
 | [0115-distinct-subsequences](https://github.com/rabbu480/dsa-master-guide/tree/master/0115-distinct-subsequences) |
+| [0131-palindrome-partitioning](https://github.com/rabbu480/dsa-master-guide/tree/master/0131-palindrome-partitioning) |
 | [0132-palindrome-partitioning-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0132-palindrome-partitioning-ii) |
 | [0198-house-robber](https://github.com/rabbu480/dsa-master-guide/tree/master/0198-house-robber) |
 | [0213-house-robber-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0213-house-robber-ii) |
@@ -383,6 +385,7 @@ To run it locally:
 | [0046-permutations](https://github.com/rabbu480/dsa-master-guide/tree/master/0046-permutations) |
 | [0047-permutations-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0047-permutations-ii) |
 | [0078-subsets](https://github.com/rabbu480/dsa-master-guide/tree/master/0078-subsets) |
+| [0131-palindrome-partitioning](https://github.com/rabbu480/dsa-master-guide/tree/master/0131-palindrome-partitioning) |
 | [0212-word-search-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0212-word-search-ii) |
 | [0494-target-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0494-target-sum) |
 ## Combinatorics
