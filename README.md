@@ -69,6 +69,7 @@ To run it locally:
 | [0046-permutations](https://github.com/rabbu480/dsa-master-guide/tree/master/0046-permutations) |
 | [0047-permutations-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0047-permutations-ii) |
 | [0049-group-anagrams](https://github.com/rabbu480/dsa-master-guide/tree/master/0049-group-anagrams) |
+| [0055-jump-game](https://github.com/rabbu480/dsa-master-guide/tree/master/0055-jump-game) |
 | [0063-unique-paths-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0063-unique-paths-ii) |
 | [0064-minimum-path-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0064-minimum-path-sum) |
 | [0074-search-a-2d-matrix](https://github.com/rabbu480/dsa-master-guide/tree/master/0074-search-a-2d-matrix) |
@@ -344,6 +345,7 @@ To run it locally:
 |  |
 | ------- |
 | [0005-longest-palindromic-substring](https://github.com/rabbu480/dsa-master-guide/tree/master/0005-longest-palindromic-substring) |
+| [0055-jump-game](https://github.com/rabbu480/dsa-master-guide/tree/master/0055-jump-game) |
 | [0062-unique-paths](https://github.com/rabbu480/dsa-master-guide/tree/master/0062-unique-paths) |
 | [0063-unique-paths-ii](https://github.com/rabbu480/dsa-master-guide/tree/master/0063-unique-paths-ii) |
 | [0064-minimum-path-sum](https://github.com/rabbu480/dsa-master-guide/tree/master/0064-minimum-path-sum) |
@@ -418,4 +420,8 @@ To run it locally:
 |  |
 | ------- |
 | [0078-subsets](https://github.com/rabbu480/dsa-master-guide/tree/master/0078-subsets) |
+## Greedy
+|  |
+| ------- |
+| [0055-jump-game](https://github.com/rabbu480/dsa-master-guide/tree/master/0055-jump-game) |
 <!---LeetCode Topics End-->
